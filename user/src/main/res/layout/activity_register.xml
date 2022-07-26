@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="registerModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="184dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/action_bar_register" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/double_padding"
+                android:layout_marginTop="68dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_title"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_28"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:src="@drawable/icon_logo" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingRight="@dimen/double_padding">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/register_layout"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/default_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/phone_account_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/country_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:focusableInTouchMode="false"
+                                    android:padding="@dimen/middle_padding"
+                                    android:text="+86"
+                                    android:textSize="@dimen/text_size_16" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/phone_account"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/default_padding"
+                                    android:hint="@string/edt_account_hint"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:padding="@dimen/middle_padding"
+                                    android:paddingLeft="0dp"
+                                    android:paddingRight="0dp"
+                                    android:textSize="@dimen/text_size_16"
+                                    app:useDelete="true" />
+
+                            </LinearLayout>
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:id="@+id/phone_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="14dp"
+                                android:paddingBottom="14dp">
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/phone_code"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@null"
+                                    android:hint="@string/hint_phone_code"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:padding="0dp" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/get_phone_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/send_code"
+                                    android:textColor="@color/C1"
+                                    android:textSize="@dimen/text_size_16" />
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/phone_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="@string/hint_password_length"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:use_delete="true" />
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/phone_invite_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/invite_code_hint"
+                                android:inputType="text"
+                                android:maxLines="1" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/mail_account_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/mail_account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/hint_mail_account"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:useDelete="true" />
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:id="@+id/mail_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="14dp"
+                                android:paddingBottom="14dp">
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/mail_check_code"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@null"
+                                    android:hint="@string/mail_code"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:padding="0dp"
+                                    android:textSize="@dimen/text_size_16" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/get_mail_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/send_code"
+                                    android:textColor="@color/C1"
+                                    android:textSize="@dimen/text_size_16" />
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/mail_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/hint_password_length"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:useDelete="true" />
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/mail_invite_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/invite_code_hint"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/middle_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanCheckBox
+                            android:id="@+id/register_agreement_check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/btn_reg_check_box"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center"
+                            android:paddingLeft="8dp"
+                            android:text="@string/register_agreement_label"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/register_agreement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/service_rule"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_register"
+                        style="@style/ButtonBlue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/register_title" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/change_register_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:textColor="@color/C1"
+                        android:textSize="@dimen/text_size_14" />
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/register_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/go_login_hint"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/go_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:text="@string/go_login"
+                    android:textColor="@color/C1"
+                    android:textSize="@dimen/text_size_13"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

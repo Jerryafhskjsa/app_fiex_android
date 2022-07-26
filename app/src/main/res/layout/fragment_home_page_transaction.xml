@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="homePageTransactionModel"
+            type="java.lang.Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/add_account"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    style="@style/CollapsingToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+                    app:titleEnabled="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        app:layout_collapseMode="pin">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="24dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:background="@drawable/bg_border_b1_corner_2"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/tab_transaction_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="24dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_border_l1_corner_2"
+                                android:checked="true"
+                                android:gravity="center"
+                                android:text="币币"
+                                android:textAlignment="center"
+                                android:textColor="@color/tab_default_text_color"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/tab_transaction_lever"
+                                android:layout_width="0dp"
+                                android:layout_height="24dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_border_l1_corner_2"
+                                android:checked="false"
+                                android:gravity="center"
+                                android:text="杠杆"
+                                android:textAlignment="center"
+                                android:textColor="@color/tab_default_text_color"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/tab_transaction_c2c"
+                                android:layout_width="0dp"
+                                android:layout_height="24dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="@string/home_tab_c2c"
+                                android:textAlignment="center"
+                                android:textColor="@color/tab_default_text_color"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                <include
+                    android:id="@+id/action_bar_layout"
+                    layout="@layout/action_bar_transaction" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/fragment_home_page_transaction_header1"
+                        layout="@layout/fragment_home_page_transaction_header1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:background="@color/B1" />
+
+                    <include
+                        android:id="@+id/fragment_home_page_transaction_header2"
+                        layout="@layout/fragment_home_page_transaction_header2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B2"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:paddingLeft="@dimen/double_padding"
+                            android:paddingRight="@dimen/double_padding"
+                            android:scrollbars="none" />
+
+                        <include
+                            android:id="@+id/empty_view"
+                            layout="@layout/list_view_empty_short" />
+                    </RelativeLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.black.base.widget.NoScrollListView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:fadingEdge="none"
+                            android:scrollbars="none" />
+                    </FrameLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </LinearLayout>
+</layout>

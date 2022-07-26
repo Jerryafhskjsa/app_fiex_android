@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="quotationDetailModelDept"
+            type="java.lang.Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.black.base.widget.DepthChart
+            android:id="@+id/depth_chart"
+            android:layout_width="match_parent"
+            android:layout_height="205dp"
+            android:layout_marginTop="@dimen/double_padding" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/L1_ALPHA60" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/B2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_amount_buy_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:maxLines="1"
+                android:text="@string/buy_amount_title"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_price_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/price"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_amount_sale_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="right"
+                android:maxLines="1"
+                android:text="@string/amount"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/order_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/B2"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

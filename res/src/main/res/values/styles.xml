@@ -1,0 +1,227 @@
+<resources>
+
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/black_real</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="spinnerItemStyle">@android:style/Widget.TextView.SpinnerItem</item>
+        <item name="android:windowAnimationStyle">@style/animfade</item>
+        <item name="android:buttonStyle">@style/MyButtonStyle</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="BaseAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="editTextStyle">@style/MyEditTextStyle</item>
+        <item name="MaterialEditTextStyle">@style/SpanInputBox.EditStyle</item>
+        <item name="titleTextAppearance">@style/ToolBarTitleStyle</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="AppThemeNoTextPadding2" parent="BaseAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="editTextStyle">@style/MyEditTextStyle</item>
+    </style>
+
+    <style name="AppThemeNoTextPadding" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/C1</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:windowAnimationStyle">@style/animfade</item>
+        <item name="android:buttonStyle">@style/MyButtonStyle</item>
+    </style>
+
+    <style name="MyTextViewStyle" parent="@android:style/Widget.TextView">
+        <!--<item name="android:padding">@dimen/text_padding_half</item>-->
+        <!--<item name="android:paddingTop">5dp</item>-->
+        <!--<item name="android:paddingBottom">5dp</item>-->
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="MyEditTextStyle">
+        <item name="android:focusable">true</item>
+        <item name="android:editable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingLeft">@dimen/text_padding_half</item>
+        <item name="android:paddingRight">@dimen/text_padding_half</item>
+        <item name="android:paddingTop">@dimen/default_padding</item>
+        <item name="android:paddingBottom">@dimen/default_padding</item>
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textColorHint">@color/T3</item>
+        <item name="android:textCursorDrawable">@drawable/my_cursor</item>
+    </style>
+
+    <style name="NormalEditTextStyle">
+        <item name="android:focusable">true</item>
+        <item name="android:editable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textCursorDrawable">@drawable/my_cursor</item>
+    </style>
+
+    <style name="anim_pairs_status_popup_window">
+        <item name="android:windowEnterAnimation">@anim/pairs_status_popup_window_in</item>
+        <item name="android:windowExitAnimation">@anim/pairs_status_popup_window_out</item>
+    </style>
+
+    <style name="anim_bottom_in_out">
+        <item name="android:windowEnterAnimation">@anim/anim_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_bottom_out</item>
+    </style>
+
+    <style name="anim_top_in_out">
+        <item name="android:windowEnterAnimation">@anim/anim_top_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_top_out</item>
+    </style>
+
+    <style name="animfade" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_for_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_for_right</item>
+    </style>
+
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AlertDialog" parent="@android:Theme.DeviceDefault.Light.Dialog">
+        <!-- 这里设置背景为透明，为了隐藏边框 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- 这里是修改顶部标题背景颜色，具体颜色自己定，可以是图片 -->
+        <item name="android:topDark">@color/white</item>
+        <!-- 这里是修改内容区域背景颜色 -->
+        <item name="android:centerDark">@color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="MyButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <!--设置分割线-->
+
+    <!--设置文本颜色 和大小-->
+
+    <style name="PopupFragmentDialog" parent="android:style/Theme.Dialog">
+        <!-- 这里设置背景为透明，为了隐藏边框 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!--<item name="android:windowSoftInputMode">stateHidden|stateUnchanged|adjustPan</item>-->
+        <!--android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan"-->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 这里是修改顶部标题背景颜色，具体颜色自己定，可以是图片 -->
+        <item name="android:topDark">@color/white</item>
+        <!-- 这里是修改内容区域背景颜色 -->
+        <item name="android:centerDark">@color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+
+    <style name="SpanInputBox.EditStyle" parent="android:Widget.EditText">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textColorHint">@color/T3</item>
+        <item name="android:background">@drawable/bg_input_box</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:editable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:enabled">true</item>
+        <item name="android:textCursorDrawable">@drawable/my_cursor</item>
+        <item name="useDelete">true</item>
+        <item name="deleteIcon">@drawable/icon_delete</item>
+        <item name="useEye">true</item>
+        <item name="eyeIcon">@drawable/btn_password_eyes</item>
+    </style>
+
+    <style name="TitleStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textSize">@dimen/text_size_28</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">@dimen/double_padding</item>
+        <item name="android:paddingRight">@dimen/double_padding</item>
+        <item name="android:paddingBottom">@dimen/double_padding</item>
+    </style>
+
+    <style name="ToolBarTitleStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="CollapsingToolbarStyle">
+        <item name="collapsedTitleGravity">center</item>
+        <item name="contentScrim">@color/transparent</item>
+        <item name="expandedTitleGravity">left|bottom</item>
+        <item name="expandedTitleMargin">0dp</item>
+        <item name="expandedTitleMarginBottom">@dimen/double_padding</item>
+        <item name="expandedTitleMarginStart">@dimen/double_padding</item>
+        <item name="collapsedTitleTextAppearance">@style/ToolBarTitleStyle</item>
+        <item name="expandedTitleTextAppearance">@style/TitleStyle</item>
+    </style>
+
+    <style name="MenuListItem">
+        <item name="android:background">@color/B2</item>
+        <item name="android:paddingLeft">@dimen/double_padding</item>
+        <item name="android:paddingRight">@dimen/double_padding</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">64dp</item>
+    </style>
+
+    <style name="ButtonBlue">
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/btn_text_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonGray">
+        <item name="android:background">@drawable/btn_gray</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/btn_text_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonRed">
+        <item name="android:background">@drawable/btn_red</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/btn_text_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DefaultTabStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/tab_default_text_color</item>
+    </style>
+</resources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="moneyRecordModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/C1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_alignParentTop="true">
+
+                    <ImageButton
+                        android:id="@+id/action_bar_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="54dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:contentDescription="@null"
+                        android:onClick="onBackClick"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/btn_back_white" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_c2c_header"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/tab_demand"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_c2c_tab_header"
+                            android:checked="true"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="活利宝"
+                            android:textColor="@color/c2c_tab_header"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/tab_regular"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_c2c_tab_header"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="定利宝"
+                            android:textColor="@color/c2c_tab_header"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/filter_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical|right"
+                        android:padding="@dimen/middle_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/filter_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:gravity="center"
+                            android:lineSpacingExtra="0dp"
+                            android:padding="0dp"
+                            android:text="@string/filter_title"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_16" />
+
+                    </RelativeLayout>
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/work_space"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/header_layout" />
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>

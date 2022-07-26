@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemForumModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/middle_padding"
+        android:paddingBottom="@dimen/middle_padding">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/icon"
+            android:includeFontPadding="true"
+            android:text="@string/number_default"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toLeftOf="@+id/icon_left"
+            android:layout_toRightOf="@+id/title"
+            android:gravity="right"
+            android:includeFontPadding="true"
+            android:text="@string/number_default"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/icon_left" />
+
+    </RelativeLayout>
+</layout>

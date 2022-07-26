@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B2"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_c2c_tab_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/c2c_buy_usdt"
+            android:textColor="@color/c2c_tab_buy"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_c2c_tab_sell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_toRightOf="@+id/btn_c2c_tab_buy"
+            android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/c2c_sale_usdt"
+            android:textColor="@color/c2c_tab_sale"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/L1_ALPHA30" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+</LinearLayout>

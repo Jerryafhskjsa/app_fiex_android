@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/icon_login_tab_checked" android:state_checked="true" />
+    <item>
+        <bitmap android:alpha="0" android:src="@drawable/icon_login_tab_checked" />
+    </item>
+</selector>

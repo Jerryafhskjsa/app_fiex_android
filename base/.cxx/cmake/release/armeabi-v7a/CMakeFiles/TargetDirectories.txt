@@ -1,0 +1,5 @@
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a/src/main/cpp/sec/CMakeFiles/fryingSecret.dir

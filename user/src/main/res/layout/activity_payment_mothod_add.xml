@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="paymentMethodAddModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/type_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/double_padding">
+
+                        <skin.support.widget.SkinCompatImageView
+                            android:id="@+id/type_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/type_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/icon_left" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:background="@color/B1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.lib.view.InputLinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/double_padding"
+                            android:background="@drawable/bg_input_box"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="姓名"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:hint="请输入姓名"
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.black.lib.view.InputLinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bank_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="银行卡号"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/bank_card_no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:hint="请输入银行卡号"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="开户银行"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/bank_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:hint="请输入开户银行"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="开户支行"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/bank_address"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:hint="请输入开户支行"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+
+                            </com.black.lib.view.InputLinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/alipay_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="账号"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/alipay_account"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:hint="请输入账号"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:text="添加收款二维码 (选填)"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <LinearLayout
+                                android:id="@+id/alipay_qrcode"
+                                android:layout_width="102dp"
+                                android:layout_height="102dp"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:orientation="horizontal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/wechat_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.black.lib.view.InputLinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:background="@drawable/bg_input_box"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="账号"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/wechat_account"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:hint="请输入账号"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+
+                            </com.black.lib.view.InputLinearLayout>
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:text="添加收款二维码 (选填)"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <LinearLayout
+                                android:id="@+id/wechat_qrcode"
+                                android:layout_width="102dp"
+                                android:layout_height="102dp"
+                                android:layout_marginTop="@dimen/double_padding"
+                                android:orientation="horizontal" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:padding="@dimen/double_padding">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_submit"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/confirm" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

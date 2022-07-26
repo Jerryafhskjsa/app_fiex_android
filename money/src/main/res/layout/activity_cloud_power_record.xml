@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="cloudPowerRecordModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/C1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingBottom="@dimen/double_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="总算力"
+                        android:textColor="@color/white_ALPHA60"
+                        android:textSize="@dimen/text_size_13" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/bg_cloud_power_record_head_01"
+                        android:drawableLeft="@drawable/icon_cloud_power_record_btc"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="BTC"
+                        android:textColor="@color/white_ALPHA60"
+                        android:textSize="@dimen/text_size_12" />
+
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="总收益"
+                    android:textColor="@color/white_ALPHA60"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:divider="@drawable/bg_divider_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:showDividers="middle">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/hold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_28"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/interest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/number_default"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_28"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btc_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_cloud_power_record_head_02"
+                android:gravity="center"
+                android:minHeight="28dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="理论收益：$0.01407/T/天，数据来自 BTC.COM"
+                android:textColor="@color/white_ALPHA60"
+                android:textSize="@dimen/text_size_13" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:tabBackground="@color/transparent"
+                app:tabMaxWidth="200dp"
+                app:tabMinWidth="20dp"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="20dp"
+                app:tabPaddingStart="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabRippleColor="@color/transparent"
+                app:tabTextAppearance="@style/DefaultTabStyle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line"
+                android:background="@color/L1_ALPHA60" />
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:flipInterval="30"
+                android:persistentDrawingCache="animation" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

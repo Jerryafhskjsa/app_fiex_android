@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B2"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/action_bar_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:padding="@dimen/middle_padding"
+                android:scaleType="centerInside"
+                android:src="@drawable/btn_back" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/action_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_20"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/head_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/head_record"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingRight="@dimen/default_padding"
+                android:src="@drawable/icon_demand_notice" />
+
+            <ImageButton
+                android:id="@+id/head_record"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingRight="15dip"
+                android:src="@drawable/icon_demand_record" />
+        </RelativeLayout>
+
+    </FrameLayout>
+</RelativeLayout>

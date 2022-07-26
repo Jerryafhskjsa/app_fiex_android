@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="recommendNewModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:background="@color/B2"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_recommend" />
+
+                <FrameLayout
+                    android:id="@id/header_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/action_bar_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_gravity="top|left"
+                        android:background="@null"
+                        android:contentDescription="@null"
+                        android:onClick="onBackClick"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/btn_back_white" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="17dp"
+                android:paddingLeft="@dimen/double_padding"
+                android:paddingRight="@dimen/double_padding">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/recommend_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+            </RelativeLayout>
+
+            <com.black.lib.refresh.QRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.black.base.widget.ObserveScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/B2"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/B2"
+                            android:descendantFocusability="blocksDescendants">
+
+                            <com.black.base.view.EmptyRecyclerView
+                                android:id="@+id/recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fadingEdge="none"
+                                android:overScrollMode="never"
+                                android:paddingLeft="@dimen/double_padding"
+                                android:paddingRight="@dimen/double_padding"
+                                android:scrollbars="none" />
+
+                            <include
+                                android:id="@+id/empty_view"
+                                layout="@layout/list_view_empty_long" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </com.black.base.widget.ObserveScrollView>
+            </com.black.lib.refresh.QRefreshLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/B2"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@drawable/shadow_k_line_button" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/double_padding"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="@dimen/double_padding"
+                android:layout_marginBottom="14dp">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/invitation_code_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/invite_code"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/invitation_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="9dp"
+                    android:layout_toLeftOf="@+id/invitation_code_copy"
+                    android:layout_toRightOf="@+id/invitation_code_title"
+                    android:maxLines="1"
+                    android:textColor="@color/T5"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/invitation_code_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/copy"
+                    android:textColor="@color/C1"
+                    android:textSize="@dimen/text_size_16" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/double_padding"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_marginRight="@dimen/double_padding"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_recommend"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_t7_corner3"
+                    android:gravity="center"
+                    android:padding="@dimen/default_padding"
+                    android:text="@string/recommend_person"
+                    android:textColor="@color/T8"
+                    android:textSize="@dimen/text_size_15"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="@dimen/line" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_share"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_t5_corner3"
+                    android:gravity="center"
+                    android:padding="@dimen/default_padding"
+                    android:text="@string/recommend_share"
+                    android:textColor="@color/T8"
+                    android:textSize="@dimen/text_size_15"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

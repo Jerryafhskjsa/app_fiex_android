@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="pushSettingModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B2"
+                    android:orientation="vertical">
+
+                    <RelativeLayout style="@style/MenuListItem">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="充值到账"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/recharge_push"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:thumb="@drawable/icon_switch_thumb"
+                            android:track="@drawable/bg_switch_track"
+                            app:track="@drawable/bg_switch_track" />
+                    </RelativeLayout>
+
+                    <RelativeLayout style="@style/MenuListItem">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="提现状态变更"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/extract_push"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:thumb="@drawable/icon_switch_thumb"
+                            android:track="@drawable/bg_switch_track"
+                            app:track="@drawable/bg_switch_track" />
+                    </RelativeLayout>
+
+                    <RelativeLayout style="@style/MenuListItem">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="委托成交"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/trade_push"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:thumb="@drawable/icon_switch_thumb"
+                            android:track="@drawable/bg_switch_track"
+                            app:track="@drawable/bg_switch_track" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </RelativeLayout>
+</layout>

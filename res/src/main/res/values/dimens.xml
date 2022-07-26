@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--图片轮播底部空隙-->
+    <dimen name="image_slider_bottom_spacing">10dp</dimen>
+
+    <dimen name="double_padding">20dp</dimen>
+    <dimen name="default_padding">10dp</dimen>
+    <dimen name="middle_padding">14dp</dimen>
+    <dimen name="text_padding_half">3dp</dimen>
+
+
+    <dimen name="line">0.5dp</dimen>
+
+    <dimen name="home_tab_text_size">14sp</dimen>
+
+    <dimen name="trend_default">12sp</dimen>
+
+    <dimen name="qrcode_size">180dp</dimen>
+
+    <dimen name="text_size_2">2sp</dimen>
+    <dimen name="text_size_5">5sp</dimen>
+    <dimen name="text_size_9">9sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_17">17sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_28">28sp</dimen>
+
+</resources>

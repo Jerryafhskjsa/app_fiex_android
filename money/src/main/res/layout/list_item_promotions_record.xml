@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemPromotionsRecordModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/double_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wallet_bill_deposit"
+                android:textColor="@color/C1"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_14" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/real_got"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/real_pay"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="75"
+                android:gravity="right"
+                android:text="@string/unit_price"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/got"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/pay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="75"
+                android:gravity="right"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/time"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

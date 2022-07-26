@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="walletLeverDetailModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/pair"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/double_padding"
+                    android:layout_marginRight="@dimen/double_padding"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B2"
+                android:fadingEdge="none"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/double_padding">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_b1_corner_2"
+                            android:orientation="vertical"
+                            android:padding="15dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                    <ImageView
+                                        android:layout_width="54dp"
+                                        android:layout_height="44dp"
+                                        android:src="@drawable/icon_risk01" />
+
+                                    <ImageView
+                                        android:id="@+id/risk_pointer"
+                                        android:layout_width="18dp"
+                                        android:layout_height="37dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="1dp"
+                                        android:src="@drawable/icon_risk02" />
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:layout_marginLeft="15dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/risk_rate"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_15" />
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/explode_price"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="right"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_15" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_padding"
+                                android:lineSpacingExtra="4dp"
+                                android:text="* 当风险率≤110%时，账户将触发爆仓以归还借币和利息。\n* 风险率=全仓杠杆资产 / (借币+利息）*100%。"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_12" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/double_padding"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="总资产"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/total"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:gravity="right"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:background="@color/L1_ALPHA30" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="净资产"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/usable"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:gravity="right"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:background="@color/L1_ALPHA30" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="总负债"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/total_borrow"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:gravity="right"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:background="@color/B1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="资产分布"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/coin_type"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:background="@color/L1_ALPHA30" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="可借"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/could_borrow_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/could_borrow_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="已借"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/has_borrow_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/has_borrow_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="利息"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/interest_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/interest_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="可用"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/usable_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/usable_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="冻结"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/froze_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/froze_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="总额"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/total_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/total_set"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/double_padding">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_transfer"
+                style="@style/ButtonGray"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:text="划转" />
+
+            <View
+                android:layout_width="@dimen/double_padding"
+                android:layout_height="@dimen/line" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_back"
+                style="@style/ButtonBlue"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:text="还币" />
+
+            <View
+                android:layout_width="@dimen/double_padding"
+                android:layout_height="@dimen/line" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_borrow"
+                style="@style/ButtonRed"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:text="借币" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

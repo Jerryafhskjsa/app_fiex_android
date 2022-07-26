@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewVerifyWindowModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical"
+        android:padding="@dimen/middle_padding">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/middle_padding"
+            android:text="@string/safe_verify"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/work_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_commit"
+            style="@style/ButtonBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/middle_padding"
+            android:gravity="center"
+            android:padding="@dimen/default_padding"
+            android:text="@string/confirm"
+            android:textColor="@color/btn_text_color"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
+
+</layout>

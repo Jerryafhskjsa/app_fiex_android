@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="18dp"
+    android:height="18dp"
+    android:viewportWidth="18"
+    android:viewportHeight="18">
+
+    <path
+        android:fillColor="@color/B2"
+        android:pathData="M10 0 A 9,9 0 1 1 8,0 M9 0 L 8,0"
+        android:strokeLineCap="round"
+        tools:ignore="VectorRaster" />
+    <path
+        android:fillColor="@color/C2"
+        android:pathData="M10 2 A 7,7 0 1 1 8,2 M9 2 L 8,2"
+        android:strokeLineCap="round"
+        tools:ignore="VectorRaster" />
+</vector>

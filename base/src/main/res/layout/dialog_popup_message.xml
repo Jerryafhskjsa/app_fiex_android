@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/B2"
+    android:orientation="vertical"
+    android:padding="11dp">
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/C1"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="11dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/C6" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="11dp" />
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="9dp"
+        android:text="@string/exit"
+        android:textColor="@color/C5"
+        android:textSize="@dimen/text_size_13"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="22dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_resume"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_c2"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/confirm"
+            android:textColor="@color/btn_text_color"
+            android:textSize="@dimen/text_size_14" />
+
+    </LinearLayout>
+</LinearLayout>

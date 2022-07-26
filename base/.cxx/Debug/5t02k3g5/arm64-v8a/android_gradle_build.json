@@ -1,0 +1,39 @@
+{
+  "buildFiles": [
+    "D:\\AndroidStudioProject\\FryingPub\\base\\CMakeLists.txt",
+    "D:\\AndroidStudioProject\\FryingPub\\base\\src\\main\\cpp\\sec\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\86153\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\AndroidStudioProject\\FryingPub\\base\\.cxx\\Debug\\5t02k3g5\\arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\86153\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\AndroidStudioProject\\FryingPub\\base\\.cxx\\Debug\\5t02k3g5\\arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "fryingSecret::@09e5848878c25dc89533": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "fryingSecret",
+      "output": "D:\\AndroidStudioProject\\FryingPub\\base\\src\\main\\jniLibs\\arm64-v8a\\libfryingSecret.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "C:\\Users\\86153\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "C:\\Users\\86153\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

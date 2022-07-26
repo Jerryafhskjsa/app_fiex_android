@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewMoreTimeStepSelectorModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/B1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border_l1"
+            android:orientation="horizontal"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/tab_min_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/min_1"
+                android:textAlignment="center"
+                android:textColor="@color/k_time_step_tab_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/tab_min_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/min_5"
+                android:textAlignment="center"
+                android:textColor="@color/k_time_step_tab_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/tab_min_30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/min_30"
+                android:textAlignment="center"
+                android:textColor="@color/k_time_step_tab_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/tab_week_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/week_1"
+                android:textAlignment="center"
+                android:textColor="@color/k_time_step_tab_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+    </FrameLayout>
+</layout>

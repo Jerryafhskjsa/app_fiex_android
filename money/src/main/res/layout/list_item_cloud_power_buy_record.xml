@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemCloudPowerBuyRecordModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/double_padding"
+        android:paddingBottom="@dimen/double_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="云算力代币"
+                android:textColor="@color/C1"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="数量"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="兑换比例"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:text="订单金额"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/power"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开始挖矿"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="挖矿周期"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/mining"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/cycle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="申购时间"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:text="订单编号"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_13" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="right"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

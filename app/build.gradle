@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+    defaultConfig {
+        applicationId "com.fbsex.exchange"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode project.PHONE_VERSION_CODE.toInteger()
+        versionName project.PHONE_VERSION_NAME
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+//            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+//        APP ID 350bbd7e49de6
+//        SECRET KEY 74665d4f3a772c968be95bb30f52df7b
+//        ACCESS ID 2100346569
+//        ACCESS KEY A42E84GXID4M
+        //信鸽账号配置
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "2100346023",
+                XG_ACCESS_KEY: "A3P777DZU1IJ",
+                JPUSH_PKGNAME: rootProject.ext.JPUSH_PKGNAME,
+                JPUSH_APPKEY : rootProject.ext.JPUSH_APPKEY, //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: rootProject.ext.JPUSH_CHANNEL, //暂时填写默认值即可.
+        ]
+        vectorDrawables.useSupportLibrary = true
+
+        //在apk文件后边生成版本号信息
+        android.applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                def date = new Date().format("MMddHH", TimeZone.getTimeZone("GMT+08"))
+                if ("debug" == variant.buildType.name) {
+                    outputFileName = "FBSEX_" + variant.buildType.name + "_V" + defaultConfig.versionName + "_" + date + ".apk"
+                } else {
+                    outputFileName = "FBSEX_" + "V" + defaultConfig.versionName + ".apk"
+                }
+            }
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file("../frying.jks")
+            storePassword "black123456"
+            keyAlias "frying"
+            keyPassword "black123456"
+        }
+        debug {
+            storeFile file("../frying.jks")
+            storePassword "black123456"
+            keyAlias "frying"
+            keyPassword "black123456"
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    dataBinding {
+        enabled true
+    }
+    aaptOptions {
+        cruncherEnabled = false
+        useNewCruncher = false
+    }
+}
+
+repositories {
+    flatDir {
+        dirs '../res/libs'
+    }
+    mavenCentral()
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation project(":base")
+    kapt project(":routerProcess")
+    implementation project(':user')
+    implementation project(':wallet')
+    implementation project(':c2c')
+    implementation project(':clutter')
+    implementation project(':money')
+    implementation project(':UdeskSDKUI')
+    implementation project(':community')
+    implementation project(':im')
+    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

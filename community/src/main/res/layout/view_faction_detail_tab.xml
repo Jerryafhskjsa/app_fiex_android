@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.black.base.widget.SpanTextView
+        android:id="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:drawableBottom="@drawable/icon_faction_tab_indicator"
+        android:drawablePadding="@dimen/default_padding"
+        android:paddingTop="12dp"
+        android:textColor="@color/faction_tab_text_color"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+</LinearLayout>

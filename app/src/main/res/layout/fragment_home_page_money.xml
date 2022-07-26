@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="homePageMoneyModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B1">
+
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icon_demand_home" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="聚宝盆"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_28"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.7"
+                            android:text="收益多一点，生活美好多一点"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_padding"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_home_money_demand"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/icon_home_money_demand"
+                                android:drawablePadding="2dp"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="活利宝"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_home_money_regular"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/icon_home_money_regular"
+                                android:drawablePadding="2dp"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="定利宝"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_home_money_loan"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/icon_home_money_loan"
+                                android:drawablePadding="2dp"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="抵押借贷"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_home_money_power"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/icon_home_money_power"
+                                android:drawablePadding="2dp"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="云算力"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B1"
+                    android:orientation="vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <RelativeLayout
+                        android:id="@+id/demand_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/B1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="@dimen/default_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="活利宝"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left_money"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="随存随取，阶梯利率"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/demand_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_b2_corner3"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/regular_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/B1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="@dimen/default_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="定利宝"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left_money"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="到期还本付息"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/regular_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_b2_corner3"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/loan_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/B1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="@dimen/default_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="抵押借贷"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left_money"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="更多"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/loan_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_b2_corner3"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/cloud_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/B1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="@dimen/default_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="云算力"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left_money"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="更多"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/cloud_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_b2_corner3"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/action_bar_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:background="@color/B2" />
+
+            <RelativeLayout
+                android:id="@+id/action_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/action_bar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:alpha="0"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="聚宝盆"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_20"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/demand_notice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:contentDescription="@null"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dip"
+                        android:src="@drawable/icon_demand_notice" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </FrameLayout>
+
+    </FrameLayout>
+</layout>

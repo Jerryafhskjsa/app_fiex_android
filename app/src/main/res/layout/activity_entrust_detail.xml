@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="entrustDetailModel"
+            type="com.black.base.model.socket.TradeOrder" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_cancel"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/double_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="@string/entrust_type_buy"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:text="@string/time"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:text="@string/entrust_price"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="75"
+                            android:gravity="right"
+                            android:padding="0dp"
+                            android:text="@string/entruct_amount"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/entrust_price"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/entrust_amount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="75"
+                            android:gravity="right"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:text="@string/deal_total_amount"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:text="@string/deal_avg_price"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="75"
+                            android:gravity="right"
+                            android:padding="0dp"
+                            android:text="@string/deal_amount"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/deal_total_amount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/deal_price"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="130"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/deal_amount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="75"
+                            android:gravity="right"
+                            android:padding="0dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/line"
+                        android:layout_marginTop="@dimen/double_padding"
+                        android:alpha="0.6"
+                        android:background="@color/L1" />
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_cancel"
+            style="@style/ButtonRed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/double_padding"
+            android:padding="@dimen/middle_padding"
+            android:text="@string/entust_cancel" />
+    </RelativeLayout>
+</layout>

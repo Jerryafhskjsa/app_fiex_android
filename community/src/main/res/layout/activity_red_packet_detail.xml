@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="redPacketDetailModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <com.black.base.widget.ObserveScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_red_packet_detail_head" />
+
+                <com.black.lib.widget.CircleImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="-34dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_avatar" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/sender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_marginTop="@dimen/default_padding"
+                    android:layout_marginRight="@dimen/default_padding"
+                    android:gravity="center"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="@dimen/default_padding"
+                    android:gravity="center"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_15" />
+
+                <LinearLayout
+                    android:id="@+id/got_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/got_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="@dimen/default_padding"
+                        android:gravity="center"
+                        android:textColor="@color/T5"
+                        android:textSize="48sp" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/coin_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:layout_marginRight="@dimen/default_padding"
+                        android:gravity="center"
+                        android:textColor="@color/T2"
+                        android:textSize="@dimen/text_size_14" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="@dimen/default_padding"
+                        android:gravity="center"
+                        android:text="领取成功，存至钱包"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_14" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_padding"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants">
+
+                    <com.black.base.view.EmptyRecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:layout_marginRight="@dimen/default_padding"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </com.black.base.widget.ObserveScrollView>
+
+        <FrameLayout
+            android:id="@id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D72F4E">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+
+                <ImageButton
+                    android:id="@+id/action_bar_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="54dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:onClick="onBackClick"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/btn_back_red_packet" />
+
+            </FrameLayout>
+        </FrameLayout>
+    </FrameLayout>
+</layout>

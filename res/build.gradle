@@ -1,0 +1,109 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+        vectorDrawables.useSupportLibrary = true
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+repositories {
+    flatDir {
+        dirs '../res/libs'
+    }
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api 'androidx.appcompat:appcompat:1.0.2'
+    api "androidx.constraintlayout:constraintlayout:1.1.3"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    api 'com.google.android.material:material:1.0.0'
+    api 'com.android.support:multidex:1.0.0'
+    api files('libs/wechat-sdk-android-without-mta.jar')
+    api files('libs/nineoldandroids-2.4.0.jar')
+    api 'com.google.code.gson:gson:2.2.4'
+    api('io.socket:socket.io-client:0.8.3') {
+        exclude group: 'org.json', module: 'json'
+    }
+    //implementation 'com.github.ForgetAll:LoadingDialog:v1.0.4'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.1'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    //网易易盾(图片验证发送短信)
+    api 'com.github.yidun:captcha-android-demo:2.0'
+    //zxing
+    api 'com.journeyapps:zxing-android-embedded:3.5.0'
+    // skin-support
+    api 'skin.support:skin-support:4.0.4'
+    // skin-support 基础控件支持
+    api 'skin.support:skin-support-appcompat:4.0.4'
+    // skin-support-design material design 控件支持[可选]
+    api 'skin.support:skin-support-design:4.0.4'
+    // skin-support-cardview CardView 控件支持[可选]
+    api 'skin.support:skin-support-cardview:4.0.4'
+    // skin-support-constraint-layout ConstraintLayout 控件支持[可选]
+    api 'skin.support:skin-support-constraint-layout:4.0.4'
+    //    api 'com.github.lzyzsd:jsbridge:1.0.4'
+    //binner
+    api 'com.github.crosswall:Android-Coverflow:release-v1.0.5'
+    //字体大小自动textview
+    api 'me.grantland:autofittextview:0.2.1'
+    //下拉刷新控件
+    api 'com.chanven.lib:cptr:1.0.0'
+    //动画类
+    api 'com.airbnb.android:lottie:3.0.7'
+    api 'com.github.bumptech.glide:glide:4.7.1'
+    api 'com.umeng.umsdk:common:2.0.0'
+    api 'com.umeng.umsdk:utdid:1.1.5.3'
+    api 'com.umeng.umsdk:analytics:8.0.0'
+    api 'com.yanzhenjie:permission:2.0.0-rc2'
+    api files('libs/pinyin4j-2.5.0.jar')
+    api(name: 'geetest_sensebot_android_v4.1.4_20190719', ext: 'aar')
+    api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
+
+    //信鸽jar
+    api 'com.tencent.xinge:xinge:3.2.3-release'
+    //wup包
+    api  'com.tencent.wup:wup:1.0.0.E-Release'
+    //mid包
+    api 'com.tencent.mid:mid:4.0.6-release'
+//    //信鸽jar，不包含厂商通道
+//    api 'com.tencent.xinge:xinge:4.3.5-release'
+//    //jg包
+//    api 'com.tencent.jg:jg:1.1'
+//    //wup包
+//    api 'com.tencent.wup:wup:1.0.0.E-Release'
+//    //mid包，minSdkVersion 14
+//    api 'com.tencent.mid:mid:4.0.7-Release'
+    //腾讯im
+    api 'com.tencent.imsdk:imsdk:4.5.111'
+
+    api 'cn.jiguang.sdk:jpush:3.5.8'  // 此处以JPush 3.4.1 版本为例。
+    api 'cn.jiguang.sdk:jcore:2.3.0'  // 此处以JCore 2.2.4 版本为例。
+    api 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+}

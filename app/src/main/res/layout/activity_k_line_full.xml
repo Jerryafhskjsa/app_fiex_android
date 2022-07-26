@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="kLineFullModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/B2">
+
+            <LinearLayout
+                android:id="@+id/coin_type_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/middle_padding"
+                android:paddingTop="@dimen/middle_padding"
+                android:paddingBottom="@dimen/middle_padding">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/coin_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="BTC/USDT"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_18"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/coin_type_layout"
+                android:text="@string/number_default"
+                android:textColor="@color/T7"
+                android:textSize="@dimen/text_size_18"
+                android:textStyle="bold" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/price"
+                android:gravity="center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="@string/number_default"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/percentage"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="2dp"
+                    android:text="@string/cny_maybe"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_14" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_cny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_14" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/low_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/high"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/low_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/volumn_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/low"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/volumn_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/btn_close"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/volumn"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/volume_h24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btn_close"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_k_line_close" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <com.black.base.widget.AnalyticChart
+                        android:id="@+id/analytic_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/quota_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/quota_layout"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical">
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/quota_main"
+                            android:textAlignment="center"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/ma"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="MA"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/boll"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="BOLL"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.lib.view.CheckedLinearLayout
+                            android:id="@+id/main_hidden"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/btn_password_eyes"
+                                android:gravity="center"
+                                android:textAlignment="center" />
+                        </com.black.lib.view.CheckedLinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line"
+                            android:background="@color/L1" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/quota_sub"
+                            android:textAlignment="center"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/macd"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="MACD"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/kdj"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="KDJ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/rsi"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="RSI"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/wr"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="WR"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.lib.view.CheckedLinearLayout
+                            android:id="@+id/sub_hidden"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/btn_password_eyes"
+                                android:gravity="center"
+                                android:textAlignment="center" />
+                        </com.black.lib.view.CheckedLinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="@color/L1_ALPHA60" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/k_time_step_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/quota_setting_layout"
+                        app:tabBackground="@color/transparent"
+                        app:tabGravity="fill"
+                        app:tabMaxWidth="0dp"
+                        app:tabMinWidth="20dp"
+                        app:tabPaddingBottom="0dp"
+                        app:tabPaddingTop="0dp"
+                        app:tabTextAppearance="@style/DefaultTabStyle" />
+
+                    <FrameLayout
+                        android:id="@+id/quota_setting_layout"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/line"
+                            android:layout_height="match_parent"
+                            android:background="@color/L1_ALPHA60" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:src="@drawable/icon_quota_dark"
+                            android:visibility="invisible" />
+                    </FrameLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/loading_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <!--<com.airbnb.lottie.LottieAnimationView-->
+                <!--android:id="@+id/loading_ring"-->
+                <!--android:layout_width="65dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--app:lottie_fileName="loading.json" />-->
+            </FrameLayout>
+        </FrameLayout>
+    </LinearLayout>
+</layout>

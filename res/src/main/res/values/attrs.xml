@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BaseBanner">
+
+        <!--
+             scale of Banner height and width,height/screenWidth.(0-1)
+            scale is 0.5 default for LoopViewPager
+        -->
+        <attr name="bb_scale" format="float" />
+        <!-- for LoopViewPager start -->
+        <!-- is LoopViewPager or not,default true -->
+        <attr name="bb_isLoopEnable" format="boolean" />
+        <!-- delay before start scroll,unit second,default 5 seconds -->
+        <attr name="bb_delay" format="integer" />
+        <!-- scroll period,unit second,default 5 seconds -->
+        <attr name="bb_period" format="integer" />
+        <!-- is auto scroll enable,default true -->
+        <attr name="bb_isAutoScrollEnable" format="boolean" />
+        <!-- is smart pause and start -->
+        <attr name="bb_isSmart" format="boolean" />
+        <!-- for LoopViewPager end -->
+        <!-- set bootom bar color,default transparent -->
+        <attr name="bb_barColor" format="color" />
+        <!-- set bottom bar show or not when the position is the last -->
+        <attr name="bb_isBarShowWhenLast" format="boolean" />
+        <!-- set bottom bar padding,unit dp -->
+        <attr name="bb_barPaddingLeft" format="dimension" />
+        <attr name="bb_barPaddingTop" format="dimension" />
+        <attr name="bb_barPaddingRight" format="dimension" />
+        <attr name="bb_barPaddingBottom" format="dimension" />
+        <!-- set title text color,default "#ffffff" -->
+        <attr name="bb_textColor" format="color" />
+        <!-- set title text size,unit sp,default 14sp -->
+        <attr name="bb_textSize" format="dimension" />
+        <!-- set title show or not,default true -->
+        <attr name="bb_isTitleShow" format="boolean" />
+        <!-- set indicator show or not,default true -->
+        <attr name="bb_isIndicatorShow" format="boolean" />
+        <!--
+        Gravity.CENTER or Gravity.RIGHT or Gravity.LEFT.if gravity equals
+        Gravity.CENTER,title will not be supported,default Gravity.CENTER
+        -->
+        <attr name="bb_indicatorGravity">
+            <enum name="CENTER" value="17" />
+            <enum name="LEFT" value="3" />
+            <enum name="RIGHT" value="5" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="BaseIndicaorBanner">
+
+        <!-- indicator style,STYLE_DRAWABLE_RESOURCE or STYLE_CORNER_RECTANGLE -->
+        <attr name="bib_indicatorStyle">
+            <enum name="DRAWABLE_RESOURCE" value="0" />
+            <enum name="CORNER_RECTANGLE" value="1" />
+        </attr>
+        <!-- indicator width, unit dp,default 6dp -->
+        <attr name="bib_indicatorWidth" format="dimension" />
+        <!-- indicator height,unit dp,default 6dp -->
+        <attr name="bib_indicatorHeight" format="dimension" />
+        <!-- gap between two indicators,unit dp,default 6dp -->
+        <attr name="bib_indicatorGap" format="dimension" />
+        <!-- for CORNER_RECTANGLE start -->
+        <!-- indicator select color for STYLE_CORNER_RECTANGLE,default "#ffffff" -->
+        <attr name="bib_indicatorSelectColor" format="color" />
+        <!-- indicator unselect color for STYLE_CORNER_RECTANGLE,default "#88ffffff" -->
+        <attr name="bib_indicatorUnselectColor" format="color" />
+        <!-- indicator corner raduis for STYLE_CORNER_RECTANGLE,unit dp,default 3dp -->
+        <attr name="bib_indicatorCornerRadius" format="dimension" />
+        <!-- for CORNER_RECTANGLE end -->
+        <!-- for DRAWABLE_RESOURCE start -->
+        <!-- indicator select drawable resource for STYLE_DRAWABLE_RESOURCE -->
+        <attr name="bib_indicatorSelectRes" format="reference" />
+        <!-- indicator unselect drawable resource for STYLE_DRAWABLE_RESOURCE -->
+        <attr name="bib_indicatorUnselectRes" format="reference" />
+        <!-- for DRAWABLE_RESOURCE end -->
+    </declare-styleable>
+
+    <declare-styleable name="StickyListHeadersListView">
+        <attr name="stickyListHeadersListViewStyle" format="reference" />
+
+        <!-- View attributes -->
+        <attr name="android:clipToPadding" />
+        <attr name="android:scrollbars" />
+        <attr name="android:overScrollMode" />
+        <attr name="android:padding" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
+
+        <!-- ListView attributes -->
+        <attr name="android:fadingEdgeLength" />
+        <attr name="android:requiresFadingEdge" />
+        <attr name="android:cacheColorHint" />
+        <attr name="android:choiceMode" />
+        <attr name="android:drawSelectorOnTop" />
+        <attr name="android:fastScrollEnabled" />
+        <attr name="android:fastScrollAlwaysVisible" />
+        <attr name="android:listSelector" />
+        <attr name="android:scrollingCache" />
+        <attr name="android:scrollbarStyle" />
+        <attr name="android:divider" />
+        <attr name="android:dividerHeight" />
+        <attr name="android:transcriptMode" />
+        <attr name="android:stackFromBottom" />
+
+        <!-- StickyListHeaders attributes -->
+        <attr name="hasStickyHeaders" format="boolean" />
+        <attr name="isDrawingListUnderStickyHeader" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="AppTheme">
+        <eat-comment />
+
+        <attr name="spinnerItemStyle" format="reference" />
+
+        <eat-comment />
+    </declare-styleable>
+    <attr name="speed">
+        <enum name="speedOne" value="1" />
+        <enum name="speedTwo" value="2" />
+    </attr>
+    <attr name="strokeColor" format="color" />
+    <declare-styleable name="RightDiaView">
+        <attr name="strokeColor" />
+        <attr name="speed" />
+    </declare-styleable>
+    <declare-styleable name="WrongDiaView">
+        <attr name="strokeColor" />
+        <attr name="speed" />
+    </declare-styleable>
+
+    <!--换肤设置-->
+    <attr name="enable" format="boolean" />
+       
+    <declare-styleable name="AutoTextView">
+               
+        <attr name="isChangeHeight" format="boolean" />
+               
+        <attr name="minTextSize" format="dimension" />
+               
+        <attr name="maxTextSize" format="dimension" />
+               
+        <attr name="isResizeOnce" format="boolean" />
+           
+    </declare-styleable>
+    <declare-styleable name="DancingNumberView">
+        <attr name="dnv_duration" format="integer" />
+        <attr name="dnv_format" format="string" />
+    </declare-styleable>
+    <declare-styleable name="GifImageView">
+        <!--gif文件引用-->
+        <attr name="gif_src" format="reference" />
+        <!--是否加载完自动播放-->
+        <attr name="auth_play" format="boolean" />
+        <!--播放次放，默认永远播放-->
+        <attr name="play_count" format="integer" />
+        <!--播放完成后是否停留在最后一帧，默认false-->
+        <attr name="end_last_frame" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="SpanEditText">
+        <attr name="use_delete" format="boolean" />
+    </declare-styleable>
+
+    <attr name="labTextSize" format="dimension" />
+    <attr name="labTextColor" format="color" />
+    <attr name="labTextStyle">
+        <enum name="normal" value="0" />
+        <enum name="bold" value="1" />
+        <enum name="italic" value="2" />
+    </attr>
+    <attr name="labText" format="string" />
+    <attr name="deleteIcon" format="reference" />
+    <attr name="useDelete" format="boolean" />
+    <attr name="eyeIcon" format="reference" />
+    <attr name="useEye" format="boolean" />
+    <attr name="assistButtonTextSize" format="dimension" />
+    <attr name="assistButtonTextColor" format="color" />
+    <attr name="assistButtonText" format="string" />
+    <attr name="assistButtonTextStyle">
+        <enum name="normal" value="0" />
+        <enum name="bold" value="1" />
+        <enum name="italic" value="2" />
+    </attr>
+    <attr name="MaterialEditTextStyle" format="reference" />
+    <declare-styleable name="MaterialEditText">
+        <attr name="MaterialEditTextStyle" />
+        <attr name="labTextSize" />
+        <attr name="labTextColor" />
+        <attr name="labTextStyle" />
+        <attr name="labText" />
+        <attr name="deleteIcon" />
+        <attr name="useDelete" />
+        <attr name="eyeIcon" />
+        <attr name="useEye" />
+        <attr name="iconPadding" format="dimension" />
+        <attr name="assistButtonTextSize" />
+        <attr name="assistButtonTextColor" />
+        <attr name="assistButtonText" />
+        <attr name="assistButtonTextStyle" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewVerifyGoogleModel"
+            type="Object" />
+    </data>
+
+    <com.black.lib.view.InputLinearLayout
+        android:id="@+id/phone_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_input_box"
+        android:orientation="horizontal"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp">
+
+        <com.black.base.widget.SpanMaterialEditText
+            android:id="@+id/google_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/google_code_input_hint"
+            android:inputType="number"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:textSize="@dimen/text_size_16" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_copy_google_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/paste"
+            android:textColor="@color/C1"
+            android:textSize="@dimen/text_size_16" />
+    </com.black.lib.view.InputLinearLayout>
+</layout>

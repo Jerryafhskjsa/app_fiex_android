@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/pair"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/T1"
+        android:textSize="@dimen/text_size_13" />
+
+    <CheckedTextView
+        android:id="@+id/btn_collect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:background="@null"
+        android:button="@null"
+        android:drawableLeft="@drawable/btn_collect"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="0sp" />
+</LinearLayout>

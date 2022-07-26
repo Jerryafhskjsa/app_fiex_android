@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/armeabi-v7a",
+  "command": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi21 --gcc-toolchain=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -DfryingSecret_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -std=c++11 -std=c++11 -Oz -DNDEBUG  -fPIC   -o src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o -c /Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/fryingSecret.cpp",
+  "file": "/Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/fryingSecret.cpp"
+}
+]

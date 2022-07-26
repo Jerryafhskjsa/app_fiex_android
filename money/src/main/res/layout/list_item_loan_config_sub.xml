@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemLoanConfigSubModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/sub_coin_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:maxLines="1"
+            android:text="@string/number_default"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/loan_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/number_default"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/explode_warn_scale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/number_default"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/explode_scale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:maxLines="1"
+            android:text="@string/number_default"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_13" />
+    </LinearLayout>
+</layout>

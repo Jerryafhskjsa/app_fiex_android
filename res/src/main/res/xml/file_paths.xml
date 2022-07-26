@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <root-path
+        name="root-path"
+        path="/data/data/com.fbsex.exchange/download"/>
+    <files-path
+        name="files_path_temp_img"
+        path="fbsex" />
+    <cache-path
+        name="cache_path_temp_img"
+        path="fbsex" />
+    <external-path
+        name="path_temp_img"
+        path="fbsex" />
+    <external-files-path
+        name="files_temp_img"
+        path="fbsex" />
+    <external-cache-path
+        name="cache_temp_img"
+        path="fbsex" />
+</paths>

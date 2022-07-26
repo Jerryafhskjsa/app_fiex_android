@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#e07241</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black_real">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_ALPHA60">#98ffffff</color>
+    <color name="black">#333333</color>
+    <color name="grey">#D7D7D7</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="top_message_normal">#CC0b2545</color>
+    <color name="top_message_error">#CCd72d4d</color>
+    <color name="C1">#18c1c2</color>
+    <color name="C1_ALPHA10">#1918c1c2</color>
+    <color name="C1_ALPHA50">#8018c1c2</color>
+    <color name="C1_ALPHA80">#cc18c1c2</color>
+    <color name="C2">#c5ced4</color>
+    <color name="C2_ALPHA30">#4cc5ced4</color>
+    <color name="C2_ALPHA50">#80c5ced4</color>
+    <color name="C2_ALPHA80">#ccc5ced4</color>
+    <color name="C3">#0b2545</color>
+    <color name="C3_ALPHA08">#140b2545</color>
+    <color name="C4">#d72d4d</color>
+    <color name="C4_ALPHA50">#80d72d4d</color>
+    <color name="C4_ALPHA80">#ccd72d4d</color>
+    <color name="C5">#ffc420</color>
+    <color name="C6">#9d4fda</color>
+    <color name="C7">#ffffff</color>
+    <color name="C8">#ecf0fd</color>
+
+    <color name="T1">#030303</color>
+    <color name="T1_ALPHA60">#98030303</color>
+    <color name="T2">#858585</color>
+    <color name="T3">#c7c5cb</color>
+    <color name="T4">#ffffff</color>
+    <color name="T4_ALPHA60">#98ffffff</color>
+    <color name="T5">#fa6b57</color>
+    <color name="T5_ALPHA10">#19fa6b57</color>
+    <color name="T5_ALPHA50">#80fa6b57</color>
+    <color name="T5_ALPHA80">#ccfa6b57</color>
+    <color name="T7">#00ca9e</color>
+    <color name="T7_ALPHA10">#1900ca9e</color>
+    <color name="T7_ALPHA50">#8000ca9e</color>
+    <color name="T7_ALPHA80">#cc00ca9e</color>
+    <color name="T8">#ffffff</color>
+    <color name="T8_ALPHA30">#4cffffff</color>
+
+    <color name="L1">#c9c9c9</color>
+    <color name="L1_ALPHA30">#4cc9c9c9</color>
+    <color name="L1_ALPHA60">#98c9c9c9</color>
+
+    <color name="B1">#f8f9f9</color>
+    <color name="B2">#ffffff</color>
+    <color name="B2_ALPHA50">#80ffffff</color>
+
+</resources>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="IMGroupMemberInfoModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:background="@color/B2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="头像"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.lib.widget.CircleImageView
+                                android:id="@+id/icon_avatar"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_avatar" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:src="@drawable/icon_left" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/nick_name_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:background="@color/B2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="昵称"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right|center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/nick_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/icon_left"
+                                android:drawablePadding="6dp"
+                                android:gravity="right"
+                                android:hint="未填写"
+                                android:textColor="@color/T1"
+                                android:textColorHint="@color/T2"
+                                android:textSize="@dimen/text_size_16" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:background="@color/B1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/btn_silence"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:text="禁言"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_change_to_manager"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:background="@color/B2"
+                        android:gravity="center"
+                        android:text="设为管理员"
+                        android:textColor="@color/T5"
+                        android:textSize="@dimen/text_size_16"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="loanRecordDetailModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/double_padding"
+                    android:paddingRight="@dimen/double_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="创建时间"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/create_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="借贷周期"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/days"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="年化利率"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/rate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="抵押资金"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/mortgage_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="借入资金"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/loan_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/back_date_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/back_date_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="还款时间"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/back_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/interest_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="利息"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/interest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/explode_mortgage_price_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="爆仓时抵押币价"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/explode_mortgage_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/explode_loan_price_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="爆仓时借贷币价"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/explode_loan_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/explode_rate_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="爆仓时风险率"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/explode_rate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/explode_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="扣除保证金"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/explode_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/status_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="还款类型"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/risk_rate_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="风险率"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/risk_rate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/break_rate_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="违约费率"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/break_rate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/break_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="违约金"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/break_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/return_amount_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="13dp"
+                        android:paddingBottom="13dp"
+                        android:visibility="gone">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="退还保证金"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/return_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="@string/number_default"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </RelativeLayout>
+</layout>

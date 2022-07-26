@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/share_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_layout"
+        android:background="@color/C2"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/double_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/share_to_wechat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/icon_share_weixin"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/wechat"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/share_to_wechat_moments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/icon_share_friend"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/friend"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/share_to_telegran"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/icon_share_telegran"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/telegran"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/share_to_download"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/icon_share_download"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/sabe_download"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/double_padding" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding"
+            android:background="@color/B1" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_share_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:padding="@dimen/double_padding"
+            android:text="@string/share_cancel"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_16" />
+    </LinearLayout>
+</LinearLayout>

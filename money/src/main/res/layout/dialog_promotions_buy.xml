@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/B2"
+    android:orientation="vertical"
+    android:padding="@dimen/double_padding">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/price"
+            android:text="@string/unit_price"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/T5"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_padding"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_coin_title"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/max_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_13" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fadingEdge="none"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_padding"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_amount"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/amount_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_13" />
+
+    </LinearLayout>
+
+    <com.black.lib.view.InputLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_input_box"
+        android:orientation="horizontal"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp">
+
+        <com.black.base.widget.SpanMaterialEditText
+            android:id="@+id/amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/purchase_amount_hint"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:textSize="@dimen/text_size_16" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/coin_type_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+    </com.black.lib.view.InputLinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大约可申购："
+            android:textColor="@color/T3"
+            android:textSize="@dimen/text_size_13" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/use_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T3"
+            android:textSize="@dimen/text_size_13" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_padding"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_gray"
+            android:gravity="center"
+            android:padding="13dp"
+            android:text="@string/cancel"
+            android:textColor="@color/T8"
+            android:textSize="@dimen/text_size_16" />
+
+        <View
+            android:layout_width="@dimen/double_padding"
+            android:layout_height="match_parent" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_buy_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue"
+            android:gravity="center"
+            android:padding="13dp"
+            android:text="@string/c2c_buy_confirm"
+            android:textColor="@color/T8"
+            android:textSize="@dimen/text_size_16" />
+    </LinearLayout>
+</LinearLayout>

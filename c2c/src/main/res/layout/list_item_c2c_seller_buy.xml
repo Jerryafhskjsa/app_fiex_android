@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemC2CSallerBuyModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="118dp"
+            android:paddingTop="@dimen/double_padding"
+            android:paddingBottom="@dimen/double_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/first_letter"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_c2c_avatar"
+                        android:gravity="center"
+                        android:textColor="@color/T4"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:drawableRight="@drawable/icon_c2c_vip"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:maxLength="25"
+                        android:maxLines="1"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_16" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/limit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="30"
+                    android:text="限额"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_13" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@drawable/bg_divider"
+                    android:orientation="horizontal"
+                    android:showDividers="middle">
+
+                    <ImageView
+                        android:id="@+id/pay_bank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_c2c_bank" />
+
+                    <ImageView
+                        android:id="@+id/pay_ali"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_c2c_alipay" />
+
+                    <ImageView
+                        android:id="@+id/pay_we"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_c2c_wechat" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/middle_padding"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="单价"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_cny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/btn_handle"
+                    android:textColor="@color/T7"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_handle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_t7_corner3"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/double_padding"
+                    android:paddingRight="@dimen/double_padding"
+                    android:text="@string/c2c_buy"
+                    android:textColor="@color/T8"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>

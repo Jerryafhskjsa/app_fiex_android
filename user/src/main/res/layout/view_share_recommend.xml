@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewShareRecommendModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/B2"
+        android:orientation="horizontal"
+        android:padding="@dimen/middle_padding">
+
+        <FrameLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="60dp"
+            android:layout_height="60dp">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:adjustViewBounds="true"
+                android:background="@color/C1"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/default_padding"
+            android:layout_toRightOf="@+id/icon_layout">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/recommended_share_title"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:includeFontPadding="false"
+                android:text="@string/recommended_share_text"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_10" />
+        </FrameLayout>
+    </RelativeLayout>
+</layout>

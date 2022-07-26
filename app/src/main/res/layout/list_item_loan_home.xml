@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemLoanHomeModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/double_padding"
+        android:paddingTop="15dp"
+        android:paddingRight="@dimen/double_padding"
+        android:paddingBottom="15dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/icon_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/icon_left_stong" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/coin_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/icon"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_toLeftOf="@+id/icon_arrow"
+            android:layout_toRightOf="@+id/icon"
+            android:text="@string/number_default"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_14" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/rate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_toRightOf="@+id/icon"
+            android:text="借贷比例"
+            android:textColor="@color/T3"
+            android:textSize="@dimen/text_size_14" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/rate_title"
+            android:layout_alignBottom="@+id/rate_title"
+            android:layout_marginLeft="6dp"
+            android:layout_toLeftOf="@+id/icon_arrow"
+            android:layout_toRightOf="@+id/rate_title"
+            android:text="@string/number_default"
+            android:textColor="@color/T5"
+            android:textSize="@dimen/text_size_16" />
+
+    </RelativeLayout>
+</layout>

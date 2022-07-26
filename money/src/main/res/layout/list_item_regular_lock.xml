@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemRegularLockModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_b2_corner3"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingRight="@dimen/double_padding">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/icon"
+                android:maxLines="1"
+                android:text="@string/number_default"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/coin_type"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toLeftOf="@+id/rate"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="年利率"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_14" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="6dp"
+                        android:layout_toLeftOf="@+id/status"
+                        android:maxLines="1"
+                        android:text="@string/number_default"
+                        android:textColor="@color/C1"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="6dp"
+                        android:gravity="center"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="2dp"
+                        android:textSize="@dimen/text_size_10" />
+                </RelativeLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_demand_rate"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textColor="@color/T5"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/L1_ALPHA30" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/rate"
+                    android:layout_toRightOf="@+id/coin_type"
+                    android:maxLines="1"
+                    android:text="存入总金额"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="4dp"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/break_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/rate"
+                    android:layout_toRightOf="@+id/coin_type"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="违约金"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/break_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T5"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/reward_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/rate"
+                    android:layout_toRightOf="@+id/coin_type"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="预计收益"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/reward"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="4dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/rate"
+                    android:layout_toRightOf="@+id/coin_type"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:text="存入日期"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/lock_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="4dp"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="锁定期"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/lock_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/unlock_date_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="到期日"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/unlock_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/L1_ALPHA30" />
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_change_out"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_weight="1"
+                android:text="取出" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

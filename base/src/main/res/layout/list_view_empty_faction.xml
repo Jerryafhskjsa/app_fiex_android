@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listViewEmptyFactionModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="120dp"
+        android:paddingBottom="0dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_list_empty_light" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/double_padding" />
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/list_view_empty_default"
+            android:textColor="#858585"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
+</layout>

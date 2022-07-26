@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/B2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/input_layout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/first_letter"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_circle_green"
+                android:gravity="center"
+                android:textColor="@color/T4"
+                android:textSize="@dimen/text_size_16" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:drawableRight="@drawable/icon_c2c_vip"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/money_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:text="实付款"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/number_default"
+                    android:textColor="@color/C1"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/L1_ALPHA60" />
+
+        <com.chanven.lib.cptr.PtrClassicFrameLayout
+            android:id="@+id/ptr_class"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B1">
+
+            <com.black.base.view.EmptyRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:fadingEdge="none"
+                android:listSelector="#00000000"
+                android:overScrollMode="never"
+                android:padding="@dimen/middle_padding"
+                android:scrollbars="none" />
+        </com.chanven.lib.cptr.PtrClassicFrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/B2"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/middle_padding"
+        android:paddingTop="10dp"
+        android:paddingRight="@dimen/middle_padding"
+        android:paddingBottom="10dp">
+
+        <com.black.base.widget.SpanMaterialEditText
+            android:id="@+id/message_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_l1_border_1_corner_3"
+            android:hint="@string/c2c_order_detail_input"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:padding="13dp"
+            android:textCursorDrawable="@drawable/icon_text_cursor"
+            android:textSize="@dimen/text_size_13"
+            app:use_delete="false" />
+
+        <View
+            android:layout_width="@dimen/default_padding"
+            android:layout_height="match_parent" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingRight="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding"
+            android:text="@string/c2c_order_detail_send"
+            android:textColor="@color/btn_text_color"
+            android:textSize="@dimen/text_size_15" />
+    </LinearLayout>
+</RelativeLayout>

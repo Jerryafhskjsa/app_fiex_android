@@ -1,0 +1,4 @@
+# ninja log v5
+0	1716	679938880	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7a4bfac7bc6c5d6d
+1717	3313	679938882	../../../../src/main/jniLibs/armeabi-v7a/libfryingSecret.so	70d2cb7c733fab92
+1	10	0	clean	696eab3b64ddb2d2

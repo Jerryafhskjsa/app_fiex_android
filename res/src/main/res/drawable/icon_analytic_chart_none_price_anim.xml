@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_analytic_chart_none_price">
+
+    <target
+        android:name="outer"
+        android:animation="@animator/anim_analytic_chart_none_price" />
+
+</animated-vector>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="safeCenterModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/gesture_password"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/gesture_password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:thumb="@drawable/icon_switch_thumb"
+                                android:track="@drawable/bg_switch_track"
+                                app:track="@drawable/bg_switch_track" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                style="@style/MenuListItem"
+                                android:layout_width="match_parent">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/finger_print"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_16" />
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:id="@+id/finger_print_password"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:thumb="@drawable/icon_switch_thumb"
+                                    android:track="@drawable/bg_switch_track"
+                                    app:track="@drawable/bg_switch_track" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <RelativeLayout
+                                style="@style/MenuListItem"
+                                android:layout_width="match_parent">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/face_password"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_16" />
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:thumb="@drawable/icon_switch_thumb"
+                                    android:track="@drawable/bg_switch_track"
+                                    app:track="@drawable/bg_switch_track" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/change_password"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/long_password"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:drawableRight="@drawable/icon_left"
+                                android:drawablePadding="6dp"
+                                android:gravity="center"
+                                android:text="@string/modify"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/money_password_layout"
+                            style="@style/MenuListItem"
+                            android:layout_width="match_parent">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/money_password"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/money_password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:thumb="@drawable/icon_switch_thumb"
+                                android:track="@drawable/bg_switch_track"
+                                app:track="@drawable/bg_switch_track" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/reset_money_password_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:drawableRight="@drawable/icon_left"
+                                android:text="@string/reset_money_password"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/payment_method_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:drawableRight="@drawable/icon_left"
+                                android:text="@string/payment_method_manager"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingTop="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:text="@string/hint_safe_center"
+                        android:textColor="@color/T2"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/safe_google_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/verify_google_02"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/safe_google_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:thumb="@drawable/icon_switch_thumb"
+                                android:track="@drawable/bg_switch_track"
+                                app:track="@drawable/bg_switch_track" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/safe_phone_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/verify_phone_02"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/safe_phone_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/safe_phone_status_icon"
+                                android:gravity="right"
+                                android:text="@string/status_closed"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <ImageView
+                                android:id="@+id/safe_phone_status_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="6dp"
+                                android:src="@drawable/icon_left" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/safe_mail_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/verify_mail_02"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/safe_mail_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/safe_mail_status_icon"
+                                android:gravity="right"
+                                android:text="@string/status_closed"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <ImageView
+                                android:id="@+id/safe_mail_status_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="6dp"
+                                android:src="@drawable/icon_left" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

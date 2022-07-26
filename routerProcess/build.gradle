@@ -1,0 +1,9 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':routerAnnotation')
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"

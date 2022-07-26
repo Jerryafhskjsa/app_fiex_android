@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.8">
+      <module name="FryingPub.app" target="11" />
+      <module name="FryingPub.base" target="11" />
+      <module name="FryingPub.c2c" target="11" />
+      <module name="FryingPub.clutter" target="11" />
+      <module name="FryingPub.community" target="11" />
+      <module name="FryingPub.im" target="11" />
+      <module name="FryingPub.lib" target="11" />
+      <module name="FryingPub.money" target="11" />
+      <module name="FryingPub.net" target="11" />
+      <module name="FryingPub.res" target="11" />
+      <module name="FryingPub.router" target="11" />
+      <module name="FryingPub.tuikit" target="11" />
+      <module name="FryingPub.UdeskSDKUI" target="11" />
+      <module name="FryingPub.user" target="11" />
+      <module name="FryingPub.util" target="11" />
+      <module name="FryingPub.wallet" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

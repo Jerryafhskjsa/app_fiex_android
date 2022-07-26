@@ -1,0 +1,1 @@
+include ':app', ':res', ':lib', ':util', ':routerAnnotation', ':routerProcess', ':router', ':net', ':base', ':user', ':wallet', ':money', ':c2c', ':clutter', ':UdeskSDKUI', ':tuikit', ':im', ':community'

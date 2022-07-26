@@ -1,0 +1,5 @@
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/x86_64/CMakeFiles/edit_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/x86_64/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/x86_64/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+/Users/randy/Desktop/FryingPub/base/.cxx/cmake/release/x86_64/src/main/cpp/sec/CMakeFiles/fryingSecret.dir

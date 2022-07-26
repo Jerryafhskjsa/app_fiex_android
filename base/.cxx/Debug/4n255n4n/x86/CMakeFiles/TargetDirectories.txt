@@ -1,0 +1,5 @@
+D:/AndroidStudioProject/FryingPub/base/.cxx/Debug/4n255n4n/x86/CMakeFiles/edit_cache.dir
+D:/AndroidStudioProject/FryingPub/base/.cxx/Debug/4n255n4n/x86/CMakeFiles/rebuild_cache.dir
+D:/AndroidStudioProject/FryingPub/base/.cxx/Debug/4n255n4n/x86/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+D:/AndroidStudioProject/FryingPub/base/.cxx/Debug/4n255n4n/x86/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+D:/AndroidStudioProject/FryingPub/base/.cxx/Debug/4n255n4n/x86/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir

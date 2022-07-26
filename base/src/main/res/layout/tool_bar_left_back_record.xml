@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CollapsingToolbarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+    app:titleEnabled="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        app:layout_collapseMode="pin">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@id/action_bar_title_big"
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:lineSpacingExtra="0dp" />
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/B2"
+        android:theme="@style/AppTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        app:theme="@style/AppTheme">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/action_bar_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:paddingLeft="@dimen/double_padding"
+                android:paddingRight="@dimen/double_padding"
+                android:scaleType="centerInside"
+                android:src="@drawable/btn_back" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@id/action_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_20" />
+
+            <RelativeLayout
+                android:id="@+id/filter_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical|right"
+                android:padding="@dimen/middle_padding">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/double_padding"
+                    android:maxLines="1"
+                    android:text="@string/record"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+
+            </RelativeLayout>
+        </FrameLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.CollapsingToolbarLayout>

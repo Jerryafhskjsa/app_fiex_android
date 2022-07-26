@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="mainHotStatusModel"
+            type="com.black.base.model.socket.PairStatus" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/pair_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/pair_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/pair_since"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/pair_price_cny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</layout>

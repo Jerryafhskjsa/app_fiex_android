@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemC2COrderModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/B2"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/double_padding"
+        android:paddingBottom="@dimen/double_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/icon_left"
+                android:drawablePadding="6dp"
+                android:gravity="right"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/time"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/amount_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:text="@string/c2c_order_amount"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="75"
+                android:gravity="right"
+                android:text="@string/c2c_order_money"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="130"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="75"
+                android:gravity="right"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_13" />
+
+    </LinearLayout>
+</layout>

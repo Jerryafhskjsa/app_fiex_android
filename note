@@ -1,0 +1,19 @@
+邮箱验证码发送之后无法收到
+
+https://fad34sd32g541.fbsex.co/api/config/coins?coinTypes=MT 返回数据结构调整为对象
+public class CoinInfoConfig {
+    public Double maxUsdtWithdrawAmountOneDay;
+    public Double noKycMaxUsdtWithdrawAmountOneDay;
+    public ArrayList<CoinInfo> configs;
+}
+
+        public final static String URL_BANNER_LIST = "commons/bannerList";
+//        public final static String URL_BANNER_LIST = "v2/commons/bannerList";
+
+  //公告首頁
+        //https://fbsexco.zendesk.com/api/v2/help_center/zh-cn/categories/360002181134/articles.json?page=1&per_page=3
+//        public final static String URL_NOTICE_HOME = "https://bkex.zendesk.com/api/v2/help_center/{language}/categories/360001640373/articles.json";
+        public final static String URL_NOTICE_HOME = "https://fbsexco.zendesk.com/api/v2/help_center/{language}/categories/360002181134/articles.json?";
+
+
+实名认证添加参数 idType   护照 0 身份证 1

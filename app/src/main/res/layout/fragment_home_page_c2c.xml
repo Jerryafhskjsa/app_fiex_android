@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B2"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_c2c_tab_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/c2c_buy_usdt"
+            android:textColor="@color/c2c_tab_buy"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_c2c_tab_sell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_toRightOf="@+id/btn_c2c_tab_buy"
+            android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/c2c_sale_usdt"
+            android:textColor="@color/c2c_tab_sale"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/head_order"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_gravity="right|center_vertical"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:paddingLeft="15dip"
+            android:paddingTop="12dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="12dp"
+            android:scaleType="fitXY"
+            android:text="我的订单"
+            android:textColor="@color/T1" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/C1_ALPHA10"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingTop="6dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_c2c_warning" />
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:drawablePadding="4dp"
+            android:gravity="top"
+            android:text="@string/c2c_warning"
+            android:textColor="@color/C1"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/L1_ALPHA30" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+</LinearLayout>

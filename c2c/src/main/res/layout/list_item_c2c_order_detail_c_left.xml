@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/middle_padding"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:gravity="center"
+            android:textColor="@color/T3"
+            android:textSize="@dimen/text_size_13" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/L1_ALPHA60" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/blank"
+            android:orientation="vertical">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_b2_corner3"
+                android:enabled="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:longClickable="true"
+                android:padding="@dimen/default_padding"
+                android:textColor="@color/T1"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_13" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/middle_padding" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/blank"
+            android:layout_width="70dp"
+            android:layout_height="@dimen/line"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

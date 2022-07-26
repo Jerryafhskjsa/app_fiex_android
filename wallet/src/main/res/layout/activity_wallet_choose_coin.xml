@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="walletChooseCoinModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/double_padding">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_search_wallet" />
+
+            <com.black.base.widget.SpanMaterialEditText
+                android:id="@+id/choose_coin_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/search_coin"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="0dp"
+                android:textColor="@color/T1"
+                android:textColorHint="@color/T3"
+                android:textSize="@dimen/text_size_16" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onBackClick"
+                android:text="@string/cancel"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_marginRight="@dimen/double_padding"
+            android:text="@string/search_history"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_13"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/double_padding"
+            android:paddingRight="@dimen/double_padding">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/history_01"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:background="@color/B1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="@dimen/middle_padding"
+                android:layout_height="@dimen/line" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/history_02"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:background="@color/B1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="@dimen/middle_padding"
+                android:layout_height="@dimen/line" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/history_03"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:background="@color/B1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="@dimen/middle_padding"
+                android:layout_height="@dimen/line" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/history_04"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:background="@color/B1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_13"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+            </FrameLayout>
+
+            <com.black.base.view.SideBar
+                android:id="@+id/side_bar"
+                android:layout_width="16dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="50dp" />
+        </FrameLayout>
+    </LinearLayout>
+</layout>

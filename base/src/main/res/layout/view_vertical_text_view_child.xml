@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.black.base.widget.SpanTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="left|center_vertical"
+    android:maxLines="1"
+    android:textColor="@color/T1"
+    android:textSize="@dimen/text_size_13"
+    app:minTextSize="@dimen/text_size_2">
+
+</com.black.base.widget.SpanTextView>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_update" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_b2_corner_4_bottom"
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingTop="15dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="30dp">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update_title"
+                android:textColor="@color/C1"
+                android:textSize="@dimen/text_size_15"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginTop="@dimen/default_padding"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+            </ScrollView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp">
+
+                <LinearLayout
+                    android:id="@+id/download_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/apk_down_load_hint"
+                        android:textColor="@color/C1"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:indeterminateOnly="false"
+                        android:max="100"
+                        android:maxHeight="6dp"
+                        android:minHeight="6dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/bg_seek_bar_download"
+                        android:thumb="@null" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/download_percent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_9" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/download_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/text_size_9" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_update"
+                    style="@style/ButtonBlue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/default_padding"
+                    android:text="@string/btn_update"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_16" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_update_jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/double_padding"
+            android:src="@drawable/icon_update_close" />
+    </LinearLayout>
+
+</FrameLayout>

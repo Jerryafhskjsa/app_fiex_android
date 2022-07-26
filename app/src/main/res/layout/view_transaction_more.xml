@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewTransactionMoreModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="151dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_b2_corner3"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <CheckedTextView
+            android:id="@+id/recharge"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/icon_translate_recharge"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="充币"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <CheckedTextView
+            android:id="@+id/extract"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/icon_translate_extract"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="提币"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <CheckedTextView
+            android:id="@+id/bill"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/icon_translate_bill"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="综合账单"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <CheckedTextView
+            android:id="@+id/collect"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/btn_collect"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="添加自选"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+
+        <CheckedTextView
+            android:id="@+id/chat_room"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/icon_coin_chat"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="聊天室"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16" />
+    </LinearLayout>
+</layout>

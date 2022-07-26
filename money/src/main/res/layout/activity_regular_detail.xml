@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="regularDetailModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/C1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/C1" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/B1" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.black.lib.refresh.QRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/btn_change_in">
+
+                <com.black.base.widget.ObserveScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/B1"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <View
+                                android:id="@+id/top_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="128dp"
+                                android:background="@color/C1" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="15dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_b2_corner3"
+                                        android:orientation="vertical"
+                                        android:padding="@dimen/double_padding">
+
+                                        <com.black.base.widget.SpanTextView
+                                            android:id="@+id/coin_type"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/default_padding"
+                                            android:ellipsize="end"
+                                            android:gravity="center"
+                                            android:singleLine="true"
+                                            android:text="@string/number_default"
+                                            android:textColor="@color/T1"
+                                            android:textSize="@dimen/text_size_16"
+                                            android:textStyle="bold" />
+
+                                        <com.black.base.widget.SpanTextView
+                                            android:id="@+id/rate"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:ellipsize="end"
+                                            android:gravity="center"
+                                            android:singleLine="true"
+                                            android:text="@string/number_default"
+                                            android:textColor="@color/C1"
+                                            android:textSize="@dimen/text_size_28"
+                                            android:textStyle="bold" />
+
+                                        <com.black.base.widget.SpanTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="24dp"
+                                            android:layout_gravity="center_horizontal"
+                                            android:layout_marginTop="@dimen/default_padding"
+                                            android:background="@drawable/bg_regular_rate_title"
+                                            android:ellipsize="end"
+                                            android:gravity="center"
+                                            android:paddingLeft="12dp"
+                                            android:paddingRight="12dp"
+                                            android:singleLine="true"
+                                            android:text="基准利率"
+                                            android:textColor="@color/T2"
+                                            android:textSize="@dimen/text_size_14" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="32dp"
+                                            android:divider="@drawable/bg_divider_8"
+                                            android:orientation="horizontal"
+                                            android:showDividers="middle">
+
+                                            <LinearLayout
+                                                android:id="@+id/amount_layout"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="center"
+                                                android:orientation="horizontal">
+
+                                                <LinearLayout
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:gravity="center"
+                                                    android:orientation="vertical">
+
+                                                    <com.black.base.widget.SpanTextView
+                                                        android:id="@+id/total_amount_title"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:gravity="center"
+                                                        android:maxLines="1"
+                                                        android:text="资产总额 (-) "
+                                                        android:textColor="@color/T3"
+                                                        android:textSize="@dimen/text_size_14" />
+
+                                                    <com.black.base.widget.SpanTextView
+                                                        android:id="@+id/total_amount"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginTop="4dp"
+                                                        android:gravity="center"
+                                                        android:maxLines="1"
+                                                        android:text="@string/number_default"
+                                                        android:textColor="@color/T1"
+                                                        android:textSize="@dimen/text_size_16" />
+                                                </LinearLayout>
+
+                                                <ImageView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:src="@drawable/icon_left"
+                                                    android:visibility="gone" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="center"
+                                                android:orientation="vertical">
+
+                                                <com.black.base.widget.SpanTextView
+                                                    android:id="@+id/total_reward_title"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center"
+                                                    android:maxLines="1"
+                                                    android:text="累计收益 (-) "
+                                                    android:textColor="@color/T3"
+                                                    android:textSize="@dimen/text_size_14" />
+
+                                                <com.black.base.widget.SpanTextView
+                                                    android:id="@+id/total_reward"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginTop="4dp"
+                                                    android:gravity="center"
+                                                    android:maxLines="1"
+                                                    android:text="@string/number_default"
+                                                    android:textColor="@color/T1"
+                                                    android:textSize="@dimen/text_size_16" />
+                                            </LinearLayout>
+                                        </LinearLayout>
+
+                                        <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="@dimen/default_padding" />
+                                    </LinearLayout>
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/lock_day"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:background="@drawable/bg_regular_detail_lock_day"
+                                        android:paddingLeft="4dp"
+                                        android:paddingTop="2dp"
+                                        android:paddingRight="4dp"
+                                        android:paddingBottom="2dp"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_size_12" />
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/B2"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="利率说明"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_16"
+                                        android:textStyle="bold" />
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/rate_description"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:text="@string/number_default"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_15" />
+
+                                    <ImageView
+                                        android:id="@+id/rate_image"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/default_padding"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitCenter" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/B2"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="收益说明"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_16"
+                                        android:textStyle="bold" />
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/reword_rule"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:text="@string/number_default"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_15" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@color/B2"
+                                    android:orientation="vertical"
+                                    android:padding="15dp">
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="费率说明"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_16"
+                                        android:textStyle="bold" />
+
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/break_rule"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:text="@string/number_default"
+                                        android:textColor="@color/T1"
+                                        android:textSize="@dimen/text_size_15" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+                </com.black.base.widget.ObserveScrollView>
+            </com.black.lib.refresh.QRefreshLayout>
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_change_in"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:padding="@dimen/middle_padding"
+                android:text="存入" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

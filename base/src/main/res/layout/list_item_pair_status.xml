@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/pair_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_15"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/set_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/max_lever"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/bg_c110_border_c1_corner_1"
+            android:paddingLeft="4dp"
+            android:paddingTop="2dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/C1"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:maxLines="1"
+        android:textColor="@color/C6"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+</LinearLayout>

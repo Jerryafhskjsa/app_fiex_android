@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemPaymentMethodModel"
+            type="Object" />
+    </data>
+
+    <com.black.lib.view.SwipeItemLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/content_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/double_padding">
+
+                <skin.support.widget.SkinCompatImageView
+                    android:id="@+id/type_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/type_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/is_active"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:drawableLeft="@drawable/icon_payment_method_active"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="已激活"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/batch_bank_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_13" />
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:textColor="@color/T2"
+                        android:textSize="@dimen/text_size_13" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/card_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <ImageView
+                            android:id="@+id/qrcode"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="6dp"
+                            android:src="@drawable/icon_payment_qrcode" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line"
+                android:layout_marginLeft="@dimen/double_padding"
+                android:layout_marginRight="@dimen/double_padding"
+                android:background="@color/L1_ALPHA60" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:background="#D72D4D"
+                android:gravity="center"
+                android:text="@string/delete"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </com.black.lib.view.SwipeItemLayout>
+</layout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FryingPub.iml" filepath="$PROJECT_DIR$/FryingPub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.iml" filepath="$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/UdeskSDKUI/FryingPub.UdeskSDKUI.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FryingPub.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FryingPub.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FryingPub.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FryingPub.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FryingPub.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FryingPub.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FryingPub.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FryingPub.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/base/FryingPub.base.iml" filepath="$PROJECT_DIR$/.idea/modules/base/FryingPub.base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/base/FryingPub.base.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/base/FryingPub.base.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/base/FryingPub.base.main.iml" filepath="$PROJECT_DIR$/.idea/modules/base/FryingPub.base.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/base/FryingPub.base.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/base/FryingPub.base.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.iml" filepath="$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.main.iml" filepath="$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/c2c/FryingPub.c2c.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.iml" filepath="$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.main.iml" filepath="$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/clutter/FryingPub.clutter.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community/FryingPub.community.iml" filepath="$PROJECT_DIR$/.idea/modules/community/FryingPub.community.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community/FryingPub.community.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/community/FryingPub.community.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community/FryingPub.community.main.iml" filepath="$PROJECT_DIR$/.idea/modules/community/FryingPub.community.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community/FryingPub.community.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/community/FryingPub.community.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/im/FryingPub.im.iml" filepath="$PROJECT_DIR$/.idea/modules/im/FryingPub.im.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/im/FryingPub.im.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/im/FryingPub.im.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/im/FryingPub.im.main.iml" filepath="$PROJECT_DIR$/.idea/modules/im/FryingPub.im.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/im/FryingPub.im.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/im/FryingPub.im.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/FryingPub.lib.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/money/FryingPub.money.iml" filepath="$PROJECT_DIR$/.idea/modules/money/FryingPub.money.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/money/FryingPub.money.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/money/FryingPub.money.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/money/FryingPub.money.main.iml" filepath="$PROJECT_DIR$/.idea/modules/money/FryingPub.money.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/money/FryingPub.money.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/money/FryingPub.money.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net/FryingPub.net.iml" filepath="$PROJECT_DIR$/.idea/modules/net/FryingPub.net.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net/FryingPub.net.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/net/FryingPub.net.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net/FryingPub.net.main.iml" filepath="$PROJECT_DIR$/.idea/modules/net/FryingPub.net.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net/FryingPub.net.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/net/FryingPub.net.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/res/FryingPub.res.iml" filepath="$PROJECT_DIR$/.idea/modules/res/FryingPub.res.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/res/FryingPub.res.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/res/FryingPub.res.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/res/FryingPub.res.main.iml" filepath="$PROJECT_DIR$/.idea/modules/res/FryingPub.res.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/res/FryingPub.res.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/res/FryingPub.res.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/router/FryingPub.router.iml" filepath="$PROJECT_DIR$/.idea/modules/router/FryingPub.router.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/router/FryingPub.router.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/router/FryingPub.router.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/router/FryingPub.router.main.iml" filepath="$PROJECT_DIR$/.idea/modules/router/FryingPub.router.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/router/FryingPub.router.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/router/FryingPub.router.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.iml" filepath="$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.main.iml" filepath="$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.test.iml" filepath="$PROJECT_DIR$/.idea/modules/routerAnnotation/FryingPub.routerAnnotation.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.iml" filepath="$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.main.iml" filepath="$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.test.iml" filepath="$PROJECT_DIR$/.idea/modules/routerProcess/FryingPub.routerProcess.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.iml" filepath="$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/tuikit/FryingPub.tuikit.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user/FryingPub.user.iml" filepath="$PROJECT_DIR$/.idea/modules/user/FryingPub.user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user/FryingPub.user.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/user/FryingPub.user.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user/FryingPub.user.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user/FryingPub.user.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user/FryingPub.user.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/user/FryingPub.user.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/FryingPub.util.iml" filepath="$PROJECT_DIR$/.idea/modules/util/FryingPub.util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/FryingPub.util.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/util/FryingPub.util.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/FryingPub.util.main.iml" filepath="$PROJECT_DIR$/.idea/modules/util/FryingPub.util.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/FryingPub.util.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/util/FryingPub.util.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.main.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet/FryingPub.wallet.unitTest.iml" />
+    </modules>
+  </component>
+</project>

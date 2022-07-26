@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="PromotionsListModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    style="@style/CollapsingToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+                    app:titleEnabled="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="109dp"
+                        app:layout_collapseMode="pin">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@id/action_bar_title_big"
+                            style="@style/TitleStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentBottom="true"
+                            android:lineSpacingExtra="0dp" />
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/B2"
+                        android:theme="@style/AppTheme"
+                        app:contentInsetLeft="0dp"
+                        app:contentInsetStart="0dp"
+                        app:layout_collapseMode="pin"
+                        app:theme="@style/AppTheme"
+                        app:titleMargin="0dp"
+                        app:titleTextAppearance="@style/ToolBarTitleStyle">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageButton
+                                android:id="@+id/action_bar_back"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_vertical"
+                                android:background="@null"
+                                android:contentDescription="@null"
+                                android:onClick="onBackClick"
+                                android:paddingLeft="@dimen/double_padding"
+                                android:paddingRight="@dimen/double_padding"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/btn_back" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@id/action_bar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:maxLines="1"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_20" />
+
+                            <RelativeLayout
+                                android:id="@+id/promotions_record"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_vertical|right"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dip">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/icon_promotions_record" />
+
+                            </RelativeLayout>
+                        </FrameLayout>
+
+                    </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.lib.refresh.QRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.black.base.widget.ObserveScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/B2"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/B2"
+                            android:descendantFocusability="blocksDescendants">
+
+                            <com.black.base.view.EmptyRecyclerView
+                                android:id="@+id/recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fadingEdge="none"
+                                android:overScrollMode="never"
+                                android:paddingLeft="@dimen/double_padding"
+                                android:paddingRight="@dimen/double_padding"
+                                android:scrollbars="none" />
+
+                            <include
+                                android:id="@+id/empty_view"
+                                layout="@layout/list_view_empty_long" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </com.black.base.widget.ObserveScrollView>
+            </com.black.lib.refresh.QRefreshLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AndroidStudioProject/FryingPub/app/src/main/res/layout/activity_k_line_full.xml" value="0.16302083333333334" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/app/src/main/res/layout/activity_quotation_detail.xml" value="0.16666666666666666" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/app/src/main/res/layout/view_k_line_quota_selector.xml" value="0.15677083333333333" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/base/src/main/res/layout/dialog_confirm.xml" value="0.178125" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/base/src/main/res/layout/toast_style.xml" value="0.15729166666666666" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/c2c/src/main/res/layout/activity_c2c_order_detail_talk.xml" value="0.17083333333333334" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/clutter/src/main/res/layout/activity_finger_print_check.xml" value="0.17239583333333333" />
+        <entry key="..\:/AndroidStudioProject/FryingPub/im/src/main/res/layout/chat_notice_layout.xml" value="0.17083333333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
