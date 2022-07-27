@@ -26,6 +26,7 @@ import com.black.base.net.NormalObserver2
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
+import com.black.im.util.ToastUtil
 import com.black.net.HttpRequestResult
 import com.black.net.RequestFunction
 import com.black.net.RequestFunction2
@@ -297,14 +298,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         showLoading()
         ApiManager.build(this, true).getService<UserApiService>(UserApiService::class.java)
                 ?.getToken(telCountryCode, username, password)
-                ?.materialize()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>>() {
+                ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
+                ?.subscribeOn(Schedulers.io())//事件产生的线程
+                ?.observeOn(AndroidSchedulers.mainThread())//事件消费的线程
+                ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>>() {//Func1表示包装有返回值的方法，Actcion无返回值
                     override fun afterRequest() {
                         hideLoading()
                     }
-
                     override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>> {
                         return if (returnData != null) {
                             when (returnData.code) {
@@ -378,6 +378,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
                             val token = result.data
+//                            val unTokek = result.data.ucToken
+//                            val ticket = result.data.ticket
                             if (TextUtils.isEmpty(token)) {
                                 FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                             } else {

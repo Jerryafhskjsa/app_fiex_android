@@ -7,36 +7,28 @@ object UrlConfig {
     //https://test.fbsex.co/api/u/userNameIsExist?userName=18380265294 "https://fad34sd32g541.fbsex.co/api/
 //    public final static String HOST = "http://118.123.249.219:8888";
     private val HOSTS = arrayOf(
-            "http://fiex.matchain.info",//测试环境
+            "http://fiex.matchain.info",//fiex测试环境
             "http://fiex.io",//正式环境
-            "https://mobile.fbsex.co",  //",//real
+            "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new
-            //"https://dfa4w4r3hxmk.fbsex.co",
-            //            "https://fad34sd32g541.fbsex.co",//",//stage
-            "https://fad34sd32g541.forright.shop",  //",//stage
+            "https://fad34sd32g541.forright.shop",//stage
             "http://192.168.1.208:8888" //",//dev
     )
     val API_HOSTS = arrayOf(
-            "http://fiex.matchain.info/api/",
+            "http://fiex.matchain.info/uc/",//fiex测试环境
             "http://fiex.io/api/",//正式环境
-            "https://mobile.fbsex.co/api/",  //",//real
+            "https://mobile.fbsex.co/api/",//real
             "https://mob1234xa.fbsex.co/api/",//real new
-            //"https://dfa4w4r3hxmk.fbsex.co/api/",
-            //            "https://fad34sd32g541.fbsex.co/api/",//stage
-            "https://fad34sd32g541.forright.shop/api/",  //",//stage
-//            "http://47.112.181.167/api/",
+            "https://fad34sd32g541.forright.shop/api/",//stage
             "http://192.168.1.208:8888/api/" //dev
     )
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
-            "http://fiex.matchain.info",
+            "http://fiex.matchain.info",//fiex测试环境
             "http://fiex.io",//正式环境
-            "https://mobile.fbsex.co",  //",//real
+            "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new
-            //"https://dfa4w4r3hxmk.fbsex.co",
-            //            "wss://fbs-thonas-elb-suite-1-529450788.ap-northeast-1.elb.amazonaws.com",
-            //            "https://fad34sd32g541.fbsex.co",//",//stage
-            "https://fad34sd32g541.forright.shop",  //",//stage
+            "https://fad34sd32g541.forright.shop",//stage
             "https://fad34sd32g541.fbsex.co" //dev
     )
 
