@@ -77,6 +77,8 @@ object ConstData {
     /*----------Pref KEys-------*/
     const val IS_NEW_APP = "is_new_app"
     const val TOKEN = "token"
+    const val UC_TOKEN = "uc_token"
+    const val TICKET = "ticket"
     const val TYPE = "type"
     const val USER_INFO = "user_info"
     const val USER_NAME = "user_name"

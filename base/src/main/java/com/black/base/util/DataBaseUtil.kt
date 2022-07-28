@@ -95,6 +95,7 @@ object DataBaseUtil {
             user.userName = Encryptor.decrypt(user.userName, ConstData.FRYING_PASSWORD)
             user.password = Encryptor.decrypt(user.password, ConstData.FRYING_PASSWORD)
             user.token = Encryptor.decrypt(user.token, ConstData.FRYING_PASSWORD)
+            user.ucToken = Encryptor.decrypt(user.ucToken, ConstData.FRYING_PASSWORD)
             list.add(user)
         }
         cursor.close()

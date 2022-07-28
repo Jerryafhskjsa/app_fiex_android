@@ -248,15 +248,15 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun loginSuffix(context: Context?, prefixAuth: String?, phoneCode: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context, true).getService(UserApiService::class.java)
-                ?.loginSuffix(prefixAuth, phoneCode, emailCode, googleCode)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
+//    fun loginSuffix(context: Context?, prefixAuth: String?, phoneCode: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+//        if (context == null || callback == null) {
+//            return
+//        }
+//        ApiManager.build(context, true).getService(UserApiService::class.java)
+//                ?.loginSuffix(prefixAuth, phoneCode, emailCode, googleCode)
+//                ?.compose(RxJavaHelper.observeOnMainThread())
+//                ?.subscribe(HttpCallbackSimple(context, true, callback))
+//    }
 
     //    public static void loginSuffixGoogle(Context context, String prefixAuth, String googleCode, Callback<HttpRequestResultString?> callback) {
 //        if (context == null || callback == null) {

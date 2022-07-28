@@ -220,6 +220,8 @@ class FryingSQLiteHelper private constructor(context: Context, name: String, fac
                 "uid VARCHAR," +
                 "password VARCHAR," +
                 "token VARCHAR," +
+                "uc_token VARCHAR," +
+                "ticket VARCHAR," +
                 "login_date LONG, " +
                 "is_current_user INTEGER" +
                 ")"

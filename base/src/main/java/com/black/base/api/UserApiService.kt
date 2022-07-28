@@ -5,6 +5,7 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
 import com.black.base.model.user.PushSwitch
 import com.black.base.model.user.RecommendPeopleDetail
+import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.UserInfo
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -20,6 +21,12 @@ interface UserApiService {
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)
     fun loginSuffix(@Field("prefixAuth") prefixAuth: String?, @Field("phoneCode") phoneCode: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?): Observable<HttpRequestResultString?>?
+
+    //fiex 返回{"ucToken","ticket"}
+    @FormUrlEncoded
+    @POST(UrlConfig.User.URL_LOGIN_SUFFIX)
+    fun loginSuffixResultObj(@Field("prefixAuth") prefixAuth: String?, @Field("phoneCode") phoneCode: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?): Observable<HttpRequestResultData<SuffixResult?>?>?
+
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)

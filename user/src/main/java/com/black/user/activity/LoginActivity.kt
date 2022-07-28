@@ -1,27 +1,35 @@
 package com.black.user.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiService
+import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindowSingle
 import com.black.base.manager.ApiManager
 import com.black.base.model.CountryCode
+import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.clutter.CoinUsdtPrice
+import com.black.base.model.user.PushSwitch
+import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
+import com.black.base.net.HttpCallbackSimple
 import com.black.base.net.NormalObserver2
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
@@ -43,11 +51,13 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import java.util.logging.LogManager
 
 @Route(value = [RouterConstData.LOGIN])
 class LoginActivity : BaseActivity(), View.OnClickListener {
     companion object {
         private const val FOR_GESTURE_PASSWORD = 102
+        private const val TAG = "LoginActivity"
     }
 
     private var type = ConstData.AUTHENTICATE_TYPE_PHONE
@@ -301,11 +311,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
                 ?.subscribeOn(Schedulers.io())//事件产生的线程
                 ?.observeOn(AndroidSchedulers.mainThread())//事件消费的线程
-                ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>>() {//Func1表示包装有返回值的方法，Actcion无返回值
+                ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>() {//Func1表示包装有返回值的方法，Actcion无返回值
                     override fun afterRequest() {
                         hideLoading()
                     }
-                    override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>> {
+                    override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
                         return if (returnData != null) {
                             when (returnData.code) {
                                 HttpRequestResult.SUCCESS -> {
@@ -370,22 +380,24 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     }
                 })
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : NormalObserver2<HttpRequestResultString?>(this) {
+                ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
                     override fun afterRequest() {
                         hideLoading()
                     }
-
-                    override fun callback(result: HttpRequestResultString?) {
+                    override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            val token = result.data
-//                            val unTokek = result.data.ucToken
-//                            val ticket = result.data.ticket
-                            if (TextUtils.isEmpty(token)) {
+                            val ucToken = result?.data?.ucToken
+                            val ticket = result?.data?.ticket
+                            Log.d(TAG,"ucToken = "+ucToken)
+                            Log.d(TAG,"ticket = "+ticket)
+                            if (TextUtils.isEmpty(ucToken)) {
                                 FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                             } else {
-                                CookieUtil.saveToken(mContext, token)
+                                CookieUtil.saveUcToken(mContext, ucToken)
+                                CookieUtil.saveToken(mContext,ucToken)
                                 if (user != null) {
-                                    user!!.token = token
+                                    user!!.token = ucToken
+                                    user!!.ucToken = ucToken
                                 }
                                 onGetTokenSuccess()
                             }
@@ -396,7 +408,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 })
     }
 
-    private fun verifyObserve(type: Int, target: Target, errorCode: Int, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultString?>> {
+    private fun verifyObserve(type: Int, target: Target, errorCode: Int, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
         hideSoftKeyboard()
         val verifyWindow = getVerifyWindowSingle(this, type, true, target)
         return verifyWindow.show()
@@ -439,23 +451,22 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     //使用验证码验证
-    private fun loginSuffix(verifyWindow: VerifyWindowObservable, type: Int, target: Target, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultString?>>? {
+    private fun loginSuffix(verifyWindow: VerifyWindowObservable, type: Int, target: Target, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
         val phoneCode = if (type and VerifyType.PHONE == VerifyType.PHONE) target.phoneCode else null
         val emailCode = if (type and VerifyType.MAIL == VerifyType.MAIL) target.mailCode else null
         val googleCode = if (type and VerifyType.GOOGLE == VerifyType.GOOGLE) target.googleCode else null
         showLoading()
         return ApiManager.build(mContext, true).getService(UserApiService::class.java)
-                ?.loginSuffix(prefixAuth, phoneCode, emailCode, googleCode)
+                ?.loginSuffixResultObj(prefixAuth, phoneCode, emailCode, googleCode)
                 ?.materialize()
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.flatMap(object : RequestFunction2<HttpRequestResultString?, HttpRequestResultString?>() {
+                ?.flatMap(object : RequestFunction2<HttpRequestResultData<SuffixResult?>?, HttpRequestResultData<SuffixResult?>?>() {
                     override fun afterRequest() {
                         hideLoading()
                     }
-
                     @Throws(Exception::class)
-                    override fun applyResult(returnData: HttpRequestResultString?): HttpRequestResultString? {
+                    override fun applyResult(returnData: HttpRequestResultData<SuffixResult?>?): HttpRequestResultData<SuffixResult?>? {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             runOnUiThread { verifyWindow.dismiss() }
                         }

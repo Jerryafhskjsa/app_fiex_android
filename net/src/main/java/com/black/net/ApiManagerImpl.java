@@ -47,18 +47,18 @@ public class ApiManagerImpl {
         }
     }
 
-    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String token, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String token,String ticket, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
         String key = getKey(url, deviceId, lang, token);
         SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
         ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
         if (apiManager == null) {
-            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, token, apiCookieHelper, interceptHelper);
+            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, token,ticket, apiCookieHelper, interceptHelper);
             managerCache.put(key, new SoftReference<>(apiManager));
         }
         return apiManager;
     }
 
-    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String token, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String token,String ticket, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
         this.apiCookieHelper = apiCookieHelper;
         this.interceptHelper = interceptHelper;
         //OkHttpClient配置
@@ -69,7 +69,7 @@ public class ApiManagerImpl {
 //        Cache cache = new Cache(new File(Environment.getExternalStorageDirectory() + "/fbsex/cache"), 1024 * 1024 * 10);
         Cache cache = new Cache(new File(cachePath), 1024 * 1024 * 10);
         builder.cache(cache);
-        addInterceptor(context, builder, deviceId, lang, token);
+        addInterceptor(context, builder, deviceId, lang, token,ticket);
         mRetrofit = new Retrofit.Builder()
                 .client(builder.build())
                 .baseUrl(url)
@@ -115,14 +115,14 @@ public class ApiManagerImpl {
     /**
      * 添加各种拦截器
      */
-    private void addInterceptor(Context context, OkHttpClient.Builder builder, String deviceId, String lang, final String token) {
+    private void addInterceptor(Context context, OkHttpClient.Builder builder, String deviceId, String lang, final String token,final String ticket) {
         // 添加日志拦截器
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-//                if (Util.isApkInDebug(context)) {
-//                    Log.e("RetrofitLog", "" + message);
-//                }
+                if (Util.isApkInDebug(context)) {
+                    Log.e("RetrofitLog", "" + message);
+                }
             }
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -147,6 +147,16 @@ public class ApiManagerImpl {
                         .header("Authorization", token == null ? "" : token)
                         .header("Accept-Encoding", "gzip, deflate")
                         .header("Cache-Control", "no-cache");
+                if(JSESSIONIDCookie == null){
+                    JSESSIONIDCookie = "JSESSIONID="+token+";";
+                }else{
+                    if(!JSESSIONIDCookie.contains("uc-token=")){
+                        JSESSIONIDCookie += "uc-token="+token+";";
+                    }
+                    if(!JSESSIONIDCookie.contains("ticket=")){
+                        JSESSIONIDCookie += "ticket="+ticket+";";
+                    }
+                }
                 if (JSESSIONIDCookie != null) {
                     requestBuilder.addHeader("Cookie", JSESSIONIDCookie);
                     requestBuilder.addHeader("cookie", JSESSIONIDCookie);
@@ -176,7 +186,7 @@ public class ApiManagerImpl {
                         charset = contentType.charset(Charset.forName("UTF-8"));
                     }
                 }
-//                Log.e("interceptor", String.valueOf(request.headers()));
+                Log.d("interceptor", String.valueOf(request.headers()));
                 Response response = chain.proceed(request);
                 List<String> cookies = response.headers("Set-Cookie");
                 if (JSESSIONIDCookie == null && !cookies.isEmpty()) {
@@ -202,6 +212,8 @@ public class ApiManagerImpl {
                     String __cdnuid_s = allParam.get("__cdnuid_s");
                     String JSESSIONID = allParam.get("JSESSIONID");
                     String SERVERID = allParam.get("SERVERID");
+                    String UCTOKEN = allParam.get("UCTOKEN");
+                    String TICKET = allParam.get("TICKET");
                     if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
                         String cookie = "";
                         if (AWSALB != null && AWSALB.trim().length() > 0) {
@@ -218,6 +230,12 @@ public class ApiManagerImpl {
                         }
                         if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
                             cookie += "JSESSIONID=" + JSESSIONID + ";";
+                        }
+                        if (token != null && token.trim().length() > 0) {
+                            cookie += "uc-token=" + UCTOKEN + ";";
+                        }
+                        if (ticket != null && ticket.trim().length() > 0) {
+                            cookie += "ticket=" + TICKET + ";";
                         }
                         if (SERVERID != null && SERVERID.trim().length() > 0) {
                             cookie += "SERVERID=" + SERVERID + ";";
