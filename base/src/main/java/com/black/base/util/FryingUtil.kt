@@ -39,6 +39,7 @@ import com.black.base.view.ConfirmDialog.OnConfirmCallback
 import com.black.base.view.LoadingDialog
 import com.black.base.widget.ObserveScrollView
 import com.black.net.DownloadListener
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.annotation.Route
 import com.black.util.Callback
@@ -431,6 +432,7 @@ object FryingUtil {
     fun clearAllUserInfo(context: Context) {
         CookieUtil.deleteUserInfo(context)
         CookieUtil.deleteToken(context)
+        HttpCookieUtil.deleteCookies(context)
         CookieUtil.setMainEyeStatus(context, true)
         DataBaseUtil.clear(context)
         CookieUtil.setAccountProtectType(context, 0)

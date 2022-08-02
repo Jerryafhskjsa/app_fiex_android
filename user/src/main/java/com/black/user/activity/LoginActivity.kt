@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
+import com.black.base.api.PairApiService
 import com.black.base.api.UserApiService
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
@@ -31,14 +32,12 @@ import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.net.NormalObserver2
+import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
 import com.black.im.util.ToastUtil
-import com.black.net.HttpRequestResult
-import com.black.net.RequestFunction
-import com.black.net.RequestFunction2
-import com.black.net.RequestObserveResult
+import com.black.net.*
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
@@ -51,6 +50,8 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import java.util.HashMap
+import java.util.logging.Handler
 import java.util.logging.LogManager
 
 @Route(value = [RouterConstData.LOGIN])
@@ -306,7 +307,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
-        ApiManager.build(this, true).getService<UserApiService>(UserApiService::class.java)
+        ApiManager.build(this).getService<UserApiService>(UserApiService::class.java)
                 ?.getToken(telCountryCode, username, password)
                 ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
                 ?.subscribeOn(Schedulers.io())//事件产生的线程
@@ -319,13 +320,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         return if (returnData != null) {
                             when (returnData.code) {
                                 HttpRequestResult.SUCCESS -> {
-                                    //登录成功，获取用户信息，进入app
+                                    //token获取成功，获取用户信息，进入app
                                     val token = returnData.data
                                     if (TextUtils.isEmpty(token)) {
                                         FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                                     } else {
-                                        CookieUtil.saveToken(mContext, token)
-                                        onGetTokenSuccess()
+                                        HttpCookieUtil.saveUcToken(mContext,token)
+                                        CookieUtil.saveToken(mContext,token)
+//                                        onGetTokenSuccess()
                                     }
                                     Observable.empty()
                                 }
@@ -393,13 +395,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             if (TextUtils.isEmpty(ucToken)) {
                                 FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                             } else {
-                                CookieUtil.saveUcToken(mContext, ucToken)
+                                HttpCookieUtil.saveUcToken(mContext, ucToken)
                                 CookieUtil.saveToken(mContext,ucToken)
+                                Log.d(TAG,"currentThread = "+Thread.currentThread().name)
+                                HttpCookieUtil.saveTicket(mContext,ticket)
                                 if (user != null) {
                                     user!!.token = ucToken
                                     user!!.ucToken = ucToken
+                                    user!!.ticket = ticket
                                 }
-                                onGetTokenSuccess()
+                                getTradeToken(mContext)
+//                                onGetTokenSuccess()
                             }
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) getString(R.string.login_data_error) else result.msg)
@@ -407,6 +413,69 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     }
                 })
     }
+
+    //获取trade-token
+    private fun getTradeToken(context: Context){
+        ApiManager.build(context,true).getService<UserApiService>(UserApiService::class.java)
+            ?.getTradeToken()
+            ?.materialize()
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.flatMap(object :RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>?>(){
+                override fun afterRequest() {
+                }
+
+                override fun applyResult(result: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>?> {
+                    if(result != null){
+                        when(result.code){
+                            HttpRequestResult.SUCCESS ->{
+                                val tradeToken = result.data
+                                HttpCookieUtil.saveTradeToken(context,tradeToken)
+                                Log.d(TAG,"getTradeTokenSuccess")
+                                getProToken(context)
+                            }
+                            -10021, -10022, -10023, -10024 ->{
+
+                            }
+                        }
+                    }
+                    return Observable.empty()
+                }
+            })
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object :NormalObserver2<HttpRequestResultString?>(context){
+                override fun afterRequest() {
+                }
+
+                override fun callback(result: HttpRequestResultString?) {
+                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+//                        var proToken = result.data
+//                        HttpCookieUtil.saveProToken(context,proToken)
+//                        onGetTokenSuccess()
+                    }
+                }
+            })
+    }
+
+    //获取pro-token
+    private fun getProToken(context: Context){
+        ApiManager.build(context!!,true).getService<UserApiService>(UserApiService::class.java)
+            ?.getProToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultString?) {
+                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+                        var proToken = result.data
+                        HttpCookieUtil.saveProToken(context,proToken)
+                        onGetTokenSuccess()
+                    }
+                }
+            }))
+    }
+
 
     private fun verifyObserve(type: Int, target: Target, errorCode: Int, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
         hideSoftKeyboard()
@@ -435,7 +504,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             FryingUtil.showToast(mContext, getString(R.string.alert_phone_or_google_code))
                             return Observable.empty()
                         }
-                        //                        verifyWindow.dismiss();
+                        //verifyWindow.dismiss();
                         target.prefixAuth = prefixAuth
                         target.type = type
                         return Observable.just(target)
@@ -456,7 +525,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         val emailCode = if (type and VerifyType.MAIL == VerifyType.MAIL) target.mailCode else null
         val googleCode = if (type and VerifyType.GOOGLE == VerifyType.GOOGLE) target.googleCode else null
         showLoading()
-        return ApiManager.build(mContext, true).getService(UserApiService::class.java)
+        return ApiManager.build(mContext).getService(UserApiService::class.java)
                 ?.loginSuffixResultObj(prefixAuth, phoneCode, emailCode, googleCode)
                 ?.materialize()
                 ?.subscribeOn(Schedulers.io())

@@ -22,6 +22,14 @@ object UrlConfig {
             "https://fad34sd32g541.forright.shop/api/",//stage
             "http://192.168.1.208:8888/api/" //dev
     )
+
+    var API_PRO = arrayOf(
+        "http://fiex.matchain.info/pro/",//fiex pro测试环境
+    )
+
+    var API_API = arrayOf(
+        "http://fiex.matchain.info/api/",//fiex pro测试环境
+    )
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
             "http://fiex.matchain.info",//fiex测试环境
@@ -46,6 +54,13 @@ object UrlConfig {
 
     fun getApiHost(context: Context): String {
         return API_HOSTS[getIndex(context)]
+    }
+
+    fun getApiApiHost(context: Context): String {
+        return API_API[getIndex(context)]
+    }
+    fun getProHost(context: Context): String {
+        return API_PRO[getIndex(context)]
     }
 
     fun getSocketHost(context: Context): String {
@@ -111,6 +126,10 @@ object UrlConfig {
     object User {
         //登录
         const val URL_TOKEN = "user/token"
+        //trade_login
+        const val URL_TRADE_LOGIN = "user/trade/login"
+        //user_login
+        const val URL_USER_LOGIN = "user/login"
         //退出登录
         const val URL_LOGOUT = "user/logout"
         //登录验证

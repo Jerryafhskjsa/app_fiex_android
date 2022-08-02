@@ -2,6 +2,7 @@ package com.black.base.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData.CURRENT_PAIR_LEVER
 import com.google.gson.Gson
@@ -112,6 +113,8 @@ object CookieUtil {
         editor.commit()
     }
 
+
+
     //保存登录token
     fun saveToken(context: Context, token: String?) {
         val editor = getSharedPreferences(context).edit()
@@ -119,34 +122,10 @@ object CookieUtil {
         editor.commit()
     }
 
-    //保存登录ucToken
-    fun saveUcToken(context: Context, token: String?) {
-        val editor = getSharedPreferences(context).edit()
-        editor.putString(ConstData.UC_TOKEN, token)
-        editor.commit()
-    }
-
-    //保存ticket
-    fun saveTicket(context: Context, ticket: String?) {
-        val editor = getSharedPreferences(context).edit()
-        editor.putString(ConstData.TICKET, ticket)
-        editor.commit()
-    }
-
-
     //获取登录token
     fun getToken(context: Context): String? {
         //        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNTg4MTA2NzE5NyIsInVzZXJJZCI6IjQ4IiwiaWF0IjoxNTcxODE0OTgyLCJleHAiOjE1NzE4NzI1ODJ9.v68pROWQaVPyD2KH-SszD0ShgAp00nzMjJWhm0leAUI";
         return getSharedPreferences(context).getString(ConstData.TOKEN, null)
-    }
-
-    //获取登录ucToken
-    fun getUcToken(context: Context): String? {
-        return getSharedPreferences(context).getString(ConstData.UC_TOKEN, null)
-    }
-    //获取登录ticket
-    fun getTicket(context: Context): String? {
-        return getSharedPreferences(context).getString(ConstData.TICKET, null)
     }
 
     /**

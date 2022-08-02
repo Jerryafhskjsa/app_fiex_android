@@ -2,6 +2,7 @@ package com.black.net;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -29,6 +30,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManagerImpl {
+    private final String TAG = "ApiManagerImpl";
     public static final int DEFAULT_TIME_OUT = 15;//超时时间5s
     public static final int DEFAULT_READ_TIME_OUT = 30;//读取时间
     public static final int DEFAULT_WRITE_TIME_OUT = 30;//读取时间
@@ -47,18 +49,18 @@ public class ApiManagerImpl {
         }
     }
 
-    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String token,String ticket, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
-        String key = getKey(url, deviceId, lang, token);
+    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+        String key = getKey(url, deviceId, lang, ucToken);
         SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
         ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
         if (apiManager == null) {
-            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, token,ticket, apiCookieHelper, interceptHelper);
+            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, ucToken,apiCookieHelper, interceptHelper);
             managerCache.put(key, new SoftReference<>(apiManager));
         }
         return apiManager;
     }
 
-    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String token,String ticket, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
         this.apiCookieHelper = apiCookieHelper;
         this.interceptHelper = interceptHelper;
         //OkHttpClient配置
@@ -69,7 +71,7 @@ public class ApiManagerImpl {
 //        Cache cache = new Cache(new File(Environment.getExternalStorageDirectory() + "/fbsex/cache"), 1024 * 1024 * 10);
         Cache cache = new Cache(new File(cachePath), 1024 * 1024 * 10);
         builder.cache(cache);
-        addInterceptor(context, builder, deviceId, lang, token,ticket);
+        addInterceptor(context, builder, deviceId, lang, ucToken);
         mRetrofit = new Retrofit.Builder()
                 .client(builder.build())
                 .baseUrl(url)
@@ -78,10 +80,10 @@ public class ApiManagerImpl {
                 .build();
     }
 
-    private static String getKey(String url, String deviceId, String lang, String token) {
+    private static String getKey(String url, String deviceId, String lang, String ucToken) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("url:").append(url).append("deviceId:").append(deviceId).append("lang:").append(lang).append("token").append(token);
-//        stringBuilder.append("url:").append(url).append("deviceId:").append(deviceId).append("lang:").append(lang);
+        stringBuilder.append("url:").append(url).append("deviceId:").append(deviceId).append("lang:").append(lang).append("token").append(ucToken);
+//        stringBuilder.append("deviceId:").append(deviceId).append("lang:").append(lang);
         return stringBuilder.toString();
     }
 
@@ -115,7 +117,7 @@ public class ApiManagerImpl {
     /**
      * 添加各种拦截器
      */
-    private void addInterceptor(Context context, OkHttpClient.Builder builder, String deviceId, String lang, final String token,final String ticket) {
+    private void addInterceptor(Context context, OkHttpClient.Builder builder, String deviceId, String lang, final String ucToken) {
         // 添加日志拦截器
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
@@ -127,7 +129,7 @@ public class ApiManagerImpl {
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        Interceptor interceptor = new Interceptor() {
+        Interceptor headerInterceptor = new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
@@ -144,19 +146,33 @@ public class ApiManagerImpl {
 //                        .header("Accept-Language", "Android")
 //                        .header("platform", "Android")
 //                        .addHeader("cookie", "lang=" + lang)
-                        .header("Authorization", token == null ? "" : token)
+                        .header("Authorization", ucToken == null ? "" : ucToken)
                         .header("Accept-Encoding", "gzip, deflate")
                         .header("Cache-Control", "no-cache");
-                if(JSESSIONIDCookie == null){
-                    JSESSIONIDCookie = "JSESSIONID="+token+";";
-                }else{
-                    if(!JSESSIONIDCookie.contains("uc-token=")){
-                        JSESSIONIDCookie += "uc-token="+token+";";
-                    }
-                    if(!JSESSIONIDCookie.contains("ticket=")){
-                        JSESSIONIDCookie += "ticket="+ticket+";";
-                    }
+
+                Log.d(TAG,"JSESSIONIDCookie = "+JSESSIONIDCookie);
+                String ucToken = HttpCookieUtil.getUcToken(context);
+                Log.d(TAG,"ucToken = "+ucToken);
+                String ticket = HttpCookieUtil.getTicket(context);
+                Log.d(TAG,"ticket = "+ticket);
+                String trade_token = HttpCookieUtil.getTradeToken(context);
+                Log.d(TAG,"trade_token = "+trade_token);
+                String pro_token = HttpCookieUtil.getProToken(context);
+                Log.d(TAG,"pro_token = "+pro_token);
+                JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
+                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)){
+                    JSESSIONIDCookie += ";uc-token="+ucToken+";";
                 }
+                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)){
+                    JSESSIONIDCookie += "ticket="+ticket+";";
+                }
+                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)){
+                    JSESSIONIDCookie += "trade-token="+trade_token+";";
+                }
+                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)){
+                    JSESSIONIDCookie += "pro-token="+pro_token+";";
+                }
+                Log.d(TAG,"JSESSIONIDCookie = "+JSESSIONIDCookie);
                 if (JSESSIONIDCookie != null) {
                     requestBuilder.addHeader("Cookie", JSESSIONIDCookie);
                     requestBuilder.addHeader("cookie", JSESSIONIDCookie);
@@ -186,7 +202,6 @@ public class ApiManagerImpl {
                         charset = contentType.charset(Charset.forName("UTF-8"));
                     }
                 }
-                Log.d("interceptor", String.valueOf(request.headers()));
                 Response response = chain.proceed(request);
                 List<String> cookies = response.headers("Set-Cookie");
                 if (JSESSIONIDCookie == null && !cookies.isEmpty()) {
@@ -212,8 +227,6 @@ public class ApiManagerImpl {
                     String __cdnuid_s = allParam.get("__cdnuid_s");
                     String JSESSIONID = allParam.get("JSESSIONID");
                     String SERVERID = allParam.get("SERVERID");
-                    String UCTOKEN = allParam.get("UCTOKEN");
-                    String TICKET = allParam.get("TICKET");
                     if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
                         String cookie = "";
                         if (AWSALB != null && AWSALB.trim().length() > 0) {
@@ -231,12 +244,6 @@ public class ApiManagerImpl {
                         if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
                             cookie += "JSESSIONID=" + JSESSIONID + ";";
                         }
-                        if (token != null && token.trim().length() > 0) {
-                            cookie += "uc-token=" + UCTOKEN + ";";
-                        }
-                        if (ticket != null && ticket.trim().length() > 0) {
-                            cookie += "ticket=" + TICKET + ";";
-                        }
                         if (SERVERID != null && SERVERID.trim().length() > 0) {
                             cookie += "SERVERID=" + SERVERID + ";";
                         }
@@ -244,10 +251,11 @@ public class ApiManagerImpl {
                             cookie = cookie.substring(0, cookie.length() - 1);
                         }
                         JSESSIONIDCookie = cookie;
-                        //  Log.e("interceptor", "set JSESSIONIDCookie：" + JSESSIONIDCookie);
+                        HttpCookieUtil.saveJsessionId(context,JSESSIONIDCookie);
+                        Log.d(TAG, "set init JSESSIONIDCookie：" + JSESSIONIDCookie);
                     }
                 }
-                //Log.e("interceptor", "fullUrl：" + fullUrl);
+                Log.d(TAG, "fullUrl：" + request.url());
                 // Log.e("interceptor", "JSESSIONIDCookie：" + JSESSIONIDCookie);
                 if (apiCookieHelper != null && apiCookieHelper.canSaveGlobalCookie(original)) {
                     globalCookie = JSESSIONIDCookie;
@@ -260,7 +268,7 @@ public class ApiManagerImpl {
             }
         };
         //头部参数拦截
-        builder.addNetworkInterceptor(interceptor);
+        builder.addNetworkInterceptor(headerInterceptor);
         //日志拦截
         if (Util.isApkInDebug(context)) {
             builder.addInterceptor(loggingInterceptor);

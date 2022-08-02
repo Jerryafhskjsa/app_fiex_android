@@ -14,9 +14,19 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface UserApiService {
+    //get jsessionId
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_TOKEN)
     fun getToken(@Field("telCountryCode") telCountryCode: String?, @Field("username") username: String?, @Field("password") password: String?): Observable<HttpRequestResultString?>?
+
+
+    @POST("http://fiex.matchain.info/pro/"+UrlConfig.User.URL_USER_LOGIN)
+    fun getProToken(): Observable<HttpRequestResultString?>?
+
+
+    @POST("http://fiex.matchain.info/api/"+UrlConfig.User.URL_TRADE_LOGIN)
+    fun getTradeToken(): Observable<HttpRequestResultString?>?
+
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)
@@ -26,6 +36,8 @@ interface UserApiService {
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)
     fun loginSuffixResultObj(@Field("prefixAuth") prefixAuth: String?, @Field("phoneCode") phoneCode: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?): Observable<HttpRequestResultData<SuffixResult?>?>?
+
+
 
 
     @FormUrlEncoded
