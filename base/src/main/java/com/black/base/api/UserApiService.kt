@@ -20,12 +20,15 @@ interface UserApiService {
     fun getToken(@Field("telCountryCode") telCountryCode: String?, @Field("username") username: String?, @Field("password") password: String?): Observable<HttpRequestResultString?>?
 
 
-    @POST("http://fiex.matchain.info/pro/"+UrlConfig.User.URL_USER_LOGIN)
+    @POST(UrlConfig.User.URL_USER_LOGIN)
     fun getProToken(): Observable<HttpRequestResultString?>?
 
 
-    @POST("http://fiex.matchain.info/api/"+UrlConfig.User.URL_TRADE_LOGIN)
+    @POST(UrlConfig.User.URL_TRADE_LOGIN)
     fun getTradeToken(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.User.URL_WS_TOKEN)
+    fun getWsToken(): Observable<HttpRequestResultString?>?
 
 
     @FormUrlEncoded

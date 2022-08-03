@@ -52,7 +52,7 @@ object UrlConfig {
         return HOSTS[getIndex(context)]
     }
 
-    fun getApiHost(context: Context): String {
+    fun getUcHost(context: Context): String {
         return API_HOSTS[getIndex(context)]
     }
 
@@ -123,6 +123,12 @@ object UrlConfig {
     //杠杆交易用户协议
     const val URL_LEVER_RULE = "https://fbsexco.zendesk.com/hc/zh-cn/articles/360041746133"
 
+    object ApiType{
+        const val URl_UC = "uc"
+        const val URL_API = "api"
+        const val URL_PRO = "pro"
+    }
+
     object User {
         //登录
         const val URL_TOKEN = "user/token"
@@ -130,6 +136,8 @@ object UrlConfig {
         const val URL_TRADE_LOGIN = "user/trade/login"
         //user_login
         const val URL_USER_LOGIN = "user/login"
+        //ws_token
+        const val URL_WS_TOKEN = "user/ws-token"
         //退出登录
         const val URL_LOGOUT = "user/logout"
         //登录验证

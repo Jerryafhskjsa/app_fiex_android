@@ -159,18 +159,43 @@ public class ApiManagerImpl {
                 Log.d(TAG,"trade_token = "+trade_token);
                 String pro_token = HttpCookieUtil.getProToken(context);
                 Log.d(TAG,"pro_token = "+pro_token);
+                String ws_token = HttpCookieUtil.getWsToken(context);
+                Log.d(TAG,"ws_token = "+ws_token);
                 JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)){
-                    JSESSIONIDCookie += ";uc-token="+ucToken+";";
+                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
+                        JSESSIONIDCookie += ";uc-token="+ucToken+";";
+                    }else{
+                        JSESSIONIDCookie += "uc-token="+ucToken+";";
+                    }
                 }
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)){
-                    JSESSIONIDCookie += "ticket="+ticket+";";
+                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
+                        JSESSIONIDCookie += ";ticket="+ticket+";";
+                    }else{
+                        JSESSIONIDCookie += "ticket="+ticket+";";
+                    }
                 }
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)){
-                    JSESSIONIDCookie += "trade-token="+trade_token+";";
+                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
+                        JSESSIONIDCookie += ";trade-token="+trade_token+";";
+                    }else{
+                        JSESSIONIDCookie += "trade-token="+trade_token+";";
+                    }
                 }
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)){
-                    JSESSIONIDCookie += "pro-token="+pro_token+";";
+                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
+                        JSESSIONIDCookie += ";pro-token="+pro_token+";";
+                    }else{
+                        JSESSIONIDCookie += "pro-token="+pro_token+";";
+                    }
+                }
+                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ws_token)){
+                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
+                        JSESSIONIDCookie += ";ws-token="+ws_token+";";
+                    }else{
+                        JSESSIONIDCookie += "ws-token="+ws_token+";";
+                    }
                 }
                 Log.d(TAG,"JSESSIONIDCookie = "+JSESSIONIDCookie);
                 if (JSESSIONIDCookie != null) {

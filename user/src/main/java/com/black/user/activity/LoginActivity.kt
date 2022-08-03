@@ -416,7 +416,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     //获取trade-token
     private fun getTradeToken(context: Context){
-        ApiManager.build(context,true).getService<UserApiService>(UserApiService::class.java)
+        ApiManager.build(context,true,UrlConfig.ApiType.URL_API).getService<UserApiService>(UserApiService::class.java)
             ?.getTradeToken()
             ?.materialize()
             ?.subscribeOn(Schedulers.io())
@@ -459,7 +459,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     //获取pro-token
     private fun getProToken(context: Context){
-        ApiManager.build(context!!,true).getService<UserApiService>(UserApiService::class.java)
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
             ?.getProToken()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
@@ -470,6 +470,25 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     if(result != null && result.code == HttpRequestResult.SUCCESS){
                         var proToken = result.data
                         HttpCookieUtil.saveProToken(context,proToken)
+                        getWsToken(mContext)
+                    }
+                }
+            }))
+    }
+
+    //获取ws-token
+    private fun getWsToken(context: Context){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
+            ?.getWsToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultString?) {
+                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+                        var wsToken = result.data
+                        HttpCookieUtil.saveWsToken(context,wsToken)
                         onGetTokenSuccess()
                     }
                 }

@@ -1,5 +1,6 @@
 package com.black.frying.activity
 
+import FiexHomePageMainFragment
 import HomePageMainFragment
 import android.app.Activity
 import android.app.AlertDialog
@@ -46,7 +47,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 
     private var tabHost: FragmentTabHost? = null
 
-    private val tabs = arrayOfNulls<HomeTab>(4)
+    private val tabs = arrayOfNulls<HomeTab>(5)
     var transactionIndex = -1
     var transactionTabType = -1
     private val transactionExtras = Bundle()
@@ -71,10 +72,12 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 //                HomePageWalletFragment.class, null);
 //        tabHost.addTab(tabHost.newTabSpec("throttle").setIndicator("Throttle"),
 //                HomePageMineFragment.class, null);
-        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
+//        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
+        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, FiexHomePageMainFragment::class.java)
         tabs[1] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragment::class.java)
         tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
-        tabs[3] = HomeTab(getString(R.string.home_tab_demand), R.drawable.home_tab_demand, HomePageMoneyFragment::class.java)
+        tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_demand, HomePageMoneyFragment::class.java)
+        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_demand, HomePageMoneyFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
             val indicator = View.inflate(applicationContext, R.layout.home_page_tab_indicator, null)
@@ -330,7 +333,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 
     //当已经打开了的fragment在换肤过程中，部分元素不能够切换资源，需要手动调用
     fun resetSkinResources() {
-        val mainFragment = supportFragmentManager.findFragmentByTag(tabs[0]!!.tabName) as HomePageMainFragment?
+        val mainFragment = supportFragmentManager.findFragmentByTag(tabs[0]!!.tabName) as FiexHomePageMainFragment?
         mainFragment?.resetSkinResources()
         val quotationFragment = supportFragmentManager.findFragmentByTag(tabs[1]!!.tabName) as HomePageQuotationFragment?
         quotationFragment?.resetSkinResources()

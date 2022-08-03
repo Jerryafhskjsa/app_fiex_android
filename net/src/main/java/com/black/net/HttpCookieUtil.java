@@ -12,6 +12,7 @@ public class HttpCookieUtil {
     public final static String TICKET = "ticket";
     public final static String TRADE_TOKEN = "trade_token";
     public final static String PRO_TOKEN = "pro_token";
+    public final static String WS_TOKEN = "ws_token";
 
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -42,14 +43,20 @@ public class HttpCookieUtil {
         editor.putString(TICKET, jsessionId);
         editor.commit();
     }
-    public static void saveTradeToken(Context context, String jsessionId) {
+    public static void saveTradeToken(Context context, String tradeToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(TRADE_TOKEN, jsessionId);
+        editor.putString(TRADE_TOKEN, tradeToken);
         editor.commit();
     }
-    public static void saveProToken(Context context, String jsessionId) {
+    public static void saveProToken(Context context, String proToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(PRO_TOKEN, jsessionId);
+        editor.putString(PRO_TOKEN, proToken);
+        editor.commit();
+    }
+
+    public static void saveWsToken(Context context, String wsToken) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(WS_TOKEN, wsToken);
         editor.commit();
     }
 
@@ -72,6 +79,9 @@ public class HttpCookieUtil {
     public static String getProToken(Context context) {
         return getSharedPreferences(context).getString(PRO_TOKEN, null);
     }
+    public static String getWsToken(Context context) {
+        return getSharedPreferences(context).getString(WS_TOKEN, null);
+    }
 
     public static void deleteUcToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
@@ -86,6 +96,11 @@ public class HttpCookieUtil {
     public static void deleteTradeToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.remove(TRADE_TOKEN).apply();
+    }
+
+    public static void deleteWsToken(Context context){
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.remove(WS_TOKEN).apply();
     }
 
     public static void deleteProToken(Context context){
@@ -103,7 +118,9 @@ public class HttpCookieUtil {
         deleteTicket(context);
         deleteTradeToken(context);
         deleteProToken(context);
+        deleteWsToken(context);
         deleteSessionId(context);
+
     }
 
 

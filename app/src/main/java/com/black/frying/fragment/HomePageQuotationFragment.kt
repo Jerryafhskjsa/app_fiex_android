@@ -154,7 +154,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         if (sets == null || sets!!.isEmpty()) {
             PairApiServiceHelper.getTradeSets(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
                 override fun error(type: Int, error: Any) {
-                    refreshSets()
+//                    refreshSets()这里接口不通目前会引起死循环调用
                 }
 
                 override fun callback(returnData: HttpRequestResultDataList<String?>?) {

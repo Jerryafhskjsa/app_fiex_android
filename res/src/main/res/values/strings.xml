@@ -8,6 +8,8 @@
     <string name="register_agreement_label">我已阅读并同意</string>
     <string name="home_tab_main">首页</string>
     <string name="home_tab_transaction">交易</string>
+    <string name="home_tab_future">合约</string>
+    <string name="home_tab_asset">资产</string>
     <string name="home_tab_c2c">法币</string>
     <string name="home_tab_demand">聚宝盆</string>
     <string name="buy">买入</string>
