@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewMainMoreModel"
+            type="Object" />
+    </data>
+    <RelativeLayout
+        android:background="@color/B2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_alignParentRight="true"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_translate_recharge"
+            />
+        <LinearLayout
+            android:layout_below="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:background="@drawable/bg_b2_corner3"
+            android:orientation="horizontal"
+            >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <CheckedTextView
+                    android:id="@+id/notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:maxLines="1"
+                    android:layout_centerInParent="true"
+                    android:drawablePadding="10dp"
+                    android:text="@string/notice_1"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <CheckedTextView
+                    android:id="@+id/custom_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:layout_centerInParent="true"
+                    android:maxLines="1"
+                    android:drawablePadding="10dp"
+                    android:text="@string/customer_service"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <CheckedTextView
+                    android:id="@+id/do_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:layout_centerInParent="true"
+                    android:maxLines="1"
+                    android:drawablePadding="10dp"
+                    android:text="@string/scan"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <CheckedTextView
+                    android:id="@+id/flash_exchange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:layout_centerInParent="true"
+                    android:maxLines="1"
+                    android:drawablePadding="10dp"
+                    android:text="@string/flash_exchange"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <CheckedTextView
+                    android:id="@+id/informations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:layout_centerInParent="true"
+                    android:maxLines="1"
+                    android:drawablePadding="10dp"
+                    android:text="@string/information"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

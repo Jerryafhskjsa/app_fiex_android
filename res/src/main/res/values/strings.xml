@@ -597,4 +597,11 @@
     <string name="regular_status_break">已违约</string>
     <string name="alert_amount_error">请输入正确的%1$s金额！</string>
     <string name="loan_warning">* 由于市场价格实时变动，实际到账的借入数量以市场实时价格为准。 \n* 定期抵押借贷如果违约赎回，利息自动转成当时按天结算利率进行计算，并且产生所借资产%s%%的违约金。</string>
+
+    <string name="notice_1">通知</string>
+    <string name="customer_service">客服</string>
+    <string name="scan">扫一扫</string>
+    <string name="flash_exchange">闪兑</string>
+    <string name="information">资讯</string>
+
 </resources>

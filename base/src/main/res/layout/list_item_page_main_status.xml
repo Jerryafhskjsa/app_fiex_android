@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="mainHotStatusModel"
             type="com.black.base.model.socket.PairStatus" />
@@ -10,61 +9,89 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:background="@drawable/hot_item_bg"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/pair_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="bold" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/pair_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="BTC/USDT"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/hot_item_bg_corner">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/pair_since"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:paddingTop="3dp"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingBottom="3dp"
+                        android:text="333.22%"
+                        android:textColor="@color/T8"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                </RelativeLayout>
+        </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp">
+            <View
+                android:layout_width="4dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/T9"/>
 
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/pair_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textSize="@dimen/text_size_18"
-            android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/pair_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:includeFontPadding="true"
+                    android:maxLines="1"
+                    android:text="444555"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp" />
-
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/pair_since"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
-
-
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/pair_price_cny"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:textColor="@color/T2"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="bold" />
-
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/pair_price_cny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:includeFontPadding="true"
+                    android:text="≈ 500000"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>
