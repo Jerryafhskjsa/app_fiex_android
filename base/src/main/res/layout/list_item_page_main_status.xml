@@ -37,6 +37,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/hot_item_bg_corner">
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/pair_since"
                         android:layout_width="wrap_content"
@@ -44,14 +45,13 @@
                         android:layout_centerInParent="true"
                         android:gravity="center"
                         android:includeFontPadding="false"
+                        android:paddingLeft="8dp"
                         android:paddingTop="3dp"
                         android:paddingRight="8dp"
-                        android:paddingLeft="8dp"
                         android:paddingBottom="3dp"
                         android:text="333.22%"
                         android:textColor="@color/T8"
-                        android:textSize="@dimen/text_size_12"
-                        />
+                        android:textSize="@dimen/text_size_12" />
                 </RelativeLayout>
         </RelativeLayout>
 
@@ -93,5 +93,11 @@
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
         </LinearLayout>
+        <com.black.base.view.LineChartView
+            android:id="@+id/line_cart"
+            android:paddingLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        </com.black.base.view.LineChartView>
     </LinearLayout>
 </layout>

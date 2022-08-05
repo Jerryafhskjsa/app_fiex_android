@@ -1,8 +1,10 @@
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +47,7 @@ import com.black.util.ImageUtil
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
+import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 
@@ -85,9 +88,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
 
         })
-
-
-
         binding!!.scrollView.addScrollListener(object : ObserveScrollView.ScrollListener {
             override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
             }
@@ -111,10 +111,19 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
         })
 
+        binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                var type = tab.position
+                viewModel!!.getRiseFallData(type)
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
         val drawable = ColorDrawable()
-        drawable.color = SkinCompatResources.getColor(mContext, R.color.L1_ALPHA30)
+        drawable.color = SkinCompatResources.getColor(mContext, R.color.B2)
         binding!!.riseFallListView.divider = drawable
-        binding!!.riseFallListView.dividerHeight = 1
+        binding!!.riseFallListView.dividerHeight = 6
         adapter = HomeMainRiseFallAdapter(mContext!!, null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
@@ -122,8 +131,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }
 
         binding!!.btnNoticeMore.setOnClickListener(this)
-        binding!!.risePairs.setOnClickListener(this)
-        binding!!.fallPairs.setOnClickListener(this)
 
         binding!!.btnUserinfo.setOnClickListener(this)
         binding!!.btnSearchMenu.setOnClickListener(this)
@@ -136,7 +143,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
         })
 
-        selectRiseFall(1)
+        viewModel!!.getRiseFallData(1)
 //        showChatFloatAdView()
         return layout
     }
@@ -197,20 +204,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }
     }
 
-    //切换涨跌幅tab
-    private fun selectRiseFall(type: Int) {
-        when (type) {
-            1 -> {
-                binding!!.risePairs.isChecked = true
-                binding!!.fallPairs.isChecked = false
-            }
-            2 -> {
-                binding!!.risePairs.isChecked = false
-                binding!!.fallPairs.isChecked = true
-            }
-        }
-        viewModel!!.getRiseFallData(type)
-    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
@@ -220,8 +213,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 bundle.putString(ConstData.URL, String.format(UrlConfig.getUrlNoticeAll(mContext), FryingUtil.getLanguageKey(mContext)))
                 BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
             }
-            R.id.rise_pairs -> selectRiseFall(1)
-            R.id.fall_pairs -> selectRiseFall(2)
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE).go(mContext)//用户信息
             R.id.btn_search_menu -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
             R.id.btn_scan_menu ->  BlackRouter.getInstance().build(RouterConstData.CAPTURE)
@@ -256,7 +247,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 for (gridView in showGridViewList) {
                     (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
                 }
-                viewModel!!.getRiseFallData(if (binding!!.risePairs.isChecked) 1 else 2)
+//                viewModel!!.getRiseFallData(if (binding!!.risePairs.isChecked) 1 else 2)
             }
         }.run { }
     }
@@ -467,6 +458,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
             binding?.pairSince?.setTextColor(color)
             binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
+            //折线图假数据
+            var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
+            var ydata:IntArray = intArrayOf(0,10,20,30,40,50,60,70,80,90)
+            var linedata:FloatArray = floatArrayOf(5f,10f,6f,30f,5f,62.5f,6f,2f,3f,6f)
+            binding?.lineCart?.setChartdate(xdata,ydata,linedata, Color.BLACK)
         }
     }
 
