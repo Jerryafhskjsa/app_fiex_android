@@ -20,8 +20,7 @@ import com.black.base.lib.banner.FryingUrlImageNormalBanner
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.Money
-import com.black.base.model.clutter.Banner
-import com.black.base.model.clutter.NoticeHome
+import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
@@ -476,6 +475,18 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
                 showHotPairs(null)
             }
         }))
+    }
+
+    override fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?) {
+
+    }
+
+    override fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?) {
+
+    }
+
+    override fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?) {
+
     }
 
     private fun showHotPairs(pairs: ArrayList<String?>?) {

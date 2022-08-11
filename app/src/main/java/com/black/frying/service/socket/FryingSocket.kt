@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import io.socket.engineio.client.transports.WebSocket
 import java.util.*
 
 abstract class FryingSocket(protected val context: Context, protected val handler: Handler) {
@@ -16,19 +17,19 @@ abstract class FryingSocket(protected val context: Context, protected val handle
     protected var emitterListenerMap = HashMap<String, Emitter.Listener>() //消息监听
 
     protected var onConnectListener = Emitter.Listener {
-        //Log.e(TAG, "onConnectListener ==============================================\nonConnectListener obj：");
+        Log.e(TAG, "onConnectListener ==============================================\nonConnectListener obj：")
     }
 
     protected var onDisconnectListener = Emitter.Listener { args: Array<Any?> ->
-        //Log.e(TAG, getTag() + "onDisconnectListener ==============================================\nonuConnectListener obj：");
+        Log.e(TAG, "onDisconnectListener ==============================================\nonuConnectListener obj：")
         for (`object` in args) {
 //            Log.e(TAG, "onDisconnectListener ==============================================\n obj：" + `object`);
         }
     }
     protected var onConnectErrorListener = Emitter.Listener { args: Array<Any?> ->
-        //Log.e(TAG, getTag() + "onConnectErrorListener ==============================================\n obj：");
+        Log.e(TAG, "onConnectErrorListener ==============================================\n obj："+args.contentToString())
         for (`object` in args) {
-            ////Log.e(TAG, "onConnectErrorListener ==============================================\n obj：" + object);
+            //Log.e(TAG, "onConnectErrorListener ==============================================\n obj：" + object);
         }
     }
 
@@ -36,7 +37,9 @@ abstract class FryingSocket(protected val context: Context, protected val handle
         get() {
             val options = IO.Options()
             options.reconnectionDelay = 5000
-            options.transports = arrayOf("websocket")
+//            options.transports = arrayOf("websocket")
+            options.transports = arrayOf(WebSocket.NAME)
+            options.path = "/websocket"
             return options
         }
 

@@ -9,8 +9,7 @@ import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CPrice
-import com.black.base.model.clutter.Banner
-import com.black.base.model.clutter.NoticeHome
+import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
@@ -22,7 +21,6 @@ import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
-import com.google.gson.Gson
 import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -41,6 +39,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
 
     private var noticeList: java.util.ArrayList<NoticeHomeItem?>? = null
+    private var tickerList: ArrayList<HomeTickers>? = null
 
     constructor(context: Context, onMainModelListener: OnMainModelListener?) : this(context) {
         this.onMainModelListener = onMainModelListener
@@ -66,6 +65,9 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         SocketDataContainer.subscribeHotPairObservable(hotPairObserver)
         getHotPairs()
+        getSymbolList()
+//        getHomeTicker()
+//        getHomeKline()
         if (noticeList == null) {
             //获取公告信息
             getNoticeInfo()
@@ -260,6 +262,10 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     //获取涨跌幅数据
     fun getRiseFallData(type: Int) {
+        Log.d("MainViewModel","getRiseFallData->type = "+type)
+        Log.d("MainViewModel","getRiseFallData->socketHandler = "+socketHandler)
+        Log.d("MainViewModel","getRiseFallData->socketHandler.looper = "+socketHandler?.looper)
+        Log.d("MainViewModel","getRiseFallData->onMainModelListener = "+onMainModelListener)
         if (socketHandler == null || socketHandler?.looper == null || onMainModelListener == null) {
             return
         }
@@ -281,6 +287,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
                 }
                 ?.compose(RxJavaHelper.observeOnMainThread()))
     }
+
 
     //获取所有bannerlist
     fun getAllBanner() {
@@ -304,6 +311,27 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     fun getHotPairs() {
         onMainModelListener?.onHotPairs(PairApiServiceHelper.getHotPair(context!!))
+    }
+
+    /**
+     * 获取交易对的详细数据
+     */
+    fun getHomeTicker(){
+        onMainModelListener?.onHomeTickers(PairApiServiceHelper.getHomeTickers((context!!)))
+    }
+
+    /**
+     * 获取首页最下面的所有币种列表
+     */
+    fun getSymbolList(){
+        onMainModelListener?.onHomeSymbolList(PairApiServiceHelper.getSymbolList((context!!)))
+    }
+
+    /**
+     * 获取首页相关交易对的k线数据
+     */
+    fun getHomeKline(){
+        onMainModelListener?.onHomeKLine(PairApiServiceHelper.getHomeKline((context!!)))
     }
 
     fun checkIntoMainChat(): Observable<ChatRoomEnable>? {
@@ -334,5 +362,8 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onUserInfoChanged()
         fun onMoney(observable: Observable<Money?>?)
         fun getMoneyCallback(): Callback<Money?>?
+        fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?)
+        fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?)
+        fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?)
     }
 }

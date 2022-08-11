@@ -3,6 +3,9 @@ package com.black.base.api
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.clutter.HomeSymbolList
+import com.black.base.model.clutter.HomeTickers
+import com.black.base.model.clutter.HomeTickersKline
 import com.black.base.model.socket.CoinOrder
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.trade.TradeSet
@@ -11,6 +14,16 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface PairApiService {
+
+    @GET(UrlConfig.Config.URL_HOME_CONFIG_LIST)
+    fun getHomeSymbolList():Observable<HttpRequestResultDataList<HomeSymbolList?>?>?
+
+    @GET(UrlConfig.Config.URL_HOME_TICKERS)
+    fun getHomeTickersList():Observable<HttpRequestResultDataList<HomeTickers?>?>?
+
+    @GET(UrlConfig.Config.URL_HOME_KLine)
+    fun getHomeKLine():Observable<HttpRequestResultDataList<HomeTickersKline?>?>?
+
     @GET(UrlConfig.Config.URL_ORDERED_PAIRS)
     fun getOrderedPairs(@Query("pair") pair: String?): Observable<HttpRequestResultDataList<String?>?>?
 

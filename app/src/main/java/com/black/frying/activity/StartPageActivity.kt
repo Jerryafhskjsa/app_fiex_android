@@ -25,7 +25,7 @@ import kotlin.math.min
 
 @Route(value = [RouterConstData.START_PAGE])
 class StartPageActivity : BaseActivity() {
-    private val WAIT_MAX_TIME = 10000
+    private val WAIT_MAX_TIME = 1000//调整等待时间，开始伟为10s
     private val REQUEST_STORAGE = 100
     private val REQUEST_CAMERA = 200
     private var runnable: Runnable? = null
@@ -104,6 +104,7 @@ class StartPageActivity : BaseActivity() {
                 if (isFinishing || !checkSign) {
                     return;
                 }
+                Log.d("StartPageActivity","hasInitJGPush = "+BaseApplication.hasInitJGPush)
                 if (!BaseApplication.hasInitJGPush) {
                     waitTime += 100
                     if (waitTime >= WAIT_MAX_TIME) {

@@ -11,6 +11,7 @@ import com.black.base.util.UrlConfig
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import io.socket.engineio.client.transports.WebSocket
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -26,7 +27,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     var leverPair: String? = null
 
     private val onUserConnectListener = Emitter.Listener {
-        ////Log.e(TAG, "onuConnectListener ==============================================\nonuConnectListener obj：");
+        Log.d(TAG, "onUserConnectListener");
         for (event in emitterListenerMap.keys) {
             socket.on(event, emitterListenerMap[event])
         }
@@ -99,8 +100,11 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
 
     @Throws(Exception::class)
     override fun initSocket(): Socket {
-        return IO.socket(UrlConfig.getSocketHost(context) + "/user", socketOptions)
+        Log.d(TAG,"initSocket")
+//        return IO.socket(UrlConfig.getSocketHost(context) + "/user", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(context), socketOptions)
     }
+
 
     override fun start() {
         if (socket != null) {
@@ -134,7 +138,9 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
 
     //请求监听用户连接 new
     fun startListenUserNewConnect() {
+        Log.d(TAG,"startListenUserNewConnect")
         val token = CookieUtil.getToken(context)
+        Log.d(TAG,"token = "+token)
         ////Log.e(TAG, "startListenUserNewConnect ==========================currentPair：" + currentPair + ",:token:" + token);
         if (!TextUtils.isEmpty(token)) {
             try {

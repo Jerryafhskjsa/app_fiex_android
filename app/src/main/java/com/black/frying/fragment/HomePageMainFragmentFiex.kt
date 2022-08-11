@@ -9,18 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.FrameLayout
+import android.widget.GridView
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
 import com.black.base.adapter.BaseViewPagerAdapter
+import com.black.base.api.PairApiService
+import com.black.base.api.PairApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.Money
-import com.black.base.model.clutter.Banner
-import com.black.base.model.clutter.NoticeHome
+import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
@@ -44,7 +47,6 @@ import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
-import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
 import com.google.android.material.tabs.TabLayout
@@ -54,6 +56,7 @@ import skin.support.content.res.SkinCompatResources
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
     companion object {
         private const val STATUS_PAGE_COUNT = 2
+        private const val TAG = "HomePageMainFragment"
     }
 
     private var userInfo: UserInfo? = null
@@ -70,6 +73,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     private var imageLoader: ImageLoader? = null
     private var viewModel: MainViewModel? = null
 
+    private var symbolListData: ArrayList<HomeSymbolList?>? = null
+    private var tickersData:ArrayList<HomeTickers?>? = null
+    private var tickersKline:ArrayList<HomeTickersKline?>? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
             return layout
@@ -82,8 +89,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-                viewModel!!.getNoticeInfo()
-                viewModel!!.getHotPairs()
+//                viewModel!!.getNoticeInfo()
+//                viewModel!!.getHotPairs()
+                viewModel!!.getSymbolList()
+//                viewModel!!.getHomeTicker()
+//                viewModel!!.getHomeKline()
                 binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
             }
 
@@ -123,7 +133,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(mContext, R.color.B2)
         binding!!.riseFallListView.divider = drawable
-        binding!!.riseFallListView.dividerHeight = 6
+        binding!!.riseFallListView.dividerHeight = 25
         adapter = HomeMainRiseFallAdapter(mContext!!, null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
@@ -144,6 +154,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         })
 
         viewModel!!.getRiseFallData(1)
+//        viewModel!!.getSymbolList()
+//        viewModel!!.getHomeTicker()
+//        viewModel!!.getHomeKline()
 //        showChatFloatAdView()
         return layout
     }
@@ -299,6 +312,59 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }))
     }
 
+    override fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeTickersKline?>?>() {
+            override fun callback(returnData: HttpRequestResultDataList<HomeTickersKline?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                    tickersKline = returnData?.data as ArrayList<HomeTickersKline?>
+                    Log.d(TAG,"onHomeKLine succ")
+                    showTickersPairs(PairApiServiceHelper.getHomePagePairData())
+                } else {
+                    Log.d(TAG,"onHomeKLine data null or fail")
+                }
+            }
+
+            override fun error(type: Int, error: Any?) {
+                Log.d(TAG,"onHomeKLine error")
+            }
+        }))
+    }
+
+    override fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeTickers?>?>() {
+            override fun callback(returnData: HttpRequestResultDataList<HomeTickers?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                    tickersData = returnData?.data as ArrayList<HomeTickers?>
+                    Log.d(TAG,"onHomeTickers succ")
+                    viewModel?.getHomeKline()
+                } else {
+                    Log.d(TAG,"onHomeTickers data null or fail")
+                }
+            }
+
+            override fun error(type: Int, error: Any?) {
+                Log.d(TAG,"onHomeTickers error")
+            }
+        }))
+    }
+
+
+    override fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeSymbolList?>?>() {
+            override fun callback(returnData: HttpRequestResultDataList<HomeSymbolList?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                    symbolListData = returnData?.data as ArrayList<HomeSymbolList?>
+                    Log.d(TAG,"onHomeSymbolList succ")
+                    viewModel?.getHomeTicker()
+                } else {
+                    Log.d(TAG,"onHomeSymbolList data null or fail")
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+                Log.d(TAG,"onHomeSymbolList error")
+            }
+        }))
+    }
     override fun onHeadBanner(observable: Observable<HttpRequestResultDataList<Banner?>?>?) {
     }
 
@@ -349,7 +415,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     val adapter = GridViewAdapter(activity!!, gridPairs)
                     gridView.numColumns = STATUS_PAGE_COUNT
                     gridView.adapter = adapter
-                    gridView.verticalSpacing = 10
+                    gridView.horizontalSpacing = 15
                     gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
                     viewList.add(gridView)
                 }
@@ -365,6 +431,44 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding!!.statusViewPager.currentItem = 0
         }
         viewModel!!.getAllPairStatus()
+    }
+
+    private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
+        //先临时取btc跟eth
+        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" }
+
+        val viewList: MutableList<View> = ArrayList()
+        if (ticketData != null) {
+            val pairCount = ticketData.size
+            if (pairCount > 0) {
+                var pageCount = pairCount / STATUS_PAGE_COUNT
+                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
+                for (i in 0 until pageCount) {
+                    val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
+                    val offset = i * STATUS_PAGE_COUNT
+                    val rest = if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
+                    val gridView = GridView(activity)
+                    for (j in 0 until rest) {
+                        gridPairs.add(ticketData[offset + j])
+                    }
+                    val adapter = GridViewAdapter(activity!!, gridPairs)
+                    gridView.numColumns = STATUS_PAGE_COUNT
+                    gridView.adapter = adapter
+                    gridView.horizontalSpacing = 15
+                    gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
+                    viewList.add(gridView)
+                }
+            }
+        }
+        statusAdapter = BaseViewPagerAdapter(viewList)
+        binding!!.statusViewPager.adapter = statusAdapter
+        binding!!.statusIndicator.removeAllViews()
+        for (i in viewList.indices) {
+            binding!!.statusIndicator.addView(activity!!.layoutInflater.inflate(R.layout.view_main_status_dot, null))
+        }
+        if (viewList.size > 0) {
+            binding!!.statusViewPager.currentItem = 0
+        }
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -456,8 +560,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairPrice?.text = pairStatus.currentPriceFormat
             binding?.pairPrice?.setTextColor(color)
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-            binding?.pairSince?.setTextColor(color)
-            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
+            binding?.pairSince?.setTextColor(colorDefault)
+//            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
+            binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
             //折线图假数据
             var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
             var ydata:IntArray = intArrayOf(0,10,20,30,40,50,60,70,80,90)

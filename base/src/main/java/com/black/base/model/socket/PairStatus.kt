@@ -1,6 +1,7 @@
 package com.black.base.model.socket
 
 import com.black.base.model.BaseAdapterItem
+import com.black.base.model.clutter.HomeTickersKline
 import com.black.util.CommonUtil
 import com.black.util.Findable
 import com.black.util.NumberUtil
@@ -8,6 +9,9 @@ import java.util.*
 
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
+    //k线数据
+    var kLineDate:HomeTickersKline? = null
+
     var pair: String? = null
         set(value) {
             field = value

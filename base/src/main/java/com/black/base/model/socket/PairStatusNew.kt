@@ -18,7 +18,7 @@ class PairStatusNew {
 
     val contentValues: ContentValues
         get() {
-            val values = ContentValues()
+            val values = ContentValues()//是一个HashMap，为写入数据库使用
             values.put("currentPrice", c)
             values.put("maxPrice", h)
             values.put("minPrice", l)

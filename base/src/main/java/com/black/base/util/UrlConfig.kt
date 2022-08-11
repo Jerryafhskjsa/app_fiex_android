@@ -32,7 +32,8 @@ object UrlConfig {
     )
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
-            "http://fiex.matchain.info",//fiex测试环境
+//            "http://fiex.matchain.info",//fiex测试环境
+            "http://112.194.204.105:8081",
             "http://fiex.io",//正式环境
             "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new
@@ -291,6 +292,13 @@ object UrlConfig {
     }
 
     object Config {
+        //fiex 首页配置项获取币种列表
+        const val URL_HOME_CONFIG_LIST = "v1/public/symbol/list"
+        //fiex 获取首页tickets
+        const val URL_HOME_TICKERS = "public/tickers"
+        //fiex 获取首首页折线图
+        const val URL_HOME_KLine = "public/tickers-Kline"
+
         //国家区码列表
         const val URL_COUNTRY_CODE_LIST = "country/list"
         //公告 /{language}/page/{pageNum}/{pageSize} 3个参数分别是语言，页数，每页显示多少条 1-中，2-日，3-韩，4-英，5-俄

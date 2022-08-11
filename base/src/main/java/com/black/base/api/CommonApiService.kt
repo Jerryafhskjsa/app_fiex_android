@@ -3,6 +3,7 @@ package com.black.base.api
 import com.black.base.model.*
 import com.black.base.model.clutter.*
 import com.black.base.model.socket.PairDescription
+import com.black.base.model.socket.PairStatus
 import com.black.base.util.UrlConfig
 import com.google.gson.JsonObject
 import io.reactivex.Observable

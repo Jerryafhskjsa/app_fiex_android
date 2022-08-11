@@ -20,17 +20,17 @@ class LineChartView : View {
     private var canvasHeight = 0
     private var canvasWidth = 0
     private var textFont = 0
-    private lateinit var xdate: Array<String>
-    private lateinit var ydate: IntArray
-    private lateinit var linedate: FloatArray
+    private lateinit var xdata: Array<String>
+    private lateinit var ydata: IntArray
+    private lateinit var linedata: FloatArray
     private var paintColor: Int = Color.BLACK
     private var xCopies = 0
     private var yCopies = 0f
 
-    fun setChartdate(xdate: Array<String>, ydate: IntArray, linedate: FloatArray,paintColor:Int) {
-        this.xdate = xdate
-        this.ydate = ydate
-        this.linedate = linedate
+    fun setChartdate(xdata: Array<String>, ydata: IntArray, linedata: FloatArray,paintColor:Int) {
+        this.xdata = xdata
+        this.ydata = ydata
+        this.linedata = linedata
         this.paintColor = paintColor
     }
 
@@ -40,7 +40,7 @@ class LineChartView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         Log.d("LineChartView","onDraw")
-        if (xdate.isNotEmpty() && ydate.isNotEmpty() && linedate.isNotEmpty() && xdate.size >= linedate.size) {
+        if (xdata.isNotEmpty() && ydata.isNotEmpty() && linedata.isNotEmpty() && xdata.size >= linedata.size) {
             if (yMaxdata() >= lineMaxdata()) {
                 drawAxis(canvas)
             }
@@ -48,8 +48,8 @@ class LineChartView : View {
     }
     //绘制
     private fun drawAxis(canvas: Canvas) {
-        xCopies = xdate.size + 2
-        yCopies = (ydate.size + 2).toFloat()
+        xCopies = xdata.size + 2
+        yCopies = (ydata.size + 2).toFloat()
         val daxesPaint: Paint
         val axispointPaint: Paint
         val brokenLinePaint: Paint
@@ -133,8 +133,8 @@ class LineChartView : View {
         p.typeface = font
         p.textSize = textFont.toFloat()
         //画x轴数据
-        for (i in xdate.indices) {
-            val text = xdate[i]
+        for (i in xdata.indices) {
+            val text = xdata[i]
             val stringWidth = p.measureText(text).toInt() //文本长度
             canvas.drawText(
                 text,
@@ -143,8 +143,8 @@ class LineChartView : View {
                 p
             ) // 画文本
         }
-        for (i in ydate.indices) {
-            val text = ydate[i].toString()
+        for (i in ydata.indices) {
+            val text = ydata[i].toString()
             val stringWidth = p.measureText(text).toInt()
             //文本长度
             if (i == 0) {
@@ -160,11 +160,11 @@ class LineChartView : View {
     }
 
     private fun drawbrokenLine(canvas: Canvas, p: Paint) {
-        val line = (hightCriterion * (yCopies - 1) - hightCriterion * 2) / ydate[ydate.size - 1]
-        for (i in linedate.indices) {
-            val height = hightCriterion * (yCopies - 1) - line * linedate[i]
-            if (i != linedate.size - 1) {
-                val elseheight = hightCriterion * (yCopies - 1) - line * linedate[i + 1]
+        val line = (hightCriterion * (yCopies - 1) - hightCriterion * 2) / ydata[ydata.size - 1]
+        for (i in linedata.indices) {
+            val height = hightCriterion * (yCopies - 1) - line * linedata[i]
+            if (i != linedata.size - 1) {
+                val elseheight = hightCriterion * (yCopies - 1) - line * linedata[i + 1]
                 canvas.drawLine(
                     (widthCriterion * (i + 1)).toFloat(),
                     height,
@@ -182,9 +182,9 @@ class LineChartView : View {
 
     private fun yMaxdata(): Float {
         var max = 0f
-        for (i in ydate.indices) {
-            if (ydate[i] > max) {
-                max = ydate[i].toFloat()
+        for (i in ydata.indices) {
+            if (ydata[i] > max) {
+                max = ydata[i].toFloat()
             }
         }
         return max
@@ -192,9 +192,9 @@ class LineChartView : View {
 
     private fun lineMaxdata(): Float {
         var max = 0f
-        for (i in linedate.indices) {
-            if (linedate[i] > max) {
-                max = linedate[i]
+        for (i in linedata.indices) {
+            if (linedata[i] > max) {
+                max = linedata[i]
             }
         }
         return max

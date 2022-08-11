@@ -30,7 +30,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManagerImpl {
-    private final String TAG = "ApiManagerImpl";
+    private static final String TAG = "ApiManagerImpl";
     public static final int DEFAULT_TIME_OUT = 15;//超时时间5s
     public static final int DEFAULT_READ_TIME_OUT = 30;//读取时间
     public static final int DEFAULT_WRITE_TIME_OUT = 30;//读取时间
@@ -53,10 +53,12 @@ public class ApiManagerImpl {
         String key = getKey(url, deviceId, lang, ucToken);
         SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
         ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
+        Log.d(TAG,"url = "+url);
         if (apiManager == null) {
             apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, ucToken,apiCookieHelper, interceptHelper);
             managerCache.put(key, new SoftReference<>(apiManager));
         }
+        Log.d(TAG,"apiManager = "+apiManager);
         return apiManager;
     }
 
@@ -149,18 +151,11 @@ public class ApiManagerImpl {
                         .header("Authorization", ucToken == null ? "" : ucToken)
                         .header("Accept-Encoding", "gzip, deflate")
                         .header("Cache-Control", "no-cache");
-
-                Log.d(TAG,"JSESSIONIDCookie = "+JSESSIONIDCookie);
                 String ucToken = HttpCookieUtil.getUcToken(context);
-                Log.d(TAG,"ucToken = "+ucToken);
                 String ticket = HttpCookieUtil.getTicket(context);
-                Log.d(TAG,"ticket = "+ticket);
                 String trade_token = HttpCookieUtil.getTradeToken(context);
-                Log.d(TAG,"trade_token = "+trade_token);
                 String pro_token = HttpCookieUtil.getProToken(context);
-                Log.d(TAG,"pro_token = "+pro_token);
                 String ws_token = HttpCookieUtil.getWsToken(context);
-                Log.d(TAG,"ws_token = "+ws_token);
                 JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)){
                     if(JSESSIONIDCookie.lastIndexOf(";") == -1){
@@ -197,7 +192,6 @@ public class ApiManagerImpl {
                         JSESSIONIDCookie += "ws-token="+ws_token+";";
                     }
                 }
-                Log.d(TAG,"JSESSIONIDCookie = "+JSESSIONIDCookie);
                 if (JSESSIONIDCookie != null) {
                     requestBuilder.addHeader("Cookie", JSESSIONIDCookie);
                     requestBuilder.addHeader("cookie", JSESSIONIDCookie);
@@ -277,7 +271,6 @@ public class ApiManagerImpl {
                         }
                         JSESSIONIDCookie = cookie;
                         HttpCookieUtil.saveJsessionId(context,JSESSIONIDCookie);
-                        Log.d(TAG, "set init JSESSIONIDCookie：" + JSESSIONIDCookie);
                     }
                 }
                 Log.d(TAG, "fullUrl：" + request.url());

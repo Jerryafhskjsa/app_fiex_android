@@ -215,19 +215,19 @@ class FryingApplication : BaseApplication() {
     private open inner class FryingSkinLoaderListener() : SkinLoaderListener {
 
         override fun onSuccess() {
-            //Log.e("initSkinLoader", "onSuccess =======")
+            Log.e("initSkinLoader", "onSuccess =======")
             //初始化极光推送
             initJPush()
         }
 
         override fun onFailed(errMsg: String?) {
-            //Log.e("initSkinLoader", "onFailed =======")
+            Log.e("initSkinLoader", "onFailed =======")
             //初始化极光推送
             initJPush()
         }
 
         override fun onStart() {
-            //Log.e("initSkinLoader", "start =======")
+            Log.e("initSkinLoader", "start =======")
         }
 
     }

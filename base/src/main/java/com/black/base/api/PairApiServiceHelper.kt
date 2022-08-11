@@ -2,24 +2,30 @@ package com.black.base.api
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import android.util.SparseArray
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.clutter.HomeSymbolList
+import com.black.base.model.clutter.HomeTickers
+import com.black.base.model.clutter.HomeTickersKline
 import com.black.base.model.socket.CoinOrder
 import com.black.base.model.socket.PairStatus
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.CookieUtil
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.SocketUtil
+import com.black.base.util.UrlConfig
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
+import com.black.util.NumberUtil
 import io.reactivex.Observable
 
 object PairApiServiceHelper {
-    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
+    private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //热门币种，请求缓存时间，20分钟
             .toLong()
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
@@ -29,6 +35,14 @@ object PairApiServiceHelper {
     private val lastGetTimeMap = SparseArray<Long>()
     private var tradeSets: ArrayList<String?>? = null
     var hotPairCache: HttpRequestResultDataList<String?>? = null
+
+    private var symbolListData: ArrayList<HomeSymbolList?>? = null
+    private var tickersData:ArrayList<HomeTickers?>? = null
+    private var tickersKline:ArrayList<HomeTickersKline?>? = null
+
+    //首页数据
+    private var homePagePairData:ArrayList<PairStatus?>? = ArrayList()
+
     private fun getLastGetTime(type: Int): Long? {
         val lastGetTime = lastGetTimeMap[type]
         return lastGetTime ?: 0
@@ -36,6 +50,10 @@ object PairApiServiceHelper {
 
     private fun setLastGetTime(type: Int, time: Long) {
         lastGetTimeMap.put(type, time)
+    }
+
+    fun getHomePagePairData():ArrayList<PairStatus?>?{
+        return homePagePairData
     }
 
     fun getTradeSetsLocal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<String?>?>?) {
@@ -136,6 +154,79 @@ object PairApiServiceHelper {
                     }
                     ?.compose(RxJavaHelper.observeOnMainThread())
         }
+    }
+
+    /**
+     * 获取首页tickers
+     */
+    fun getHomeTickers(context: Context?): Observable<HttpRequestResultDataList<HomeTickers?>?>? {
+        if (context == null) {
+            return null
+        }
+        return ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+                ?.getHomeTickersList()
+                ?.flatMap { result: HttpRequestResultDataList<HomeTickers?>? ->
+                    var data = result?.data!!
+                    for(i in data.indices){
+                        for(j in homePagePairData!!.indices){
+                            if(homePagePairData!![j]?.pair == data[i]?.s){
+                                //现价
+                                homePagePairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!//这个地方小数点位数可能会有问题
+                                //涨跌幅
+                                homePagePairData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
+                            }
+                        }
+                    }
+                    Observable.just(result)
+                }
+                ?.compose(RxJavaHelper.observeOnMainThread())
+    }
+
+    /**
+     * 获取首页symbolList
+     */
+    fun getSymbolList(context: Context?): Observable<HttpRequestResultDataList<HomeSymbolList?>?>? {
+        if (context == null) {
+            return null
+        }
+        return ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+            ?.getHomeSymbolList()
+            ?.flatMap { result: HttpRequestResultDataList<HomeSymbolList?>? ->
+                var data = result?.data!!
+                homePagePairData?.clear()//清除数据
+                for(i in data.indices){
+                    var pair = data[i]?.symbol//交易对名
+                    var pairStatus:PairStatus? = PairStatus()
+                    pairStatus?.pair = pair
+                    homePagePairData?.add(pairStatus)
+                }
+                Observable.just(result)
+            }
+            ?.compose(RxJavaHelper.observeOnMainThread())
+    }
+
+    /**
+     * 获取首页kline
+     */
+    fun getHomeKline(context: Context?): Observable<HttpRequestResultDataList<HomeTickersKline?>?>? {
+        if (context == null) {
+            return null
+        }
+        return ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+            ?.getHomeKLine()
+            ?.flatMap { result: HttpRequestResultDataList<HomeTickersKline?>? ->
+                var data = result?.data!!
+                for(i in data.indices){
+                    for(j in homePagePairData!!.indices){
+                        if(homePagePairData!![j]?.pair == data[i]?.s){
+                            //赋k线数值
+                            homePagePairData!![j]?.kLineDate = data[i]
+                        }
+                    }
+                }
+                Observable.just(result)
+            }
+            ?.compose(RxJavaHelper.observeOnMainThread())
     }
 
     /**
@@ -282,75 +373,6 @@ object PairApiServiceHelper {
                     }
                     Observable.just(pairStatuses)
                 }
-        //        return Observable.zip(
-////                pairApiService.getOrderedPairs(null),
-//                pairApiService.getCoinOrders(),
-//                pairApiService.getTradePairInfo(null),
-//                (coinOrderData, pairInfoData) -> {
-//                    ArrayList<PairStatus> pairStatuses = new ArrayList<>();
-//                    ArrayList<String> allPair = new ArrayList<>();
-//                    ArrayList<String> allLeverPair = new ArrayList<>();
-//                    CoinOrder coinOrder = coinOrderData != null && coinOrderData.code == HttpRequestResult.SUCCESS ? coinOrderData.data : null;
-//                    if (pairInfoData.data != null && pairInfoData.code == HttpRequestResult.SUCCESS) {
-//                        for (PairStatus pairStatus : pairInfoData.data) {
-//                            if (pairStatus != null) {
-//                                pairStatus.setPair(pairStatus.pairName);
-//                                pairStatus.order_no = coinOrder == null ? CoinOrder.MAX_ORDER : coinOrder.getOrder(pairStatus.pair);
-//                                Integer maxPrecision = CommonUtil.getMax(pairStatus.supportingPrecisionList);
-//                                maxPrecision = maxPrecision == null || maxPrecision == 0 ? 6 : maxPrecision;
-//                                pairStatus.precision = maxPrecision;
-//                                pairStatus.isHighRisk = pairStatus.isHighRisk == null ? false : pairStatus.isHighRisk;
-//                                pairStatuses.add(pairStatus);
-//                                allPair.add(pairStatus.pair);
-//                                if (pairStatus.isLever()) {
-//                                    allLeverPair.add(pairStatus.pair);
-//                                }
-//                            }
-//                        }
-//                    }
-////                        HashMap<String, PairStatus> pairInfoMap = new HashMap<>();
-////                        if (pairSource != null && pairSource.code == HttpRequestResult.SUCCESS) {
-////                            ArrayList<String> pairs = pairSource.data == null ? new ArrayList<String>() : pairSource.data;
-////                            String currentPair = CookieUtil.getCurrentPair(context);
-////                            if (!pairs.isEmpty() && TextUtils.isEmpty(currentPair)) {
-////                                CookieUtil.setCurrentPair(context, CommonUtil.getItemFromList(pairs, 0));
-////                                SocketUtil.notifyPairChanged(context);
-////                            }
-////                            int pairSize = pairs.size();
-////                            for (int i = 0; i < pairSize; i++) {
-////                                String pair = pairs.get(i);
-////                                PairStatus pairStatus = new PairStatus();
-////                                pairStatus.setPair(pair);
-////                                pairStatus.order_no = coinOrder == null ? CoinOrder.MAX_ORDER : coinOrder.getOrder(pair);
-////                                PairStatus pairInfo = pairInfoMap.get(pair);
-////                                if (pairInfo != null) {
-////                                    pairStatus.supportingPrecisionList = pairInfo.supportingPrecisionList;
-////                                    Integer maxPrecision = CommonUtil.getMax(pairInfo.supportingPrecisionList);
-////                                    maxPrecision = maxPrecision == null || maxPrecision == 0 ? 6 : maxPrecision;
-////                                    pairStatus.precision = maxPrecision;
-////                                    pairStatus.amountPrecision = pairInfo.amountPrecision;
-////                                    pairStatus.isHighRisk = pairInfo.isHighRisk == null ? false : pairInfo.isHighRisk;
-////                                }
-////                                pairStatuses.add(pairStatus);
-////                            }
-////                        }
-//                    String currentPair = CookieUtil.getCurrentPair(context);
-//                    if (!allPair.isEmpty() && (TextUtils.isEmpty(currentPair) || !allPair.contains(currentPair))) {
-//                        currentPair = CommonUtil.getItemFromList(allPair, 0);
-//                        if (currentPair != null) {
-//                            CookieUtil.setCurrentPair(context, currentPair);
-//                            SocketUtil.notifyPairChanged(context);
-//                        }
-//                    }
-//                    String currentLeverPair = CookieUtil.getCurrentPairLever(context);
-//                    if (!allLeverPair.isEmpty() && (TextUtils.isEmpty(currentLeverPair) || !allLeverPair.contains(currentLeverPair))) {
-//                        currentPair = CommonUtil.getItemFromList(allLeverPair, 0);
-//                        if (currentPair != null) {
-//                            CookieUtil.setCurrentPairLever(context, currentPair);
-//                        }
-//                    }
-//                    return pairStatuses;
-//                });
     }
 
     /**

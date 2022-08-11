@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.*
-import android.util.Log
 import com.black.base.model.SuccessObserver
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -132,24 +131,24 @@ class SocketService : Service() {
                 socketServerHandler = Handler(handlerThread?.looper)
             }
             if (qSocket == null) {
-                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
-                qSocket?.start()
+//                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
+//                qSocket?.start()
             }
-            if (uSocket == null) {
-                uSocket = UserSocket(mContext!!, socketServerHandler!!)
-                uSocket?.start()
-            }
+//            if (uSocket == null) {
+//                uSocket = UserSocket(mContext!!, socketServerHandler!!)
+//                uSocket?.start()
+//            }
             if (factionSocket == null) {
-                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
-                factionSocket?.start()
+//                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
+//                factionSocket?.start()
             }
             if (pushSocket == null) {
-                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
-                pushSocket?.start()
+//                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
+//                pushSocket?.start()
             }
-            if (observer == null) {
+//            if (observer == null) {
                 observer = createCommandObserver()
-            }
+//            }
             SocketUtil.subscribeCommandObservable(observer)
         } catch (e: Exception) {
             FryingUtil.printError(e)
