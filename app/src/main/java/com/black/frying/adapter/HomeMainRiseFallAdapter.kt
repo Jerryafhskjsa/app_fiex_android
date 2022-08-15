@@ -33,7 +33,7 @@ class HomeMainRiseFallAdapter(context: Context, data: ArrayList<PairStatus?>?) :
         val viewHolder = holder?.dataBing
         val bgColor = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
         val bg = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
-        viewHolder?.pairName?.setText(pairStatus?.name)
+        viewHolder?.pairName?.setText(pairStatus?.pair)
 //        viewHolder?.setName?.setText(pairStatus?.setName)
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
 //        viewHolder?.priceCny?.setText("¥ " + pairStatus?.currentPriceCNYFormat)
@@ -43,7 +43,7 @@ class HomeMainRiseFallAdapter(context: Context, data: ArrayList<PairStatus?>?) :
         var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
         var ydata:IntArray = intArrayOf(0,10,20,30,40,50,60,70,80,90)
         var linedata:FloatArray = floatArrayOf(5f,10f,6f,30f,5f,62.5f,6f,2f,3f,6f)
-        viewHolder?.lineCartTab?.setChartdate(xdata,ydata,linedata, Color.GREEN)
+//        viewHolder?.lineCartTab?.setChartdate(xdata,ydata,linedata, Color.GREEN)
     }
 
 }

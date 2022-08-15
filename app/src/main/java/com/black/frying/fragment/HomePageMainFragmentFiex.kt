@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
 import com.black.base.adapter.BaseViewPagerAdapter
-import com.black.base.api.PairApiService
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
@@ -72,10 +71,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
     private var viewModel: MainViewModel? = null
+    private var homeTabTyoe:Int? = ConstData.HOME_TAB_HOT
 
-    private var symbolListData: ArrayList<HomeSymbolList?>? = null
-    private var tickersData:ArrayList<HomeTickers?>? = null
-    private var tickersKline:ArrayList<HomeTickersKline?>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
@@ -123,8 +120,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
         binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                var type = tab.position
-                viewModel!!.getRiseFallData(type)
+                homeTabTyoe = tab.position
+//                viewModel!!.getRiseFallData(type)
+                viewModel!!.getHomeSybolListData(homeTabTyoe!!)
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -153,7 +151,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
         })
 
-        viewModel!!.getRiseFallData(1)
+//        viewModel!!.getRiseFallData(1)
 //        viewModel!!.getSymbolList()
 //        viewModel!!.getHomeTicker()
 //        viewModel!!.getHomeKline()
@@ -258,7 +256,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     }
                 }
                 for (gridView in showGridViewList) {
-                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
+//                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
                 }
 //                viewModel!!.getRiseFallData(if (binding!!.risePairs.isChecked) 1 else 2)
             }
@@ -266,6 +264,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
+    }
+
+    override fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
+        Log.d(TAG,"onHomeTabDataChanged")
         observable!!.subscribe {
             CommonUtil.checkActivityAndRunOnUI(activity) {
                 adapter?.data = it
@@ -319,6 +321,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 //                    tickersKline = returnData?.data as ArrayList<HomeTickersKline?>
                     Log.d(TAG,"onHomeKLine succ")
                     showTickersPairs(PairApiServiceHelper.getHomePagePairData())
+                    viewModel!!.getHomeSybolListData(homeTabTyoe!!)
                 } else {
                     Log.d(TAG,"onHomeKLine data null or fail")
                 }
@@ -341,7 +344,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     Log.d(TAG,"onHomeTickers data null or fail")
                 }
             }
-
             override fun error(type: Int, error: Any?) {
                 Log.d(TAG,"onHomeTickers error")
             }
@@ -541,6 +543,72 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
     internal class GridViewAdapter(context: Context, data: MutableList<PairStatus?>?) : BaseDataBindAdapter<PairStatus?, ListItemPageMainStatusBinding>(context, data) {
         private var color4: Int = 0
+
+        /**
+         * 取x轴横坐标数据，整数均分递增
+         */
+        fun getKLineXdata(kLineData:HomeTickersKline?): Array<String?>? {
+            var kDataList: ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
+            var size = kDataList?.size
+            Log.d("kkkkk","size = "+size)
+            var arrayX = size?.let { arrayOfNulls<String>(it) }
+            for (i in 0 until size!!){
+                arrayX?.set(i, i.toString())
+            }
+            return arrayX
+        }
+
+        /**
+         * 取y轴纵坐标数据，最大值和最小值均分，0开始
+         */
+        fun getKlineData(kLineData:HomeTickersKline?):FloatArray{
+            var kDataList:ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
+            Log.d("kkkkk","size = "+kDataList?.size)
+            var yListSize = kDataList?.size
+            var kPlistArray = FloatArray(yListSize!!)
+            for (value in kDataList!!){
+                var index = 0
+                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it }
+            }
+            return kPlistArray
+        }
+
+        /**
+         * k线数据转为FloatArray
+         */
+        fun getKineYdata(kLineData:HomeTickersKline?):FloatArray{
+            var kDataList:ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
+            var yListSize = kDataList?.size
+            var kPlistArray = FloatArray(yListSize!!)
+            for (value in kDataList!!){
+                var index = 0
+                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it }
+                index++
+            }
+            var yMax = kPlistArray.maxOrNull()
+            var newYdata:ArrayList<Float> = ArrayList()
+            var divide = yListSize?.let { yMax?.div(it.toFloat()) }
+            var temp: Float? = null
+            if (yListSize != null) {
+                while (yListSize > -1){
+                    if(temp == null){
+                        temp = 0.0f
+                    }else{
+                        if (divide != null) {
+                            temp += divide
+                        }
+                    }
+                    if(yListSize == 0){
+                        if(temp < yMax!!){
+                            temp = yMax
+                        }
+                    }
+                    newYdata.add(temp)
+                    yListSize--
+                }
+            }
+            return newYdata.toFloatArray()
+        }
         override fun resetSkinResources() {
             super.resetSkinResources()
             colorWin = SkinCompatResources.getColor(context, R.color.T7)
@@ -563,13 +631,25 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairSince?.setTextColor(colorDefault)
 //            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
             binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
+
+//            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
+            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
             //折线图假数据
             var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
-            var ydata:IntArray = intArrayOf(0,10,20,30,40,50,60,70,80,90)
+            var ydata:FloatArray = floatArrayOf(0.0f,10.0f,20.0f,30.0f,40.0f,50.0f,60.0f,70.0f,80.0f,90.0f)
             var linedata:FloatArray = floatArrayOf(5f,10f,6f,30f,5f,62.5f,6f,2f,3f,6f)
-            binding?.lineCart?.setChartdate(xdata,ydata,linedata, Color.BLACK)
+
+
+//            binding?.lineCart?.setChartdate(xdata,ydata,linedata, Color.BLACK)
+            var kLineData = pairStatus?.kLineDate
+            if(kLineData != null){
+                getKLineXdata(kLineData)?.let { binding?.lineCart?.setChartdate(it,getKineYdata(kLineData),getKlineData(kLineData), Color.BLACK) }
+            }
         }
     }
+
+
+
 
     override fun onCancelClick(mainMorePopup: MainMorePopup) {
         mainMorePopup.dismiss()

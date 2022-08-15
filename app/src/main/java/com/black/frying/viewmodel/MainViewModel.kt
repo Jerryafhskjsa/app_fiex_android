@@ -274,6 +274,14 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
                 ?.observeOn(AndroidSchedulers.mainThread()))
     }
 
+
+
+    fun getHomeSybolListData(type: Int) {
+        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,PairApiServiceHelper.getHomePagePairData())
+            ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
+            ?.observeOn(AndroidSchedulers.mainThread()))
+    }
+
     //获取公告信息
     fun getNoticeInfo() {
         onMainModelListener?.onNoticeList(ApiManager.build(context!!)
@@ -355,6 +363,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     interface OnMainModelListener {
         fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
+        fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onNoticeList(observable: Observable<NoticeHome?>?)
         fun onHeadBanner(observable: Observable<HttpRequestResultDataList<Banner?>?>?)
         fun onMiddleBanner(observable: Observable<HttpRequestResultDataList<Banner?>?>?)

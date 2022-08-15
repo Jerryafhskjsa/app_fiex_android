@@ -29,11 +29,11 @@ class MainMorePopup(private val activity: Activity) : PopupWindow.OnDismissListe
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener(this)
         binding.cancel?.setOnClickListener(this)
-        binding.notify?.setOnClickListener(this)
-        binding.customService?.setOnClickListener(this)
-        binding.doScan?.setOnClickListener(this)
-        binding.flashExchange?.setOnClickListener(this)
-        binding.informations?.setOnClickListener(this)
+        binding.relNotice?.setOnClickListener(this)
+        binding.relService?.setOnClickListener(this)
+        binding.relScan?.setOnClickListener(this)
+        binding.relFastExchange?.setOnClickListener(this)
+        binding.relInfo?.setOnClickListener(this)
     }
 
     override fun onDismiss() {
@@ -45,11 +45,11 @@ class MainMorePopup(private val activity: Activity) : PopupWindow.OnDismissListe
     override fun onClick(v: View) {
         when (v.id) {
             R.id.cancel -> onMainMoreClickListener?.onCancelClick(this)
-            R.id.notify -> onMainMoreClickListener?.onNotifyClick(this)
-            R.id.custom_service -> onMainMoreClickListener?.onCustomServiceClick(this)
-            R.id.do_scan -> onMainMoreClickListener?.onDoScanClick(this)
-            R.id.flash_exchange -> onMainMoreClickListener?.onFlashExchangeClick(this)
-            R.id.informations -> onMainMoreClickListener?.onInformationClick(this)
+            R.id.rel_notice -> onMainMoreClickListener?.onNotifyClick(this)
+            R.id.rel_service -> onMainMoreClickListener?.onCustomServiceClick(this)
+            R.id.rel_scan -> onMainMoreClickListener?.onDoScanClick(this)
+            R.id.rel_fast_exchange -> onMainMoreClickListener?.onFlashExchangeClick(this)
+            R.id.rel_info -> onMainMoreClickListener?.onInformationClick(this)
         }
     }
 

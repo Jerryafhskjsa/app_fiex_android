@@ -54,4 +54,5 @@ class HomeSymbolList {
         var depthPrecisionMerge: String? = null
         var onboardDate: String? = null
         var setType: String? = null
+        var hot:Boolean? = null
 }

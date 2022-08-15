@@ -12,100 +12,147 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/cancel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_translate_recharge"
-            />
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/fiex_icon_main_pop_close" />
         <LinearLayout
             android:layout_below="@+id/cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
+            android:paddingBottom="25dp"
             android:background="@drawable/bg_b2_corner3"
             android:orientation="horizontal"
             >
             <RelativeLayout
+                android:id="@+id/rel_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/icon_notice"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@drawable/fiex_bg_icon_item_mainpop"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/notification"/>
                 <CheckedTextView
-                    android:id="@+id/notify"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:drawableTop="@drawable/icon_translate_recharge"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icon_notice"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:maxLines="1"
-                    android:layout_centerInParent="true"
-                    android:drawablePadding="10dp"
                     android:text="@string/notice_1"
-                    android:textColor="@color/T1"
+                    android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rel_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/icon_service"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fiex_bg_icon_item_mainpop"
+                    android:padding="8dp"
+                    android:src="@drawable/service" />
+
                 <CheckedTextView
-                    android:id="@+id/custom_service"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:drawableTop="@drawable/icon_translate_recharge"
-                    android:layout_centerInParent="true"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icon_service"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:maxLines="1"
-                    android:drawablePadding="10dp"
                     android:text="@string/customer_service"
-                    android:textColor="@color/T1"
+                    android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rel_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/icon_scan"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fiex_bg_icon_item_mainpop"
+                    android:padding="8dp"
+                    android:src="@drawable/scanning_w" />
+
                 <CheckedTextView
-                    android:id="@+id/do_scan"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:drawableTop="@drawable/icon_translate_recharge"
-                    android:layout_centerInParent="true"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icon_scan"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:maxLines="1"
-                    android:drawablePadding="10dp"
                     android:text="@string/scan"
-                    android:textColor="@color/T1"
+                    android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rel_fast_exchange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/icon_fast_exchange"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fiex_bg_icon_item_mainpop"
+                    android:padding="8dp"
+                    android:src="@drawable/exchange" />
+
                 <CheckedTextView
-                    android:id="@+id/flash_exchange"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:drawableTop="@drawable/icon_translate_recharge"
-                    android:layout_centerInParent="true"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icon_fast_exchange"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:maxLines="1"
-                    android:drawablePadding="10dp"
                     android:text="@string/flash_exchange"
-                    android:textColor="@color/T1"
+                    android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rel_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/icon_info"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fiex_bg_icon_item_mainpop"
+                    android:padding="8dp"
+                    android:src="@drawable/info" />
+
                 <CheckedTextView
-                    android:id="@+id/informations"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:drawableTop="@drawable/icon_translate_recharge"
-                    android:layout_centerInParent="true"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/icon_info"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:maxLines="1"
-                    android:drawablePadding="10dp"
                     android:text="@string/information"
-                    android:textColor="@color/T1"
+                    android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
         </LinearLayout>

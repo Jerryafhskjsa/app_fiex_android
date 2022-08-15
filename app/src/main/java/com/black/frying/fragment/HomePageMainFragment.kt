@@ -339,6 +339,10 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
         }.run { }
     }
 
+    override fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
+
+    }
+
     override fun onNoticeList(observable: Observable<NoticeHome?>?) {
         observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<NoticeHome?>() {
             override fun callback(returnData: NoticeHome?) =

@@ -798,6 +798,44 @@ object SocketDataContainer {
         }
     }
 
+
+    fun getHomeTickerTypePairs(context: Context?, type: Int,initPairStatus:ArrayList<PairStatus?>?): Observable<ArrayList<PairStatus?>>? {
+            if (context == null) {
+                return null
+            }
+            val result: MutableList<PairStatus?> = ArrayList()
+            when(type){
+                ConstData.HOME_TAB_HOT ->{
+                    for (i in initPairStatus?.indices!!) {
+                        val pairStatus = initPairStatus[i]
+                        if (pairStatus?.hot != null && pairStatus.hot!!) {
+                            result.add(pairStatus)
+                        }
+                    }
+                }
+
+                ConstData.HOME_TAB_RAISE_BAND ->{
+                    Collections.sort(initPairStatus,PairStatus.COMPARATOR_SINCE_UP)
+                    if (initPairStatus != null) {
+                        result.addAll(initPairStatus)
+                    }
+                }
+                ConstData.HOME_TAB_FAIL_BAND ->{
+                    Collections.sort(initPairStatus,PairStatus.COMPARATOR_SINCE_DOWN)
+                    if (initPairStatus != null) {
+                        result.addAll(initPairStatus)
+                    }
+                }
+                ConstData.HOME_TAB_VOLUME_BAND ->{
+                    Collections.sort(initPairStatus,PairStatus.COMPARATOR_VOLUME_24)
+                    if (initPairStatus != null) {
+                        result.addAll(initPairStatus)
+                    }
+                }
+            }
+            return Observable.just(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
+    }
+
     fun getPairStatus(context: Context?, pair: String?, callback: Callback<PairStatus?>?) {
         if (context == null || callback == null) {
             return

@@ -6,11 +6,22 @@ import com.black.util.CommonUtil
 import com.black.util.Findable
 import com.black.util.NumberUtil
 import java.util.*
+import kotlin.collections.ArrayList
 
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
     //k线数据
     var kLineDate:HomeTickersKline? = null
+    //交易量
+    var tradeVolume:String? = null
+    set(value) {
+        field = value
+        if(value != null){
+            tradeAmount = value.toDouble()
+        }
+    }
+    var tradeAmount:Double? = null
+    var hot:Boolean? = null
 
     var pair: String? = null
         set(value) {
@@ -108,6 +119,10 @@ open class PairStatus : BaseAdapterItem(), Findable {
             return sign + NumberUtil.formatNumberDynamicScaleNoGroup(priceChangeSinceToday, 4, 0, 2) + "%"
         }
 
+    //判断是否是HOT
+    val isHot: Boolean
+        get() = hot == null || hot!! .equals("true")
+
     //判断是否下跌
     val isDown: Boolean
         get() = priceChangeSinceToday == null || priceChangeSinceToday!! <= 0
@@ -174,5 +189,16 @@ open class PairStatus : BaseAdapterItem(), Findable {
             } else -java.lang.Double.compare(o1.priceChangeSinceToday!!, o2.priceChangeSinceToday!!)
         }
         var COMPARATOR_QUOTATION: Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 -> 0 }
+        var COMPARATOR_VOLUME_24 : Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 ->
+            if (o1 == null || o2 == null || o1.tradeAmount == null && o2.tradeAmount == null) {
+                return@Comparator 0
+            }
+            if (o1.tradeAmount == null) {
+                return@Comparator 1
+            }
+            if (o2.tradeAmount == null) {
+                -1
+            } else java.lang.Double.compare(o1.tradeAmount!!, o2.tradeAmount!!)
+        }
     }
 }

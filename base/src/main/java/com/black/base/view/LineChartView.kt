@@ -20,26 +20,35 @@ class LineChartView : View {
     private var canvasHeight = 0
     private var canvasWidth = 0
     private var textFont = 0
-    private lateinit var xdata: Array<String>
-    private lateinit var ydata: IntArray
+    private lateinit var xdata: Array<String?>
+    private lateinit var ydata: FloatArray
     private lateinit var linedata: FloatArray
     private var paintColor: Int = Color.BLACK
     private var xCopies = 0
     private var yCopies = 0f
 
-    fun setChartdate(xdata: Array<String>, ydata: IntArray, linedata: FloatArray,paintColor:Int) {
+    fun setChartdate(xdata: Array<String?>, ydata: FloatArray, linedata: FloatArray, paintColor:Int) {
         this.xdata = xdata
         this.ydata = ydata
         this.linedata = linedata
-        this.paintColor = paintColor
     }
 
-    constructor(context: Context?) : super(context) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context?) : super(context) {
+        Log.d("LineChartView","constructor")
+    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        Log.d("LineChartView","constructor111")
+        this.xdata = emptyArray()
+        this.ydata = floatArrayOf()
+        this.linedata = floatArrayOf()
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         Log.d("LineChartView","onDraw")
+        Log.d("LineChartView","xdata.size = "+xdata.size)
+        Log.d("LineChartView","ydata.size = "+ydata.size)
+        Log.d("LineChartView","linedata.size = "+linedata.size)
         if (xdata.isNotEmpty() && ydata.isNotEmpty() && linedata.isNotEmpty() && xdata.size >= linedata.size) {
             if (yMaxdata() >= lineMaxdata()) {
                 drawAxis(canvas)

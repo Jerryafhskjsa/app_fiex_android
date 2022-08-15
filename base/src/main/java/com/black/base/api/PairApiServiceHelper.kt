@@ -172,6 +172,8 @@ object PairApiServiceHelper {
                             if(homePagePairData!![j]?.pair == data[i]?.s){
                                 //现价
                                 homePagePairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!//这个地方小数点位数可能会有问题
+                                //交易量
+                                homePagePairData!![j]?.tradeVolume = data[i]?.v
                                 //涨跌幅
                                 homePagePairData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
                             }
@@ -198,6 +200,7 @@ object PairApiServiceHelper {
                     var pair = data[i]?.symbol//交易对名
                     var pairStatus:PairStatus? = PairStatus()
                     pairStatus?.pair = pair
+                    pairStatus?.hot = data[i]?.hot
                     homePagePairData?.add(pairStatus)
                 }
                 Observable.just(result)

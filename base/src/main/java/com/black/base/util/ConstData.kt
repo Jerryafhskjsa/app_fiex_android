@@ -261,4 +261,9 @@ object ConstData {
 
     const val MONEY_PASSWORD_SET = 0 //设置资金密码
     const val MONEY_PASSWORDR_RESET = 1 //重置资金密码
+
+    const val HOME_TAB_HOT = 0
+    const val HOME_TAB_RAISE_BAND = 1
+    const val HOME_TAB_FAIL_BAND = 2
+    const val HOME_TAB_VOLUME_BAND = 3
 }
