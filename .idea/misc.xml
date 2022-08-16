@@ -4,11 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/activity_mine.xml" value="0.1280701754385965" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/activity_quotation_detail.xml" value="0.14210526315789473" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/activity_start_page_new.xml" value="0.13728070175438598" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fiex_fragment_home_page_main.xml" value="0.16666666666666666" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_main.xml" value="0.1875" />
-        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.13508771929824562" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction.xml" value="0.14210526315789473" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.14210526315789473" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.14210526315789473" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/list_item_home_main_rise_fall.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_home_quotation_tab.xml" value="0.14210526315789473" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_main_more.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_transaction_more.xml" value="0.1267543859649123" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/action_bar_login.xml" value="0.16875" />

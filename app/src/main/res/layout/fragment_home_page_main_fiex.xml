@@ -534,13 +534,11 @@
                                 </RelativeLayout>
 
                             </androidx.cardview.widget.CardView>
-
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/line"
                             android:background="@color/L1_ALPHA30" />
-
                         <com.google.android.material.tabs.TabLayout
                             android:id="@+id/main_tab"
                             android:layout_width="match_parent"

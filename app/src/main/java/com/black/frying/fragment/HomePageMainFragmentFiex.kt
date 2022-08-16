@@ -131,7 +131,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(mContext, R.color.B2)
         binding!!.riseFallListView.divider = drawable
-        binding!!.riseFallListView.dividerHeight = 25
+        binding!!.riseFallListView.dividerHeight = 15
         adapter = HomeMainRiseFallAdapter(mContext!!, null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
@@ -456,6 +456,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     val adapter = GridViewAdapter(activity!!, gridPairs)
                     gridView.numColumns = STATUS_PAGE_COUNT
                     gridView.adapter = adapter
+                    gridView.scrollBarSize = 0
                     gridView.horizontalSpacing = 15
                     gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
                     viewList.add(gridView)

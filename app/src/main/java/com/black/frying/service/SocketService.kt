@@ -14,10 +14,7 @@ import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.SocketDataContainer
 import com.black.base.util.SocketUtil
-import com.black.frying.service.socket.FactionSocket
-import com.black.frying.service.socket.PushSocket
-import com.black.frying.service.socket.QuotationSocket
-import com.black.frying.service.socket.UserSocket
+import com.black.frying.service.socket.*
 import com.google.gson.Gson
 import io.reactivex.Observer
 
@@ -28,6 +25,8 @@ class SocketService : Service() {
     }
 
     private val gson = Gson()
+    private var homePageSocket:HomePageSocket? = null
+
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketServerHandler: Handler? = null
@@ -145,6 +144,10 @@ class SocketService : Service() {
             if (pushSocket == null) {
 //                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
 //                pushSocket?.start()
+            }
+            if(homePageSocket == null){
+                homePageSocket = HomePageSocket(mContext!!,socketServerHandler!!)
+                homePageSocket?.startConnect()
             }
 //            if (observer == null) {
                 observer = createCommandObserver()

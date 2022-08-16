@@ -86,6 +86,8 @@ dependencies {
     api(name: 'geetest_sensebot_android_v4.1.4_20190719', ext: 'aar')
     api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
 
+    api 'org.java-websocket:Java-WebSocket:1.4.0'
+
     //信鸽jar
     api 'com.tencent.xinge:xinge:3.2.3-release'
     //wup包

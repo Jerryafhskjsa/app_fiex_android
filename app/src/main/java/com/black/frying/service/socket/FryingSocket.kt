@@ -3,16 +3,22 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.net.websocket.SimpleListener
+import com.black.net.websocket.WebSocketManager
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import io.socket.engineio.client.transports.WebSocket
 import java.util.*
+import kotlin.collections.HashMap
 
 abstract class FryingSocket(protected val context: Context, protected val handler: Handler) {
     private val TAG: String? = "FryingSocket"
     protected val gson = Gson()
+
+
+
     protected val socket: Socket
     protected var emitterListenerMap = HashMap<String, Emitter.Listener>() //消息监听
 
@@ -49,6 +55,7 @@ abstract class FryingSocket(protected val context: Context, protected val handle
 
     @Throws(Exception::class)
     protected abstract fun initSocket(): Socket
+
 
     open protected fun getTag(): String {
         return ""
