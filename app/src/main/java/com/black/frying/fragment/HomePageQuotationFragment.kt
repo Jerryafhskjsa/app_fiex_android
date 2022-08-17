@@ -2,6 +2,7 @@ package com.black.frying.fragment
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -10,12 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.FryingUtil
@@ -24,6 +27,7 @@ import com.black.base.util.SocketDataContainer
 import com.black.base.util.StatusBarUtil
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.util.PairQuotationComparator
+import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.util.CommonUtil
@@ -38,11 +42,8 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private var binding: FragmentHomePageQuotationBinding? = null
 
-    private val viewPagerAdapter: PagerAdapter? = null
     private var sets: List<String?>? = null
     private var fragmentList: MutableList<HomePageQuotationDetailFragment?>? = null
-    private val defaultIndex = 0
-    private val allPairStatus: List<PairStatus>? = null
 
     //异步获取数据
     private val handlerThread: HandlerThread? = null
@@ -55,17 +56,23 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         parent = activity as HomePageActivity
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (binding != null) {
             return binding?.root
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_quotation, container, false)
-        StatusBarUtil.addStatusBarPadding(binding?.root)
         binding?.setTab?.setTabTextColors(SkinCompatResources.getColor(activity, R.color.C5), SkinCompatResources.getColor(activity, R.color.C1))
-        binding?.setTab?.setSelectedTabIndicatorHeight(0)
         binding?.setTab?.tabMode = TabLayout.MODE_SCROLLABLE
 
-        binding?.btnSearch?.setOnClickListener(this)
+        binding?.marketRefreshLayout?.setRefreshHolder(RefreshHolderFrying(activity!!))
+        binding?.marketRefreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding!!.marketRefreshLayout.postDelayed({ binding!!.marketRefreshLayout.setRefreshing(false) }, 300)
+            }
+
+        })
+
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
         binding?.sortRange?.setOnClickListener(this)
@@ -90,7 +97,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_search -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
             R.id.sort_coin -> {
                 comparator.coinType = getNextType(comparator.coinType)
                 comparator.priceType = PairQuotationComparator.NORMAL
@@ -238,4 +244,22 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             initQuotationGroup()
         }
     }
+
+    companion object {
+        fun newInstance(tab: String?): HomePageQuotationDetailFragment {
+            val args = Bundle()
+            val fragment = HomePageQuotationDetailFragment()
+            fragment.arguments = args
+//            fragment.set = tab
+            return fragment
+        }
+        fun newSelfInstance(tab: String?): HomePageQuotationFragment {
+            val args = Bundle()
+            val fragment = HomePageQuotationFragment()
+            fragment.arguments = args
+//            fragment.set = tab
+            return fragment
+        }
+    }
+
 }

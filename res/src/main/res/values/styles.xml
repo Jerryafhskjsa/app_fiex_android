@@ -224,4 +224,8 @@
     <style name="DefaultTabStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/tab_default_text_color</item>
     </style>
+    <style name="MainTabStyle">
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

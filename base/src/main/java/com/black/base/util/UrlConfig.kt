@@ -33,7 +33,7 @@ object UrlConfig {
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
 //            "http://fiex.matchain.info",//fiex测试环境
-            "http://112.194.204.105:8081",
+            "ws://112.194.204.105:8081",
             "http://fiex.io",//正式环境
             "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new

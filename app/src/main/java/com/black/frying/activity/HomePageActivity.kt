@@ -26,6 +26,7 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.frying.FryingApplication
 import com.black.frying.fragment.HomePageMoneyFragment
 import com.black.frying.fragment.HomePageQuotationFragment
+import com.black.frying.fragment.HomePageQuotationFragmentMain
 import com.black.frying.fragment.HomePageTransactionFragment
 import com.black.frying.model.HomeTab
 import com.black.frying.service.SocketService
@@ -73,10 +74,10 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 //                HomePageMineFragment.class, null);
 //        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
         tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragmentFiex::class.java)
-        tabs[1] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragment::class.java)
+        tabs[1] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
         tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
-        tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_demand, HomePageMoneyFragment::class.java)
-        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_demand, HomePageMoneyFragment::class.java)
+        tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
+        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageMoneyFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
             val indicator = View.inflate(applicationContext, R.layout.home_page_tab_indicator, null)
@@ -334,8 +335,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     fun resetSkinResources() {
         val mainFragment = supportFragmentManager.findFragmentByTag(tabs[0]!!.tabName) as HomePageMainFragmentFiex?
         mainFragment?.resetSkinResources()
-        val quotationFragment = supportFragmentManager.findFragmentByTag(tabs[1]!!.tabName) as HomePageQuotationFragment?
-        quotationFragment?.resetSkinResources()
+        val quotationFragment = supportFragmentManager.findFragmentByTag(tabs[1]!!.tabName) as HomePageQuotationFragmentMain?
+//        quotationFragment?.resetSkinResources()
         val transactionFragment = supportFragmentManager.findFragmentByTag(tabs[2]!!.tabName) as HomePageTransactionFragment?
         transactionFragment?.resetSkinResources()
         val moneyFragment = supportFragmentManager.findFragmentByTag(tabs[3]!!.tabName) as HomePageMoneyFragment?

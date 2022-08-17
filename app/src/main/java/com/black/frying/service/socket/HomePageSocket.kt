@@ -3,7 +3,10 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.util.FryingUtil
+import com.black.base.util.UrlConfig
 import com.black.net.websocket.*
+import org.json.JSONException
 import org.json.JSONObject
 
 class HomePageSocket(context: Context,handler: Handler){
@@ -20,7 +23,8 @@ class HomePageSocket(context: Context,handler: Handler){
         private const val userKeys = "userKeys"
     }
     init {
-        var socketUrl = "ws://112.194.204.105:8081/websocket"
+        var socketUrl = UrlConfig.getSocketHost(context)+"/websocket"
+        Log.d("11111", "socketUrl = $socketUrl")
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 5
@@ -69,13 +73,14 @@ class HomePageSocket(context: Context,handler: Handler){
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("11111", "$key onMessage = $message")
-            when(key){
-                homeKeyS ->{
-                    Log.d("11111", "22222")
-                }
-                userKeys ->{
-                    Log.d("11111", "33333")
-                }
+            var data:JSONObject? = null
+            try {
+                data = JSONObject(message)
+            }catch (e:JSONException){
+                FryingUtil.printError(e)
+            }
+            if(data != null){
+                Log.d("11111","resType = "+data.getString("resType"))
             }
         }
     }
@@ -92,13 +97,14 @@ class HomePageSocket(context: Context,handler: Handler){
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("11111", "$key onMessage = $message")
-            when(key){
-                homeKeyS ->{
-                    Log.d("11111", "22222")
-                }
-                userKeys ->{
-                    Log.d("11111", "33333")
-                }
+            var data:JSONObject? = null
+            try {
+                data = JSONObject(message)
+            }catch (e:JSONException){
+                FryingUtil.printError(e)
+            }
+            if(data != null){
+                Log.d("11111","resType = "+data.getString("resType"))
             }
         }
     }

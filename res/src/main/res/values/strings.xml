@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Pitaya</string>
+    <string name="app_name">Fiex</string>
     <string name="edt_account_hint">手机号码</string>
     <string name="get_check_code">获取验证码</string>
     <string name="cancel">取消</string>
@@ -142,7 +142,7 @@
     <string name="alert_trade_not_support">%1$s交易已关闭，请稍后重试</string>
     <string name="language_chinese">简体中文</string>
     <string name="language_english">English</string>
-    <string name="welcome_fbsex">欢迎来到Pitaya</string>
+    <string name="welcome_fbsex">欢迎来到Fiex</string>
     <string name="alert_server_error">服务器异常！</string>
     <string name="wallet_coin_filter">隐藏小额币种</string>
     <string name="k_pop_time">时间</string>
@@ -375,7 +375,7 @@
     <string name="reset_password">重置登录密码</string>
     <string name="hint_password_length">密码 (不少于8位字符)</string>
     <string name="hint_input_mail_code">输入邮箱验证码</string>
-    <string name="hint_google_lost">谷歌验证器遗失，请联系客服 support@Pitaya.com 申诉</string>
+    <string name="hint_google_lost">谷歌验证器遗失，请联系客服 support@Fiex.com 申诉</string>
     <string name="copy">复制</string>
     <string name="hint_google_secret">保存二维码到手机或复制秘钥到剪切板可能会有安全风险，请妥善保存。</string>
     <string name="login_title">登录</string>
@@ -405,8 +405,8 @@
     <string name="verify_mail_02">邮箱认证</string>
     <string name="invite_code">邀请码</string>
     <string name="recommend_person">邀请好友</string>
-    <string name="recommended_share_title">我在全球领先的区块链金融衍生品服务平台 “Pitaya”等你，你也快来注册吧!</string>
-    <string name="recommended_share_text">“Pitaya”全球领先的区块链金融衍生品服务平台</string>
+    <string name="recommended_share_title">我在全球领先的区块链金融衍生品服务平台 “Fiex”等你，你也快来注册吧!</string>
+    <string name="recommended_share_text">“Fiex”全球领先的区块链金融衍生品服务平台</string>
     <string name="recharge_amount">充币数量</string>
     <string name="recharge_confirm">确认数</string>
     <string name="recharge_status">充币状态</string>
@@ -457,9 +457,9 @@
     <string name="login_phone">手机登录</string>
     <string name="login_email">邮箱登录</string>
     <string name="go_register">注冊</string>
-    <string name="go_register_hint">还没有 Pitaya 账号？</string>
+    <string name="go_register_hint">还没有 Fiex 账号？</string>
     <string name="go_login">登录</string>
-    <string name="go_login_hint">还没有 Pitaya.co 账号？</string>
+    <string name="go_login_hint">还没有 Fiex.co 账号？</string>
     <string name="register_type_email">邮箱注册</string>
     <string name="register_type_phone">手机注册</string>
     <string name="btn_reset_password">重置密码</string>
@@ -536,7 +536,7 @@
     <string name="promotions_done">已完成</string>
     <string name="promotions_finish">已结束</string>
     <string name="promotions_not_start">即将开始</string>
-    <string name="company">Pitaya 全球交易所</string>
+    <string name="company">Fiex 全球交易所</string>
     <string name="recommend_count">邀请人数 %s人</string>
     <string name="service_rule">《服务条款》</string>
     <string name="extract_useable">可用 %s %s</string>
@@ -608,6 +608,7 @@
     <string name="referral">Referral</string>
     <string name="support">Support</string>
     <string name="futures">Futures</string>
+    <string name="coin_volume">交易量</string>
 
 
 </resources>
