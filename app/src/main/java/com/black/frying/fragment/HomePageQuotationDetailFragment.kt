@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.frying.adapter.HomeQuotationDetailAdapter
 import com.black.frying.util.PairQuotationComparator
+import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -71,6 +73,13 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
             group.addView(emptyView)
             binding?.listView?.emptyView = emptyView
         }
+        binding?.marketRefreshLayout?.setRefreshHolder(RefreshHolderFrying(activity!!))
+        binding?.marketRefreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding!!.marketRefreshLayout.postDelayed({ binding!!.marketRefreshLayout.setRefreshing(false) }, 300)
+            }
+
+        })
         return binding?.root
     }
 

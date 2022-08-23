@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <variable
             name="homePageTransactionHeader1"
             type="Object" />
     </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,62 +14,529 @@
         android:paddingTop="@dimen/double_padding"
         android:paddingRight="15dp"
         android:paddingBottom="@dimen/double_padding">
-
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="180"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/btn_buy"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/bg_transaction_buy"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/k_buy"
+                    android:textAlignment="center"
+                    android:textColor="@color/btn_buy_check"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/btn_sale"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/bg_transaction_sale"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/k_sale"
+                    android:textAlignment="center"
+                    android:textColor="@color/btn_sale_check"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/double_padding" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_transaction_input"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/order_type"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_weight="1"
+                            android:text="@string/limit_order"
+                            android:padding="0dp"
+                            android:maxLines="1"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold"
+                            />
+                        <ImageView
+                            android:id="@+id/order_type_arrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_selector_down" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/double_padding" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_transaction_input"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/price_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_price_buy_sub" />
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/price"
+                            style="@style/NormalEditTextStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:gravity="center_horizontal"
+                            android:hint="@string/price"
+                            android:padding="0dp"
+                            android:maxLines="1"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold"
+                            app:useDelete="false" />
+                        <ImageView
+                            android:id="@+id/price_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_price_buy_add" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_cny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_transaction_input"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/amount_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_price_buy_sub" />
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/transaction_quota"
+                            style="@style/NormalEditTextStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:gravity="center_horizontal"
+                            android:hint="@string/amount"
+                            android:padding="0dp"
+                            android:maxLines="1"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold"
+                            app:useDelete="false" />
+                        <ImageView
+                            android:id="@+id/amount_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_price_buy_add" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/useable"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:gravity="right"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/action_freez"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/freez"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_freez_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/freez_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:gravity="right"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/action_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/buy_usable"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_buy_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_buy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:gravity="right"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ProgressBar
+                    android:id="@+id/count_progress"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:maxHeight="2dp"
+                    android:minHeight="2dp"
+                    android:progressDrawable="@drawable/bg_transaction_progress_bar_buy" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_zero"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:layout_marginLeft="-2dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_twenty"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_fourty"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_sixty"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_eighty"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:layout_marginRight="-2dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_all"
+                        android:layout_width="8dp"
+                        android:layout_height="6dp"
+                        android:layout_marginRight="-2dp"
+                        android:button="@drawable/icon_transaction_count_buy"
+                        android:enabled="false" />
+                </LinearLayout>
+                <skin.support.widget.SkinCompatSeekBar
+                    android:id="@+id/count_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:maxHeight="20dp"
+                    android:minHeight="20dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:progressDrawable="@color/transparent"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/icon_thumbcount_bar"
+                    android:thumbOffset="0dp" />
+            </FrameLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="0"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:layout_alignParentRight="true"
+                    android:text="100%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/double_padding" />
+            <com.black.base.widget.SpanTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/C6"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="8dp"
+                android:text="@string/limite_buy"
+                android:textColor="@color/C5"
+                android:textSize="@dimen/text_size_13"
+                android:textStyle="bold"
+                android:visibility="gone" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_handle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_c2"
+                android:checked="true"
+                android:includeFontPadding="false"
+                android:padding="@dimen/default_padding"
+                android:text="@string/k_buy"
+                android:textAlignment="center"
+                android:textColor="@color/T8"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <View
+            android:layout_width="@dimen/double_padding"
+            android:layout_height="@dimen/line" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="145"
             android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/middle_padding" />
-
-            <RelativeLayout
+            amountSixty            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:text="@string/price"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-
+                    />
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_price_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deep_price"
+                    android:layout_alignParentLeft="true"
+                    android:includeFontPadding="false"
+                    android:paddingTop="4dp"
+                    android:maxLines="1"
+                    android:text="(usdt)"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:text="@string/amount"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_amount_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deep_amount"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:paddingTop="4dp"
+                    android:text="(Eth)"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_padding" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_10"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_10"
                         android:layout_width="wrap_content"
@@ -82,12 +546,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_10"
                         android:layout_width="wrap_content"
@@ -97,18 +558,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_09"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_09"
                         android:layout_width="wrap_content"
@@ -117,12 +574,9 @@
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_09"
                         android:layout_width="wrap_content"
@@ -132,18 +586,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_08"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_08"
                         android:layout_width="wrap_content"
@@ -154,12 +604,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
                         android:textColor="@color/T5"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_08"
                         android:layout_width="wrap_content"
@@ -168,18 +615,14 @@
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
                         android:textColor="@color/T2"
                         android:textSize="@dimen/text_size_12" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_07"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_07"
                         android:layout_width="wrap_content"
@@ -190,8 +633,6 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -205,18 +646,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_06"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_06"
                         android:layout_width="wrap_content"
@@ -227,12 +664,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_06"
                         android:layout_width="wrap_content"
@@ -242,18 +676,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_05"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_05"
                         android:layout_width="wrap_content"
@@ -265,12 +695,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_05"
                         android:layout_width="wrap_content"
@@ -280,18 +707,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_04"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_04"
                         android:layout_width="wrap_content"
@@ -303,12 +726,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_04"
                         android:layout_width="wrap_content"
@@ -318,18 +738,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_03"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_03"
                         android:layout_width="wrap_content"
@@ -340,8 +756,6 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -355,10 +769,8 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -366,7 +778,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_02"
                         android:layout_width="wrap_content"
@@ -377,8 +788,6 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -392,10 +801,8 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -403,7 +810,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_01"
                         android:layout_width="wrap_content"
@@ -413,8 +819,6 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T5"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -428,12 +832,9 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/current_price_layout"
                     android:layout_width="match_parent"
@@ -442,14 +843,11 @@
                     android:orientation="horizontal"
                     android:paddingTop="@dimen/default_padding"
                     android:paddingBottom="@dimen/default_padding">
-
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-
-
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/current_price"
                             android:layout_width="match_parent"
@@ -457,10 +855,9 @@
                             android:includeFontPadding="false"
                             android:maxLines="1"
                             android:text="@string/number_default"
-                            android:textColor="@color/T5"
-                            android:textSize="@dimen/text_size_17"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
-
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/current_price_cny"
                             android:layout_width="wrap_content"
@@ -470,30 +867,15 @@
                             android:includeFontPadding="false"
                             android:maxLines="1"
                             android:text="@string/number_default"
-                            android:textColor="@color/T2"
+                            android:textColor="@color/black_real"
                             android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/current_price_since"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:includeFontPadding="false"
-                        android:maxLines="1"
-                        android:text="@string/number_default"
-                        android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
                 </LinearLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_01"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_01"
                         android:layout_width="wrap_content"
@@ -503,12 +885,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_01"
                         android:layout_width="wrap_content"
@@ -518,18 +897,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_02"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_02"
                         android:layout_width="wrap_content"
@@ -540,12 +915,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_02"
                         android:layout_width="wrap_content"
@@ -555,18 +927,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_03"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_03"
                         android:layout_width="wrap_content"
@@ -576,12 +944,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_03"
                         android:layout_width="wrap_content"
@@ -591,18 +956,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_04"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_04"
                         android:layout_width="wrap_content"
@@ -612,12 +973,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_04"
                         android:layout_width="wrap_content"
@@ -627,18 +985,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_05"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_05"
                         android:layout_width="wrap_content"
@@ -649,12 +1003,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_05"
                         android:layout_width="wrap_content"
@@ -664,18 +1015,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_06"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_06"
                         android:layout_width="wrap_content"
@@ -685,12 +1032,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_06"
                         android:layout_width="wrap_content"
@@ -700,18 +1044,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_07"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_07"
                         android:layout_width="wrap_content"
@@ -722,12 +1062,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_07"
                         android:layout_width="wrap_content"
@@ -737,18 +1074,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_08"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_08"
                         android:layout_width="wrap_content"
@@ -759,8 +1092,6 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -774,10 +1105,8 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -785,7 +1114,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_09"
                         android:layout_width="wrap_content"
@@ -795,12 +1123,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_09"
                         android:layout_width="wrap_content"
@@ -810,18 +1135,14 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_10"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_10"
                         android:layout_width="wrap_content"
@@ -831,12 +1152,9 @@
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-
-
                         android:textColor="@color/T7"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_10"
                         android:layout_width="wrap_content"
@@ -846,23 +1164,19 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T2"
-
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
             </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_padding" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:orientation="horizontal">
-
+                android:visibility="gone"
+                >
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/deep"
                     android:layout_width="wrap_content"
@@ -890,404 +1204,72 @@
                     android:layout_marginEnd="1dp"
                     android:layout_marginRight="1dp"
                     android:src="@drawable/icon_trade_deep" />
-
             </RelativeLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="@dimen/double_padding"
-            android:layout_height="@dimen/line" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="180"
-            android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanCheckedTextView
-                    android:id="@+id/btn_buy"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/bg_transaction_buy"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="@string/k_buy"
-                    android:textAlignment="center"
-                    android:textColor="@color/btn_buy_check"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold" />
-
-                <com.black.base.widget.SpanCheckedTextView
-                    android:id="@+id/btn_sale"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/bg_transaction_sale"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="@string/k_sale"
-                    android:textAlignment="center"
-                    android:textColor="@color/btn_sale_check"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/double_padding" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/price"
-                            style="@style/NormalEditTextStyle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginBottom="6dp"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:gravity="center_vertical"
-                            android:hint="@string/price"
-                            android:padding="0dp"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold"
-                            app:useDelete="false" />
-
-                        <View
-                            android:layout_width="@dimen/line"
-                            android:layout_height="match_parent"
-                            android:background="@color/L1" />
-
-                        <ImageView
-                            android:id="@+id/price_sub"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="12dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_sub" />
-
-                        <View
-                            android:layout_width="@dimen/line"
-                            android:layout_height="12dp"
-                            android:background="@color/L1" />
-
-
-                        <ImageView
-                            android:id="@+id/price_add"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="12dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_add" />
-                    </LinearLayout>
-
-                </FrameLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/price_cny"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:includeFontPadding="false"
-                    android:maxLines="1"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanMaterialEditText
-                    android:id="@+id/transaction_quota"
-                    style="@style/NormalEditTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="@string/amount"
-                    android:padding="0dp"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold"
-                    app:useDelete="false" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/transaction_quota_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:paddingRight="8dp"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_14" />
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/double_padding" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ProgressBar
-                    android:id="@+id/count_progress"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:max="100"
-                    android:maxHeight="2dp"
-                    android:minHeight="2dp"
-                    android:progressDrawable="@drawable/bg_transaction_progress_bar_buy" />
-
+                android:layout_height="32dp"
+                android:background="@drawable/bg_transaction_input">
                 <LinearLayout
+                    android:id="@+id/lin_deep_postion"
+                    android:layout_weight="49"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_zero"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:layout_marginLeft="-2dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_quarter"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_half"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_three_quarter"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_all"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:layout_marginRight="-2dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/deep_position"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:gravity="center_horizontal"
+                        android:text="default"
+                        android:textStyle="bold"
+                        android:textColor="@color/black_real"
+                        android:textSize="@dimen/text_size_10" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/deep_position_des"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:includeFontPadding="false"
+                        android:text="Positions"
+                        android:textColor="@color/T2"
+                        android:textSize="@dimen/text_size_10" />
                 </LinearLayout>
-
-                <skin.support.widget.SkinCompatSeekBar
-                    android:id="@+id/count_bar"
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/L1"/>
+                <LinearLayout
+                    android:id="@+id/lin_deep_depth"
+                    android:layout_weight="49"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:max="100"
-                    android:maxHeight="20dp"
-                    android:minHeight="20dp"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:progressDrawable="@color/transparent"
-                    android:splitTrack="false"
-                    android:thumb="@drawable/thumbcount_bar"
-                    android:thumbOffset="0dp" />
-            </FrameLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="70dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="@string/useable"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:gravity="right"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="8dp"
-                    android:singleLine="true"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/deep_depth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:gravity="center_horizontal"
+                        android:text="default"
+                        android:textStyle="bold"
+                        android:textColor="@color/black_real"
+                        android:textSize="@dimen/text_size_10" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/deep_depth_des"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:includeFontPadding="false"
+                        android:text="Depth"
+                        android:textColor="@color/T2"
+                        android:textSize="@dimen/text_size_10" />
+                </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/action_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="@string/buy_usable"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable_buy_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable_buy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:gravity="right"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="8dp"
-                    android:singleLine="true"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/double_padding" />
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/C6"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:padding="8dp"
-                android:text="@string/limite_buy"
-                android:textColor="@color/C5"
-                android:textSize="@dimen/text_size_13"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_handle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_c2"
-                android:checked="true"
-                android:includeFontPadding="false"
-                android:padding="@dimen/default_padding"
-                android:text="@string/k_buy"
-                android:textAlignment="center"
-                android:textColor="@color/T8"
-                android:textSize="@dimen/text_size_14"
-                android:textStyle="bold" />
         </LinearLayout>
-
 
     </LinearLayout>
 </layout>

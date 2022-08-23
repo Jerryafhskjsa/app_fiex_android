@@ -33,14 +33,14 @@ public class HttpCookieUtil {
         editor.commit();
     }
 
-    public static void saveUcToken(Context context, String jsessionId) {
+    public static void saveUcToken(Context context, String ucToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(UC_TOKEN, jsessionId);
+        editor.putString(UC_TOKEN, ucToken);
         editor.commit();
     }
-    public static void saveTicket(Context context, String jsessionId) {
+    public static void saveTicket(Context context, String ticket) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(TICKET, jsessionId);
+        editor.putString(TICKET, ticket);
         editor.commit();
     }
     public static void saveTradeToken(Context context, String tradeToken) {

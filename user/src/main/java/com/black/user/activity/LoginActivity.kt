@@ -307,7 +307,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
-        ApiManager.build(this).getService<UserApiService>(UserApiService::class.java)
+        ApiManager.build(this,false,UrlConfig.ApiType.URl_UC).getService<UserApiService>(UserApiService::class.java)
                 ?.getToken(telCountryCode, username, password)
                 ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
                 ?.subscribeOn(Schedulers.io())//事件产生的线程
@@ -416,7 +416,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     //获取trade-token
     private fun getTradeToken(context: Context){
-        ApiManager.build(context,true,UrlConfig.ApiType.URL_API).getService<UserApiService>(UserApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService<UserApiService>(UserApiService::class.java)
             ?.getTradeToken()
             ?.materialize()
             ?.subscribeOn(Schedulers.io())
@@ -544,7 +544,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         val emailCode = if (type and VerifyType.MAIL == VerifyType.MAIL) target.mailCode else null
         val googleCode = if (type and VerifyType.GOOGLE == VerifyType.GOOGLE) target.googleCode else null
         showLoading()
-        return ApiManager.build(mContext).getService(UserApiService::class.java)
+        return ApiManager.build(mContext,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.loginSuffixResultObj(prefixAuth, phoneCode, emailCode, googleCode)
                 ?.materialize()
                 ?.subscribeOn(Schedulers.io())

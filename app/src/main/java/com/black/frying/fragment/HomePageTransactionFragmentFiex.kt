@@ -59,6 +59,7 @@ import com.black.util.NumberUtil
 import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageTransactionBinding
+import com.fbsex.exchange.databinding.FragmentHomePageTransactionFiexBinding
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
@@ -69,9 +70,9 @@ import kotlin.math.pow
 
 //交易
 @Route(value = [RouterConstData.TRANSACTION], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 2)
-class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeekBarChangeListener, EntrustCurrentHomeAdapter.OnHandleClickListener, OnItemClickListener, OnTransactionMoreClickListener, OnTransactionModelListener, OnTransactionDeepListener {
+class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, OnSeekBarChangeListener, EntrustCurrentHomeAdapter.OnHandleClickListener, OnItemClickListener, OnTransactionMoreClickListener, OnTransactionModelListener, OnTransactionDeepListener {
     companion object {
-        private const val TAG = "TransactionFragment"
+        private const val TAG = "HomePageTransactionFragmentFiex"
     }
 
     private var colorWin = 0
@@ -96,7 +97,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     private var currentEstimatedWallet: Wallet? = null
 
     private var layout: View? = null
-    private var binding: FragmentHomePageTransactionBinding? = null
+    private var binding: FragmentHomePageTransactionFiexBinding? = null
     private var viewModel: TransactionViewModel? = null
     private var deepViewBinding: TransactionDeepViewBinding? = null
 
@@ -114,7 +115,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_transaction, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_transaction_fiex, container, false)
         layout = binding?.root
         StatusBarUtil.addStatusBarPadding(layout)
         viewModel = TransactionViewModel(mContext!!, this)
@@ -122,9 +123,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         deepViewBinding?.setOnTransactionDeepListener(this)
 
         binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
-//        binding?.actionBarLayout?.stView?.visibility = View.GONE
         binding?.actionBarLayout?.headCharts?.setOnClickListener(this)
-//        binding?.actionBarLayout?.headCoinChoose?.setOnClickListener(this)
         binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
@@ -161,8 +160,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     override fun onResume() {
         super.onResume()
         viewModel?.setTabType(tabType)
-        binding!!.tabTransactionCoin.isChecked = tabType == ConstData.TAB_COIN
-        binding!!.tabTransactionLever.isChecked = tabType == ConstData.TAB_LEVER
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -174,9 +171,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
 
     //买卖功能
     private fun initHeader1() {
-        binding!!.tabTransactionCoin.setOnClickListener(this)
-        binding!!.tabTransactionLever.setOnClickListener(this)
-        binding!!.tabTransactionC2c.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader1.btnBuy.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader1.btnSale.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader1.price.addTextChangedListener(object : TextWatcher {
@@ -254,40 +248,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                 bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair())
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(mContext)
             }
-//            R.id.head_coin_choose -> viewModel!!.getAboutCoinPairStatus(if (tabType == ConstData.TAB_LEVER) PairStatus.LEVER_DATA else PairStatus.NORMAL_DATA)
-//                    .subscribe(HttpCallbackSimple(mContext, true, object : Callback<List<PairStatus?>?>() {
-//                        override fun error(type: Int, error: Any) {
-//                            FryingUtil.showToast(mContext, "没有可用的交易对，请稍后重试！", FryingSingleToast.ERROR)
-//                        }
-//
-//                        override fun callback(returnData: List<PairStatus?>?) {
-//                            if (returnData == null || returnData.isEmpty()) {
-//                                FryingUtil.showToast(mContext, "没有可用的交易对，请稍后重试！", FryingSingleToast.ERROR)
-//                            } else {
-//                                var currentPair = viewModel?.getCurrentPair()
-//                                if (!TextUtils.isEmpty(currentPair)) {
-//                                    currentPair = currentPair?.replace("_", "/")
-//                                }
-//                                val finalCurrentPair = currentPair
-//                                CommonUtil.checkActivityAndRunOnUI(mContext) {
-//                                    PairChoosePopup(mContext!!, returnData, finalCurrentPair)
-//                                            .setOnPairChooseListener(object : OnPairChooseListener {
-//                                                override fun onPairChoose(pairStatus: PairStatus?) {
-//                                                    if (pairStatus == null) {
-//                                                        return
-//                                                    }
-//                                                    //交易对切换
-//                                                    if (!TextUtils.equals(viewModel?.getCurrentPair(), pairStatus.pair)) {
-//                                                        //清空价格，数量
-//                                                        onPairStatusChanged(pairStatus)
-//                                                    }
-//                                                }
-//
-//                                            }).show(v)
-//                                }
-//                            }
-//                        }
-//                    }))
             R.id.head_transaction_more -> viewModel!!.checkDearPair()
                     ?.subscribe(HttpCallbackSimple(mContext, true, object : Callback<Boolean>() {
                         override fun error(type: Int, error: Any) {}
@@ -296,14 +256,14 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                                 override fun error(type: Int, error: Any) {
                                     CommonUtil.checkActivityAndRunOnUI(mContext) {
                                         TransactionMorePopup(mContext!!, returnData
-                                                ?: false, null).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
+                                                ?: false, null).setOnTransactionMoreClickListener(this@HomePageTransactionFragmentFiex).show(v)
                                     }
                                 }
 
                                 override fun callback(coinInfo: CoinInfo?) {
                                     CommonUtil.checkActivityAndRunOnUI(mContext) {
                                         TransactionMorePopup(mContext!!, returnData
-                                                ?: false, coinInfo?.groupId).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
+                                                ?: false, coinInfo?.groupId).setOnTransactionMoreClickListener(this@HomePageTransactionFragmentFiex).show(v)
                                     }
                                 }
                             })
@@ -421,8 +381,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
 
     private fun changeTabType(tabType: Int) {
         this.tabType = tabType
-        binding!!.tabTransactionCoin.isChecked = tabType == ConstData.TAB_COIN
-        binding!!.tabTransactionLever.isChecked = tabType == ConstData.TAB_LEVER
         binding?.actionBarLayout?.leverLayout?.visibility = if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
         viewModel!!.setTabType(tabType)
         viewModel!!.changePairSocket()
@@ -447,7 +405,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         } else {
             binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(max * BigDecimal(amountPercent), RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
         }
-        onCountProgressClick(progress * 4 / 100)
+        onCountProgressClick(progress * 5 / 100)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -484,37 +442,50 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         when (type) {
             0 -> {
                 binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = false
-//                binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = false
-//                binding!!.fragmentHomePageTransactionHeader1.amountThreeQuarter.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
                 binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
             }
             1 -> {
                 binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = false
-//                binding!!.fragmentHomePageTransactionHeader1.amountThreeQuarter.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
                 binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
             }
             2 -> {
                 binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountThreeQuarter.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
                 binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
             }
             3 -> {
                 binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountThreeQuarter.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
                 binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
             }
             4 -> {
                 binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = true
-//                binding!!.fragmentHomePageTransactionHeader1.amountThreeQuarter.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+            }
+            5 -> {
+                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = true
                 binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = true
             }
         }
@@ -620,9 +591,10 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
         binding!!.fragmentHomePageTransactionHeader1.countBar.progress = 0
         binding!!.fragmentHomePageTransactionHeader1.countProgress.progress = 0
-//        binding!!.fragmentHomePageTransactionHeader1.amountQuarter.isChecked = false
-//        binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = false
-//        binding!!.fragmentHomePageTransactionHeader1.amountHalf.isChecked = false
+        binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = false
+        binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
+        binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
+        binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
         binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
         refreshSubmitButton()
     }
@@ -670,9 +642,10 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
             binding!!.fragmentHomePageTransactionHeader1.btnSale.isChecked = false
             binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable = countProgressBuy
             binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-//            binding!!.fragmentHomePageTransactionHeader1.amountQuarter.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-//            binding!!.fragmentHomePageTransactionHeader1.amountHalf.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-//            binding!!.fragmentHomePageTransactionHeader1.amountHalf.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t7)
         } else if (transactionType == 2) {
@@ -680,14 +653,16 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
             binding!!.fragmentHomePageTransactionHeader1.btnSale.isChecked = true
             binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable = countProgressSale
             binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-//            binding!!.fragmentHomePageTransactionHeader1.amountQuarter.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-//            binding!!.fragmentHomePageTransactionHeader1.amountHalf.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-//            binding!!.fragmentHomePageTransactionHeader1.amountHalf.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
             binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
             binding!!.fragmentHomePageTransactionHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t5)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
-            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCurrentPair()?.replace("_", "/"))
+            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
+            binding!!.actionBarLayout.pairSetName.setText("/"+viewModel!!.getSetName())
             if (transactionType == 1) {
                 binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
@@ -745,7 +720,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
             } else if (transactionType == 2) {
                 if (currentWallet != null) {
                     binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentWallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
-                    //                binding.fragmentHomePageTransactionHeader1.useableBuy.setText(CommonUtil.formatNumberNoGroup(currentWallet.coinAmount));
                 } else {
                     binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
                 }
@@ -953,21 +927,6 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     }
 
     override fun onLeverPairConfigCheck(hasLeverConfig: Boolean) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) {
-            if (hasLeverConfig) {
-                if (binding?.tabTransactionLever?.visibility != View.VISIBLE) {
-                    binding?.tabTransactionLever?.visibility = View.VISIBLE
-                }
-            } else {
-                //杠杆交易对配置不存在，隐藏杠杆交易tab，如果当前选中杠杆，切换回普通交易
-                if (binding?.tabTransactionLever?.visibility != View.GONE) {
-                    binding?.tabTransactionLever?.visibility = View.GONE
-                    if (tabType == ConstData.TAB_LEVER) {
-                        changeTabType(ConstData.TAB_COIN)
-                    }
-                }
-            }
-        }
     }
 
     override fun onRechargeClick(transactionMorePopup: TransactionMorePopup) {
@@ -1063,13 +1022,8 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
         binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
-//        binding!!.fragmentHomePageTransactionHeader1.currentPriceSince.setText(pairStatus.priceChangeSinceTodayFormat)
-//        binding!!.fragmentHomePageTransactionHeader1.currentPriceSince.setTextColor(color)
-//        if (pairStatus.isHighRisk != null && pairStatus.isHighRisk!!) {
-//            binding!!.actionBarLayout.stView.visibility = View.VISIBLE
-//        } else {
-//            binding!!.actionBarLayout.stView.visibility = View.GONE
-//        }
+        binding!!.actionBarLayout.currentPriceSince.setText(pairStatus.priceChangeSinceTodayFormat)
+        binding!!.actionBarLayout.currentPriceSince.setTextColor(color)
         computePriceCNY()
     }
 

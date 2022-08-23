@@ -10,7 +10,7 @@
         android:pathData="M0,0h8v8h-8z"
         tools:ignore="VectorRaster" />
     <path
-        android:fillColor="@color/T7"
+        android:fillColor="@color/c_tab_p"
         android:pathData="M2,0L6,0L6,6L2,6"
         tools:ignore="VectorRaster" />
 </vector>

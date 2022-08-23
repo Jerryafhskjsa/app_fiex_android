@@ -9,7 +9,7 @@ import com.black.net.websocket.*
 import org.json.JSONException
 import org.json.JSONObject
 
-class HomePageSocket(context: Context,handler: Handler){
+class FiexSocketManager(context: Context, handler: Handler){
     private var homeSocketMgr:WebSocketManager
     private var userSocketMgr:WebSocketManager
     private var socketSetting:WebSocketSetting
@@ -23,7 +23,7 @@ class HomePageSocket(context: Context,handler: Handler){
         private const val userKeys = "userKeys"
     }
     init {
-        var socketUrl = UrlConfig.getSocketHost(context)+"/websocket"
+        var socketUrl = UrlConfig.getSocketHostFiex(context)+"/websocket"
         Log.d("11111", "socketUrl = $socketUrl")
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl

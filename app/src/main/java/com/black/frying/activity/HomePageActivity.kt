@@ -24,10 +24,7 @@ import com.black.base.service.DownloadServiceHelper
 import com.black.base.util.*
 import com.black.base.view.PairStatusPopupWindow
 import com.black.frying.FryingApplication
-import com.black.frying.fragment.HomePageMoneyFragment
-import com.black.frying.fragment.HomePageQuotationFragment
-import com.black.frying.fragment.HomePageQuotationFragmentMain
-import com.black.frying.fragment.HomePageTransactionFragment
+import com.black.frying.fragment.*
 import com.black.frying.model.HomeTab
 import com.black.frying.service.SocketService
 import com.black.frying.util.UdeskUtil
@@ -75,7 +72,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 //        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
         tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragmentFiex::class.java)
         tabs[1] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
-        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
+//        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
+        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
         tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
         tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageMoneyFragment::class.java)
         for (i in tabs.indices) {
@@ -147,6 +145,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             sendLoginBroadcast(SocketUtil.COMMAND_USER_LOGIN)
         }
         getDialogAd()
+        //获取了所有交易对信息
         SocketDataContainer.initAllPairStatusData(this)
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_QUOTA_OPEN)
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_ORDER_OPEN)
@@ -337,8 +336,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         mainFragment?.resetSkinResources()
         val quotationFragment = supportFragmentManager.findFragmentByTag(tabs[1]!!.tabName) as HomePageQuotationFragmentMain?
 //        quotationFragment?.resetSkinResources()
-        val transactionFragment = supportFragmentManager.findFragmentByTag(tabs[2]!!.tabName) as HomePageTransactionFragment?
-        transactionFragment?.resetSkinResources()
+        val transactionFragment = supportFragmentManager.findFragmentByTag(tabs[2]!!.tabName) as HomePageTransactionFragmentFiex?
+//        transactionFragment?.resetSkinResources()
         val moneyFragment = supportFragmentManager.findFragmentByTag(tabs[3]!!.tabName) as HomePageMoneyFragment?
         moneyFragment?.resetSkinResources()
     }

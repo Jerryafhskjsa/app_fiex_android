@@ -39,6 +39,10 @@ class ApiManager {
             return apiManager
         }
 
+        fun build(context: Context,apiType:String): ApiManager {
+            return build(context.applicationContext, false,apiType)
+        }
+
         /**
          * apiType->uc,api,pro
          */

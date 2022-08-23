@@ -156,16 +156,12 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <com.black.lib.refresh.QRefreshLayout
-            android:id="@+id/market_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/quotation_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:flipInterval="30"
                 android:persistentDrawingCache="animation" />
-        </com.black.lib.refresh.QRefreshLayout>>
     </LinearLayout>
 </layout>

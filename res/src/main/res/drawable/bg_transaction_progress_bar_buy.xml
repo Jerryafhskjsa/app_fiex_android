@@ -11,7 +11,7 @@
                 <item android:state_enabled="false">
                     <color android:color="@android:color/transparent" />
                 </item>
-                <item android:drawable="@color/T7" />
+                <item android:drawable="@color/c_tab_p" />
             </selector>
         </scale>
     </item>

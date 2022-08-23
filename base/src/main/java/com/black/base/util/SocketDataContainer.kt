@@ -55,6 +55,7 @@ object SocketDataContainer {
     private val lastGetTimeMap = SparseArray<Long>()
     private val c2CPrice: C2CPrice? = null
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
+
     private val allPairStatusMap: MutableMap<String, PairStatus> = HashMap()
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()

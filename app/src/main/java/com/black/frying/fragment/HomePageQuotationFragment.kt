@@ -65,13 +65,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         binding?.setTab?.setTabTextColors(SkinCompatResources.getColor(activity, R.color.C5), SkinCompatResources.getColor(activity, R.color.C1))
         binding?.setTab?.tabMode = TabLayout.MODE_SCROLLABLE
 
-        binding?.marketRefreshLayout?.setRefreshHolder(RefreshHolderFrying(activity!!))
-        binding?.marketRefreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                binding!!.marketRefreshLayout.postDelayed({ binding!!.marketRefreshLayout.setRefreshing(false) }, 300)
-            }
-
-        })
 
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)

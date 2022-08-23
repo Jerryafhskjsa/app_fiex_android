@@ -86,7 +86,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
         startListenLeverDetail()
         getWalletLeverDetail()
-
         initPairStatus()
         changePairSocket()
         checkLeverPairConfig()
@@ -217,6 +216,9 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
     }
 
+    /**
+     * btc/usdt-->btc,usdt
+     */
     private fun initPairCoinSet() {
         currentPairStatus.pair?.run {
             val arr: Array<String>? = currentPairStatus.pair?.split("_")?.toTypedArray()
@@ -330,17 +332,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         } else {
             onResumeTodo.run()
         }
-//        if (currentPairStatus.pair == null) {
-//            currentPairStatus.setPair(getLastPair())
-//            initPairCoinSet()
-//            if (currentPairStatus.pair == null) {
-//                SocketDataContainer.initAllPairStatusData(context)
-//            } else {
-//                onResumeTodo.run()
-//            }
-//        } else {
-//            onResumeTodo.run()
-//        }
     }
 
     private fun getLastPair(): String? {

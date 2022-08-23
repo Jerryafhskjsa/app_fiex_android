@@ -25,7 +25,7 @@ class SocketService : Service() {
     }
 
     private val gson = Gson()
-    private var homePageSocket:HomePageSocket? = null
+    private var fiexSocketManager:FiexSocketManager? = null
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
@@ -130,24 +130,24 @@ class SocketService : Service() {
                 socketServerHandler = Handler(handlerThread?.looper)
             }
             if (qSocket == null) {
-//                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
+                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
 //                qSocket?.start()
             }
-//            if (uSocket == null) {
-//                uSocket = UserSocket(mContext!!, socketServerHandler!!)
+            if (uSocket == null) {
+                uSocket = UserSocket(mContext!!, socketServerHandler!!)
 //                uSocket?.start()
-//            }
+            }
             if (factionSocket == null) {
-//                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
+                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
 //                factionSocket?.start()
             }
             if (pushSocket == null) {
-//                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
+                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
 //                pushSocket?.start()
             }
-            if(homePageSocket == null){
-                homePageSocket = HomePageSocket(mContext!!,socketServerHandler!!)
-                homePageSocket?.startConnect()
+            if(fiexSocketManager == null){
+//                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
+//                fiexSocketManager?.startConnect()
             }
 //            if (observer == null) {
                 observer = createCommandObserver()

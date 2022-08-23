@@ -72,13 +72,15 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         binding.handicapBuyLayout10.setOnClickListener(this)
         binding.deep.setOnClickListener(this)
         binding.displayType.setOnClickListener(this)
+        binding.linDeepPostion.setOnClickListener(this)
+        binding.linDeepDepth.setOnClickListener(this)
         showCurrentStyle()
         showStyleLayout()
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.deep ->  //弹出深度选择器
+            R.id.deep,R.id.lin_deep_postion ->  //弹出深度选择器
                 if (viewModel.getPrecisionList() != null && viewModel.getPrecisionList()!!.isNotEmpty()) {
                     DeepControllerWindow<Int>(context, null, viewModel.getPrecision(), viewModel.getPrecisionList() as List<Int>,
                             object : DeepControllerWindow.OnReturnListener<Int> {
@@ -88,7 +90,6 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                                         onTransactionDeepListener!!.onDeepChanged(item)
                                     }
                                 }
-
                             }).show()
                 }
             R.id.display_type -> {

@@ -609,6 +609,12 @@
     <string name="support">Support</string>
     <string name="futures">Futures</string>
     <string name="coin_volume">交易量</string>
+    <string name="limit_order">Limit Order</string>
+    <string name="management_fee">Management Fee</string>
+    <string name="net_value">Net Value</string>
+    <string name="purchase_redeem">Purchase/Redeem</string>
+    <string name="freez">冻结</string>
+
 
 
 </resources>

@@ -289,7 +289,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,false, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getUserInfo()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

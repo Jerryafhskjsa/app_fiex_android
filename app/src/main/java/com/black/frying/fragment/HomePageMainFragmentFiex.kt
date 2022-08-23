@@ -634,7 +634,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
 
 //            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
-            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
+//            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
             //折线图假数据
             var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
             var ydata:FloatArray = floatArrayOf(0.0f,10.0f,20.0f,30.0f,40.0f,50.0f,60.0f,70.0f,80.0f,90.0f)
@@ -644,7 +644,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 //            binding?.lineCart?.setChartdate(xdata,ydata,linedata, Color.BLACK)
             var kLineData = pairStatus?.kLineDate
             if(kLineData != null){
-                getKLineXdata(kLineData)?.let { binding?.lineCart?.setChartdate(it,getKineYdata(kLineData),getKlineData(kLineData), Color.BLACK) }
+//                getKLineXdata(kLineData)?.let { binding?.lineCart?.setChartdate(it,getKineYdata(kLineData),getKlineData(kLineData), Color.BLACK) }
             }
         }
     }

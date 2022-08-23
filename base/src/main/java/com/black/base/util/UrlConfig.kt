@@ -32,13 +32,22 @@ object UrlConfig {
     )
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
-//            "http://fiex.matchain.info",//fiex测试环境
-            "ws://112.194.204.105:8081",
+            "http://fiex.matchain.info",//fiex测试环境
+//            "ws://112.194.204.105:8081",
             "http://fiex.io",//正式环境
             "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new
             "https://fad34sd32g541.forright.shop",//stage
             "https://fad34sd32g541.fbsex.co" //dev
+    )
+
+    private val SOCKET_HOSTS_FIEX = arrayOf(
+        "ws://112.194.204.105:8081",
+        "http://fiex.io",//正式环境
+        "https://mobile.fbsex.co",//real
+        "https://mob1234xa.fbsex.co",//real new
+        "https://fad34sd32g541.forright.shop",//stage
+        "https://fad34sd32g541.fbsex.co" //dev
     )
 
     fun getIndex(context: Context): Int {
@@ -66,6 +75,9 @@ object UrlConfig {
 
     fun getSocketHost(context: Context): String {
         return SOCKET_HOSTS[getIndex(context)]
+    }
+    fun getSocketHostFiex(context: Context): String {
+        return SOCKET_HOSTS_FIEX[getIndex(context)]
     }
 
     fun getFactionRuleUrl(mContext: Context): String {
@@ -139,6 +151,10 @@ object UrlConfig {
         const val URL_USER_LOGIN = "user/login"
         //ws_token
         const val URL_WS_TOKEN = "user/ws-token"
+        //获取用户资产
+        const val URL_BALANCE_LIST = "banlance/list"
+
+
         //退出登录
         const val URL_LOGOUT = "user/logout"
         //登录验证
