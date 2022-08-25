@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
-
         <variable
             name="listItemEntrustCurrentHomeModel"
             type="Object" />
     </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,184 +13,122 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/double_padding"
         android:paddingBottom="@dimen/double_padding">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
+            android:layout_height="wrap_content">
             <com.black.base.widget.SpanTextView
-                android:id="@+id/type"
+                android:id="@+id/pair_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:includeFontPadding="false"
-                android:text="@string/entrust_type_buy"
-                android:textColor="@color/C1"
-                android:textSize="@dimen/text_size_16"
+                android:text="ETH/USDT"
+                android:textColor="@color/black_real"
+                android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
-
             <com.black.base.widget.SpanTextView
                 android:id="@+id/status"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_border_c1"
-                android:gravity="right|center_vertical"
+                android:layout_weight="1"
                 android:includeFontPadding="false"
-                android:paddingLeft="20dp"
-                android:paddingTop="8dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="8dp"
-                android:text="@string/trade_cancel"
-                android:textColor="@color/C1"
-                android:textSize="@dimen/text_size_13"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:text="@string/time"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:text="@string/entrust_price"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="75"
                 android:gravity="right"
-                android:padding="0dp"
-                android:text="@string/entruct_amount"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
+                android:text="@string/revoke"
+                android:textColor="@color/main_blue"
+                android:textSize="@dimen/text_size_12"
+                />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
-
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/type"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/limit_price_buy"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@drawable/trans_revoke_type_bg_corner"
+                android:textColor="@color/T9"
+                android:textSize="@dimen/text_size_12"
+                />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/entrust_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/entrust_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="75"
-                android:gravity="right"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
+                android:text="2022-09-08 22:22:22"
+                android:textColor="@color/T11"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/price"
+                android:textColor="@color/T11"
+                android:textSize="@dimen/text_size_12"
+                />
 
             <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
+                android:id="@+id/price_des"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:text="@string/deal_total_amount"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:text="@string/deal_avg_price"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="75"
-                android:gravity="right"
-                android:padding="0dp"
-                android:text="@string/deal_amount"
-                android:textColor="@color/T3"
-                android:textSize="@dimen/text_size_13" />
-        </LinearLayout>
-
-        <LinearLayout
+                android:layout_alignParentRight="true"
+                android:includeFontPadding="false"
+                android:text="1.33"
+                android:textColor="@color/T11"
+                android:textSize="@dimen/text_size_12" />
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="6dp">
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/deal_total_amount"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/deal_price"
-                android:layout_width="0dp"
+                android:includeFontPadding="false"
+                android:text="@string/amount"
+                android:textColor="@color/T11"
+                android:textSize="@dimen/text_size_12" />
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="130"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/deal_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="75"
-                android:gravity="right"
-                android:padding="0dp"
-                android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_13" />
-        </LinearLayout>
-
+                android:layout_alignParentRight="true"
+                >
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deal_amount"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="right"
+                    android:text="成交数量10"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="/"
+                    android:textColor="@color/T11"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/entrust_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="总数量111"
+                    android:textColor="@color/T11"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

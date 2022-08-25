@@ -29,7 +29,9 @@ class QuotationDetailDealAdapter(context: Context, variableId: Int, data: Mutabl
         super.onBindViewHolder(holder, position)
         val dealOrder = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.timeView?.setText(if (dealOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("HH:mm:ss", dealOrder.createdTime))
+        viewHolder?.timeView?.setText(if (dealOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("HH:mm:ss",
+            dealOrder.createdTime!!
+        ))
         if ("B".equals(dealOrder?.tradeDealDirection, ignoreCase = true) || "BID".equals(dealOrder?.tradeDealDirection, ignoreCase = true)) {
             viewHolder?.directionView?.setText(R.string.k_buy)
             viewHolder?.directionView?.setTextColor(colorC2)

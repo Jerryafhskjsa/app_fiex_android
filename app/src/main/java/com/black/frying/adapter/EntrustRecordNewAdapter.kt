@@ -58,7 +58,7 @@ class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList
         }
         viewHolder?.status?.setText(tradeOrder?.getStatusDisplay(context))
         viewHolder?.date?.setText(if (this.type == TYPE_NEW)
-            (if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.createdTime))
+            (if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.createdTime!!))
         else (if (tradeOrder?.updateTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.updateTime)))
         viewHolder?.entrustPrice?.setText(if (tradeOrder?.price == null || tradeOrder.price == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.price))
         viewHolder?.entrustAmount?.setText(if (tradeOrder?.totalAmount == null || tradeOrder.totalAmount == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.totalAmount, amountPrecision, amountPrecision))

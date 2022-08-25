@@ -121,12 +121,12 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         getUserInfo(object : Callback<UserInfo?>() {
             override fun error(type: Int, error: Any) {
 //                (application as FryingApplication).xgBind()
-                (application as FryingApplication).jPushBind();
+//                (application as FryingApplication).jPushBind();
             }
 
             override fun callback(userInfo: UserInfo?) {
 //                (application as FryingApplication).xgBind()
-                (application as FryingApplication).jPushBind();
+//                (application as FryingApplication).jPushBind();
                 if (userInfo?.id != null) {
                     val userIdHeader = IMHelper.getUserIdHeader(mContext)
                     IMHelper.imLogin(mContext, userIdHeader + userInfo.id, object : Callback<Boolean?>() {
@@ -144,7 +144,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         if (CookieUtil.getUserInfo(mContext) != null) {
             sendLoginBroadcast(SocketUtil.COMMAND_USER_LOGIN)
         }
-        getDialogAd()
+//        getDialogAd()
         //获取了所有交易对信息
         SocketDataContainer.initAllPairStatusData(this)
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_QUOTA_OPEN)
@@ -206,56 +206,6 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         if (extras != null && extras.containsKey("routeUri")) {
             BlackRouter.getInstance().build(extras.getString("routeUri")).with(extras).go(this)
         }
-        //        int fragmentIndex = intent.getIntExtra(ConstData.HOME_FRAGMENT_INDEX, -1);
-//        int routeFragmentIndex = intent.getIntExtra("routeFragmentIndex", -1);
-//        if (routeFragmentIndex != -1) {
-//            fragmentIndex = routeFragmentIndex;
-//        }
-//        if (fragmentIndex == 0) {
-//            int mainIndex = intent.getIntExtra(ConstData.MAIN_INDEX, -1);
-//            if (mainIndex == 1) {
-//                //挖矿收益
-//                if (CookieUtil.getUserInfo(this) == null) {
-//                    FryingUtil.showToast(this, getString(R.string.alert_login_first));
-//                } else {
-////                    openActivity(MiningProfitActivity.class);
-//                }
-//            }
-////            mTabHost.setCurrentTab(fragmentIndex);
-//        } else if (fragmentIndex == 1) {
-//            transactionIndex = intent.getIntExtra(ConstData.TRANSACTION_INDEX, -1);
-//            if (transactionIndex == 1 || transactionIndex == 2) {
-//                HomePageTransactionFragment homePageTransactionFragment = (HomePageTransactionFragment) getSupportFragmentManager().findFragmentByTag(tabs[fragmentIndex].tabName);
-//                if (homePageTransactionFragment != null) {
-//                    homePageTransactionFragment.setTransactionType(transactionIndex);
-//                } else {
-//
-//                }
-//            }
-//
-////            mTabHost.setCurrentTab(fragmentIndex);
-//        } else if (fragmentIndex == 2) {
-////            int transactionIndex = intent.getIntExtra(ConstData.HOME_FRAGMENT_INDEX, -1);
-////            if (transactionIndex == 1 || transactionIndex == 2) {
-////                homePageTransactionFragment.setTransactionType(transactionIndex);
-////            }
-//            int homePageIndex = intent.getIntExtra(ConstData.HOME_PAGE_INDEX, -1);
-//            if (homePageIndex == 1) {
-//                if (CookieUtil.getUserInfo(this) == null) {
-//                    FryingUtil.showToast(this, getString(R.string.alert_login_first));
-//                } else {
-////                    openDemand();
-//                }
-//            } else if (homePageIndex == 2) {
-////                openDemand();
-//            }
-////            mTabHost.setCurrentTab(fragmentIndex);
-//        } else if (fragmentIndex == 3) {
-////            mTabHost.setCurrentTab(fragmentIndex);
-//        }
-//        if (fragmentIndex != -1) {
-//            tabHost.setCurrentTab(fragmentIndex);
-//        }
     }
 
     override fun onClick(v: View) {

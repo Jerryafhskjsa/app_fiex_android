@@ -56,10 +56,13 @@ object SocketDataContainer {
     private val c2CPrice: C2CPrice? = null
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
 
+    //所有现货交易对
     private val allPairStatusMap: MutableMap<String, PairStatus> = HashMap()
+    //所有杠杆交易对
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
+    //自选交易对数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
     //委托
@@ -89,6 +92,7 @@ object SocketDataContainer {
     private val factionOwnerObservers = ArrayList<Observer<Long?>>()
     //热门币种变更
     private val hotPairObservers = ArrayList<Observer<ArrayList<String?>?>>()
+
     private var handlerThread: HandlerThread? = null
     private var pairHandler: Handler? = null
     //创建几个线程，让所有操作在这几个线程中进行
@@ -740,7 +744,7 @@ object SocketDataContainer {
         }
     }
 
-    //主动拉取所有交易对信息，直接返回，不适用观察者模式
+    //主动拉取所有交易对信息，直接返回
     fun getAllPairStatus(context: Context?): Observable<ArrayList<PairStatus?>>? {
         if (context == null) {
             return null
@@ -1194,7 +1198,7 @@ object SocketDataContainer {
         return returnData
     }
 
-    //按pair和价格合并 Ask Bid，直接替换对对应的交易量  交易额
+    //按pair和价格合并 Ask Bid，直接替换对应的交易量  交易额
     @Throws(Exception::class)
     fun mergeQuotationOrder2(oldData: List<QuotationOrderNew?>, newData: List<QuotationOrderNew?>?): Array<ArrayList<QuotationOrderNew?>?>? {
         if (newData == null || newData.isEmpty()) {

@@ -9,16 +9,32 @@ import java.util.*
 
 //委托订单
 class TradeOrder : BaseAdapterItem, Parcelable {
+    /*fiex********************/
+    var avgPrice:Double? = null//成交均价 == dealAvgPrice
+    var clientOrderId:String? = null//自定义订单I
+    var createdTime: Long? = null//创建时间
+    var executedQty:Int? = null//已成交数量
+    var forceClose:Boolean? = false//是否是全平订单
+    var marginFrozen:Double? = null//占用保证金 == frozenAmountByOrder
+    var orderId:String? = null//订单id == id
+    var orderSide:String? = null//订单方向 == direction
+    var orderType: String? = null//订单类型
+    var origQty:String? = null//数量(张)
+    var price: Double? = null//委托价格
+    var sourceId:Long? = null//条件触发id
+    var state:String? = null//订单状态 = status
+    var symbol:String? = null//交易对 = pair
+    var timeInForce:String? = null//有效类型
+    var triggerProfitPrice:Double? = null//止盈触发价
+    var triggerStopPrice:Double? = null//止损触发价
+    /*fiex********************/
     var pair: String? = null
     var dealAmount: Double? = null
-    var price: Double? = null
     var priceString: String? = null
-    var createdTime: Long = 0
     var updateTime //成交时间
             : Long = 0
     var tradeDealDirection: String? = null
     var formattedPrice: String? = null
-    var orderType: String? = null
     var exchangeAmount = 0.0
     var exchangeAmountFormat: String? = null
     var anchorAmount = 0.0
@@ -93,7 +109,7 @@ class TradeOrder : BaseAdapterItem, Parcelable {
             dest.writeDouble(price!!)
         }
         dest.writeString(priceString)
-        dest.writeLong(createdTime)
+        dest.writeLong(createdTime!!)
         dest.writeLong(updateTime)
         dest.writeString(tradeDealDirection)
         dest.writeString(formattedPrice)
@@ -157,6 +173,6 @@ class TradeOrder : BaseAdapterItem, Parcelable {
         }
         var COMPARATOR_UP = Comparator<TradeOrder?> { o1, o2 -> if (o1?.price == null || o2?.price == null || o1.price === o2.price) 0 else if (o1.price!! > o2.price!!) 1 else -1 }
         var COMPARATOR_DOWN = Comparator<TradeOrder?> { o1, o2 -> if (o1?.price == null || o2?.price == null || o1.price === o2.price) 0 else if (o1.price!! > o2.price!!) -1 else 1 }
-        var COMPARATOR_DEAL = Comparator<TradeOrder?> { o1, o2 -> if (o1?.createdTime == null || o2?.createdTime == null || o1.createdTime == o2.createdTime) 0 else if (o1.createdTime > o2?.createdTime) -1 else 1 }
+        var COMPARATOR_DEAL = Comparator<TradeOrder?> { o1, o2 -> if (o1?.createdTime == null || o2?.createdTime == null || o1.createdTime == o2.createdTime) 0 else if (o1.createdTime!! > o2.createdTime!!) -1 else 1 }
     }
 }

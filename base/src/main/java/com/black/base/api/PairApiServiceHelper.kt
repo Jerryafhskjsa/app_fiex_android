@@ -36,10 +36,6 @@ object PairApiServiceHelper {
     private var tradeSets: ArrayList<String?>? = null
     var hotPairCache: HttpRequestResultDataList<String?>? = null
 
-    private var symbolListData: ArrayList<HomeSymbolList?>? = null
-    private var tickersData:ArrayList<HomeTickers?>? = null
-    private var tickersKline:ArrayList<HomeTickersKline?>? = null
-
     //首页数据
     private var homePagePairData:ArrayList<PairStatus?>? = ArrayList()
 
@@ -84,6 +80,33 @@ object PairApiServiceHelper {
                 }
             })
         }
+    }
+
+
+    fun getTradeSetsFiex(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context).getService(PairApiService::class.java)
+            ?.getTradeSetsFiex()
+            ?.flatMap {
+                val setList = ArrayList<String?>()
+                if (it.code == HttpRequestResult.SUCCESS && it.data != null) {
+                    for (tradeSet in it.data!!) {
+                        if (tradeSet?.coinType != null) {
+                            setList.add(tradeSet.coinType)
+                        }
+                    }
+                }
+                val result = HttpRequestResultDataList<String?>()
+                result.code = it.code
+                result.msg = it.msg
+                result.message = it.message
+                result.data = setList
+                Observable.just(result)
+            }
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
     fun getTradeSets(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>?) {

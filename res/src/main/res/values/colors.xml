@@ -57,9 +57,12 @@
     <color name="B2_ALPHA50">#80ffffff</color>
 
     <color name="T9">#83CD13</color>
+    <color name="T9_ALPHA10">#1A83CD13</color>
     <color name="T10">#F12C18</color>
     <color name="T11">#99000000</color>
     <color name="c_tab_p">#1571FF</color>
     <color name="c_tab_n">#66000000</color>
+    <color name="main_blue">#1571FF</color>
+
 
 </resources>

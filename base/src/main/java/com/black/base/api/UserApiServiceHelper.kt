@@ -5,14 +5,13 @@ import android.content.Context
 import android.text.TextUtils
 import com.black.base.api.CommonApiServiceHelper.geetestInit
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
+import com.black.base.model.*
+import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.filter.GeeTestResult
-import com.black.base.model.user.PushSwitch
-import com.black.base.model.user.RecommendPeopleDetail
-import com.black.base.model.user.UserInfo
+import com.black.base.model.socket.PairStatus
+import com.black.base.model.user.*
+import com.black.base.model.wallet.Wallet
+import com.black.base.model.wallet.WalletConfig
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.util.FryingUtil.getLoadDialog
@@ -24,16 +23,28 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.netease.nis.captcha.Captcha
 import com.netease.nis.captcha.CaptchaListener
+import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
+import java.util.ArrayList
 
 object UserApiServiceHelper {
+    private var gson: Gson = Gson()
+        get() {
+            if (field == null) {
+                field = Gson()
+            }
+            return field
+        }
+    private val userBalanceCache:ArrayList<UserBalance?> = ArrayList()
+
     fun upload(context: Context?, key: String, file: File, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
@@ -293,6 +304,69 @@ object UserApiServiceHelper {
                 ?.getUserInfo()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+
+
+    //获取普通资产
+    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<UserBalance?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        getUserBalance(context, false, callback, callback)
+    }
+
+    fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<ArrayList<UserBalance?>?>?,errorCallback: Callback<*>?){
+        if (context == null) {
+            return
+        }
+        var callback = Runnable {
+            synchronized(userBalanceCache) {
+                userBalance?.callback(if (userBalanceCache == null) null else gson.fromJson<ArrayList<UserBalance?>?>(
+                    gson.toJson(userBalanceCache),
+                    object : TypeToken<ArrayList<UserBalance?>?>() {}.type))
+            }
+        }
+        callback.run()
+        getUserBalance(context)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+                override fun error(type: Int, error: Any) {
+                    errorCallback?.error(type, error)
+                }
+                override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        callback.run()
+                    } else {
+                        errorCallback?.error(ConstData.ERROR_NORMAL, returnData?.message)
+                    }
+                }
+            }))
+    }
+
+    private fun getUserBalance(context: Context?): Observable<HttpRequestResultDataList<UserBalance?>?>?{
+        return if(context == null){
+            Observable.empty()
+        }else ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+                ?.getUserBalance()
+                ?.flatMap { returnData: HttpRequestResultDataList<UserBalance?>? ->
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        val balance: ArrayList<UserBalance?>? =
+                            if (returnData?.data == null) ArrayList() else returnData?.data!!
+                        synchronized(userBalanceCache) {
+                            val list: ArrayList<UserBalance?>? =
+                                if (balance == null) ArrayList() else gson.fromJson(
+                                    gson.toJson(balance),
+                                    object : TypeToken<ArrayList<UserBalance?>?>() {}.type
+                                )
+                            list?.let {
+                                userBalanceCache.clear()
+                                userBalanceCache.addAll(list)
+                            }
+                        }
+                    }
+                        Observable.just(returnData)
+                    }
     }
 
     fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {

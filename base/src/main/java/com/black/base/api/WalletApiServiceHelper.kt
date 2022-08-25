@@ -8,10 +8,13 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
+import com.black.base.model.user.User
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.ConstData
 import com.black.base.util.RxJavaHelper
+import com.black.base.util.UrlConfig
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.RSAUtil
@@ -22,11 +25,14 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import skin.support.app.SkinAppCompatViewInflater
 import java.util.*
+import kotlin.collections.ArrayList
 
 object WalletApiServiceHelper {
     private val coinInfoCache = ArrayList<CoinInfo?>()
     private val walletCache: ArrayList<Wallet?> = ArrayList()
     private val walletLeverCache: ArrayList<WalletLever?> = ArrayList()
+
+
     private const val COIN_INFO = 1
     private const val WALLET = 2
     private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
@@ -160,7 +166,6 @@ object WalletApiServiceHelper {
                     override fun error(type: Int, error: Any) {
                         errorCallback?.error(type, error)
                     }
-
                     override fun callback(returnData: HttpRequestResultData<WalletConfig?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             callback.run()

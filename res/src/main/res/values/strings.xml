@@ -614,6 +614,10 @@
     <string name="net_value">Net Value</string>
     <string name="purchase_redeem">Purchase/Redeem</string>
     <string name="freez">冻结</string>
+    <string name="entrust_all">全部委托</string>
+    <string name="revoke_all_entrust">撤销全部</string>
+    <string name="revoke">撤销</string>
+    <string name="limit_price_buy">限价买入</string>
 
 
 

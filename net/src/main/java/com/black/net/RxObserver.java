@@ -36,7 +36,7 @@ public abstract class RxObserver<T> implements Observer<T> {
 
     @Override
     final public void onError(Throwable e) {
-//        e.printStackTrace();
+        e.printStackTrace();
         if (e instanceof com.jakewharton.retrofit2.adapter.rxjava2.HttpException) {
             com.jakewharton.retrofit2.adapter.rxjava2.HttpException httpException = (com.jakewharton.retrofit2.adapter.rxjava2.HttpException) e;
             int code = httpException.code();

@@ -8,24 +8,76 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <com.black.base.widget.SpanTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:text="@string/entrust_current"
-            android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold" />
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/total_current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:text="@string/trade_history"
-            android:textColor="@color/T2"
-            android:textSize="@dimen/text_size_15" />
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entrust_current"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_13"
+                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/trans_bg_entrust_title_line">
+                </View>
+            </LinearLayout>
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/total_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/trade_history"
+                android:textColor="@color/main_blue"
+                android:textSize="@dimen/text_size_13"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/entrust_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entrust_all"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_13"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/order_type_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:paddingLeft="10dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icon_selector_down" />
+            </LinearLayout>
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/revoke_all_entrust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/revoke_all_entrust"
+                android:textColor="@color/main_blue"
+                android:textSize="@dimen/text_size_13" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/L1">
+        </View>
     </LinearLayout>
 </layout>

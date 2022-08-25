@@ -178,8 +178,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         dataMap[it] = pairStatus
                                         adapter?.addItem(pairStatus)
                                         hasPairListChanged = true
-                                    } else {
-
                                     }
                                 }
                             }

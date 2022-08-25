@@ -127,7 +127,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
     val isDown: Boolean
         get() = priceChangeSinceToday == null || priceChangeSinceToday!! <= 0
 
-    //判断交易对数据是否一直
+    //判断交易对数据是否一致
     fun equalsData(pairStatus: PairStatus?): Boolean {
         return if (pairStatus == null) {
             false

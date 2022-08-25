@@ -9,6 +9,7 @@ import com.black.base.model.clutter.HomeTickersKline
 import com.black.base.model.socket.CoinOrder
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.trade.TradeSet
+import com.black.base.model.trade.TradeSetFiex
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -23,6 +24,10 @@ interface PairApiService {
 
     @GET(UrlConfig.Config.URL_HOME_KLine)
     fun getHomeKLine():Observable<HttpRequestResultDataList<HomeTickersKline?>?>?
+
+    @GET(UrlConfig.Config.URL_SET_LIST)
+    fun getTradeSetsFiex(): Observable<HttpRequestResultDataList<TradeSetFiex?>?>?
+
 
     @GET(UrlConfig.Config.URL_ORDERED_PAIRS)
     fun getOrderedPairs(@Query("pair") pair: String?): Observable<HttpRequestResultDataList<String?>?>?

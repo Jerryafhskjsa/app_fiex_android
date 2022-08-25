@@ -1,12 +1,10 @@
 package com.black.base.api
 
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
-import com.black.base.model.user.PushSwitch
-import com.black.base.model.user.RecommendPeopleDetail
-import com.black.base.model.user.SuffixResult
-import com.black.base.model.user.UserInfo
+import com.black.base.model.user.*
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -30,6 +28,8 @@ interface UserApiService {
     @GET(UrlConfig.User.URL_WS_TOKEN)
     fun getWsToken(): Observable<HttpRequestResultString?>?
 
+    @GET(UrlConfig.User.URL_BALANCE_LIST)
+    fun getUserBalance(): Observable<HttpRequestResultDataList<UserBalance?>?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)

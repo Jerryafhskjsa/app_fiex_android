@@ -4,31 +4,30 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    //https://test.fbsex.co/api/u/userNameIsExist?userName=18380265294 "https://fad34sd32g541.fbsex.co/api/
-//    public final static String HOST = "http://118.123.249.219:8888";
     private val HOSTS = arrayOf(
-            "http://fiex.matchain.info",//fiex测试环境
             "http://fiex.io",//正式环境
+            "http://fiex.matchain.info",//fiex测试环境
             "https://mobile.fbsex.co",//real
             "https://mob1234xa.fbsex.co",//real new
             "https://fad34sd32g541.forright.shop",//stage
             "http://192.168.1.208:8888" //",//dev
     )
     val API_HOSTS = arrayOf(
-            "http://fiex.matchain.info/uc/",//fiex测试环境
             "http://fiex.io/api/",//正式环境
+            "http://fiex.matchain.info/uc/",//fiex测试环境
             "https://mobile.fbsex.co/api/",//real
             "https://mob1234xa.fbsex.co/api/",//real new
             "https://fad34sd32g541.forright.shop/api/",//stage
             "http://192.168.1.208:8888/api/" //dev
     )
-
-    var API_PRO = arrayOf(
-        "http://fiex.matchain.info/pro/",//fiex pro测试环境
+    var API_FIEX_UC = arrayOf(
+        "http://fiex.io/uc/",//fiex uc
     )
-
-    var API_API = arrayOf(
-        "http://fiex.matchain.info/api/",//fiex pro测试环境
+    var API_FIEX_PRO = arrayOf(
+        "http://fiex.io/pro/",//fiex pro
+    )
+    var API_FIEX_API = arrayOf(
+        "http://fiex.io/api/",//fiex api
     )
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
@@ -63,14 +62,14 @@ object UrlConfig {
     }
 
     fun getUcHost(context: Context): String {
-        return API_HOSTS[getIndex(context)]
+        return API_FIEX_UC[getIndex(context)]
     }
 
     fun getApiApiHost(context: Context): String {
-        return API_API[getIndex(context)]
+        return API_FIEX_API[getIndex(context)]
     }
     fun getProHost(context: Context): String {
-        return API_PRO[getIndex(context)]
+        return API_FIEX_PRO[getIndex(context)]
     }
 
     fun getSocketHost(context: Context): String {
@@ -152,7 +151,7 @@ object UrlConfig {
         //ws_token
         const val URL_WS_TOKEN = "user/ws-token"
         //获取用户资产
-        const val URL_BALANCE_LIST = "banlance/list"
+        const val URL_BALANCE_LIST = "balance/list"
 
 
         //退出登录
@@ -310,10 +309,14 @@ object UrlConfig {
     object Config {
         //fiex 首页配置项获取币种列表
         const val URL_HOME_CONFIG_LIST = "v1/public/symbol/list"
-        //fiex 获取首页tickets
+        //fiex 获取tickets
         const val URL_HOME_TICKERS = "public/tickers"
         //fiex 获取首首页折线图
         const val URL_HOME_KLine = "public/tickers-Kline"
+        //{"code":0,"msg":"success","data":[{"coinType":"USDT","name":"USDT","hot":true,"type":1,"open":true},{"coinType":"ETH","name":"ETH","hot":false,"type":2,"open":true}]}
+        //pro
+        //查询交易区
+        const val URL_SET_LIST = "config/set/list"
 
         //国家区码列表
         const val URL_COUNTRY_CODE_LIST = "country/list"
@@ -351,7 +354,7 @@ object UrlConfig {
         const val URL_GLOBAL_AD = "notice/currentPhone"
         ///币种顺序
         const val URL_COIN_ORDERS_LIST = "config/currency/type"
-        ///USDT折算价格
+        ///USDT折算价格 pro
         const val URL_USDT_CNY_PRICE = "config/price"
         ///GEETEST 初始化参数
         const val URL_GEETEST_INIT = "gt/init"

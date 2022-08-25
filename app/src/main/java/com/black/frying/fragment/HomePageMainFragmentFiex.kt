@@ -52,6 +52,9 @@ import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 
+/**
+ *先取symbolList,在取tickers,然后取kLine数据
+ */
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
     companion object {
         private const val STATUS_PAGE_COUNT = 2
@@ -367,6 +370,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
         }))
     }
+
     override fun onHeadBanner(observable: Observable<HttpRequestResultDataList<Banner?>?>?) {
     }
 

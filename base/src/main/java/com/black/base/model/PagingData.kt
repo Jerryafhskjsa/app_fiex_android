@@ -1,16 +1,18 @@
 package com.black.base.model
 
-import java.util.*
+import kotlin.collections.ArrayList
 
-class PagingData<T> {
+class PagingData<T>{
     var data: ArrayList<T>? = null
     var list: ArrayList<T>? = null
+    var items:ArrayList<T>? = null
     var pageRequest: Paging? = null
     var totalCount = 0
     var total = 0
     var listTotal = 0
     var page = 0
     var pageSize = 0
+    var ps = 0
     var more: Boolean? = null
 
     class Paging {

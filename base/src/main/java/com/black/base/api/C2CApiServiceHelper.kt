@@ -13,6 +13,7 @@ import com.black.base.model.user.PaymentMethod
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.CookieUtil
 import com.black.base.util.RxJavaHelper
+import com.black.base.util.UrlConfig
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -72,7 +73,7 @@ object C2CApiServiceHelper {
         }
         val lastGetTime = getLastGetTime(C2C_PRICE)
         return if (lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) { //通过接口获取
-            ApiManager.build(context).getService(CommonApiService::class.java)
+            ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
                     ?.getUsdtCnyPrice()
                     ?.flatMap(Function<HttpRequestResultData<CoinUsdtPrice?>?, ObservableSource<C2CPrice?>> { returnData: HttpRequestResultData<CoinUsdtPrice?>? ->
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {

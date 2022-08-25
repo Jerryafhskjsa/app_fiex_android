@@ -10,12 +10,15 @@ import android.util.Log
 import android.util.Pair
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.UserApiService
+import com.black.base.api.UserApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderPairList
+import com.black.base.model.user.User
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.model.wallet.WalletLeverDetail
@@ -40,8 +43,9 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     companion object {
         const val LEVER_TYPE_COIN = "PHYSICAL" // 现货
         const val LEVER_TYPE_LEVER = "ISOLATED" //逐仓杠杆
-        const val LEVER_TYPE_ALL = "ALL" // 全仓杠杆
+        const val LIMIT = "LIMIT"//现货
     }
+
 
     private var tabType = ConstData.TAB_COIN
     private var currentPairStatus = PairStatus()
@@ -72,6 +76,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             orderObserver = createOrderObserver()
         }
         SocketDataContainer.subscribeOrderObservable(orderObserver)
+
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
@@ -347,7 +352,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         } else {
             var pair = CookieUtil.getCurrentPair(context)
             if (pair == null) {
-                val allPair = SocketDataContainer.getAllPair(context);
+                val allPair = SocketDataContainer.getAllPair(context)
                 if (allPair != null) {
                     pair = CommonUtil.getItemFromList(allPair, 0)
                 }
@@ -377,28 +382,34 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         onTransactionModelListener?.onPairStatusDataChanged(currentPairStatus)
     }
 
-    //获取当前交易对深度
-    fun getTradePairInfo() {
-        PairApiServiceHelper.getTradePairInfo(context, currentPairStatus.pair, object : Callback<HttpRequestResultDataList<PairStatus?>?>() {
-            override fun error(type: Int, error: Any) {}
-            override fun callback(returnData: HttpRequestResultDataList<PairStatus?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                    for (pairStatus in returnData.data!!) {
-                        if (TextUtils.equals(currentPairStatus.pair, pairStatus?.pairName)) {
-                            val supportingPrecisionList = pairStatus?.supportingPrecisionList
-                            var maxPrecision = CommonUtil.getMax(supportingPrecisionList)
-                            maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
-                            pairStatus?.precision = maxPrecision
-                            currentPairStatus.supportingPrecisionList = pairStatus?.supportingPrecisionList
-                            currentPairStatus.amountPrecision = pairStatus?.amountPrecision
-                            currentPairStatus.precision = maxPrecision
-                            onTransactionModelListener?.onTradePairInfo(currentPairStatus)
-                            break
+    fun getCurrentUserBalance(){
+        onTransactionModelListener?.getUserBalanceCallback()?.let{
+            UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<ArrayList<UserBalance?>?>() {
+                override fun callback(balances: ArrayList<UserBalance?>?) {
+                    var buyBalance: UserBalance? = null
+                    var sellBalance: UserBalance? = null
+                    if (balances != null) {
+                        for (balance in balances) {
+                            val pairCoinType = currentPairStatus.name
+                            val pairEstimatedCoinType = currentPairStatus.setName
+                            if (TextUtils.equals(pairCoinType, balance?.coin)) {
+                                buyBalance = balance
+                            }
+                            if (TextUtils.equals(pairEstimatedCoinType, balance?.coin)) {
+                                sellBalance = balance
+                            }
+                            if (buyBalance != null && sellBalance != null) {
+                                break
+                            }
                         }
                     }
+                    it.callback(Pair(buyBalance, sellBalance))
                 }
-            }
-        })
+                override fun error(type: Int, error: Any?) {
+                    it.error(type, error)
+                }
+            })
+        }
     }
 
     fun getCurrentWallet(tabType: Int) {
@@ -458,54 +469,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                 })
             }
         }
-//        onTransactionModelListener?.onWallet(
-//                ApiManager.build(context).getService(WalletApiService::class.java)
-//                        .getWallet(if (tabType == ConstData.TAB_LEVER) "4" else "3")
-//                        .flatMap { result: HttpRequestResultData<WalletConfig?>? ->
-//                            var coinWallet: Wallet? = null
-//                            var setWallet: Wallet? = null
-//                            if (result != null && result.code == HttpRequestResult.SUCCESS && result.data != null) {
-//                                if (tabType == ConstData.TAB_LEVER) {
-//                                    val wallets: ArrayList<WalletLever?>? = result.data?.userCoinAccountLeverVO
-//                                    val pair = currentPairStatus.pair
-//                                    wallets?.run {
-//                                        for (wallet in wallets) {
-//                                            if (TextUtils.equals(pair, wallet?.pair)) {
-//                                                coinWallet = wallet?.createCoinWallet()
-//                                                setWallet = wallet?.createSetWallet()
-//                                            }
-//                                            if (coinWallet != null && setWallet != null) {
-//                                                break
-//                                            }
-//                                        }
-//                                    }
-//                                } else {
-//                                    val wallets = result.data?.userCoinAccountVO
-//                                    val pairCoinType = currentPairStatus.getName()
-//                                    val pairEstimatedCoinType = currentPairStatus.getSetName()
-//                                    wallets?.runCatching {
-//                                        for (wallet in wallets) {
-//                                            if (TextUtils.equals(pairCoinType, wallet.coinType)) {
-//                                                coinWallet = wallet
-//                                            }
-//                                            if (TextUtils.equals(pairEstimatedCoinType, wallet.coinType)) {
-//                                                setWallet = wallet
-//                                            }
-//                                            if (coinWallet != null && setWallet != null) {
-//                                                break
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                            Observable.just(Pair(coinWallet, setWallet))
-//                        }
-//                        .compose(RxJavaHelper.observeOnMainThread()))
-    }
-
-    fun getAboutCoinPairStatus(type: Int): Observable<ArrayList<PairStatus>> {
-        return SocketDataContainer.getAboutCoinPairStatus(context, type, currentPairStatus.pair)
-                .compose(RxJavaHelper.observeOnMainThread())
     }
 
     fun checkDearPair(): Observable<Boolean>? {
@@ -616,10 +579,14 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         fun onTradeOrder(pair: String?, bidOrderList: List<TradeOrder?>?, askOrderList: List<TradeOrder?>?)
 
         fun onTradePairInfo(pairStatus: PairStatus?)
+
         fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
         fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>
 
         fun onWalletLeverDetail(leverDetail: WalletLeverDetail?)
         fun onLeverPairConfigCheck(hasLeverConfig: Boolean)
+        fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
+
+        fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
     }
 }

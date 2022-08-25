@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
@@ -24,13 +25,14 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
-import com.black.base.lib.FryingSingleToast
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
+import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.trade.TradeOrderResult
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
@@ -41,8 +43,6 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
-import com.black.frying.view.PairChoosePopup
-import com.black.frying.view.PairChoosePopup.OnPairChooseListener
 import com.black.frying.view.TransactionDeepViewBinding
 import com.black.frying.view.TransactionDeepViewBinding.OnTransactionDeepListener
 import com.black.frying.view.TransactionMorePopup
@@ -58,7 +58,6 @@ import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
-import com.fbsex.exchange.databinding.FragmentHomePageTransactionBinding
 import com.fbsex.exchange.databinding.FragmentHomePageTransactionFiexBinding
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
@@ -72,7 +71,7 @@ import kotlin.math.pow
 @Route(value = [RouterConstData.TRANSACTION], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 2)
 class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, OnSeekBarChangeListener, EntrustCurrentHomeAdapter.OnHandleClickListener, OnItemClickListener, OnTransactionMoreClickListener, OnTransactionModelListener, OnTransactionDeepListener {
     companion object {
-        private const val TAG = "HomePageTransactionFragmentFiex"
+        private const val TAG = "TransFragmentFiex"
     }
 
     private var colorWin = 0
@@ -96,10 +95,25 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
      */
     private var currentEstimatedWallet: Wallet? = null
 
+    /**
+     * 买入可使用资产
+     */
+    private var currentBalanceBuy:UserBalance? = null
+
+    /**
+     * 卖出可使用资产
+     */
+    private var currentBalanceSell:UserBalance? = null
+
     private var layout: View? = null
     private var binding: FragmentHomePageTransactionFiexBinding? = null
     private var viewModel: TransactionViewModel? = null
     private var deepViewBinding: TransactionDeepViewBinding? = null
+
+    /**
+     * 用户资产
+     */
+    private var userBalance:ArrayList<UserBalance?>?  = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val start = System.currentTimeMillis()
@@ -160,6 +174,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     override fun onResume() {
         super.onResume()
         viewModel?.setTabType(tabType)
+        viewModel?.getCurrentUserBalance()
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -357,9 +372,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                                 if (returnData != null) {
                                     if (returnData.supportTrade != null && true == returnData.supportTrade) {
                                         if (transactionType == 1) { //买入
-                                            createOrder("BID")
+                                            createOrder("BUY")
                                         } else if (transactionType == 2) { //卖出
-                                            createOrder("ASK")
+                                            createOrder("SELL")
                                         }
                                     } else {
                                         FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
@@ -492,7 +507,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     //处理点击，撤销订单
-    override fun onHandleClick(tradeOrder: TradeOrder) {
+    override fun onHandleClick(tradeOrder: TradeOrderFiex) {
         //新订单可以撤销
         cancelTradeOrder(tradeOrder)
     }
@@ -666,10 +681,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
             if (transactionType == 1) {
                 binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                binding!!.fragmentHomePageTransactionHeader1.useableFreezUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(resources.getString(R.string.buy).toString() + viewModel!!.getCoinType())
             } else if (transactionType == 2) {
                 binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getCoinType())
                 binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageTransactionHeader1.useableFreezUnit.setText(viewModel!!.getCoinType())
                 binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(resources.getString(R.string.sale).toString() + viewModel!!.getCoinType())
             }
         }
@@ -710,16 +727,18 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         activity?.runOnUiThread {
             //买入
             if (transactionType == 1) {
-                if (currentEstimatedWallet != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentEstimatedWallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
+                if (currentBalanceSell != null) {
+                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
                 } else {
                     binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
                 }
                 binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
                 binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
             } else if (transactionType == 2) {
-                if (currentWallet != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentWallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
+                if (currentBalanceBuy != null) {
+                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
                 } else {
                     binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
                 }
@@ -733,15 +752,14 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     private fun getTradeOrderCurrent() {
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
             mContext?.runOnUiThread { }
-            val levelType = if (tabType == ConstData.TAB_LEVER) TransactionViewModel.LEVER_TYPE_LEVER else TransactionViewModel.LEVER_TYPE_COIN
-            TradeApiServiceHelper.getTradeOrderRecord(activity, viewModel!!.getCurrentPair(), false, 1, 20, false, null, null, levelType, false, object : NormalCallback<HttpRequestResultData<PagingData<TradeOrder?>?>?>() {
+            val orderState = 10
+            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), orderState, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
                 override fun error(type: Int, error: Any) {
                     showCurrentOrderList(null)
                 }
-
-                override fun callback(returnData: HttpRequestResultData<PagingData<TradeOrder?>?>?) {
+                override fun callback(returnData: HttpRequestResultData<TradeOrderResult?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        showCurrentOrderList(returnData.data?.data)
+                        showCurrentOrderList(returnData.data?.items)
                     }
                 }
             })
@@ -749,7 +767,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     //显示当前委托
-    private fun showCurrentOrderList(data: ArrayList<TradeOrder?>?) {
+    private fun showCurrentOrderList(data: ArrayList<TradeOrderFiex?>?) {
         adapter?.data = data
         adapter?.notifyDataSetChanged()
     }
@@ -764,11 +782,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         }
         val currentPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.currentPrice.text.toString())
         if (currentPrice != null && currentPrice != 0.0) {
-            if ("BID" != direction && java.lang.Double.compare(priceDouble, currentPrice * 0.8) < 0) {
+            if ("SELL" != direction && java.lang.Double.compare(priceDouble, currentPrice * 0.8) < 0) {
                 FryingUtil.showToast(mContext, getString(R.string.trade_sale_over_price))
                 return
             }
-            if ("BID" == direction && java.lang.Double.compare(priceDouble, currentPrice * 1.2) > 0) {
+            if ("BUY" == direction && java.lang.Double.compare(priceDouble, currentPrice * 1.2) > 0) {
                 FryingUtil.showToast(mContext, getString(R.string.trade_buy_over_price))
                 return
             }
@@ -779,14 +797,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
-        val levelType = if (tabType == ConstData.TAB_LEVER) TransactionViewModel.LEVER_TYPE_LEVER else TransactionViewModel.LEVER_TYPE_COIN
+        val tradeType = TransactionViewModel.LIMIT
         val createRunnable = Runnable {
-            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, levelType, object : NormalCallback<HttpRequestResultString?>() {
+            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>() {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding!!.fragmentHomePageTransactionHeader1.price.setText("")
                         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
-                        viewModel!!.getWalletLeverDetail()
+//                        viewModel!!.getWalletLeverDetail()
+                        viewModel!!.getCurrentUserBalance()
+                        refreshData()
                         FryingUtil.showToast(mContext, getString(R.string.trade_success))
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -794,19 +814,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                 }
             })
         }
-        if (levelType == TransactionViewModel.LEVER_TYPE_LEVER) {
-            mContext?.let {
-                FryingUtil.checkAndAgreeLeverProtocol(it, createRunnable)
-            }
-        } else {
-            createRunnable.run()
-        }
-
+        createRunnable.run()
     }
 
     //撤销新单
-    private fun cancelTradeOrder(tradeOrder: TradeOrder) {
-        TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder.id, tradeOrder.pair, tradeOrder.direction, object : NormalCallback<HttpRequestResultString?>() {
+    private fun cancelTradeOrder(tradeOrder: TradeOrderFiex) {
+        TradeApiServiceHelper.cancelTradeOrderFiex(mContext, tradeOrder.orderId, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     adapter?.removeItem(tradeOrder)
@@ -831,7 +844,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         refreshSubmitButton()
         refreshData()
         if (!TextUtils.isEmpty(pairStatus.pair)) {
-            binding!!.actionBarLayout.actionBarTitle.setText(pairStatus.pair!!.replace("_", "/"))
+            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
+            binding!!.actionBarLayout.pairSetName.setText("/"+viewModel!!.getSetName())
         }
         adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetAmountLength()
@@ -878,6 +892,29 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                 refreshUsable()
             }
         }))
+    }
+
+    override fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>> {
+        return object : Callback<Pair<UserBalance?, UserBalance?>>() {
+            override fun callback(returnData: Pair<UserBalance?, UserBalance?>?) {
+                if (returnData != null) {
+                    currentBalanceBuy = returnData.first
+                    currentBalanceSell = returnData.second
+                }
+                refreshUsable()
+            }
+            override fun error(type: Int, error: Any?) {
+//                if (currentWallet != null && currentEstimatedWallet != null
+//                    && TextUtils.equals(currentWallet?.coinType, viewModel!!.getCoinType()) && TextUtils.equals(currentEstimatedWallet?.coinType, viewModel!!.getSetName())) {
+//                    //如果当前资产数据符合当前交易对，在错误情况下不清空资产数据
+//                } else {
+//                    currentWallet = null
+//                    currentEstimatedWallet = null
+//                    refreshUsable()
+//                }
+            }
+
+        }
     }
 
     override fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>> {
@@ -1015,6 +1052,22 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
 
     override fun onDeepChanged(deep: Int) {
         onDeepChoose()
+    }
+
+    override fun onUserBanlance(observable: Observable<HttpRequestResultDataList<UserBalance?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+            override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    Log.d(TAG,"onUserBanlance succ")
+                    userBalance = returnData.data
+                } else {
+                    Log.d(TAG,"onUserBanlance data null or fail")
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+                Log.d(TAG,"onUserBanlance error")
+            }
+        }))
     }
 
     private fun updateCurrentPair(pairStatus: PairStatus) {

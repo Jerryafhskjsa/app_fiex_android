@@ -31,6 +31,8 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
+import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
@@ -463,6 +465,17 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         }
     }
 
+    override fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>> {
+        return object : Callback<Pair<UserBalance?, UserBalance?>>() {
+            override fun callback(returnData: Pair<UserBalance?, UserBalance?>?) {
+            }
+
+            override fun error(type: Int, error: Any?) {
+            }
+
+        }
+    }
+
     override fun doResetSkinResources() {
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
@@ -521,9 +534,9 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     }
 
     //处理点击，撤销订单
-    override fun onHandleClick(tradeOrder: TradeOrder) {
+    override fun onHandleClick(tradeOrder: TradeOrderFiex) {
         //新订单可以撤销
-        cancelTradeOrder(tradeOrder)
+//        cancelTradeOrder(tradeOrder)
     }
 
     //计算最大交易数量
@@ -767,7 +780,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
 
                 override fun callback(returnData: HttpRequestResultData<PagingData<TradeOrder?>?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        showCurrentOrderList(returnData.data?.data)
+//                        showCurrentOrderList(returnData.data?.data)
                     }
                 }
             })
@@ -775,7 +788,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     }
 
     //显示当前委托
-    private fun showCurrentOrderList(data: ArrayList<TradeOrder?>?) {
+    private fun showCurrentOrderList(data: ArrayList<TradeOrderFiex?>?) {
         adapter?.data = data
         adapter?.notifyDataSetChanged()
     }
@@ -835,7 +848,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder.id, tradeOrder.pair, tradeOrder.direction, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    adapter?.removeItem(tradeOrder)
+//                    adapter?.removeItem(tradeOrder)
                     adapter?.notifyDataSetChanged()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -1056,6 +1069,10 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
 
     override fun onDeepChanged(deep: Int) {
         onDeepChoose()
+    }
+
+    override fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?) {
+
     }
 
     private fun updateCurrentPair(pairStatus: PairStatus) {

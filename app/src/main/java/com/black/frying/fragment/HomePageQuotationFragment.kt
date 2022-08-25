@@ -151,7 +151,22 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private fun refreshSets() {
         if (sets == null || sets!!.isEmpty()) {
-            PairApiServiceHelper.getTradeSets(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
+//            PairApiServiceHelper.getTradeSets(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
+//                override fun error(type: Int, error: Any) {
+////                    refreshSets()这里接口不通目前会引起死循环调用
+//                }
+//
+//                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+//                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+//                        val sets = returnData.data
+//                        sets?.add(0, getString(R.string.pair_collect))
+//                        setSets(sets)
+//                    } else {
+//                        refreshSets()
+//                    }
+//                }
+//            })
+            PairApiServiceHelper.getTradeSetsFiex(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
                 override fun error(type: Int, error: Any) {
 //                    refreshSets()这里接口不通目前会引起死循环调用
                 }
