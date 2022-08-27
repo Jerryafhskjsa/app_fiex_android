@@ -130,15 +130,17 @@ public class ApiManagerImpl {
             }
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        String ucToken1 = HttpCookieUtil.getUcToken(context);
-        String ticket = HttpCookieUtil.getTicket(context);
-        String trade_token = HttpCookieUtil.getTradeToken(context);
-        String pro_token = HttpCookieUtil.getProToken(context);
-        String ws_token = HttpCookieUtil.getWsToken(context);
-        String ft_token = "";
+
         Interceptor headerInterceptor = new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
+
+                String ucToken = HttpCookieUtil.getUcToken(context);
+                String ticket = HttpCookieUtil.getTicket(context);
+                String trade_token = HttpCookieUtil.getTradeToken(context);
+                String pro_token = HttpCookieUtil.getProToken(context);
+                String ws_token = HttpCookieUtil.getWsToken(context);
+
                 Request original = chain.request();
                 Request.Builder requestBuilder = original.newBuilder();
                 requestBuilder
@@ -153,12 +155,13 @@ public class ApiManagerImpl {
 //                        .header("Accept-Language", "Android")
 //                        .header("platform", "Android")
 //                        .addHeader("cookie", "lang=" + lang)
-                        .header("Authorization", ucToken1 == null ? "" : ucToken1)
+                        .header("Authorization", ucToken == null ? "" : ucToken)
+//                        .header("Authorization-uc", ucToken == null ? "" : ucToken)
+//                        .header("Authorization-pro", pro_token == null ? "" : pro_token)
+//                        .header("Authorization-ft", "")
                         .header("Accept-Encoding", "gzip, deflate")
-                        .header("Cache-Control", "no-cache")
-                        .header("Authorization-uc",ucToken1 == null ? "" : ucToken1)
-                        .header("Authorization-pro",pro_token == null ? "" : pro_token)
-                        .header("Authorization-ft",ft_token);
+                        .header("Cache-Control", "no-cache");
+
                 JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
                 if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)){
                     if(JSESSIONIDCookie.lastIndexOf(";") == -1){
@@ -205,6 +208,13 @@ public class ApiManagerImpl {
                         requestBuilder.addHeader("cookie", globalCookie);
                     }
                 }
+//                String fullUrl = original.url().toString();
+//                if (fullUrl.endsWith("foundation/addFoundationOrder")) {
+//                    if (globalCookie != null) {
+//                        requestBuilder.addHeader("Cookie", globalCookie);
+//                        requestBuilder.addHeader("cookie", globalCookie);
+//                    }
+//                }
                 Request request = requestBuilder.method(original.method(), original.body()).build();
                 RequestBody requestBody = request.body();
                 if (requestBody != null) {

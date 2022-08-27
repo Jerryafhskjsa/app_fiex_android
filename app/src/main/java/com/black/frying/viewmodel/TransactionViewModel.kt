@@ -8,16 +8,15 @@ import android.os.Process
 import android.text.TextUtils
 import android.util.Log
 import android.util.Pair
-import com.black.base.api.PairApiServiceHelper
-import com.black.base.api.UserApiService
-import com.black.base.api.UserApiServiceHelper
-import com.black.base.api.WalletApiServiceHelper
+import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.socket.PairStatus
+import com.black.base.model.socket.QuotationOrderNew
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderPairList
-import com.black.base.model.user.User
+import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
@@ -35,7 +34,6 @@ import io.reactivex.ObservableSource
 import io.reactivex.Observer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
-import skin.support.app.SkinCompatDelegate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,6 +59,10 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
     private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
     private var leverDetailObserver: Observer<WalletLeverDetail?>? = createLeverDetailObserver()
+
+
+    private var tradeOrderDepthPair:TradeOrderPairList? = null
+    private var singleOrderDepthList :ArrayList<QuotationOrderNew?>? = null
 
     init {
         currentPairStatus.pair == (CookieUtil.getCurrentPair(context))
@@ -245,23 +247,36 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
     }
 
+    fun getAllOrderFiex() {
+        CommonUtil.postHandleTask(socketHandler) {
+            SocketDataContainer.getOrderListFiex(context,singleOrderDepthList,object : Callback<TradeOrderPairList?>() {
+                override fun error(type: Int, error: Any) {}
+                override fun callback(returnData: TradeOrderPairList?) {
+                    sortTradeOrder(currentPairStatus.pair, returnData)
+                }
+            })
+        }
+    }
+
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {
         Observable.just(orderPairList)
                 .flatMap(object : Function<TradeOrderPairList?, ObservableSource<Void>> {
                     @Throws(Exception::class)
                     override fun apply(orders: TradeOrderPairList): ObservableSource<Void> {
                         var tradeOrders = orders
-                        tradeOrders = tradeOrders ?: TradeOrderPairList()
+//                        tradeOrders = tradeOrders ?: TradeOrderPairList()
                         tradeOrders.bidOrderList = if (tradeOrders.bidOrderList == null) ArrayList() else tradeOrders.bidOrderList
                         tradeOrders.askOrderList = if (tradeOrders.askOrderList == null) ArrayList() else tradeOrders.askOrderList
                         var bidTradeOrderList: List<TradeOrder?>? = tradeOrders.bidOrderList
                         if (bidTradeOrderList != null && bidTradeOrderList.isNotEmpty()) {
                             val bidTradeOrderListAfterFilter = ArrayList<TradeOrder>()
                             for (tradeOrder in bidTradeOrderList) {
+                                //过滤出委托量>0的数据
                                 if (tradeOrder != null && tradeOrder.exchangeAmount > 0 && TextUtils.equals(currentPairStatus.pair, tradeOrder.pair)) {
                                     bidTradeOrderListAfterFilter.add(tradeOrder)
                                 }
                             }
+                            //按照价格，精度和最大数量进行合并,
                             bidTradeOrderList = SocketUtil.mergeQuotationOrder(bidTradeOrderListAfterFilter, currentPairStatus.pair, "BID", currentPairStatus.precision, bidMax)
                             bidTradeOrderList = bidTradeOrderList ?: ArrayList()
                             Collections.sort(bidTradeOrderList, TradeOrder.COMPARATOR_DOWN)
@@ -382,6 +397,29 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         onTransactionModelListener?.onPairStatusDataChanged(currentPairStatus)
     }
 
+    /**
+     * 获取当前交易对深度
+     */
+    fun getCurrentPairDepth(level:Int){
+        TradeApiServiceHelper.getTradeOrderDepth(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultData<TradeOrderDepth?>?>() {
+            override fun callback(returnData: HttpRequestResultData<TradeOrderDepth?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    tradeOrderDepthPair = returnData.data?.let { SocketDataContainer.parseOrderDepthData(it) }
+                    singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
+                    getAllOrderFiex()
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+                Log.d("11111", "error type = $type")
+            }
+        })
+    }
+
+
+
+    /**
+     * 获取用户资产
+     */
     fun getCurrentUserBalance(){
         onTransactionModelListener?.getUserBalanceCallback()?.let{
             UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<ArrayList<UserBalance?>?>() {

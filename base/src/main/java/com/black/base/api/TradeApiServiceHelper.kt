@@ -9,6 +9,7 @@ import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
@@ -62,6 +63,16 @@ object TradeApiServiceHelper {
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
             ?.getTradeOrderRecordFiex(symbol, state, startTime, endTime)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    fun getTradeOrderDepth(context: Context?, level:Int?,symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderDepth?>?>) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
+            ?.getTradeOrderDepth(level,symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

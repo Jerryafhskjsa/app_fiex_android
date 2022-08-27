@@ -25,7 +25,7 @@ import kotlin.math.min
 
 @Route(value = [RouterConstData.START_PAGE])
 class StartPageActivity : BaseActivity() {
-    private val WAIT_MAX_TIME = 1000//调整等待时间，开始伟为10s
+    private val WAIT_MAX_TIME = 1000//调整等待时间，开始为10s
     private val REQUEST_STORAGE = 100
     private val REQUEST_CAMERA = 200
     private var runnable: Runnable? = null

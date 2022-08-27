@@ -741,7 +741,7 @@ object SocketUtil {
         db?.endTransaction()
     }
 
-    //合并委托，只要前N条数据
+    //按照价格进行合并委托，只要前N条数据
     fun mergeQuotationOrder(data: List<TradeOrder>?, pair: String?, direction: String?, precision: Int, maxSize: Int): List<TradeOrder>? {
         var precision = precision
         var maxSize = maxSize

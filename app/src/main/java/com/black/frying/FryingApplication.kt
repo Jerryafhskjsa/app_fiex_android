@@ -77,13 +77,13 @@ class FryingApplication : BaseApplication() {
         StrictMode.setVmPolicy(builder.build())
         initPRC()
         //初始化友盟
-        UMConfigure.init(applicationContext, UMConfigure.DEVICE_TYPE_PHONE, "5d75f996570df376960000b5")
+//        UMConfigure.init(applicationContext, UMConfigure.DEVICE_TYPE_PHONE, "5d75f996570df376960000b5")
         //实人认证初始化
         initX5()
         //清理webview的缓存
         WebView(applicationContext).destroy()
         //初始化腾讯im
-        initTencentIM()
+//        initTencentIM()
         initLanguageItems(applicationContext)
         initFilters()
         BlackRouter.getInstance().init(this)
@@ -217,13 +217,13 @@ class FryingApplication : BaseApplication() {
         override fun onSuccess() {
             Log.e("initSkinLoader", "onSuccess =======")
             //初始化极光推送
-            initJPush()
+//            initJPush()
         }
 
         override fun onFailed(errMsg: String?) {
             Log.e("initSkinLoader", "onFailed =======")
             //初始化极光推送
-            initJPush()
+//            initJPush()
         }
 
         override fun onStart() {
@@ -251,24 +251,25 @@ class FryingApplication : BaseApplication() {
                 .setSkinWindowBackgroundEnable(false) // 关闭windowBackground换肤，默认打开[可选]
         //设置默认为夜间模式
         if (!CookieUtil.hasSetNightMode(this)) {
-            skinCompatManager.loadSkin("night.skin", object : FryingSkinLoaderListener() {
-                override fun onStart() {
-                    super.onStart()
-                }
-
-                override fun onSuccess() {
-                    super.onSuccess()
-                    CookieUtil.setNightMode(applicationContext, true)
-                }
-
-                override fun onFailed(errMsg: String?) {
-                    super.onFailed(errMsg)
-                    CookieUtil.setNightMode(applicationContext, false)
-                }
-            }, SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS)
+//            skinCompatManager.loadSkin("night.skin", object : FryingSkinLoaderListener() {
+//                override fun onStart() {
+//                    super.onStart()
+//                }
+//
+//                override fun onSuccess() {
+//                    super.onSuccess()
+//                    CookieUtil.setNightMode(applicationContext, true)
+//                }
+//
+//                override fun onFailed(errMsg: String?) {
+//                    super.onFailed(errMsg)
+//                    CookieUtil.setNightMode(applicationContext, false)
+//                }
+//            }, SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS)
         } else {
-            skinCompatManager.loadSkin(FryingSkinLoaderListener())
+//            skinCompatManager.loadSkin(FryingSkinLoaderListener())
         }
+        skinCompatManager.loadSkin(FryingSkinLoaderListener())
     }
 
     fun setLocale() {

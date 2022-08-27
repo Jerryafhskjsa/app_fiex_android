@@ -3,13 +3,32 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.model.trade.TradeOrderOneDepth
 import com.black.base.util.FryingUtil
+import com.black.base.util.SocketDataContainer
+import com.black.base.util.SocketUtil
 import com.black.base.util.UrlConfig
 import com.black.net.websocket.*
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import org.json.JSONException
 import org.json.JSONObject
 
 class FiexSocketManager(context: Context, handler: Handler){
+
+    private var gson: Gson = Gson()
+        get() {
+            if (field == null) {
+                field = Gson()
+            }
+            return field
+        }
+    private var mCcontext:Context? = null
+    private var mHandler:Handler? = null
+    private var currentPair:String? = null
     private var userSocketMgr:WebSocketManager
     private var subStatusSocketMgr:WebSocketManager
     private var socketSetting:WebSocketSetting
@@ -24,8 +43,10 @@ class FiexSocketManager(context: Context, handler: Handler){
         private const val subStatusKeys = "subStatus"
     }
     init {
+        mCcontext = context
+        mHandler = handler
+        currentPair = SocketUtil.getCurrentPair(mCcontext!!)
         var socketUrl = UrlConfig.getSocketHostFiex(context)+"/websocket"
-        Log.d("11111", "socketUrl = $socketUrl")
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 5
@@ -36,17 +57,17 @@ class FiexSocketManager(context: Context, handler: Handler){
     }
 
     fun startConnect(){
-        userSocketMgr.start()
+//        userSocketMgr.start()
         subStatusSocketMgr.start()
     }
 
     fun stopConnect(){
-        userSocketMgr.disConnect()
+//        userSocketMgr.disConnect()
         subStatusSocketMgr.disConnect()
     }
 
     fun destorySocket(){
-        userSocketMgr.destroy()
+//        userSocketMgr.destroy()
         subStatusSocketMgr.destroy()
     }
 
@@ -97,15 +118,38 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d("11111", "$key onMessage = $message")
             var data:JSONObject? = null
             try {
                 data = JSONObject(message)
+                if(data != null){
+                    var resType = data.getString("resType")
+                    var resultData = data.getString("data")
+                    val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
+                    when(resType){
+                        "qAllDepth" -> {
+                            val allDepth:TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(jsonObject.toString(), object : TypeToken<TradeOrderDepth??>() {}.type)
+                            SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepth,true)
+                        }
+                        "qDepth" ->{
+                            val oneDepth:TradeOrderOneDepth? = gson.fromJson<TradeOrderOneDepth?>(jsonObject.toString(), object : TypeToken<TradeOrderOneDepth??>() {}.type)
+                            var allDepthData = TradeOrderDepth()
+                            var direction = oneDepth?.m
+                            var desArray = arrayOf(oneDepth?.p?.toDouble(),oneDepth?.q?.toDouble())
+                            if(direction.equals("1")){//BID
+                                var bidArray = arrayOf(desArray)
+                                allDepthData?.b = bidArray
+                            }
+                            if(direction.equals("2")){//ASK
+                                var askArray = arrayOf(desArray)
+                                allDepthData?.a = askArray
+                            }
+                            allDepthData.s = oneDepth?.s
+//                            SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepthData,false)
+                        }
+                    }
+                }
             }catch (e:JSONException){
                 FryingUtil.printError(e)
-            }
-            if(data != null){
-                Log.d("11111","resType = "+data.getString("resType"))
             }
         }
     }

@@ -430,15 +430,37 @@
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
                     android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
                     android:text="100%"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_13" />
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/double_padding" />
+                android:layout_height="@dimen/default_padding" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="VOL"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="4000usdt"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_13" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_padding" />
             <com.black.base.widget.SpanTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1175,7 +1197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 >
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/deep"
@@ -1208,6 +1230,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
+                android:visibility="gone"
                 android:background="@drawable/bg_transaction_input">
                 <LinearLayout
                     android:id="@+id/lin_deep_postion"

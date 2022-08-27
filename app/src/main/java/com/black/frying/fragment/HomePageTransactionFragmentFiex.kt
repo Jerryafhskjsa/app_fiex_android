@@ -28,9 +28,11 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
@@ -175,6 +177,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         super.onResume()
         viewModel?.setTabType(tabType)
         viewModel?.getCurrentUserBalance()
+        viewModel?.getCurrentPairDepth(50)
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -515,11 +518,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     //计算最大交易数量
     private fun getMaxAmount(): BigDecimal? {
         if (transactionType == 1) {
-            val usable = currentEstimatedWallet?.coinAmount
+            val usable = currentBalanceSell?.availableBalance
             val price = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString())
-            return if (usable == null || price == null || price == 0.0) null else usable / BigDecimal(price)
+            return if (usable == null || price == null || price == 0.0) null else  BigDecimal(usable).divide(BigDecimal(price),2,BigDecimal.ROUND_HALF_DOWN)
         } else if (transactionType == 2) {
-            return currentWallet?.coinAmount
+            return currentBalanceBuy?.availableBalance?.toBigDecimal()
         }
         return null
     }
@@ -751,8 +754,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     //当前委托
     private fun getTradeOrderCurrent() {
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
-            mContext?.runOnUiThread { }
-            val orderState = 10
+//            mContext?.runOnUiThread { }
+            val orderState = 1
             TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), orderState, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
                 override fun error(type: Int, error: Any) {
                     showCurrentOrderList(null)

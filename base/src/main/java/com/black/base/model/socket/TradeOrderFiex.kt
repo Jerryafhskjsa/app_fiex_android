@@ -21,5 +21,10 @@ class TradeOrderFiex{
     var timeInForce:String? = null//有效类型
     var triggerProfitPrice:String? = null//止盈触发价
     var triggerStopPrice:String? = null//止损触发价
+
+    var weightPercent //权重占比，绘制挂单进度条使用
+            = 0.0
+    var beforeAmount //自身和前面所有挂单数量，扫单使用
+            = 0.0
     /*fiex********************/
 }

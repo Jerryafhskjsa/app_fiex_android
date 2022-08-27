@@ -5,6 +5,7 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -33,5 +34,7 @@ interface TradeApiService {
     @GET(UrlConfig.Trade.URL_TRADE_ORDERS_RECORD)
     fun getTradeOrderRecordFiex(@Query("symbol") symbol: String?, @Query("state") state: Int, @Query("startTime") startTime: String?, @Query("endTime") endTime: String?): Observable<HttpRequestResultData<TradeOrderResult?>?>?
 
+    @GET(UrlConfig.Trade.URL_TRADE_ORDERS_DEPTH)
+    fun getTradeOrderDepth(@Query("level") level: Int?, @Query("symbol") symbol: String?): Observable<HttpRequestResultData<TradeOrderDepth?>?>?
 
 }

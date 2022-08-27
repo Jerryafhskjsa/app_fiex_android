@@ -258,6 +258,8 @@ object UrlConfig {
         const val URL_URL_CANCEL_TRADE_ORDER_NEW = "trade/order/cancel"
         //获取交易委托记录
         const val URL_TRADE_ORDERS_RECORD = "trade/order/list"
+        //获取当前交易对的深度
+        const val URL_TRADE_ORDERS_DEPTH = "public/depth"
     }
 
     object Wallet {

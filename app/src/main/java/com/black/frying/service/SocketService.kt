@@ -146,12 +146,12 @@ class SocketService : Service() {
 //                pushSocket?.start()
             }
             if(fiexSocketManager == null){
-//                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
-//                fiexSocketManager?.startConnect()
+                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
+                fiexSocketManager?.startConnect()
             }
-//            if (observer == null) {
+            if (observer == null) {
                 observer = createCommandObserver()
-//            }
+            }
             SocketUtil.subscribeCommandObservable(observer)
         } catch (e: Exception) {
             FryingUtil.printError(e)

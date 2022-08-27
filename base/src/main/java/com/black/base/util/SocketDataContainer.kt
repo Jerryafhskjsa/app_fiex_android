@@ -17,6 +17,7 @@ import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.socket.*
+import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.util.FryingUtil.printError
 import com.black.base.util.SharePreferencesUtil.getTextValue
@@ -68,6 +69,10 @@ object SocketDataContainer {
     //委托
     private val orderDataList = ArrayList<QuotationOrderNew?>()
     private val orderObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
+
+    /***fiex***/
+    private val orderDepthDataList = ArrayList<QuotationOrderNew?>()
+    /***fiex***/
     //成交
     const val DEAL_MAX_SIZE = 20
     private val dealList = ArrayList<QuotationDealNew>()
@@ -1144,6 +1149,161 @@ object SocketDataContainer {
         }
     }
 
+    fun updateQuotationOrderNewDataFiex(context: Context?, handler: Handler?, currentPair: String?, tradeOrderDepth: TradeOrderDepth?, isRemoveAll: Boolean) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<String>(ObservableOnSubscribe { emitter ->
+                if (tradeOrderDepth == null) {
+                    emitter.onComplete()
+                } else {
+                    var tradeOrderPairList  = parseOrderDepthData(tradeOrderDepth)
+                    var orderDepthData = tradeOrderPairList?.let { parseOrderDepthToList(it) }
+                    synchronized(orderDataList) {
+                        if (isRemoveAll) {
+                            orderDataList.clear()
+                        }
+                    }
+                    val count = orderDepthData?.size
+                    for (i in 0 until count!!) {
+                        val quotationOrderNew = orderDepthData?.get(i)
+                        if (quotationOrderNew != null && (quotationOrderNew.a < 0 || quotationOrderNew.v < 0)) { //存在错误数据，重新订阅
+                            sendSocketCommandBroadcast(context, SocketUtil.COMMAND_PAIR_CHANGED)
+                            emitter.onComplete()
+                            return@ObservableOnSubscribe
+                        }
+                        if (quotationOrderNew != null && quotationOrderNew.v > 0) { //添加反向节点
+                            val quotationOrderNewReverse = QuotationOrderNew()
+                            quotationOrderNewReverse.a = 0.0
+                            quotationOrderNewReverse.v = 0.0
+                            quotationOrderNewReverse.pair = quotationOrderNew.pair
+                            quotationOrderNewReverse.p = quotationOrderNew.p
+                            quotationOrderNewReverse.d = if ("BID".equals(quotationOrderNew.d, ignoreCase = true)) "ASK" else "BID"
+                            orderDepthData?.add(quotationOrderNewReverse)
+                        }
+                    }
+                    var mergeData: Array<java.util.ArrayList<QuotationOrderNew?>?>?
+                    synchronized(orderDataList) { mergeData = mergeQuotationOrder2(orderDataList, orderDepthData) }
+                    val askOrderNews: ArrayList<QuotationOrderNew?> = if (mergeData == null || mergeData!![0] == null) ArrayList() else mergeData!![0]!!
+                    val bidOrderNews: ArrayList<QuotationOrderNew?> = if (mergeData == null || mergeData!![1] == null) ArrayList() else mergeData!![1]!!
+                    synchronized(orderDataList) {
+                        orderDataList.clear()
+                        orderDataList.addAll(askOrderNews)
+                        orderDataList.addAll(bidOrderNews)
+                    }
+                    //组装返回数据
+                    val askOrders = ArrayList<TradeOrder?>(askOrderNews.size)
+                    val bidOrders = ArrayList<TradeOrder?>(bidOrderNews.size)
+                    for (i in askOrderNews.indices) {
+                        askOrderNews[i]?.toTradeOrder()?.let {
+                            askOrders.add(it)
+                        }
+                    }
+                    for (i in bidOrderNews.indices) {
+                        bidOrderNews[i]?.toTradeOrder()?.let {
+                            bidOrders.add(it)
+                        }
+                    }
+                    //排序
+                    //                    Collections.sort(bidOrders, TradeOrder.COMPARATOR_DOWN);
+                    //                    Collections.sort(askOrders, TradeOrder.COMPARATOR_UP);
+                    val result = TradeOrderPairList()
+                    result.bidOrderList = bidOrders
+                    result.askOrderList = askOrders
+                    //                    int size = Math.max(bidOrders.size(), askOrders.size());
+                    //                    for (int i = 0; i < size; i++) {
+                    //                        TradeOrderPair tradeOrderPair = new TradeOrderPair();
+                    //                        tradeOrderPair.order = i;
+                    //                        tradeOrderPair.bidOrder = CommonUtil.getItemFromList(bidOrders, i);
+                    //                        tradeOrderPair.askOrder = CommonUtil.getItemFromList(askOrders, i);
+                    //                        result.add(tradeOrderPair);
+                    //                    }
+                    emitter.onNext(gson.toJson(result))
+                }
+            }).subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<String?>() {
+                    override fun onSuccess(s: String?) {
+                        synchronized(orderObservers) {
+                            for (observer in orderObservers) {
+                                observer.onNext(Pair(currentPair, gson.fromJson(s, object : TypeToken<TradeOrderPairList?>() {}.type)))
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+
+    /**
+     * 请求得到的数据转换成TradeOrderPairList
+     */
+    fun parseOrderDepthData(depth: TradeOrderDepth):TradeOrderPairList?{
+        var pairListData = TradeOrderPairList()
+        var askOrderList = ArrayList<TradeOrder?>()
+        var bidOrderList = ArrayList<TradeOrder?>()
+        var result = depth
+        var pair = result?.s
+        var bidArray = result?.b
+        var askArray = result?.a
+        if (bidArray != null) {
+            for(bidItem in bidArray){
+                var tradeOrder = TradeOrder()
+                tradeOrder.price = bidItem[0]
+                tradeOrder.priceString = bidItem[0].toString()
+                tradeOrder.orderType = "BID"
+                tradeOrder.exchangeAmount = bidItem[1]!!
+                tradeOrder.direction = "BID"
+                tradeOrder.pair = pair
+                bidOrderList.add(tradeOrder)
+            }
+            pairListData!!.bidOrderList = bidOrderList
+        }
+        if (askArray != null) {
+            for(askItem in askArray){
+                var tradeOrder = TradeOrder()
+                tradeOrder.price = askItem[0]
+                tradeOrder.priceString = askItem[0].toString()
+                tradeOrder.orderType = "ASK"
+                tradeOrder.exchangeAmount = askItem[1]!!
+                tradeOrder.direction = "ASK"
+                tradeOrder.pair = pair
+                askOrderList.add(tradeOrder)
+            }
+            pairListData!!.askOrderList = askOrderList
+        }
+        return pairListData
+    }
+
+    fun parseOrderDepthToList(tradeOrderPairList: TradeOrderPairList):ArrayList<QuotationOrderNew?>{
+        var newQuotationOrderList = ArrayList<QuotationOrderNew?>()
+        var bidList = tradeOrderPairList.bidOrderList
+        var askList = tradeOrderPairList.askOrderList
+        if (bidList != null) {
+            for(bid in bidList){
+                var newQuotationOrder = QuotationOrderNew()
+                newQuotationOrder.pair = bid?.pair
+                newQuotationOrder.p = bid?.priceString
+                newQuotationOrder.a = bid?.exchangeAmount!!
+                newQuotationOrder.d = bid?.direction
+                newQuotationOrder.v = (bid.price?.times(bid.exchangeAmount)) as Double
+                newQuotationOrderList.add(newQuotationOrder)
+            }
+        }
+        if (askList != null) {
+            for(ask in askList){
+                var newQuotationOrder = QuotationOrderNew()
+                newQuotationOrder.pair = ask?.pair
+                newQuotationOrder.p = ask?.priceString
+                newQuotationOrder.a = ask?.exchangeAmount!!
+                newQuotationOrder.d = ask?.direction
+                newQuotationOrder.v = (ask.price?.times(ask.exchangeAmount)) as Double
+                newQuotationOrderList.add(newQuotationOrder)
+            }
+        }
+        return newQuotationOrderList
+    }
+
+
+
     //发送数据更新通知
     fun sendSocketCommandBroadcast(context: Context?, type: Int) {
         if (context == null) {
@@ -1189,8 +1349,6 @@ object SocketDataContainer {
                 } else if ("BID".equals(dealNew.d, ignoreCase = true)) {
                     bidList.add(dealNew)
                 }
-            }
-            if (dealNew.a < -0.0001) {
             }
         }
         returnData[0] = askList
@@ -1265,6 +1423,33 @@ object SocketDataContainer {
                 printError(e)
             }
         }
+    }
+
+    //主动拉去挂单数据，直接回调
+    fun getOrderListFiex(context: Context?, depthDataList:ArrayList<QuotationOrderNew?>?, callback: Callback<TradeOrderPairList?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+            try {
+                val mergeData = mergeQuotationOrder(depthDataList)
+                val askOrderNews = if (mergeData == null || mergeData[0] == null) ArrayList() else mergeData[0]!!
+                val bidOrderNews = if (mergeData == null || mergeData[1] == null) ArrayList() else mergeData[1]!!
+                //组装返回数据
+                val askOrders = ArrayList<TradeOrder?>(askOrderNews.size)
+                val bidOrders = ArrayList<TradeOrder?>(bidOrderNews.size)
+                for (i in askOrderNews.indices) {
+                    askOrders.add(askOrderNews[i].toTradeOrder())
+                }
+                for (i in bidOrderNews.indices) {
+                    bidOrders.add(bidOrderNews[i].toTradeOrder())
+                }
+                val result = TradeOrderPairList()
+                result.bidOrderList = bidOrders
+                result.askOrderList = askOrders
+                callback.callback(result)
+            } catch (e: Exception) {
+                printError(e)
+            }
     }
 
     fun updateQuotationDealNewData(context: Context?, handler: Handler?, currentPair: String?, dataSource: JSONArray?, removeAll: Boolean) {
