@@ -101,6 +101,9 @@ class SocketService : Service() {
                 }
             }
             SocketUtil.COMMAND_LEVER_DETAIL_FINISH -> uSocket?.finishListenLeverDetail()
+            /***fiex***/
+//            SocketUtil.COMMAND_CURRENT_PAIR_QUOTA -> fiexSocketManager?.startListenCurrentQuota(SocketUtil.getCurrentPair(mContext!!))
+            /***fiex***/
         }
         false
     })
@@ -110,6 +113,8 @@ class SocketService : Service() {
     private var factionSocket: FactionSocket? = null //笑傲江湖监听
     private var pushSocket: PushSocket? = null  //平台配置推送监听
     private val currentPair: String? = null
+
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }

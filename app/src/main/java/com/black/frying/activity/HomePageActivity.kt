@@ -75,7 +75,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 //        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
         tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
         tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
-        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageMoneyFragment::class.java)
+        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
             val indicator = View.inflate(applicationContext, R.layout.home_page_tab_indicator, null)

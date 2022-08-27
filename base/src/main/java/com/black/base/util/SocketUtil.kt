@@ -60,6 +60,9 @@ object SocketUtil {
     const val COMMAND_ORDER_RELOAD = 20 //挂单重新加载
     const val COMMAND_LEVER_DETAIL_START = 21 //监听杠杆详情
     const val COMMAND_LEVER_DETAIL_FINISH = 22 //停止监听杠杆详情
+    /***fiex***/
+    const val COMMAND_CURRENT_PAIR_QUOTA = 100//开始监听当前交易对委托行情
+    /***fiex***/
     //上次保存数据时间记录
     private val lastSaveTimeMap = SparseArray<Long>()
     //时间间隔内，只保存一次数据

@@ -1,17 +1,20 @@
-package com.black.wallet.activity
+package com.black.frying.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.black.base.activity.BaseActionBarActivity
+import com.black.base.fragment.BaseFragment
 import com.black.base.model.Money
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
@@ -19,27 +22,28 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.StatusBarUtil
 import com.black.base.view.DeepControllerWindow
+import com.black.base.viewmodel.BaseViewModel
+import com.black.frying.fragment.assets.WalletNormalFragment
 import com.black.router.BlackRouter
-import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
-import com.black.wallet.R
-import com.black.wallet.databinding.ActivitySpotAccountBinding
+import com.fbsex.exchange.R
 import com.black.wallet.fragment.WalletLeverFragment
-import com.black.wallet.fragment.WalletNormalFragment
 import com.black.wallet.viewmodel.WalletViewModel
-import com.black.wallet.viewmodel.WalletViewModel.OnWalletModelListener
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import kotlin.math.abs
+import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
+import com.black.frying.fragment.assets.WalletNormalFragment.EventResponseListener
 
-//现货账户
-@Route(value = [RouterConstData.WALLET], beforePath = RouterConstData.LOGIN)
-class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener, OnWalletModelListener {
+
+class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener,
+    WalletViewModel.OnWalletModelListener,EventResponseListener {
     companion object {
         private const val TYPE_CNY = "CNY"
         private const val TYPE_BTC = "BTC"
@@ -49,7 +53,6 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
         private var TAB_FINANCE: String? = null
         private var TAB_WALLET: String? = null
     }
-
     private var bgB2 = 0
     private var bgDefault: Int = 0
     private var btnBackDefault: Drawable? = null
@@ -58,53 +61,50 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     private var colorT1: Int = 0
 
     private var appBarLayout: AppBarLayout? = null
-    private var actionBarTitle: TextView? = null
 
     private var otherMoneyType = TYPE_CNY
     private var typeList: MutableList<String>? = null
-    private var binding: ActivitySpotAccountBinding? = null
+    var layout: FrameLayout? = null
+    var binding:FragmentHomePageAssetsBinding? = null
     private var viewModel: WalletViewModel? = null
 
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var normalFragment: WalletNormalFragment? = null
     private var leverFragment: WalletLeverFragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        if (layout != null) {
+            return layout
+        }
+        bgB2 = SkinCompatResources.getColor(mContext, R.color.B2)
+        bgDefault = SkinCompatResources.getColor(mContext, R.color.C1)
+        btnBackDefault = SkinCompatResources.getDrawable(mContext, R.drawable.btn_back_white)
+        btnBackNormal = SkinCompatResources.getDrawable(mContext, R.drawable.btn_back)
+        colorDefault = SkinCompatResources.getColor(mContext, R.color.white)
+        colorT1 = SkinCompatResources.getColor(mContext, R.color.T1)
 
-        bgB2 = SkinCompatResources.getColor(this, R.color.B2)
-        bgDefault = SkinCompatResources.getColor(this, R.color.C1)
-        btnBackDefault = SkinCompatResources.getDrawable(this, R.drawable.btn_back_white)
-        btnBackNormal = SkinCompatResources.getDrawable(this, R.drawable.btn_back)
-        colorDefault = SkinCompatResources.getColor(this, R.color.white)
-        colorT1 = SkinCompatResources.getColor(this, R.color.T1)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home_page_assets,container,false)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_spot_account)
+        layout = binding?.root as FrameLayout
 
+        StatusBarUtil.addStatusBarPadding(layout)
         appBarLayout = binding?.root?.findViewById(R.id.app_bar_layout)
-        actionBarTitle = binding?.root?.findViewById(R.id.action_bar_title)
         appBarLayout?.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBar, verticalOffset ->
             if (abs(verticalOffset) >= appBar.totalScrollRange) {
                 binding?.root?.setBackgroundColor(bgB2)
-                binding?.toolbar?.setBackgroundColor(bgB2)
-                binding?.actionBarBack?.setImageDrawable(btnBackNormal)
-                actionBarTitle?.setTextColor(colorT1)
             } else {
                 binding?.root?.setBackgroundColor(bgDefault)
-                binding?.toolbar?.setBackgroundColor(bgDefault)
-                binding?.actionBarBack?.setImageDrawable(btnBackDefault)
-                actionBarTitle?.setTextColor(colorDefault)
             }
         })
 
-        viewModel = WalletViewModel(this, this)
+        viewModel = WalletViewModel(mContext!!,this)
 
         binding?.btnWalletEye?.isChecked = true
         binding?.btnWalletEye?.setOnCheckedChangeListener(this)
         binding?.moneyCny?.setOnClickListener(this)
-        binding?.btnExchange?.setOnClickListener(this)
-        binding?.btnWithdraw?.setOnClickListener(this)
-        binding?.btnDemand?.setOnClickListener(this)
+        binding?.linExchange?.setOnClickListener(this)
+        binding?.linWithdraw?.setOnClickListener(this)
+        binding?.linTransfer?.setOnClickListener(this)
 
         typeList = ArrayList()
         typeList!!.add(TYPE_CNY)
@@ -132,7 +132,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
 
         initFragmentList()
 
-        binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
+        binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(mContext?.supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragmentList!![position]
             }
@@ -145,7 +145,9 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
                 return TAB_TITLES[position]
             }
 
-            override fun restoreState(state: Parcelable?, loader: ClassLoader?) {}
+            override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+
+            }
         }
         binding?.tabLayout?.setupWithViewPager(binding?.viewPager, true)
 
@@ -163,46 +165,30 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
                 FryingUtil.printError(throwable)
             }
         }
-
-    }
-
-    override fun isStatusBarDark(): Boolean {
-        return !super.isStatusBarDark()
-    }
-
-    override fun getTitleText(): String {
-        return getString(R.string.my_wallet)
-    }
-
-    public override fun getViewModel(): WalletViewModel {
-        return viewModel!!
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel!!.getAllWallet(true)
+        return binding?.root
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_exchange -> {
+            R.id.lin_exchange -> {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                        .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
-                        .with(bundle)
-                        .go(this)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .with(bundle)
+                    .go(this)
             }
-            R.id.btn_withdraw -> {
+            R.id.lin_withdraw -> {
                 val extras = Bundle()
                 extras.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                        .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
-                        .with(extras)
-                        .go(this)
+                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                    .with(extras)
+                    .go(this)
             }
-            R.id.btn_demand -> {
-                BlackRouter.getInstance().build(RouterConstData.LEVER_PAIR_CHOOSE).withRequestCode(ConstData.LEVER_PAIR_CHOOSE).go(this)
+            R.id.lin_transfer -> {
+                BlackRouter.getInstance().build(RouterConstData.LEVER_PAIR_CHOOSE).withRequestCode(
+                    ConstData.LEVER_PAIR_CHOOSE).go(this)
 //                BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(this)
             }
             R.id.money_cny -> {
@@ -215,7 +201,16 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
 
                 }).show()
             }
-        }
+           }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel!!.getAllWallet(true)
+    }
+
+    override fun getViewModel(): BaseViewModel<*>? {
+        return viewModel!!
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -257,7 +252,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
                 ConstData.LEVER_PAIR_CHOOSE -> {
                     val pair = data?.getStringExtra(ConstData.PAIR)
                     if (pair != null) {
-                        FryingUtil.checkAndAgreeLeverProtocol(mContext, Runnable {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
                             val bundle = Bundle()
                             bundle.putString(ConstData.PAIR, pair)
                             BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
@@ -280,6 +275,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
             normalFragment = it
+            normalFragment?.setEventListener(this)
         })
         fragmentList?.add(WalletNormalFragment().also {
             val bundle = Bundle()
@@ -306,9 +302,8 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
             normalFragment = it
         })
     }
-
     private fun refreshMoneyDisplay() {
-        runOnUiThread {
+        mContext?.runOnUiThread {
             showNumberTextView(binding?.money!!)
             showNumberTextView(binding?.moneyCny!!)
         }
@@ -357,7 +352,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     }
 
     override fun onGetWallet(observable: Observable<Int>?, isShowLoading: Boolean) {
-        observable!!.subscribe(HttpCallbackSimple(this, isShowLoading, object : Callback<Int>() {
+        observable!!.subscribe(HttpCallbackSimple(mContext, isShowLoading, object : Callback<Int>() {
             override fun error(type: Int, message: Any) {
                 FryingUtil.showToast(mContext, message.toString())
             }
@@ -368,7 +363,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     }
 
     override fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean) {
-        runOnUiThread {
+        mContext?.runOnUiThread {
             normalFragment?.run {
                 observable?.subscribe {
                     setData(it)
@@ -378,7 +373,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     }
 
     override fun onWalletLever(observable: Observable<ArrayList<WalletLever?>?>?, isShowLoading: Boolean) {
-        runOnUiThread {
+        mContext?.runOnUiThread {
             leverFragment?.run {
                 observable?.subscribe {
                     setData(it)
@@ -388,7 +383,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     }
 
     override fun onWalletTotal(observable: Observable<Money?>?) {
-        runOnUiThread {
+        mContext?.runOnUiThread {
             normalFragment?.run {
                 observable?.subscribe {
                     setTotal(it)
@@ -398,7 +393,7 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
     }
 
     override fun onWalletLeverTotal(observable: Observable<Money?>?) {
-        runOnUiThread {
+        mContext?.runOnUiThread {
             leverFragment?.run {
                 observable?.subscribe {
                     setTotal(it)
@@ -431,23 +426,37 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
         }.run { }
     }
 
-    fun getAllWallet(isShowLoading: Boolean) {
+
+    override fun getAllWallet(isShowLoading: Boolean) {
         viewModel!!.getAllWallet(isShowLoading)
     }
 
-    fun getWalletCoinFilter(): Boolean? {
+    override fun getWalletCoinFilter(): Boolean? {
         return viewModel!!.getWalletCoinFilter()
     }
 
-    fun setWalletCoinFilter(checked: Boolean) {
+    override fun setWalletCoinFilter(checked: Boolean) {
         viewModel!!.setWalletCoinFilter(checked)
         normalFragment?.setWalletCoinFilter(checked)
         leverFragment?.setWalletCoinFilter(checked)
     }
 
-    fun search(searchKey: String, walletType: Int) {
+    override fun search(searchKey: String, walletType: Int) {
         viewModel!!.search(searchKey)
         normalFragment?.setSearchKey(searchKey)
         leverFragment?.setSearchKey(searchKey)
+        mContext?.hideSoftKeyboard()
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }

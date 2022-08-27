@@ -56,6 +56,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         addListener(subStatusSocketMgr, subStatusKeys,subStatusSocketListener as SimpleListener)
     }
 
+
     fun startConnect(){
 //        userSocketMgr.start()
         subStatusSocketMgr.start()

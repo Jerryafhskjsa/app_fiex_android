@@ -56,19 +56,19 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Favorites" />
+                android:text="@string/favorites" />
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Spot" />
+                android:text="@string/spot" />
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Futures" />
+                android:text="@string/futures" />
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Zone" />
+                android:text="@string/zone" />
         </com.google.android.material.tabs.TabLayout>
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/quotation_main_view_pager"

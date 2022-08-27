@@ -249,7 +249,6 @@ public class WebSocketWrapper {
         if (mSocketListener != null) {
             Response<String> response = ResponseFactory.createTextResponse();
             response.setResponseData(message);
-            LogUtil.i(TAG, "WebSocket received message:" + response.toString());
             mSocketListener.onMessage(response);
         }
     }

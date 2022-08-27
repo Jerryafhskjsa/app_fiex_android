@@ -45,6 +45,7 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
+import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.view.TransactionDeepViewBinding
 import com.black.frying.view.TransactionDeepViewBinding.OnTransactionDeepListener
 import com.black.frying.view.TransactionMorePopup

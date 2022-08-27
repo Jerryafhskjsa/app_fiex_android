@@ -213,6 +213,7 @@
     <string name="more">更多</string>
     <string name="rechange">充值</string>
     <string name="extract">提现</string>
+    <string name="transfer">划转</string>
     <string name="rise">涨幅榜</string>
     <string name="fall">跌幅榜</string>
     <string name="name">名称</string>
@@ -411,7 +412,7 @@
     <string name="recharge_confirm">确认数</string>
     <string name="recharge_status">充币状态</string>
     <string name="recharge_time">充币时间</string>
-    <string name="wallet_total_usdt">钱包资产总估值(USDT)</string>
+    <string name="wallet_total_usdt">总资产(USDT)</string>
     <string name="wallet_total_amount">可用</string>
     <string name="froze">冻结</string>
     <string name="wallet_cny">折合(CNY)</string>
@@ -608,6 +609,9 @@
     <string name="referral">Referral</string>
     <string name="support">Support</string>
     <string name="futures">Futures</string>
+    <string name="favorites">Favorites</string>
+    <string name="spot">Spot</string>
+    <string name="zone">Zone</string>
     <string name="coin_volume">交易量</string>
     <string name="limit_order">Limit Order</string>
     <string name="management_fee">Management Fee</string>
@@ -618,6 +622,11 @@
     <string name="revoke_all_entrust">撤销全部</string>
     <string name="revoke">撤销</string>
     <string name="limit_price_buy">限价买入</string>
+
+    <string name="spot_account">现货账户</string>
+    <string name="contract_account">合约账户</string>
+    <string name="finance_account">理财账户</string>
+    <string name="wallet_account">钱包账户</string>
 
 
 
