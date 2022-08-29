@@ -344,7 +344,7 @@ object UserApiServiceHelper {
             }))
     }
 
-    private fun getUserBalance(context: Context?): Observable<HttpRequestResultDataList<UserBalance?>?>?{
+    fun getUserBalance(context: Context?): Observable<HttpRequestResultDataList<UserBalance?>?>?{
         return if(context == null){
             Observable.empty()
         }else ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)

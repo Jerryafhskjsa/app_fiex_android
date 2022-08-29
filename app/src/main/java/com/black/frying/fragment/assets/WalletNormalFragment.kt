@@ -83,6 +83,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 eventListener?.getAllWallet(false)
+                binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
             }
 
         })

@@ -7,6 +7,6 @@ class UserBalance {
     var availableBalance:String? = null
     var estimatedTotalAmount:String? = null
     var estimatedCynAmount:String? = null
-    var estimatedAvailableAmount:String? = null
+    var estimatedAvailableAmount:String = ""
     var estimatedCoinType:String? = null
 }

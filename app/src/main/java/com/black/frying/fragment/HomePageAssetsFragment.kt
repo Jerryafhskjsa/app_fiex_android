@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.Money
+import com.black.base.model.socket.PairStatus
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
@@ -54,7 +55,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         private var TAB_WALLET: String? = null
     }
     private var bgB2 = 0
-    private var bgDefault: Int = 0
+    private var bgDefault: Int? = null
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
     private var colorDefault = 0
@@ -72,12 +73,13 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var normalFragment: WalletNormalFragment? = null
     private var leverFragment: WalletLeverFragment? = null
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
             return layout
         }
         bgB2 = SkinCompatResources.getColor(mContext, R.color.B2)
-        bgDefault = SkinCompatResources.getColor(mContext, R.color.C1)
+        bgDefault = R.drawable.bg_assets_header
         btnBackDefault = SkinCompatResources.getDrawable(mContext, R.drawable.btn_back_white)
         btnBackNormal = SkinCompatResources.getDrawable(mContext, R.drawable.btn_back)
         colorDefault = SkinCompatResources.getColor(mContext, R.color.white)
@@ -93,7 +95,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             if (abs(verticalOffset) >= appBar.totalScrollRange) {
                 binding?.root?.setBackgroundColor(bgB2)
             } else {
-                binding?.root?.setBackgroundColor(bgDefault)
+                binding?.root?.setBackgroundResource(bgDefault!!)
             }
         })
 

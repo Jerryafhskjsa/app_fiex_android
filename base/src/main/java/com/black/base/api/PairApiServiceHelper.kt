@@ -224,6 +224,7 @@ object PairApiServiceHelper {
                     var pairStatus:PairStatus? = PairStatus()
                     pairStatus?.pair = pair
                     pairStatus?.hot = data[i]?.hot
+                    pairStatus?.setType = data[i]?.setType
                     homePagePairData?.add(pairStatus)
                 }
                 Observable.just(result)

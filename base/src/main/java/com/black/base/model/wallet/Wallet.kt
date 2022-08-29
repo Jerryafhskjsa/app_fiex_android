@@ -9,8 +9,13 @@ import java.util.*
 
 class Wallet : BaseAdapterItem, Parcelable {
     var coinType: String? = null
+    var coinTypeDes:String? = null//币种全称
+    var coinIconUrl:String? = null//币种icon
     var coinAmount //数量 可使用
             : BigDecimal? = null
+    var estimatedAvailableAmount:Double = 0.0
+    var estimatedAvailableAmountCny:Double? = 0.0
+
     var coinWallet //资产地址
             : String? = null
     var memo //资产地址
@@ -23,7 +28,6 @@ class Wallet : BaseAdapterItem, Parcelable {
             : Double? = null
     var estimatedCoinType: String? = null
     var estimatedTotalAmount = 0.0
-    var estimatedAvailableAmount = 0.0
     var createTime: Long = 0
     var updateTime: Long = 0
     var minChainDepositAmt: String? = null
@@ -32,6 +36,7 @@ class Wallet : BaseAdapterItem, Parcelable {
     constructor()
     constructor(`in`: Parcel) {
         coinType = `in`.readString()
+        coinTypeDes = `in`.readString()
         coinAmount = CommonUtil.parseBigDecimal(`in`.readString())
         coinWallet = `in`.readString()
         memo = `in`.readString()
@@ -60,6 +65,7 @@ class Wallet : BaseAdapterItem, Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(coinType)
+        dest.writeString(coinTypeDes)
         dest.writeString(if (coinAmount == null) null else coinAmount.toString())
         dest.writeString(coinWallet)
         dest.writeString(memo)

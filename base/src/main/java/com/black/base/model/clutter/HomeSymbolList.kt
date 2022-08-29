@@ -53,6 +53,6 @@ class HomeSymbolList {
         var marketTakeBound: String? = null
         var depthPrecisionMerge: String? = null
         var onboardDate: String? = null
-        var setType: String? = null
+        var setType: Int? = null
         var hot:Boolean? = null
 }

@@ -22,6 +22,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
     }
     var tradeAmount:Double? = null
     var hot:Boolean? = null
+    var setType:Int? = null
 
     var pair: String? = null
         set(value) {
