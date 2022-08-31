@@ -340,6 +340,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                     target.mail = if (mailArr.size >= 2) mailArr[1] else null
                                     verifyObserve(type, target, returnData.code!!, prefixAuth)
                                 }
+                                /**
+                                 * {
+                                "msg": "038e9725-349b-4e09-9578-45e85f2a6d09#15308206311",
+                                "code": -10022,
+                                "data": "86#15308206311"
+                                }
+                                 */
                                 -10022 -> {
                                     val prefixAuth = returnData.msg
                                     val target = Target()

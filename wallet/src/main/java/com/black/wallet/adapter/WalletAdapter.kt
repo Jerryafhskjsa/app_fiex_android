@@ -1,15 +1,16 @@
 package com.black.wallet.adapter
 
 import android.content.Context
-import android.util.Log
+import android.net.Uri
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.wallet.Wallet
-import com.black.base.util.FryingUtil
 import com.black.base.util.ImageLoader
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListItemSpotAccountBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import java.math.RoundingMode
 
 class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?) : BaseRecycleDataBindAdapter<Wallet?, ListItemSpotAccountBinding>(context, variableId, data) {
@@ -29,7 +30,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         val viewHolder = holder.dataBing
         viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
         if (isVisibility) {
-            viewHolder?.usable?.setText(NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmount, RoundingMode.FLOOR, 2, 8))
+            viewHolder?.usable?.setText(NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
         } else {
             viewHolder?.usable?.setText("****")
         }
@@ -38,7 +39,10 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         } else {
             viewHolder?.totalCny?.setText("****")
         }
-        imageLoader?.loadImage(viewHolder?.iconCoin,wallet?.coinIconUrl)
+        Glide.with(context)
+            .load(Uri.parse(wallet?.coinIconUrl))
+            .apply(RequestOptions().error(R.drawable.icon_coin_default))
+            .into(viewHolder?.iconCoin!!)
     }
 
     fun setVisibility(isVisibility: Boolean) {

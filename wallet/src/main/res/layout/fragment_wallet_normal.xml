@@ -101,7 +101,6 @@
                                     android:inputType="text"
                                     android:maxLines="1"
                                     android:padding="0dp"
-                                    android:visibility="invisible"
                                     android:textColor="@color/T1"
                                     android:textColorHint="@color/T3"
                                     android:textSize="@dimen/text_size_16" />

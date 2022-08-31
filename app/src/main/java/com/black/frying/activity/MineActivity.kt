@@ -1,15 +1,17 @@
 package com.black.frying.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.FryingServerConfig
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
@@ -39,8 +41,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mine);
         imageLoader = ImageLoader(this)
+        binding?.imgBack?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
-        binding?.info?.setOnClickListener(this)
+        binding?.btnLogin?.setOnClickListener(this)
+        binding?.btnLoginOut?.setOnClickListener(this)
         binding?.name?.setOnClickListener(this)
         binding?.userLayout?.setOnClickListener(this)
         binding?.uuid?.setOnClickListener(this)
@@ -69,10 +73,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             }
         }
         refreshNighModeViews(CookieUtil.getNightMode(mContext))
-        binding?.wallet?.setOnClickListener(this)
-        binding?.billManage?.setOnClickListener(this)
-        binding?.recommend?.setOnClickListener(this)
-        binding?.consult?.setOnClickListener(this)
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
@@ -88,10 +88,8 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         } else {
             binding?.serverSetting?.visibility = View.GONE
         }
-        binding?.forum?.setOnClickListener(this)
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
-        binding?.info?.setOnClickListener(this)
 
         initServiceApi()
     }
@@ -102,6 +100,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
+            R.id.img_back -> finish()
+            R.id.btn_login ->{
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }
             R.id.user_layout, R.id.name -> {
                 val thisUserInfo = CookieUtil.getUserInfo(mContext)
                 if (thisUserInfo == null) {
@@ -124,7 +126,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             R.id.recommend -> BlackRouter.getInstance().build(RouterConstData.RECOMMEND).go(mContext)
             R.id.consult ->  //客服咨询
                 UdeskUtil.start(applicationContext)
-            R.id.forum -> BlackRouter.getInstance().build(RouterConstData.FORUM).go(mContext)
             R.id.safe_center -> BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER).go(mContext)
             R.id.help_center -> {
                 //帮助中心
@@ -173,7 +174,58 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             R.id.more_language -> BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(mContext)
             R.id.setting -> BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
             R.id.info -> BlackRouter.getInstance().build(RouterConstData.ABOUT).go(mContext)
+            R.id.btn_login_out ->{
+                if (userInfo != null) {
+                    showLogoutDialog(View.OnClickListener {
+                        val doLogout = Runnable {
+                            FryingUtil.clearAllUserInfo(mContext)
+                            sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_USER_LOGOUT)
+                            finish()
+                        }
+                        UserApiServiceHelper.logout(mContext, object : Callback<HttpRequestResultString?>() {
+                            override fun error(type: Int, error: Any) {
+                                doLogout.run()
+                            }
+
+                            override fun callback(returnData: HttpRequestResultString?) {
+                                doLogout.run()
+                            }
+                        })
+                    })
+                }
+            }
         }
+    }
+
+    private fun showLogoutDialog(resumeClickListener: View.OnClickListener?) {
+        val contentView = LayoutInflater.from(mContext).inflate(com.black.user.R.layout.dialog_logout_resume, null)
+        val alertDialog = Dialog(mContext, com.black.user.R.style.AlertDialog)
+        //        alertDialog.setContentView(contentView);
+//                new AlertDialog.Builder(mActivity).setView(contentView).create();
+//        int height = display.getHeight();
+        val window = alertDialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.BOTTOM
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            //设置dialog动画
+            window.setWindowAnimations(com.black.user.R.style.anim_bottom_in_out)
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        alertDialog.setContentView(contentView, layoutParams)
+        //        dialog.setContentView(viewDialog, layoutParams);
+        contentView.findViewById<View>(com.black.user.R.id.btn_resume).setOnClickListener { v ->
+            alertDialog.dismiss()
+            resumeClickListener?.onClick(v)
+        }
+        contentView.findViewById<View>(com.black.user.R.id.btn_cancel).setOnClickListener { alertDialog.dismiss() }
+        alertDialog.show()
     }
 
     public override fun onResume() {
@@ -207,11 +259,9 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         if (isNighMode) {
             binding?.nightModeToggle?.isChecked = true
             binding?.night?.visibility = View.VISIBLE
-            binding?.day?.visibility = View.GONE
         } else {
             binding?.nightModeToggle?.isChecked = false
             binding?.night?.visibility = View.GONE
-            binding?.day?.visibility = View.VISIBLE
         }
         resetStatusBarTheme(!isNighMode)
     }
@@ -271,11 +321,17 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     binding?.safeLevel?.setText(R.string.level_low)
                 }
             }
+            binding?.btnLoginOut?.visibility = View.VISIBLE
+            binding?.loginStatus?.visibility = View.VISIBLE
+            binding?.btnLogin?.visibility = View.GONE
         } else {
             binding?.name?.setText(R.string.please_login)
             binding?.uuid?.visibility = View.GONE
             binding?.uuid?.setText(R.string.welcome_fbsex)
             binding?.safeLevel?.text = ""
+            binding?.btnLoginOut?.visibility = View.GONE
+            binding?.loginStatus?.visibility = View.GONE
+            binding?.btnLogin?.visibility = View.VISIBLE
         }
     }
 

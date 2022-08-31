@@ -19,7 +19,6 @@
     <string name="amount">数量</string>
     <string name="entrust_current">当前委托</string>
     <string name="real_name">实名认证</string>
-    <string name="safe_center">安全中心</string>
     <string name="time">时间</string>
     <string name="cny">CNY</string>
     <string name="usdt">USDT</string>
@@ -191,7 +190,6 @@
     <string name="alert_send_empty">发送消息不能为空！</string>
     <string name="c2c_release">确认收款</string>
     <string name="yesterday">昨天</string>
-    <string name="server_setting">服务器选择</string>
     <string name="memo_hint">输入地址标签</string>
     <string name="alert_input_withdraw_address_error">提币地址不正确！</string>
     <string name="pair_collect">自选</string>
@@ -244,7 +242,6 @@
     <string name="help_center">帮助中心</string>
     <string name="current_version">版本</string>
     <string name="logout">退出登录</string>
-    <string name="language">语言切换</string>
     <string name="notice">公告</string>
     <string name="coin_description">简介</string>
     <string name="in_audit"><![CDATA[审核中]]></string>
@@ -628,6 +625,18 @@
     <string name="finance_account">理财账户</string>
     <string name="wallet_account">钱包账户</string>
 
-
-
+    <string name="dark_mode">DarkMode</string>
+    <string name="light_mode">LightMode</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="simple_version">Simple version</string>
+    <string name="notification">Notifications</string>
+    <string name="safe_center">Security Center</string>
+    <string name="language">Language</string>
+    <string name="exchange_rates">Exchange Rates</string>
+    <string name="super_rebate">Super Rebate</string>
+    <string name="language_cny">CNY</string>
+    <string name="system_setup">System Setup</string>
+    <string name="system_version">System Version</string>
+    <string name="server_setting">Link Line</string>
 </resources>

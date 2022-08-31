@@ -3,6 +3,7 @@ package com.black.base.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
 import com.black.base.service.DownloadServiceHelper.downloadImage

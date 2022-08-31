@@ -32,7 +32,7 @@ import com.black.wallet.adapter.WalletAdapter
 import com.black.wallet.databinding.FragmentWalletNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
 
-class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
+class AssetsWalletFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var walletList: ArrayList<Wallet?>? = null
     private var isVisibility: Boolean = false
     private var searchKey: String? = null
@@ -42,13 +42,13 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
     private var layout: View? = null
 
     private var adapter: WalletAdapter? = null
-    private var eventListener:EventResponseListener? = null
+    private var eventListener:WalletEventResponseListener? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
     }
 
-    fun setEventListener(listener: EventResponseListener){
+    fun setEventListener(listener: WalletEventResponseListener){
         this.eventListener = listener
     }
 
@@ -56,7 +56,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         if (layout != null) {
             return layout
         }
-        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
+//        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
         isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
 
@@ -82,7 +82,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
         binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-                eventListener?.getAllWallet(false)
+                eventListener?.getAssetAllWallet(false)
                 binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
             }
 
@@ -91,7 +91,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         binding?.coinSearch?.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEND || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    eventListener?.search(v!!.text.toString(), WalletViewModel.WALLET_NORMAL)
+                    eventListener?.assetWalletSearch(v!!.text.toString(), WalletViewModel.WALLET_NORMAL)
                     return true
                 }
                 return false
@@ -101,7 +101,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (doSearch)
-                    eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
+                    eventListener?.assetWalletSearch(s.toString(), WalletViewModel.WALLET_NORMAL)
                 doSearch = true
             }
 
@@ -109,8 +109,8 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         })
         binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
             if (doSearch) {
-                eventListener?.setWalletCoinFilter(isChecked)
-                eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
+                eventListener?.setAssetWalletCoinFilter(isChecked)
+                eventListener?.assetWalletSearch(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
             }
             doSearch = true
         }
@@ -120,7 +120,7 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
     override fun onResume() {
         super.onResume()
         doSearch = false
-//        binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getWalletCoinFilter() == null) false else walletActivity?.getWalletCoinFilter()!!)
+//        binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getContractWalletCoinFilter() == null) false else walletActivity?.getContractWalletCoinFilter()!!)
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -181,18 +181,18 @@ class WalletNormalFragment : BaseFragment(), OnItemClickListener, View.OnClickLi
         binding?.coinSearch?.setText(searchKey)
     }
 
-    interface EventResponseListener {
-        fun getAllWallet(isShowLoading: Boolean) {
+    interface WalletEventResponseListener {
+        fun getAssetAllWallet(isShowLoading: Boolean) {
         }
 
-        fun getWalletCoinFilter(): Boolean? {
+        fun getAssetWalletCoinFilter(): Boolean? {
             return false
         }
 
-        fun setWalletCoinFilter(checked: Boolean) {
+        fun setAssetWalletCoinFilter(checked: Boolean) {
         }
 
-        fun search(searchKey: String, walletType: Int) {
+        fun assetWalletSearch(searchKey: String, walletType: Int) {
         }
     }
 

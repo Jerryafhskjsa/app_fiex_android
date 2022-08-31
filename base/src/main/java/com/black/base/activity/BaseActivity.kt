@@ -320,6 +320,7 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
         sendBroadcast(intent)
     }
 
+
     //发送数据更新通知
     protected open fun sendPairChangedBroadcast(type: Int, bundle: Bundle?) {
         val intent = Intent()

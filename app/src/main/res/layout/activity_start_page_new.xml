@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/B2"
+    android:background="@color/black_real"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -16,26 +16,26 @@
             android:layout_marginBottom="40dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="142dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/double_padding"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_start_page_2" />
+                android:src="@drawable/splash_middle" />
 
         </FrameLayout>
 
         <ImageView
             android:id="@+id/icon_02"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/double_padding"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/icon_start_page_1" />
+            android:src="@drawable/splash_bottom" />
     </RelativeLayout>
 
 </FrameLayout>

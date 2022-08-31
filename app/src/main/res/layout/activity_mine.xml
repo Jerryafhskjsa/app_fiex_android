@@ -20,43 +20,20 @@
             android:layout_height="wrap_content"
             android:background="@color/B2"
             android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingRight="8dp">
-
-                    <ImageView
-                        android:id="@+id/setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:src="@drawable/icon_mine_setting" />
-
-                    <ImageView
-                        android:id="@+id/info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:src="@drawable/icon_mine_info" />
-                </LinearLayout>
-
-            </FrameLayout>
-
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="9dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/icon_back" />
         </RelativeLayout>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/B1"
+            android:background="@color/B2"
             android:fadingEdge="none"
             android:overScrollMode="never"
             android:scrollbars="none">
@@ -65,65 +42,99 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/B2"
                     android:orientation="vertical">
-
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@drawable/btn_t8"
+                        android:checked="false"
+                        android:includeFontPadding="false"
+                        android:layout_margin="@dimen/default_padding"
+                        android:text="@string/login"
+                        android:gravity="center"
+                        android:textColor="@color/T8"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
                     <LinearLayout
-                        android:id="@+id/user_layout"
+                        android:id="@+id/login_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/double_padding">
-
-                        <com.black.lib.widget.CircleImageView
-                            android:id="@+id/icon_avatar"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/icon_avatar" />
-
+                        android:orientation="vertical"
+                        android:visibility="visible">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:id="@+id/user_layout"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:text="@string/number_default"
-                                android:textColor="@color/T5"
-                                android:textSize="@dimen/text_size_20"
-                                android:textStyle="bold" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/uuid"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/double_padding">
+                            <com.black.lib.widget.CircleImageView
+                                android:id="@+id/icon_avatar"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_avatar" />
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:drawableRight="@drawable/icon_copy"
-                                android:drawablePadding="8dp"
-                                android:maxLines="1"
-                                android:text="UID:-"
-                                android:textColor="@color/T2"
-                                android:textSize="@dimen/text_size_14" />
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:maxLines="1"
+                                        android:text="@string/number_default"
+                                        android:textColor="@color/T5"
+                                        android:textSize="@dimen/text_size_20"
+                                        android:textStyle="bold" />
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:src="@drawable/userinfo_edit" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+                                    <com.black.base.widget.SpanTextView
+                                        android:id="@+id/uuid"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:maxLines="1"
+                                        android:text="ID:-"
+                                        android:textColor="@color/T2"
+                                        android:textSize="@dimen/text_size_14" />
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:src="@drawable/icon_copy">
+                                    </ImageView>
+                                </LinearLayout>
+                            </LinearLayout>
                         </LinearLayout>
-
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/icon_left" />
+                            android:id="@+id/verify_status"
+                            android:layout_width="126dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:src="@drawable/junior_certify">
+                        </ImageView>
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -131,58 +142,61 @@
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/double_padding"
                         android:paddingBottom="@dimen/double_padding">
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/wallet"
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:drawableTop="@drawable/icon_qianbao"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:text="@string/my_wallet"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_14" />
+                            android:id="@+id/dark_mode"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="164dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/dark_mode_normal">
+                            </ImageView>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="8dp"
+                                android:text="@string/dark_mode"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
 
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/bill_manage"
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:drawableTop="@drawable/icon_dingdan"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:text="@string/bill_manager"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_14" />
+                            android:id="@+id/light_mode"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="164dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/day_mode_selected">
+                            </ImageView>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="8dp"
+                                android:text="@string/light_mode"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
 
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/recommend"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableTop="@drawable/icon_yaoqing"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:text="@string/recommend"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_14" />
+
                     </LinearLayout>
                 </LinearLayout>
-
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_padding" />
-
+                    android:layout_height="1dp" />
                 <LinearLayout
                     style="@style/MenuListItem"
                     android:orientation="horizontal"
-                    android:visibility="gone">
-
+                    android:visibility="visible">
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_skin" />
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_simple_version" />
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="0dp"
@@ -190,14 +204,21 @@
                         android:layout_marginLeft="@dimen/double_padding"
                         android:layout_weight="1"
                         android:maxLines="1"
-                        android:text="@string/skin_mode"
+                        android:text="@string/simple_version"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
-
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/night"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="8dp"
+                            android:text="@string/open"
+                            android:textColor="@color/T11"
+                            android:textSize="@dimen/text_size_12" />
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/night_mode_toggle"
                             android:layout_width="wrap_content"
@@ -205,49 +226,126 @@
                             android:checked="false"
                             android:clickable="true"
                             android:focusable="true"
+                            android:layout_marginLeft="8dp"
                             android:thumb="@drawable/icon_switch_thumb"
                             android:track="@drawable/bg_switch_track"
                             app:track="@drawable/bg_switch_track" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/night"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:text="@string/night"
-                            android:textColor="@color/T4"
-                            android:textSize="@dimen/text_size_12" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/day"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:layout_marginRight="8dp"
-                            android:text="@string/day"
-                            android:textColor="@color/T4"
-                            android:textSize="@dimen/text_size_12" />
-                    </FrameLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/safe_center"
+                    android:id="@+id/sper_rebate"
                     style="@style/MenuListItem"
                     android:orientation="horizontal">
-
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_anquan" />
-
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_super_rebate" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/double_padding"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="@string/super_rebate"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:paddingRight="6dp"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/rebate_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:includeFontPadding="false"
+                            android:background="@drawable/super_rebate_bg_corner"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="1dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="1dp"
+                            android:text="+40%"
+                            android:layout_marginRight="4dp"
+                            android:textColor="@color/B2"
+                            android:textSize="@dimen/text_size_12" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_left" />
+                    </LinearLayout>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/notifications"
+                    style="@style/MenuListItem"
+                    android:orientation="horizontal">
+                    <ImageView
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_notifications" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="@string/notification"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:paddingRight="6dp"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/notification_counts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:includeFontPadding="false"
+                            android:background="@drawable/notification_bg_corner"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="1dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="1dp"
+                            android:text="99+"
+                            android:layout_marginRight="4dp"
+                            android:textColor="@color/B2"
+                            android:textSize="@dimen/text_size_12" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_left" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/safe_center"
+                    style="@style/MenuListItem"
+                    android:orientation="horizontal">
+                    <ImageView
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_anquan" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -256,7 +354,6 @@
                             android:text="@string/safe_center"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16" />
-
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/safe_level"
                             android:layout_width="wrap_content"
@@ -265,7 +362,6 @@
                             android:paddingRight="6dp"
                             android:textColor="@color/T2"
                             android:textSize="@dimen/text_size_14" />
-
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -277,11 +373,10 @@
                     android:id="@+id/more_language"
                     style="@style/MenuListItem"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/SettingIconStyle"
                         android:src="@drawable/icon_yy" />
 
                     <LinearLayout
@@ -317,19 +412,59 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/exchange_rates"
+                    style="@style/MenuListItem"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_exchange_rates" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="@string/exchange_rates"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/current_exchange_rates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:paddingRight="6dp"
+                            android:text="@string/language_cny"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_left" />
+                    </LinearLayout>
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_padding" />
-
+                    android:layout_height="1dp" />
                 <LinearLayout
-                    android:id="@+id/forum"
+                    android:id="@+id/setting"
                     style="@style/MenuListItem"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_community" />
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_setting" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -343,7 +478,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:maxLines="1"
-                            android:text="@string/join_forum"
+                            android:text="@string/system_setup"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16" />
 
@@ -355,14 +490,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/consult"
+                    android:id="@+id/system_version"
                     style="@style/MenuListItem"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_kefu" />
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/icon_system_version" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -370,33 +504,38 @@
                         android:layout_marginLeft="@dimen/double_padding"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <com.black.base.widget.SpanTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:maxLines="1"
-                            android:text="@string/consult"
+                            android:text="@string/system_version"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16" />
-
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:text="v1.0.0"
+                            android:layout_marginRight="4dp"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16" />
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_left" />
                     </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/help_center"
                     style="@style/MenuListItem"
+                    android:visibility="gone"
                     android:orientation="horizontal">
-
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/icon_banzhu" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -419,24 +558,20 @@
                             android:src="@drawable/icon_left" />
                     </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/server_setting"
                     style="@style/MenuListItem"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        style="@style/SettingIconStyle"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
-                        android:src="@drawable/icon_sys_setting" />
-
+                        android:src="@drawable/icon_link_line" />
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/double_padding">
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -463,10 +598,12 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:maxWidth="200dp"
+                                    android:gravity="right"
+                                    android:text="fiex"
+                                    android:layout_marginRight="4dp"
                                     android:textColor="@color/T2"
                                     android:textSize="@dimen/text_size_14" />
                             </LinearLayout>
-
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -474,9 +611,26 @@
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_login_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@drawable/btn_t9"
+                    android:checked="false"
+                    android:includeFontPadding="false"
+                    android:layout_margin="@dimen/default_padding"
+                    android:text="@string/logout"
+                    android:gravity="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
 </layout>

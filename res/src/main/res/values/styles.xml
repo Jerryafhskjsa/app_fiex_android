@@ -67,7 +67,7 @@
         <item name="android:editable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:focusableInTouchMode">true</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical|right</item>
         <item name="android:enabled">true</item>
         <item name="android:background">@null</item>
         <item name="android:padding">0dp</item>
@@ -227,5 +227,9 @@
     <style name="MainTabStyle">
         <item name="android:textSize">@dimen/text_size_13</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    <style name="SettingIconStyle">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">20dp</item>
     </style>
 </resources>

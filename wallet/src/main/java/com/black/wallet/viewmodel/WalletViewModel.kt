@@ -13,7 +13,9 @@ import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.Money
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
+import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.socket.PairStatus
+import com.black.base.model.socket.TradeOrder
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletConfig
@@ -28,8 +30,10 @@ import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.functions.Function
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     companion object {
@@ -175,28 +179,71 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             }))
     }
 
+    /**
+     * setType 1现货
+     */
+    fun getSymbolListSets(setType:Int,symbolList: ArrayList<PairStatus?>?):ArrayList<String>{
+        var setListSet = ArrayList<String>()
+        var sellCoinSet = ArrayList<String?>()
+        var buyCoinSet = ArrayList<String?>()
+        if(symbolList != null && symbolList?.size!! > 0){
+            for(m in symbolList!!){
+                if (m != null) {
+                    if(m.setType == setType){
+                        if (m != null) {
+                            if(!buyCoinSet.contains(m.name)){
+                                buyCoinSet.add(m.name)
+                            }
+                        }
+                        if (m != null) {
+                            if(!sellCoinSet.contains(m.setName)){
+                                sellCoinSet.add(m.setName)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       for (i in buyCoinSet){
+           if (i != null) {
+               setListSet.add(i)
+           }
+       }
+        for (j in sellCoinSet){
+            if (j != null) {
+                setListSet.add(j)
+            }
+        }
+        return setListSet
+    }
+
     fun handleResult(){
         if(walletList != null && walletList!!.size>0){
             walletList!!.clear()
         }
+        var setList = getSymbolListSets(1, symbolList)
         if(userBalanceList != null){
-            if(symbolList != null){
-                for (i in userBalanceList!!.indices){
-                    for(j in symbolList!!.indices){
-                            if(symbolList!![j]?.setType == 1 &&  userBalanceList!![i]?.coin.equals(symbolList!![j]?.name)){
-                                var wallet = Wallet()
-                                var userBalance = userBalanceList!![i]
-                                wallet.coinType = userBalance?.coin
-                                wallet.coinAmount =userBalance?.availableBalance?.toBigDecimal()
-                                wallet.estimatedAvailableAmount = userBalance?.estimatedAvailableAmount?.toDouble()!!
-                                wallet.estimatedAvailableAmountCny = userBalance?.estimatedCynAmount?.toDouble()
-                                var iconUrl = "https://fiex.s3.ap-southeast-1.amazonaws.com/coin/${userBalance?.coin?.lowercase()}.png"
-                                wallet.coinIconUrl = iconUrl
-                                walletList?.add(wallet)
-                            }
+            if(setList != null){
+                for(j in setList!!.indices){
+                        var wallet = Wallet()
+                        wallet.coinType = setList[j]
+                        var iconUrl = UrlConfig.getCoinIconUrl(setList[j])
+                        wallet.coinIconUrl = iconUrl
+                        wallet.coinAmount = BigDecimal(0)
+                        wallet.estimatedAvailableAmount = 0.0
+                        wallet.estimatedAvailableAmountCny = 0.0
+                        walletList?.add(wallet)
                     }
                 }
-            }
+                for(i in walletList!!.indices){
+                    for (k in userBalanceList!!.indices){
+                        if(userBalanceList!![k]?.coin == walletList!![i]?.coinType){
+                            walletList!![i]?.coinAmount = BigDecimal(userBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!)
+                            walletList!![i]?.estimatedAvailableAmountCny = userBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
+                            break
+                        }
+                    }
+                }
         }
         onWalletModelListener?.onWallet(Observable.just(walletList)
             .compose(RxJavaHelper.observeOnMainThread()), false)
@@ -294,13 +341,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in walletList!!) {
-                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10) {
                             showData?.add(wallet)
                         }
                     }
                 } else {
                     for (wallet in walletList!!) {
-                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                             showData?.add(wallet)
                         }
                     }

@@ -7,46 +7,27 @@ object UrlConfig {
     private val HOSTS = arrayOf(
             "http://fiex.io",//正式环境
             "http://fiex.matchain.info",//fiex测试环境
-            "https://mobile.fbsex.co",//real
-            "https://mob1234xa.fbsex.co",//real new
-            "https://fad34sd32g541.forright.shop",//stage
-            "http://192.168.1.208:8888" //",//dev
     )
     val API_HOSTS = arrayOf(
             "http://fiex.io/api/",//正式环境
             "http://fiex.matchain.info/uc/",//fiex测试环境
-            "https://mobile.fbsex.co/api/",//real
-            "https://mob1234xa.fbsex.co/api/",//real new
-            "https://fad34sd32g541.forright.shop/api/",//stage
-            "http://192.168.1.208:8888/api/" //dev
     )
-    var API_FIEX_UC = arrayOf(
-        "http://fiex.io/uc/",//fiex uc
-    )
-    var API_FIEX_PRO = arrayOf(
-        "http://fiex.io/pro/",//fiex pro
-    )
-    var API_FIEX_API = arrayOf(
-        "http://fiex.io/api/",//fiex api
-    )
+
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
             "http://fiex.matchain.info",//fiex测试环境
-//            "ws://112.194.204.105:8081",
             "http://fiex.io",//正式环境
-            "https://mobile.fbsex.co",//real
-            "https://mob1234xa.fbsex.co",//real new
-            "https://fad34sd32g541.forright.shop",//stage
-            "https://fad34sd32g541.fbsex.co" //dev
     )
+
+    fun getHost(context: Context): String {
+        return HOSTS[getIndex(context)]
+    }
+
 
     private val SOCKET_HOSTS_FIEX = arrayOf(
         "ws://112.194.204.105:8081",
+//        "ws://fiex.matchain.info/socket",
         "http://fiex.io",//正式环境
-        "https://mobile.fbsex.co",//real
-        "https://mob1234xa.fbsex.co",//real new
-        "https://fad34sd32g541.forright.shop",//stage
-        "https://fad34sd32g541.fbsex.co" //dev
     )
 
     fun getIndex(context: Context): Int {
@@ -57,9 +38,19 @@ object UrlConfig {
         return if (index < 0 || index > API_HOSTS.size) 0 else index
     }
 
-    fun getHost(context: Context): String {
-        return HOSTS[getIndex(context)]
-    }
+    /***fiex***/
+    var API_FIEX_UC = arrayOf(
+        "http://fiex.io/uc/",//fiex uc
+//        "http://fiex.matchchain.info/uc/"
+    )
+    var API_FIEX_PRO = arrayOf(
+        "http://fiex.io/pro/",//fiex pro
+//        "http://fiex.matchchain.info/pro/"
+    )
+    var API_FIEX_API = arrayOf(
+        "http://fiex.io/api/",//fiex api
+//        "http://fiex.matchchain.info/api/"
+    )
 
     fun getUcHost(context: Context): String {
         return API_FIEX_UC[getIndex(context)]
@@ -71,13 +62,20 @@ object UrlConfig {
     fun getProHost(context: Context): String {
         return API_FIEX_PRO[getIndex(context)]
     }
+    fun getSocketHostFiex(context: Context): String {
+        return SOCKET_HOSTS_FIEX[getIndex(context)]
+    }
+    //币种图标
+    fun getCoinIconUrl(pairName:String?):String{
+        return "https://fiex.s3.ap-southeast-1.amazonaws.com/coin/${pairName?.lowercase()}.png"
+    }
+    /***fiex***/
+
 
     fun getSocketHost(context: Context): String {
         return SOCKET_HOSTS[getIndex(context)]
     }
-    fun getSocketHostFiex(context: Context): String {
-        return SOCKET_HOSTS_FIEX[getIndex(context)]
-    }
+
 
     fun getFactionRuleUrl(mContext: Context): String {
         return getHost(mContext) + "/pages/league_info/"
@@ -88,8 +86,7 @@ object UrlConfig {
         return getHost(context) + "/#/help/instruction/31"
     }
 
-    //首页币种图标
-    const val URL_COIN_ICON = "https://ss-app.oss-cn-hangzhou.aliyuncs.com/app-ico/ios/%s.png"
+
 
     //首页
     fun getUrlHome(context: Context?): String { //        return getHost(context) + "/#/help/apps";

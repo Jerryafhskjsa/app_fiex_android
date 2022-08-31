@@ -63,6 +63,13 @@
     <color name="c_tab_p">#1571FF</color>
     <color name="c_tab_n">#66000000</color>
     <color name="main_blue">#1571FF</color>
+    <color name="T12">#F5F5F5</color>
+
+    <color name="T13">#1571FF</color>
+    <color name="T13_ALPHA10">#191571FF</color>
+    <color name="T13_ALPHA50">#801571FF</color>
+    <color name="T13_ALPHA80">#cc1571FF</color>
+    <color name="T14">#000000</color>
 
 
 </resources>

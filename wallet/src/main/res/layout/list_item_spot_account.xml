@@ -15,14 +15,16 @@
         android:paddingBottom="@dimen/default_padding">
         <ImageView
             android:id="@+id/icon_coin"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@mipmap/ic_launcher_fiex">
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_coin_default">
         </ImageView>
         <LinearLayout
             android:layout_toRightOf="@+id/icon_coin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
             android:orientation="vertical">
             <com.black.base.widget.SpanTextView
                 android:id="@+id/coin_type"
@@ -36,6 +38,7 @@
                 android:id="@+id/coin_type_des"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:textColor="@color/black_real"
                 android:textSize="@dimen/text_size_12"
                 android:text="BTC"
@@ -44,20 +47,23 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
             android:layout_alignParentRight="true"
             android:orientation="vertical">
             <com.black.base.widget.SpanTextView
                 android:id="@+id/usable"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="@string/number_default"
+                android:text="659695695464958654"
                 android:textColor="@color/T1"
+                android:gravity="right"
                 android:textSize="@dimen/text_size_13" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/total_cny"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="@string/number_default"
+                android:text="6666.88"
+                android:gravity="right"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>
