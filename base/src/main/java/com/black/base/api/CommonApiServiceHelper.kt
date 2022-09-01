@@ -7,6 +7,7 @@ import com.black.base.model.clutter.*
 import com.black.base.model.socket.PairDescription
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
+import com.black.base.util.UrlConfig
 import com.black.util.Callback
 import com.google.gson.JsonObject
 
@@ -21,12 +22,12 @@ object CommonApiServiceHelper {
         interval: String,
         limit: Int,
         isShowLoading: Boolean,
-        callback: Callback<HttpRequestResultData<Kline?>?>?
+        callback: Callback<HttpRequestResultDataList<Kline?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true).getService(CommonApiService::class.java)
+        ApiManager.build(context, true,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
             ?.getHistoryKline(symbol,interval, limit)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

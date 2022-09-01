@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -1999,6 +2000,7 @@ class AnalyticChart : SkinCompatView {
             }
             if (lastKLineChartItem != null) { //判断是否有断层
                 val count = ((kLineChartItem.time - lastKLineChartItem.time) / timeStep.value).toInt()
+                Log.d("9999999", "count = $count")
                 val time = lastKLineChartItem.time
                 for (ii in 0 until count - 1) {
                     val insertKLineChartItem = KLineChartItem(time + timeStep.value * (ii + 1), 0.0, lastKLineChartItem.high, lastKLineChartItem.low, lastKLineChartItem.`in`, lastKLineChartItem.out)

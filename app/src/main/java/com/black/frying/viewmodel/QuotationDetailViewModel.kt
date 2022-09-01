@@ -11,6 +11,7 @@ import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CPrice
+import com.black.base.model.clutter.Kline
 import com.black.base.model.socket.*
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.service.DearPairService
@@ -468,6 +469,30 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         })
     }
 
+    fun getKLineDataFiex(){
+        var kLineData = ArrayList<Kline?>()
+        CommonApiServiceHelper.getHistoryKline(
+            context,
+            "BTC_USDT",
+            "15m",
+            500,
+            false,
+            object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                override fun error(type: Int, error: Any) {
+                }
+
+                override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                    if (returnData != null && returnData.code == 0 && returnData.data != null) {
+                        kLineData = returnData.data!!
+                        onKLineAllEnd = true
+                        onKLineModelListener!!.onKLineDataAllFiex(kLineData)
+                    } else {
+
+                    }
+                }
+            })
+    }
+
     fun toggleDearPair(isDearPair: Boolean) {
         if (onKLineModelListener == null) {
             return
@@ -557,9 +582,11 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onPairStatusPrecision(precision: Int)
         fun onPairStatusAmountPrecision(amountPrecision: Int)
         fun onPairStatusDataChanged(pairStatus: PairStatus?)
+
         fun onKLineDataAll(items: ArrayList<KLineItem?>)
         fun onKLineDataAdd(item: KLineItem)
         fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>)
+
         fun onTradeOrder(currentPrice: Double, bidOrderList: ArrayList<TradeOrder?>, askOrderList: ArrayList<TradeOrder?>)
         fun onDeal(dealData: ArrayList<TradeOrder?>?)
         fun onPairDescription(observable: Observable<HttpRequestResultData<PairDescription?>?>?)
@@ -567,6 +594,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onCheckIntoChatRoom(observable: Observable<HttpRequestResultString>?)
         fun onCheckDearPair(isDearPair: Boolean?)
         fun onToggleDearPair(isSuccess: Boolean?)
+        fun onKLineDataAllFiex(items: ArrayList<Kline?>)
     }
 
 }

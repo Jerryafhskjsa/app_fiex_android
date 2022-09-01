@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.clutter.Kline
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairDescription
 import com.black.base.model.socket.PairStatus
@@ -49,7 +50,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_FIXED
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 //行情详情 走势图
 @Route(value = [RouterConstData.QUOTATION_DETAIL])
@@ -227,6 +230,32 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         }
     }
 
+    override fun onKLineDataAllFiex(items: ArrayList<Kline?>) {
+        if(items != null && items.size>0){
+            var dataItem = ArrayList<KLineItem?>()
+            for (i in items.indices){
+                var klineItem = KLineItem()
+                var temp = items[i]
+                klineItem.a = temp?.a?.toDouble()!!
+                klineItem.c = temp?.c?.toDouble()!!
+                klineItem.h = temp?.h?.toDouble()!!
+                klineItem.l = temp?.l?.toDouble()!!
+                klineItem.o = temp?.o?.toDouble()!!
+                var time = temp?.t?.toLong()!!
+                var tTime = BigDecimal(0.0)
+                try {
+                    tTime = BigDecimal(time!!)?.divide(BigDecimal(1000))
+                }catch (e:Exception){
+
+                }
+                klineItem.t = tTime?.toLong()!!
+                klineItem.v = temp?.v?.toDouble()!!
+                dataItem?.add(klineItem)
+            }
+            refreshKLineChart(dataItem)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         selectKTab(binding?.analyticChart?.getTimeStep())
@@ -238,7 +267,9 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         viewModel!!.onResume()
         viewModel!!.getAllOrder()
         viewModel!!.getQuotationDeals()
-        listenKLineData()
+//        listenKLineData()
+        viewModel!!.getKLineDataFiex()
+
     }
 
     override fun getViewModel(): BaseViewModel<*>? {
