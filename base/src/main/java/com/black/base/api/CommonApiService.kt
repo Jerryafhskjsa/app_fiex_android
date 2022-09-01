@@ -12,6 +12,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CommonApiService {
+
+    @GET(UrlConfig.Config.URL_KLINE_HISTORY)
+    fun getHistoryKline(@Query("symbol") symbol: String?,
+                        @Query("interval") interval: String?,
+                        @Query("limit") limit: Int?): Observable<HttpRequestResultData<Kline?>?>?
+
     @GET(UrlConfig.Config.URL_UPDATE)
     fun checkUpdate(@Query("platform") platform: String?): Observable<HttpRequestResultData<Update?>?>?
 

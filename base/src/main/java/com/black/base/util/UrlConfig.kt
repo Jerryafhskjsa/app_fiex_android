@@ -306,6 +306,8 @@ object UrlConfig {
     }
 
     object Config {
+        //K线
+        const val URL_KLINE_HISTORY="public/kline"
         //fiex 首页配置项获取币种列表
         const val URL_HOME_CONFIG_LIST = "v1/public/symbol/list"
         //fiex 获取tickets
