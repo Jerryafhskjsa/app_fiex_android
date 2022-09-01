@@ -111,7 +111,7 @@ class FiexSocketManager(context: Context, handler: Handler){
     inner class SubStatusDataListener(keyListener: String):SimpleListener(){
         private var key = keyListener
         override fun onConnected() {
-            Log.d("11111", "$key onConnected")
+            Log.d("22222", "$key onConnected")
             val jsonObject2 = JSONObject()
             jsonObject2.put("sub", "subSymbol")
             jsonObject2.put("symbol", "BTC_USDT")

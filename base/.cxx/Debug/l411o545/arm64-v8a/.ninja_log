@@ -1,0 +1,3 @@
+# ninja log v5
+0	880	1661855703	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	cc5b812963a270a
+881	948	1661855704	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	bae2d2fbfab5c8d9
