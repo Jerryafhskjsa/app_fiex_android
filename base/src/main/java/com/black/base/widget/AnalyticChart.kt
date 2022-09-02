@@ -280,7 +280,8 @@ class AnalyticChart : SkinCompatView {
         TimeStep.WEEK_1.text = context.getString(R.string.week_1)
         TimeStep.MONTH_1.text = context.getString(R.string.mon_1)
         TimeStep.MORE.text = context.getString(R.string.more)
-        logoDrawable = SkinCompatResources.getDrawable(context, R.drawable.icon_k_line_logo)
+//        logoDrawable = SkinCompatResources.getDrawable(context, R.drawable.icon_k_line_logo)
+        logoDrawable = null
         stepNoneLightDrawable = context.getDrawable(R.drawable.icon_analytic_chart_none_price_anim) as AnimatedVectorDrawable
         val dm = resources.displayMetrics
         density = dm.density

@@ -94,7 +94,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
         var check = false
         if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
             check = true
-            binding?.phoneLayout?.visibility = View.VISIBLE
+//            binding?.phoneLayout?.visibility = View.VISIBLE
         } else {
             binding?.phoneLayout?.visibility = View.GONE
         }

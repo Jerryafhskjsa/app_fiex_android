@@ -48,6 +48,8 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.name?.setOnClickListener(this)
         binding?.userLayout?.setOnClickListener(this)
         binding?.uuid?.setOnClickListener(this)
+        binding?.darkMode?.setOnClickListener(this)
+        binding?.lightMode?.setOnClickListener(this)
         binding?.nightModeToggle?.setOnCheckedChangeListener { _, isChecked ->
             val isNightMode = CookieUtil.getNightMode(mContext)
             //选中表示黑夜
@@ -174,6 +176,12 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             R.id.more_language -> BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(mContext)
             R.id.setting -> BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
             R.id.info -> BlackRouter.getInstance().build(RouterConstData.ABOUT).go(mContext)
+            R.id.dark_mode -> {
+                setDarkMode()
+            }
+            R.id.light_mode -> {
+                setDarkMode()
+            }
             R.id.btn_login_out ->{
                 if (userInfo != null) {
                     showLogoutDialog(View.OnClickListener {
@@ -194,6 +202,30 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     })
                 }
             }
+        }
+    }
+
+    private fun setDarkMode(){
+        var isNightMode = CookieUtil.getNightMode(mContext)
+        //选中表示黑夜
+        isNightMode = !isNightMode
+        if (isNightMode) {
+                SkinCompatManager.getInstance().loadSkin("night.skin", object : SkinLoaderListener {
+                    override fun onStart() {}
+                    override fun onSuccess() {
+                        CookieUtil.setNightMode(mContext, true)
+                        refreshNighModeViews(true)
+                    }
+
+                    override fun onFailed(errMsg: String) {
+                        CookieUtil.setNightMode(mContext, false)
+                        refreshNighModeViews(false)
+                    }
+                }, SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS)
+        }else{
+            SkinCompatManager.getInstance().restoreDefaultTheme()
+            CookieUtil.setNightMode(mContext, false)
+            refreshNighModeViews(false)
         }
     }
 
@@ -259,9 +291,13 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         if (isNighMode) {
             binding?.nightModeToggle?.isChecked = true
             binding?.night?.visibility = View.VISIBLE
+            binding?.darkModeImg?.setImageDrawable(resources.getDrawable(R.drawable.dark_mode_selected))
+            binding?.dayModeImg?.setImageDrawable(resources.getDrawable(R.drawable.day_mode_normal))
         } else {
             binding?.nightModeToggle?.isChecked = false
             binding?.night?.visibility = View.GONE
+            binding?.darkModeImg?.setImageDrawable(resources.getDrawable(R.drawable.dark_mode_normal))
+            binding?.dayModeImg?.setImageDrawable(resources.getDrawable(R.drawable.day_mode_selected))
         }
         resetStatusBarTheme(!isNighMode)
     }

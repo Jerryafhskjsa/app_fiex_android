@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Fiex</string>
-    <string name="edt_account_hint">手机号码</string>
+    <string name="edt_account_hint">手机号</string>
     <string name="get_check_code">获取验证码</string>
     <string name="cancel">取消</string>
     <string name="login">登录/注册</string>
@@ -28,7 +28,7 @@
     <string name="bind_google_title">绑定谷歌身份认证器</string>
     <string name="bind_google_note">请妥善备份密钥以防遗失</string>
     <string name="next">下一步</string>
-    <string name="google_code_input_hint">输入6位谷歌验证码</string>
+    <string name="google_code_input_hint">请输入谷歌Code码</string>
     <string name="submit">提交</string>
     <string name="mail_code">邮箱验证码</string>
     <string name="safe_verify">安全认证</string>
@@ -323,7 +323,7 @@
     <string name="sabe_download">保存到相册</string>
     <string name="paste">粘贴</string>
     <string name="send_code">获取验证码</string>
-    <string name="long_password">登录密码</string>
+    <string name="long_password">修改密码</string>
     <string name="hint_phone_code">短信验证码</string>
     <string name="c2c_buy_usdt">购买USDT</string>
     <string name="c2c_sale_usdt">出售USDT</string>
@@ -366,10 +366,10 @@
     <string name="person_check_imd">立即认证</string>
     <string name="open_phone_bind">开启手机认证</string>
     <string name="change_password">修改密码</string>
-    <string name="current_login_password">当前登录密码</string>
-    <string name="new_password">新登录密码</string>
-    <string name="new_password_again">确认新登录密码</string>
-    <string name="change_password_warning">修改密码后，24小时内无法提币</string>
+    <string name="current_login_password">请输入原密码</string>
+    <string name="new_password">请输入新密码</string>
+    <string name="new_password_again">请确认新登录</string>
+    <string name="change_password_warning">修改安全密码后，24小时内禁止提币和法币卖出</string>
     <string name="reset_password">重置登录密码</string>
     <string name="hint_password_length">密码 (不少于8位字符)</string>
     <string name="hint_input_mail_code">输入邮箱验证码</string>
@@ -467,7 +467,7 @@
     <string name="reset_money_password">重置资金密码</string>
     <string name="about_us">关于我们</string>
     <string name="secret_rule">隐私政策</string>
-    <string name="user_setting">设置</string>
+    <string name="user_setting">系统设置</string>
     <string name="change_user">切换账号</string>
     <string name="skin_mode">皮肤模式</string>
     <string name="add_account">添加或注册账号</string>
@@ -639,4 +639,16 @@
     <string name="system_setup">System Setup</string>
     <string name="system_version">System Version</string>
     <string name="server_setting">Link Line</string>
+
+    <string name="old_psw">旧密码</string>
+    <string name="new_psw">新密码</string>
+    <string name="input_new_phone_number">输入新手机号</string>
+    <string name="input_new_phone_code">请输入新手机验证码</string>
+    <string name="input_new_phone_code_verify">请输入手机15******251的验证码</string>
+    <string name="google_code_1">谷歌Code码</string>
+    <string name="google_key">谷歌密钥:</string>
+    <string name="style_setting">风格设置</string>
+    <string name="red_down">绿涨红跌</string>
+    <string name="red_up">红涨绿跌</string>
+
 </resources>

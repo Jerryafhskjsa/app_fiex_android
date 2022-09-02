@@ -21,11 +21,9 @@ import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindowSingle
 import com.black.base.manager.ApiManager
-import com.black.base.model.CountryCode
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
+import com.black.base.model.*
 import com.black.base.model.clutter.CoinUsdtPrice
+import com.black.base.model.money.MoneyHomeConfigDemand
 import com.black.base.model.user.PushSwitch
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
@@ -45,11 +43,14 @@ import com.black.user.databinding.ActivityLoginBinding
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.RSAUtil
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import java.util.ArrayList
 import java.util.HashMap
 import java.util.logging.Handler
 import java.util.logging.LogManager
@@ -411,8 +412,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                     user!!.ucToken = ucToken
                                     user!!.ticket = ticket
                                 }
-                                getTradeToken(mContext)
-//                                onGetTokenSuccess()
+                                getProToken(mContext)
                             }
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) getString(R.string.login_data_error) else result.msg)
@@ -469,14 +469,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
             ?.getProToken()
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
+            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultData<ProTokenResult?>?>(){
                 override fun error(type: Int, error: Any?) {
                 }
 
-                override fun callback(result: HttpRequestResultString?) {
+                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
                     if(result != null && result.code == HttpRequestResult.SUCCESS){
-                        var proToken = result.data
+                        var proTokenResult: ProTokenResult? = result.data
+                        var proToken = proTokenResult?.proToken
+                        var proTokenExpiredTime =proTokenResult?.expireTime
                         HttpCookieUtil.saveProToken(context,proToken)
+                        HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
                         getWsToken(mContext)
                     }
                 }

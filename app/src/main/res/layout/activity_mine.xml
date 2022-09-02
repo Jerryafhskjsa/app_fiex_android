@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@color/B2"
             android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/img_back"
                 android:layout_width="9dp"
@@ -150,6 +151,7 @@
                             android:id="@+id/dark_mode"
                             android:orientation="vertical">
                             <ImageView
+                                android:id="@+id/dark_mode_img"
                                 android:layout_width="164dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/dark_mode_normal">
@@ -171,6 +173,7 @@
                             android:id="@+id/light_mode"
                             android:orientation="vertical">
                             <ImageView
+                                android:id="@+id/day_mode_img"
                                 android:layout_width="164dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/day_mode_selected">

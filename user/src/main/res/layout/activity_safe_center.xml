@@ -27,13 +27,7 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
-
                 <include layout="@layout/tool_bar_left_back" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_padding"
-                    android:background="@color/B1" />
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.base.widget.ObserveScrollView
@@ -55,30 +49,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <RelativeLayout style="@style/MenuListItem">
-
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/gesture_password"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/gesture_password"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:thumb="@drawable/icon_switch_thumb"
-                                android:track="@drawable/bg_switch_track"
-                                app:track="@drawable/bg_switch_track" />
-                        </RelativeLayout>
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -110,12 +80,32 @@
                             </RelativeLayout>
                         </LinearLayout>
 
+                        <RelativeLayout style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/gesture_password"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/gesture_password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:thumb="@drawable/icon_switch_thumb"
+                                android:track="@drawable/bg_switch_track"
+                                app:track="@drawable/bg_switch_track" />
+                        </RelativeLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="gone">
-
                             <RelativeLayout
                                 style="@style/MenuListItem"
                                 android:layout_width="match_parent">
@@ -141,11 +131,10 @@
                             </RelativeLayout>
                         </LinearLayout>
                     </LinearLayout>
-
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding" />
-
+                        android:layout_height="1dp"
+                        android:background="@color/B1" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -172,7 +161,6 @@
                                 android:drawableRight="@drawable/icon_left"
                                 android:drawablePadding="6dp"
                                 android:gravity="center"
-                                android:text="@string/modify"
                                 android:textColor="@color/T2"
                                 android:textSize="@dimen/text_size_14" />
 
@@ -181,6 +169,7 @@
                         <RelativeLayout
                             android:id="@+id/money_password_layout"
                             style="@style/MenuListItem"
+                            android:visibility="gone"
                             android:layout_width="match_parent">
 
                             <com.black.base.widget.SpanTextView
@@ -206,8 +195,8 @@
 
                         <RelativeLayout
                             android:id="@+id/reset_money_password_layout"
+                            android:visibility="gone"
                             style="@style/MenuListItem">
-
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -216,11 +205,11 @@
                                 android:text="@string/reset_money_password"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_16" />
-
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/payment_method_layout"
+                            android:visibility="gone"
                             style="@style/MenuListItem">
 
                             <com.black.base.widget.SpanTextView
@@ -234,18 +223,6 @@
 
                         </RelativeLayout>
                     </LinearLayout>
-
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/double_padding"
-                        android:paddingTop="@dimen/double_padding"
-                        android:paddingRight="@dimen/double_padding"
-                        android:paddingBottom="@dimen/default_padding"
-                        android:text="@string/hint_safe_center"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

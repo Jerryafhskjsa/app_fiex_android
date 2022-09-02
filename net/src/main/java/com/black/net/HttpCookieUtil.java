@@ -12,6 +12,7 @@ public class HttpCookieUtil {
     public final static String TICKET = "ticket";
     public final static String TRADE_TOKEN = "trade_token";
     public final static String PRO_TOKEN = "pro_token";
+    public final static String PRO_TOKEN_EXPIRED_TIME = "pro_token_expired_time";
     public final static String WS_TOKEN = "ws_token";
 
     public static SharedPreferences getSharedPreferences(Context context) {
@@ -54,9 +55,21 @@ public class HttpCookieUtil {
         editor.commit();
     }
 
+
     public static void saveWsToken(Context context, String wsToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(WS_TOKEN, wsToken);
+        editor.commit();
+    }
+
+    public static void saveTradeTokenExpiredTime(Context context, String proTokenExpiredTime) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(PRO_TOKEN_EXPIRED_TIME, proTokenExpiredTime);
+        editor.commit();
+    }
+    public static void saveProTokenExpiredTime(Context context, String proToken) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(PRO_TOKEN_EXPIRED_TIME, proToken);
         editor.commit();
     }
 

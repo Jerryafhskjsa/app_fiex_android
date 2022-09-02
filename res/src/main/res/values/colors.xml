@@ -60,6 +60,8 @@
     <color name="T9_ALPHA10">#1A83CD13</color>
     <color name="T10">#F12C18</color>
     <color name="T11">#99000000</color>
+    <color name="T11_ALPHA5">#0D000000</color>
+    <color name="T11_ALPHA16">#16000000</color>
     <color name="c_tab_p">#1571FF</color>
     <color name="c_tab_n">#66000000</color>
     <color name="main_blue">#1571FF</color>
@@ -70,6 +72,7 @@
     <color name="T13_ALPHA50">#801571FF</color>
     <color name="T13_ALPHA80">#cc1571FF</color>
     <color name="T14">#000000</color>
+    <color name="T15">#FF8B00</color>
 
 
 </resources>

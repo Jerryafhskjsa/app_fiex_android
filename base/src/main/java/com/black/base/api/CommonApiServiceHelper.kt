@@ -56,7 +56,7 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(CommonApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
             ?.getCountryCodeList()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

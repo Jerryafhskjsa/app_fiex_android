@@ -1,9 +1,6 @@
 package com.black.base.api
 
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.user.*
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -19,7 +16,7 @@ interface UserApiService {
 
 
     @POST(UrlConfig.User.URL_USER_LOGIN)
-    fun getProToken(): Observable<HttpRequestResultString?>?
+    fun getProToken(): Observable<HttpRequestResultData<ProTokenResult?>?>?
 
 
     @POST(UrlConfig.User.URL_TRADE_LOGIN)

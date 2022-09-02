@@ -82,14 +82,15 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
     override fun onClick(v: View) {
         val i = v.id
         if (i == R.id.safe_phone_layout) {
-            if (!TextUtils.equals("phone", userInfo?.registerFrom)) {
-            }
-            if (TextUtils.isEmpty(userInfo?.tel)) {
-                //未绑定
-                BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
-            } else {
+            BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
+//            if (!TextUtils.equals("phone", userInfo?.registerFrom)) {
+//            }
+//            if (TextUtils.isEmpty(userInfo?.tel)) {
+//                //未绑定
+//                BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
+//            } else {
                 //                BlackRouter.getInstance().build(RouterConstData.PHONE_SECURITY_STATUS).go(mContext);
-            }
+//            }
         } else if (i == R.id.safe_mail_layout) {
             if (!TextUtils.equals("email", userInfo?.registerFrom)) {
             }
@@ -124,7 +125,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         }
         if (TextUtils.equals(userInfo?.phoneSecurityStatus, "1")) {
             binding?.safePhoneStatus?.text = if (userInfo?.tel == null) "" else userInfo?.tel?.replace("(?<=\\d{3})\\d(?=\\d{4})".toRegex(), "*")
-            binding?.safePhoneStatusIcon?.visibility = View.GONE
+//            binding?.safePhoneStatusIcon?.visibility = View.GONE
         } else {
             binding?.safePhoneStatus?.setText(R.string.status_closed)
             binding?.safePhoneStatusIcon?.visibility = View.VISIBLE
