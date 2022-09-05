@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="notificationItemForumModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:id="@+id/lin_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/middle_padding"
+        android:layout_marginLeft="@dimen/middle_padding"
+        android:layout_marginRight="@dimen/middle_padding"
+        android:orientation="vertical"
+        android:background="@drawable/bg_notification_itme_corner">
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/icon"
+            android:includeFontPadding="true"
+            android:text="Trading Contest"
+            android:textColor="@color/T1"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:includeFontPadding="true"
+            android:layout_marginTop="6dp"
+            android:text="Trading Contest"
+            android:textColor="@color/T11_ALPHA60"
+            android:textSize="@dimen/text_size_12"
+            />
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/content_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:includeFontPadding="true"
+            android:layout_marginTop="8dp"
+            android:text="Trading Contest"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/T11_ALPHA60"
+            android:textSize="@dimen/text_size_14"
+            />
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:includeFontPadding="true"
+            android:text="@string/view_more"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/T13"
+            android:textSize="@dimen/text_size_12"
+            />
+    </LinearLayout>
+</layout>

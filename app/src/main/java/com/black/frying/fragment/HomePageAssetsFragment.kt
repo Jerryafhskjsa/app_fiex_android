@@ -143,7 +143,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
         initFragmentList()
 
-        binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(mContext?.supportFragmentManager) {
+        binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(mContext!!.supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragmentList!![position]
             }

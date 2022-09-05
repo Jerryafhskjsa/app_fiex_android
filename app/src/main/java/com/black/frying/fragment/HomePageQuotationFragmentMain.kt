@@ -26,7 +26,7 @@ import kotlin.collections.ArrayList
 class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
     private var parent: HomePageActivity? = null
     private var binding: FragmentHomePageQuotationMainBinding? = null
-    private var fragmentList: MutableList<HomePageQuotationFragment?>? = null
+    private var fragmentList: MutableList<Fragment>? = null
     private var tabSets: List<String?>? = null
 
     override fun onAttach(activity: Activity) {
@@ -62,7 +62,7 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
     override fun doResetSkinResources() {
         if (fragmentList != null) {
             for (fragment in fragmentList!!) {
-                fragment?.resetSkinResources()
+//                fragment?.resetSkinResources()
             }
         }
     }
@@ -82,8 +82,8 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
                 }
             }
             binding?.quotationMainViewPager?.adapter = object : FragmentPagerAdapter(childFragmentManager) {
-                override fun getItem(position: Int): Fragment? {
-                    return fragmentList?.get(position)
+                override fun getItem(position: Int): Fragment{
+                    return fragmentList?.get(position) as Fragment
                 }
 
                 override fun getCount(): Int {

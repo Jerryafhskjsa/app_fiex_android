@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.fragment.BaseFragment
@@ -36,6 +37,7 @@ import com.fbsex.exchange.databinding.FragmentHomePageQuotationBinding
 import com.google.android.material.tabs.TabLayout
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private var parent: HomePageActivity? = null
@@ -43,7 +45,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private var binding: FragmentHomePageQuotationBinding? = null
 
     private var sets: List<String?>? = null
-    private var fragmentList: MutableList<HomePageQuotationDetailFragment?>? = null
+    private var fragmentList: MutableList<Fragment?>? = null
 
     //异步获取数据
     private val handlerThread: HandlerThread? = null
@@ -113,7 +115,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     override fun doResetSkinResources() {
         if (fragmentList != null) {
             for (fragment in fragmentList!!) {
-                fragment?.resetSkinResources()
+//                fragment?.resetSkinResources()
             }
         }
     }
@@ -145,7 +147,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             return
         }
         for (fragment in fragmentList!!) {
-            fragment?.updateCompare(comparator)
+//            fragment?.updateCompare(comparator)
         }
     }
 
@@ -197,13 +199,13 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                     FryingUtil.printError(throwable)
                 }
             }
-            binding?.quotationViewPager?.adapter = object : FragmentPagerAdapter(childFragmentManager) {
-                override fun getItem(position: Int): Fragment? {
-                    return fragmentList?.get(position)
+            binding?.quotationViewPager?.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
+                override fun getItem(position: Int): Fragment{
+                    return fragmentList!![position] as Fragment
                 }
 
                 override fun getCount(): Int {
-                    return fragmentList?.size ?: 0
+                    return fragmentList!!.size
                 }
 
                 override fun getPageTitle(position: Int): CharSequence? {

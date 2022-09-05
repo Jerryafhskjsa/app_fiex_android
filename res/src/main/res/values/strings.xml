@@ -650,5 +650,6 @@
     <string name="style_setting">风格设置</string>
     <string name="red_down">绿涨红跌</string>
     <string name="red_up">红涨绿跌</string>
+    <string name="view_more">View more</string>
 
 </resources>

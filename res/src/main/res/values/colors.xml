@@ -54,6 +54,7 @@
     <color name="B1">#f8f9f9</color>
     <color name="B2">#ffffff</color>
     <color name="B3">#99FFFFFF</color>
+    <color name="B2_ALPHA8">#14FFFFFF</color>
     <color name="B2_ALPHA50">#80ffffff</color>
 
     <color name="T9">#83CD13</color>
@@ -62,6 +63,7 @@
     <color name="T11">#99000000</color>
     <color name="T11_ALPHA5">#0D000000</color>
     <color name="T11_ALPHA16">#16000000</color>
+    <color name="T11_ALPHA60">#98000000</color>
     <color name="c_tab_p">#1571FF</color>
     <color name="c_tab_n">#66000000</color>
     <color name="main_blue">#1571FF</color>

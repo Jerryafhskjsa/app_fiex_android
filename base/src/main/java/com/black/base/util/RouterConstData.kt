@@ -27,6 +27,7 @@ object RouterConstData {
     const val NEWS_DETAIL = "fbsex://newsDetail"
     const val K_LINE_FULL = "fbsex://kLineFull"
     const val LANGUAGE_SETTING = "fbsex://languageSetting"
+    const val NOTIFICATION_LIST = "fbsex://notificationList"
     const val FINGER_PRINT_CHECK = "fbsex://fingerPrintCheck"
     const val FORUM = "fbsex://forum"
 

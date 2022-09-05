@@ -8,5 +8,7 @@ class NoticeHome {
     inner class NoticeHomeItem {
         var html_url: String? = null
         var title: String? = null
+        var created_at:String? = null
+        var body:String? = null
     }
 }

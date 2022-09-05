@@ -92,6 +92,7 @@ repositories {
         dirs '../res/libs'
     }
     mavenCentral()
+//    maven { url 'https://zendesk.jfrog.io/zendesk/repo'}
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -110,4 +111,5 @@ dependencies {
     implementation project(':im')
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation group: 'com.zendesk', name: 'support', version: '5.1.0'
 }

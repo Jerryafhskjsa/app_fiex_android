@@ -75,6 +75,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             }
         }
         refreshNighModeViews(CookieUtil.getNightMode(mContext))
+        binding?.notifications?.setOnClickListener(this)
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
@@ -137,6 +138,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 bundle.putString(ConstData.URL, UrlConfig.HELP_CENTER)
                 BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
             }
+            R.id.notifications -> BlackRouter.getInstance().build(RouterConstData.NOTIFICATION_LIST).go(mContext)
             R.id.server_setting -> {
                 //                LoadingDialog loadingDialog = FryingUtil.getLoadDialog(mContext, "");
 //                loadingDialog.show();

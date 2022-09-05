@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import android.text.TextUtils
@@ -17,8 +16,6 @@ import androidx.multidex.MultiDex
 import cn.jpush.android.api.JPushInterface
 import cn.jpush.android.api.TagAliasCallback
 import cn.jpush.android.ups.JPushUPSManager
-import cn.jpush.android.ups.TokenResult
-import cn.jpush.android.ups.UPSRegisterCallBack
 import com.black.base.BaseApplication
 import com.black.base.util.*
 import com.black.im.config.CustomFaceConfig
@@ -35,7 +32,6 @@ import com.tencent.imsdk.TIMSdkConfig
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import com.umeng.analytics.MobclickAgent
-import com.umeng.commonsdk.UMConfigure
 import io.reactivex.plugins.RxJavaPlugins
 import skin.support.SkinCompatManager
 import skin.support.SkinCompatManager.SkinLoaderListener
@@ -43,6 +39,9 @@ import skin.support.app.SkinAppCompatViewInflater
 import skin.support.app.SkinCardViewInflater
 import skin.support.constraint.app.SkinConstraintViewInflater
 import skin.support.design.app.SkinMaterialViewInflater
+//import zendesk.core.AnonymousIdentity
+//import zendesk.core.Zendesk
+//import zendesk.support.Support
 import java.util.*
 
 class FryingApplication : BaseApplication() {
@@ -178,6 +177,14 @@ class FryingApplication : BaseApplication() {
         TypefaceManager.init(this)
         CustomerTypefaceSpanManager.init(this)
         initSkinLoader()
+//        initZendesk()
+    }
+
+    fun initZendesk(){
+//        Zendesk.INSTANCE.init(this, "https://fiexsupport.zendesk.com", "a825c816c9ce113e9b2c8e680961e6bf42c2194c1f12709c", "mobile_sdk_client_b6b89bd116298645a3df")
+//        val identity = AnonymousIdentity()
+//        Zendesk.INSTANCE.setIdentity(identity)
+//        Support.INSTANCE.init(Zendesk.INSTANCE)
     }
 
     /**

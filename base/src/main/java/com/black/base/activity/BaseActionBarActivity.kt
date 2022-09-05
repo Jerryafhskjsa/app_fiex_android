@@ -123,6 +123,7 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
         return super.onCreateView(name, context, attrs)
     }
 
+
     protected open fun initToolbar() {
         val titleText = getTitleText()
         val titleView = findViewById<TextView>(R.id.action_bar_title)

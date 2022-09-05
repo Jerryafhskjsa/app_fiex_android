@@ -89,7 +89,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-//                viewModel!!.getNoticeInfo()
+                viewModel!!.getNoticeInfo()
 //                viewModel!!.getHotPairs()
                 viewModel!!.getSymbolList()
 //                viewModel!!.getHomeTicker()

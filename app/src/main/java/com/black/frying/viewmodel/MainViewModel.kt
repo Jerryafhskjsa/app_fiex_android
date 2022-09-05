@@ -286,7 +286,8 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     fun getNoticeInfo() {
         onMainModelListener?.onNoticeList(ApiManager.build(context!!)
                 .getService(CommonApiService::class.java)
-                ?.getNoticeHome(FryingUtil.getLanguageKey(context!!), 6, 1)
+//                ?.getNoticeHome(FryingUtil.getLanguageKey(context!!), 6, 1)
+            ?.getNoticeHome("zh-tw", 6, 1)
                 ?.flatMap { noticeHomeResult ->
                     if (noticeHomeResult.articles != null && noticeHomeResult.articles!!.isNotEmpty()) {
                         noticeList = noticeHomeResult.articles
