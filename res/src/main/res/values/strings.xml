@@ -620,11 +620,6 @@
     <string name="revoke">撤销</string>
     <string name="limit_price_buy">限价买入</string>
 
-    <string name="spot_account">现货账户</string>
-    <string name="contract_account">合约账户</string>
-    <string name="finance_account">理财账户</string>
-    <string name="wallet_account">钱包账户</string>
-
     <string name="dark_mode">DarkMode</string>
     <string name="light_mode">LightMode</string>
     <string name="open">Open</string>
@@ -651,5 +646,14 @@
     <string name="red_down">绿涨红跌</string>
     <string name="red_up">红涨绿跌</string>
     <string name="view_more">View more</string>
+    <string name="asset_transfer">Asset transfer</string>
+    <string name="from">from</string>
+    <string name="to">to</string>
+    <string name="spot_account">现货账户</string>
+    <string name="contract_account">合约账户</string>
+    <string name="finance_account">理财账户</string>
+    <string name="wallet_account">Wallet Account</string>
+    <string name="confirm_transfer">Confirm transfer</string>
+    <string name="select_wallet">选择钱包</string>
 
 </resources>

@@ -64,6 +64,8 @@
     <color name="T11_ALPHA5">#0D000000</color>
     <color name="T11_ALPHA16">#16000000</color>
     <color name="T11_ALPHA60">#98000000</color>
+    <color name="T11_ALPHA40">#66000000</color>
+    <color name="T11_ALPHA8">#14000000</color>
     <color name="c_tab_p">#1571FF</color>
     <color name="c_tab_n">#66000000</color>
     <color name="main_blue">#1571FF</color>
