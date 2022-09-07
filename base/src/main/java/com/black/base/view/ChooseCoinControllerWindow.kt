@@ -12,7 +12,7 @@ import com.black.base.R
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
-//换砖钱包类型选择弹窗
+//划转钱包类型选择弹窗
 class ChooseCoinControllerWindow<T>(private val activity: Activity, title: String?, private val selectObject: T?, data: List<T>?, private val onReturnListener: OnReturnListener<T>?) : View.OnClickListener, AdapterView.OnItemClickListener {
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
     private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.C1)

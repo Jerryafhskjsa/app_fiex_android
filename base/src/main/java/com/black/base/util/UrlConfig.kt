@@ -260,6 +260,15 @@ object UrlConfig {
     }
 
     object Wallet {
+        /***fiex***/
+        //查询支持的账户划转类型 pro
+        const val URL_GET_SUPPORT_ACCOUNT = "/wallet/getSupportAccount"
+        //查询可支持划转的币种
+        const val URL_GET_SUPPORT_COIN = "/wallet/getSupportCoin"
+        //划转
+        const val URL_TRANSFER = "/wallet/transfer"
+        /***fiex***/
+
         //现货资产 钱包
         const val URL_WALLET = "wallet"
         ///现货资产提币 资产币信息

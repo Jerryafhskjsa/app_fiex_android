@@ -1,16 +1,26 @@
 package com.black.base.api
 
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.wallet.*
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
 import retrofit2.http.*
+import java.math.BigDecimal
 
 //钱包相关
 interface WalletApiService {
+    /***fiex***/
+    @GET(UrlConfig.Wallet.URL_GET_SUPPORT_ACCOUNT)
+    fun getSupportAccount(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.Wallet.URL_GET_SUPPORT_COIN)
+    fun getSupportCoin(@Query("from") fromAccount:String?,@Query("to") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?
+
+    @GET(UrlConfig.Wallet.URL_TRANSFER)
+    fun getTransfer(@Query("amount") amount: BigDecimal?,@Query("coin") coin:String?,@Query("fromWalletType") fromWalletType:String?,@Query("toWalletType") toWalletType:String?): Observable<HttpRequestResultString?>?
+
+    /***fiex***/
+
     // type 3 现货 4 杠杆 不传全部
     @GET(UrlConfig.Wallet.URL_WALLET)
     fun getWallet(@Query("type") type: String?): Observable<HttpRequestResultData<WalletConfig?>?>?

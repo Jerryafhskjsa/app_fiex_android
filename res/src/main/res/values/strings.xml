@@ -655,5 +655,9 @@
     <string name="wallet_account">Wallet Account</string>
     <string name="confirm_transfer">Confirm transfer</string>
     <string name="select_wallet">选择钱包</string>
+    <string name="select_coin">选择币种</string>
+    <string name="transfer_record">划转记录</string>
+    <string name="transfer_record_filter">划转记录筛选</string>
+
 
 </resources>

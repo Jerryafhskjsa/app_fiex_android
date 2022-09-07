@@ -9,13 +9,16 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.*
 import com.black.base.view.ChooseCoinControllerWindow
 import com.black.base.view.ChooseWalletControllerWindow
-import com.black.base.view.DeepControllerWindow
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.wallet.R
 import com.black.wallet.adapter.LeverPairAdapter
 import com.black.wallet.databinding.ActivityLeverPairChooseBinding
 import io.reactivex.Observable
 
+/**
+ * 资产划转页面 对应WalletTransferActivity
+ */
 @Route(value = [RouterConstData.LEVER_PAIR_CHOOSE])
 class LeverPairChooseActivity : BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityLeverPairChooseBinding? = null
@@ -28,6 +31,7 @@ class LeverPairChooseActivity : BaseActionBarActivity(), View.OnClickListener{
         binding?.relChoose?.setOnClickListener(this)
         var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         actionBarRecord?.visibility = View.VISIBLE
+        actionBarRecord?.setOnClickListener(this)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -59,6 +63,12 @@ class LeverPairChooseActivity : BaseActionBarActivity(), View.OnClickListener{
             }
             R.id.rel_choose ->{
                 showCoinChooseDialog()
+            }
+            R.id.img_action_bar_right ->{
+                val bundle = Bundle()
+                var pair = "BTC"
+                bundle.putString(ConstData.PAIR, pair)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER_RECORD).with(bundle).go(this)
             }
         }
     }

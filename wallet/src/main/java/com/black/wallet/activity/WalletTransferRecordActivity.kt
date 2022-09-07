@@ -1,6 +1,9 @@
 package com.black.wallet.activity
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +12,8 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.WalletApiService
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
+import com.black.base.model.AssetTransfer
+import com.black.base.model.CanTransferCoin
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.PagingData
 import com.black.base.model.wallet.WalletTransferRecord
@@ -17,6 +22,8 @@ import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.RxJavaHelper
+import com.black.base.view.ChooseCoinControllerWindow
+import com.black.base.view.TransferRecordFilterControllerWindow
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.annotation.Route
@@ -28,7 +35,7 @@ import skin.support.content.res.SkinCompatResources
 import java.util.*
 
 @Route(value = [RouterConstData.WALLET_TRANSFER_RECORD], beforePath = RouterConstData.LOGIN)
-class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
+class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener,View.OnClickListener {
     private var pair: String? = null
 
     private var binding: ActivityWalletTransferRecordBinding? = null
@@ -36,6 +43,10 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
     private var adapter: WalletTransferRecordAdapter? = null
     private var currentPage = 1
     private var total = 0
+    private var all = true
+    private var formWallet:AssetTransfer? = AssetTransfer()
+    private var toWallet:AssetTransfer? = AssetTransfer()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pair = intent.getStringExtra(ConstData.PAIR)
@@ -43,6 +54,10 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_transfer_record)
 
         binding?.type?.setText(pair?.replace("_", "/") ?: "")
+        var selectIcon: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
+        selectIcon?.setImageDrawable(getDrawable(R.drawable.icon_selected_type))
+        selectIcon?.visibility = View.VISIBLE
+        selectIcon?.setOnClickListener(this)
 
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -69,13 +84,71 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         getRecord(true)
     }
 
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.img_action_bar_right ->{
+                showChooseDialog()
+            }
+        }
+    }
+
+    private fun showChooseDialog(){
+        TransferRecordFilterControllerWindow(mContext as Activity, getString(R.string.transfer_record_filter), formWallet,
+            toWallet,
+            all,
+            object : TransferRecordFilterControllerWindow.OnReturnListener{
+                override fun onConfirm(
+                    window: TransferRecordFilterControllerWindow,
+                    all: Boolean?,
+                    from: AssetTransfer?,
+                    to: AssetTransfer?
+                ) {
+
+                }
+
+                override fun onWalletTypeChoose(
+                    window: TransferRecordFilterControllerWindow,
+                    item: AssetTransfer?,
+                    type: Int?
+                ) {
+                    if(type == 1){
+                        formWallet = item
+                    }else{
+                        toWallet = item
+                    }
+                    showCoinChooseDialog()
+                }
+            }).show()
+    }
+
+    private fun showCoinChooseDialog(){
+        var transformCoin = ArrayList<CanTransferCoin?>()
+        var coin1 = CanTransferCoin()
+        coin1.coin = "BTC"
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        transformCoin.add(coin1)
+        ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin), CanTransferCoin(),
+            transformCoin,
+            object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
+                override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
+                    showChooseDialog()
+                }
+            }).show()
+    }
+
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
     }
 
     override fun getTitleText(): String {
         pair = intent.getStringExtra(ConstData.PAIR)
-        return "划转记录"
+        return getString(R.string.transfer_record)
     }
 
     override fun onRefresh() {

@@ -55,6 +55,27 @@ object WalletApiServiceHelper {
     fun setLastGetTime(type: Int, time: Long) {
         lastGetTimeMap.put(type, time)
     }
+    /***fiex***/
+    //查询支持的账户划转类型
+    fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+    }
+    //查询可支持划转的币种
+    fun getSupportCoin(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+    }
+    //划转
+    fun doTransfer(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+    }
+    /***fiex***/
+
 
     //获取普通资产
     fun getWalletList(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
