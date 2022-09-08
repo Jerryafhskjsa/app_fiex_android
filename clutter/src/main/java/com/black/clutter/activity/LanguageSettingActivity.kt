@@ -26,12 +26,22 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         application = getApplication() as BaseApplication
+        initLanguage()
+        onLanguageChanged()
+    }
+
+    private fun initLanguage(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_language_setting)
         binding?.chinese?.setOnClickListener(this)
-        binding?.chinese?.tag = application!!.getChinese()
+        binding?.chinese?.tag = application!!.getLanguage(FryingLanguage.Chinese)
+        binding?.chineseTw?.setOnClickListener(this)
+        binding?.chineseTw?.tag = application!!.getLanguage(FryingLanguage.Chinese_tw)
         binding?.english?.setOnClickListener(this)
-        binding?.english?.tag = application!!.getEnglish()
-        onLanguageChanged()
+        binding?.english?.tag = application!!.getLanguage(FryingLanguage.English)
+        binding?.janpanese?.setOnClickListener(this)
+        binding?.janpanese?.tag = application!!.getLanguage(FryingLanguage.Japanese)
+        binding?.englishUk?.setOnClickListener(this)
+        binding?.englishUk?.tag = application!!.getLanguage(FryingLanguage.English_uk)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -43,16 +53,13 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        val i = v.id
-        if (i == R.id.chinese) {
-            changeLanguage(v.tag as FryingLanguage)
-        } else if (i == R.id.english) {
-            changeLanguage(v.tag as FryingLanguage)
+        when(v.id){
+            R.id.chinese,R.id.chinese_tw,R.id.english,R.id.janpanese,R.id.english_uk -> changeLanguage(v.tag as FryingLanguage)
         }
     }
 
     private fun changeLanguage(language: FryingLanguage) {
-        if (language.languageCode != 1 && language.languageCode != 4) {
+        if (language.languageCode != 0 && language.languageCode != 2) {
             FryingUtil.showToast(this, getString(R.string.please_waiting))
             return
         }
@@ -68,18 +75,25 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
 
     private fun onLanguageChanged() {
         var language = LanguageUtil.getLanguageSetting(this)
-        language = language ?: application!!.getChinese()
         refreshLanguageChecked(language, binding?.chinese)
+        refreshLanguageChecked(language, binding?.chineseTw)
         refreshLanguageChecked(language, binding?.english)
+        refreshLanguageChecked(language, binding?.janpanese)
+        refreshLanguageChecked(language, binding?.englishUk)
     }
 
     private fun refreshLanguageChecked(language: FryingLanguage?, textView: TextView?) {
         if (language == null || textView == null) {
             return
         }
-        if (language == textView.tag) {
-            CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
-        } else {
+        var tag = textView.tag
+        if(tag is FryingLanguage){
+            if (language.languageCode == tag.languageCode) {
+                CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
+            } else {
+                CommonUtil.setTextViewCompoundDrawable(textView, null, 2)
+            }
+        }else{
             CommonUtil.setTextViewCompoundDrawable(textView, null, 2)
         }
     }

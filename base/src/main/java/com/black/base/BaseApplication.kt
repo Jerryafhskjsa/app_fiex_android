@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Process
 import android.webkit.WebView
 import androidx.multidex.MultiDex
+import com.black.base.model.FryingExchangeRates
 import com.black.base.model.FryingLanguage
 import com.black.base.model.filter.*
 import com.black.base.model.wallet.WalletBillType
@@ -16,9 +17,8 @@ open class BaseApplication : Application() {
     companion object {
         lateinit var instance: BaseApplication
             private set
-        private var chinese: FryingLanguage? = null
-        private var english: FryingLanguage? = null
         private var languages: ArrayList<FryingLanguage?>? = null
+        private var exchangeRates: ArrayList<FryingExchangeRates?>? = null
         var checkTokenError = true
         var isXGRegister = false
         var hasInitJGPush = false
@@ -55,34 +55,35 @@ open class BaseApplication : Application() {
     }
 
     fun initLanguageItems(context: Context) {
-        languages = ArrayList(4)
-        chinese = FryingLanguage(Locale.CHINESE, 1, context.getString(R.string.language_chinese))
-        languages!!.add(chinese)
-        //        languages.add(new FryingLanguage(Locale.JAPANESE, 2, context.getString(R.string.language_japanese)));
-//        languages.add(new FryingLanguage(Locale.KOREAN, 3, context.getString(R.string.language_korean)));
-        english = FryingLanguage(Locale.ENGLISH, 4, context.getString(R.string.language_english))
-        languages!!.add(english)
+        languages = ArrayList()
+        languages!!.add(FryingLanguage(Locale.CHINESE, 0, context.getString(R.string.language_chinese)))
+        languages!!.add( FryingLanguage(Locale.TAIWAN, 1, context.getString(R.string.language_chinese_tw)))
+        languages!!.add( FryingLanguage(Locale.ENGLISH, 2, context.getString(R.string.language_english)))
+        languages!!.add( FryingLanguage(Locale.JAPANESE, 3, context.getString(R.string.language_janpanese)))
+        languages!!.add( FryingLanguage(Locale.UK, 4, context.getString(R.string.language_english_uk)))
     }
 
-    open fun getChinese(): FryingLanguage? {
-        if (chinese == null) {
-            initLanguageItems(this)
-        }
-        return chinese
+    fun initExchangeItems(context: Context){
+        exchangeRates = ArrayList()
+        exchangeRates!!.add(FryingExchangeRates(0, context.getString(R.string.cny)))
+        exchangeRates!!.add(FryingExchangeRates(1, context.getString(R.string.exchange_rates_usd)))
+        exchangeRates!!.add(FryingExchangeRates(2, context.getString(R.string.exchange_rates_jpy)))
+        exchangeRates!!.add(FryingExchangeRates(3, context.getString(R.string.exchange_rates_krw)))
+        exchangeRates!!.add(FryingExchangeRates(4, context.getString(R.string.exchange_rates_vnd)))
     }
 
-    open fun getEnglish(): FryingLanguage? {
-        if (english == null) {
-            initLanguageItems(this)
-        }
-        return english
-    }
-
-    open fun getLanguages(): ArrayList<FryingLanguage?>? {
+    open fun getLanguage(type:Int): FryingLanguage? {
         if (languages == null || languages!!.isEmpty()) {
             initLanguageItems(this)
         }
-        return languages
+        return languages?.get(type)
+    }
+
+    open fun getExhcangeRates(type:Int): FryingExchangeRates? {
+        if (exchangeRates == null || exchangeRates!!.isEmpty()) {
+            initExchangeItems(this)
+        }
+        return exchangeRates?.get(type)
     }
 
     fun initFilters() {

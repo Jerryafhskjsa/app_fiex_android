@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CollapsingToolbarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+    app:titleEnabled="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="pin">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/bar_top">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true">
+                <ImageView
+                    android:id="@+id/icon_coin"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher_fiex">
+                </ImageView>
+                <com.black.base.widget.SpanTextView
+                    android:id="@id/action_bar_title_big"
+                    android:layout_toRightOf="@+id/icon_coin"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="BTC"
+                    android:layout_marginLeft="15dp"
+                    />
+                <ImageView
+                    android:id="@+id/icon_hidden"
+                    android:layout_width="20dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_asset_hidden">
+                </ImageView>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_asset"
+            android:layout_width="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/bar_top">
+            <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/all_value"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_14" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_useable"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/wallet_total_amount"
+                    android:textColor="@color/T11_ALPHA60"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_froze"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tv_useable"
+                    android:maxLines="1"
+                    android:text="@string/froze"
+                    android:textColor="@color/T11_ALPHA60"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_all_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:maxLines="1"
+                    android:text="1000"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_14" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/total_cny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_all_des"
+                    android:layout_alignParentRight="true"
+                    android:maxLines="1"
+                    android:text="≈10000"
+                    android:textColor="@color/T11_ALPHA60"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/usable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/froze"
+                    android:layout_alignParentRight="true"
+                    android:maxLines="1"
+                    android:text="200"
+                    android:textColor="@color/T11_ALPHA60"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/froze"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:maxLines="1"
+                    android:text="300"
+                    android:textColor="@color/T11_ALPHA60"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/B2"
+        android:theme="@style/AppTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        app:theme="@style/AppTheme">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/action_bar_back"
+                android:layout_width="9dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_back" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@id/action_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_20" />
+            <RelativeLayout
+                android:id="@+id/filter_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical|right"
+                android:padding="@dimen/middle_padding">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/icon_bill_filter"/>
+            </RelativeLayout>
+        </FrameLayout>
+    </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.CollapsingToolbarLayout>

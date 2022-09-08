@@ -26,9 +26,7 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
-
                 <include layout="@layout/tool_bar_left_back" />
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_padding"
@@ -52,34 +50,34 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/chinese"
+                        android:id="@+id/exchange_cny"
                         style="@style/MenuListItem"
-                        android:text="@string/language_chinese"
+                        android:text="@string/cny"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/chinese_tw"
+                        android:id="@+id/exchange_usd"
                         style="@style/MenuListItem"
-                        android:text="@string/language_chinese_tw"
+                        android:text="@string/exchange_rates_usd"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/english"
+                        android:id="@+id/exchange_jpy"
                         style="@style/MenuListItem"
-                        android:text="@string/language_english"
+                        android:text="@string/exchange_rates_jpy"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/janpanese"
+                        android:id="@+id/exchange_krw"
                         style="@style/MenuListItem"
-                        android:text="@string/language_janpanese"
+                        android:text="@string/exchange_rates_krw"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/english_uk"
+                        android:id="@+id/exchange_vnd"
                         style="@style/MenuListItem"
-                        android:text="@string/language_english_uk"
+                        android:text="@string/exchange_rates_vnd"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
                 </LinearLayout>

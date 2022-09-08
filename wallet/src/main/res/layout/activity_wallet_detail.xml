@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
 
         <variable
@@ -28,101 +27,7 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
-
-                <include layout="@layout/tool_bar_left_back_filter" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/double_padding"
-                    android:paddingRight="@dimen/double_padding"
-                    android:paddingBottom="@dimen/double_padding">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="130"
-                        android:orientation="vertical">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:text="@string/wallet_total_amount"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/usable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="130"
-                        android:orientation="vertical">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:text="@string/froze"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/froze"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="75"
-                        android:orientation="vertical">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:maxLines="1"
-                            android:text="@string/wallet_cny"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/total_cny"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:maxLines="1"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-                    </LinearLayout>
-                </LinearLayout>
-
+                <include layout="@layout/tool_bar_coin_bill" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_padding"
@@ -144,7 +49,6 @@
                     android:fillViewport="true"
                     android:overScrollMode="never"
                     android:scrollbars="none">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

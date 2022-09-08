@@ -1,20 +1,21 @@
 package com.black.base.model
 
+import java.time.chrono.JapaneseDate
 import java.util.*
 
 class FryingLanguage(locale: Locale, languageCode: Int, languageText: String) {
     companion object {
-        const val Chinese = 1
-        const val Japanese = 2
-        const val Korean = 3
-        const val English = 4
-        const val Russian = 5
+        const val Chinese = 0
+        const val Chinese_tw = 1
+        const val English = 2
+        const val Japanese = 3
+        const val English_uk = 4
     }
 
     var locale: Locale?
-    var languageCode //s1-中，2-日，3-韩，4-英，5-俄
+    var languageCode //s1-中，2-繁，3-英，4-日，5-英_uk
             : Int
-    var languageText //s1-简体中文，2-Japanese，3-Korean，4-English，5-俄
+    var languageText //s1-简体中文，2-繁体中文，3-英语，4-日本语，5-英_uk
             : String
 
     init {

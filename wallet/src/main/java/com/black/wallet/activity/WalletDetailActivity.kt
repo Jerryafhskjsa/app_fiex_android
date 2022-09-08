@@ -25,6 +25,7 @@ import com.black.base.model.wallet.WalletBillType
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.widget.SpanTextView
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -35,6 +36,7 @@ import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.WalletBillAdapter
 import com.black.wallet.databinding.ActivityWalletDetailBinding
+import com.google.android.material.appbar.AppBarLayout
 import skin.support.content.res.SkinCompatResources
 import java.math.RoundingMode
 import java.util.*
@@ -44,7 +46,7 @@ import java.util.*
 class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     private var wallet: Wallet? = null
     private var coinType: String? = null
-
+    private var appBarLayout: AppBarLayout? = null
     private var binding: ActivityWalletDetailBinding? = null
 
     private var adapter: WalletBillAdapter? = null
@@ -87,6 +89,7 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
+
         refreshWallet()
         typeData
         if (coinType != null) {
@@ -174,9 +177,12 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         }
 
     private fun refreshWallet() {
-        binding?.usable?.text = if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8)
-        binding?.totalCny?.text = if (wallet == null) nullAmount else if (wallet?.totalAmountCny == null) nullAmount else NumberUtil.formatNumberNoGroupHardScale(wallet?.totalAmountCny, 2)
-        binding?.froze?.text = if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8)
+        var usableText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
+        usableText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+        var usableCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
+        usableCnyText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+        var usableFrozeText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
+        usableFrozeText?.setText(if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8))
     }
 
     private fun getBillData(isShowLoading: Boolean) {

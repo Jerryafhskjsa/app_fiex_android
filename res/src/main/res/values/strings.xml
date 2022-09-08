@@ -140,7 +140,10 @@
     <string name="error_message_06">下拉刷新控件%1$s的弹簧距离与下拉刷新控件高度的比值%2$s不能小于0</string>
     <string name="alert_trade_not_support">%1$s交易已关闭，请稍后重试</string>
     <string name="language_chinese">简体中文</string>
+    <string name="language_chinese_tw">繁體中文</string>
     <string name="language_english">English</string>
+    <string name="language_janpanese">日本语</string>
+    <string name="language_english_uk">English (UK)</string>
     <string name="welcome_fbsex">欢迎来到Fiex</string>
     <string name="alert_server_error">服务器异常！</string>
     <string name="wallet_coin_filter">隐藏小额币种</string>
@@ -631,6 +634,12 @@
     <string name="exchange_rates">Exchange Rates</string>
     <string name="super_rebate">Super Rebate</string>
     <string name="language_cny">CNY</string>
+    <string name="exchange_rates_usd">USD</string>
+    <string name="exchange_rates_jpy">JPY</string>
+    <string name="exchange_rates_krw">KRW</string>
+    <string name="exchange_rates_vnd">VND</string>
+
+
     <string name="system_setup">System Setup</string>
     <string name="system_version">System Version</string>
     <string name="server_setting">Link Line</string>
@@ -658,6 +667,9 @@
     <string name="select_coin">选择币种</string>
     <string name="transfer_record">划转记录</string>
     <string name="transfer_record_filter">划转记录筛选</string>
+    <string name="check_update">检测更新</string>
+    <string name="all_value">净资产折合</string>
+    <string name="fee">手续费</string>
 
 
 </resources>

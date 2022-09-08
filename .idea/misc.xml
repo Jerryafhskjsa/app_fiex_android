@@ -38,6 +38,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/action_bar_quotation_detail.xml" value="0.1280701754385965" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/action_bar_transaction.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/activity_simple_web_view.xml" value="0.13157894736842105" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_item_choose_menu.xml" value="0.15833333333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_item_coin_choose.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_item_deep_choose.xml" value="0.1267543859649123" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_item_page_main_status.xml" value="0.264" />
@@ -47,7 +48,9 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_view_empty_pair.xml" value="0.1442982456140351" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/list_view_empty_short.xml" value="0.1600877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/loading_dialog.xml" value="0.13026315789473683" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/tool_bar_coin_bill.xml" value="0.3958333333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/tool_bar_left_back.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/tool_bar_left_back_filter.xml" value="0.536" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/view_choose_menu.xml" value="0.14473684210526316" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/view_coin_chooser.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/view_deep_chooser.xml" value="0.1267543859649123" />
@@ -62,7 +65,9 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/view_wallet_chooser.xml" value="0.4125753660637382" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/web_view.xml" value="0.1412280701754386" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/c2c/src/main/res/layout/fragment_c2c_customer_sale_item.xml" value="0.13333333333333333" />
-        <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/activity_language_setting.xml" value="0.1267543859649123" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/activity_about_us.xml" value="0.3551609322974473" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/activity_exchange_rates.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/activity_language_setting.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/activity_notification_list.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/list_item_forum.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/clutter/src/main/res/layout/list_item_notification.xml" value="0.4" />
@@ -197,11 +202,13 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_lever_back.xml" value="0.13333333333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_lever_pair_choose.xml" value="0.3793103448275862" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_spot_account.xml" value="0.28399122807017546" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_wallet_detail.xml" value="0.3958333333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_wallet_transfer.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/activity_wallet_transfer_record.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/fragment_financial_extract_record.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/fragment_wallet_normal.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/list_item_wallet_bill.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/list_item_wallet_transfer_record.xml" value="0.4" />
       </map>
     </option>

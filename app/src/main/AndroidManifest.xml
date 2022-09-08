@@ -360,6 +360,14 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
+            android:name="com.black.clutter.activity.ExchangeRatesActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
             android:name="com.black.clutter.activity.AboutUsActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"

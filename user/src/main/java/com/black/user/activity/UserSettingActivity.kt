@@ -1,21 +1,14 @@
 package com.black.user.activity
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
-import com.black.base.api.UserApiServiceHelper
-import com.black.base.model.HttpRequestResultString
-import com.black.base.util.CookieUtil
-import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
-import com.black.base.util.SocketUtil
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityUserSettingBinding
-import com.black.util.Callback
 
 @Route(value = [RouterConstData.USER_SETTING], beforePath = RouterConstData.LOGIN)
 class UserSettingActivity : BaseActivity(), View.OnClickListener {
@@ -24,6 +17,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         val binding: ActivityUserSettingBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_setting)
         binding.push.setOnClickListener(this)
         binding.changeUser.setOnClickListener(this)
+        binding.aboutUs.setOnClickListener(this)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -41,6 +35,9 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.change_user -> {
                 BlackRouter.getInstance().build(RouterConstData.ACCOUNT_MANAGER).go(this)
+            }
+            R.id.about_us ->{
+                BlackRouter.getInstance().build(RouterConstData.ABOUT).go(this)
             }
         }
     }

@@ -51,9 +51,9 @@ object LanguageUtil {
         val preferences = CookieUtil.getSharedPreferences(context)
         val language = preferences.getString(LANGUAGE, null)
         val country = preferences.getString(COUNTRY, null)
-        val languageCode = preferences.getInt(LANGUAGE_CODE, 0)
+        val languageCode = preferences.getInt(LANGUAGE_CODE, -1)
         val languageText = preferences.getString(LANGUAGE_TEXT, null)
-        return if (languageCode == 0 || TextUtils.isEmpty(languageText) || TextUtils.isEmpty(language)) {
+        return if (languageCode == -1 || TextUtils.isEmpty(languageText) || TextUtils.isEmpty(language)) {
             null
         } else {
             FryingLanguage(Locale(language, country), languageCode, languageText!!)

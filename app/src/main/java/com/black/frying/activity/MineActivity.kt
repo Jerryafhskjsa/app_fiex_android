@@ -79,6 +79,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
+        binding?.exchangeRates?.setOnClickListener(this)
         val currentLanguage = LanguageUtil.getLanguageSetting(applicationContext)
         if (currentLanguage == null) {
             binding?.currentLanguage?.setText(R.string.language_chinese)
@@ -176,6 +177,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                         }).show()
             }
             R.id.more_language -> BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(mContext)
+            R.id.exchange_rates -> BlackRouter.getInstance().build(RouterConstData.EXCHANGE_RATES).go(mContext)
             R.id.setting -> BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
             R.id.info -> BlackRouter.getInstance().build(RouterConstData.ABOUT).go(mContext)
             R.id.dark_mode -> {

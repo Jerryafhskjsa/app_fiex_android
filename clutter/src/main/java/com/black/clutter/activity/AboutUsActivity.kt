@@ -22,9 +22,8 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityAboutUsBinding = DataBindingUtil.setContentView(this, R.layout.activity_about_us)
-        binding.secretRule.setOnClickListener(this)
-        binding.version.setOnClickListener(this)
-        binding.currentVersion.setText(String.format("FBSEX V%s", CommonUtil.getVersionName(this, "1.0.0")))
+        binding.currentVersion.setText(String.format("FIEX V%s", CommonUtil.getVersionName(this, "1.0.0")))
+        binding.checkUpdate.setOnClickListener(this)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -37,8 +36,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         val i = view.id
-        if (i == R.id.secret_rule) {
-        } else if (i == R.id.version) {
+        if (i == R.id.version) {
             checkUpdate(false)
         }
     }
