@@ -140,6 +140,7 @@ object ConstData {
     const val FOR_RESULT = "for_result"
     const val WALLET_HANDLE_TYPE = "wallet_handle_type"
     const val WALLET_LIST = "wallet_list"
+    const val BALANCE_LIST = "user_balance_list"
     const val WALLET_WITHDRAW_ADDRESS = "wallet_withdraw_address"
     const val COUNTRY = "country"
     const val REGULAR = "regular"

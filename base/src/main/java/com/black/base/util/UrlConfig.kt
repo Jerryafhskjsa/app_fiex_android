@@ -40,16 +40,16 @@ object UrlConfig {
 
     /***fiex***/
     var API_FIEX_UC = arrayOf(
-        "http://fiex.io/uc/",//fiex uc
-//        "http://fiex.matchchain.info/uc/"
+//        "http://fiex.io/uc/",//fiex uc
+        "http://fiex.matchain.info/uc/"
     )
     var API_FIEX_PRO = arrayOf(
-        "http://fiex.io/pro/",//fiex pro
-//        "http://fiex.matchchain.info/pro/"
+//        "http://fiex.io/pro/",//fiex pro
+        "http://fiex.matchain.info/pro/"
     )
     var API_FIEX_API = arrayOf(
-        "http://fiex.io/api/",//fiex api
-//        "http://fiex.matchchain.info/api/"
+//        "http://fiex.io/api/",//fiex api
+        "http://fiex.matchain.info/api/"
     )
 
     fun getUcHost(context: Context): String {
@@ -262,11 +262,11 @@ object UrlConfig {
     object Wallet {
         /***fiex***/
         //查询支持的账户划转类型 pro
-        const val URL_GET_SUPPORT_ACCOUNT = "/wallet/getSupportAccount"
+        const val URL_GET_SUPPORT_ACCOUNT = "wallet/getSupportAccount"
         //查询可支持划转的币种
-        const val URL_GET_SUPPORT_COIN = "/wallet/getSupportCoin"
+        const val URL_GET_SUPPORT_COIN = "wallet/getSupportCoin"
         //划转
-        const val URL_TRANSFER = "/wallet/transfer"
+        const val URL_TRANSFER = "wallet/transfer"
         /***fiex***/
 
         //现货资产 钱包

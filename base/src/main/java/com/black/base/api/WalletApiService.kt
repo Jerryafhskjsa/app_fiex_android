@@ -11,13 +11,13 @@ import java.math.BigDecimal
 interface WalletApiService {
     /***fiex***/
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_ACCOUNT)
-    fun getSupportAccount(): Observable<HttpRequestResultString?>?
+    fun getSupportAccount(): Observable<HttpRequestResultDataList<String?>?>?
 
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_COIN)
     fun getSupportCoin(@Query("from") fromAccount:String?,@Query("to") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?
 
-    @GET(UrlConfig.Wallet.URL_TRANSFER)
-    fun getTransfer(@Query("amount") amount: BigDecimal?,@Query("coin") coin:String?,@Query("fromWalletType") fromWalletType:String?,@Query("toWalletType") toWalletType:String?): Observable<HttpRequestResultString?>?
+    @POST(UrlConfig.Wallet.URL_TRANSFER)
+    fun doTransfer(@Body bean:AssetTransfer?): Observable<HttpRequestResultString?>?
 
     /***fiex***/
 

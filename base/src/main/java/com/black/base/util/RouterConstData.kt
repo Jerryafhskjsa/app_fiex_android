@@ -84,6 +84,7 @@ object RouterConstData {
     const val PUSH_SETTING = "fbsex://push_setting"
     const val WALLET_TRANSFER = "fbsex://walletTransfer"
     const val LEVER_PAIR_CHOOSE = "fbsex://leverPairChoose"
+    const val ASSET_TRANSFER = "fbsex://assetTransfer"
     const val WALLET_TRANSFER_RECORD = "fbsex://walletTransferRecord"
     const val LEVER_BORROW = "fbsex://leverBorrow"
     const val LEVER_BORROW_RECORD = "fbsex://leverBorrowRecord"

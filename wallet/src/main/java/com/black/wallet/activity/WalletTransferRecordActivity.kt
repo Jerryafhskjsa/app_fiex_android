@@ -133,7 +133,7 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         transformCoin.add(coin1)
         transformCoin.add(coin1)
         transformCoin.add(coin1)
-        ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin), CanTransferCoin(),
+        ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin),
             transformCoin,
             object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
                 override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {

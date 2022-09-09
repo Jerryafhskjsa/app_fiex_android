@@ -661,7 +661,7 @@
     <string name="spot_account">现货账户</string>
     <string name="contract_account">合约账户</string>
     <string name="finance_account">理财账户</string>
-    <string name="wallet_account">Wallet Account</string>
+    <string name="wallet_account">钱包账户</string>
     <string name="confirm_transfer">Confirm transfer</string>
     <string name="select_wallet">选择钱包</string>
     <string name="select_coin">选择币种</string>
@@ -670,6 +670,11 @@
     <string name="check_update">检测更新</string>
     <string name="all_value">净资产折合</string>
     <string name="fee">手续费</string>
+    <string name="transfer_succ">划转成功</string>
+    <string name="input_amount">请输入数量</string>
+    <string name="select_account">请选择账户</string>
+    <string name="max_transfer">Max transfer %s</string>
+    <string name="no_transfer_coin">暂无可划转的币种</string>
 
 
 </resources>

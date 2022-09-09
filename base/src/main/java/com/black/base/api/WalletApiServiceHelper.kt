@@ -3,11 +3,9 @@ package com.black.base.api
 import android.content.Context
 import android.text.TextUtils
 import android.util.SparseArray
+import com.black.base.activity.BaseActionBarActivity
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.user.User
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.*
@@ -57,22 +55,34 @@ object WalletApiServiceHelper {
     }
     /***fiex***/
     //查询支持的账户划转类型
-    fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+    fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>) {
         if (context == null || callback == null) {
             return
         }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getSupportAccount()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
     //查询可支持划转的币种
-    fun getSupportCoin(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+    fun getSupportTransferCoin(context: Context?,formAccount:String,toAccount:String, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<CanTransferCoin?>?>?) {
         if (context == null || callback == null) {
             return
         }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getSupportCoin(formAccount,toAccount)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
     //划转
-    fun doTransfer(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<Wallet?>?>?) {
+    fun doTransfer(context: Context?,transferData:AssetTransfer, isShowLoading: Boolean, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.doTransfer(transferData)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
     /***fiex***/
 

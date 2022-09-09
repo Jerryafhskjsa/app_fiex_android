@@ -198,9 +198,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     .go(this)
             }
             R.id.lin_transfer -> {
-                BlackRouter.getInstance().build(RouterConstData.LEVER_PAIR_CHOOSE).withRequestCode(
-                    ConstData.LEVER_PAIR_CHOOSE).go(this)
-//                BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(this)
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
             }
             R.id.money_cny -> {
                 DeepControllerWindow(mContext as Activity, getString(R.string.price_unit), otherMoneyType, typeList, object : DeepControllerWindow.OnReturnListener<String> {

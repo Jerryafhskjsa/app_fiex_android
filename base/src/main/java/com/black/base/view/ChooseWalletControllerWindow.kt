@@ -9,11 +9,12 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.*
 import com.black.base.R
+import com.black.base.model.wallet.SupportAccount
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
 //划转钱包类型选择弹窗
-class ChooseWalletControllerWindow<T>(private val activity: Activity, title: String?, private val selectObject: T?, data: List<T>?, private val onReturnListener: OnReturnListener<T>?) : View.OnClickListener, AdapterView.OnItemClickListener {
+class ChooseWalletControllerWindow<T>(private val activity: Activity, title: String?, accountType:String,private val selectObject: T?, data: List<T>?, private val onReturnListener: OnReturnListener<T>?) : View.OnClickListener, AdapterView.OnItemClickListener {
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
     private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.C1)
     private val COLOR_BG: Int = SkinCompatResources.getColor(activity, R.color.B2)
@@ -121,18 +122,15 @@ class ChooseWalletControllerWindow<T>(private val activity: Activity, title: Str
             if (view == null) {
                 view = inflater.inflate(R.layout.list_item_wallet_choose, null)
             }
-            val item = getItem(position)
+            val item = getItem(position) as SupportAccount
             val textView = view?.findViewById<View>(R.id.text) as TextView?
             var select = view?.findViewById<View>(R.id.img_select) as ImageView?
             if (item == selectObject) {
-                textView?.setTextColor(COLOR_SELECT)
-                select?.visibility = View.GONE
-            } else {
-                textView?.setTextColor(COLOR_DEFAULT)
                 select?.visibility = View.VISIBLE
+            } else {
+                select?.visibility = View.GONE
             }
-            textView?.text = item.toString()
-            view?.setBackgroundColor(COLOR_BG)
+            textView?.text = item.name
             return view
         }
 

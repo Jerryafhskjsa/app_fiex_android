@@ -133,6 +133,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return walletList
     }
 
+    fun getUserBalanceList():ArrayList<UserBalance?>?{
+        return userBalanceList
+    }
+
     fun getWalletLeverList(): ArrayList<WalletLever?>? {
         return walletLeverList
     }
