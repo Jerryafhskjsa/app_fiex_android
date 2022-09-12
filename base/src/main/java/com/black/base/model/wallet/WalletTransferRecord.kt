@@ -4,21 +4,29 @@ import android.content.Context
 import com.black.base.R
 
 class WalletTransferRecord {
-    var id: String? = null
-    var userId: String? = null
-    var pair: String? = null
-    var coinType: String? = null
+    var id: Long? = null
+    var userId: Long? = null
+    var bizId:Long? = null
+    var accountId:Long? = null
+    var fromWalletType:String? = null
+    var toWalletType:String? = null
+    var coin: String? = null
     var amount: Double? = null
-    var createTime: Long? = null
-    var type: Int? = null
+    var status:Int? = null
+    var createdTime: String? = null
+    var updatedTime: String? = null
 
     fun getTypeText(context: Context): String {
-        return if (type == null) {
-            context.resources.getString(R.string.number_default)
-        } else when (type) {
-            1 -> "币币账户到逐仓账户"
-            2 -> "逐仓账户到币币账户"
-            else -> context.resources.getString(R.string.number_default)
+        var fromTypeText = "-"
+        var toTypeText = "-"
+        when(fromWalletType){
+            "spot" ->fromTypeText = context.getString(R.string.spot_account)
+            "contract" ->fromTypeText = context.getString(R.string.contract_account)
         }
+        when(toWalletType){
+            "spot" ->toTypeText = context.getString(R.string.spot_account)
+            "contract" ->toTypeText = context.getString(R.string.contract_account)
+        }
+        return fromTypeText+context.getString(R.string.arrival)+toTypeText
     }
 }

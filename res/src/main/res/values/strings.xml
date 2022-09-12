@@ -675,6 +675,8 @@
     <string name="select_account">请选择账户</string>
     <string name="max_transfer">Max transfer %s</string>
     <string name="no_transfer_coin">暂无可划转的币种</string>
+    <string name="arrival">到</string>
+    <string name="pls_selected_query">请选择查询条件</string>
 
 
 </resources>

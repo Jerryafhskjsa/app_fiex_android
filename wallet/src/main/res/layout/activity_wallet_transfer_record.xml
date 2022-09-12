@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <variable
             name="walletTransferRecordModel"
             type="Object" />
     </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/B2">
-
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@id/app_bar_layout"
                 android:layout_width="match_parent"
@@ -27,9 +22,7 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
-
                 <include layout="@layout/tool_bar_left_back" />
-
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/type"
                     android:layout_width="match_parent"

@@ -7,14 +7,16 @@ import android.view.*
 import android.widget.*
 import com.black.base.R
 import com.black.base.model.AssetTransfer
+import com.black.base.model.wallet.SupportAccount
+import com.black.base.widget.SpanTextView
 import skin.support.content.res.SkinCompatResources
 
 //划转记录筛选弹窗
 class TransferRecordFilterControllerWindow(private val activity: Activity, title: String?,
-                                              fromObject: AssetTransfer?,
-                                              toObject: AssetTransfer?,
-                                              all:Boolean?,
-                                              private val onReturnListener: OnReturnListener?) : View.OnClickListener{
+                                           fromObject: SupportAccount?,
+                                           toObject: SupportAccount?,
+                                           all:Boolean?,
+                                           private val onReturnListener: OnReturnListener?) : View.OnClickListener{
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
     private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.C1)
     private val COLOR_BG: Int = SkinCompatResources.getColor(activity, R.color.B2)
@@ -22,9 +24,14 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
     private val popupWindow: PopupWindow
     private val titleView: TextView
     private val selectedImg:ImageView
-    private val mAll = all
-    private val mFrom:AssetTransfer? = fromObject
-    private val mTo:AssetTransfer? = toObject
+    private var mAll = all
+    private val mFrom:SupportAccount? = fromObject
+    private val mTo:SupportAccount? = toObject
+
+    private var fromTextView:SpanTextView? = null
+    private var toTextView:SpanTextView? = null
+    private var selectedAll:ImageView? = null
+    private var linALl:RelativeLayout? = null
 
 
     init {
@@ -51,15 +58,24 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
             titleView.text = title
         }
         selectedImg = contentView.findViewById(R.id.img_all)
-        if(mAll!!){
-            selectedImg.visibility = View.VISIBLE
-        }else{
-            selectedImg.visibility = View.GONE
-        }
+        updateSelectedAll(mAll)
+        fromTextView = contentView.findViewById(R.id.tv_from_account)
+        toTextView = contentView.findViewById(R.id.tv_to_account)
+        selectedAll = contentView.findViewById(R.id.img_all)
+        linALl = contentView.findViewById(R.id.lin_all)
+        linALl?.setOnClickListener(this)
         contentView.findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
         contentView.findViewById<View>(R.id.rel_from).setOnClickListener(this)
         contentView.findViewById<View>(R.id.rel_to).setOnClickListener(this)
         contentView.findViewById<View>(R.id.btn_confirm).setOnClickListener(this)
+    }
+
+    private fun updateSelectedAll(all: Boolean?){
+        if(all!!){
+            selectedImg.visibility = View.VISIBLE
+        }else{
+            selectedImg.visibility = View.GONE
+        }
     }
 
     override fun onClick(v: View) {
@@ -73,6 +89,11 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
             }
             R.id.btn_confirm ->{
                 onReturnListener?.onConfirm(this,mAll,mFrom,mTo)
+            }
+            R.id.lin_all ->{
+                mAll = !mAll!!
+                updateSelectedAll(mAll)
+                onReturnListener?.onSelectedAll(this,mAll)
             }
         }
 
@@ -89,16 +110,25 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
         popupWindow.dismiss()
     }
 
+    fun getFromView():SpanTextView?{
+        return fromTextView
+
+    }
+    fun getToView():SpanTextView?{
+        return toTextView
+    }
+
     interface OnReturnListener{
         fun onConfirm(
-            window: TransferRecordFilterControllerWindow, all:Boolean?, from: AssetTransfer?,
-            to: AssetTransfer?
+            dialog: TransferRecordFilterControllerWindow, all:Boolean?, from: SupportAccount?,
+            to: SupportAccount?
         )
 
         /**
          * 1 from
          * 2 to
          */
-        fun  onWalletTypeChoose(window: TransferRecordFilterControllerWindow, item: AssetTransfer?,type:Int?)
+        fun  onWalletTypeChoose(dialog: TransferRecordFilterControllerWindow, item: SupportAccount?,type:Int?)
+        fun onSelectedAll(dialog: TransferRecordFilterControllerWindow,selected:Boolean?)
     }
 }

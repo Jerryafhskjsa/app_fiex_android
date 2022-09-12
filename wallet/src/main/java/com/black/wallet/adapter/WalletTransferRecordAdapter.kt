@@ -18,9 +18,11 @@ class WalletTransferRecordAdapter(context: Context, variableId: Int, data: Array
         super.onBindViewHolder(holder, position)
         val record = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.coinType?.setText(if (record?.coinType == null) nullAmount else record.coinType)
+        viewHolder?.coinType?.setText(if (record?.coin == null) nullAmount else record.coin)
         viewHolder?.amount?.setText(if (record?.amount == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(record.amount, 9, 0, 8))
-        viewHolder?.type?.setText(if (record?.type == null) nullAmount else record.getTypeText(context))
-        viewHolder?.time?.setText(if (record?.createTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", record.createTime!!))
+        viewHolder?.type?.setText(if (record?.getTypeText(context) == null) nullAmount else record.getTypeText(context))
+//        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else CommonUtil.formatDate("yyyy/MM/dd HH:mm", record.createdTime!!))
+        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else record.createdTime!!)
+
     }
 }

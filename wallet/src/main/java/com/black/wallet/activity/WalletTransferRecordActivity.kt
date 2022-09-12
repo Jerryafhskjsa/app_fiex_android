@@ -16,13 +16,12 @@ import com.black.base.model.AssetTransfer
 import com.black.base.model.CanTransferCoin
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.PagingData
+import com.black.base.model.wallet.SupportAccount
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
-import com.black.base.util.RxJavaHelper
+import com.black.base.util.*
 import com.black.base.view.ChooseCoinControllerWindow
+import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.view.TransferRecordFilterControllerWindow
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
@@ -33,6 +32,7 @@ import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.ActivityWalletTransferRecordBinding
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.WALLET_TRANSFER_RECORD], beforePath = RouterConstData.LOGIN)
 class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener,View.OnClickListener {
@@ -42,17 +42,24 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
 
     private var adapter: WalletTransferRecordAdapter? = null
     private var currentPage = 1
+    private var pageSize = 10
     private var total = 0
-    private var all = true
-    private var formWallet:AssetTransfer? = AssetTransfer()
-    private var toWallet:AssetTransfer? = AssetTransfer()
+    private var all:Boolean? = true
+    private var supportAccoutTypeList:ArrayList<SupportAccount>? = null
+    private var fromAccount:SupportAccount? = null
+    private var toAccount:SupportAccount? = null
+    private var filterDialog:TransferRecordFilterControllerWindow? = null
+
+    companion object{
+        var fromAccountType = "SPOT"
+        var toAccountType = "CONTRACT"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pair = intent.getStringExtra(ConstData.PAIR)
-
+        supportAccoutTypeList = intent.getParcelableArrayListExtra(ConstData.ASSET_SUPPORT_ACCOUNT_TYPE)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_transfer_record)
-
         binding?.type?.setText(pair?.replace("_", "/") ?: "")
         var selectIcon: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         selectIcon?.setImageDrawable(getDrawable(R.drawable.icon_selected_type))
@@ -81,7 +88,7 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
 
-        getRecord(true)
+        getRecord(true,all)
     }
 
     override fun onClick(v: View?) {
@@ -93,51 +100,61 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
     }
 
     private fun showChooseDialog(){
-        TransferRecordFilterControllerWindow(mContext as Activity, getString(R.string.transfer_record_filter), formWallet,
-            toWallet,
+        filterDialog =  TransferRecordFilterControllerWindow(mContext as Activity, getString(R.string.transfer_record_filter), fromAccount,
+            toAccount,
             all,
             object : TransferRecordFilterControllerWindow.OnReturnListener{
                 override fun onConfirm(
-                    window: TransferRecordFilterControllerWindow,
+                    dialog: TransferRecordFilterControllerWindow,
                     all: Boolean?,
-                    from: AssetTransfer?,
-                    to: AssetTransfer?
+                    from: SupportAccount?,
+                    to: SupportAccount?
                 ) {
-
+                    dialog.dismiss()
+                    getRecord(true,all)
                 }
-
                 override fun onWalletTypeChoose(
-                    window: TransferRecordFilterControllerWindow,
-                    item: AssetTransfer?,
+                    dialog: TransferRecordFilterControllerWindow,
+                    item: SupportAccount?,
                     type: Int?
                 ) {
                     if(type == 1){
-                        formWallet = item
+                        fromAccount = item
+                        showWalletChooseDialog(fromAccountType)
                     }else{
-                        toWallet = item
+                        toAccount = item
+                        showWalletChooseDialog(toAccountType)
                     }
-                    showCoinChooseDialog()
                 }
-            }).show()
+                override fun onSelectedAll(dialog: TransferRecordFilterControllerWindow,selected:Boolean?) {
+                    all = selected
+                }
+            })
+        filterDialog?.show()
     }
 
-    private fun showCoinChooseDialog(){
-        var transformCoin = ArrayList<CanTransferCoin?>()
-        var coin1 = CanTransferCoin()
-        coin1.coin = "BTC"
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        transformCoin.add(coin1)
-        ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin),
-            transformCoin,
-            object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
-                override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
-                    showChooseDialog()
+    private fun showWalletChooseDialog(accountType:String){
+        var clickAccout:SupportAccount? = null
+        when(accountType){
+            fromAccountType -> clickAccout = fromAccount
+            toAccountType -> clickAccout = toAccount
+        }
+        ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet), accountType,clickAccout,
+            supportAccoutTypeList,
+            object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
+                override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {
+                    when(accountType){
+                        AssetTransferActivity.fromAccountType -> {
+                            fromAccount = item
+                            fromAccount?.selected = true
+                            filterDialog?.getFromView()?.text = fromAccount?.name
+                        }
+                        AssetTransferActivity.toAccountType -> {
+                            toAccount = item
+                            toAccount?.selected = true
+                            filterDialog?.getToView()?.text = toAccount?.name
+                        }
+                    }
                 }
             }).show()
     }
@@ -153,13 +170,13 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
 
     override fun onRefresh() {
         currentPage = 1
-        getRecord(false)
+        getRecord(false,all)
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getRecord(false)
+            getRecord(false,all)
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -169,27 +186,31 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         return total > adapter?.count!!
     }
 
-    private fun getRecord(isShowLoading: Boolean) {
-        ApiManager.build(this).getService(WalletApiService::class.java)
-                ?.getWalletTransferRecord(currentPage, 10, pair)
+    private fun getRecord(isShowLoading: Boolean,all:Boolean?) {
+        if(all == false){
+            if(fromAccount == null || toAccount == null){
+                FryingUtil.showToast(mContext,getString(R.string.pls_selected_query))
+                return
+            }
+        }
+        ApiManager.build(this,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+                ?.getWalletTransferRecord(null,currentPage, pageSize,
+                    if(all == true)fromAccount?.type else null,if(all == true) toAccount?.type else null)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>() {
-
                     override fun error(type: Int, error: Any?) {
                         super.error(type, error)
                         showData(null)
                     }
-
                     override fun callback(returnData: HttpRequestResultData<PagingData<WalletTransferRecord?>?>?) {
                         if (returnData?.code != null && returnData.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                             total = returnData.data?.totalCount!!
-                            val dataList = returnData.data?.data
+                            val dataList = returnData.data?.records
                             showData(dataList)
                         } else {
                             FryingUtil.showToast(mContext, if (returnData?.msg == null) "null" else returnData.msg)
                         }
                     }
-
                 }))
     }
 

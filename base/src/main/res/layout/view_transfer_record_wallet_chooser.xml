@@ -31,10 +31,12 @@
         </ImageView>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/lin_all"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.black.base.widget.SpanTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,15 +81,15 @@
                     android:paddingLeft="10dp"
                     android:text="@string/from">
                 </com.black.base.widget.SpanTextView>
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/tv_from_account"
-                    android:layout_toRightOf="@+id/tv_from"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/T14"
-                    android:text="Quanto Futures Account">
-                </com.black.base.widget.SpanTextView>
+                    android:layout_toRightOf="@+id/tv_from"
+                    android:text="@string/number_default"
+                    android:textColor="@color/T14"></com.black.base.widget.SpanTextView>
                 <ImageView
                     android:id="@+id/img_from"
                     android:layout_alignParentRight="true"
@@ -123,11 +125,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/tv_to"
-                    android:text="Wallet account"
-                    android:textColor="@color/T14">
-                </com.black.base.widget.SpanTextView>
+                    android:text="@string/number_default"
+                    android:textColor="@color/T14"></com.black.base.widget.SpanTextView>
                 <ImageView
                     android:id="@+id/img_to"
                     android:layout_width="wrap_content"
@@ -144,8 +144,8 @@
             >
             <ImageView
                 android:id="@+id/img_exchange"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_margin="10dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/icon_exchange">

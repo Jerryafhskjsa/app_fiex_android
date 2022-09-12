@@ -19,6 +19,8 @@ interface WalletApiService {
     @POST(UrlConfig.Wallet.URL_TRANSFER)
     fun doTransfer(@Body bean:AssetTransfer?): Observable<HttpRequestResultString?>?
 
+    @GET(UrlConfig.Wallet.URL_WALLET_TRANSFER_RECORD)
+    fun getWalletTransferRecord(@Query("coin") coin: String?,@Query("page") page: Int?, @Query("size") pageSize: Int?, @Query("fromType") fromType: String?,@Query("toType") toType: String?): Observable<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>?
     /***fiex***/
 
     // type 3 现货 4 杠杆 不传全部
@@ -86,9 +88,6 @@ interface WalletApiService {
     @FormUrlEncoded
     @POST(UrlConfig.Wallet.URL_WALLET_TRANSFER)
     fun walletTransfer(@Field("coinType") coinType: String?, @Field("amount") amount: String?, @Field("type") type: String?, @Field("pair") pair: String?): Observable<HttpRequestResultString?>?
-
-    @GET(UrlConfig.Wallet.URL_WALLET_TRANSFER_RECORD)
-    fun getWalletTransferRecord(@Query("page") page: Int, @Query("size") pageSize: Int, @Query("pair") pair: String?): Observable<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_LEVER_DETAIL)
     fun getWalletLeverDetail(@Query("pair") pair: String?): Observable<HttpRequestResultData<WalletLeverDetail?>?>?

@@ -12,7 +12,6 @@ class RedPacket : Parcelable {
     var status // 0 初始值 1 已抢完 2 已过期
             : Int? = null
 
-    constructor()
     constructor(`in`: Parcel) {
         id = `in`.readString()
         sendName = `in`.readString()

@@ -26,6 +26,7 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivityAssetTransferBinding
+import java.io.Serializable
 import java.math.BigDecimal
 
 /**
@@ -41,6 +42,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private var supportAccountData:ArrayList<SupportAccount?>? = null
     private var supportCoinData:ArrayList<CanTransferCoin?>? = null
+    private var showSupportCoin:Boolean? = false
 
     private var fromAccount:SupportAccount? = null
     private var toAccount:SupportAccount? = null
@@ -51,10 +53,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var userBalance:UserBalance? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_asset_transfer)
-        userBalanceList = intent.getParcelableArrayListExtra(ConstData.BALANCE_LIST)
         binding?.relFrom?.setOnClickListener(this)
         binding?.relTo?.setOnClickListener(this)
         binding?.relChoose?.setOnClickListener(this)
@@ -84,6 +86,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 showWalletChooseDialog(toAccountType)
             }
             R.id.rel_choose ->{
+                showSupportCoin = true
                 supportTransferCoin
             }
             R.id.img_exchange ->{
@@ -97,6 +100,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 val bundle = Bundle()
                 var pair = selectedCoin?.coin
                 bundle.putString(ConstData.PAIR, pair)
+                bundle.putParcelableArrayList(ConstData.ASSET_SUPPORT_ACCOUNT_TYPE,supportAccountData)
                 BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER_RECORD).with(bundle).go(this)
             }
         }
@@ -160,7 +164,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                                 var result = returnData.data
                                 supportCoinData = result
                                 if(supportCoinData != null && supportCoinData?.size!! > 0){
-                                    showCoinChooseDialog(supportCoinData)
+                                    if(showSupportCoin == true){
+                                        showCoinChooseDialog(supportCoinData)
+                                        showSupportCoin = false
+                                    }
                                 }else{
                                     FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.no_transfer_coin) else returnData.msg)
                                 }
@@ -205,7 +212,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         var initSupportAccountData:ArrayList<SupportAccount?>? = ArrayList()
         if(supportAccount != null && supportAccount.size > 0){
             for(i in supportAccount){
-                var initData = SupportAccount("","",false)
+                var initData =  SupportAccount("","",false)
                 when(i){
                     "SPOT" ->{
                         initData.name = getString(R.string.spot_account)
@@ -272,5 +279,9 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
                 }
             }).show()
+    }
+
+    private fun updateMaxTransfer(){
+
     }
 }

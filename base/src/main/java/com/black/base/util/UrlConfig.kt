@@ -267,6 +267,8 @@ object UrlConfig {
         const val URL_GET_SUPPORT_COIN = "wallet/getSupportCoin"
         //划转
         const val URL_TRANSFER = "wallet/transfer"
+        //划转记录
+        const val URL_WALLET_TRANSFER_RECORD = "wallet/transfer/list"
         /***fiex***/
 
         //现货资产 钱包
@@ -304,8 +306,6 @@ object UrlConfig {
         const val URL_ADDRESS_DELETE = "withdraw/address/remove/{id}"
         //划转
         const val URL_WALLET_TRANSFER = "lever/transfer"
-        //划转记录
-        const val URL_WALLET_TRANSFER_RECORD = "lever/transfer/record"
         //杠杆钱包详情
         const val URL_WALLET_LEVER_DETAIL = "lever/assets/detail"
         //杠杆借币/还币

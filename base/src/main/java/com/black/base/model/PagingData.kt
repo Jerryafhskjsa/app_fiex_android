@@ -6,6 +6,7 @@ class PagingData<T>{
     var data: ArrayList<T>? = null
     var list: ArrayList<T>? = null
     var items:ArrayList<T>? = null
+    var records:ArrayList<T>? = null
     var pageRequest: Paging? = null
     var totalCount = 0
     var total = 0

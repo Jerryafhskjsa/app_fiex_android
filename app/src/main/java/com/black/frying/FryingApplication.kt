@@ -58,7 +58,6 @@ class FryingApplication : BaseApplication() {
         var currentActivity: Activity? = null
             private set
     }
-
     private var goBackTime: Long? = null
     private val handler = Handler()
     override fun attachBaseContext(base: Context) {
