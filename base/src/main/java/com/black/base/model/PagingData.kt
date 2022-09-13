@@ -15,6 +15,8 @@ class PagingData<T>{
     var pageSize = 0
     var ps = 0
     var more: Boolean? = null
+    var hasNext:Boolean? = null
+    var hasPrev:Boolean? = null
 
     class Paging {
         var page = 0

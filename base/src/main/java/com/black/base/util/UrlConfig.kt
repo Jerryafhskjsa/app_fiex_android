@@ -269,6 +269,9 @@ object UrlConfig {
         const val URL_TRANSFER = "wallet/transfer"
         //划转记录
         const val URL_WALLET_TRANSFER_RECORD = "wallet/transfer/list"
+
+        //综合账单查询
+        const val URL_WALLET_BILL_FIEX = "balance/bills"
         /***fiex***/
 
         //现货资产 钱包

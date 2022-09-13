@@ -504,6 +504,18 @@ object WalletApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
+    //综合账单列表
+    fun getWalletBillFiex(context: Context?, isShowLoading: Boolean, coinType: String?,
+                      callback: Callback<HttpRequestResultData<PagingData<WalletBill?>?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getWalletBillFiex(coinType)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
     //币下链列表
     fun getLianListInCoin(context: Context?, isShowLoading: Boolean, coinType: String?, chainType: String?, callback: Callback<HttpRequestResultDataList<LianInCoinModel?>?>?) {
         if (context == null || callback == null) {

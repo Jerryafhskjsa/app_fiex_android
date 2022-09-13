@@ -232,6 +232,14 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
+            android:name="com.black.wallet.activity.WalletCoinDetailActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
             android:name="com.black.user.activity.RecommendNewActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"

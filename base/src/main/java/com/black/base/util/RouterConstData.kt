@@ -77,6 +77,7 @@ object RouterConstData {
     const val WALLET_CHOOSE_COIN = "fbsex://walletChooseCoin"
     const val WALLET_ADDRESS_MANAGE = "fbsex://walletAddressManage"
     const val WITHDRAW_DETAIL = "fbsex://withdrawDetail"
+    const val WALLET_COIN_DETAIL = "fbsex://walletCoinDetail"
     const val WALLET_ADDRESS_ADD = "fbsex://walletAddressAdd"
     const val RECHARGE_DETAIL = "fbsex://rechargeDetail"
     const val WALLET_DETAIL = "fbsex://coinbill"

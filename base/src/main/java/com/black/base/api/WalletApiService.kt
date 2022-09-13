@@ -21,6 +21,10 @@ interface WalletApiService {
 
     @GET(UrlConfig.Wallet.URL_WALLET_TRANSFER_RECORD)
     fun getWalletTransferRecord(@Query("coin") coin: String?,@Query("page") page: Int?, @Query("size") pageSize: Int?, @Query("fromType") fromType: String?,@Query("toType") toType: String?): Observable<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>?
+
+    @GET(UrlConfig.Wallet.URL_WALLET_BILL_FIEX)
+    fun getWalletBillFiex(@Query("coin") coin: String?): Observable<HttpRequestResultData<PagingData<WalletBill?>?>?>?
+
     /***fiex***/
 
     // type 3 现货 4 杠杆 不传全部

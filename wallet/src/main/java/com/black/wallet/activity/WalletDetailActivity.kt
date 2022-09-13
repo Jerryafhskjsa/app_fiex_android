@@ -3,13 +3,16 @@ package com.black.wallet.activity
 import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActivity
+import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.lib.filter.FilterEntity
 import com.black.base.lib.filter.FilterResult
@@ -37,16 +40,22 @@ import com.black.wallet.R
 import com.black.wallet.adapter.WalletBillAdapter
 import com.black.wallet.databinding.ActivityWalletDetailBinding
 import com.google.android.material.appbar.AppBarLayout
+import com.google.gson.Gson
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
 //综合账单
 @Route(value = [RouterConstData.WALLET_DETAIL])
-class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
+class WalletDetailActivity : BaseActivity(),
+    View.OnClickListener,
+    QRefreshLayout.OnRefreshListener,
+    QRefreshLayout.OnLoadListener,
+    QRefreshLayout.OnLoadMoreCheckListener,
+    OnItemClickListener {
     private var wallet: Wallet? = null
     private var coinType: String? = null
-    private var appBarLayout: AppBarLayout? = null
     private var binding: ActivityWalletDetailBinding? = null
 
     private var adapter: WalletBillAdapter? = null
@@ -60,6 +69,8 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         super.onCreate(savedInstanceState)
         wallet = intent.getParcelableExtra(ConstData.WALLET)
         coinType = intent.getStringExtra(ConstData.ROUTER_COIN_TYPE)
+        var gson = Gson()
+        Log.d("999999","wallet = "+gson.toJson(wallet))
         if (wallet == null) { //没有传入wallet，并且也没有coinType，非法调用
             if (coinType == null) {
                 finish()
@@ -69,6 +80,8 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_detail)
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
+
+        binding?.appBarLayout?.findViewById<SpanTextView>(R.id.action_bar_title_big)?.text = wallet?.coinType
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -79,6 +92,7 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         decoration.setDrawable(drawable)
         binding?.recyclerView?.addItemDecoration(decoration)
         adapter = WalletBillAdapter(mContext, BR.listItemWalletBillModel, null)
+        adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
@@ -177,19 +191,27 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         }
 
     private fun refreshWallet() {
+
         var usableText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
         usableText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
-        var usableCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
-        usableCnyText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
-        var usableFrozeText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
+
+        var totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
+        totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8))
+
+        var totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
+        totalCnyText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+
+
+        var usableFrozeText =  binding?.root?.findViewById<SpanTextView>(R.id.froze)
         usableFrozeText?.setText(if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8))
+
     }
 
     private fun getBillData(isShowLoading: Boolean) {
         if (wallet == null) {
             return
         }
-        WalletApiServiceHelper.getWalletBill(mContext, isShowLoading, currentPage, 10, walletBillTypeFilter.billType, wallet?.coinType, dateFilter.startTime, dateFilter.endTime, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>() {
+        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>() {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -201,11 +223,11 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
                 binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     total = returnData.data?.total!!
-                    hasMore = returnData.data?.more != null && returnData.data?.more!!
+                    hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
                     if (currentPage == 1) {
-                        adapter?.data = (returnData.data?.data)
+                        adapter?.data = (returnData.data?.items)
                     } else {
-                        adapter?.addAll(returnData.data?.data)
+                        adapter?.addAll(returnData.data?.items)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {
@@ -284,5 +306,13 @@ class WalletDetailActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
 
     override fun onLoadMoreCheck(): Boolean {
         return total > adapter?.count!! || hasMore
+    }
+
+    override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
+        val walletBill = adapter?.getItem(position)
+        //点击账户详情
+        val extras = Bundle()
+        extras.putParcelable(ConstData.WALLET_BILL, walletBill)
+        BlackRouter.getInstance().build(RouterConstData.WALLET_COIN_DETAIL).with(extras).go(this)
     }
 }

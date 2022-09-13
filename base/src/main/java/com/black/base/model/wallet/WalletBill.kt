@@ -1,17 +1,42 @@
 package com.black.base.model.wallet
 
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
 import com.black.base.R
 import com.black.base.model.BaseAdapterItem
+import kotlinx.android.parcel.Parcelize
 
-class WalletBill : BaseAdapterItem() {
+class WalletBill() : BaseAdapterItem() , Parcelable {
+    var availableChange:String? = null
+    var coin:String? = null
+    var createdTime:Long? = null
+    var frozeChange:String? = null
     var id: String? = null
+    var type:String? = null
+
+    var amount: Double? = null
     var availableAmountChange: Double? = null
     var frozenAmountChange: Double? = null
-    var amount: Double? = null
     var businessType: String? = null
     var coinType: String? = null
     var businessTime: Long? = null
+
+    constructor(parcel: Parcel) : this() {
+        availableChange = parcel.readString()
+        coin = parcel.readString()
+        createdTime = parcel.readValue(Long::class.java.classLoader) as? Long
+        frozeChange = parcel.readString()
+        id = parcel.readString()
+        type = parcel.readString()
+        amount = parcel.readValue(Double::class.java.classLoader) as? Double
+        availableAmountChange = parcel.readValue(Double::class.java.classLoader) as? Double
+        frozenAmountChange = parcel.readValue(Double::class.java.classLoader) as? Double
+        businessType = parcel.readString()
+        coinType = parcel.readString()
+        businessTime = parcel.readValue(Long::class.java.classLoader) as? Long
+    }
+
     fun getBusinessType(context: Context): String {
         return if (businessType == null) {
             ""
@@ -71,6 +96,35 @@ class WalletBill : BaseAdapterItem() {
             "TRIBE_PROFIT_TRANS" -> "部落收益"
             "LOCK_USER_LOCK_IN" -> "活利宝转入"
             else -> ""
+        }
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(availableChange)
+        parcel.writeString(coin)
+        parcel.writeValue(createdTime)
+        parcel.writeString(frozeChange)
+        parcel.writeString(id)
+        parcel.writeString(type)
+        parcel.writeValue(amount)
+        parcel.writeValue(availableAmountChange)
+        parcel.writeValue(frozenAmountChange)
+        parcel.writeString(businessType)
+        parcel.writeString(coinType)
+        parcel.writeValue(businessTime)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<WalletBill> {
+        override fun createFromParcel(parcel: Parcel): WalletBill {
+            return WalletBill(parcel)
+        }
+
+        override fun newArray(size: Int): Array<WalletBill?> {
+            return arrayOfNulls(size)
         }
     }
 }

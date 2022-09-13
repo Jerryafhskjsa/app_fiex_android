@@ -29,10 +29,10 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(getWalletBillTypeText(walletBill))
-        viewHolder?.date?.setText(if (walletBill?.businessTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.businessTime!!))
-        viewHolder?.amount?.setText(if (walletBill?.amount == null) nullAmount else NumberUtil.formatNumberNoGroup(walletBill.amount, 2, 8))
-        if (walletBill?.amount == null || walletBill.amount!! < 0) {
+        viewHolder?.action?.setText(walletBill?.type)
+        viewHolder?.date?.setText(if (walletBill?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createdTime!!))
+        viewHolder?.amount?.setText(if (walletBill?.availableChange == null) nullAmount else NumberUtil.formatNumberNoGroup(walletBill.availableChange?.toDouble(), 2, 8))
+        if (walletBill?.availableChange == null || walletBill?.availableChange?.toDouble()!! < 0) {
             viewHolder?.action?.setTextColor(t5)
         } else {
             viewHolder?.action?.setTextColor(c1)
@@ -45,7 +45,7 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
 
     private fun getWalletBillTypeText(walletBill: WalletBill?): String? {
         return if (walletBillTypeMap != null && walletBillTypeMap!!.isNotEmpty()) {
-            walletBillTypeMap!![walletBill?.businessType]
+            walletBillTypeMap!![walletBill?.type]
         } else null
     }
 }

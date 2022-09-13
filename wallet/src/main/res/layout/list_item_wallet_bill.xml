@@ -85,7 +85,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="1"
-                android:text="0.05"
+                android:text="0.00"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>

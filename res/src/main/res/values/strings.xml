@@ -677,6 +677,9 @@
     <string name="no_transfer_coin">暂无可划转的币种</string>
     <string name="arrival">到</string>
     <string name="pls_selected_query">请选择查询条件</string>
-
+    <string name="reback">归还</string>
+    <string name="borrow">借贷</string>
+    <string name="type">类型</string>
+    <string name="bill_detail">账单详情</string>
 
 </resources>

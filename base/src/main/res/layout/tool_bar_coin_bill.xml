@@ -28,18 +28,18 @@
                     android:layout_centerVertical="true"
                     android:src="@mipmap/ic_launcher_fiex">
                 </ImageView>
+
                 <com.black.base.widget.SpanTextView
                     android:id="@id/action_bar_title_big"
-                    android:layout_toRightOf="@+id/icon_coin"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="BTC"
                     android:layout_marginLeft="15dp"
-                    />
+                    android:layout_toRightOf="@+id/icon_coin"
+                    android:text="BTC"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
                 <ImageView
                     android:id="@+id/icon_hidden"
                     android:layout_width="20dp"
@@ -63,7 +63,8 @@
             <RelativeLayout
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp">
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/tv_all"
                     android:layout_width="wrap_content"
@@ -97,7 +98,7 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:paddingBottom="10dp">
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/tv_all_des"
@@ -121,24 +122,24 @@
                     android:textSize="@dimen/text_size_12" />
 
                 <com.black.base.widget.SpanTextView
-                    android:id="@+id/usable"
+                    android:id="@+id/froze"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/froze"
+                    android:layout_above="@+id/usable"
                     android:layout_alignParentRight="true"
                     android:maxLines="1"
-                    android:text="200"
+                    android:text="0"
                     android:textColor="@color/T11_ALPHA60"
                     android:textSize="@dimen/text_size_12" />
 
                 <com.black.base.widget.SpanTextView
-                    android:id="@+id/froze"
+                    android:id="@+id/usable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:maxLines="1"
-                    android:text="300"
+                    android:text="0"
                     android:textColor="@color/T11_ALPHA60"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
