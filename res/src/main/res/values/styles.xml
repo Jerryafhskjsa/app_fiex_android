@@ -19,6 +19,21 @@
         <item name="titleTextAppearance">@style/ToolBarTitleStyle</item>
     </style>
 
+    <style name="AppTheme.Launcher.Translucent" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <!-- 将背景设置成透明的 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 透明掉状态栏，设置为true，状态栏有阴影，false则无阴影 -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <!-- 设置状态栏颜色为透明色 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Launcher.Picture" parent="AppTheme">
+        <!-- 设置应用启动时默认显示的图片 , 这样比白屏/黑屏体验好一些 -->
+        <item name="android:windowBackground">@mipmap/ic_launcher</item>
+    </style>
+
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
