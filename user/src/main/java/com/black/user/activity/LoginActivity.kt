@@ -13,28 +13,22 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
-import com.black.base.api.PairApiService
 import com.black.base.api.UserApiService
-import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindowSingle
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.clutter.CoinUsdtPrice
-import com.black.base.model.money.MoneyHomeConfigDemand
-import com.black.base.model.user.PushSwitch
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.net.NormalObserver2
-import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
-import com.black.im.util.ToastUtil
+import com.black.base.widget.SpanTextView
 import com.black.net.*
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -43,17 +37,11 @@ import com.black.user.databinding.ActivityLoginBinding
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.RSAUtil
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.logging.Handler
-import java.util.logging.LogManager
 
 @Route(value = [RouterConstData.LOGIN])
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -82,35 +70,34 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         clickSource = intent.extras
-        binding?.tabPhone?.setOnClickListener(this)
-        binding?.tabEmail?.setOnClickListener(this)
-        binding?.countryCode?.isFocusable = false
-        binding?.countryCode?.isFocusableInTouchMode = false
-        binding?.countryCode?.tag = "86"
-        binding?.countryCode?.setOnClickListener(this)
         binding?.phoneAccount?.addTextChangedListener(watcher)
-        binding?.phonePassword?.addTextChangedListener(watcher)
         binding?.mailAccount?.addTextChangedListener(watcher)
-        binding?.mailPassword?.addTextChangedListener(watcher)
+        binding?.password?.addTextChangedListener(watcher)
         binding?.forgetPassword?.setOnClickListener(this)
         binding?.btnLogin?.setOnClickListener(this)
-        binding?.goRegister?.setOnClickListener(this)
+        binding?.phoneBar?.setOnClickListener(this)
+        binding?.emailBar?.setOnClickListener(this)
+        binding?.imgCountryCode?.setOnClickListener(this)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.text = getString(R.string.register_title)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.setOnClickListener(this)
         if (thisCountry == null) {
             thisCountry = CountryCode()
-            thisCountry!!.code = "86"
+            thisCountry?.code = "86"
         }
         chooseWindow = CountryChooseWindow(this, thisCountry, object : OnCountryChooseListener {
             override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {
                 chooseWindow.dismiss()
                 thisCountry = countryCode
-                binding?.countryCode?.tag = thisCountry!!.code
-                binding?.countryCode?.setText("+" + thisCountry!!.code)
+                binding?.countryCode?.tag = thisCountry?.code
+                binding?.countryCode?.setText("+" + thisCountry?.code)
             }
-
         })
         initChooseWindowData()
-        refreshAccountLayout()
         checkClickable()
+    }
+
+    override fun getTitleText(): String? {
+        return getString(R.string.login_title)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -131,81 +118,31 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        val i = v.id
-        if (i == R.id.action_bar_extras) {
-        } else if (i == R.id.tab_phone) {
-            //切换类型
-            if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
+        val id = v.id
+        when(id){
+            R.id.forget_password -> {
+                //找回密码
+                val bundle = Bundle()
+                bundle.putInt(ConstData.TYPE, type)
+                if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
+                    bundle.putString(ConstData.ACCOUNT, binding!!.phoneAccount.text.toString().trim { it <= ' ' })
+                } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
+                }
+                BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD).with(bundle).go(mContext)
+            }
+            R.id.btn_login -> login()
+            R.id.text_action_bar_right ->{//注册
+                BlackRouter.getInstance().build(RouterConstData.REGISTER).go(mContext)
+            }
+            R.id.email_bar ->{
                 type = ConstData.AUTHENTICATE_TYPE_MAIL
-                if (!binding!!.mailAccount.hasFocus() && !binding!!.mailPassword.hasFocus()) {
-                    binding!!.mailAccount.requestFocus()
-                }
-            } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
+                changeLoinType(type)
+            }
+            R.id.phone_bar ->{
                 type = ConstData.AUTHENTICATE_TYPE_PHONE
-                if (!binding!!.phoneAccount.hasFocus() && !binding!!.phonePassword.hasFocus()) {
-                    binding!!.phoneAccount.requestFocus()
-                }
-            } else {
-                type = ConstData.AUTHENTICATE_TYPE_NONE
+                changeLoinType(type)
             }
-            refreshAccountLayout()
-            checkClickable()
-        } else if (i == R.id.tab_email) {
-            //切换类型
-            if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
-                type = ConstData.AUTHENTICATE_TYPE_MAIL
-                if (!binding!!.mailAccount.hasFocus() && !binding!!.mailPassword.hasFocus()) {
-                    binding!!.mailAccount.requestFocus()
-                }
-            } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
-                type = ConstData.AUTHENTICATE_TYPE_PHONE
-                if (!binding!!.phoneAccount.hasFocus() && !binding!!.phonePassword.hasFocus()) {
-                    binding!!.phoneAccount.requestFocus()
-                }
-            } else {
-                type = ConstData.AUTHENTICATE_TYPE_NONE
-            }
-            refreshAccountLayout()
-            checkClickable()
-        } else if (i == R.id.country_code) {
-            //切换国家区号
-            chooseCountryCode()
-        } else if (i == R.id.forget_password) {
-            //找回密码
-            val bundle = Bundle()
-            bundle.putInt(ConstData.TYPE, type)
-            if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
-                bundle.putString(ConstData.ACCOUNT, binding!!.phoneAccount.text.toString().trim { it <= ' ' })
-            } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
-                bundle.putString(ConstData.ACCOUNT, binding!!.mailAccount.text.toString().trim { it <= ' ' })
-            }
-            BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD).with(bundle).go(mContext)
-        } else if (i == R.id.btn_login) { //登录
-            login()
-        } else if (i == R.id.go_register) { //注册
-            val bundle = Bundle()
-            bundle.putInt(ConstData.TYPE, type)
-            BlackRouter.getInstance().build(RouterConstData.REGISTER).with(bundle).go(mContext)
-        }
-    }
-
-    override fun onCountryCodeChoose(resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            val code = data?.getStringExtra(ConstData.COUNTRY_CODE)
-            if (!TextUtils.isEmpty(code)) {
-                binding!!.countryCode.tag = code
-                binding!!.countryCode.setText(String.format("%s%s", getString(R.string.country_code_add), code))
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            FOR_GESTURE_PASSWORD -> {
-                setResult(resultCode)
-                finish()
-            }
+            R.id.img_country_code -> chooseCountryCode()
         }
     }
 
@@ -219,50 +156,53 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    protected fun chooseCountryCode() {
+    private fun chooseCountryCode() {
         chooseWindow!!.show(thisCountry)
     }
+
+    private fun changeLoinType(loginType:Int?){
+        when(loginType){
+            ConstData.AUTHENTICATE_TYPE_PHONE ->{
+                binding?.mailBarB?.visibility = View.GONE
+                binding?.phoneBarB?.visibility = View.VISIBLE
+                binding?.mailAccount?.visibility = View.GONE
+                binding?.relPhone?.visibility = View.VISIBLE
+            }
+            ConstData.AUTHENTICATE_TYPE_MAIL ->{
+                binding?.mailBarB?.visibility = View.VISIBLE
+                binding?.phoneBarB?.visibility = View.GONE
+                binding?.mailAccount?.visibility = View.VISIBLE
+                binding?.relPhone?.visibility = View.GONE
+            }
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            FOR_GESTURE_PASSWORD -> {
+                setResult(resultCode)
+                finish()
+            }
+        }
+    }
+
 
     private fun checkClickable() {
         when (type) {
             ConstData.AUTHENTICATE_TYPE_PHONE -> binding!!.btnLogin.isEnabled = !(TextUtils.isEmpty(binding!!.phoneAccount.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding!!.phonePassword.text.toString().trim { it <= ' ' }))
+                    || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
             ConstData.AUTHENTICATE_TYPE_MAIL -> binding!!.btnLogin.isEnabled = !(TextUtils.isEmpty(binding!!.mailAccount.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding!!.mailPassword.text.toString().trim { it <= ' ' }))
+                    || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
             else -> binding!!.btnLogin.isEnabled = false
-        }
-    }
-
-    //切换账号类型
-    private fun refreshAccountLayout() {
-        when (type) {
-            ConstData.AUTHENTICATE_TYPE_PHONE -> {
-                binding!!.phoneAccountLayout.visibility = View.VISIBLE
-                binding!!.mailAccountLayout.visibility = View.GONE
-                binding!!.tabPhone.isChecked = true
-                binding!!.tabEmail.isChecked = false
-            }
-            ConstData.AUTHENTICATE_TYPE_MAIL -> {
-                binding!!.phoneAccountLayout.visibility = View.GONE
-                binding!!.mailAccountLayout.visibility = View.VISIBLE
-                binding!!.tabPhone.isChecked = false
-                binding!!.tabEmail.isChecked = true
-            }
-            else -> {
-                binding!!.phoneAccountLayout.visibility = View.GONE
-                binding!!.mailAccountLayout.visibility = View.GONE
-            }
         }
     }
 
     private var user: User? = null
     private fun login() {
         if (type == ConstData.AUTHENTICATE_TYPE_PHONE) { //进行手机登录
-            val telCountryCode = if (binding!!.countryCode.tag == null) null else binding!!.countryCode.tag.toString()
-            if (TextUtils.isEmpty(telCountryCode)) {
-                FryingUtil.showToast(mContext, getString(R.string.alert_choose_country))
-                return
-            }
+
             val userName: String = binding!!.phoneAccount.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(userName)) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
@@ -272,17 +212,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_rule_phone))
                 return
             }
-            var password: String = binding!!.phonePassword.text.toString().trim { it <= ' ' }
+            var password: String = binding!!.password.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(password)) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
                 return
             }
             password = RSAUtil.encryptDataByPublicKey(password)
             user = User()
-            user!!.telCountryCode = telCountryCode
+            user!!.telCountryCode = thisCountry?.code
             user!!.userName = userName
             user!!.password = password
-            doLogin(userName, password, telCountryCode)
+            doLogin(userName, password, thisCountry?.code)
         } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) { //进行邮箱登录
             val userName: String = binding!!.mailAccount.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(userName)) {
@@ -293,7 +233,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_mail_rule))
                 return
             }
-            var password: String = binding!!.mailPassword.text.toString().trim { it <= ' ' }
+            var password: String = binding!!.password.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(password)) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
                 return
@@ -419,49 +359,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         }
                     }
                 })
-    }
-
-    //获取trade-token
-    private fun getTradeToken(context: Context){
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService<UserApiService>(UserApiService::class.java)
-            ?.getTradeToken()
-            ?.materialize()
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.flatMap(object :RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>?>(){
-                override fun afterRequest() {
-                }
-
-                override fun applyResult(result: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>?> {
-                    if(result != null){
-                        when(result.code){
-                            HttpRequestResult.SUCCESS ->{
-                                val tradeToken = result.data
-                                HttpCookieUtil.saveTradeToken(context,tradeToken)
-                                Log.d(TAG,"getTradeTokenSuccess")
-                                getProToken(context)
-                            }
-                            -10021, -10022, -10023, -10024 ->{
-
-                            }
-                        }
-                    }
-                    return Observable.empty()
-                }
-            })
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object :NormalObserver2<HttpRequestResultString?>(context){
-                override fun afterRequest() {
-                }
-
-                override fun callback(result: HttpRequestResultString?) {
-                    if(result != null && result.code == HttpRequestResult.SUCCESS){
-//                        var proToken = result.data
-//                        HttpCookieUtil.saveProToken(context,proToken)
-//                        onGetTokenSuccess()
-                    }
-                }
-            })
     }
 
     //获取pro-token

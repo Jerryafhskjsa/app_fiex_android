@@ -21,6 +21,7 @@ import com.black.base.util.RouterConstData
 import com.black.base.util.UrlConfig
 import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -35,7 +36,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         private val TAG = RegisterActivity::class.java.simpleName
     }
 
-    private var type = 0
+    private var type = ConstData.AUTHENTICATE_TYPE_PHONE
     private var binding: ActivityRegisterBinding? = null
 
     private val mHandler = Handler()
@@ -50,22 +51,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                 binding?.getPhoneCode?.setText(R.string.get_check_code)
             } else {
                 binding?.getPhoneCode?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-
-    }
-
-    private var getMailCodeLocked = false
-    private var getMailCodeLockedTime = 0
-    private val getMailCodeLockTimer = object : Runnable {
-        override fun run() {
-            getMailCodeLockedTime--
-            if (getMailCodeLockedTime <= 0) {
-                getMailCodeLocked = false
-                binding?.getMailCode?.setText(R.string.get_check_code)
-            } else {
-                binding?.getMailCode?.setText(getString(R.string.aler_get_code_locked, getMailCodeLockedTime.toString()))
                 mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
             }
         }
@@ -87,27 +72,26 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
-        type = intent.getIntExtra(ConstData.TYPE, ConstData.AUTHENTICATE_TYPE_PHONE)
         binding?.countryCode?.tag = "86"
         binding?.countryCode?.setOnClickListener(this)
         binding?.phoneAccount?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
         binding?.getPhoneCode?.setOnClickListener(this)
-        binding?.phonePassword?.addTextChangedListener(watcher)
+        binding?.password?.addTextChangedListener(watcher)
         binding?.phoneInviteCode?.addTextChangedListener(watcher)
 
+        binding?.phoneBar?.setOnClickListener(this)
+        binding?.emailBar?.setOnClickListener(this)
+        binding?.imgCountryCode?.setOnClickListener(this)
+
         binding?.mailAccount?.addTextChangedListener(watcher)
-        binding?.mailCheckCode?.addTextChangedListener(watcher)
-        binding?.getMailCode?.setOnClickListener(this)
-        binding?.mailPassword?.addTextChangedListener(watcher)
-        binding?.mailInviteCode?.addTextChangedListener(watcher)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.text = getString(R.string.login_title)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.setOnClickListener(this)
 
         binding?.registerAgreementCheck?.setOnCheckedChangeListener { _, _ -> checkClickable() }
         binding?.registerAgreement?.setOnClickListener(this)
         binding?.btnRegister?.setOnClickListener(this)
-        binding?.goLogin?.setOnClickListener(this)
 
-        binding?.changeRegisterType?.setOnClickListener(this)
         if (thisCountry == null) {
             thisCountry = CountryCode()
             thisCountry?.code = "86"
@@ -122,10 +106,13 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         })
 
         initChooseWindowData()
-        refreshAccountLayout()
-        displayCurrentType()
         checkClickable()
     }
+
+    override fun getTitleText(): String? {
+        return getString(R.string.register_title)
+    }
+
 
     override fun needGeeTest(): Boolean {
         return true
@@ -149,41 +136,10 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     }
-        } else if (i == R.id.change_register_type) {
-            //切换类型
-            type = when (type) {
-                ConstData.AUTHENTICATE_TYPE_PHONE -> {
-                    ConstData.AUTHENTICATE_TYPE_MAIL
-                }
-                ConstData.AUTHENTICATE_TYPE_MAIL -> {
-                    ConstData.AUTHENTICATE_TYPE_PHONE
-                }
-                else -> {
-                    ConstData.AUTHENTICATE_TYPE_NONE
-                }
-            }
-            checkClickable()
-            refreshAccountLayout()
-            displayCurrentType()
-        } else if (i == R.id.tab_email) {
-            //切换类型
-            type = when (type) {
-                ConstData.AUTHENTICATE_TYPE_PHONE -> {
-                    ConstData.AUTHENTICATE_TYPE_MAIL
-                }
-                ConstData.AUTHENTICATE_TYPE_MAIL -> {
-                    ConstData.AUTHENTICATE_TYPE_PHONE
-                }
-                else -> {
-                    ConstData.AUTHENTICATE_TYPE_NONE
-                }
-            }
-            checkClickable()
-            refreshAccountLayout()
         } else if (i == R.id.country_code) {
             //切换国家区号
             chooseCountryCode()
-        } else if (i == R.id.get_phone_code || i == R.id.get_mail_code) {
+        } else if (i == R.id.get_phone_code) {
             //获取验证码
             if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
                 getPhoneVerifyCode()
@@ -199,7 +155,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             bundle.putString(ConstData.TITLE, getString(R.string.user_protocol))
             bundle.putString(ConstData.URL, UrlConfig.getUrlProcote(this))
             BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(this)
-        } else if (i == R.id.go_login) {
+        } else if (i == R.id.text_action_bar_right) {
             BlackRouter.getInstance().build(RouterConstData.LOGIN)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(this) { routeResult, _ ->
@@ -207,6 +163,12 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     }
+        }else if(i == R.id.email_bar){
+            type = ConstData.AUTHENTICATE_TYPE_MAIL
+            changeLoinType(type)
+        }else if(i == R.id.phone_bar){
+            type = ConstData.AUTHENTICATE_TYPE_PHONE
+            changeLoinType(type)
         }
     }
 
@@ -236,9 +198,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
     private fun chooseCountryCode() {
         chooseWindow!!.show(thisCountry)
-        //        Intent intent = new Intent(mContext, ChooseCountryCodeActivity.class)
-//        intent.setPackage(getPackageName())
-//        startActivityForResult(intent, ConstData.CHOOSE_COUNTRY_CODE)
     }
 
     private fun checkClickable() {
@@ -246,41 +205,29 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             ConstData.AUTHENTICATE_TYPE_PHONE -> binding?.btnRegister?.isEnabled = !(!(binding?.registerAgreementCheck?.isChecked
                     ?: false)
                     || TextUtils.isEmpty(binding?.phoneAccount?.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding?.phonePassword?.text.toString().trim { it <= ' ' })
                     || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' }))
             ConstData.AUTHENTICATE_TYPE_MAIL -> binding?.btnRegister?.isEnabled = !(!(binding?.registerAgreementCheck?.isChecked
                     ?: false)
                     || TextUtils.isEmpty(binding?.mailAccount?.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding?.mailPassword?.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding?.mailCheckCode?.text.toString().trim { it <= ' ' }))
+                    || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' }))
             else -> {
             }
         }
     }
 
-    //显示当前类型
-    private fun displayCurrentType() {
-        when (type) {
-            ConstData.AUTHENTICATE_TYPE_PHONE -> binding?.changeRegisterType?.setText(R.string.register_type_email)
-            ConstData.AUTHENTICATE_TYPE_MAIL -> binding?.changeRegisterType?.setText(R.string.register_type_phone)
-            else -> binding?.changeRegisterType?.text = ""
-        }
-    }
-
-    //切换账号类型
-    private fun refreshAccountLayout() {
-        when (type) {
-            ConstData.AUTHENTICATE_TYPE_PHONE -> {
-                binding?.phoneAccountLayout?.visibility = View.VISIBLE
-                binding?.mailAccountLayout?.visibility = View.GONE
+    private fun changeLoinType(loginType:Int?){
+        when(loginType){
+            ConstData.AUTHENTICATE_TYPE_PHONE ->{
+                binding?.mailBarB?.visibility = View.GONE
+                binding?.phoneBarB?.visibility = View.VISIBLE
+                binding?.mailAccount?.visibility = View.GONE
+                binding?.relPhone?.visibility = View.VISIBLE
             }
-            ConstData.AUTHENTICATE_TYPE_MAIL -> {
-                binding?.phoneAccountLayout?.visibility = View.GONE
-                binding?.mailAccountLayout?.visibility = View.VISIBLE
-            }
-            else -> {
-                binding?.phoneAccountLayout?.visibility = View.GONE
-                binding?.mailAccountLayout?.visibility = View.GONE
+            ConstData.AUTHENTICATE_TYPE_MAIL ->{
+                binding?.mailBarB?.visibility = View.VISIBLE
+                binding?.phoneBarB?.visibility = View.GONE
+                binding?.mailAccount?.visibility = View.VISIBLE
+                binding?.relPhone?.visibility = View.GONE
             }
         }
     }
@@ -318,9 +265,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
     //获取邮箱验证码
     private fun getMailVerifyCode() {
-        if (getMailCodeLocked) {
-            return
-        }
         val userName = binding?.mailAccount?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(userName)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
@@ -331,10 +275,10 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                     //锁定发送按钮
-                    if (!getMailCodeLocked) {
-                        getMailCodeLocked = true
-                        getMailCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getMailCodeLockTimer)
+                    if (!getPhoneCodeLocked) {
+                        getPhoneCodeLocked = true
+                        getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
+                        mHandler.post(getPhoneCodeLockTimer)
                     }
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
@@ -374,7 +318,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 //            FryingUtil.showToast(mContext, getString(R.string.alert_input_captcha))
 //            return
 //        }
-        var password = binding?.phonePassword?.text.toString().trim { it <= ' ' }
+        var password = binding?.password?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(password)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
             return
@@ -412,7 +356,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
             return
         }
-        val verifyCode = binding?.mailCheckCode?.text.toString().trim { it <= ' ' }
+        val verifyCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(verifyCode)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
             return
@@ -422,7 +366,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 //            FryingUtil.showToast(mContext, getString(R.string.alert_input_captcha))
 //            return
 //        }
-        var password = binding?.mailPassword?.text.toString().trim { it <= ' ' }
+        var password = binding?.password?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(password)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
             return
@@ -440,7 +384,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 //            return
 //        }
         password = RSAUtil.encryptDataByPublicKey(password)
-        val inviteCode = binding?.mailInviteCode?.text.toString().trim { it <= ' ' }
+        val inviteCode = binding?.phoneInviteCode?.text.toString().trim { it <= ' ' }
         UserApiServiceHelper.register(this, userName, password, null, verifyCode, null, inviteCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {

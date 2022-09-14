@@ -62,6 +62,7 @@
     <color name="T10">#F12C18</color>
     <color name="T11">#99000000</color>
     <color name="T11_ALPHA5">#0D000000</color>
+    <color name="T11_ALPHA3">#08000000</color>
     <color name="T11_ALPHA16">#16000000</color>
     <color name="T11_ALPHA60">#98000000</color>
     <color name="T11_ALPHA40">#66000000</color>

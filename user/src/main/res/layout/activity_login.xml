@@ -1,251 +1,446 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <variable
             name="loginModel"
             type="Object" />
     </data>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/B2"
-        android:orientation="vertical">
-
-        <FrameLayout
+        android:background="@color/B2">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
+            android:layout_height="match_parent">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/bg_login" />
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+                <include layout="@layout/tool_bar_left_back_login" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B2" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-            <FrameLayout
-                android:id="@id/header_layout"
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include layout="@layout/action_bar_login" />
-
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/double_padding"
-                    android:layout_marginTop="68dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_marginRight="@dimen/default_padding"
+                    android:orientation="vertical">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        >
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:background="@drawable/bg_login_devide_bar"
+                            android:layout_gravity="bottom"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:id="@+id/phone_bar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/T14"
+                                    android:text="@string/phone">
+                                </com.black.base.widget.SpanTextView>
+                                <View
+                                    android:id="@+id/phone_bar_b"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="4dp"
+                                    android:background="@drawable/bg_login_devide_bar_title"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/email_bar"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/T14"
+                                    android:text="@string/email">
+                                </com.black.base.widget.SpanTextView>
+                                <View
+                                    android:id="@+id/mail_bar_b"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="4dp"
+                                    android:visibility="gone"
+                                    android:background="@drawable/bg_login_devide_bar_title"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </FrameLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/login_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14" />
+                    <com.black.base.widget.SpanMaterialEditText
+                        android:id="@+id/mail_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/pls_input_email"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="5dp"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_login_editbox"
+                        android:textSize="@dimen/text_size_12"
+                        android:visibility="gone"
+                        app:use_delete="true" />
+                    <RelativeLayout
+                        android:id="@+id/rel_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_login_editbox">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/country_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/default_padding"
+                            android:text="+86"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <ImageView
+                            android:id="@+id/img_country_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/country_code"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="10dp"
+                            android:src="@drawable/icon_country_code" />
+
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/phone_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_country_code"
+                            android:background="@null"
+                            android:gravity="center_vertical"
+                            android:hint="@string/pls_input_phone_number"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingLeft="0dp"
+                            android:paddingRight="0dp"
+                            android:textSize="@dimen/text_size_12"
+                            app:useDelete="true" />
+                    </RelativeLayout>
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_title"
-                        android:textColor="@color/T4"
-                        android:textSize="@dimen/text_size_28"
-                        android:textStyle="bold" />
+                        android:text="@string/password"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14"
+                        />
 
-                    <ImageView
+                    <com.black.base.widget.SpanMaterialEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/bg_login_editbox"
+                        android:gravity="center_vertical"
+                        android:hint="@string/pls_input_password"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:paddingLeft="5dp"
+                        android:textSize="@dimen/text_size_12"
+                        app:use_delete="true" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/forget_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_padding"
-                        android:visibility="gone"
-                        android:src="@drawable/icon_logo" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <com.black.base.widget.SpanCheckedTextView
-                        android:id="@+id/tab_phone"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:drawableBottom="@drawable/icon_login_tab"
-                        android:drawablePadding="8dp"
-                        android:gravity="center"
-                        android:text="@string/login_phone"
-                        android:textColor="@color/T4"
-                        android:textSize="@dimen/text_size_14"
-                        android:textStyle="bold" />
-
-                    <com.black.base.widget.SpanCheckedTextView
-                        android:id="@+id/tab_email"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableBottom="@drawable/icon_login_tab"
-                        android:drawablePadding="8dp"
-                        android:gravity="center"
-                        android:text="@string/login_email"
-                        android:textColor="@color/T4"
-                        android:textSize="@dimen/text_size_14"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </FrameLayout>
-        </FrameLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/double_padding"
-            android:paddingRight="@dimen/double_padding">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/register_layout"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/default_padding">
-
-                    <LinearLayout
+                        android:layout_marginTop="@dimen/double_padding"
+                        android:autoLink="all"
+                        android:text="@string/forget_passwrod"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_login"
+                        style="@style/ButtonBlue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/phone_account_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/country_code"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="@dimen/middle_padding"
-                                    android:text="+86"
-                                    android:textSize="@dimen/text_size_16" />
-
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/phone_account"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/default_padding"
-                                    android:hint="@string/edt_account_hint"
-                                    android:inputType="text"
-                                    android:maxLines="1"
-                                    android:padding="@dimen/middle_padding"
-                                    android:paddingLeft="0dp"
-                                    android:paddingRight="0dp"
-                                    android:textSize="@dimen/text_size_16"
-                                    app:useDelete="true" />
-
-                            </LinearLayout>
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/phone_password"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:hint="@string/password"
-                                android:inputType="textPassword"
-                                android:maxLines="1"
-                                android:textSize="@dimen/text_size_16"
-                                app:use_delete="true" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/mail_account_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/mail_account"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/hint_mail_account"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:textSize="@dimen/text_size_16"
-                                app:useDelete="true" />
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/mail_password"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/password"
-                                android:inputType="textPassword"
-                                android:maxLines="1"
-                                android:textSize="@dimen/text_size_16"
-                                app:useDelete="true" />
-                        </LinearLayout>
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/forget_password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/default_padding"
-                            android:autoLink="all"
-                            android:gravity="right"
-                            android:text="@string/forget_passwrod"
-                            android:textColor="@color/T2"
-                            android:textSize="@dimen/text_size_13"
-                            android:textStyle="bold" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/btn_login"
-                            style="@style/ButtonBlue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="32dp"
-                            android:padding="@dimen/middle_padding"
-                            android:text="@string/login_title" />
-
-                    </LinearLayout>
-
+                        android:layout_marginTop="32dp"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/login_title" />
                 </LinearLayout>
-            </ScrollView>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/register_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
 
-                <com.black.base.widget.SpanTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/go_register_hint"
-                    android:textColor="@color/T3"
-                    android:textSize="@dimen/text_size_16"
-                    android:textStyle="bold" />
 
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/go_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="all"
-                    android:text="@string/go_register"
-                    android:textColor="@color/C1"
-                    android:textSize="@dimen/text_size_13"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/B2"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+<!--            <FrameLayout-->
+<!--                android:id="@id/header_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+<!--                <include layout="@layout/action_bar_login" />-->
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/double_padding"-->
+<!--                    android:layout_marginTop="68dp"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <com.black.base.widget.SpanTextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/login_title"-->
+<!--                        android:textColor="@color/T4"-->
+<!--                        android:textSize="@dimen/text_size_28"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/default_padding"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:src="@drawable/icon_logo" />-->
+<!--                </LinearLayout>-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="bottom"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <com.black.base.widget.SpanCheckedTextView-->
+<!--                        android:id="@+id/tab_phone"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:checked="true"-->
+<!--                        android:drawableBottom="@drawable/icon_login_tab"-->
+<!--                        android:drawablePadding="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="@string/login_phone"-->
+<!--                        android:textColor="@color/T4"-->
+<!--                        android:textSize="@dimen/text_size_14"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <com.black.base.widget.SpanCheckedTextView-->
+<!--                        android:id="@+id/tab_email"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:drawableBottom="@drawable/icon_login_tab"-->
+<!--                        android:drawablePadding="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="@string/login_email"-->
+<!--                        android:textColor="@color/T4"-->
+<!--                        android:textSize="@dimen/text_size_14"-->
+<!--                        android:textStyle="bold" />-->
+<!--                </LinearLayout>-->
+<!--            </FrameLayout>-->
+<!--        </FrameLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingLeft="@dimen/double_padding"-->
+<!--            android:paddingRight="@dimen/double_padding">-->
+
+<!--            <ScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_above="@+id/register_layout"-->
+<!--                android:fadingEdge="none"-->
+<!--                android:overScrollMode="never"-->
+<!--                android:scrollbars="none">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:paddingTop="@dimen/default_padding">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:id="@+id/phone_account_layout"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:orientation="horizontal">-->
+
+<!--                                <com.black.base.widget.SpanMaterialEditText-->
+<!--                                    android:id="@+id/country_code"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:padding="@dimen/middle_padding"-->
+<!--                                    android:text="+86"-->
+<!--                                    android:textSize="@dimen/text_size_16" />-->
+
+<!--                                <com.black.base.widget.SpanMaterialEditText-->
+<!--                                    android:id="@+id/phone_account"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_marginLeft="@dimen/default_padding"-->
+<!--                                    android:hint="@string/edt_account_hint"-->
+<!--                                    android:inputType="text"-->
+<!--                                    android:maxLines="1"-->
+<!--                                    android:padding="@dimen/middle_padding"-->
+<!--                                    android:paddingLeft="0dp"-->
+<!--                                    android:paddingRight="0dp"-->
+<!--                                    android:textSize="@dimen/text_size_16"-->
+<!--                                    app:useDelete="true" />-->
+
+<!--                            </LinearLayout>-->
+
+<!--                            <com.black.base.widget.SpanMaterialEditText-->
+<!--                                android:id="@+id/phone_password"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:hint="@string/password"-->
+<!--                                android:inputType="textPassword"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:textSize="@dimen/text_size_16"-->
+<!--                                app:use_delete="true" />-->
+<!--                        </LinearLayout>-->
+
+<!--                        <LinearLayout-->
+<!--                            android:id="@+id/mail_account_layout"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <com.black.base.widget.SpanMaterialEditText-->
+<!--                                android:id="@+id/mail_account"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:hint="@string/hint_mail_account"-->
+<!--                                android:inputType="text"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:textSize="@dimen/text_size_16"-->
+<!--                                app:useDelete="true" />-->
+
+<!--                            <com.black.base.widget.SpanMaterialEditText-->
+<!--                                android:id="@+id/mail_password"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:hint="@string/password"-->
+<!--                                android:inputType="textPassword"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:textSize="@dimen/text_size_16"-->
+<!--                                app:useDelete="true" />-->
+<!--                        </LinearLayout>-->
+
+<!--                        <com.black.base.widget.SpanTextView-->
+<!--                            android:id="@+id/forget_password"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="@dimen/default_padding"-->
+<!--                            android:autoLink="all"-->
+<!--                            android:gravity="right"-->
+<!--                            android:text="@string/forget_passwrod"-->
+<!--                            android:textColor="@color/T2"-->
+<!--                            android:textSize="@dimen/text_size_13"-->
+<!--                            android:textStyle="bold" />-->
+
+<!--                        <com.black.base.widget.SpanTextView-->
+<!--                            android:id="@+id/btn_login"-->
+<!--                            style="@style/ButtonBlue"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="32dp"-->
+<!--                            android:padding="@dimen/middle_padding"-->
+<!--                            android:text="@string/login_title" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </LinearLayout>-->
+<!--            </ScrollView>-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/register_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <com.black.base.widget.SpanTextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/go_register_hint"-->
+<!--                    android:textColor="@color/T3"-->
+<!--                    android:textSize="@dimen/text_size_16"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <com.black.base.widget.SpanTextView-->
+<!--                    android:id="@+id/go_register"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:autoLink="all"-->
+<!--                    android:text="@string/go_register"-->
+<!--                    android:textColor="@color/C1"-->
+<!--                    android:textSize="@dimen/text_size_13"-->
+<!--                    android:textStyle="bold" />-->
+<!--            </LinearLayout>-->
+<!--        </RelativeLayout>-->
+<!--    </LinearLayout>-->
 </layout>

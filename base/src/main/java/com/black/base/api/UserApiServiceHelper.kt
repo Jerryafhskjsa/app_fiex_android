@@ -231,7 +231,7 @@ object UserApiServiceHelper {
 
     fun sendVerifyCodeGeeTest(context: Context?, userName: String?, telCountryCode: String?, geetest: String?, callback: Callback<HttpRequestResultString?>?) {
         val verifyCodeCallBack = VerifyCodeCallBack(callback)
-        ApiManager.build(context!!, true).getService(UserApiService::class.java)
+        ApiManager.build(context!!, true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.sendVerifyCodeGeeTest(userName, telCountryCode, geetest)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))

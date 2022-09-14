@@ -246,9 +246,6 @@ open class ForgetPasswordActivity : BaseActivity(), View.OnClickListener {
 
     private fun chooseCountryCode() {
         chooseWindow?.show(thisCountry)
-        //        Intent intent = new Intent(mContext, ChooseCountryCodeActivity.class)
-//        intent.setPackage(getPackageName())
-//        startActivityForResult(intent, ConstData.CHOOSE_COUNTRY_CODE)
     }
 
     //切换账号类型

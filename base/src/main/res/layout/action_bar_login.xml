@@ -3,25 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|center_vertical">
-
-        <com.black.base.widget.SpanTextView
+        android:layout_centerVertical="true">
+        <ImageView
             android:id="@+id/action_bar_title"
+            android:layout_width="9dp"
+            android:layout_height="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@null"
+            android:onClick="onBackClick"
+            android:src="@drawable/icon_back" />
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/action_bar_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onBackClick"
-            android:paddingLeft="@dimen/double_padding"
-            android:paddingTop="@dimen/middle_padding"
-            android:paddingRight="@dimen/double_padding"
-            android:paddingBottom="@dimen/middle_padding"
-            android:text="@string/cancel"
-            android:textColor="@color/T4"
-            android:textSize="@dimen/text_size_14"
+            android:layout_gravity="right|center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingRight="10dp"
+            android:text="@string/register_title"
+            android:textColor="@color/T13"
+            android:textSize="@dimen/text_size_17"
             android:textStyle="bold" />
-    </LinearLayout>
-
+    </FrameLayout>
 </FrameLayout>
