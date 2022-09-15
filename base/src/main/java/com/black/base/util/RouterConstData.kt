@@ -41,6 +41,8 @@ object RouterConstData {
     const val LOGIN = "fbsex://login"
     const val REGISTER = "fbsex://register"
     const val FORGET_PASSWORD = "fbsex://forgetPassword"
+    const val FORGET_PASSWORD_FIEX = "fbsex://forgetPasswordFiex"
+    const val FORGET_PASSWORD_NEW_PWD = "fbsex://forgetPasswordNewPws"
     const val GESTURE_PASSWORD_CHECK = "fbsex://gesturePasswordCheck"
     const val GESTURE_PASSWORD_SETTING = "fbsex://gesturePasswordSetting"
     const val SAFE_CENTER = "fbsex://safeCenter"

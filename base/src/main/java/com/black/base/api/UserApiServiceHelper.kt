@@ -471,7 +471,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.changePassword(password, newPass, phoneCode, googleCode, emailCode)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

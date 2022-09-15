@@ -127,8 +127,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
                     bundle.putString(ConstData.ACCOUNT, binding!!.phoneAccount.text.toString().trim { it <= ' ' })
                 } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
+                    bundle.putString(ConstData.ACCOUNT, binding!!.mailAccount.text.toString().trim { it <= ' ' })
                 }
-                BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD).with(bundle).go(mContext)
+                BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD_FIEX).with(bundle).go(mContext)
             }
             R.id.btn_login -> login()
             R.id.text_action_bar_right ->{//注册
@@ -167,12 +168,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 binding?.phoneBarB?.visibility = View.VISIBLE
                 binding?.mailAccount?.visibility = View.GONE
                 binding?.relPhone?.visibility = View.VISIBLE
+                binding?.loginType?.text = getString(R.string.phone_number)
             }
             ConstData.AUTHENTICATE_TYPE_MAIL ->{
                 binding?.mailBarB?.visibility = View.VISIBLE
                 binding?.phoneBarB?.visibility = View.GONE
                 binding?.mailAccount?.visibility = View.VISIBLE
                 binding?.relPhone?.visibility = View.GONE
+                binding?.loginType?.text = getString(R.string.email)
             }
         }
     }

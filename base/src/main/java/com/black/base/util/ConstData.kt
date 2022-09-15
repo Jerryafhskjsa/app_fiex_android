@@ -78,6 +78,8 @@ object ConstData {
     const val IS_NEW_APP = "is_new_app"
     const val TOKEN = "token"
     const val TYPE = "type"
+    const val VERIFY_CODE = "verify_code"
+    const val GOOGLE_CODE = "google_code"
     const val USER_INFO = "user_info"
     const val USER_NAME = "user_name"
     const val USER_ID = "user_id"

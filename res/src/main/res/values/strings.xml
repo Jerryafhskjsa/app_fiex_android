@@ -371,8 +371,8 @@
     <string name="change_password">修改密码</string>
     <string name="current_login_password">请输入原密码</string>
     <string name="new_password">请输入新密码</string>
-    <string name="new_password_again">请确认新登录</string>
-    <string name="change_password_warning">修改安全密码后，24小时内禁止提币和法币卖出</string>
+    <string name="new_password_again">请确认新密码</string>
+    <string name="change_password_warning">修改安全项目后，24小时内禁止提币和法币卖出</string>
     <string name="reset_password">重置登录密码</string>
     <string name="hint_password_length">密码 (不少于8位字符)</string>
     <string name="hint_input_mail_code">输入邮箱验证码</string>
@@ -686,8 +686,12 @@
     <string name="pls_input_phone_number">请输入手机号</string>
     <string name="email">邮箱</string>
     <string name="pls_input_password">请输入密码</string>
+    <string name="pls_input_new_password">请输入新密码</string>
     <string name="pls_input_email">请输入邮箱</string>
     <string name="verify_code">验证码</string>
     <string name="input_verify_code">请输入验证码</string>
+    <string name="input_verify_google_code">请输入谷歌认证码</string>
+    <string name="input_verify_code_1">请输入收到的6位验证码</string>
+    <string name="confirm_1">确认</string>
 
 </resources>

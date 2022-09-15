@@ -78,6 +78,7 @@
     <color name="T13_ALPHA80">#cc1571FF</color>
     <color name="T14">#000000</color>
     <color name="T15">#FF8B00</color>
+    <color name="T15_ALPHA10">#1AFF8B00</color>
 
 
 </resources>

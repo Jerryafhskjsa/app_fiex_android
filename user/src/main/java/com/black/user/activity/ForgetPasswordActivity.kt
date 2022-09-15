@@ -476,7 +476,6 @@ open class ForgetPasswordActivity : BaseActivity(), View.OnClickListener {
                             FryingUtil.showToast(mContext, if (result == null) getString(R.string.data_error) else result.msg)
                         }
                     }
-
                 })
 
     }

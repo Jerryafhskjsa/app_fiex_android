@@ -40,7 +40,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     private var binding: ActivityRegisterBinding? = null
 
     private val mHandler = Handler()
-
     private var getPhoneCodeLocked = false
     private var getPhoneCodeLockedTime = 0
     private val getPhoneCodeLockTimer = object : Runnable {
@@ -54,7 +53,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                 mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
             }
         }
-
     }
 
     private var thisCountry: CountryCode? = null
@@ -222,12 +220,14 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                 binding?.phoneBarB?.visibility = View.VISIBLE
                 binding?.mailAccount?.visibility = View.GONE
                 binding?.relPhone?.visibility = View.VISIBLE
+                binding?.loginType?.text = getString(R.string.phone_number)
             }
             ConstData.AUTHENTICATE_TYPE_MAIL ->{
                 binding?.mailBarB?.visibility = View.VISIBLE
                 binding?.phoneBarB?.visibility = View.GONE
                 binding?.mailAccount?.visibility = View.VISIBLE
                 binding?.relPhone?.visibility = View.GONE
+                binding?.loginType?.text = getString(R.string.email)
             }
         }
     }

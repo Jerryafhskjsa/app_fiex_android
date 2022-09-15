@@ -116,6 +116,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_red_corner.xml" value="0.1935" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_red_cornor.xml" value="0.1935" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_regular_rate_title.xml" value="0.1435" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_reset_pwd_tip_corner.xml" value="0.1755" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_switch_track.xml" value="0.1855" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_t3_corner3.xml" value="0.1435" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/bg_t7_corner3.xml" value="0.182" />
@@ -205,9 +206,13 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/res/src/main/res/drawable/trans_revoke_type_bg_corner.xml" value="0.198" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_change_password.xml" value="0.3341176470588235" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_forget_password.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_forget_password_fiex.xml" value="0.3551609322974473" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_forget_password_new_pwd.xml" value="0.33074361820199777" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_forget_password_secure_verify.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_google_bind.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_google_get_key.xml" value="0.3530701754385965" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_login.xml" value="0.31822222222222224" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_mail_bind.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_money_password.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_payment_mothod_add.xml" value="0.12412280701754386" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_phone_bind.xml" value="0.336094674556213" />
