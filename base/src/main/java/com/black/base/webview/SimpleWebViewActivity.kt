@@ -104,7 +104,7 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
         } else {
             setResult(Activity.RESULT_CANCELED)
             finish()
-            overridePendingTransition(0, 0)
+//            overridePendingTransition(0, 0)
         }
     }
 

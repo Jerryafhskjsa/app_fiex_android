@@ -276,7 +276,7 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
 
     open fun onBackClick(view: View?) {
         finish()
-        overridePendingTransition(0, 0)
+//        overridePendingTransition(0, 0)
     }
 
     override fun onNewIntent(intent: Intent?) {

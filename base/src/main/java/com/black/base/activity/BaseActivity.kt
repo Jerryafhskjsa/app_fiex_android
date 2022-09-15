@@ -154,7 +154,7 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
 
     open fun onBackClick(view: View?) {
         finish()
-        overridePendingTransition(0, 0)
+//        overridePendingTransition(0, 0)
     }
 
     protected open fun getViewModel(): BaseViewModel<*>? {
