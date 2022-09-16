@@ -10,11 +10,9 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
-import com.black.base.model.AssetTransfer
-import com.black.base.model.CanTransferCoin
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
+import com.black.base.model.*
 import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.SupportAccount
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
@@ -141,12 +139,12 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private fun getUserBalance(isShowLoading: Boolean){
         UserApiServiceHelper.getUserBalance(this)
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+            ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
                 override fun error(type: Int, error: Any) {
                 }
-                override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        userBalanceList = returnData.data
+                        userBalanceList = returnData.data?.spotBalance
                     } else {
                     }
                 }

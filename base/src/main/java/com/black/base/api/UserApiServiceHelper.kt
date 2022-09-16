@@ -43,7 +43,7 @@ object UserApiServiceHelper {
             }
             return field
         }
-    private val userBalanceCache:ArrayList<UserBalance?> = ArrayList()
+    private var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
 
     fun upload(context: Context?, key: String, file: File, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
@@ -309,32 +309,32 @@ object UserApiServiceHelper {
 
 
     //获取普通资产
-    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<UserBalance?>?>?) {
+    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?) {
         if (context == null || callback == null) {
             return
         }
         getUserBalance(context, false, callback, callback)
     }
 
-    fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<ArrayList<UserBalance?>?>?,errorCallback: Callback<*>?){
+    fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<UserBalanceWarpper?>?,errorCallback: Callback<*>?){
         if (context == null) {
             return
         }
         var callback = Runnable {
-            synchronized(userBalanceCache) {
-                userBalance?.callback(if (userBalanceCache == null) null else gson.fromJson<ArrayList<UserBalance?>?>(
-                    gson.toJson(userBalanceCache),
-                    object : TypeToken<ArrayList<UserBalance?>?>() {}.type))
+            synchronized(userBalanceWrapperCache) {
+                userBalance?.callback(if (userBalanceWrapperCache == null) null else gson.fromJson<UserBalanceWarpper?>(
+                    gson.toJson(userBalanceWrapperCache),
+                    object : TypeToken<UserBalanceWarpper?>() {}.type))
             }
         }
         callback.run()
         getUserBalance(context)
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
                 override fun error(type: Int, error: Any) {
                     errorCallback?.error(type, error)
                 }
-                override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         callback.run()
                     } else {
@@ -344,24 +344,23 @@ object UserApiServiceHelper {
             }))
     }
 
-    fun getUserBalance(context: Context?): Observable<HttpRequestResultDataList<UserBalance?>?>?{
+    fun getUserBalance(context: Context?): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?{
         return if(context == null){
             Observable.empty()
         }else ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
                 ?.getUserBalance()
-                ?.flatMap { returnData: HttpRequestResultDataList<UserBalance?>? ->
+                ?.flatMap { returnData: HttpRequestResultData<UserBalanceWarpper?>? ->
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        val balance: ArrayList<UserBalance?>? =
-                            if (returnData?.data == null) ArrayList() else returnData?.data!!
-                        synchronized(userBalanceCache) {
-                            val list: ArrayList<UserBalance?>? =
-                                if (balance == null) ArrayList() else gson.fromJson(
+                        val balance: UserBalanceWarpper? =
+                            if (returnData?.data == null) UserBalanceWarpper() else returnData?.data!!
+                        synchronized(userBalanceWrapperCache) {
+                            val balanceWrapper: UserBalanceWarpper? =
+                                if (balance == null) UserBalanceWarpper() else gson.fromJson(
                                     gson.toJson(balance),
-                                    object : TypeToken<ArrayList<UserBalance?>?>() {}.type
+                                    object : TypeToken<UserBalanceWarpper?>() {}.type
                                 )
-                            list?.let {
-                                userBalanceCache.clear()
-                                userBalanceCache.addAll(list)
+                            balanceWrapper?.let {
+                                userBalanceWrapperCache = balanceWrapper
                             }
                         }
                     }

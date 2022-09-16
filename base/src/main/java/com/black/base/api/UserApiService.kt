@@ -26,7 +26,7 @@ interface UserApiService {
     fun getWsToken(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.User.URL_BALANCE_LIST)
-    fun getUserBalance(): Observable<HttpRequestResultDataList<UserBalance?>?>?
+    fun getUserBalance(): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)

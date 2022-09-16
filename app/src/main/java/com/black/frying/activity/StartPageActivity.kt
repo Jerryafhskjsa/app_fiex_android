@@ -35,8 +35,8 @@ class StartPageActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN)
         val intent = intent
         if (intent != null && intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT == Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) {
             finish()
@@ -58,7 +58,7 @@ class StartPageActivity : BaseActivity() {
         WalletApiServiceHelper.clearCache()
         FileCache(this).clear()
 
-        setContentView(R.layout.activity_start_page_new)
+//        setContentView(R.layout.activity_start_page_new)
 
         val sign = CommonUtil.getSignInfo(this)
         val rightSign = SecretUtil.getCertificate("sign")

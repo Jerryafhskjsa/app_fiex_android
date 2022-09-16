@@ -18,6 +18,7 @@ import com.black.base.model.socket.TradeOrderPairList
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.model.wallet.WalletLeverDetail
@@ -419,25 +420,38 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     /**
      * 获取用户资产
+     *
      */
-    fun getCurrentUserBalance(){
+    fun getCurrentUserBalance(balanceType:ConstData.BalanceType?){
         onTransactionModelListener?.getUserBalanceCallback()?.let{
-            UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<ArrayList<UserBalance?>?>() {
-                override fun callback(balances: ArrayList<UserBalance?>?) {
+            UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<UserBalanceWarpper?>() {
+                override fun callback(balances: UserBalanceWarpper?) {
+
                     var buyBalance: UserBalance? = null
                     var sellBalance: UserBalance? = null
                     if (balances != null) {
-                        for (balance in balances) {
-                            val pairCoinType = currentPairStatus.name
-                            val pairEstimatedCoinType = currentPairStatus.setName
-                            if (TextUtils.equals(pairCoinType, balance?.coin)) {
-                                buyBalance = balance
+                        var balanceList:ArrayList<UserBalance?>? = null
+                        when(balanceType){
+                            ConstData.BalanceType.SPOT ->{
+                                balanceList = balances?.spotBalance
                             }
-                            if (TextUtils.equals(pairEstimatedCoinType, balance?.coin)) {
-                                sellBalance = balance
+                            ConstData.BalanceType.CONTRACT ->{
+                                balanceList = balances?.tigerBalance
                             }
-                            if (buyBalance != null && sellBalance != null) {
-                                break
+                        }
+                        if (balanceList != null) {
+                            for (balance in balanceList) {
+                                val pairCoinType = currentPairStatus.name
+                                val pairEstimatedCoinType = currentPairStatus.setName
+                                if (TextUtils.equals(pairCoinType, balance?.coin)) {
+                                    buyBalance = balance
+                                }
+                                if (TextUtils.equals(pairEstimatedCoinType, balance?.coin)) {
+                                    sellBalance = balance
+                                }
+                                if (buyBalance != null && sellBalance != null) {
+                                    break
+                                }
                             }
                         }
                     }

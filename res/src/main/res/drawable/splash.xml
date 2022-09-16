@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:drawable="@color/black_real"/>
+<item android:width="100dp"
+    android:height="142dp"
+    android:gravity="center">
+    <bitmap android:src="@drawable/splash_middle"/>
+</item>
+    <item android:gravity="bottom"
+        android:width="300dp"
+        android:left="40dp"
+        android:right="40dp"
+        android:bottom="40dp">
+        <bitmap  android:src="@drawable/splash_bottom"/>
+    </item>
+</layer-list>
+

@@ -17,6 +17,7 @@ import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletConfig
 import com.black.base.model.wallet.WalletLever
@@ -170,12 +171,12 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private fun getUserBalance(isShowLoading: Boolean){
         UserApiServiceHelper.getUserBalance(context)
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
                 override fun error(type: Int, error: Any) {
                 }
-                override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        userBalanceList = returnData.data
+                        userBalanceList = returnData.data?.spotBalance
                         handleResult()
                     } else {
                     }

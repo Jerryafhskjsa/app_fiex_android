@@ -33,6 +33,8 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
 
     private var thisCountry: CountryCode? = null
     private var chooseWindow: CountryChooseWindow? = null
+    private var mailCaptcha: String? = null
+    private var phoneCaptcha: String? = null
 
     private val mHandler = Handler()
 
@@ -171,11 +173,13 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
                         bundle.putString(ConstData.COUNTRY_CODE,binding?.countryCode?.text.toString().trim { it <= ' ' })
                         bundle.putString(ConstData.ACCOUNT,binding?.phoneAccount?.text.toString().trim { it <= ' ' })
                         bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodePhone?.text.toString().trim { it <= ' ' })
+                        bundle.putString(ConstData.PHONE_CAPTCHA,phoneCaptcha)
                     }
                     ConstData.AUTHENTICATE_TYPE_MAIL ->{
                         bundle.putString(ConstData.ACCOUNT,binding?.mailAccount?.text.toString().trim { it <= ' ' })
                         bundle.putString(ConstData.GOOGLE_CODE,binding?.editGoogleCode?.text.toString().trim { it <= ' ' })
                         bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodeMail?.text.toString().trim { it <= ' ' })
+                        bundle.putString(ConstData.MAIL_CAPTCHA,mailCaptcha)
                     }
                 }
                 BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD_NEW_PWD).with(bundle).go(mContext)
@@ -211,6 +215,7 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
+                    phoneCaptcha = returnData.data
                     if (!getPhoneCodeLocked) {
                         getPhoneCodeLocked = true
                         getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
@@ -230,6 +235,7 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
+                    mailCaptcha = returnData.data
                     //锁定发送按钮
                     if (!getMailCodeLocked) {
                         getMailCodeLocked = true

@@ -177,7 +177,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     override fun onResume() {
         super.onResume()
         viewModel?.setTabType(tabType)
-        viewModel?.getCurrentUserBalance()
+        viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
     }
 
@@ -809,7 +809,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                         binding!!.fragmentHomePageTransactionHeader1.price.setText("")
                         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
 //                        viewModel!!.getWalletLeverDetail()
-                        viewModel!!.getCurrentUserBalance()
+                        viewModel!!.getCurrentUserBalance(ConstData.BalanceType.SPOT)
                         refreshData()
                         FryingUtil.showToast(mContext, getString(R.string.trade_success))
                     } else {

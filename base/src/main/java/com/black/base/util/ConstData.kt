@@ -4,6 +4,13 @@ import android.R
 import com.black.net.HttpRequestResult
 
 object ConstData {
+
+    //资金类型
+    enum class BalanceType{
+        SPOT,
+        CONTRACT
+    }
+    const val DEFAULT_PSW_LEN = 8
     const val FRYING_PASSWORD = "frying" //不可修改
 
     const val IMAGE_MAX_SIZE = 4 * 1024 * 1024 //4M
@@ -79,6 +86,8 @@ object ConstData {
     const val TOKEN = "token"
     const val TYPE = "type"
     const val VERIFY_CODE = "verify_code"
+    const val PHONE_CAPTCHA = "phone_captcha"
+    const val MAIL_CAPTCHA = "mail_captcha"
     const val GOOGLE_CODE = "google_code"
     const val USER_INFO = "user_info"
     const val USER_NAME = "user_name"
