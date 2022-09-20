@@ -48,6 +48,12 @@ import com.black.util.CommonUtil
 import com.black.util.ImageUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
@@ -548,77 +554,81 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
     internal class GridViewAdapter(context: Context, data: MutableList<PairStatus?>?) : BaseDataBindAdapter<PairStatus?, ListItemPageMainStatusBinding>(context, data) {
         private var color4: Int = 0
-
-        /**
-         * 取x轴横坐标数据，整数均分递增
-         */
-        fun getKLineXdata(kLineData:HomeTickersKline?): Array<String?>? {
-            var kDataList: ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
-            var size = kDataList?.size
-            Log.d("kkkkk","size = "+size)
-            var arrayX = size?.let { arrayOfNulls<String>(it) }
-            for (i in 0 until size!!){
-                arrayX?.set(i, i.toString())
-            }
-            return arrayX
-        }
-
-        /**
-         * 取y轴纵坐标数据，最大值和最小值均分，0开始
-         */
-        fun getKlineData(kLineData:HomeTickersKline?):FloatArray{
-            var kDataList:ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
-            Log.d("kkkkk","size = "+kDataList?.size)
-            var yListSize = kDataList?.size
-            var kPlistArray = FloatArray(yListSize!!)
-            for (value in kDataList!!){
-                var index = 0
-                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it }
-            }
-            return kPlistArray
-        }
+        private var brokenLine: LineChart? = null
 
         /**
          * k线数据转为FloatArray
          */
-        fun getKineYdata(kLineData:HomeTickersKline?):FloatArray{
+        fun getKineYdata(kLineData:HomeTickersKline?):ArrayList<Entry>{
             var kDataList:ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
             var yListSize = kDataList?.size
             var kPlistArray = FloatArray(yListSize!!)
+            val dataEntry = java.util.ArrayList<Entry>()
+            var index = 0
             for (value in kDataList!!){
-                var index = 0
-                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it }
+                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it}
+                var entry = value?.p?.toFloat()?.let { Entry(index.toFloat(), it,null) }
+                if (entry != null) {
+                    dataEntry.add(entry)
+                }
                 index++
             }
-            var yMax = kPlistArray.maxOrNull()
-            var newYdata:ArrayList<Float> = ArrayList()
-            var divide = yListSize?.let { yMax?.div(it.toFloat()) }
-            var temp: Float? = null
-            if (yListSize != null) {
-                while (yListSize > -1){
-                    if(temp == null){
-                        temp = 0.0f
-                    }else{
-                        if (divide != null) {
-                            temp += divide
-                        }
-                    }
-                    if(yListSize == 0){
-                        if(temp < yMax!!){
-                            temp = yMax
-                        }
-                    }
-                    newYdata.add(temp)
-                    yListSize--
-                }
-            }
-            return newYdata.toFloatArray()
+            return dataEntry
         }
         override fun resetSkinResources() {
             super.resetSkinResources()
             colorWin = SkinCompatResources.getColor(context, R.color.T7)
             colorLost = SkinCompatResources.getColor(context, R.color.T5)
             color4 = SkinCompatResources.getColor(context, R.color.T3)
+        }
+
+        fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>){
+            brokenLine?.setDrawBorders(false)
+            brokenLine?.isAutoScaleMinMaxEnabled = true
+            // background color
+            brokenLine?.setBackgroundColor(Color.WHITE)
+            // disable description text
+            brokenLine?.description?.isEnabled = false
+            // enable touch gestures
+            brokenLine?.setTouchEnabled(false)
+            brokenLine?.setDrawGridBackground(false)
+            brokenLine?.isDragEnabled = false
+            brokenLine?.setScaleEnabled(false)
+            brokenLine?.setPinchZoom(false)
+            var xAxis =  brokenLine?.getXAxis()
+                xAxis?.setDrawGridLines(false)
+                xAxis?.isEnabled = false
+            brokenLine?.axisRight?.isEnabled = false
+            brokenLine?.axisLeft?.isEnabled = false
+            // get the legend (only possible after setting data)
+            val l: Legend? = brokenLine?.legend
+            l?.isEnabled = false
+
+            var set1 = LineDataSet(values, " ")
+            if (brokenLine?.data != null &&
+                brokenLine?.data?.dataSetCount!! > 0
+            ){
+                set1 = brokenLine?.data.getDataSetByIndex(0) as LineDataSet
+                set1?.values = values
+                set1.notifyDataSetChanged()
+                brokenLine?.data.notifyDataChanged()
+                brokenLine?.notifyDataSetChanged()
+            }else{
+                set1.setDrawIcons(false)
+                // black lines and points
+                set1.color = Color.BLACK
+                set1.setCircleColor(Color.BLACK)
+                // line thickness and point size
+                set1.lineWidth = 2f
+                set1.circleRadius = 1f
+                set1.setDrawValues(false)
+                // draw points as solid circles
+                set1.setDrawCircleHole(false)
+                val dataSets = java.util.ArrayList<ILineDataSet>()
+                dataSets.add(set1)
+                val data = LineData(dataSets)
+                brokenLine?.data = data
+            }
         }
 
         override fun getItemLayoutId(): Int {
@@ -636,22 +646,16 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairSince?.setTextColor(colorDefault)
 //            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
             binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
-
-//            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
-//            Log.d("fffff","kLine1 = "+ pairStatus?.kLineDate?.k?.get(0)?.p)
-            //折线图假数据
-            var xdata = arrayOf("0","1","2","3","4","5","6","7","8","9")
-            var ydata:FloatArray = floatArrayOf(0.0f,10.0f,20.0f,30.0f,40.0f,50.0f,60.0f,70.0f,80.0f,90.0f)
-            var linedata:FloatArray = floatArrayOf(5f,10f,6f,30f,5f,62.5f,6f,2f,3f,6f)
-
-
-//            binding?.lineCart?.setChartdate(xdata,ydata,linedata, Color.BLACK)
             var kLineData = pairStatus?.kLineDate
             if(kLineData != null){
-//                getKLineXdata(kLineData)?.let { binding?.lineCart?.setChartdate(it,getKineYdata(kLineData),getKlineData(kLineData), Color.BLACK) }
+                brokenLine = binding?.lineCart
+                var brokenLineData = getKineYdata(pairStatus?.kLineDate)
+                initBrokenline(brokenLine,brokenLineData)
             }
         }
     }
+
+
 
 
 

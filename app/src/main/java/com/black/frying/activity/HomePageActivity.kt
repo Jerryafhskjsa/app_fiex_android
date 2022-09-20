@@ -8,9 +8,11 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.TabHost
 import android.widget.TextView
 import androidx.fragment.app.FragmentTabHost
 import com.black.base.activity.BaseActionBarActivity
@@ -70,12 +72,12 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 //        tabHost.addTab(tabHost.newTabSpec("throttle").setIndicator("Throttle"),
 //                HomePageMineFragment.class, null);
 //        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
-        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragmentFiex::class.java)
-        tabs[1] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
+        tabs[ConstData.TAB_HOME] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragmentFiex::class.java)
+        tabs[ConstData.TAB_QUOTATION] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
 //        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
-        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
-        tabs[3] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
-        tabs[4] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
+        tabs[ConstData.TAB_TRANSATION] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
+        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
+        tabs[ConstData.TAB_ASSET] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
             val indicator = View.inflate(applicationContext, R.layout.home_page_tab_indicator, null)
@@ -96,7 +98,16 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                 tabSpec?.let { tabHost?.addTab(it, tab.fragmentClass, null) }
             }
         }
-        //
+        //资产fragment检查登录状态
+        tabHost?.tabWidget?.getChildAt(ConstData.TAB_ASSET)?.setOnClickListener{
+            Log.d("999999","clicked")
+            if(CookieUtil.getUserInfo(mContext) == null){
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }else{
+                tabHost?.currentTab = ConstData.TAB_ASSET
+                tabHost?.tabWidget?.requestFocus(View.FOCUS_FORWARD)
+            }
+        }
         PairStatusPopupWindow.reset()
         val routeFragmentIndex = intent.getIntExtra("routeFragmentIndex", -1)
         if (routeFragmentIndex != -1) {

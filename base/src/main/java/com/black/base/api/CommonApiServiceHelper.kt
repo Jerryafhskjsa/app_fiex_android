@@ -8,6 +8,8 @@ import com.black.base.model.socket.PairDescription
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
+import com.black.net.HttpCookieUtil
+import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.google.gson.JsonObject
 
@@ -32,7 +34,6 @@ object CommonApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
-
 
     fun checkUpdate(
         context: Context?,

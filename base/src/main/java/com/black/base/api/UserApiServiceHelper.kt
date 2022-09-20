@@ -45,6 +45,30 @@ object UserApiServiceHelper {
         }
     private var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
 
+    //获取ticket
+    fun getTicket(context: Context,callback:Callback<HttpRequestResultString?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+            ?.getTicket()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
+    //获取pro-token
+    fun getProToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+            ?.getProToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
+    //获取ws-token
+    fun getWsToken(context: Context,callback:Callback<HttpRequestResultString?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+            ?.getWsToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
     fun upload(context: Context?, key: String, file: File, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return

@@ -1,6 +1,7 @@
 package com.black.net;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.JsonParseException;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.HttpException;
@@ -34,14 +36,22 @@ public abstract class RxObserver<T> implements Observer<T> {
         }
     }
 
+    private void refreshTokens(String requestUrl){
+        if(requestUrl.contains("/uc/") || requestUrl.contains("/pro/")){
+
+        }
+    }
+
     @Override
     final public void onError(Throwable e) {
         e.printStackTrace();
         if (e instanceof com.jakewharton.retrofit2.adapter.rxjava2.HttpException) {
             com.jakewharton.retrofit2.adapter.rxjava2.HttpException httpException = (com.jakewharton.retrofit2.adapter.rxjava2.HttpException) e;
             int code = httpException.code();
+            HttpUrl url = httpException.response().raw().request().url();
+            String urlStr = url.url().toString();
             if (code == ERROR_TOKEN_INVALID_CODE) {
-                error(httpException.response().message(), HttpRequestResult.ERROR_TOKEN_INVALID);
+                error(httpException.response().raw().request(), HttpRequestResult.ERROR_TOKEN_INVALID);
             } else if (code == HttpRequestResult.ERROR_MISS_MONEY_PASSWORD_CODE) {
                 //资金密码错误
                 Request request = httpException.response().raw().request();
@@ -55,7 +65,7 @@ public abstract class RxObserver<T> implements Observer<T> {
             int code = httpException.code();
             if (code == ERROR_TOKEN_INVALID_CODE) {
                 //token失效
-                error(httpException.response().message(), HttpRequestResult.ERROR_TOKEN_INVALID);
+                error(httpException.response().raw().request(), HttpRequestResult.ERROR_TOKEN_INVALID);
             } else if (code == HttpRequestResult.ERROR_MISS_MONEY_PASSWORD_CODE) {
                 //资金密码错误
                 Request request = httpException.response().raw().request();
@@ -66,10 +76,12 @@ public abstract class RxObserver<T> implements Observer<T> {
             }
         } else if (e instanceof BlackHttpException) {
             BlackHttpException interceptException = (BlackHttpException) e;
+            HttpUrl url = interceptException.response().request().url();
+            String urlStr = url.url().toString();
             int code = interceptException.code();
             if (code == ERROR_TOKEN_INVALID_CODE) {
                 //token失效
-                error(interceptException.response().message(), HttpRequestResult.ERROR_TOKEN_INVALID);
+                error(interceptException.response().request().url(), HttpRequestResult.ERROR_TOKEN_INVALID);
             } else if (code == HttpRequestResult.ERROR_MISS_MONEY_PASSWORD_CODE) {
                 //资金密码错误
                 error(interceptException, HttpRequestResult.ERROR_MISS_MONEY_PASSWORD);

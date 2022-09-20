@@ -252,7 +252,7 @@ open class BaseFragment : Fragment(), RouteCheckHelper {
             when (type) {
                 ConstData.ERROR_NORMAL -> showToast(activity, error.toString())
                 ConstData.ERROR_TOKEN_INVALID -> if (activity is BaseActionBarActivity) {
-                    (activity as BaseActionBarActivity).onTokenError()
+                    (activity as BaseActionBarActivity).onTokenError(error)
                 }
                 ConstData.ERROR_UNKNOWN ->  //根據情況處理，error 是返回的HttpRequestResultError
                     if (error != null && error is HttpRequestResultBase) {

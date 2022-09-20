@@ -141,6 +141,8 @@ object UrlConfig {
     object User {
         //登录
         const val URL_TOKEN = "user/token"
+        //ticket
+        const val URL_TICKET = "/user/get/ticket"
         //trade_login
         const val URL_TRADE_LOGIN = "user/trade/login"
         //user_login

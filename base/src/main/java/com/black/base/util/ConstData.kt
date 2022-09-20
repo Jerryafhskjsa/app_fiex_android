@@ -10,6 +10,13 @@ object ConstData {
         SPOT,
         CONTRACT
     }
+
+    const val TAB_HOME = 0
+    const val TAB_QUOTATION = 1
+    const val TAB_TRANSATION = 2
+    const val TAB_CONTRACT = 3
+    const val TAB_ASSET = 4
+
     const val DEFAULT_PSW_LEN = 8
     const val FRYING_PASSWORD = "frying" //不可修改
 

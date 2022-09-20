@@ -82,9 +82,9 @@ abstract class NormalObserver2<T>(protected var context: Context? = null) : NetO
         when (type) {
             ConstData.ERROR_NORMAL -> FryingUtil.showToast(context, error.toString())
             ConstData.ERROR_TOKEN_INVALID -> if (context is BaseActionBarActivity) {
-                (context as BaseActionBarActivity).onTokenError()
+                (context as BaseActionBarActivity).onTokenError(error)
             } else if (context is BaseActivity) {
-                (context as BaseActivity).onTokenError()
+                (context as BaseActivity).onTokenError(error)
             }
             ConstData.ERROR_UNKNOWN ->  //根據情況處理，error 是返回的HttpRequestResultError
                 if (error != null && error is HttpRequestResultBase) {

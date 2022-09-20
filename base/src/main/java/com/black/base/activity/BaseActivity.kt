@@ -24,12 +24,15 @@ import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.FryingSingleToast
 import com.black.base.model.HttpRequestResultBase
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.ProTokenResult
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.LoadingDialog
 import com.black.base.viewmodel.BaseViewModel
 import com.black.lib.permission.Permission
 import com.black.lib.permission.PermissionHelper
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.RouteCheckHelper
@@ -38,6 +41,7 @@ import com.black.util.CommonUtil
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
+import okhttp3.Request
 import kotlin.math.abs
 
 open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteCheckHelper {
@@ -341,29 +345,59 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
         CommonUtil.postHandleTask(handler, runnable, delayTime)
     }
 
+    private fun refreshToken(error: Any?){
+        if(CookieUtil.getUserInfo(mContext) != null && error is Request){
+            var urlStr = error.url().toString()
+            if(urlStr.contains("/pro/")){
+                UserApiServiceHelper.getProToken(mContext!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
+                    override fun error(type: Int, error: Any?) {
+                        if(type == ConstData.ERROR_TOKEN_INVALID){
+                            UserApiServiceHelper.getTicket(mContext!!, object:Callback<HttpRequestResultString?>() {
+                                override fun error(type: Int, error: Any?) {
+                                    if(type == ConstData.ERROR_TOKEN_INVALID){
+                                        FryingUtil.showToast(mContext, getString(R.string.login_over_time), FryingSingleToast.ERROR)
+                                        CookieUtil.deleteUserInfo(mContext)
+                                        CookieUtil.deleteToken(mContext)
+                                        //退回到主界面并要求登录
+                                        BlackRouter.getInstance().build(RouterConstData.HOME_PAGE)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                            .go(mContext) { _, _ ->
+                                                if (!FryingUtil.checkRouteUri(mContext, RouterConstData.HOME_PAGE)) {
+                                                    finish()
+                                                }
+                                                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+                                            }
+                                    }
+                                }
+                                override fun callback(result: HttpRequestResultString?) {
+                                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+                                        var ticket: String? = result.data
+                                        HttpCookieUtil.saveTicket(mContext,ticket)
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                        if(result != null && result.code == HttpRequestResult.SUCCESS){
+                            var proTokenResult: ProTokenResult? = result.data
+                            var proToken = proTokenResult?.proToken
+                            var proTokenExpiredTime =proTokenResult?.expireTime
+                            HttpCookieUtil.saveProToken(mContext,proToken)
+                            HttpCookieUtil.saveProTokenExpiredTime(mContext,proTokenExpiredTime.toString())
+                        }
+                    }
+                })
+            }
+        }
+    }
+
     //token过期的处理
-    open fun onTokenError() {
+    open fun onTokenError(error: Any?) {
         if (BaseApplication.checkTokenError) {
             BaseApplication.checkTokenError = false
-            FryingUtil.showToast(mContext, getString(R.string.login_over_time), FryingSingleToast.ERROR)
-            CookieUtil.deleteUserInfo(this)
-            CookieUtil.deleteToken(this)
-            //        CookieUtil.setAccountProtectType(this, 0);
-//        CookieUtil.setGesturePassword(this, null);
-//        CookieUtil.setAccountProtectJump(this, false);
-//        CookieUtil.saveUserId(this, null);
-//        CookieUtil.saveUserName(this, null);
-            sendPairChangedBroadcast(SocketUtil.COMMAND_USER_LOGOUT)
-            //退回到主界面并要求登录
-            BlackRouter.getInstance().build(RouterConstData.HOME_PAGE)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    .go(this) { _, _ ->
-                        if (!FryingUtil.checkRouteUri(mContext, RouterConstData.HOME_PAGE)) {
-                            finish()
-                        }
-                        BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
-                    }
+            refreshToken(error)
         }
     }
 
@@ -510,7 +544,7 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
         override fun error(type: Int, error: Any?) {
             when (type) {
                 ConstData.ERROR_NORMAL -> FryingUtil.showToast(mContext, error.toString())
-                ConstData.ERROR_TOKEN_INVALID -> onTokenError()
+                ConstData.ERROR_TOKEN_INVALID -> onTokenError(error)
                 ConstData.ERROR_UNKNOWN ->
                     //根據情況處理，error 是返回的HttpRequestResultError
                     if (error != null && error is HttpRequestResultBase) {

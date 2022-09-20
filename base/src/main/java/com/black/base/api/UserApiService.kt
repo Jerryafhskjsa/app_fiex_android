@@ -14,13 +14,11 @@ interface UserApiService {
     @POST(UrlConfig.User.URL_TOKEN)
     fun getToken(@Field("telCountryCode") telCountryCode: String?, @Field("username") username: String?, @Field("password") password: String?): Observable<HttpRequestResultString?>?
 
+    @POST(UrlConfig.User.URL_TICKET)
+    fun getTicket(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.User.URL_USER_LOGIN)
     fun getProToken(): Observable<HttpRequestResultData<ProTokenResult?>?>?
-
-
-    @POST(UrlConfig.User.URL_TRADE_LOGIN)
-    fun getTradeToken(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.User.URL_WS_TOKEN)
     fun getWsToken(): Observable<HttpRequestResultString?>?

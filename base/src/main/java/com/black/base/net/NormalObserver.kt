@@ -2,6 +2,7 @@ package com.black.base.net
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.black.base.R
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.activity.BaseActivity
@@ -38,7 +39,8 @@ abstract class NormalObserver<T>(protected var context: Context? = null) : NetOb
                         ?: context?.getString(R.string.alert_server_error)
                 HttpRequestResult.ERROR_TOKEN_INVALID -> {
                     type = ConstData.ERROR_TOKEN_INVALID
-                    error = context?.getString(R.string.login_over_time)
+//                    error = context?.getString(R.string.login_over_time)
+                    error = returnString
                 }
                 HttpRequestResult.ERROR_MISS_MONEY_PASSWORD -> {
                     type = ConstData.ERROR_MISS_MONEY_PASSWORD
@@ -81,9 +83,9 @@ abstract class NormalObserver<T>(protected var context: Context? = null) : NetOb
         when (type) {
             ConstData.ERROR_NORMAL -> FryingUtil.showToast(context, error.toString())
             ConstData.ERROR_TOKEN_INVALID -> if (context is BaseActionBarActivity) {
-                (context as BaseActionBarActivity).onTokenError()
+                (context as BaseActionBarActivity).onTokenError(error)
             } else if (context is BaseActivity) {
-                (context as BaseActivity).onTokenError()
+                (context as BaseActivity).onTokenError(error)
             }
             ConstData.ERROR_UNKNOWN ->
                 //根據情況處理，error 是返回的HttpRequestResultError

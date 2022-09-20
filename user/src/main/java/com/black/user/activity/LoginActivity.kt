@@ -14,6 +14,7 @@ import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiService
+import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
@@ -366,43 +367,68 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     //获取pro-token
     private fun getProToken(context: Context){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
-            ?.getProToken()
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultData<ProTokenResult?>?>(){
-                override fun error(type: Int, error: Any?) {
+        UserApiServiceHelper.getProToken(context!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
+            override fun error(type: Int, error: Any?) {
+            }
+            override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                if(result != null && result.code == HttpRequestResult.SUCCESS){
+                    var proTokenResult: ProTokenResult? = result.data
+                    var proToken = proTokenResult?.proToken
+                    var proTokenExpiredTime =proTokenResult?.expireTime
+                    HttpCookieUtil.saveProToken(context,proToken)
+                    HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
+                    getWsToken(mContext)
                 }
-
-                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
-                    if(result != null && result.code == HttpRequestResult.SUCCESS){
-                        var proTokenResult: ProTokenResult? = result.data
-                        var proToken = proTokenResult?.proToken
-                        var proTokenExpiredTime =proTokenResult?.expireTime
-                        HttpCookieUtil.saveProToken(context,proToken)
-                        HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
-                        getWsToken(mContext)
-                    }
-                }
-            }))
+            }
+        })
+//        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
+//            ?.getProToken()
+//            ?.compose(RxJavaHelper.observeOnMainThread())
+//            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultData<ProTokenResult?>?>(){
+//                override fun error(type: Int, error: Any?) {
+//                }
+//
+//                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+//                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+//                        var proTokenResult: ProTokenResult? = result.data
+//                        var proToken = proTokenResult?.proToken
+//                        var proTokenExpiredTime =proTokenResult?.expireTime
+//                        HttpCookieUtil.saveProToken(context,proToken)
+//                        HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
+//                        getWsToken(mContext)
+//                    }
+//                }
+//            }))
     }
 
     //获取ws-token
     private fun getWsToken(context: Context){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
-            ?.getWsToken()
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
-                override fun error(type: Int, error: Any?) {
+        UserApiServiceHelper.getWsToken(context!!,object :Callback<HttpRequestResultString?>(){
+            override fun error(type: Int, error: Any?) {
+            }
+            override fun callback(result: HttpRequestResultString?) {
+                if(result != null && result.code == HttpRequestResult.SUCCESS){
+                    var wsToken = result.data
+                    HttpCookieUtil.saveWsToken(context,wsToken)
+                    onGetTokenSuccess()
                 }
-
-                override fun callback(result: HttpRequestResultString?) {
-                    if(result != null && result.code == HttpRequestResult.SUCCESS){
-                        var wsToken = result.data
-                        HttpCookieUtil.saveWsToken(context,wsToken)
-                        onGetTokenSuccess()
-                    }
-                }
-            }))
+            }
+        })
+//        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
+//            ?.getWsToken()
+//            ?.compose(RxJavaHelper.observeOnMainThread())
+//            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
+//                override fun error(type: Int, error: Any?) {
+//                }
+//
+//                override fun callback(result: HttpRequestResultString?) {
+//                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+//                        var wsToken = result.data
+//                        HttpCookieUtil.saveWsToken(context,wsToken)
+//                        onGetTokenSuccess()
+//                    }
+//                }
+//            }))
     }
 
 

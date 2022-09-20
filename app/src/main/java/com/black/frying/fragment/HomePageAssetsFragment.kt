@@ -19,10 +19,7 @@ import com.black.base.model.Money
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
-import com.black.base.util.StatusBarUtil
+import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.base.viewmodel.BaseViewModel
 import com.black.frying.fragment.assets.AssetsContractFragment
@@ -43,7 +40,7 @@ import kotlin.math.abs
 import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
 import com.black.frying.fragment.assets.AssetsSpotFragment.EventResponseListener
 import com.black.frying.fragment.assets.AssetsWalletFragment
-
+import com.black.router.annotation.Route
 
 class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener,
     WalletViewModel.OnWalletModelListener, AssetsSpotFragment.EventResponseListener,

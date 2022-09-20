@@ -131,6 +131,7 @@ object RouterConstData {
     const val C2C_ORDER_DETAIL_TALK_NEW = "fbsex://c2cOrderDetailTalkNew"
 
     const val TRANSACTION = "fbsex://transaction"
+    const val HOME_ASSET = "fbsex://homeAsset"
     const val C2C_HOME = "fbsex://c2cHome"
 
     const val FACTION_LIST = "fbsex://league"

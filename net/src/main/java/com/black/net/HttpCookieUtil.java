@@ -98,32 +98,32 @@ public class HttpCookieUtil {
 
     public static void deleteUcToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(UC_TOKEN).apply();
+        editor.remove(UC_TOKEN).commit();
     }
 
     public static void deleteTicket(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(TICKET).apply();
+        editor.remove(TICKET).commit();
     }
 
     public static void deleteTradeToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(TRADE_TOKEN).apply();
+        editor.remove(TRADE_TOKEN).commit();
     }
 
     public static void deleteWsToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(WS_TOKEN).apply();
+        editor.remove(WS_TOKEN).commit();
     }
 
     public static void deleteProToken(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(PRO_TOKEN).apply();
+        editor.remove(PRO_TOKEN).commit();
     }
 
     public static void deleteSessionId(Context context){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.remove(JSESSION_ID).apply();
+        editor.remove(JSESSION_ID).commit();
     }
 
     public static void deleteCookies(Context context){
@@ -133,8 +133,6 @@ public class HttpCookieUtil {
         deleteProToken(context);
         deleteWsToken(context);
         deleteSessionId(context);
-
     }
-
 
 }

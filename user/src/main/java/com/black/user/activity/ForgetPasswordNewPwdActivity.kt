@@ -119,7 +119,6 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
                 override fun afterRequest() {
                     hideLoading()
                 }
-
                 override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>> {
                     if (returnData != null) {
                         when (returnData.code) {

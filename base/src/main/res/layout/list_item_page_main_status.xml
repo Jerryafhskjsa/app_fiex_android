@@ -93,11 +93,19 @@
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
         </LinearLayout>
-        <com.black.base.view.LineChartView
+<!--        <com.black.base.view.LineChartView-->
+<!--            android:id="@+id/line_cart"-->
+<!--            android:paddingLeft="5dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80dp">-->
+<!--        </com.black.base.view.LineChartView>-->
+        <!-- https://juejin.cn/post/6844904160710803464
+        https://github.com/PhilJay/MPAndroidChart-->
+        <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/line_cart"
             android:paddingLeft="5dp"
             android:layout_width="match_parent"
-            android:layout_height="80dp">
-        </com.black.base.view.LineChartView>
+            android:layout_height="80dp"
+            />
     </LinearLayout>
 </layout>
