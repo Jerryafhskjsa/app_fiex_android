@@ -627,6 +627,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 dataSets.add(set1)
                 val data = LineData(dataSets)
                 brokenLine?.data = data
+
             }
         }
 
