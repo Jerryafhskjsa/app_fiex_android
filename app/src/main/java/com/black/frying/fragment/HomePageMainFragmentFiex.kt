@@ -585,7 +585,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>){
             brokenLine?.setDrawBorders(false)
             brokenLine?.isAutoScaleMinMaxEnabled = true
-            // background color
             brokenLine?.setBackgroundColor(Color.WHITE)
             // disable description text
             brokenLine?.description?.isEnabled = false
