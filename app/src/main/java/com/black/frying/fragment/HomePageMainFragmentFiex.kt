@@ -27,6 +27,7 @@ import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
+import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.Wallet
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
@@ -110,6 +111,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
         })
 
+
         binding!!.noticeLayout.visibility = View.VISIBLE
         binding!!.noticeTextView.setTextColor(SkinCompatResources.getColor(activity, R.color.T1))
         binding!!.noticeTextView.setTextStillTime(3000)//设置停留时长间隔
@@ -153,7 +155,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.btnSearchMenu.setOnClickListener(this)
         binding!!.btnScanMenu.setOnClickListener(this)
         binding!!.btnMoreMenu.setOnClickListener(this)
-
         layout?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 layout?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
@@ -275,6 +276,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     override fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
     }
 
+    override fun onCoinlistConfig(data: ArrayList<CoinInfo?>?) {
+        Log.d("999999","colistListConfigSiz = "+data?.size)
+    }
+
     override fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
         Log.d(TAG,"onHomeTabDataChanged")
         observable!!.subscribe {
@@ -387,68 +392,18 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<String?>?>() {
             override fun callback(returnData: HttpRequestResultDataList<String?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    showHotPairs(returnData.data)
                 } else {
-                    showHotPairs(null)
                 }
             }
 
             override fun error(type: Int, error: Any?) {
-                showHotPairs(null)
             }
         }))
-    }
-
-    private fun showHotPairs(pairs: ArrayList<String?>?) {
-        val viewList: MutableList<View> = ArrayList()
-        if (pairs != null) {
-            val pairCount = pairs.size
-            if (pairCount > 0) {
-                var pageCount = pairCount / STATUS_PAGE_COUNT
-                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
-                for (i in 0 until pageCount) {
-                    val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
-                    val offset = i * STATUS_PAGE_COUNT
-                    val rest = if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
-                    val gridView = GridView(activity)
-                    for (j in 0 until rest) {
-                        val pair = pairs[offset + j]
-                        pair?.let {
-                            val pairStatus = PairStatus()
-                            pairStatus.pair = pair
-                            pairStatus.currentPrice = (pairStatus.currentPrice)
-                            pairStatus.setCurrentPriceCNY(0.0, nullAmount)
-                            pairStatus.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                            gridPairs.add(pairStatus)
-                            hotPairMap[it] = pairStatus
-                            hardGridViewMap[it] = gridView
-                        }
-                    }
-                    val adapter = GridViewAdapter(activity!!, gridPairs)
-                    gridView.numColumns = STATUS_PAGE_COUNT
-                    gridView.adapter = adapter
-                    gridView.horizontalSpacing = 15
-                    gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
-                    viewList.add(gridView)
-                }
-            }
-        }
-        statusAdapter = BaseViewPagerAdapter(viewList)
-        binding!!.statusViewPager.adapter = statusAdapter
-        binding!!.statusIndicator.removeAllViews()
-        for (i in viewList.indices) {
-            binding!!.statusIndicator.addView(activity!!.layoutInflater.inflate(R.layout.view_main_status_dot, null))
-        }
-        if (viewList.size > 0) {
-            binding!!.statusViewPager.currentItem = 0
-        }
-        viewModel!!.getAllPairStatus()
     }
 
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
         var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" }
-
         val viewList: MutableList<View> = ArrayList()
         if (ticketData != null) {
             val pairCount = ticketData.size
@@ -475,13 +430,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }
         statusAdapter = BaseViewPagerAdapter(viewList)
         binding!!.statusViewPager.adapter = statusAdapter
-        binding!!.statusIndicator.removeAllViews()
-        for (i in viewList.indices) {
-            binding!!.statusIndicator.addView(activity!!.layoutInflater.inflate(R.layout.view_main_status_dot, null))
-        }
-        if (viewList.size > 0) {
-            binding!!.statusViewPager.currentItem = 0
-        }
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -553,7 +501,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     internal class GridViewAdapter(context: Context, data: MutableList<PairStatus?>?) : BaseDataBindAdapter<PairStatus?, ListItemPageMainStatusBinding>(context, data) {
-        private var color4: Int = 0
         private var brokenLine: LineChart? = null
 
         /**
@@ -577,12 +524,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }
         override fun resetSkinResources() {
             super.resetSkinResources()
-            colorWin = SkinCompatResources.getColor(context, R.color.T7)
-            colorLost = SkinCompatResources.getColor(context, R.color.T5)
-            color4 = SkinCompatResources.getColor(context, R.color.T3)
+            colorWin = SkinCompatResources.getColor(context, R.color.T10)
+            colorLost = SkinCompatResources.getColor(context, R.color.T9)
+            colorDefault = SkinCompatResources.getColor(context, R.color.T3)
         }
 
-        fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>){
+        fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>,color:Int?){
             brokenLine?.setDrawBorders(false)
             brokenLine?.isAutoScaleMinMaxEnabled = true
             brokenLine?.setBackgroundColor(Color.WHITE)
@@ -615,8 +562,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }else{
                 set1.setDrawIcons(false)
                 // black lines and points
-                set1.color = Color.BLACK
-                set1.setCircleColor(Color.BLACK)
+                if (color != null) {
+                    set1.color = color
+                }
+                if (color != null) {
+                    set1.setCircleColor(color)
+                }
                 // line thickness and point size
                 set1.lineWidth = 2f
                 set1.circleRadius = 1f
@@ -639,26 +590,25 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
             val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
+            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+            pairStatus?.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
+            binding?.gridIndicator?.setBackgroundColor(color)
+            binding?.raiseDownBg?.background = bgWinLose
             binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
             binding?.pairPrice?.text = pairStatus.currentPriceFormat
             binding?.pairPrice?.setTextColor(color)
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
             binding?.pairSince?.setTextColor(colorDefault)
-//            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
-            binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
+            binding?.pairPriceCny?.text = String.format("≈ %s", pairStatus.currentPriceCNYFormat)
+//            binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
             var kLineData = pairStatus?.kLineDate
             if(kLineData != null){
                 brokenLine = binding?.lineCart
                 var brokenLineData = getKineYdata(pairStatus?.kLineDate)
-                initBrokenline(brokenLine,brokenLineData)
+                initBrokenline(brokenLine,brokenLineData,color)
             }
         }
     }
-
-
-
-
-
 
     override fun onCancelClick(mainMorePopup: MainMorePopup) {
         mainMorePopup.dismiss()

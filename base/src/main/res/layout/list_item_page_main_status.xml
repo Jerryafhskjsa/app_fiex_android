@@ -32,11 +32,12 @@
                 android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
                 <RelativeLayout
+                    android:id="@+id/raise_down_bg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/hot_item_bg_corner">
+                    android:background="@drawable/hot_item_bg_corner_default">
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/pair_since"
@@ -49,7 +50,7 @@
                         android:paddingTop="3dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="3dp"
-                        android:text="333.22%"
+                        android:text="0.00%"
                         android:textColor="@color/T8"
                         android:textSize="@dimen/text_size_12" />
                 </RelativeLayout>
@@ -61,6 +62,7 @@
             android:layout_marginTop="10dp"
             android:paddingLeft="5dp">
             <View
+                android:id="@+id/grid_indicator"
                 android:layout_width="4dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
@@ -71,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp">
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/pair_price"
                     android:layout_width="wrap_content"
@@ -80,6 +83,7 @@
                     android:maxLines="1"
                     android:text="444555"
                     android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/T3"
                     android:textStyle="bold" />
 
                 <com.black.base.widget.SpanTextView

@@ -13,9 +13,7 @@ import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
-import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletConfig
-import com.black.base.model.wallet.WalletLever
+import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
@@ -64,7 +62,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
             hotPairObserver = createHotPairObserver()
         }
         SocketDataContainer.subscribeHotPairObservable(hotPairObserver)
-        getHotPairs()
+//        getHotPairs()
         getSymbolList()
 //        getHomeTicker()
 //        getHomeKline()
@@ -72,6 +70,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
             //获取公告信息
             getNoticeInfo()
         }
+        getCoinlistConfig()
     }
 
     override fun onStop() {
@@ -343,6 +342,22 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         onMainModelListener?.onHomeKLine(PairApiServiceHelper.getHomeKline((context!!)))
     }
 
+    /**
+     * 获取币种配置
+     */
+    private fun getCoinlistConfig(){
+        WalletApiServiceHelper.getCoinInfoList(context!!, object :Callback<ArrayList<CoinInfo?>?>(){
+            override fun callback(returnData: ArrayList<CoinInfo?>?) {
+                onMainModelListener?.onCoinlistConfig(returnData)
+            }
+
+            override fun error(type: Int, error: Any?) {
+            }
+        })
+    }
+
+
+
     fun checkIntoMainChat(): Observable<ChatRoomEnable>? {
         return ApiManager.build(context!!).getService(UserApiService::class.java)
                 ?.checkMainChatEnable()
@@ -375,5 +390,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?)
         fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?)
         fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?)
+        fun onCoinlistConfig(coinConfigList: ArrayList<CoinInfo?>?)
     }
 }

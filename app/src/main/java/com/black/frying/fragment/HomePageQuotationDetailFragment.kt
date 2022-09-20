@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
+import com.black.base.model.QuotationSet
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
@@ -256,11 +257,11 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     }
 
     companion object {
-        fun newInstance(tab: String?): HomePageQuotationDetailFragment {
+        fun newInstance(tab: QuotationSet?): HomePageQuotationDetailFragment {
             val args = Bundle()
             val fragment = HomePageQuotationDetailFragment()
             fragment.arguments = args
-            fragment.set = tab
+            fragment.set = tab?.coinType
             return fragment
         }
     }

@@ -1027,21 +1027,24 @@ object SocketDataContainer {
         if (context == null || callback == null || setName == null) {
             return
         }
-        synchronized(pairDataList) {
-            val result = ArrayList<PairStatus?>()
-            for (i in pairDataList.indices) {
-                val pairStatus = pairDataList[i]
-                if (context.getString(R.string.pair_collect) == setName) {
-                    if (true == pairStatus?.is_dear) {
-                        result.add(pairStatus)
-                    }
-                } else {
-                    if (TextUtils.equals(pairStatus?.setName, setName)) {
-                        result.add(pairStatus)
+        var symbolList = PairApiServiceHelper.getHomePagePairData()
+        if (symbolList != null) {
+            synchronized(symbolList) {
+                val result = ArrayList<PairStatus?>()
+                for (i in symbolList.indices) {
+                    val pairStatus = symbolList[i]
+                    if (context.getString(R.string.pair_collect) == setName) {
+                        if (true == pairStatus?.is_dear) {
+                            result.add(pairStatus)
+                        }
+                    } else {
+                        if (TextUtils.equals(pairStatus?.setName, setName)) {
+                            result.add(pairStatus)
+                        }
                     }
                 }
+                callback.callback(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
             }
-            callback.callback(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
         }
     }
 

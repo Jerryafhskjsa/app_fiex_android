@@ -342,7 +342,7 @@ object WalletApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.getCoins(null)
                 ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
                     val resultCoinInfos = HttpRequestResultDataList<CoinInfo?>()
@@ -446,7 +446,7 @@ object WalletApiServiceHelper {
     fun getCoinInfoConfigAndCache(context: Context?): Observable<ArrayList<CoinInfo?>?>? {
         return if (context == null) {
             Observable.empty()
-        } else ApiManager.build(context).getService(WalletApiService::class.java)
+        } else ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.getCoins(null)
                 ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
                     synchronized(coinInfoCache) {
@@ -464,7 +464,7 @@ object WalletApiServiceHelper {
         if (context == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.getCoins(null)
                 ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
                     synchronized(coinInfoCache) {

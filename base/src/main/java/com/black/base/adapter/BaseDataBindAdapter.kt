@@ -33,8 +33,8 @@ abstract class BaseDataBindAdapter<T, DB : ViewDataBinding?>(protected var conte
     }
 
     open fun resetSkinResources() {
-        colorWin = SkinCompatResources.getColor(context, R.color.T7)
-        colorLost = SkinCompatResources.getColor(context, R.color.T5)
+        colorWin = SkinCompatResources.getColor(context, R.color.T9)
+        colorLost = SkinCompatResources.getColor(context, R.color.T10)
         colorDefault = SkinCompatResources.getColor(context, R.color.T3)
     }
 

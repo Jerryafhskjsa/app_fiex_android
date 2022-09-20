@@ -21,6 +21,7 @@ import com.black.base.api.PairApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.QuotationSet
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -44,7 +45,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private var binding: FragmentHomePageQuotationBinding? = null
 
-    private var sets: List<String?>? = null
+    private var sets: List<QuotationSet?>? = null
     private var fragmentList: MutableList<Fragment?>? = null
 
     //异步获取数据
@@ -152,38 +153,23 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun refreshSets() {
-        if (sets == null || sets!!.isEmpty()) {
-//            PairApiServiceHelper.getTradeSets(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
-//                override fun error(type: Int, error: Any) {
-////                    refreshSets()这里接口不通目前会引起死循环调用
-//                }
-//
-//                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
-//                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-//                        val sets = returnData.data
-//                        sets?.add(0, getString(R.string.pair_collect))
-//                        setSets(sets)
-//                    } else {
-//                        refreshSets()
-//                    }
-//                }
-//            })
-            PairApiServiceHelper.getTradeSetsFiex(activity, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
+            PairApiServiceHelper.getTradeSetsFiex(activity, false, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {
 //                    refreshSets()这里接口不通目前会引起死循环调用
                 }
-
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                         val sets = returnData.data
-                        sets?.add(0, getString(R.string.pair_collect))
+                        var optionalSet = QuotationSet()
+                        optionalSet.coinType = getString(R.string.pair_collect)
+                        optionalSet.name = getString(R.string.pair_collect)
+                        sets?.add(0,  optionalSet)
                         setSets(sets)
                     } else {
                         refreshSets()
                     }
                 }
             })
-        }
     }
 
     //初始化行情分组
@@ -209,7 +195,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 }
 
                 override fun getPageTitle(position: Int): CharSequence? {
-                    return sets!![position]
+                    return sets!![position]?.name
                 }
             }
             binding?.setTab?.setupWithViewPager(binding?.quotationViewPager, true)
@@ -221,7 +207,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                         tab.setCustomView(R.layout.view_home_quotation_tab)
                         if (tab.customView != null) {
                             val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
-                            textView.text = set
+                            textView.text = set?.name
                         }
                     }
                 } catch (throwable: Throwable) {
@@ -248,8 +234,8 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    fun setSets(sets: List<String?>?) {
-        if (sets != null && !sets.isEmpty()) {
+    fun setSets(sets: List<QuotationSet?>?) {
+        if (sets != null && sets.isNotEmpty()) {
             this.sets = sets
             initQuotationGroup()
         }

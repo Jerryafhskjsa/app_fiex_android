@@ -10,15 +10,15 @@ import com.fbsex.exchange.databinding.ListItemHomeQuotationDetailBinding
 import skin.support.content.res.SkinCompatResources
 
 class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?>?) : BaseDataTypeBindAdapter<PairStatus?, ListItemHomeQuotationDetailBinding>(context, data) {
-    private var bgWin: Drawable? = null
-    private var bgLose: Drawable? = null
-    private var bgDefault: Drawable? = null
+    private var bgWin: Int? = null
+    private var bgLose: Int? = null
+    private var bgDefault: Int? = null
 
     override fun resetSkinResources() {
         super.resetSkinResources()
-        bgDefault = SkinCompatResources.getDrawable(context, R.drawable.bg_t3_corner3)
-        bgWin = SkinCompatResources.getDrawable(context, R.drawable.bg_t7_corner3)
-        bgLose = SkinCompatResources.getDrawable(context, R.drawable.bg_t5_corner3)
+        bgDefault = SkinCompatResources.getColor(context, R.color.T3)
+        bgWin = SkinCompatResources.getColor(context, R.color.T10)
+        bgLose = SkinCompatResources.getColor(context, R.color.T9)
     }
 
     override fun getItemLayoutId(): Int {
@@ -33,7 +33,7 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         pairStatus?.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
 
         val viewHolder = holder?.dataBing
-        val bg = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
+        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
         if (pairStatus?.isHighRisk != null && true == pairStatus.isHighRisk) {
             viewHolder?.stView?.visibility = View.VISIBLE
         } else {
@@ -44,9 +44,9 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         viewHolder?.volume24?.setText(context.getString(R.string.volumn_24, pairStatus?.totalAmountFromat
                 ?: "0.00"))
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
-        viewHolder?.priceCny?.setText(String.format("¥ %s", pairStatus?.currentPriceCNYFormat))
+        viewHolder?.priceCny?.setText(String.format("≈ %s", pairStatus?.currentPriceCNYFormat))
         viewHolder?.since?.setText(pairStatus?.priceChangeSinceTodayFormat)
-        viewHolder?.since?.background = bg
+        viewHolder?.since?.setTextColor(color)
     }
 
 }

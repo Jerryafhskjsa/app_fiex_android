@@ -3,6 +3,7 @@ package com.black.base.api
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.QuotationSet
 import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.clutter.HomeTickersKline
@@ -26,7 +27,7 @@ interface PairApiService {
     fun getHomeKLine():Observable<HttpRequestResultDataList<HomeTickersKline?>?>?
 
     @GET(UrlConfig.Config.URL_SET_LIST)
-    fun getTradeSetsFiex(): Observable<HttpRequestResultDataList<TradeSetFiex?>?>?
+    fun getTradeSetsFiex(): Observable<HttpRequestResultDataList<QuotationSet?>?>?
 
 
     @GET(UrlConfig.Config.URL_ORDERED_PAIRS)

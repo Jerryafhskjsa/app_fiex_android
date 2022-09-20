@@ -8,6 +8,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.QuotationSet
 import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.clutter.HomeTickersKline
@@ -83,28 +84,12 @@ object PairApiServiceHelper {
     }
 
 
-    fun getTradeSetsFiex(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>?) {
+    fun getTradeSetsFiex(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<QuotationSet?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
             ?.getTradeSetsFiex()
-            ?.flatMap {
-                val setList = ArrayList<String?>()
-                if (it.code == HttpRequestResult.SUCCESS && it.data != null) {
-                    for (tradeSet in it.data!!) {
-                        if (tradeSet?.coinType != null) {
-                            setList.add(tradeSet.coinType)
-                        }
-                    }
-                }
-                val result = HttpRequestResultDataList<String?>()
-                result.code = it.code
-                result.msg = it.msg
-                result.message = it.message
-                result.data = setList
-                Observable.just(result)
-            }
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
