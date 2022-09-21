@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
-
         <variable
             name="listItemWalletChooseCoinModel"
             type="Object" />
     </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <com.black.base.widget.SpanTextView
             android:id="@+id/sub_title"
             android:layout_width="match_parent"
@@ -23,17 +19,53 @@
             android:paddingRight="@dimen/double_padding"
             android:textColor="@color/C1"
             android:textSize="@dimen/text_size_16"
+            android:visibility="gone"
             android:textStyle="bold" />
-
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/coin_type"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="60dp"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/double_padding"
-            android:paddingRight="@dimen/double_padding"
-            android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_13"
-            android:textStyle="bold" />
+            >
+            <ImageView
+                android:id="@+id/img_coin"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/ic_launcher_fiex">
+            </ImageView>
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/img_coin"
+                android:maxLines="1"
+                android:text="1INCH"
+                android:textColor="@color/T14"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_name_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/coin_type"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/img_coin"
+                android:maxLines="1"
+                android:text="1INCH"
+                android:textColor="@color/T11_ALPHA60"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/coin_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="15dp"
+                android:maxLines="1"
+                android:text="0.00"
+                android:textColor="@color/T14"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
     </LinearLayout>
 </layout>

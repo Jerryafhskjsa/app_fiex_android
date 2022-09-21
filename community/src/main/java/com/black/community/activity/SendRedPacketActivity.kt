@@ -212,26 +212,26 @@ open class SendRedPacketActivity : BaseActionBarActivity(), View.OnClickListener
             callback.run()
             return
         }
-        WalletApiServiceHelper.getCoinInfoList(this, object : Callback<ArrayList<CoinInfo?>?>() {
-            override fun error(type: Int, error: Any) {
-                callback.run()
-            }
-
-            override fun callback(returnData: ArrayList<CoinInfo?>?) {
-                if (returnData != null && returnData.isNotEmpty()) {
-                    if (coinInfoCache == null) {
-                        coinInfoCache = HashMap()
-                    }
-                    coinInfoCache!!.clear()
-                    for (coinInfo in returnData) {
-                        if (coinInfo != null && !TextUtils.isEmpty(coinInfo.coinType)) {
-                            coinInfoCache!![coinInfo.coinType] = coinInfo
-                        }
-                    }
-                    callback.run()
-                }
-            }
-        })
+//        WalletApiServiceHelper.getCoinInfoList(this, object : Callback<ArrayList<CoinInfo?>?>() {
+//            override fun error(type: Int, error: Any) {
+//                callback.run()
+//            }
+//
+//            override fun callback(returnData: ArrayList<CoinInfo?>?) {
+//                if (returnData != null && returnData.isNotEmpty()) {
+//                    if (coinInfoCache == null) {
+//                        coinInfoCache = HashMap()
+//                    }
+//                    coinInfoCache!!.clear()
+//                    for (coinInfo in returnData) {
+//                        if (coinInfo != null && !TextUtils.isEmpty(coinInfo.coinType)) {
+//                            coinInfoCache!![coinInfo.coinType] = coinInfo
+//                        }
+//                    }
+//                    callback.run()
+//                }
+//            }
+//        })
     }
 
     private val coinInfo: Unit

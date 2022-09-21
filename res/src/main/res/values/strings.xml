@@ -693,5 +693,12 @@
     <string name="input_verify_google_code">请输入谷歌认证码</string>
     <string name="input_verify_code_1">请输入收到的6位验证码</string>
     <string name="confirm_1">确认</string>
+    <string name="chain_choose">选择网络</string>
+    <string name="recharge_addr">充值地址</string>
+    <string name="warm_notice_des">TRC20 最小充值数额：0.01 USDT，小于最小充值数额的充值将不会入账且无法退回。禁止向地址充值当前通证之外的资产，任何充入当前通证地址的非当前通证资产将不可找回使用地址充值需要 20 个网络确认才能到账。</string>
+    <string name="get_chain_name">获取链名称</string>
+    <string name="chain_tips">请确保你选择的充值链名称和您在提币时选择的链名称一致，否则可能会造成资产丢失</string>
+
+
 
 </resources>

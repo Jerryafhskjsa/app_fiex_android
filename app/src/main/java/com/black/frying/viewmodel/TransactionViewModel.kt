@@ -426,7 +426,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         onTransactionModelListener?.getUserBalanceCallback()?.let{
             UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<UserBalanceWarpper?>() {
                 override fun callback(balances: UserBalanceWarpper?) {
-
                     var buyBalance: UserBalance? = null
                     var sellBalance: UserBalance? = null
                     if (balances != null) {
@@ -458,7 +457,13 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                     it.callback(Pair(buyBalance, sellBalance))
                 }
                 override fun error(type: Int, error: Any?) {
+
+                }
+            },object :Callback<Any?>(){
+                override fun error(type: Int, error: Any?) {
                     it.error(type, error)
+                }
+                override fun callback(returnData: Any?) {
                 }
             })
         }

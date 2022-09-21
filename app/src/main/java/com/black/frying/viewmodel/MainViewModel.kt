@@ -346,11 +346,10 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
      * 获取币种配置
      */
     private fun getCoinlistConfig(){
-        WalletApiServiceHelper.getCoinInfoList(context!!, object :Callback<ArrayList<CoinInfo?>?>(){
-            override fun callback(returnData: ArrayList<CoinInfo?>?) {
+        WalletApiServiceHelper.getCoinInfoList(context!!, object :Callback<ArrayList<CoinInfoType?>?>(){
+            override fun callback(returnData: ArrayList<CoinInfoType?>?) {
                 onMainModelListener?.onCoinlistConfig(returnData)
             }
-
             override fun error(type: Int, error: Any?) {
             }
         })
@@ -390,6 +389,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?)
         fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?)
         fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?)
-        fun onCoinlistConfig(coinConfigList: ArrayList<CoinInfo?>?)
+        fun onCoinlistConfig(coinConfigList: ArrayList<CoinInfoType?>?)
     }
 }

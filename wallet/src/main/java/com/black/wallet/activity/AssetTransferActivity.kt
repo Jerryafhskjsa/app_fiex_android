@@ -233,7 +233,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             fromAccountType -> clickAccout = fromAccount
             toAccountType -> clickAccout = toAccount
         }
-        ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet), accountType,clickAccout,
+        ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet),clickAccout,
             supportAccountData,
             object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
                 override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {

@@ -10,15 +10,16 @@
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
+
         <com.black.base.widget.SpanTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/T14"
-            android:textStyle="bold"
             android:layout_centerVertical="true"
             android:text="钱包选择"
-            android:textSize="@dimen/text_size_16" />
+            android:textColor="@color/T14"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
         <ImageView
             android:id="@+id/btn_cancel"
             android:layout_alignParentRight="true"
@@ -28,6 +29,17 @@
             android:src="@drawable/icon_cancel">
         </ImageView>
     </RelativeLayout>
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/tips"
+        android:paddingLeft="@dimen/middle_padding"
+        android:paddingTop="@dimen/default_padding"
+        android:paddingBottom="@dimen/default_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_12"
+        android:visibility="gone">
+    </com.black.base.widget.SpanTextView>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"

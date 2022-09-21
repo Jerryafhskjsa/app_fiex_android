@@ -10,7 +10,6 @@ object ConstData {
         SPOT,
         CONTRACT
     }
-
     const val TAB_HOME = 0
     const val TAB_QUOTATION = 1
     const val TAB_TRANSATION = 2

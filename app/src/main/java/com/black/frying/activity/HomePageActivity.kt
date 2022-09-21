@@ -115,6 +115,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         }
         showOpenNotificationDialog()
         UdeskUtil.initUdesk(applicationContext)
+        //获取所有配置币种并且缓存
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
         checkUpdate(true)
     }

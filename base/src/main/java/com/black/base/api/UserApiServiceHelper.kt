@@ -333,14 +333,14 @@ object UserApiServiceHelper {
 
 
     //获取普通资产
-    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?) {
+    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?,errorCallback: Callback<Any?>?) {
         if (context == null || callback == null) {
             return
         }
-        getUserBalance(context, false, callback, callback)
+        getUserBalance(context, false, callback, errorCallback)
     }
 
-    fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<UserBalanceWarpper?>?,errorCallback: Callback<*>?){
+    private fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<UserBalanceWarpper?>?, errorCallback: Callback<*>?){
         if (context == null) {
             return
         }
@@ -367,6 +367,7 @@ object UserApiServiceHelper {
                 }
             }))
     }
+
 
     fun getUserBalance(context: Context?): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?{
         return if(context == null){

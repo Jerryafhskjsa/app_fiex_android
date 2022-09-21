@@ -26,14 +26,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object WalletApiServiceHelper {
-    private val coinInfoCache = ArrayList<CoinInfo?>()
+    private val coinInfoCache = ArrayList<CoinInfoType?>()
     private val walletCache: ArrayList<Wallet?> = ArrayList()
     private val walletLeverCache: ArrayList<WalletLever?> = ArrayList()
 
 
     private const val COIN_INFO = 1
     private const val WALLET = 2
-    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
+    private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //20分钟
             .toLong()
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
@@ -243,12 +243,12 @@ object WalletApiServiceHelper {
     }
 
     //get冲币地址
-    fun getExchangeAddress(context: Context?, coinType: String?, callback: Callback<HttpRequestResultData<WalletAddress?>?>?) {
+    fun getExchangeAddress(context: Context?, coinType: String?,chainName:String?, callback: Callback<HttpRequestResultData<WalletAddress?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getExchangeAddress(coinType)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+                ?.getExchangeAddress(coinType,chainName)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -338,29 +338,11 @@ object WalletApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getCoinInfos(context: Context?, callback: Callback<HttpRequestResultDataList<CoinInfo?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getCoins(null)
-                ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
-                    val resultCoinInfos = HttpRequestResultDataList<CoinInfo?>()
-                    resultCoinInfos.code = resultConfig?.code
-                    resultCoinInfos.message = resultConfig?.message
-                    resultCoinInfos.msg = resultConfig?.msg
-                    resultCoinInfos.data = if (resultConfig?.data == null) null else resultConfig.data!!.configs
-                    Observable.just(resultCoinInfos)
-                }
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
-
-    private fun getCoinInfoFromCache(coinType: String?, callback: Callback<CoinInfo?>?) {
+    private fun getCoinInfoFromCache(coinType: String?, callback: Callback<CoinInfoType?>?) {
         if (coinType == null || callback == null) {
             return
         }
-        var coinInfo: CoinInfo? = null
+        var coinInfo: CoinInfoType? = null
         if (coinInfoCache.isNotEmpty()) {
             for (coinInfo1 in coinInfoCache) {
                 if (TextUtils.equals(coinType, coinInfo1?.coinType)) {
@@ -372,11 +354,11 @@ object WalletApiServiceHelper {
         callback.callback(coinInfo)
     }
 
-    private fun getCoinInfoFromCache(coinType: String?): CoinInfo? {
+    private fun getCoinInfoFromCache(coinType: String?): CoinInfoType? {
         if (coinType == null) {
             return null
         }
-        var coinInfo: CoinInfo? = null
+        var coinInfo: CoinInfoType? = null
         if (coinInfoCache.isNotEmpty()) {
             for (coinInfo1 in coinInfoCache) {
                 if (TextUtils.equals(coinType, coinInfo1?.coinType)) {
@@ -388,7 +370,7 @@ object WalletApiServiceHelper {
         return coinInfo
     }
 
-    fun getCoinInfo(context: Context?, coinType: String?): Observable<CoinInfo?>? {
+    fun getCoinInfo(context: Context?, coinType: String?): Observable<CoinInfoType?>? {
         if (context == null) {
             return Observable.empty()
         }
@@ -402,18 +384,18 @@ object WalletApiServiceHelper {
         }
     }
 
-    fun getCoinInfo(context: Context?, coinType: String?, callback: Callback<CoinInfo?>?) {
+    fun getCoinInfo(context: Context?, coinType: String?, callback: Callback<CoinInfoType?>?) {
         if (context == null || callback == null) {
             return
         }
         val lastGetTime = getLastGetTime(COIN_INFO)
         if (coinInfoCache.isEmpty() || lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) {
-            getCoinInfoConfigAndCache(context, object : Callback<ArrayList<CoinInfo?>?>() {
+            getCoinInfoConfigAndCache(context, object : Callback<ArrayList<CoinInfoType?>?>() {
                 override fun error(type: Int, error: Any) {
                     callback.error(type, error)
                 }
 
-                override fun callback(returnData: ArrayList<CoinInfo?>?) {
+                override fun callback(returnData: ArrayList<CoinInfoType?>?) {
                     setLastGetTime(COIN_INFO, System.currentTimeMillis())
                     getCoinInfoFromCache(coinType, callback)
                 }
@@ -423,18 +405,18 @@ object WalletApiServiceHelper {
         }
     }
 
-    fun getCoinInfoList(context: Context?, callback: Callback<ArrayList<CoinInfo?>?>?) {
+    fun getCoinInfoList(context: Context?, callback: Callback<ArrayList<CoinInfoType?>?>?) {
         if (context == null || callback == null) {
             return
         }
         val lastGetTime = getLastGetTime(COIN_INFO)
         if (coinInfoCache.isEmpty() || lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) {
-            getCoinInfoConfigAndCache(context, object : Callback<ArrayList<CoinInfo?>?>() {
+            getCoinInfoConfigAndCache(context, object : Callback<ArrayList<CoinInfoType?>?>() {
                 override fun error(type: Int, error: Any) {
                     callback.error(type, error)
                 }
 
-                override fun callback(returnData: ArrayList<CoinInfo?>?) {
+                override fun callback(returnData: ArrayList<CoinInfoType?>?) {
                     callback.callback(returnData)
                 }
             })
@@ -443,7 +425,7 @@ object WalletApiServiceHelper {
         }
     }
 
-    fun getCoinInfoConfigAndCache(context: Context?): Observable<ArrayList<CoinInfo?>?>? {
+    private fun getCoinInfoConfigAndCache(context: Context?): Observable<ArrayList<CoinInfoType?>?>? {
         return if (context == null) {
             Observable.empty()
         } else ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
@@ -460,7 +442,7 @@ object WalletApiServiceHelper {
                 }
     }
 
-    fun getCoinInfoConfigAndCache(context: Context?, callback: Callback<ArrayList<CoinInfo?>?>?) {
+    fun getCoinInfoConfigAndCache(context: Context?, callback: Callback<ArrayList<CoinInfoType?>?>?) {
         if (context == null) {
             return
         }

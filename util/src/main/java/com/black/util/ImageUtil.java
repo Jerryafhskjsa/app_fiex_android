@@ -9,13 +9,16 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.ByteArrayInputStream;
@@ -346,17 +349,13 @@ public class ImageUtil {
         String galleryPath = Environment.getExternalStorageDirectory()
                 + File.separator + Environment.DIRECTORY_DCIM
                 + File.separator + "Camera" + File.separator;
-
-
         // 声明文件对象
         File file = null;
         // 声明输出流
         FileOutputStream outStream = null;
-
         try {
             // 如果有目标文件，直接获得文件对象，否则创建一个以filename为名称的文件
             file = new File(galleryPath, picName + ".jpg");
-
             // 获得文件相对路径
             fileName = file.toString();
             // 获得输出流，如果文件中有内容，追加内容
@@ -364,7 +363,6 @@ public class ImageUtil {
             if (null != outStream) {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outStream);
             }
-
         } catch (Exception e) {
             CommonUtil.printError(context, e);
         } finally {
@@ -375,7 +373,6 @@ public class ImageUtil {
             } catch (IOException e) {
                 CommonUtil.printError(context, e);
             }
-
             //通知相册更新
             MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, fileName, null);
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -421,5 +418,18 @@ public class ImageUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+    public static Bitmap getBitmapFromImageView(ImageView imageView){
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        //canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

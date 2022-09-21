@@ -19,13 +19,15 @@ class WalletChooseCoinAdapter(context: Context, data: ArrayList<Wallet?>?) : Bas
         val wallet = getItem(position)
         val lastWallet = CommonUtil.getItemFromList(data, position - 1)
         val viewHolder = holder?.dataBing
-        if (lastWallet == null || Wallet.COMPARATOR_CHOOSE_COIN.compare(wallet, lastWallet) != 0) {
-            viewHolder?.subTitle?.visibility = View.VISIBLE
-            viewHolder?.subTitle?.setText(wallet?.sortLetter.toString())
-        } else {
-            viewHolder?.subTitle?.visibility = View.GONE
-        }
+//        if (lastWallet == null || Wallet.COMPARATOR_CHOOSE_COIN.compare(wallet, lastWallet) != 0) {
+//            viewHolder?.subTitle?.visibility = View.VISIBLE
+//            viewHolder?.subTitle?.setText(wallet?.sortLetter.toString())
+//        } else {
+//            viewHolder?.subTitle?.visibility = View.GONE
+//        }
         viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
+        viewHolder?.coinCount?.setText(wallet?.coinAmount.toString())
+        viewHolder?.coinNameDes?.setText(wallet?.coinTypeDes)
     }
 
     override fun getSections(): Array<Any> {

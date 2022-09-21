@@ -619,18 +619,18 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 })
     }
 
-    private fun getCoinInfo(coinType: String?): Observable<CoinInfo?>? {
-        return if (coinType == null) {
-            Observable.just(null)
-        } else {
-            WalletApiServiceHelper.getCoinInfo(this, coinType)
-                    ?.flatMap { info: CoinInfo? ->
-                        this.coinInfo = info
-                        memoNeeded = info != null && info.memoNeeded
-                        Observable.just(info)
-                    }
-        }
-    }
+//    private fun getCoinInfo(coinType: String?): Observable<CoinInfo?>? {
+//        return if (coinType == null) {
+//            Observable.just(null)
+//        } else {
+//            WalletApiServiceHelper.getCoinInfo(this, coinType)
+//                    ?.flatMap { info: CoinInfo? ->
+//                        this.coinInfo = info
+//                        memoNeeded = info != null && info.memoNeeded
+//                        Observable.just(info)
+//                    }
+//        }
+//    }
 
     private fun refreshWalletHandleInfo() {
         if (wallet != null) {
@@ -641,24 +641,24 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             } else {
                 //判断充值提现开关是否开启
                 showLoading()
-                getCoinInfo(coinType)
-                        ?.compose(RxJavaHelper.observeOnMainThread())
-                        ?.subscribe(object : NormalObserver<CoinInfo?>(this) {
-                            override fun afterRequest() {
-                                super.afterRequest()
-                                hideLoading()
-                            }
-
-                            override fun error(type: Int, error: Any?) {
-                                super.error(type, error)
-                                refreshWallet(wallet, coinInfo)
-                            }
-
-                            override fun callback(result: CoinInfo?) {
-                                refreshWallet(wallet, coinInfo)
-                            }
-
-                        })
+//                getCoinInfo(coinType)
+//                        ?.compose(RxJavaHelper.observeOnMainThread())
+//                        ?.subscribe(object : NormalObserver<CoinInfo?>(this) {
+//                            override fun afterRequest() {
+//                                super.afterRequest()
+//                                hideLoading()
+//                            }
+//
+//                            override fun error(type: Int, error: Any?) {
+//                                super.error(type, error)
+//                                refreshWallet(wallet, coinInfo)
+//                            }
+//
+//                            override fun callback(result: CoinInfo?) {
+//                                refreshWallet(wallet, coinInfo)
+//                            }
+//
+//                        })
             }
         }
     }

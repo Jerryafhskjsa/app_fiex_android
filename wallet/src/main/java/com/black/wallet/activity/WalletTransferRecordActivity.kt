@@ -139,7 +139,9 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
             fromAccountType -> clickAccout = fromAccount
             toAccountType -> clickAccout = toAccount
         }
-        ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet), accountType,clickAccout,
+        ChooseWalletControllerWindow(mContext as Activity,
+            getString(R.string.select_wallet),
+            clickAccout,
             supportAccoutTypeList,
             object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
                 override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {

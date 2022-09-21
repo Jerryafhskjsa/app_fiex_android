@@ -1,6 +1,5 @@
 package com.black.wallet.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,8 +15,12 @@ import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
+import com.black.base.api.UserApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.databinding.ListViewEmptyLongBinding
+import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -26,29 +29,29 @@ import com.black.base.util.RouterConstData
 import com.black.base.view.SideBar
 import com.black.router.annotation.Route
 import com.black.util.Callback
-import com.black.util.CommonUtil
 import com.black.wallet.R
 import com.black.wallet.adapter.WalletChooseCoinAdapter
 import com.black.wallet.databinding.ActivityWalletChooseCoinBinding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.WALLET_CHOOSE_COIN], beforePath = RouterConstData.LOGIN)
 class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener {
     private var supportCoinList: ArrayList<String>? = null
 
-    private var binding: ActivityWalletChooseCoinBinding? = null
-
+    private var userSoptBanlace: ArrayList<UserBalance?>? = null
     private var walletList: ArrayList<Wallet?>? = null
+    private var supportCoinInfoList:ArrayList<CoinInfoType?>? = null
+    private var binding: ActivityWalletChooseCoinBinding? = null
     private var adapter: WalletChooseCoinAdapter? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportCoinList = intent.getStringArrayListExtra(ConstData.SUPPORT_COIN_LIST)
         walletList = intent.getParcelableArrayListExtra(ConstData.WALLET_LIST)
-        walletList = getAfterFilterWalletList(walletList)
-        if (walletList != null) {
-            Collections.sort(walletList, Wallet.COMPARATOR_CHOOSE_COIN)
-        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_choose_coin)
         binding?.chooseCoinSearch?.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
@@ -67,17 +70,14 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
 
             override fun afterTextChanged(s: Editable) {}
         })
-        binding?.history01?.setOnClickListener(this)
-        binding?.history02?.setOnClickListener(this)
-        binding?.history03?.setOnClickListener(this)
-        binding?.history04?.setOnClickListener(this)
         binding?.listView?.onItemClickListener = this
         adapter = WalletChooseCoinAdapter(this, walletList)
         binding?.listView?.adapter = adapter
+
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(mContext, R.color.L1_ALPHA60)
-        binding?.listView?.setDivider(drawable)
-        binding?.listView?.dividerHeight = 1
+        binding?.listView?.divider = drawable
+        binding?.listView?.dividerHeight = 0
 
         val emptyBinding: ListViewEmptyLongBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.list_view_empty_long, null, false)
         val group = binding?.listView?.parent as ViewGroup
@@ -91,10 +91,65 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
                     binding?.listView?.setSelection(position)
                 }
             }
-
         })
-        allWallet
-        refreshSearchHistory()
+        getCoinlistConfig()
+    }
+
+    /**
+     * 获取币种配置
+     */
+    private fun getCoinlistConfig(){
+        WalletApiServiceHelper.getCoinInfoList(this, object :Callback<ArrayList<CoinInfoType?>?>(){
+            override fun callback(returnData: ArrayList<CoinInfoType?>?) {
+                supportCoinInfoList = returnData
+                getUserBalance()
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        })
+    }
+
+    /**
+     * 获取用户资产
+     */
+    private fun getUserBalance(){
+        UserApiServiceHelper.getUserBalanceReal(this,false,object :Callback<UserBalanceWarpper?>(){
+            override fun callback(returnData: UserBalanceWarpper?) {
+                if(returnData != null){
+                    userSoptBanlace = returnData?.spotBalance
+                    getWalletData()
+                    if (walletList != null) {
+                        Collections.sort(walletList, Wallet.COMPARATOR_CHOOSE_COIN)
+                    }
+                    showWalletList()
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        },object :Callback<Any?>(){
+            override fun error(type: Int, error: Any?) {
+            }
+
+            override fun callback(returnData: Any?) {
+            }
+        })
+    }
+
+    private fun getWalletData(){
+        walletList?.clear()
+        for (i in supportCoinInfoList!!.indices){
+            var wallet = Wallet()
+            wallet.coinAmount = BigDecimal.valueOf(0.00)
+            for (j in userSoptBanlace!!.indices){
+                if(supportCoinInfoList!![i]?.coinType.equals(userSoptBanlace!![j]?.coin)){
+                    wallet.coinAmount = (userSoptBanlace!![j]?.availableBalance)?.toBigDecimal()
+                }
+            }
+            wallet.coinType = supportCoinInfoList!![i]?.coinType
+            wallet.coinIconUrl = supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.logosUrl
+            wallet.coinTypeDes = supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.coinFullName
+            walletList?.add(wallet)
+        }
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -102,109 +157,21 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
     }
 
     override fun onClick(v: View) {
-        val i = v.id
-        if (i == R.id.history_01 || i == R.id.history_02 || i == R.id.history_03 || i == R.id.history_04) { //            search(((TextView) v).getText().toString());
-            val coinType = (v as TextView).text.toString()
-            var searchWallet: Wallet? = null
-            if (walletList != null) {
-                for (wallet in walletList!!) {
-                    if (coinType.equals(wallet?.coinType, ignoreCase = true)) {
-                        searchWallet = wallet
-                        break
-                    }
-                }
-            }
-            if (searchWallet != null) {
-                val resultData = Intent()
-                resultData.putExtra(ConstData.WALLET, searchWallet)
-                setResult(Activity.RESULT_OK, resultData)
-                finish()
-            } else {
-                FryingUtil.showToast(this, getString(R.string.coin_search_failed))
-            }
-        }
-    }
+        val i = v.id    }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         val wallet = adapter?.getItem(position)
         saveSearchHistory(wallet?.coinType)
         val resultData = Intent()
         resultData.putExtra(ConstData.WALLET, wallet)
-        setResult(Activity.RESULT_OK, resultData)
+        setResult(RESULT_OK, resultData)
         finish()
     }
 
-    private val allWallet: Unit
-        get() {
-            WalletApiServiceHelper.getWalletList(mContext, true, object : Callback<ArrayList<Wallet?>?>() {
-                override fun callback(result: ArrayList<Wallet?>?) {
-                    walletList = result
-                    walletList = getAfterFilterWalletList(walletList)
-                    showWalletList()
-                }
-
-                override fun error(type: Int, message: Any) {
-                    walletList = null
-                    showWalletList()
-                    FryingUtil.showToast(mContext, message.toString())
-                }
-            })
-        }
 
     private fun showWalletList() {
         walletList = if (walletList == null) ArrayList() else walletList
         search(binding?.chooseCoinSearch?.text.toString())
-    }
-
-    private fun getAfterFilterWalletList(walletListSource: ArrayList<Wallet?>?): ArrayList<Wallet?>? {
-        if (walletListSource == null) {
-            return null
-        }
-        if (supportCoinList == null) {
-            return walletListSource
-        }
-        val result = ArrayList<Wallet?>()
-        for (i in walletListSource.indices) {
-            val wallet = walletListSource[i]
-            if (wallet != null && supportCoinList!!.contains(wallet.coinType)) {
-                result.add(wallet)
-            }
-        }
-        return result
-    }
-
-    private fun clearSearchHistory() {
-        CookieUtil.clearCoinSearchHistory(mContext)
-        refreshSearchHistory()
-    }
-
-    private fun refreshSearchHistory() {
-        var history = CookieUtil.getCoinSearchHistory(mContext)
-        history = history ?: ArrayList()
-        if (supportCoinList != null) {
-            val tmp = ArrayList<String?>()
-            for (i in history.indices) {
-                if (supportCoinList!!.contains(history[i])) {
-                    tmp.add(history[i])
-                }
-            }
-            history = tmp
-        }
-        history.reverse()
-        refreshHistoryItem(binding?.history01, CommonUtil.getItemFromList(history, 0))
-        refreshHistoryItem(binding?.history02, CommonUtil.getItemFromList(history, 1))
-        refreshHistoryItem(binding?.history03, CommonUtil.getItemFromList(history, 2))
-        refreshHistoryItem(binding?.history04, CommonUtil.getItemFromList(history, 3))
-    }
-
-    private fun refreshHistoryItem(textView: TextView?, text: String?) {
-        if (text != null) {
-            textView!!.text = text
-            textView.visibility = View.VISIBLE
-        } else {
-            textView!!.text = ""
-            textView.visibility = View.INVISIBLE
-        }
     }
 
     private fun saveSearchHistory(searchKey: String?) {
@@ -213,7 +180,6 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
         }
         if (searchKey != null && searchKey.trim { it <= ' ' }.isNotEmpty()) {
             CookieUtil.addCoinSearchHistory(mContext, searchKey)
-            refreshSearchHistory()
         }
     }
 

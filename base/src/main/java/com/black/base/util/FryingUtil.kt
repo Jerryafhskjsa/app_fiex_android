@@ -32,6 +32,7 @@ import com.black.base.model.Update
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DownloadServiceHelper
 import com.black.base.view.ConfirmDialog
@@ -519,14 +520,14 @@ object FryingUtil {
         if (imageLoader == null || imageView == null) {
             return
         }
-        WalletApiServiceHelper.getCoinInfo(context, coinType, object : Callback<CoinInfo?>() {
+        WalletApiServiceHelper.getCoinInfo(context, coinType, object : Callback<CoinInfoType?>() {
             override fun error(type: Int, error: Any) {
                 imageView.setImageBitmap(null)
             }
 
-            override fun callback(returnData: CoinInfo?) {
-                if (returnData?.logosUrl != null) {
-                    imageLoader.loadImage(imageView, returnData.logosUrl!!)
+            override fun callback(returnData: CoinInfoType?) {
+                if (returnData?.config?.get(0)?.coinConfigVO?.logosUrl != null) {
+                    imageLoader.loadImage(imageView, returnData?.config?.get(0)?.coinConfigVO?.logosUrl!!)
                 } else {
                     imageView.setImageBitmap(null)
                 }

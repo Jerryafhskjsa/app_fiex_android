@@ -28,6 +28,7 @@ import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
@@ -276,7 +277,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     override fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
     }
 
-    override fun onCoinlistConfig(data: ArrayList<CoinInfo?>?) {
+    override fun onCoinlistConfig(data: ArrayList<CoinInfoType?>?) {
         Log.d("999999","colistListConfigSiz = "+data?.size)
     }
 

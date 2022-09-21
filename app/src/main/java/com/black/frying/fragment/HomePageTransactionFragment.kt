@@ -294,21 +294,21 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                     ?.subscribe(HttpCallbackSimple(mContext, true, object : Callback<Boolean>() {
                         override fun error(type: Int, error: Any) {}
                         override fun callback(returnData: Boolean) {
-                            WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
-                                override fun error(type: Int, error: Any) {
-                                    CommonUtil.checkActivityAndRunOnUI(mContext) {
-                                        TransactionMorePopup(mContext!!, returnData
-                                                ?: false, null).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
-                                    }
-                                }
-
-                                override fun callback(coinInfo: CoinInfo?) {
-                                    CommonUtil.checkActivityAndRunOnUI(mContext) {
-                                        TransactionMorePopup(mContext!!, returnData
-                                                ?: false, coinInfo?.groupId).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
-                                    }
-                                }
-                            })
+//                            WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
+//                                override fun error(type: Int, error: Any) {
+//                                    CommonUtil.checkActivityAndRunOnUI(mContext) {
+//                                        TransactionMorePopup(mContext!!, returnData
+//                                                ?: false, null).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
+//                                    }
+//                                }
+//
+//                                override fun callback(coinInfo: CoinInfo?) {
+//                                    CommonUtil.checkActivityAndRunOnUI(mContext) {
+//                                        TransactionMorePopup(mContext!!, returnData
+//                                                ?: false, coinInfo?.groupId).setOnTransactionMoreClickListener(this@HomePageTransactionFragment).show(v)
+//                                    }
+//                                }
+//                            })
                         }
                     }))
             R.id.btn_transaction_memu -> mContext?.let {
@@ -394,27 +394,27 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
                     if (viewModel!!.getCoinType() != null) {
-                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
-                            override fun callback(returnData: CoinInfo?) {
-                                if (returnData != null) {
-                                    if (returnData.supportTrade != null && true == returnData.supportTrade) {
-                                        if (transactionType == 1) { //买入
-                                            createOrder("BID")
-                                        } else if (transactionType == 2) { //卖出
-                                            createOrder("ASK")
-                                        }
-                                    } else {
-                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-                                    }
-                                } else {
-                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-                                }
-                            }
-
-                            override fun error(type: Int, error: Any) {
-                                FryingUtil.showToast(mContext, error.toString())
-                            }
-                        })
+//                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
+//                            override fun callback(returnData: CoinInfo?) {
+//                                if (returnData != null) {
+//                                    if (returnData.supportTrade != null && true == returnData.supportTrade) {
+//                                        if (transactionType == 1) { //买入
+//                                            createOrder("BID")
+//                                        } else if (transactionType == 2) { //卖出
+//                                            createOrder("ASK")
+//                                        }
+//                                    } else {
+//                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+//                                    }
+//                                } else {
+//                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+//                                }
+//                            }
+//
+//                            override fun error(type: Int, error: Any) {
+//                                FryingUtil.showToast(mContext, error.toString())
+//                            }
+//                        })
                     }
                 }
             }

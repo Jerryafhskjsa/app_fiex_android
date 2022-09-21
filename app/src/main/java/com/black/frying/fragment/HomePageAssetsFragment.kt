@@ -179,11 +179,8 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     override fun onClick(v: View) {
         when (v.id) {
             R.id.lin_exchange -> {
-                val bundle = Bundle()
-                bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
                     .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
-                    .with(bundle)
                     .go(this)
             }
             R.id.lin_withdraw -> {
@@ -233,9 +230,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()
-                        bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                        bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
                         BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
                             if (error != null) {
                                 CommonUtil.printError(mContext, error)

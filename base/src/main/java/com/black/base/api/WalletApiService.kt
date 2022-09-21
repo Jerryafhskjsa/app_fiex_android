@@ -14,7 +14,7 @@ interface WalletApiService {
     fun getSupportAccount(): Observable<HttpRequestResultDataList<String?>?>?
 
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_COIN)
-    fun getSupportCoin(@Query("from") fromAccount:String?,@Query("to") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?
+    fun getSupportCoin(@Query("fromWalletType") fromAccount:String?,@Query("toWalletType") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?
 
     @POST(UrlConfig.Wallet.URL_TRANSFER)
     fun doTransfer(@Body bean:AssetTransfer?): Observable<HttpRequestResultString?>?
@@ -52,7 +52,7 @@ interface WalletApiService {
     fun getRechargeRecord(@Query("coinType") coinType: String?): Observable<HttpRequestResultDataList<FinancialRecord?>?>?
 
     @GET(UrlConfig.Wallet.URL_RECHARGE_ADDRESS_POST)
-    fun getExchangeAddress(@Query("coinType") coinType: String?): Observable<HttpRequestResultData<WalletAddress?>?>?
+    fun getExchangeAddress(@Query("coinType") coinType: String?,@Query("chain") chainType: String?): Observable<HttpRequestResultData<WalletAddress?>?>?
 
     @GET(UrlConfig.Wallet.URL_LIAN_IN_COIN)
     fun getChainAddress(@Query("coinType") coinType: String?, @Query("chainType") chainType: String?): Observable<HttpRequestResultDataList<LianInCoinModel?>?>?

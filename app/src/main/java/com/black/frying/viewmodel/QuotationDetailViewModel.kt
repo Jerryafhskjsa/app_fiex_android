@@ -447,15 +447,15 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         if (coinType == null) {
             return
         }
-        WalletApiServiceHelper.getCoinInfo(context, coinType, object : Callback<CoinInfo?>() {
-            override fun error(type: Int, error: Any) {
-                onKLineModelListener?.onChatRoomId(null)
-            }
-
-            override fun callback(coinInfo: CoinInfo?) {
-                onKLineModelListener?.onChatRoomId(coinInfo?.groupId)
-            }
-        })
+//        WalletApiServiceHelper.getCoinInfo(context, coinType, object : Callback<CoinInfo?>() {
+//            override fun error(type: Int, error: Any) {
+//                onKLineModelListener?.onChatRoomId(null)
+//            }
+//
+//            override fun callback(coinInfo: CoinInfo?) {
+//                onKLineModelListener?.onChatRoomId(coinInfo?.groupId)
+//            }
+//        })
     }
 
     fun checkDearPair() {
