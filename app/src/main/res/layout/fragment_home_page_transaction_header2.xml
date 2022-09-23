@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="@string/trade_history"
-                android:textColor="@color/main_blue"
+                android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_13"/>
         </RelativeLayout>
         <RelativeLayout
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="@string/revoke_all_entrust"
-                android:textColor="@color/main_blue"
+                android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_13" />
         </RelativeLayout>
         <View

@@ -3,6 +3,7 @@ package com.black.frying.activity
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -329,18 +330,38 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         if (userInfo != null) {
             val userName = if (userInfo!!.username == null) "" else userInfo!!.username
             binding?.name?.text = String.format("%s", userName)
-            //            if (TextUtils.equals(userInfo.idNoStatus, "1")) {
-//                String userName = userInfo.realName == null ? "" : userInfo.realName.length() > 8 ? userInfo.realName.substring(0, 8) : userInfo.realName;
-//                nameView.setText(String.format("HI,%s >", userName));
-//            } else if (TextUtils.equals(userInfo.idNoStatus, "2")) {
-//                nameView.setText(R.string.in_audit);
-//            } else if (TextUtils.equals(userInfo.idNoStatus, "3")) {
-//                nameView.setTextColor(SkinCompatResources.getColor(mContext, R.color.T5));
-//                nameView.setText(R.string.audit_failed);
-//            } else {
-//                nameView.setTextColor(SkinCompatResources.getColor(mContext, R.color.T5));
-//                nameView.setText(R.string.not_real_name);
-//            }
+
+            var relVerifyBg:Drawable? = null
+            var tvVerifyColor:Int? = null
+            var tvVerifyText:String? = null
+            when(userInfo?.idNoStatus){
+                ConstData.USER_VERIFY_NO ->{
+                    relVerifyBg = getDrawable(R.drawable.bg_user_unverify_corner)
+                    tvVerifyColor = getColor(R.color.T8)
+                    tvVerifyText = getString(R.string.person_unchecked)
+                }
+                ConstData.USER_VERIFY_ED ->{
+                    relVerifyBg = getDrawable(R.drawable.bg_user_verify_corner)
+                    tvVerifyColor = getColor(R.color.T8)
+                    tvVerifyText = getString(R.string.person_checked)
+                }
+                ConstData.USER_VERIFY_ING ->{
+                    relVerifyBg = getDrawable(R.drawable.bg_user_under_verify_corner)
+                    tvVerifyColor = getColor(R.color.T15)
+                    tvVerifyText = getString(R.string.person_checking)
+                }
+                ConstData.USER_VERIFY_FAIL ->{
+                    relVerifyBg = getDrawable(R.drawable.bg_user_verify_fail_corner)
+                    tvVerifyColor = getColor(R.color.T10)
+                    tvVerifyText = getString(R.string.purchase_failed)
+                }
+            }
+            binding?.relVerifyStatus?.background = relVerifyBg
+            binding?.tvVerify?.text = tvVerifyText
+            if (tvVerifyColor != null) {
+                binding?.tvVerify?.setTextColor(tvVerifyColor)
+            }
+
             binding?.uuid?.visibility = View.VISIBLE
             binding?.uuid?.text = "UID:" + if (userInfo!!.id == null) "" else userInfo!!.id
             if (TextUtils.equals("email", userInfo!!.registerFrom)) {

@@ -82,7 +82,7 @@ class FryingApplication : BaseApplication() {
         //清理webview的缓存
         WebView(applicationContext).destroy()
         //初始化腾讯im
-//        initTencentIM()
+        initTencentIM()
         initLanguageItems(applicationContext)
         initFilters()
         BlackRouter.getInstance().init(this)

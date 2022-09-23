@@ -24,7 +24,7 @@
                 app:tabBackground="@color/transparent"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabIndicator="@drawable/tabs_rounded_line_indicator"
-                app:tabIndicatorColor="@color/c_tab_p"
+                app:tabIndicatorColor="@color/T13"
                 app:tabMaxWidth="200dp"
                 app:tabMinWidth="20dp"
                 app:tabPaddingBottom="0dp"

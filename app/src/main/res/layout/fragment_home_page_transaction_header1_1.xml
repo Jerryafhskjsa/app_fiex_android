@@ -95,7 +95,7 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="6dp"
                 android:text="@string/purchase_redeem"
-                android:textColor="@color/c_tab_p"
+                android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_12" />
         </RelativeLayout>
     </RelativeLayout>

@@ -364,8 +364,6 @@
     <string name="password_not_same">两次密码不一致！</string>
     <string name="change_password_success_02">密码修改成功！</string>
     <string name="personal_center">个人中心</string>
-    <string name="person_checked">已认证</string>
-    <string name="person_unchecked">未认证</string>
     <string name="person_check_imd">立即认证</string>
     <string name="open_phone_bind">开启手机认证</string>
     <string name="change_password">修改密码</string>
@@ -698,6 +696,9 @@
     <string name="warm_notice_des">TRC20 最小充值数额：0.01 USDT，小于最小充值数额的充值将不会入账且无法退回。禁止向地址充值当前通证之外的资产，任何充入当前通证地址的非当前通证资产将不可找回使用地址充值需要 20 个网络确认才能到账。</string>
     <string name="get_chain_name">获取链名称</string>
     <string name="chain_tips">请确保你选择的充值链名称和您在提币时选择的链名称一致，否则可能会造成资产丢失</string>
+    <string name="person_checked">已认证</string>
+    <string name="person_unchecked">未认证</string>
+    <string name="person_checking">认证中</string>
 
 
 

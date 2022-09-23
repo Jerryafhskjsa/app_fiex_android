@@ -79,7 +79,7 @@ object UserApiServiceHelper {
         //        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), key);
 //        RequestBody requestFile = RequestBody.create(MediaType.parse("text/plain"), file);
 //        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.upload(description, body)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

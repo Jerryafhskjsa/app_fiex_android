@@ -222,7 +222,7 @@
                             android:includeFontPadding="false"
                             android:layout_centerVertical="true"
                             android:textSize="@dimen/text_size_14"
-                            android:textColor="@color/main_blue"
+                            android:textColor="@color/T13"
                             android:layout_marginRight="10dp"
                             android:text="All">
                         </com.black.base.widget.SpanTextView>

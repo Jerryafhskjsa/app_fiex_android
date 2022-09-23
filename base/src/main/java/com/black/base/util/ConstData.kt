@@ -10,6 +10,12 @@ object ConstData {
         SPOT,
         CONTRACT
     }
+
+    const val USER_VERIFY_NO = "0"
+    const val USER_VERIFY_ED = "1"
+    const val USER_VERIFY_ING = "2"
+    const val USER_VERIFY_FAIL = "3"
+
     const val TAB_HOME = 0
     const val TAB_QUOTATION = 1
     const val TAB_TRANSATION = 2

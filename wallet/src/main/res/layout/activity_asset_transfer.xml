@@ -222,7 +222,7 @@
                             android:layout_marginRight="10dp"
                             android:includeFontPadding="false"
                             android:text="All"
-                            android:textColor="@color/main_blue"
+                            android:textColor="@color/T13"
                             android:textSize="@dimen/text_size_14">
                         </com.black.base.widget.SpanTextView>
                     </RelativeLayout>

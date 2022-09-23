@@ -106,7 +106,7 @@
                             android:layout_centerVertical="true"
                             android:gravity="center"
                             android:text="@string/paste"
-                            android:textColor="@color/main_blue"
+                            android:textColor="@color/T13"
                             android:layout_marginRight="30dp"
                             android:textSize="@dimen/text_size_15" />
                     </RelativeLayout>

@@ -34,7 +34,7 @@
                 android:includeFontPadding="false"
                 android:gravity="right"
                 android:text="@string/revoke"
-                android:textColor="@color/main_blue"
+                android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_12"
                 />
         </LinearLayout>

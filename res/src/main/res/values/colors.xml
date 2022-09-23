@@ -60,16 +60,15 @@
     <color name="T9">#83CD13</color>
     <color name="T9_ALPHA10">#1A83CD13</color>
     <color name="T10">#F12C18</color>
+    <color name="T10_ALPHA20">#33F12C18</color>
     <color name="T11">#99000000</color>
     <color name="T11_ALPHA5">#0D000000</color>
     <color name="T11_ALPHA3">#08000000</color>
     <color name="T11_ALPHA16">#16000000</color>
+    <color name="T11_ALPHA20">#33000000</color>
     <color name="T11_ALPHA60">#98000000</color>
     <color name="T11_ALPHA40">#66000000</color>
     <color name="T11_ALPHA8">#14000000</color>
-    <color name="c_tab_p">#1571FF</color>
-    <color name="c_tab_n">#66000000</color>
-    <color name="main_blue">#1571FF</color>
     <color name="T12">#F5F5F5</color>
 
     <color name="T13">#1571FF</color>
@@ -78,6 +77,7 @@
     <color name="T13_ALPHA80">#cc1571FF</color>
     <color name="T14">#000000</color>
     <color name="T15">#FF8B00</color>
+    <color name="T15_ALPHA20">#33FF8B00</color>
     <color name="T15_ALPHA10">#1AFF8B00</color>
 
 
