@@ -613,7 +613,6 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onCheckIntoChatRoom(observable: Observable<HttpRequestResultString>?)
         fun onCheckDearPair(isDearPair: Boolean?)
         fun onToggleDearPair(isSuccess: Boolean?)
-        fun onKLineDataAllFiex(items: ArrayList<Kline?>)
     }
 
 }

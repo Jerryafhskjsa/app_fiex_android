@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
-import com.black.base.model.clutter.Kline
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairDescription
 import com.black.base.model.socket.PairStatus
@@ -227,32 +226,6 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             deepBinding!!.hide()
             binding?.quotationDetailDealLayout?.root?.visibility = View.GONE
             binding?.quotationDetailDescriptionLayout?.root?.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onKLineDataAllFiex(items: ArrayList<Kline?>) {
-        if(items != null && items.size>0){
-            var dataItem = ArrayList<KLineItem?>()
-            for (i in items.indices){
-                var klineItem = KLineItem()
-                var temp = items[i]
-                klineItem.a = temp?.a?.toDouble()!!
-                klineItem.c = temp?.c?.toDouble()!!
-                klineItem.h = temp?.h?.toDouble()!!
-                klineItem.l = temp?.l?.toDouble()!!
-                klineItem.o = temp?.o?.toDouble()!!
-                var time = temp?.t?.toLong()!!
-                var tTime = BigDecimal(0.0)
-                try {
-                    tTime = BigDecimal(time!!)?.divide(BigDecimal(1000))
-                }catch (e:Exception){
-
-                }
-                klineItem.t = tTime?.toLong()!!
-                klineItem.v = temp?.v?.toDouble()!!
-                dataItem?.add(klineItem)
-            }
-            refreshKLineChart(dataItem)
         }
     }
 

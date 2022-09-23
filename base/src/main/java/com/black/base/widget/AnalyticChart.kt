@@ -1786,7 +1786,7 @@ class AnalyticChart : SkinCompatView {
                 }
             }
         }
-        //Log.e(TAG, "showingMinValue:" + showingMinValue + ",showingMaxValue:" + showingMaxValue);
+//        Log.e(TAG, "showingMinValue:$showingMinValue,showingMaxValue:$showingMaxValue");
     }
 
     //计算坐标

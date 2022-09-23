@@ -33,6 +33,8 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/list_item_home_quotation_detail.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/list_item_search_pair_delete.xml" value="0.14385964912280702" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_home_quotation_tab.xml" value="0.14210526315789473" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_k_time_step_tab.xml" value="0.11578947368421053" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_k_time_step_tab_more.xml" value="0.11578947368421053" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_main_more.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/view_transaction_more.xml" value="0.1267543859649123" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/base/src/main/res/layout/action_bar_left_back.xml" value="0.4" />
@@ -227,7 +229,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_money_password.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_payment_mothod_add.xml" value="0.12412280701754386" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_person_info_center.xml" value="0.264" />
-        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_phone_bind.xml" value="0.336094674556213" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_phone_bind.xml" value="0.30548302872062666" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_real_name_authenticate_first.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_real_name_authenticate_second.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/user/src/main/res/layout/activity_register.xml" value="0.35635964912280704" />
