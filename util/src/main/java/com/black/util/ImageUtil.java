@@ -1,5 +1,6 @@
 package com.black.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -381,6 +383,83 @@ public class ImageUtil {
             context.sendBroadcast(intent);
         }
 
+    }
+
+    /**
+     * 截取指定View显示内容
+     * 需要读写权限
+     * @param activity
+     */
+    public static void saveScreenShotFromActivit(Activity activity){
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = view.getDrawingCache();
+        saveImageToGallery(bitmap,activity);
+        view.setDrawingCacheEnabled(false);
+        view.destroyDrawingCache();
+    }
+
+    /**
+     * 截取指定View显示内容
+     * 需要读写权限
+     * @param view
+     * @param context
+     */
+    public static void saveScreenShotFromView(View view,Activity context){
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = view.getDrawingCache();
+        bitmap = Bitmap.createBitmap(bitmap);
+        saveImageToGallery(bitmap,context);
+        view.setDrawingCacheEnabled(false);
+        view.destroyDrawingCache();
+    }
+
+    /**
+     * 保存图片至相册
+     * 需要读写权限
+     * @param bitmap
+     * @param context
+     */
+    private static void saveImageToGallery(Bitmap bitmap,Activity context){
+        File appDir = new File(getDCIM());
+        if(!appDir.exists()){
+            appDir.mkdirs();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir,fileName);
+        try{
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+            fos.flush();
+            fos.close();
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.parse("file://"+getDCIM())));
+    }
+
+    /**
+     * 获取相册路径
+     * @return
+     */
+    private static String getDCIM(){
+        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
+            return "";
+        }
+        String path = Environment.getExternalStorageDirectory().getPath() + "/dcim/";
+        if(new File(path).exists()){
+            return path;
+        }
+        path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/";
+        File file = new File(path);
+        if(!file.exists()){
+            if(!file.mkdirs()){
+                return "";
+            }
+        }
+        return path;
     }
 
     public static byte[] getBitmapBytes(Bitmap bitmap) {

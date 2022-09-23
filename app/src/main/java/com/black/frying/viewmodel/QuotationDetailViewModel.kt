@@ -48,9 +48,11 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
     private var dealObserver: Observer<Pair<String?, ArrayList<TradeOrder?>?>>? = createDealObserver()
+
     private var kLineObserver: Observer<KLineItemListPair?>? = createKLineObserver()
     private var kLineAddObserver: Observer<KLineItemPair?>? = createKLineAddObserver()
     private var kLineAddMoreObserver: Observer<KLineItemListPair?>? = createKLineAddMoreObserver()
+
     private var kLineId: String? = null
     private var onKLineAllEnd = false
     var gotoLarge = false
@@ -79,6 +81,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             dealObserver = createDealObserver()
         }
         SocketDataContainer.subscribeDealObservable(dealObserver)
+
         if (kLineObserver == null) {
             kLineObserver = createKLineObserver()
         }
@@ -91,6 +94,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             kLineAddMoreObserver = createKLineAddMoreObserver()
         }
         SocketDataContainer.subscribeKLineAddMoreObservable(kLineAddMoreObserver)
+
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ORDER_RELOAD)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_QUOTA_OPEN)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ORDER_OPEN)
@@ -475,17 +479,32 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             context,
             "BTC_USDT",
             "15m",
-            500,
+            1500,
             false,
             object : Callback<HttpRequestResultDataList<Kline?>?>() {
                 override fun error(type: Int, error: Any) {
                 }
 
                 override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
-                    if (returnData != null && returnData.code == 0 && returnData.data != null) {
-                        kLineData = returnData.data!!
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                        var items = returnData.data!!
                         onKLineAllEnd = true
-                        onKLineModelListener!!.onKLineDataAllFiex(kLineData)
+                        if(items != null && items.size>0){
+                            var dataItem = ArrayList<KLineItem?>()
+                            for (i in items.indices){
+                                var klineItem = KLineItem()
+                                var temp = items[i]
+                                klineItem.a = temp?.a?.toDouble()!!
+                                klineItem.c = temp?.c?.toDouble()!!
+                                klineItem.h = temp?.h?.toDouble()!!
+                                klineItem.l = temp?.l?.toDouble()!!
+                                klineItem.o = temp?.o?.toDouble()!!
+                                klineItem.t = temp?.t?.div(1000)
+                                klineItem.v = temp?.v?.toDouble()!!
+                                dataItem?.add(klineItem)
+                            }
+                            onKLineModelListener!!.onKLineDataAll(dataItem)
+                        }
                     } else {
 
                     }

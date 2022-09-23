@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.databinding.DataBindingUtil
@@ -83,15 +84,6 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
         val group = binding?.listView?.parent as ViewGroup
         group.addView(emptyBinding.root)
         binding?.listView?.emptyView = emptyBinding.root
-
-        binding?.sideBar?.setOnTouchLetterChangeListener(object : SideBar.OnTouchLetterChangeListener {
-            override fun letterChange(s: String?) {
-                val position = if (s == null) null else adapter?.getPositionForSection(s[0].toInt())
-                if (position != null && position != -1) {
-                    binding?.listView?.setSelection(position)
-                }
-            }
-        })
         getCoinlistConfig()
     }
 
@@ -156,8 +148,14 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
         return !super.isStatusBarDark()
     }
 
+    override fun getTitleText(): String? {
+        return getString(R.string.coin_choose)
+    }
+
     override fun onClick(v: View) {
-        val i = v.id    }
+        when(v.id){
+        }
+    }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         val wallet = adapter?.getItem(position)
@@ -189,7 +187,9 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
             result = walletList
         } else {
             for (wallet in walletList!!) {
-                if (wallet?.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey.toUpperCase(Locale.getDefault()))) {
+                if (wallet?.coinType != null && wallet.coinType!!.uppercase(Locale.getDefault()).trim { it <= ' ' }.contains(
+                        searchKey.uppercase(Locale.getDefault())
+                    )) {
                     result!!.add(wallet)
                 }
             }

@@ -119,7 +119,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
         })
         binding?.analyticChart?.setType(BOLL or KDJ)
-//        analyticChart.hideSub()
+//        binding?.analyticChart?.hideSub()
         binding?.analyticChart?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val params = binding?.analyticChart?.layoutParams

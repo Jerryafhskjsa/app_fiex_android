@@ -77,6 +77,5 @@
                 </com.black.base.widget.ObserveScrollView>
             </com.black.lib.refresh.QRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     </RelativeLayout>
 </layout>

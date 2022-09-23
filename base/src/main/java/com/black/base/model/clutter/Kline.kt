@@ -14,7 +14,7 @@ package com.black.base.model.clutter
 }
  */
 class Kline {
-    var t: String? = null
+    var t: Long? = null
     var s: String? = null
     var c: String? = null
     var h: String? = null

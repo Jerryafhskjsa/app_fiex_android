@@ -55,6 +55,10 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recharge)
 
+        var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
+        actionBarRecord?.visibility = View.VISIBLE
+        actionBarRecord?.setOnClickListener(this)
+
         binding?.chooseCoinLayout?.setOnClickListener(this)
         binding?.btnSaveQrcode?.setOnClickListener(this)
         binding?.btnCopyAddress?.setOnClickListener(this)
@@ -122,32 +126,23 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
                     .go(this)
             }
             R.id.btn_save_qrcode ->{
-                var bitmap = ImageUtil.getImageViewBitmap(binding?.qrcode)
-                if (bitmap != null) {
-                    requestStoragePermissions(Runnable {
-                        try {
-                            ImageUtil.saveImageToSysGallery(mContext, saveFileName, bitmap)
-                            FryingUtil.showToast(
-                                mContext,
-                                mContext.getString(com.black.base.R.string.save_success)
-                            )
-                        } catch (e: Exception) {
-                            FryingUtil.showToast(
-                                mContext,
-                                mContext.getString(com.black.base.R.string.save_failed)
-                            )
-                        }
-                    })
-                }
+                requestStoragePermissions(Runnable {
+                    try {
+                        ImageUtil.saveScreenShotFromActivit(this)
+                        FryingUtil.showToast(
+                            mContext,
+                            mContext.getString(com.black.base.R.string.save_success)
+                        )
+                    } catch (e: Exception) {
+                        FryingUtil.showToast(
+                            mContext,
+                            mContext.getString(com.black.base.R.string.save_failed)
+                        )
+                    }
+                })
             }
         }
     }
-
-    private val saveFileName: String
-        get() {
-            val now = System.currentTimeMillis()
-            return CommonUtil.formatTimestamp("yyyyMMddHHmmss", now) + (Math.random() * 10000).toInt() + ".png"
-        }
 
     private fun showChainChooseDialog(){
         if(coinChain != null && chainNames!!.size >0){

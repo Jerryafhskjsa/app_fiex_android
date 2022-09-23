@@ -2001,7 +2001,6 @@ class AnalyticChart : SkinCompatView {
             }
             if (lastKLineChartItem != null) { //判断是否有断层
                 val count = ((kLineChartItem.time - lastKLineChartItem.time) / timeStep.value).toInt()
-                Log.d("9999999", "count = $count")
                 val time = lastKLineChartItem.time
                 for (ii in 0 until count - 1) {
                     val insertKLineChartItem = KLineChartItem(time + timeStep.value * (ii + 1), 0.0, lastKLineChartItem.high, lastKLineChartItem.low, lastKLineChartItem.`in`, lastKLineChartItem.out)
@@ -2043,7 +2042,7 @@ class AnalyticChart : SkinCompatView {
 //            }
 //        }
         val size = items.size
-        val dataSize = Math.min(size, ITEM_COUNT_MAX)
+        val dataSize = size.coerceAtMost(ITEM_COUNT_MAX)
         SHOW_COUNT_MAX = dataSize
         var start = size - SHOW_COUNT_MAX
         start = if (start < 0) 0 else start
@@ -2130,8 +2129,8 @@ class AnalyticChart : SkinCompatView {
 //        if (kLineItem.a == 0) {
 //            return;
 //        }
-        val KLineChartItem = KLineChartItem(kLineItem.t!!, kLineItem.a, kLineItem.h, kLineItem.l, kLineItem.o, kLineItem.c)
-        addData(KLineChartItem)
+        val kLineChartItem = KLineChartItem(kLineItem.t!!, kLineItem.a, kLineItem.h, kLineItem.l, kLineItem.o, kLineItem.c)
+        addData(kLineChartItem)
     }
 
     var lastPage = 0
