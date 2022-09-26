@@ -11,10 +11,7 @@ import android.util.Pair
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.socket.PairStatus
-import com.black.base.model.socket.QuotationOrderNew
-import com.black.base.model.socket.TradeOrder
-import com.black.base.model.socket.TradeOrderPairList
+import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
@@ -60,6 +57,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
     private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
     private var leverDetailObserver: Observer<WalletLeverDetail?>? = createLeverDetailObserver()
+    private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
 
 
     private var tradeOrderDepthPair:TradeOrderPairList? = null
@@ -75,6 +73,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread!!.start()
         socketHandler = Handler(handlerThread!!.looper)
+
         if (orderObserver == null) {
             orderObserver = createOrderObserver()
         }
@@ -84,14 +83,22 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             pairObserver = createPairObserver()
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
+
         if (userInfoObserver == null) {
             userInfoObserver = createUserInfoObserver()
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
+
         if (userLeverObserver == null) {
             userLeverObserver = createUserLeverObserver()
         }
         SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
+
+        if(pairQuotationObserver != null){
+           pairQuotationObserver = createPairQuotationObserver()
+        }
+        SocketDataContainer.subscribePairQuotationObservable(pairQuotationObserver)
+
         startListenLeverDetail()
         getWalletLeverDetail()
         initPairStatus()
@@ -128,6 +135,10 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         if (leverDetailObserver != null) {
             SocketDataContainer.removeUserLeverDetailObservable(leverDetailObserver)
         }
+        if(pairQuotationObserver != null){
+            SocketDataContainer.removePairQuotationObservable(pairQuotationObserver)
+        }
+
         if (socketHandler != null) {
             socketHandler!!.removeMessages(0)
             socketHandler = null
@@ -219,6 +230,16 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             override fun onSuccess(value: WalletLeverDetail?) {
                 if (value != null && TextUtils.equals(value.pair, currentPairStatus.pair)) {
                     onTransactionModelListener?.onWalletLeverDetail(value)
+                }
+            }
+        }
+    }
+
+    private fun createPairQuotationObserver(): Observer<PairQuotation?>? {
+        return object : SuccessObserver<PairQuotation?>() {
+            override fun onSuccess(value: PairQuotation?) {
+                if (value != null && TextUtils.equals(value.s, currentPairStatus.pair)) {
+                    onTransactionModelListener?.onPairQuotation(value)
                 }
             }
         }
@@ -615,6 +636,10 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     }
 
     interface OnTransactionModelListener {
+        /**
+         * 24小时行情
+         */
+        fun onPairQuotation(pairQuo:PairQuotation)
         /**
          * 交易对初始化
          */

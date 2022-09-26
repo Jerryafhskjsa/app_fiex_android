@@ -17,15 +17,14 @@
 
             <ImageButton
                 android:id="@+id/action_bar_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="9dp"
+                android:layout_height="16dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:background="@null"
                 android:contentDescription="@null"
                 android:onClick="onBackClick"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/btn_back" />
 
@@ -35,16 +34,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="-11dp"
                 android:layout_toRightOf="@+id/action_bar_back"
                 android:clickable="true"
                 android:maxLines="1"
+                android:layout_marginLeft="@dimen/double_padding"
                 android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_20"
+                android:textSize="@dimen/text_size_17"
                 android:textStyle="bold" />
-
         </RelativeLayout>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

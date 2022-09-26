@@ -29,6 +29,7 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
+import com.black.base.model.socket.PairQuotation
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
@@ -833,6 +834,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                 }
             }
         })
+    }
+
+    override fun onPairQuotation(pairQuo: PairQuotation) {
+
     }
 
     override fun onPairStatusInit(pairStatus: PairStatus) {

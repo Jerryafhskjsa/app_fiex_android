@@ -165,7 +165,7 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(CommonApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
             ?.getUsdtCnyPrice()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, false, callback))

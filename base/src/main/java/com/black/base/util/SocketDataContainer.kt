@@ -72,6 +72,9 @@ object SocketDataContainer {
 
     /***fiex***/
     private val orderDepthDataList = ArrayList<QuotationOrderNew?>()
+    private val currentPairDeal = PairDeal()
+    private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
+    private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
     /***fiex***/
     //成交
     const val DEAL_MAX_SIZE = 20
@@ -89,12 +92,7 @@ object SocketDataContainer {
     private val userLeverObservers = ArrayList<Observer<String?>>()
     //用户杠杆详情有修改
     private val userLeverDetailObservers = ArrayList<Observer<WalletLeverDetail?>>()
-    //笑傲江湖门派成员变更
-    private val factionMemberObservers = ArrayList<Observer<Long?>>()
-    //笑傲江湖门派变更
-    private val factionUpdateObservers = ArrayList<Observer<JSONObject?>>()
-    //笑傲江湖门派掌门变更
-    private val factionOwnerObservers = ArrayList<Observer<Long?>>()
+
     //热门币种变更
     private val hotPairObservers = ArrayList<Observer<ArrayList<String?>?>>()
 
@@ -114,6 +112,46 @@ object SocketDataContainer {
 
     fun setLastGetTime(type: Int, time: Long) {
         lastGetTimeMap.put(type, time)
+    }
+
+    //添加当前交易对deal观察者
+    fun subscribePairDealObservable(observer: Observer<PairDeal?>?){
+        if(observer == null){
+            return
+        }
+        synchronized(currentPairDealObservers){
+            if(!currentPairDealObservers.contains(observer)){
+                currentPairDealObservers.add(observer)
+            }
+        }
+    }
+
+    //移除当前交易对deal观察者
+    fun removePairDealObservable(observer: Observer<PairDeal?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(currentPairDealObservers) { currentPairDealObservers.remove(observer) }
+    }
+
+    //添加当前交易对24小时行情观察者
+    fun subscribePairQuotationObservable(observer: Observer<PairQuotation?>?){
+        if(observer == null){
+            return
+        }
+        synchronized(pairQuotationObservers){
+            if(!pairQuotationObservers.contains(observer)){
+                pairQuotationObservers.add(observer)
+            }
+        }
+    }
+
+    //移除当前交易对24小时行情观察者
+    fun removePairQuotationObservable(observer: Observer<PairQuotation?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(pairQuotationObservers) { pairQuotationObservers.remove(observer) }
     }
 
     //添加交易对观察者
@@ -301,11 +339,6 @@ object SocketDataContainer {
         if (observer == null) {
             return
         }
-        synchronized(factionMemberObservers) {
-            if (!factionMemberObservers.contains(observer)) {
-                factionMemberObservers.add(observer)
-            }
-        }
     }
 
     //移除傲江湖门派成员变更观察者
@@ -313,18 +346,12 @@ object SocketDataContainer {
         if (observer == null) {
             return
         }
-        synchronized(factionMemberObservers) { factionMemberObservers.remove(observer) }
     }
 
     //添加笑傲江湖门派变更观察者
     fun subscribeFactionUpdateObservable(observer: Observer<JSONObject?>?) {
         if (observer == null) {
             return
-        }
-        synchronized(factionUpdateObservers) {
-            if (!factionUpdateObservers.contains(observer)) {
-                factionUpdateObservers.add(observer)
-            }
         }
     }
 
@@ -333,18 +360,12 @@ object SocketDataContainer {
         if (observer == null) {
             return
         }
-        synchronized(factionUpdateObservers) { factionUpdateObservers.remove(observer) }
     }
 
     //添加笑傲江湖门派掌门变更观察者
     fun subscribeFactionOwnerObservable(observer: Observer<Long?>?) {
         if (observer == null) {
             return
-        }
-        synchronized(factionOwnerObservers) {
-            if (!factionOwnerObservers.contains(observer)) {
-                factionOwnerObservers.add(observer)
-            }
         }
     }
 
@@ -353,7 +374,6 @@ object SocketDataContainer {
         if (observer == null) {
             return
         }
-        synchronized(factionOwnerObservers) { factionOwnerObservers.remove(observer) }
     }
 
     //添加热门币种变更观察者
@@ -458,7 +478,7 @@ object SocketDataContainer {
     }
 
     //缓存所有交易对数据
-    fun refreshAllPairStatus(allPairStatus: ArrayList<PairStatus?>?) {
+    private fun refreshAllPairStatus(allPairStatus: ArrayList<PairStatus?>?) {
         synchronized(allPairStatusParentMap) {
             synchronized(allPairStatusMap!!) {
                 if (allPairStatus == null || allPairStatus.isEmpty()) {
@@ -884,79 +904,6 @@ object SocketDataContainer {
                 null
             } else {
                 Observable.just(gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java))
-            }
-        }
-    }
-
-    //获取相关的交易对
-    fun getAboutCoinPairStatus(context: Context?, pair: String?, callback: Callback<List<PairStatus?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        synchronized(allPairStatusMap) {
-            var coinName = getPairCoinName(pair)
-            if (pair != null) {
-                val arr = pair.split("_").toTypedArray()
-                if (arr.size > 1) {
-                    coinName = arr[0]
-                }
-            }
-            if (TextUtils.isEmpty(coinName)) {
-                callback.callback(null)
-            } else {
-                val result = ArrayList<PairStatus>()
-                for (pairStatus in allPairStatusMap.values) {
-                    if (TextUtils.equals(coinName, getPairCoinName(pairStatus.pair))) {
-                        result.add(pairStatus)
-                    }
-                }
-                callback.callback(gson.fromJson<List<PairStatus?>>(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
-            }
-        }
-    }
-
-    //获取相关的交易对
-    fun getAboutCoinPairStatus(context: Context?, dataType: Int, pair: String?): Observable<ArrayList<PairStatus>> {
-        if (context == null) {
-            return Observable.empty()
-        }
-        if (dataType == PairStatus.LEVER_DATA) {
-            synchronized(allLeverPairMap) {
-                val coinName = getPairCoinName(pair)
-                var result: ArrayList<PairStatus?>? = null
-                if (!TextUtils.isEmpty(coinName)) {
-                    result = ArrayList()
-                    for (pairStatus in allLeverPairMap.values) {
-                        if (TextUtils.equals(coinName, getPairCoinName(pairStatus.pair))) {
-                            result.add(pairStatus)
-                        }
-                    }
-                }
-                return if (result == null) {
-                    Observable.error(RuntimeException())
-                } else Observable.just(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
-            }
-        } else {
-            synchronized(allPairStatusMap) {
-                var coinName = getPairCoinName(pair)
-                if (pair != null) {
-                    val arr = pair.split("_").toTypedArray()
-                    if (arr.size > 1) {
-                        coinName = arr[0]
-                    }
-                }
-                var result: ArrayList<PairStatus?>? = null
-                if (!TextUtils.isEmpty(coinName)) {
-                    result = ArrayList()
-                    for (pairStatus in allPairStatusMap.values) {
-                        if (TextUtils.equals(coinName, getPairCoinName(pairStatus.pair))) {
-                            result?.add(pairStatus)
-                        }
-                    }
-                }
-                return if (result == null) {
-                    Observable.error(RuntimeException())
-                } else Observable.just(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
             }
         }
     }
@@ -1505,7 +1452,7 @@ object SocketDataContainer {
         }
     }
 
-    //主动拉去成交数据，直接回调
+    //主动拉取成交数据，直接回调
     fun getAllQuotationDeal(context: Context?, pair: String?, callback: Callback<ArrayList<TradeOrder?>?>?) {
         if (context == null || callback == null || TextUtils.isEmpty(pair)) {
             return
@@ -1529,6 +1476,56 @@ object SocketDataContainer {
             } catch (e: Exception) {
                 printError(e)
             }
+        }
+    }
+
+    /**
+     * 当前交易对的成交价
+     */
+    fun getCurrentPairDeal(handler: Handler?, data: PairDeal?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<PairDeal> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<PairDeal>() {
+                    override fun onSuccess(pairDeal: PairDeal) {
+                        synchronized(currentPairDealObservers) {
+                            for (observer in currentPairDealObservers) {
+                                observer?.onNext(pairDeal)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 当前交易对的24小时行情
+     */
+    fun getCurrentPairQuotation(handler: Handler?, data: PairQuotation?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<PairQuotation> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<PairQuotation>() {
+                    override fun onSuccess(pairQuo: PairQuotation) {
+                        synchronized(pairQuotationObservers) {
+                            for (observer in pairQuotationObservers) {
+                                observer?.onNext(pairQuo)
+                            }
+                        }
+                    }
+                })
         }
     }
 
@@ -1649,29 +1646,14 @@ object SocketDataContainer {
 
     //笑傲江湖门派成员变更
     fun onFactionMemberUpdate(factionId: Long) {
-        synchronized(factionMemberObservers) {
-            for (observer in factionMemberObservers) {
-                observer.onNext(factionId)
-            }
-        }
     }
 
     //笑傲江湖门派变更
     fun onFactionUpdate(factionId: JSONObject) {
-        synchronized(factionUpdateObservers) {
-            for (observer in factionUpdateObservers) {
-                observer.onNext(factionId)
-            }
-        }
     }
 
     //笑傲江湖门派成员变更
     fun onFactionOwnerUpdate(factionId: Long) {
-        synchronized(factionOwnerObservers) {
-            for (observer in factionOwnerObservers) {
-                observer.onNext(factionId)
-            }
-        }
     }
 
     private val leverDetailCache: MutableMap<String, WalletLeverDetail?> = HashMap()

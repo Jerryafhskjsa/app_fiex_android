@@ -49,6 +49,8 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
     private var dealObserver: Observer<Pair<String?, ArrayList<TradeOrder?>?>>? = createDealObserver()
 
+    private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
+
     private var kLineObserver: Observer<KLineItemListPair?>? = createKLineObserver()
     private var kLineAddObserver: Observer<KLineItemPair?>? = createKLineAddObserver()
     private var kLineAddMoreObserver: Observer<KLineItemListPair?>? = createKLineAddMoreObserver()
@@ -69,6 +71,11 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
         initPairStatus()
+        if(pairDealObserver == null){
+            pairDealObserver = createPairDealObserver()
+        }
+        SocketDataContainer.subscribePairDealObservable(pairDealObserver)
+
         if (orderObserver == null) {
             orderObserver = createOrderObserver()
         }
@@ -120,6 +127,11 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         if (handlerThread != null) {
             handlerThread?.quit()
         }
+
+        if(pairDealObserver != null){
+            SocketDataContainer.removePairDealObservable(pairDealObserver)
+        }
+
         if (orderObserver != null) {
             SocketDataContainer.removeOrderObservable(orderObserver)
         }
@@ -225,6 +237,18 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             }
             getTradePairInfo()
             getPairStatus()
+        }
+    }
+
+    private fun createPairDealObserver(): Observer<PairDeal?> {
+        return object : SuccessObserver<PairDeal?>() {
+            override fun onSuccess(value: PairDeal?) {
+                onKLineModelListener?.run {
+                    if (value != null && currentPairStatus.pair != null) {
+                        onPairDeal(value)
+                    }
+                }
+            }
         }
     }
 
@@ -601,6 +625,8 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onPairStatusPrecision(precision: Int)
         fun onPairStatusAmountPrecision(amountPrecision: Int)
         fun onPairStatusDataChanged(pairStatus: PairStatus?)
+
+        fun onPairDeal(value:PairDeal)
 
         fun onKLineDataAll(items: ArrayList<KLineItem?>)
         fun onKLineDataAdd(item: KLineItem)

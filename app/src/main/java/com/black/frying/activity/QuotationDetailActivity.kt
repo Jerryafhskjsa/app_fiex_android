@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
-import com.black.base.model.socket.KLineItem
-import com.black.base.model.socket.PairDescription
-import com.black.base.model.socket.PairStatus
-import com.black.base.model.socket.TradeOrder
+import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -479,6 +476,10 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             }
             runOnUiThread { refreshQuotationDeals(dealData) }
         }
+    }
+
+    override fun onPairDeal(value: PairDeal) {
+
     }
 
     override fun onPairDescription(observable: Observable<HttpRequestResultData<PairDescription?>?>?) {
