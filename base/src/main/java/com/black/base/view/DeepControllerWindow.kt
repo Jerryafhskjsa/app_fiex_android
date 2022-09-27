@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.*
 import com.black.base.R
+import com.black.base.model.socket.Deep
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
@@ -127,7 +128,11 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
             } else {
                 textView?.setTextColor(COLOR_DEFAULT)
             }
-            textView?.text = item.toString()
+            var text = item.toString()
+            if(item is Deep){
+                text = item.deep.toString()
+            }
+            textView?.text = text
             view?.setBackgroundColor(COLOR_BG)
             return view
         }

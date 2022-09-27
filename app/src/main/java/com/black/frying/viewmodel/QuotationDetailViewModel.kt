@@ -443,8 +443,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                                     for (pairStatus in returnData.data!!) {
                                         if (TextUtils.equals(currentPairStatus.pair, pairStatus?.pairName)) {
-                                            val supportingPrecisionList = pairStatus?.supportingPrecisionList
-                                            var maxPrecision = CommonUtil.getMax(supportingPrecisionList)
+                                            var maxPrecision = pairStatus?.precision
                                             maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
                                             currentPairStatus.amountPrecision = if (pairStatus?.amountPrecision == null || pairStatus?.amountPrecision == 0) 5 else pairStatus?.amountPrecision
                                             currentPairStatus.precision = maxPrecision

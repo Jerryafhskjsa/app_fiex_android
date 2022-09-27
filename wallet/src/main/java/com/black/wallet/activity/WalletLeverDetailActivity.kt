@@ -251,10 +251,10 @@ class WalletLeverDetailActivity : BaseActionBarActivity(), View.OnClickListener 
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                     for (pairStatus in returnData.data!!) {
                         if (TextUtils.equals(pair, pairStatus?.pairName)) {
-                            val supportingPrecisionList = pairStatus?.supportingPrecisionList
-                            var maxPrecision = CommonUtil.getMax(supportingPrecisionList)
-                            maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
-                            precision = maxPrecision
+//                            val supportingPrecisionList = pairStatus?.supportingPrecisionList
+//                            var maxPrecision = CommonUtil.getMax(supportingPrecisionList)
+//                            maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
+//                            precision = maxPrecision
                             showDetail()
                             break
                         }

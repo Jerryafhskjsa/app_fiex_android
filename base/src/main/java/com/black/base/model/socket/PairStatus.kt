@@ -1,17 +1,25 @@
 package com.black.base.model.socket
 
+import android.util.Log
 import com.black.base.model.BaseAdapterItem
 import com.black.base.model.clutter.HomeTickersKline
 import com.black.util.CommonUtil
 import com.black.util.Findable
 import com.black.util.NumberUtil
+import java.math.BigDecimal
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+import kotlin.math.pow
 
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
     //k线数据
     var kLineDate:HomeTickersKline? = null
+    var supportingPrecisionList //支持深度
+            : ArrayList<Deep>? = null
     //交易量
     var tradeVolume:String? = null
     set(value) {
@@ -68,8 +76,6 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var order_no = Int.MAX_VALUE //排序
     var is_dear = false //是否收藏
     var pairName: String? = null
-    var supportingPrecisionList //支持深度
-            : ArrayList<Int>? = null
     var amountPrecision: Int? = null //交易数量精度
     var isHighRisk: Boolean? = null //是否是ST币种
     var feeRate: Double? = null
@@ -112,6 +118,30 @@ open class PairStatus : BaseAdapterItem(), Findable {
     fun setCurrentPriceCNY(currentPriceCNY: Double?, nullText: String?) {
         this.currentPriceCNY = currentPriceCNY
         currentPriceCNYFormat = if (currentPriceCNY == null) nullText else CommonUtil.formatMoneyCNY(currentPriceCNY)
+    }
+
+    fun setMaxSupportPrecisionList(pricePrecision:String?,depthPrecisionMerge:Int?):ArrayList<Deep>{
+        var depth = depthPrecisionMerge
+        var pricePrecision = pricePrecision
+        var deepList = ArrayList<Deep>()
+        for (index in 0..(depth?.minus(1) ?: 0)){
+            var deep = Deep()
+            var d = pricePrecision?.toInt()?.minus(index)
+            if (d != null) {
+                var p = if(d < 0){
+                    10.0.pow(abs(d).toDouble())
+                }else if(d > 0){
+                    pricePrecision?.toInt()
+                        ?.let { NumberUtil.formatNumberNoGroup(1/ 10.0.pow(d.toDouble()), it) }
+                }else{
+                    1.0
+                }
+                deep.precision = d
+                deep.deep = p.toString()
+                deepList.add(deep)
+            }
+        }
+        return deepList
     }
 
     val priceChangeSinceTodayDisplay: String

@@ -20,6 +20,9 @@ interface PairApiService {
     @GET(UrlConfig.Config.URL_HOME_CONFIG_LIST)
     fun getHomeSymbolList():Observable<HttpRequestResultDataList<HomeSymbolList?>?>?
 
+    @GET(UrlConfig.Config.URL_PAIR_SYMBOL_CONFIG)
+    fun getPairSymbol():Observable<HttpRequestResultData<HomeSymbolList?>?>?
+
     @GET(UrlConfig.Config.URL_HOME_TICKERS)
     fun getHomeTickersList():Observable<HttpRequestResultDataList<HomeTickers?>?>?
 

@@ -26,6 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object WalletApiServiceHelper {
+    //所有币种配置信息
     private val coinInfoCache = ArrayList<CoinInfoType?>()
     private val walletCache: ArrayList<Wallet?> = ArrayList()
     private val walletLeverCache: ArrayList<WalletLever?> = ArrayList()

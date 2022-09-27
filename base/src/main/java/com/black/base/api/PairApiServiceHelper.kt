@@ -15,10 +15,7 @@ import com.black.base.model.clutter.HomeTickersKline
 import com.black.base.model.socket.CoinOrder
 import com.black.base.model.socket.PairStatus
 import com.black.base.net.HttpCallbackSimple
-import com.black.base.util.CookieUtil
-import com.black.base.util.RxJavaHelper
-import com.black.base.util.SocketUtil
-import com.black.base.util.UrlConfig
+import com.black.base.util.*
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -207,14 +204,86 @@ object PairApiServiceHelper {
                 for(i in data.indices){
                     var pair = data[i]?.symbol//交易对名
                     var pairStatus:PairStatus? = PairStatus()
+                    var symbol = data[i]
                     pairStatus?.pair = pair
-                    pairStatus?.hot = data[i]?.hot
-                    pairStatus?.setType = data[i]?.setType
+                    pairStatus?.hot = symbol?.hot
+                    pairStatus?.setType = symbol?.setType
+                    pairStatus?.order_no = i
+//                    var maxPrecision = CommonUtil.getMax(data[i]?.depthPrecisionMerge)
+                    var maxPrecision = symbol?.pricePrecision?.toInt()
+                    maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
+                    pairStatus?.precision = maxPrecision
+                    pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
                     homePagePairData?.add(pairStatus)
                 }
                 Observable.just(result)
             }
             ?.compose(RxJavaHelper.observeOnMainThread())
+    }
+
+    /**
+     * 获取交易对全部配置信息
+     */
+    fun getFullPairStatusObservable(context: Context?): Observable<ArrayList<PairStatus>?>? {
+        if (context == null) {
+            return null
+        }
+        val pairApiService = ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+        return pairApiService!!.getHomeSymbolList()
+            ?.flatMap { pairInfoData: HttpRequestResultDataList<HomeSymbolList?>? ->
+                val pairStatuses = ArrayList<PairStatus>()
+                val allPair = ArrayList<String?>()
+                val allLeverPair = ArrayList<String?>()
+                if (pairInfoData!!.data != null && pairInfoData.code == HttpRequestResult.SUCCESS) {
+                    for (i in pairInfoData.data!!.indices) {
+                        val symbol = pairInfoData.data!![i]
+                        var pairStatus:PairStatus? = PairStatus()
+                        var pair = symbol?.symbol//交易对名
+                        pairStatus?.pair = pair
+                        pairStatus?.hot = symbol?.hot
+                        pairStatus?.setType = symbol?.setType
+                        pairStatus?.order_no = i
+                        var maxPrecision = symbol?.pricePrecision?.toInt()
+                        maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
+                        pairStatus?.precision = maxPrecision
+                        pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
+                        if (pairStatus != null) {
+                            pairStatuses.add(pairStatus)
+                        }
+                        allPair.add(pairStatus?.pair)
+                        if (pairStatus?.isLever == true) {
+                            allLeverPair.add(pairStatus.pair)
+                        }
+                    }
+                }
+                var currentPair = CookieUtil.getCurrentPair(context)
+                if (allPair.isNotEmpty() && (TextUtils.isEmpty(currentPair) || !allPair.contains(currentPair))) {
+                    currentPair = CommonUtil.getItemFromList(allPair, 0)
+                    if (currentPair != null) {
+                        CookieUtil.setCurrentPair(context, currentPair)
+                        SocketUtil.notifyPairChanged(context)
+                    }
+                }
+                val currentLeverPair = CookieUtil.getCurrentPairLever(context)
+                if (allLeverPair.isNotEmpty() && (TextUtils.isEmpty(currentLeverPair) || !allLeverPair.contains(currentLeverPair))) {
+                    currentPair = CommonUtil.getItemFromList(allLeverPair, 0)
+                    if (currentPair != null) {
+                        CookieUtil.setCurrentPairLever(context, currentPair)
+                    }
+                }
+                Observable.just(pairStatuses)
+            }
+    }
+
+    /**
+     * 获取交易对全部信息，包括 ST 默认排序 交易深度
+     */
+    fun getFullPairStatus(context: Context?, callback: Callback<ArrayList<PairStatus>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        val observable = getFullPairStatusObservable(context)
+        observable?.compose(RxJavaHelper.observeOnMainThread())?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
     /**
@@ -335,66 +404,5 @@ object PairApiServiceHelper {
                 ?.getCoinOrders()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
-    }
-
-    /**
-     * 获取交易对全部信息，包括 ST 默认排序 交易深度
-     */
-    fun getFullPairStatusObservable(context: Context?): Observable<ArrayList<PairStatus>?>? {
-        if (context == null) {
-            return null
-        }
-        val pairApiService = ApiManager.build(context).getService(PairApiService::class.java)
-        return pairApiService!!.getTradePairInfo(null)
-                ?.flatMap { pairInfoData: HttpRequestResultDataList<PairStatus?>? ->
-                    val pairStatuses = ArrayList<PairStatus>()
-                    val allPair = ArrayList<String?>()
-                    val allLeverPair = ArrayList<String?>()
-                    if (pairInfoData!!.data != null && pairInfoData.code == HttpRequestResult.SUCCESS) {
-                        for (i in pairInfoData.data!!.indices) {
-                            val pairStatus = pairInfoData.data!![i]
-                            if (pairStatus != null) {
-                                pairStatus.pair = pairStatus.pairName
-                                pairStatus.order_no = i
-                                var maxPrecision = CommonUtil.getMax(pairStatus.supportingPrecisionList)
-                                maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
-                                pairStatus.precision = maxPrecision
-                                pairStatus.isHighRisk = if (pairStatus.isHighRisk == null) false else pairStatus.isHighRisk
-                                pairStatuses.add(pairStatus)
-                                allPair.add(pairStatus.pair)
-                                if (pairStatus.isLever) {
-                                    allLeverPair.add(pairStatus.pair)
-                                }
-                            }
-                        }
-                    }
-                    var currentPair = CookieUtil.getCurrentPair(context)
-                    if (allPair.isNotEmpty() && (TextUtils.isEmpty(currentPair) || !allPair.contains(currentPair))) {
-                        currentPair = CommonUtil.getItemFromList(allPair, 0)
-                        if (currentPair != null) {
-                            CookieUtil.setCurrentPair(context, currentPair)
-                            SocketUtil.notifyPairChanged(context)
-                        }
-                    }
-                    val currentLeverPair = CookieUtil.getCurrentPairLever(context)
-                    if (allLeverPair.isNotEmpty() && (TextUtils.isEmpty(currentLeverPair) || !allLeverPair.contains(currentLeverPair))) {
-                        currentPair = CommonUtil.getItemFromList(allLeverPair, 0)
-                        if (currentPair != null) {
-                            CookieUtil.setCurrentPairLever(context, currentPair)
-                        }
-                    }
-                    Observable.just(pairStatuses)
-                }
-    }
-
-    /**
-     * 获取交易对全部信息，包括 ST 默认排序 交易深度
-     */
-    fun getFullPairStatus(context: Context?, callback: Callback<ArrayList<PairStatus>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        val observable = getFullPairStatusObservable(context)
-        observable?.compose(RxJavaHelper.observeOnMainThread())?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 }

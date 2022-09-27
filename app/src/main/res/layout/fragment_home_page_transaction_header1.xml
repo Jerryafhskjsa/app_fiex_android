@@ -1199,6 +1199,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:visibility="visible"
                 >
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/deep"
                     android:layout_width="wrap_content"

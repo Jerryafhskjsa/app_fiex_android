@@ -29,11 +29,10 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
-import com.black.base.model.socket.PairStatus
-import com.black.base.model.socket.TradeOrder
-import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.socket.*
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
@@ -394,27 +393,28 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
                     if (viewModel!!.getCoinType() != null) {
-//                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
-//                            override fun callback(returnData: CoinInfo?) {
-//                                if (returnData != null) {
-//                                    if (returnData.supportTrade != null && true == returnData.supportTrade) {
-//                                        if (transactionType == 1) { //买入
-//                                            createOrder("BID")
-//                                        } else if (transactionType == 2) { //卖出
-//                                            createOrder("ASK")
-//                                        }
-//                                    } else {
-//                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-//                                    }
-//                                } else {
-//                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-//                                }
-//                            }
-//
-//                            override fun error(type: Int, error: Any) {
-//                                FryingUtil.showToast(mContext, error.toString())
-//                            }
-//                        })
+                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfoType?>() {
+                            override fun callback(returnData: CoinInfoType?) {
+                                if (returnData != null) {
+                                    var coinInfo = returnData.config?.get(0)?.coinConfigVO
+                                    if (coinInfo?.supportTrade != null && true == coinInfo.supportTrade) {
+                                        if (transactionType == 1) { //买入
+                                            createOrder("BID")
+                                        } else if (transactionType == 2) { //卖出
+                                            createOrder("ASK")
+                                        }
+                                    } else {
+                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+                                    }
+                                } else {
+                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+                                }
+                            }
+
+                            override fun error(type: Int, error: Any) {
+                                FryingUtil.showToast(mContext, error.toString())
+                            }
+                        })
                     }
                 }
             }
@@ -857,6 +857,9 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         })
     }
 
+    override fun onPairQuotation(pairQuo: PairQuotation) {
+    }
+
     override fun onPairStatusInit(pairStatus: PairStatus) {
         clearInput()
         binding!!.fragmentHomePageTransactionHeader1.price.filters = arrayOf(NumberFilter(), PointLengthFilter(pairStatus.precision))
@@ -1067,7 +1070,7 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
         }
     }
 
-    override fun onDeepChanged(deep: Int) {
+    override fun onDeepChanged(deep: Deep) {
         onDeepChoose()
     }
 

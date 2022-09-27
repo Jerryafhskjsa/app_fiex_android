@@ -29,14 +29,12 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
-import com.black.base.model.socket.PairQuotation
-import com.black.base.model.socket.PairStatus
-import com.black.base.model.socket.TradeOrder
-import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
@@ -372,27 +370,28 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
                     if (viewModel!!.getCoinType() != null) {
-//                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
-//                            override fun callback(returnData: CoinInfo?) {
-//                                if (returnData != null) {
-//                                    if (returnData.supportTrade != null && true == returnData.supportTrade) {
-//                                        if (transactionType == 1) { //买入
-//                                            createOrder("BUY")
-//                                        } else if (transactionType == 2) { //卖出
-//                                            createOrder("SELL")
-//                                        }
-//                                    } else {
-//                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-//                                    }
-//                                } else {
-//                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
-//                                }
-//                            }
-//
-//                            override fun error(type: Int, error: Any) {
-//                                FryingUtil.showToast(mContext, error.toString())
-//                            }
-//                        })
+                        WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfoType?>() {
+                            override fun callback(returnData: CoinInfoType?) {
+                                if (returnData != null) {
+                                    var coinInfo = returnData.config?.get(0)?.coinConfigVO
+                                    if (coinInfo?.supportTrade != null && true == coinInfo.supportTrade) {
+                                        if (transactionType == 1) { //买入
+                                            createOrder("BUY")
+                                        } else if (transactionType == 2) { //卖出
+                                            createOrder("SELL")
+                                        }
+                                    } else {
+                                        FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+                                    }
+                                } else {
+                                    FryingUtil.showToast(mContext, getString(R.string.alert_trade_not_support, viewModel!!.getCoinType()))
+                                }
+                            }
+
+                            override fun error(type: Int, error: Any) {
+                                FryingUtil.showToast(mContext, error.toString())
+                            }
+                        })
                     }
                 }
             }
@@ -702,7 +701,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     private fun refreshDeepView() {
-        binding!!.fragmentHomePageTransactionHeader1.deep.setText(getString(R.string.point_count, if (viewModel!!.getPrecision() == 0) "" else viewModel!!.getPrecision().toString()))
+        var deep = viewModel!!.getPrecisionDeep(viewModel!!.getPrecision())
+        binding!!.fragmentHomePageTransactionHeader1.deep.setText(getString(R.string.point_count,deep?.deep?: ""))
     }
 
     private fun onDeepChoose() {
@@ -711,7 +711,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         viewModel!!.getAllOrder()
     }
 
-    //s
     private fun refreshData() {
 //        if (!getUserVisibleHint()) {
 //            return;
@@ -1059,7 +1058,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         }
     }
 
-    override fun onDeepChanged(deep: Int) {
+    override fun onDeepChanged(deep: Deep) {
         onDeepChoose()
     }
 

@@ -263,6 +263,8 @@ object UrlConfig {
 
     object Wallet {
         /***fiex***/
+        //币种列表配置
+        const val URL_COINS = "config/coins"
         //查询支持的账户划转类型 pro
         const val URL_GET_SUPPORT_ACCOUNT = "wallet/getSupportAccount"
         //查询可支持划转的币种
@@ -293,8 +295,6 @@ object UrlConfig {
         const val URL_WITHDRAW_CANCEL = "withdraw/cancel"
         ///冲币地址
         const val URL_RECHARGE_ADDRESS_POST = "wallet/address"
-        //加入各个币种的交易，充值，提现开关
-        const val URL_COINS = "config/coins"
         //综合账单类型配置
         const val URL_WALLET_BILL_TYPE = "bill/conf/all"
         //综合账单查询
@@ -322,8 +322,10 @@ object UrlConfig {
     object Config {
         //K线
         const val URL_KLINE_HISTORY="public/kline"
-        //fiex 首页配置项获取币种列表
+        //fiex 获取所有交易对配置
         const val URL_HOME_CONFIG_LIST = "v1/public/symbol/list"
+        //fiex 获取单个交易对配置信息
+        const val URL_PAIR_SYMBOL_CONFIG = "v1/public/symbol/detail"
         //fiex 获取tickets
         const val URL_HOME_TICKERS = "public/tickers"
         //fiex 获取首首页折线图

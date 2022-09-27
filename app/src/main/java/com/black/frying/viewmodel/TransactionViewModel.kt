@@ -578,7 +578,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         return currentPairStatus.pair
     }
 
-    fun getPrecisionList(): ArrayList<Int>? {
+    fun getPrecisionList(): ArrayList<Deep>? {
         return currentPairStatus.supportingPrecisionList
     }
 
@@ -596,6 +596,18 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     fun getPrecision(): Int? {
         return currentPairStatus.precision
+    }
+
+    fun getPrecisionDeep(precision:Int?):Deep?{
+        var deepList = currentPairStatus.supportingPrecisionList
+        if (deepList != null) {
+            for(deep in deepList){
+                if(precision.toString().equals(deep.precision)){
+                    return deep
+                }
+            }
+        }
+        return null
     }
 
     fun getCurrentPriceCNY(): Double? {

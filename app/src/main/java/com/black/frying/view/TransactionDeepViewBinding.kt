@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
+import com.black.base.model.socket.Deep
 import com.black.base.model.socket.TradeOrder
 import com.black.base.util.FryingUtil
 import com.black.base.view.DeepControllerWindow
@@ -82,10 +83,10 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         when (v.id) {
             R.id.deep,R.id.lin_deep_postion ->  //弹出深度选择器
                 if (viewModel.getPrecisionList() != null && viewModel.getPrecisionList()!!.isNotEmpty()) {
-                    DeepControllerWindow<Int>(context, null, viewModel.getPrecision(), viewModel.getPrecisionList() as List<Int>,
-                            object : DeepControllerWindow.OnReturnListener<Int> {
-                                override fun onReturn(window: DeepControllerWindow<Int>, item: Int) {
-                                    viewModel.setPrecision(item)
+                    DeepControllerWindow<Deep>(context, null, viewModel.getPrecisionDeep(viewModel.getPrecision()), viewModel.getPrecisionList() as List<Deep>,
+                            object : DeepControllerWindow.OnReturnListener<Deep> {
+                                override fun onReturn(window: DeepControllerWindow<Deep>, item: Deep) {
+                                    item.precision?.let { viewModel.setPrecision(it) }
                                     if (onTransactionDeepListener != null) {
                                         onTransactionDeepListener!!.onDeepChanged(item)
                                     }
@@ -348,7 +349,7 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
 
     interface OnTransactionDeepListener {
         fun onTradeOrderFastClick(tradeOrder: TradeOrder)
-        fun onDeepChanged(deep: Int)
+        fun onDeepChanged(deep: Deep)
     }
 
     init {

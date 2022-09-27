@@ -10,6 +10,9 @@ import java.math.BigDecimal
 //钱包相关
 interface WalletApiService {
     /***fiex***/
+    @GET(UrlConfig.Wallet.URL_COINS)
+    fun getCoins(@Query("coinTypes") coinType: String?): Observable<HttpRequestResultData<CoinInfoConfig?>?>?
+
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_ACCOUNT)
     fun getSupportAccount(): Observable<HttpRequestResultDataList<String?>?>?
 
@@ -56,9 +59,6 @@ interface WalletApiService {
 
     @GET(UrlConfig.Wallet.URL_LIAN_IN_COIN)
     fun getChainAddress(@Query("coinType") coinType: String?, @Query("chainType") chainType: String?): Observable<HttpRequestResultDataList<LianInCoinModel?>?>?
-
-    @GET(UrlConfig.Wallet.URL_COINS)
-    fun getCoins(@Query("coinTypes") coinType: String?): Observable<HttpRequestResultData<CoinInfoConfig?>?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_BILL_TYPE)
     fun getWalletBillType(): Observable<HttpRequestResultDataList<WalletBillType?>?>?

@@ -213,8 +213,7 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
                                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                                     for (pairStatus in returnData.data!!) {
                                         if (TextUtils.equals(currentPairStatus.pair, pairStatus?.pairName)) {
-                                            val supportingPrecisionList = pairStatus?.supportingPrecisionList
-                                            var maxPrecision = CommonUtil.getMax(supportingPrecisionList)
+                                            var maxPrecision = pairStatus?.precision
                                             maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
                                             precision = maxPrecision
                                             break
