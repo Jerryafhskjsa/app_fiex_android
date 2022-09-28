@@ -55,6 +55,7 @@ object SocketDataContainer {
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
     private val c2CPrice: C2CPrice? = null
+
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
 
     //所有现货交易对
@@ -62,6 +63,7 @@ object SocketDataContainer {
     //所有杠杆交易对
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
+
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
     //自选交易对数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
@@ -332,48 +334,6 @@ object SocketDataContainer {
             return
         }
         synchronized(userLeverDetailObservers) { userLeverDetailObservers.remove(observer) }
-    }
-
-    //添加傲江湖门派成员变更观察者
-    fun subscribeFactionMemberObservable(observer: Observer<Long?>?) {
-        if (observer == null) {
-            return
-        }
-    }
-
-    //移除傲江湖门派成员变更观察者
-    fun removeFactionMemberObservable(observer: Observer<Long?>?) {
-        if (observer == null) {
-            return
-        }
-    }
-
-    //添加笑傲江湖门派变更观察者
-    fun subscribeFactionUpdateObservable(observer: Observer<JSONObject?>?) {
-        if (observer == null) {
-            return
-        }
-    }
-
-    //移除笑傲江湖门派变更观察者
-    fun removeFactionUpdateObservable(observer: Observer<JSONObject?>?) {
-        if (observer == null) {
-            return
-        }
-    }
-
-    //添加笑傲江湖门派掌门变更观察者
-    fun subscribeFactionOwnerObservable(observer: Observer<Long?>?) {
-        if (observer == null) {
-            return
-        }
-    }
-
-    //移除笑傲江湖门派掌门变更观察者
-    fun removeFactionOwnerObservable(observer: Observer<Long?>?) {
-        if (observer == null) {
-            return
-        }
     }
 
     //添加热门币种变更观察者

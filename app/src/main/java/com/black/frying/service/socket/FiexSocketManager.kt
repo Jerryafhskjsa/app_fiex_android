@@ -65,18 +65,18 @@ class FiexSocketManager(context: Context, handler: Handler){
         subStatusSocketMgr = WebSocketHandler.initGeneralWebSocket("wsSubStatus",socketSetting)
         pairKlineMgr = WebSocketHandler.initGeneralWebSocket("wsPairKline",socketSetting)
         tickerSocketMgr = WebSocketHandler.initGeneralWebSocket("wsTickets",socketSetting)
-//        addListener(userSocketMgr, userKeyS, userDataListener as SimpleListener)
+        addListener(userSocketMgr, userKeyS, userDataListener as SimpleListener)
         addListener(subStatusSocketMgr, subStatusKeys,subStatusSocketListener as SimpleListener)
 //        addListener(pairKlineMgr, pairKlineKeys,pariKlineSocketListener as SimpleListener)
-//        addListener(tickerSocketMgr, tickerKeyS,tickerDataListener as SimpleListener)
+        addListener(tickerSocketMgr, tickerKeyS,tickerDataListener as SimpleListener)
     }
 
 
     fun startConnect(){
-//        userSocketMgr.start()
+        userSocketMgr.start()
         subStatusSocketMgr.start()
 //        pairKlineMgr.start()
-//        tickerSocketMgr.start()
+        tickerSocketMgr.start()
     }
 
     fun stopConnect(){

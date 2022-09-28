@@ -114,14 +114,9 @@ class FactionChatActivity : BaseActionBarActivity() {
     override fun onResume() {
         super.onResume()
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_FACTION_OPEN)
-        if (factionUpdateObserver == null) {
-            factionUpdateObserver = createFactionUpdateObserver()
-        }
-        SocketDataContainer.subscribeFactionUpdateObservable(factionUpdateObserver)
         if (ownerUpdateObserver == null) {
             ownerUpdateObserver = createOwnerUpdateObserver()
         }
-        SocketDataContainer.subscribeFactionOwnerObservable(ownerUpdateObserver)
         refreshFactionUserInfo()
         factionMemberList
     }
@@ -129,12 +124,6 @@ class FactionChatActivity : BaseActionBarActivity() {
     override fun onStop() {
         super.onStop()
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_FACTION_CLOSE)
-        if (factionUpdateObserver != null) {
-            SocketDataContainer.removeFactionUpdateObservable(factionUpdateObserver)
-        }
-        if (ownerUpdateObserver != null) {
-            SocketDataContainer.removeFactionOwnerObservable(ownerUpdateObserver)
-        }
     }
 
     var chatLayout: ChatLayout? = null

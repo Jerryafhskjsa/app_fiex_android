@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.QuotationSet
 import com.black.base.model.filter.EntrustType
 import com.black.base.util.SocketDataContainer
 import com.black.base.util.SpacesItemDecoration
@@ -28,6 +29,7 @@ import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ViewEntrustFilterBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 class EntrustFilter(private val activity: Activity, private val parentView: View, defaultCoinType: String?, private val defaultSet: String?,
                     private val leverType: String?, defaultEntrustType: EntrustType?) : PopupWindow.OnDismissListener, View.OnClickListener {
@@ -179,14 +181,19 @@ class EntrustFilter(private val activity: Activity, private val parentView: View
             }
             showSetData(sets)
         } else {
-            PairApiServiceHelper.getTradeSets(activity, false, object : Callback<HttpRequestResultDataList<String?>?>() {
+            PairApiServiceHelper.getTradeSets(activity, false, object : Callback<HttpRequestResultDataList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {
                     showSetData(null)
                 }
 
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        showSetData(returnData.data)
+                        var setS:ArrayList<String> = ArrayList()
+                        var dataSet = returnData.data
+                        for (i in dataSet?.indices!!){
+                            dataSet[i]?.name?.let { setS.add(it) }
+                        }
+                        showSetData(setS)
                     } else {
                         showSetData(null)
                     }

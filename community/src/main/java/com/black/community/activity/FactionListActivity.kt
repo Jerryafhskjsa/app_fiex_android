@@ -118,7 +118,6 @@ class FactionListActivity : BaseActionBarActivity(), OnItemClickListener, QRefre
         if (factionUpdateObserver == null) {
             factionUpdateObserver = createFactionUpdateObserver()
         }
-        SocketDataContainer.subscribeFactionUpdateObservable(factionUpdateObserver)
         getFactionList(false)
         checkListAddTimer()
     }
@@ -126,9 +125,6 @@ class FactionListActivity : BaseActionBarActivity(), OnItemClickListener, QRefre
     override fun onStop() {
         super.onStop()
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_FACTION_CLOSE)
-        if (factionUpdateObserver != null) {
-            SocketDataContainer.removeFactionUpdateObservable(factionUpdateObserver)
-        }
         if (timerCommand != null) {
             handler.removeCallbacks(timerCommand)
             timerCommand = null

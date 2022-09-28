@@ -111,6 +111,10 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         }
     }
 
+    fun updateCurrentPrice(){
+
+    }
+
     fun setOnTransactionDeepListener(onTransactionDeepListener: OnTransactionDeepListener?) {
         this.onTransactionDeepListener = onTransactionDeepListener
     }

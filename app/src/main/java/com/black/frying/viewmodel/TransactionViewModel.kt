@@ -58,6 +58,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
     private var leverDetailObserver: Observer<WalletLeverDetail?>? = createLeverDetailObserver()
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
+    private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
 
 
     private var tradeOrderDepthPair:TradeOrderPairList? = null
@@ -73,6 +74,11 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread!!.start()
         socketHandler = Handler(handlerThread!!.looper)
+
+        if(pairDealObserver == null){
+            pairDealObserver = createPairDealObserver()
+        }
+        SocketDataContainer.subscribePairDealObservable(pairDealObserver)
 
         if (orderObserver == null) {
             orderObserver = createOrderObserver()
@@ -106,18 +112,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         checkLeverPairConfig()
     }
 
-    fun startListenLeverDetail() {
-        if (tabType == ConstData.TAB_LEVER) {
-            if (leverDetailObserver == null) {
-                leverDetailObserver = createLeverDetailObserver()
-            }
-            SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
-            val bundle = Bundle()
-            bundle.putString(ConstData.PAIR, currentPairStatus.pair)
-            SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         if (orderObserver != null) {
@@ -138,6 +132,9 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         if(pairQuotationObserver != null){
             SocketDataContainer.removePairQuotationObservable(pairQuotationObserver)
         }
+        if(pairDealObserver != null){
+            SocketDataContainer.removePairDealObservable(pairDealObserver)
+        }
 
         if (socketHandler != null) {
             socketHandler!!.removeMessages(0)
@@ -145,6 +142,31 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
         if (handlerThread != null) {
             handlerThread!!.quit()
+        }
+    }
+
+    fun startListenLeverDetail() {
+        if (tabType == ConstData.TAB_LEVER) {
+            if (leverDetailObserver == null) {
+                leverDetailObserver = createLeverDetailObserver()
+            }
+            SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
+            val bundle = Bundle()
+            bundle.putString(ConstData.PAIR, currentPairStatus.pair)
+            SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
+        }
+    }
+
+
+    private fun createPairDealObserver(): Observer<PairDeal?> {
+        return object : SuccessObserver<PairDeal?>() {
+            override fun onSuccess(value: PairDeal?) {
+                onTransactionModelListener?.run {
+                    if (value != null && currentPairStatus.pair != null) {
+                        onTransactionModelListener?.onPairDeal(value)
+                    }
+                }
+            }
         }
     }
 
@@ -361,14 +383,14 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                 currentPairStatus.pair = (currentPair)
                 initPairCoinSet()
                 currentPairStatus.supportingPrecisionList = null
-                currentPairStatus.precision = 6
+                currentPairStatus.precision = ConstData.DEFAULT_PRECISION
             }
             getCurrentPairStatus(currentPairStatus.pair)
         }
         currentPairStatus.pair = (getLastPair())
         initPairCoinSet()
         currentPairStatus.supportingPrecisionList = null
-        currentPairStatus.precision = 6
+        currentPairStatus.precision = ConstData.DEFAULT_PRECISION
         if (currentPairStatus.pair == null) {
             SocketDataContainer.initAllPairStatusData(context)
         } else {
@@ -445,7 +467,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
      */
     fun getCurrentUserBalance(balanceType:ConstData.BalanceType?){
         onTransactionModelListener?.getUserBalanceCallback()?.let{
-            UserApiServiceHelper.getUserBalanceReal(context, false, object : Callback<UserBalanceWarpper?>() {
+            WalletApiServiceHelper.getUserBalanceReal(context, false, object : Callback<UserBalanceWarpper?>() {
                 override fun callback(balances: UserBalanceWarpper?) {
                     var buyBalance: UserBalance? = null
                     var sellBalance: UserBalance? = null
@@ -602,7 +624,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         var deepList = currentPairStatus.supportingPrecisionList
         if (deepList != null) {
             for(deep in deepList){
-                if(precision.toString().equals(deep.precision)){
+                if(precision == deep.precision){
                     return deep
                 }
             }
@@ -682,5 +704,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
 
         fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
+
+        fun onPairDeal(value:PairDeal)
     }
 }

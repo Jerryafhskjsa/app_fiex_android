@@ -1,5 +1,6 @@
 package com.black.wallet.viewmodel
 
+import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
@@ -8,21 +9,17 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.Money
-import com.black.base.model.SuccessObserver
+import com.black.base.model.*
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.user.UserBalance
 import com.black.base.model.user.UserBalanceWarpper
-import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletConfig
-import com.black.base.model.wallet.WalletLever
+import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
+import com.black.base.view.PairStatusPopupWindow
 import com.black.base.viewmodel.BaseViewModel
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
@@ -52,7 +49,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var walletCoinFilter: Boolean? = false
 
     private var symbolList:ArrayList<PairStatus?>? = null
-    private var userBalanceList:ArrayList<UserBalance?>?  = null
+    private var coinList:ArrayList<CoinInfo?>? = ArrayList()
+    private var spotBalanceList:ArrayList<UserBalance?>?  = null
 
 
     private val comparator = WalletComparator(WalletComparator.NORMAL, WalletComparator.NORMAL, WalletComparator.NORMAL, WalletComparator.NORMAL)
@@ -64,6 +62,27 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     init {
         symbolList = PairApiServiceHelper.getHomePagePairData()
+        getCoinlistConfig()
+    }
+
+    /**
+     * 获取币种配置
+     */
+    private fun getCoinlistConfig(){
+        WalletApiServiceHelper.getCoinInfoList(context!!, object :Callback<ArrayList<CoinInfoType?>?>(){
+            override fun callback(returnData: ArrayList<CoinInfoType?>?) {
+                if (returnData != null) {
+                    for (i in returnData){
+                        var config = i?.config
+                        //钱包显示币种，多链只取第一个
+                        var coinInfo = config?.get(0)?.coinConfigVO
+                        coinList?.add(coinInfo)
+                    }
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        })
     }
 
     override fun onResume() {
@@ -134,8 +153,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return walletList
     }
 
-    fun getUserBalanceList():ArrayList<UserBalance?>?{
-        return userBalanceList
+    fun getSpotBalanceList():ArrayList<UserBalance?>?{
+        return spotBalanceList
     }
 
     fun getWalletLeverList(): ArrayList<WalletLever?>? {
@@ -169,14 +188,14 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
 
     private fun getUserBalance(isShowLoading: Boolean){
-        UserApiServiceHelper.getUserBalance(context)
+        WalletApiServiceHelper.getUserBalance(context)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
                 override fun error(type: Int, error: Any) {
                 }
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        userBalanceList = returnData.data?.spotBalance
+                        spotBalanceList = returnData.data?.spotBalance
                         handleResult()
                     } else {
                     }
@@ -187,7 +206,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     /**
      * setType 1现货
      */
-    fun getSymbolListSets(setType:Int,symbolList: ArrayList<PairStatus?>?):ArrayList<String>{
+    private fun getSymbolListSets(setType:Int,symbolList: ArrayList<PairStatus?>?):ArrayList<String>{
         var setListSet = ArrayList<String>()
         var sellCoinSet = ArrayList<String?>()
         var buyCoinSet = ArrayList<String?>()
@@ -226,14 +245,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         if(walletList != null && walletList!!.size>0){
             walletList!!.clear()
         }
-        var setList = getSymbolListSets(1, symbolList)
-        if(userBalanceList != null){
-            if(setList != null){
-                for(j in setList!!.indices){
+//        var setList = getSymbolListSets(1, symbolList)
+        if(spotBalanceList != null){
+            if(coinList != null){
+                for(coin in coinList!!){
                         var wallet = Wallet()
-                        wallet.coinType = setList[j]
-                        var iconUrl = UrlConfig.getCoinIconUrl(setList[j])
-                        wallet.coinIconUrl = iconUrl
+                        wallet.coinType = coin?.coinType
+                        wallet.coinIconUrl = coin?.logosUrl
                         wallet.coinAmount = BigDecimal(0)
                         wallet.estimatedAvailableAmount = 0.0
                         wallet.estimatedAvailableAmountCny = 0.0
@@ -241,10 +259,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                     }
                 }
                 for(i in walletList!!.indices){
-                    for (k in userBalanceList!!.indices){
-                        if(userBalanceList!![k]?.coin == walletList!![i]?.coinType){
-                            walletList!![i]?.coinAmount = BigDecimal(userBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!)
-                            walletList!![i]?.estimatedAvailableAmountCny = userBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
+                    for (k in spotBalanceList!!.indices){
+                        if(spotBalanceList!![k]?.coin == walletList!![i]?.coinType){
+                            walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!)
+                            walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
                             break
                         }
                     }

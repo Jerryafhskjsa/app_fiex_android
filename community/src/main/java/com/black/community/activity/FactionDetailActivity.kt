@@ -216,18 +216,9 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
             userInfoObserver = createUserInfoObserver()
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
-        if (memberUpdateObserver == null) {
-            memberUpdateObserver = createMemberUpdateObserver()
-        }
-        SocketDataContainer.subscribeFactionMemberObservable(memberUpdateObserver)
         if (factionUpdateObserver == null) {
             factionUpdateObserver = createFactionUpdateObserver()
         }
-        SocketDataContainer.subscribeFactionUpdateObservable(factionUpdateObserver)
-        if (ownerUpdateObserver == null) {
-            ownerUpdateObserver = createOwnerUpdateObserver()
-        }
-        SocketDataContainer.subscribeFactionOwnerObservable(ownerUpdateObserver)
         factionNotice
         factionDetail
         factionMemberList
@@ -242,15 +233,6 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_FACTION_CLOSE)
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
-        }
-        if (memberUpdateObserver != null) {
-            SocketDataContainer.removeFactionMemberObservable(memberUpdateObserver)
-        }
-        if (factionUpdateObserver != null) {
-            SocketDataContainer.removeFactionUpdateObservable(factionUpdateObserver)
-        }
-        if (ownerUpdateObserver != null) {
-            SocketDataContainer.removeFactionOwnerObservable(ownerUpdateObserver)
         }
         if (timerCommand != null) {
             handler.removeCallbacks(timerCommand)

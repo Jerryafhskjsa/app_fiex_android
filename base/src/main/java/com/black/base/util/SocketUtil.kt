@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Message
 import android.os.SystemClock
 import android.text.TextUtils
+import android.util.Log
 import android.util.SparseArray
 import com.black.base.model.socket.*
 import com.black.base.service.DearPairService
@@ -747,6 +748,7 @@ object SocketUtil {
     //按照价格进行合并委托，只要前N条数据
     fun mergeQuotationOrder(data: List<TradeOrder>?, pair: String?, direction: String?, precision: Int, maxSize: Int): List<TradeOrder>? {
         var precision = precision
+        Log.d("888888", "precision = $precision")
         var maxSize = maxSize
         if (data == null || data.isEmpty() || TextUtils.isEmpty(pair) || TextUtils.isEmpty(direction)) {
             return null
@@ -755,19 +757,20 @@ object SocketUtil {
         if (maxSize <= 0) {
             maxSize = 5
         }
-        if (precision <= 0) {
-            precision = 15
-        }
         val result: MutableList<TradeOrder> = ArrayList(maxSize)
         var lastOrder: TradeOrder? = null
         for (i in data.indices) {
             val tradeOrder = data[i]
             if (pair.equals(tradeOrder.pair, ignoreCase = true) && TextUtils.equals(direction, tradeOrder.orderType)) {
                 val priceString = tradeOrder.priceString
+                Log.d("888888", "priceString = $priceString")
                 var price = CommonUtil.parseBigDecimal(priceString)
+                Log.d("888888", "price = $price")
                 price = price?.setScale(precision, if ("ASK".equals(direction, ignoreCase = true)) BigDecimal.ROUND_UP else BigDecimal.ROUND_DOWN)
                 //                String formattedPrice = price == null ? null : price.setScale(precision, "ASK".equalsIgnoreCase(direction) ? BigDecimal.ROUND_UP : BigDecimal.ROUND_DOWN).toString();
+                Log.d("888888", "price1 = $price")
                 val formattedPrice = NumberUtil.formatNumberNoGroup(price, precision, precision)
+                Log.d("888888", "formattedPrice = $formattedPrice")
                 val lastFormattedPrice = lastOrder?.formattedPrice
                 if (formattedPrice == null) {
                     continue

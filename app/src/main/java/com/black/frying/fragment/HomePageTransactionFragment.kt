@@ -25,10 +25,7 @@ import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.FryingSingleToast
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.socket.*
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.CoinInfo
@@ -311,8 +308,8 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
                         }
                     }))
             R.id.btn_transaction_memu -> mContext?.let {
-                PairApiServiceHelper.getTradeSets(it, true, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
-                    override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                PairApiServiceHelper.getTradeSets(it, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
+                    override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
                             PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData.data)
@@ -1075,6 +1072,10 @@ class HomePageTransactionFragment : BaseFragment(), View.OnClickListener, OnSeek
     }
 
     override fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?) {
+
+    }
+
+    override fun onPairDeal(value: PairDeal) {
 
     }
 

@@ -105,7 +105,7 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
      * 获取用户资产
      */
     private fun getUserBalance(){
-        UserApiServiceHelper.getUserBalanceReal(this,false,object :Callback<UserBalanceWarpper?>(){
+        WalletApiServiceHelper.getUserBalanceReal(this,false,object :Callback<UserBalanceWarpper?>(){
             override fun callback(returnData: UserBalanceWarpper?) {
                 if(returnData != null){
                     userSoptBanlace = returnData?.spotBalance

@@ -25,10 +25,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.NormalCallback
+import com.black.base.model.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
@@ -288,8 +285,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                         }
                     }))
             R.id.btn_transaction_memu -> mContext?.let {
-                PairApiServiceHelper.getTradeSets(it, true, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
-                    override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                PairApiServiceHelper.getTradeSets(it, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
+                    override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
                             PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData.data)
@@ -412,6 +409,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
+    }
+
+    override fun onPairDeal(value: PairDeal) {
+        binding?.fragmentHomePageTransactionHeader1?.currentPrice?.text = value.p
+        binding?.fragmentHomePageTransactionHeader1?.currentPriceCny?.text = value.p
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

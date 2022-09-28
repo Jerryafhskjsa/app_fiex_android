@@ -149,9 +149,6 @@ object UrlConfig {
         const val URL_USER_LOGIN = "user/login"
         //ws_token
         const val URL_WS_TOKEN = "user/ws-token"
-        //获取用户资产
-        const val URL_BALANCE_LIST = "balance/list"
-
 
         //退出登录
         const val URL_LOGOUT = "user/logout"
@@ -263,6 +260,8 @@ object UrlConfig {
 
     object Wallet {
         /***fiex***/
+        //获取用户资产
+        const val URL_BALANCE_LIST = "balance/list"
         //币种列表配置
         const val URL_COINS = "config/coins"
         //查询支持的账户划转类型 pro
@@ -332,9 +331,8 @@ object UrlConfig {
         const val URL_HOME_KLine = "public/tickers-Kline"
         //{"code":0,"msg":"success","data":[{"coinType":"USDT","name":"USDT","hot":true,"type":1,"open":true},{"coinType":"ETH","name":"ETH","hot":false,"type":2,"open":true}]}
         //pro
-        //查询交易区
+        //所有币种列表
         const val URL_SET_LIST = "config/set/list"
-
         //国家区码列表
         const val URL_COUNTRY_CODE_LIST = "country/list"
         //公告 /{language}/page/{pageNum}/{pageSize} 3个参数分别是语言，页数，每页显示多少条 1-中，2-日，3-韩，4-英，5-俄

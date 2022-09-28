@@ -23,9 +23,6 @@ interface UserApiService {
     @GET(UrlConfig.User.URL_WS_TOKEN)
     fun getWsToken(): Observable<HttpRequestResultString?>?
 
-    @GET(UrlConfig.User.URL_BALANCE_LIST)
-    fun getUserBalance(): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?
-
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_LOGIN_SUFFIX)
     fun loginSuffix(@Field("prefixAuth") prefixAuth: String?, @Field("phoneCode") phoneCode: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?): Observable<HttpRequestResultString?>?

@@ -24,17 +24,16 @@ import io.reactivex.Observable
 
 object PairApiServiceHelper {
     private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //热门币种，请求缓存时间，20分钟
-            .toLong()
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
     private const val TRADE_PAIR = 3
     private const val HOT_PAIR = 4
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
-    private var tradeSets: ArrayList<String?>? = null
-    var hotPairCache: HttpRequestResultDataList<String?>? = null
+    private var tradeSets: ArrayList<QuotationSet?>? = null
+    private var hotPairCache: HttpRequestResultDataList<String?>? = null
 
-    //首页数据
+    //交易对配置的所有数据
     private var homePagePairData:ArrayList<PairStatus?>? = ArrayList()
 
     private fun getLastGetTime(type: Int): Long? {
@@ -50,18 +49,17 @@ object PairApiServiceHelper {
         return homePagePairData
     }
 
-    fun getTradeSetsLocal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<String?>?>?) {
+    fun getTradeSetsLocal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<QuotationSet?>?>?) {
         if (tradeSets != null && tradeSets!!.isNotEmpty() && System.currentTimeMillis() - (getLastGetTime(TRADE_SET)
                         ?: 0) < DATA_CACHE_OVER_TIME) {
             callback?.callback(tradeSets)
         } else {
-            getTradeSets(context, isShowLoading, object : Callback<HttpRequestResultDataList<String?>?>() {
+            getTradeSets(context, isShowLoading, object : Callback<HttpRequestResultDataList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {
                     tradeSets = null
                     callback?.error(type, error)
                 }
-
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         setLastGetTime(TRADE_SET, System.currentTimeMillis())
                         tradeSets = ArrayList()
@@ -72,7 +70,7 @@ object PairApiServiceHelper {
                                 }
                             }
                         }
-                        //将交易对保存到本地
+                        //将币种列表保存到本地
                         callback?.callback(tradeSets)
                     }
                 }
@@ -91,27 +89,17 @@ object PairApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun getTradeSets(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>?) {
+    fun getTradeSets(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<QuotationSet?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
-                ?.getTradeSets()
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+                ?.getTradeSetsFiex()
                 ?.flatMap {
-                    val setList = ArrayList<String?>()
                     if (it.code == HttpRequestResult.SUCCESS && it.data != null) {
-                        for (tradeSet in it.data!!) {
-                            if (tradeSet?.coinType != null) {
-                                setList.add(tradeSet.coinType)
-                            }
-                        }
+                        Observable.just(it.data)
                     }
-                    val result = HttpRequestResultDataList<String?>()
-                    result.code = it.code
-                    result.msg = it.msg
-                    result.message = it.message
-                    result.data = setList
-                    Observable.just(result)
+                    Observable.just(null)
                 }
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -176,7 +164,7 @@ object PairApiServiceHelper {
                         for(j in homePagePairData!!.indices){
                             if(homePagePairData!![j]?.pair == data[i]?.s){
                                 //现价
-                                homePagePairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!//这个地方小数点位数可能会有问题
+                                homePagePairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
                                 //交易量
                                 homePagePairData!![j]?.tradeVolume = data[i]?.v
                                 //涨跌幅
@@ -211,7 +199,7 @@ object PairApiServiceHelper {
                     pairStatus?.order_no = i
 //                    var maxPrecision = CommonUtil.getMax(data[i]?.depthPrecisionMerge)
                     var maxPrecision = symbol?.pricePrecision?.toInt()
-                    maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
+                    maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
                     pairStatus?.precision = maxPrecision
                     pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
                     homePagePairData?.add(pairStatus)

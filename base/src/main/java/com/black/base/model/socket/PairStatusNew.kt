@@ -2,9 +2,13 @@ package com.black.base.model.socket
 
 import android.content.ContentValues
 
+/**
+ * 行情下发数据结构
+ */
 class PairStatusNew {
     var pair: String? = null
-    var o = 0.0
+    var s:String? = null
+    var o = 0.0 //open 开盘价
     var c //最新价
             = 0.0
     var h //24小时最高价
@@ -15,6 +19,8 @@ class PairStatusNew {
             = 0.0
     var r //24小时涨跌
             = 0.0
+    var v = 0.0//成交额
+
 
     val contentValues: ContentValues
         get() {
@@ -25,6 +31,7 @@ class PairStatusNew {
             values.put("pair", pair)
             values.put("priceChangeSinceToday", r)
             values.put("totalAmount", a)
+            values.put("volume",v)
             return values
         }
 
@@ -36,6 +43,7 @@ class PairStatusNew {
         pairStatus.minPrice = l
         pairStatus.totalAmount = a
         pairStatus.priceChangeSinceToday = r
+        pairStatus.tradeVolume = v.toString()
         return pairStatus
     }
 
@@ -44,6 +52,7 @@ class PairStatusNew {
             return
         }
         pairStatus.pair = pair
+        pairStatus.pair = s
         pairStatus.currentPrice = c
         pairStatus.maxPrice = h
         pairStatus.minPrice = l

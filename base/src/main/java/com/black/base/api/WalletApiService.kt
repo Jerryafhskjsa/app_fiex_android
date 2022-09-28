@@ -1,6 +1,7 @@
 package com.black.base.api
 
 import com.black.base.model.*
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.*
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -10,6 +11,9 @@ import java.math.BigDecimal
 //钱包相关
 interface WalletApiService {
     /***fiex***/
+    @GET(UrlConfig.Wallet.URL_BALANCE_LIST)
+    fun getUserBalance(): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?
+
     @GET(UrlConfig.Wallet.URL_COINS)
     fun getCoins(@Query("coinTypes") coinType: String?): Observable<HttpRequestResultData<CoinInfoConfig?>?>?
 

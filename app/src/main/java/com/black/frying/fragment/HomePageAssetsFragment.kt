@@ -69,6 +69,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var typeList: MutableList<String>? = null
     var layout: FrameLayout? = null
     var binding:FragmentHomePageAssetsBinding? = null
+
     private var viewModel: WalletViewModel? = null
 
     private var fragmentList: java.util.ArrayList<Fragment>? = null

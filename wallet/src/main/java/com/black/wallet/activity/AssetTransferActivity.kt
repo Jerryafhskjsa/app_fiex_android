@@ -137,7 +137,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
 
     private fun getUserBalance(isShowLoading: Boolean){
-        UserApiServiceHelper.getUserBalance(this)
+        WalletApiServiceHelper.getUserBalance(this)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
                 override fun error(type: Int, error: Any) {
@@ -277,9 +277,5 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
                 }
             }).show()
-    }
-
-    private fun updateMaxTransfer(){
-
     }
 }

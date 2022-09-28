@@ -22,6 +22,7 @@ import androidx.viewpager.widget.ViewPager
 import com.black.base.R
 import com.black.base.adapter.PairStatusAdapter
 import com.black.base.model.PairStatusShowPopup
+import com.black.base.model.QuotationSet
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
 import com.black.base.service.DearPairService.getDearPairList
@@ -42,13 +43,13 @@ import skin.support.content.res.SkinCompatResources
 import java.util.*
 
 //弹出交易对状态列表
-open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, oldSets: List<String?>?) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
+open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, oldSets: List<QuotationSet?>?) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     companion object {
         const val TYPE_TRANSACTION = 0 //交易
         const val TYPE_ENTRUST = 1 //委托
         const val TYPE_K_LINE_FULL = 2 //全屏K线
         private var pairStatusPopupWindow: PairStatusPopupWindow? = null
-        fun getInstance(activity: Activity, type: Int, sets: List<String?>?): PairStatusPopupWindow {
+        fun getInstance(activity: Activity, type: Int, sets: List<QuotationSet?>?): PairStatusPopupWindow {
             return PairStatusPopupWindow(activity, type, sets)
         }
 
@@ -62,7 +63,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
     private val imageLoader: ImageLoader = ImageLoader(mActivity)
     private val inputEdit: EditText
     private var searchKey: String? = null
-    private val sets: MutableList<String?> = oldSets?.let { ArrayList(it) } ?: ArrayList()
+    private val sets: MutableList<QuotationSet?> = oldSets?.let { ArrayList(it) } ?: ArrayList()
     private val pair: List<String>? = null
     private val popupWindow: PopupWindow
     protected var nullAmount: String
@@ -86,7 +87,9 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
 
 
     init {
-        sets.add(0, myPairSet)
+        var myPairSetQuot = QuotationSet()
+        myPairSetQuot.name = myPairSet
+        sets.add(0, myPairSetQuot)
         this.type = type
         imm = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         nullAmount = mActivity.getString(R.string.number_default)
@@ -152,7 +155,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         listViewMap = HashMap(setSize)
         val viewPagerViews: MutableList<View> = ArrayList()
         for (i in 0 until setSize) {
-            val set = sets[i] ?: continue
+            val set = sets.get(i)
             try {
                 val view = inflater.inflate(R.layout.list_view_add_empty, null) as FrameLayout
                 val listView = view.findViewById<ListView>(R.id.list_view)
@@ -160,7 +163,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                 listView.adapter = adapter
                 val layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
                 layoutParams.gravity = Gravity.TOP
-                if (set.equals(myPairSet, ignoreCase = true)) {
+                if (set?.name.equals(myPairSet, ignoreCase = true)) {
                     val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
                     emptyView.findViewById<View>(R.id.btn_action).setOnClickListener(this)
                     val group = listView.parent as ViewGroup
@@ -178,9 +181,10 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                 listView.divider = drawable
                 listView.dividerHeight = 1
                 listView.onItemClickListener = this
-                adapterMap[set] = adapter
-                listViewMap[set] = listView
-                listViewDataMap[set] = ArrayList()
+                var setName = set?.name as String
+                adapterMap[setName] = adapter
+                listViewMap[setName] = listView
+                listViewDataMap[setName] = ArrayList()
                 viewPagerViews.add(view)
             } catch (throwable: Throwable) {
                 printError(throwable)
@@ -196,7 +200,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                     tab.setCustomView(R.layout.view_pair_status_choose_tab)
                     if (tab.customView != null) {
                         val textView = tab.customView?.findViewById<View>(android.R.id.text1) as TextView
-                        textView.text = set
+                        textView.text = set?.name
                     }
                 }
             } catch (throwable: Throwable) {
@@ -454,7 +458,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         synchronized(adapterMap) {
             synchronized(listViewDataMap) {
                 for (i in sets.indices) {
-                    val setName = sets[i]
+                    val setName = sets[i]?.name
                     val adapter = adapterMap[setName]
                     if (adapter != null) {
                         val data: MutableList<PairStatusShowPopup?>? = listViewDataMap[setName]
@@ -580,7 +584,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return sets[position]
+            return sets[position]?.name
         }
 
     }

@@ -36,15 +36,6 @@ import java.io.File
 import java.util.ArrayList
 
 object UserApiServiceHelper {
-    private var gson: Gson = Gson()
-        get() {
-            if (field == null) {
-                field = Gson()
-            }
-            return field
-        }
-    private var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
-
     //获取ticket
     fun getTicket(context: Context,callback:Callback<HttpRequestResultString?>){
         ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
@@ -328,69 +319,6 @@ object UserApiServiceHelper {
                 ?.getUserInfo()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
-
-
-
-    //获取普通资产
-    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?,errorCallback: Callback<Any?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        getUserBalance(context, false, callback, errorCallback)
-    }
-
-    private fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<UserBalanceWarpper?>?, errorCallback: Callback<*>?){
-        if (context == null) {
-            return
-        }
-        var callback = Runnable {
-            synchronized(userBalanceWrapperCache) {
-                userBalance?.callback(if (userBalanceWrapperCache == null) null else gson.fromJson<UserBalanceWarpper?>(
-                    gson.toJson(userBalanceWrapperCache),
-                    object : TypeToken<UserBalanceWarpper?>() {}.type))
-            }
-        }
-        callback.run()
-        getUserBalance(context)
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
-                override fun error(type: Int, error: Any) {
-                    errorCallback?.error(type, error)
-                }
-                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        callback.run()
-                    } else {
-                        errorCallback?.error(ConstData.ERROR_NORMAL, returnData?.message)
-                    }
-                }
-            }))
-    }
-
-
-    fun getUserBalance(context: Context?): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?{
-        return if(context == null){
-            Observable.empty()
-        }else ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
-                ?.getUserBalance()
-                ?.flatMap { returnData: HttpRequestResultData<UserBalanceWarpper?>? ->
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        val balance: UserBalanceWarpper? =
-                            if (returnData?.data == null) UserBalanceWarpper() else returnData?.data!!
-                        synchronized(userBalanceWrapperCache) {
-                            val balanceWrapper: UserBalanceWarpper? =
-                                if (balance == null) UserBalanceWarpper() else gson.fromJson(
-                                    gson.toJson(balance),
-                                    object : TypeToken<UserBalanceWarpper?>() {}.type
-                                )
-                            balanceWrapper?.let {
-                                userBalanceWrapperCache = balanceWrapper
-                            }
-                        }
-                    }
-                        Observable.just(returnData)
-                    }
     }
 
     fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {

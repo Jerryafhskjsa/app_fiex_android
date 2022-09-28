@@ -33,7 +33,6 @@ import com.black.wallet.databinding.FragmentWalletNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
 
 class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
-    private var walletList: ArrayList<Wallet?>? = null
     private var isVisibility: Boolean = false
     private var searchKey: String? = null
     private var doSearch = true
@@ -56,7 +55,6 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         if (layout != null) {
             return layout
         }
-//        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
         isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
 
@@ -67,7 +65,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        adapter = WalletAdapter(mContext!!, BR.listItemSpotAccountModel, walletList)
+        adapter = WalletAdapter(mContext!!, BR.listItemSpotAccountModel, null)
         adapter?.setVisibility(isVisibility)
         adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter

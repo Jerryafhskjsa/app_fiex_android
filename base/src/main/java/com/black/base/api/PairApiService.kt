@@ -32,7 +32,6 @@ interface PairApiService {
     @GET(UrlConfig.Config.URL_SET_LIST)
     fun getTradeSetsFiex(): Observable<HttpRequestResultDataList<QuotationSet?>?>?
 
-
     @GET(UrlConfig.Config.URL_ORDERED_PAIRS)
     fun getOrderedPairs(@Query("pair") pair: String?): Observable<HttpRequestResultDataList<String?>?>?
 

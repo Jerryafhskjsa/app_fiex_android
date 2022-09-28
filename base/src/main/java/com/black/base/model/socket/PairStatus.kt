@@ -72,7 +72,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             priceChangeSinceTodayFormat = priceChangeSinceTodayDisplay
         }
     var statDate: Long = 0
-    var precision = 15 //精度
+    var precision = 15 //价格精度
     var order_no = Int.MAX_VALUE //排序
     var is_dear = false //是否收藏
     var pairName: String? = null
@@ -132,7 +132,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
                     10.0.pow(abs(d).toDouble())
                 }else if(d > 0){
                     pricePrecision?.toInt()
-                        ?.let { NumberUtil.formatNumberNoGroup(1/ 10.0.pow(d.toDouble()), it) }
+                        ?.let { NumberUtil.formatNumberNoGroup(1/ 10.0.pow(d!!.toDouble()), it) }
                 }else{
                     1.0
                 }

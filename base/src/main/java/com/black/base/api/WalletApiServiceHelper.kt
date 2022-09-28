@@ -8,6 +8,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.user.User
 import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.ConstData
@@ -31,6 +32,7 @@ object WalletApiServiceHelper {
     private val walletCache: ArrayList<Wallet?> = ArrayList()
     private val walletLeverCache: ArrayList<WalletLever?> = ArrayList()
 
+    private var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
 
     private const val COIN_INFO = 1
     private const val WALLET = 2
@@ -38,6 +40,7 @@ object WalletApiServiceHelper {
             .toLong()
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
+
     private var gson: Gson = Gson()
         get() {
             if (field == null) {
@@ -55,6 +58,67 @@ object WalletApiServiceHelper {
         lastGetTimeMap.put(type, time)
     }
     /***fiex***/
+    //获取普通资产
+    fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?, errorCallback: Callback<Any?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        getUserBalance(context, false, callback, errorCallback)
+    }
+
+    private fun getUserBalance(context: Context, isShowLoading: Boolean, userBalance: Callback<UserBalanceWarpper?>?, errorCallback: Callback<*>?){
+        if (context == null) {
+            return
+        }
+        var callback = Runnable {
+            synchronized(userBalanceWrapperCache) {
+                userBalance?.callback(if (userBalanceWrapperCache == null) null else gson.fromJson<UserBalanceWarpper?>(
+                    gson.toJson(userBalanceWrapperCache),
+                    object : TypeToken<UserBalanceWarpper?>() {}.type))
+            }
+        }
+        callback.run()
+        getUserBalance(context)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
+                override fun error(type: Int, error: Any) {
+                    errorCallback?.error(type, error)
+                }
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        callback.run()
+                    } else {
+                        errorCallback?.error(ConstData.ERROR_NORMAL, returnData?.message)
+                    }
+                }
+            }))
+    }
+
+
+    fun getUserBalance(context: Context?): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?{
+        return if(context == null){
+            Observable.empty()
+        }else ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getUserBalance()
+            ?.flatMap { returnData: HttpRequestResultData<UserBalanceWarpper?>? ->
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val balance: UserBalanceWarpper? =
+                        if (returnData?.data == null) UserBalanceWarpper() else returnData?.data!!
+                    synchronized(userBalanceWrapperCache) {
+                        val balanceWrapper: UserBalanceWarpper? =
+                            if (balance == null) UserBalanceWarpper() else gson.fromJson(gson.toJson(balance),
+                                object : TypeToken<UserBalanceWarpper?>() {}.type
+                            )
+                        balanceWrapper?.let {
+                            userBalanceWrapperCache = balanceWrapper
+                        }
+                    }
+                }
+                Observable.just(returnData)
+            }
+    }
+
+
     //查询支持的账户划转类型
     fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>) {
         if (context == null || callback == null) {

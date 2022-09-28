@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.QuotationSet
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.ConstData
@@ -66,8 +67,8 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.coin_type_layout -> PairApiServiceHelper.getTradeSets(mContext, true, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+            R.id.coin_type_layout -> PairApiServiceHelper.getTradeSets(mContext, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
+                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         PairStatusPopupWindow.getInstance(mContext as Activity, PairStatusPopupWindow.TYPE_K_LINE_FULL, returnData.data)
                                 .show(object : OnPairStatusSelectListener {
