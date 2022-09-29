@@ -32,7 +32,7 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
                 dm.widthPixels,
                 WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+//        popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {

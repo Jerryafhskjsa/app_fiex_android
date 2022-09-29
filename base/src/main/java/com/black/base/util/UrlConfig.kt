@@ -260,6 +260,8 @@ object UrlConfig {
 
     object Wallet {
         /***fiex***/
+        //获取用户24小时提现额度
+        const val URL_USER_WITHDRAW_QUOTA = "withdraw/quota"
         //获取用户资产
         const val URL_BALANCE_LIST = "balance/list"
         //币种列表配置

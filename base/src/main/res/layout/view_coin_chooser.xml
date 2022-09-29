@@ -5,11 +5,13 @@
     android:background="@drawable/bg_asset_coin_corner"
     android:gravity="bottom"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
+
         <com.black.base.widget.SpanTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -19,58 +21,62 @@
             android:textColor="@color/T14"
             android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/btn_cancel"
-            android:layout_alignParentRight="true"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_cancel">
-        </ImageView>
+            android:src="@drawable/icon_cancel"/>
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
+
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/bg_transfer_corner">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_coin_search">
-            </ImageView>
+                android:src="@drawable/icon_coin_search"/>
+
             <com.black.base.widget.SpanEditText
+                android:id="@+id/ed_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null">
-            </com.black.base.widget.SpanEditText>
+                android:background="@null" />
         </LinearLayout>
+
         <com.black.base.widget.SpanTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:textColor="@color/T14"
-            android:text="@string/cancel">
-        </com.black.base.widget.SpanTextView>
+            android:text="@string/cancel"
+            android:textColor="@color/T14"/>
 
     </LinearLayout>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:paddingLeft="@dimen/middle_padding"
         android:paddingRight="@dimen/middle_padding"
-        android:layout_marginTop="10dp"
         android:scrollbars="none" />
 </LinearLayout>

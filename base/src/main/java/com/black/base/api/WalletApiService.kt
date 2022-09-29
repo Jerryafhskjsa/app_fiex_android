@@ -11,6 +11,9 @@ import java.math.BigDecimal
 //钱包相关
 interface WalletApiService {
     /***fiex***/
+    @GET(UrlConfig.Wallet.URL_USER_WITHDRAW_QUOTA)
+    fun getUserWithdrawQuota(@Query("coin") coin: String?): Observable<HttpRequestResultString?>?
+
     @GET(UrlConfig.Wallet.URL_BALANCE_LIST)
     fun getUserBalance(): Observable<HttpRequestResultData<UserBalanceWarpper?>?>?
 
@@ -79,7 +82,7 @@ interface WalletApiService {
     //    @GET(UrlConfig.Wallet.URL_LIAN_IN_COIN)
 //    Observable<HttpRequestResultDataList<LianInCoinModel>> getLianInCoin(@Query("coinType") String coinType);
     @GET(UrlConfig.Wallet.URL_ADDRESS_LIST)
-    fun getWalletAddressList(@Query("page") page: Int, @Query("size") pageSize: Int, @Query("coinType") coinType: String?): Observable<HttpRequestResultDataList<WalletWithdrawAddress?>?>?
+    fun getWalletAddressList(@Query("coinType") coinType: String?): Observable<HttpRequestResultDataList<WalletWithdrawAddress?>?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.Wallet.URL_ADDRESS_ADD)

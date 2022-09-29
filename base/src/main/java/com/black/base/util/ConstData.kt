@@ -179,6 +179,7 @@ object ConstData {
     const val TRADE_ORDER = "trade_order"
     const val AMOUNT_PRECISION = "amount_precision"
     const val COIN_INFO = "coin_info"
+    const val COIN_CHAIN = "coin_chain"
     const val PROMOTIONS_BUY = "promotions_buy"
     const val PROMOTIONS_BUY_FIVE = "promotions_buy_five"
     const val FACTION_ITEM = "faction_item"

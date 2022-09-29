@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="walletChooseCoinModel"
             type="Object" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@id/app_bar_layout"
                 android:layout_width="match_parent"
@@ -21,35 +26,41 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
+
                 <include layout="@layout/tool_bar_left_back" />
             </com.google.android.material.appbar.AppBarLayout>
+
             <com.black.base.widget.ObserveScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
+                android:background="@color/B2"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/B2"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:background="@drawable/bg_transfer_corner"
                         android:layout_marginLeft="@dimen/default_padding"
-                        android:layout_marginRight="@dimen/default_padding">
+                        android:layout_marginRight="@dimen/default_padding"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icon_search_wallet"
-                            android:layout_marginLeft="@dimen/default_padding"/>
+                            android:layout_marginLeft="@dimen/default_padding"
+                            android:src="@drawable/icon_search_wallet" />
+
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/choose_coin_search"
                             android:layout_width="0dp"
@@ -66,16 +77,18 @@
                             android:textColorHint="@color/T3"
                             android:textSize="@dimen/text_size_16" />
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/default_padding" />
+
                     <com.black.base.widget.NoScrollListView
                         android:id="@+id/list_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fadingEdge="none"
                         android:layout_marginLeft="@dimen/default_padding"
                         android:layout_marginRight="@dimen/default_padding"
+                        android:fadingEdge="none"
                         android:overScrollMode="never"
                         android:scrollbars="none" />
                 </LinearLayout>

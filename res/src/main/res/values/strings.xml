@@ -342,7 +342,7 @@
     <string name="gesture_error_count">手势错误，还有%d次机会！</string>
     <string name="gestrue_hint_01">为了您的资金安全，请设置手势密码</string>
     <string name="price_unit">计价单位</string>
-    <string name="coin_choose">选择币种</string>
+    <string name="coin_choose">币种选择</string>
     <string name="coin_search_failed">币种查找失败！</string>
     <string name="add_address">添加%s地址</string>
     <string name="coin_type_recharge">充币币种</string>
@@ -418,7 +418,7 @@
     <string name="extract_remark_hint">填写备注</string>
     <string name="phone_check">手机验证</string>
     <string name="google_code">谷歌验证码</string>
-    <string name="wallet_address_add">添加</string>
+    <string name="wallet_address_add">新增提币地址</string>
     <string name="search_history">搜索历史</string>
     <string name="extract_amount">提币数量</string>
     <string name="extract_status">提币状态</string>
@@ -693,12 +693,20 @@
     <string name="confirm_1">确认</string>
     <string name="chain_choose">选择网络</string>
     <string name="recharge_addr">充值地址</string>
+    <string name="withdraw_chain">提现网络</string>
     <string name="warm_notice_des">TRC20 最小充值数额：0.01 USDT，小于最小充值数额的充值将不会入账且无法退回。禁止向地址充值当前通证之外的资产，任何充入当前通证地址的非当前通证资产将不可找回使用地址充值需要 20 个网络确认才能到账。</string>
-    <string name="get_chain_name">获取链名称</string>
+    <string name="get_chain_name">选择链名称</string>
     <string name="chain_tips">请确保你选择的充值链名称和您在提币时选择的链名称一致，否则可能会造成资产丢失</string>
     <string name="person_checked">已认证</string>
     <string name="person_unchecked">未认证</string>
     <string name="person_checking">认证中</string>
+    <string name="withdraw_amount">提现数量</string>
+    <string name="usable_coin_amount">可用%1$s%1$s</string>
+    <string name="actual_receive_amount">实际到账%1$s</string>
+    <string name="fee_amount">手续费%1$s</string>
+    <string name="withdraw_amount_limit">24小时提币额度%1$s</string>
+    <string name="addr_remark">请输入别名(选填)</string>
+    <string name="addr_remark_des">地址别名</string>
 
 
 

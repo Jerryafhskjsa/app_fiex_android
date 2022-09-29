@@ -1,14 +1,13 @@
 package com.black.wallet.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import androidx.appcompat.widget.Toolbar
+import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.WalletApiService
@@ -18,16 +17,15 @@ import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.manager.ApiManager
+import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
-import com.black.base.model.wallet.CoinInfo
-import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletWithdrawAddress
+import com.black.base.model.wallet.*
 import com.black.base.net.NormalObserver
 import com.black.base.util.*
+import com.black.base.view.ChooseWalletControllerWindow
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
-import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.black.util.RSAUtil
@@ -38,14 +36,15 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import skin.support.content.res.SkinCompatResources
 import java.math.RoundingMode
-import java.util.*
 
 @Route(value = [RouterConstData.EXTRACT])
 open class ExtractActivity : BaseActivity(), View.OnClickListener {
-    protected var walletList: ArrayList<Wallet?>? = null
     protected var wallet: Wallet? = null
     protected var coinType: String? = null
-    protected var coinInfo: CoinInfo? = null
+    protected var coinInfo: CoinInfoType? = null
+    private var coinInfoReal: CoinInfo? = null
+    private var coinChain:String? = null
+    private var chainNames:ArrayList<String>? = null
     protected var memoNeeded = false
 
     private var binding: ActivityExtractBinding? = null
@@ -54,39 +53,39 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        walletList = intent.getParcelableArrayListExtra(ConstData.WALLET_LIST)
         wallet = intent.getParcelableExtra(ConstData.WALLET)
-        coinType = intent.getStringExtra(ConstData.COIN_TYPE)
+        coinType = wallet?.coinType
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_extract)
+        var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
+        actionBarRecord?.visibility = View.VISIBLE
+        actionBarRecord?.setOnClickListener(this)
         binding?.chooseCoinLayout?.setOnClickListener(this)
+        binding?.chooseChainLayout?.setOnClickListener(this)
+        binding?.tvTransfer?.setOnClickListener(this)
         val c1 = SkinCompatResources.getColor(this, R.color.C1)
         val l1 = SkinCompatResources.getColor(this, R.color.L1)
-        FryingUtil.setEditTextBottomLine(binding?.extractAddress, binding?.addressLine, l1, c1)
-        binding?.scanQrcode?.setOnClickListener(this)
-        binding?.addressManager?.setOnClickListener(this)
         binding?.extractCount?.filters = arrayOf<InputFilter>(PointLengthFilter(10))
         binding?.extractCount?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val amount = CommonUtil.parseDouble(binding?.extractCount?.text.toString().trim { it <= ' ' })
-                binding?.arriveCount?.text = if (amount == null || coinInfo?.withdrawFee == null || amount < coinInfo?.withdrawFee!!) "0.0" else NumberUtil.formatNumberNoGroup(amount - coinInfo?.withdrawFee!!)
+                binding?.arriveCount?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount < coinInfoReal?.withdrawFee!!) getString(R.string.actual_receive_amount,"0.0")  else getString(R.string.actual_receive_amount,NumberUtil.formatNumberNoGroup(amount - coinInfoReal?.withdrawFee!!))
             }
-
             override fun afterTextChanged(s: Editable) {}
         })
         binding?.total?.setOnClickListener(this)
         binding?.poundage?.isEnabled = false
-        binding?.descriptionUsdt?.visibility = View.GONE
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.withdrawAddrLayout?.setOnClickListener(this)
         if (wallet != null) {
             selectCoin(wallet)
-        } else if (walletList != null) {
-            selectCoin(0)
-        } else {
-            getAllWallet()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getUserWithdrawQuota()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -97,26 +96,92 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         return getString(R.string.extract)
     }
 
-    override fun initToolbarViews(toolbar: Toolbar) {
-        toolbar.findViewById<View>(R.id.btn_record).setOnClickListener(this)
+    private fun showChainChooseDialog(){
+        if(coinChain != null && chainNames!!.size >0){
+            var chooseWalletDialog =  ChooseWalletControllerWindow(mContext as Activity,
+                getString(R.string.get_chain_name),
+                coinChain,
+                chainNames,
+                object : ChooseWalletControllerWindow.OnReturnListener<String?> {
+                    override fun onReturn(window: ChooseWalletControllerWindow<String?>, item: String?) {
+                        binding?.currentChain?.setText(item)
+                    }
+                })
+            chooseWalletDialog.setTipsText(getString(R.string.chain_tips))
+            chooseWalletDialog.setTipsTextVisible(true)
+            chooseWalletDialog.show()
+        }
     }
 
+    private fun getCoinInfo(coinType: String?): Observable<CoinInfoType?>? {
+        return if (coinType == null) {
+            Observable.just(null)
+        } else {
+            WalletApiServiceHelper.getCoinInfo(this, coinType)
+                ?.flatMap { info: CoinInfoType? ->
+                    coinInfo = info
+                    coinInfoReal = info?.config?.get(0)?.coinConfigVO
+                    memoNeeded = coinInfoReal != null && coinInfoReal?.memoNeeded == true
+                    setChainNames(info)
+                    coinChain = info?.config?.get(0)?.chain
+                    binding?.currentChain?.setText(if (coinType == null) "null" else coinChain)
+                    Observable.just(info)
+                }
+        }
+    }
+
+    private fun setChainNames(info:CoinInfoType?){
+        chainNames = ArrayList()
+        var chainConfig = info?.config
+        if (chainConfig != null) {
+            for (i in chainConfig){
+                i.chain?.let { chainNames?.add(it) }
+            }
+        }
+    }
+
+
     override fun onClick(view: View) {
-        val i = view.id
-        if (i == R.id.btn_record) {
-            //点击账户详情
-            val extras = Bundle()
-            extras.putParcelable(ConstData.WALLET, wallet)
-            extras.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
-            BlackRouter.getInstance().build(RouterConstData.FINANCIAL_RECORD).with(extras).go(this)
-        } else if (i == R.id.choose_coin_layout) {
-            val extras = Bundle()
-            extras.putParcelableArrayList(ConstData.WALLET_LIST, walletList)
-            BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+        when(view.id){
+            R.id.btn_record ->{
+                //点击账户详情
+                val extras = Bundle()
+                extras.putParcelable(ConstData.WALLET, wallet)
+                extras.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+                BlackRouter.getInstance().build(RouterConstData.FINANCIAL_RECORD).with(extras).go(this)
+            }
+            R.id.choose_coin_layout ->{
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
                     .withRequestCode(ConstData.CHOOSE_COIN)
-                    .with(extras)
                     .go(this)
-        } else if (i == R.id.btn_confirm) {
+            }
+            R.id.btn_confirm -> doSubmit()
+            R.id.scan_qrcode ->{
+                requestCameraPermissions(Runnable {
+                    BlackRouter.getInstance().build(RouterConstData.CAPTURE)
+                        .withRequestCode(ConstData.SCANNIN_GREQUEST_CODE)
+                        .go(mContext)
+                })
+            }
+            R.id.withdraw_addr_layout ->{
+                //选择地址
+                val extras = Bundle()
+                extras.putParcelable(ConstData.COIN_INFO, coinInfoReal)
+                extras.putString(ConstData.COIN_CHAIN,coinChain)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_ADDRESS_MANAGE)
+                    .with(extras)
+                    .withRequestCode(ConstData.WALLET_ADDRESS_MANAGE)
+                    .go(mContext)
+            }
+            R.id.total ->binding?.extractCount?.setText(if (wallet?.coinAmount == null) "" else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
+            R.id.choose_chain_layout ->  showChainChooseDialog()
+            R.id.tv_transfer ->{
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            }
+        }
+    }
+
+    private fun doSubmit(){
             val userInfo = CookieUtil.getUserInfo(mContext)
             if (userInfo != null) {
 //                if (TextUtils.equals(userInfo.authType, "5") || TextUtils.equals(userInfo.authType, "6")) {
@@ -128,7 +193,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_address))
                     return
                 }
-                if (!checkAddress(address, coinInfo)) {
+                if (!checkAddress(address, coinInfoReal)) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_address_error))
                     return
                 }
@@ -140,13 +205,13 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 //                        FryingUtil.showToast(mContext, getString(R.string.withdraw_must_money_password))
 //                        return
 //                    }
-                if (coinInfo?.supportWithdraw == null || !coinInfo?.supportWithdraw!!) {
+                if (coinInfoReal?.supportWithdraw == null || !coinInfoReal?.supportWithdraw!!) {
                     FryingUtil.showToast(mContext, getString(R.string.can_not_withdraw_02))
                     return
                 }
                 if (memoNeeded) {
                     val memo = binding?.memo?.text.toString().trim { it <= ' ' }
-                    if (!checkMemo(memo, coinInfo)) {
+                    if (!checkMemo(memo, coinInfoReal)) {
                         FryingUtil.showToast(mContext, getString(R.string.extract_target_error))
                         return
                     }
@@ -156,11 +221,11 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_count))
                     return
                 }
-                if (coinInfo?.minWithdrawSingle != null && count.toDouble() < coinInfo?.minWithdrawSingle!!) {
+                if (coinInfoReal?.minWithdrawSingle != null && count.toDouble() < coinInfoReal?.minWithdrawSingle!!) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_too_small))
                     return
                 }
-                if (coinInfo?.maxWithdrawSingle != null && count.toDouble() > coinInfo?.maxWithdrawSingle!!) {
+                if (coinInfoReal?.maxWithdrawSingle != null && count.toDouble() > coinInfoReal?.maxWithdrawSingle!!) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_too_large))
                     return
                 }
@@ -193,119 +258,28 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 val target = Target.buildFromUserInfo(userInfo)
                 val verifyWindow = VerifyWindowObservable.getVerifyWindowMultiple(this, type, target)
                 verifyWindow.show()
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .flatMap { returnTarget: Target? ->
-                            if (returnTarget == null) {
-                                verifyWindow.dismiss()
-                                Observable.empty()
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap { returnTarget: Target? ->
+                        if (returnTarget == null) {
+                            verifyWindow.dismiss()
+                            Observable.empty()
+                        } else {
+                            if (checkVerify(authType, returnTarget)) {
+                                createWithdrawCoinNew(verifyWindow, returnTarget)
+                                Observable.just(1)
                             } else {
-                                if (checkVerify(authType, returnTarget)) {
-                                    createWithdrawCoinNew(verifyWindow, returnTarget)
-                                    Observable.just(1)
-                                } else {
-                                    Observable.just(0)
-                                }
+                                Observable.just(0)
                             }
                         }
-                        .subscribe()
+                    }
+                    .subscribe()
 //                }
             } else {
                 FryingUtil.showToast(mContext, getString(R.string.login_first))
             }
-        } else if (i == R.id.scan_qrcode) {
-            requestCameraPermissions(Runnable {
-                BlackRouter.getInstance().build(RouterConstData.CAPTURE)
-                        .withRequestCode(ConstData.SCANNIN_GREQUEST_CODE)
-                        .go(mContext)
-            })
-        } else if (i == R.id.address_manager) {
-            //选择地址
-            val extras = Bundle()
-            extras.putString(ConstData.COIN_TYPE, if (wallet == null) null else wallet?.coinType)
-            extras.putParcelable(ConstData.COIN_INFO, coinInfo)
-            BlackRouter.getInstance().build(RouterConstData.WALLET_ADDRESS_MANAGE)
-                    .with(extras)
-                    .withRequestCode(ConstData.WALLET_ADDRESS_MANAGE)
-                    .go(mContext)
-        } else if (i == R.id.total) {
-            binding?.extractCount?.setText(if (wallet?.coinAmount == null) "" else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
-        }
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val bundle = data?.extras
-            when (requestCode) {
-                ConstData.CHOOSE_COIN -> {
-                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
-                    if (chooseWallet != null) { //查找出选中的币种，并做相应跳转
-                        if (walletList != null) {
-                            for (wallet in walletList!!) {
-                                if (TextUtils.equals(wallet?.coinType, chooseWallet.coinType)) {
-                                    this.wallet = wallet
-                                    this.wallet?.coinWallet = null
-                                    this.wallet?.memo = null
-                                    break
-                                }
-                            }
-                        } else {
-                            this.wallet = chooseWallet
-                            this.wallet?.coinWallet = null
-                            this.wallet?.memo = null
-                        }
-                        coinInfo = null
-                        selectCoin(wallet)
-                    }
-                }
-                ConstData.SCANNIN_GREQUEST_CODE -> {
-                    val scanResult = bundle?.getString("result")
-                    binding?.extractAddress?.setText(scanResult ?: "")
-                    refreshAddress(null, scanResult, null)
-                }
-                ConstData.WALLET_ADDRESS_MANAGE -> {
-                    val selectAddress: WalletWithdrawAddress? = bundle?.getParcelable(ConstData.WALLET_WITHDRAW_ADDRESS)
-                    refreshAddress(selectAddress, null, null)
-                }
-            }
-        }
-    }
-
-    private fun showWalletList() {
-        if (wallet == null) {
-            if (TextUtils.isEmpty(coinType)) {
-                selectCoin(0)
-            } else {
-                if (walletList != null && walletList!!.isNotEmpty()) {
-                    for (wallet in walletList!!) {
-                        if (TextUtils.equals(coinType, wallet?.coinType)) {
-                            selectCoin(wallet)
-                            break
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getAllWallet() {
-        WalletApiServiceHelper.getWalletList(mContext, true, object : Callback<ArrayList<Wallet?>?>() {
-            override fun callback(result: ArrayList<Wallet?>?) {
-                walletList = result
-                showWalletList()
-            }
-
-            override fun error(type: Int, message: Any) {
-                FryingUtil.showToast(mContext, message.toString())
-            }
-        })
-    }
-
-    private fun selectCoin(position: Int) {
-        selectCoin(CommonUtil.getItemFromList(walletList, position))
-    }
 
     private fun selectCoin(wallet: Wallet?) {
         this.wallet = wallet
@@ -318,7 +292,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         this.wallet = wallet
         this.coinType = wallet?.coinType
         this.memoNeeded = coinInfo != null && coinInfo.memoNeeded
-        this.coinInfo = coinInfo
+        this.coinInfoReal = coinInfoReal
         requestRefresh()
     }
 
@@ -340,31 +314,24 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         binding?.arriveCount?.setText(R.string.extract_not_support)
         binding?.extractCount?.isEnabled = false
         binding?.arriveCount?.isEnabled = false
-        binding?.scanQrcode?.isEnabled = false
-        binding?.addressManager?.isEnabled = false
         binding?.btnConfirm?.isEnabled = false
         if ("EOS".equals(coinType, ignoreCase = true) || "XRP".equals(coinType, ignoreCase = true)
                 || "PASC".equals(coinType, ignoreCase = true)) {
-            binding?.memo?.visibility = View.VISIBLE
+            binding?.withdrawMemoLayout?.visibility = View.VISIBLE
             binding?.memo?.hint = getString(R.string.memo_hint)
         } else {
-            binding?.memo?.visibility = View.GONE
+            binding?.withdrawMemoLayout?.visibility = View.GONE
             if (memoNeeded) {
-                binding?.memo?.visibility = View.VISIBLE
+                binding?.withdrawMemoLayout?.visibility = View.VISIBLE
                 binding?.memo?.hint = getString(R.string.memo_hint)
             }
-        }
-        if ("USDT".equals(coinType, ignoreCase = true)) {
-            binding?.descriptionUsdt?.visibility = View.VISIBLE
-        } else {
-            binding?.descriptionUsdt?.visibility = View.GONE
         }
     }
 
     private fun refreshAddress(withdrawAddress: WalletWithdrawAddress?, scanAddress: String?, copyAddress: String?) {
         if (withdrawAddress != null) {
             binding?.extractAddress?.setText(if (withdrawAddress.coinWallet == null) "" else withdrawAddress.coinWallet)
-            if (coinInfo != null && coinInfo?.memoNeeded!!) {
+            if (coinInfo != null && coinInfoReal?.memoNeeded!!) {
                 binding?.memo?.setText(if (withdrawAddress.memo == null) "" else withdrawAddress.memo)
             }
         } else if (scanAddress != null) {
@@ -376,7 +343,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun resetViews() {
-        if (coinInfo?.supportWithdraw != null && coinInfo?.supportWithdraw!!) {
+        if (coinInfoReal?.supportWithdraw != null && coinInfoReal?.supportWithdraw!!) {
             binding?.extractAddress?.setText("")
             binding?.memo?.setText("")
             binding?.poundage?.setText("")
@@ -385,14 +352,12 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             binding?.memo?.isEnabled = true
             binding?.extractCount?.isEnabled = true
             binding?.arriveCount?.isEnabled = true
-            binding?.scanQrcode?.isEnabled = true
-            binding?.addressManager?.isEnabled = true
             binding?.btnConfirm?.isEnabled = true
             binding?.available?.text = String.format(getString(R.string.extract_useable), NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 0, 8), coinType)
             binding?.extractCount?.hint = getString(R.string.extract_single,
-                    NumberUtil.formatNumberNoGroup(coinInfo?.minWithdrawSingle, 2, 15),
-                    NumberUtil.formatNumberNoGroup(coinInfo?.maxWithdrawSingle, 2, 15))
-            binding?.poundage?.setText(String.format("%s %s", NumberUtil.formatNumberNoGroup(coinInfo?.withdrawFee), coinType))
+                    NumberUtil.formatNumberNoGroup(coinInfoReal?.minWithdrawSingle, 2, 15),
+                    NumberUtil.formatNumberNoGroup(coinInfoReal?.maxWithdrawSingle, 2, 15))
+            binding?.poundage?.setText(getString(R.string.fee_amount,String.format("%s %s", NumberUtil.formatNumberNoGroup(coinInfoReal?.withdrawFee), coinType)))
             binding?.arriveCount?.text = String.format("0.00 %s", coinType)
         } else {
             binding?.extractAddress?.setText(R.string.extract_not_support)
@@ -404,25 +369,18 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             binding?.arriveCount?.setText(R.string.extract_not_support)
             binding?.extractCount?.isEnabled = false
             binding?.arriveCount?.isEnabled = false
-            binding?.scanQrcode?.isEnabled = false
-            binding?.addressManager?.isEnabled = false
             binding?.btnConfirm?.isEnabled = false
         }
         if ("EOS".equals(coinType, ignoreCase = true) || "XRP".equals(coinType, ignoreCase = true)
                 || "PASC".equals(coinType, ignoreCase = true)) {
-            binding?.memo?.visibility = View.VISIBLE
+            binding?.withdrawMemoLayout?.visibility = View.VISIBLE
             binding?.memo?.hint = getString(R.string.memo_hint)
         } else {
-            binding?.memo?.visibility = View.GONE
+            binding?.withdrawMemoLayout?.visibility = View.GONE
             if (memoNeeded) {
-                binding?.memo?.visibility = View.VISIBLE
+                binding?.withdrawMemoLayout?.visibility = View.VISIBLE
                 binding?.memo?.hint = getString(R.string.memo_hint)
             }
-        }
-        if ("USDT".equals(coinType, ignoreCase = true)) {
-            binding?.descriptionUsdt?.visibility = View.VISIBLE
-        } else {
-            binding?.descriptionUsdt?.visibility = View.GONE
         }
         refreshSubmitButton()
     }
@@ -577,7 +535,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         }
         val jsonObject = JsonObject()
         jsonObject.addProperty("coinType", coinType)
-        jsonObject.addProperty("withdrawFee", coinInfo?.withdrawFee.toString())
+        jsonObject.addProperty("withdrawFee", coinInfoReal?.withdrawFee.toString())
         jsonObject.addProperty("txTo", binding?.extractAddress?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("amount", binding?.extractCount?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("memo", memoPost)
@@ -619,46 +577,74 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 })
     }
 
-//    private fun getCoinInfo(coinType: String?): Observable<CoinInfo?>? {
-//        return if (coinType == null) {
-//            Observable.just(null)
-//        } else {
-//            WalletApiServiceHelper.getCoinInfo(this, coinType)
-//                    ?.flatMap { info: CoinInfo? ->
-//                        this.coinInfo = info
-//                        memoNeeded = info != null && info.memoNeeded
-//                        Observable.just(info)
-//                    }
-//        }
-//    }
+    private fun getUserWithdrawQuota(){
+        coinType?.let {
+            WalletApiServiceHelper.getUserWithdrawQuota(this, it, object : NormalCallback<HttpRequestResultString?>() {
+                override fun callback(returnData: HttpRequestResultString?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        binding?.withdrawQuota?.setText(getString(R.string.withdraw_amount_limit,returnData.data))
+                    } else {
+                        FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
+                    }
+                }
+            })
+        }
+    }
 
-    private fun refreshWalletHandleInfo() {
+    private fun getRechargeAddress(coinType: String?): Observable<WalletAddress?>? {
+        return if (coinType == null) {
+            Observable.just(null)
+        } else {
+            ApiManager.build(this,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+                ?.getExchangeAddress(coinType,coinChain)
+                ?.flatMap { addressResult: HttpRequestResultData<WalletAddress?>? ->
+                    if (addressResult != null && addressResult.code == HttpRequestResult.SUCCESS) {
+                        Observable.just(addressResult.data)
+                    } else {
+                        Observable.error(RuntimeException(if (addressResult == null) "null" else addressResult.msg))
+                    }
+                }
+        }
+    }
+
+
+
+    protected open fun refreshWalletHandleInfo() {
         if (wallet != null) {
             coinType = wallet?.coinType
             //数据不为空刷新 否则重新请求
             if (coinInfo != null) {
-                refreshWallet(wallet, coinInfo)
+                refreshWallet(wallet, coinInfoReal)
             } else {
                 //判断充值提现开关是否开启
                 showLoading()
-//                getCoinInfo(coinType)
-//                        ?.compose(RxJavaHelper.observeOnMainThread())
-//                        ?.subscribe(object : NormalObserver<CoinInfo?>(this) {
-//                            override fun afterRequest() {
-//                                super.afterRequest()
-//                                hideLoading()
-//                            }
-//
-//                            override fun error(type: Int, error: Any?) {
-//                                super.error(type, error)
-//                                refreshWallet(wallet, coinInfo)
-//                            }
-//
-//                            override fun callback(result: CoinInfo?) {
-//                                refreshWallet(wallet, coinInfo)
-//                            }
-//
-//                        })
+                getCoinInfo(coinType)
+                    ?.flatMap { info: CoinInfoType? ->
+                        if (info == null) {
+                            Observable.just(null)
+                        } else {
+                            getRechargeAddress(coinType)
+                        }
+                    }
+                    ?.compose(RxJavaHelper.observeOnMainThread())
+                    ?.subscribe(object : NormalObserver<WalletAddress?>(this) {
+                        override fun afterRequest() {
+                            super.afterRequest()
+                            hideLoading()
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                            super.error(type, error)
+                            refreshWallet(wallet, coinInfoReal)
+                        }
+
+                        override fun callback(result: WalletAddress?) {
+                            wallet?.coinWallet = if (result?.address == null) result?.account else result.address
+                            wallet?.memo = result?.memo
+                            wallet?.minChainDepositAmt = result?.minChainDepositAmt
+                            refreshWallet(wallet, coinInfoReal)
+                        }
+                    })
             }
         }
     }

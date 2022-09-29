@@ -38,19 +38,18 @@ import io.reactivex.schedulers.Schedulers
 import skin.support.content.res.SkinCompatResources
 
 @Route(value = [RouterConstData.WALLET_ADDRESS_MANAGE])
-class WalletAddressManageActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener {
+class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
+    AdapterView.OnItemClickListener {
     private var coinInfo: CoinInfo? = null
     private var coinType: String? = null
+    private var coinChain: String? = null
     private var binding: ActivityWalletAddressManageBinding? = null
     private var adapter: WalletAddressAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        coinChain = intent.getStringExtra(ConstData.COIN_CHAIN)
         coinInfo = intent.getParcelableExtra(ConstData.COIN_INFO)
-        coinType = intent.getStringExtra(ConstData.COIN_TYPE)
-        if (coinInfo == null || coinType == null) {
-            finish()
-            return
-        }
+        coinType = coinInfo?.coinType
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_address_manage)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -63,22 +62,6 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener, Adapte
         binding?.recyclerView?.addItemDecoration(decoration)
         binding?.recyclerView?.addOnItemTouchListener(OnSwipeItemTouchListener(this))
         adapter = WalletAddressAdapter(this, BR.listItemWalletWtihdrawAddressModel, null)
-        adapter?.setOnSwipeItemClickListener(object : OnSwipeItemClickListener {
-            override fun deleteClick(position: Int) {
-                val address = adapter?.getItem(position)
-                address?.let {
-                    doDelete(address)
-                }
-            }
-
-            override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-                val address = adapter?.getItem(position)
-                val resultData = Intent()
-                resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, address)
-                setResult(Activity.RESULT_OK, resultData)
-                finish()
-            }
-        })
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -104,66 +87,77 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener, Adapte
         val i = v.id
         if (i == R.id.btn_add) {
             val bundle = Bundle()
-            bundle.putString(ConstData.COIN_TYPE, coinType)
+            bundle.putString(ConstData.COIN_CHAIN, coinChain)
             bundle.putParcelable(ConstData.COIN_INFO, coinInfo)
             BlackRouter.getInstance().build(RouterConstData.WALLET_ADDRESS_ADD).with(bundle)
-                    .withRequestCode(ConstData.WALLET_ADDRESS_ADD).go(this)
+                .withRequestCode(ConstData.WALLET_ADDRESS_ADD).go(this)
         }
     }
 
     private fun doDelete(address: WalletWithdrawAddress) {
         val userInfo = CookieUtil.getUserInfo(this) ?: return
         val target = Target.buildFromUserInfo(userInfo)
-        val verifyWindow = VerifyWindowObservable.getVerifyWindowMultiple(this, if (userInfo.registerFromMail()) VerifyType.MAIL else VerifyType.PHONE, target)
+        val verifyWindow = VerifyWindowObservable.getVerifyWindowMultiple(
+            this,
+            if (userInfo.registerFromMail()) VerifyType.MAIL else VerifyType.PHONE,
+            target
+        )
         verifyWindow
-                .show()
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { returnTarget: Target? ->
-                    if (returnTarget == null) {
-                        verifyWindow.dismiss()
-                        Observable.empty()
-                    } else {
-                        showLoading()
-                        val deleteResult = HttpRequestResultString()
-                        deleteResult.code = HttpRequestResult.SUCCESS
+            .show()
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { returnTarget: Target? ->
+                if (returnTarget == null) {
+                    verifyWindow.dismiss()
+                    Observable.empty()
+                } else {
+                    showLoading()
+                    val deleteResult = HttpRequestResultString()
+                    deleteResult.code = HttpRequestResult.SUCCESS
 //                        Observable.just(deleteResult)
-                        ApiManager.build(mContext).getService(WalletApiService::class.java)
-                                ?.deleteWalletAddress(address.id.toString(), if (userInfo.registerFromMail()) returnTarget.mailCode else returnTarget.phoneCode)
-                                ?.materialize()
-                                ?.subscribeOn(Schedulers.io())
-                                ?.observeOn(AndroidSchedulers.mainThread())
-                                ?.flatMap(object : RequestFunction2<HttpRequestResultString?, HttpRequestResultString?>() {
-                                    override fun afterRequest() {
-                                        hideLoading()
-                                    }
+                    ApiManager.build(mContext).getService(WalletApiService::class.java)
+                        ?.deleteWalletAddress(
+                            address.id.toString(),
+                            if (userInfo.registerFromMail()) returnTarget.mailCode else returnTarget.phoneCode
+                        )
+                        ?.materialize()
+                        ?.subscribeOn(Schedulers.io())
+                        ?.observeOn(AndroidSchedulers.mainThread())
+                        ?.flatMap(object :
+                            RequestFunction2<HttpRequestResultString?, HttpRequestResultString?>() {
+                            override fun afterRequest() {
+                                hideLoading()
+                            }
 
-                                    @Throws(Exception::class)
-                                    override fun applyResult(returnData: HttpRequestResultString?): HttpRequestResultString? {
-                                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                            runOnUiThread { verifyWindow.dismiss() }
-                                        }
-                                        return returnData
-                                    }
-                                })
+                            @Throws(Exception::class)
+                            override fun applyResult(returnData: HttpRequestResultString?): HttpRequestResultString? {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    runOnUiThread { verifyWindow.dismiss() }
+                                }
+                                return returnData
+                            }
+                        })
+                }
+            }
+            .compose(RxJavaHelper.observeOnMainThread())
+            .subscribe(object : NormalObserver2<HttpRequestResultString?>(this) {
+                override fun onComplete() {
+                    super.onComplete()
+                }
+
+
+                override fun callback(result: HttpRequestResultString?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        adapter?.removeItem(address)
+                        adapter?.notifyDataSetChanged()
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (result == null) getString(R.string.error_data) else result.msg
+                        )
                     }
                 }
-                .compose(RxJavaHelper.observeOnMainThread())
-                .subscribe(object : NormalObserver2<HttpRequestResultString?>(this) {
-                    override fun onComplete() {
-                        super.onComplete()
-                    }
-
-
-                    override fun callback(result: HttpRequestResultString?) {
-                        if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            adapter?.removeItem(address)
-                            adapter?.notifyDataSetChanged()
-                        } else {
-                            FryingUtil.showToast(mContext, if (result == null) getString(R.string.error_data) else result.msg)
-                        }
-                    }
-                })
+            })
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
@@ -176,15 +170,21 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener, Adapte
 
     private val walletAddressList: Unit
         get() {
-            WalletApiServiceHelper.getWalletAddressList(this, 1, 10, coinType, object : NormalCallback<HttpRequestResultDataList<WalletWithdrawAddress?>?>() {
-                override fun callback(returnData: HttpRequestResultDataList<WalletWithdrawAddress?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        adapter?.data = returnData.data
-                        adapter?.notifyDataSetChanged()
-                    } else {
-                        FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
+            WalletApiServiceHelper.getWalletAddressList(
+                this,
+                coinType,
+                object : NormalCallback<HttpRequestResultDataList<WalletWithdrawAddress?>?>() {
+                    override fun callback(returnData: HttpRequestResultDataList<WalletWithdrawAddress?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            adapter?.data = returnData.data
+                            adapter?.notifyDataSetChanged()
+                        } else {
+                            FryingUtil.showToast(
+                                mContext,
+                                if (returnData == null) getString(R.string.error_data) else returnData.msg
+                            )
+                        }
                     }
-                }
-            })
+                })
         }
 }

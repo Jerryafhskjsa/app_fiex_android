@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class Wallet : BaseAdapterItem, Parcelable {
-    var coinType: String? = null
+    var coinType: String? = null//币种名称
     var coinTypeDes:String? = null//币种全称
     var coinIconUrl:String? = null//币种icon
     var coinAmount //数量 可使用

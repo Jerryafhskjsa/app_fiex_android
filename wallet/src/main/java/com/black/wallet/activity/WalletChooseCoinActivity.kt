@@ -40,7 +40,6 @@ import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.WALLET_CHOOSE_COIN], beforePath = RouterConstData.LOGIN)
 class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener {
-    private var supportCoinList: ArrayList<String>? = null
 
     private var userSoptBanlace: ArrayList<UserBalance?>? = null
     private var walletList: ArrayList<Wallet?>? = null
@@ -51,9 +50,6 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportCoinList = intent.getStringArrayListExtra(ConstData.SUPPORT_COIN_LIST)
-        walletList = intent.getParcelableArrayListExtra(ConstData.WALLET_LIST)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_choose_coin)
         binding?.chooseCoinSearch?.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {

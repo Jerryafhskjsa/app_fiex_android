@@ -58,6 +58,13 @@ object WalletApiServiceHelper {
         lastGetTimeMap.put(type, time)
     }
     /***fiex***/
+    //获取用户24小时提现额度
+    fun getUserWithdrawQuota(context: Context,coin:String,callback:Callback<HttpRequestResultString?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getUserWithdrawQuota(coin)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
     //获取普通资产
     fun getUserBalanceReal(context: Context?, isShowLoading: Boolean, callback: Callback<UserBalanceWarpper?>?, errorCallback: Callback<Any?>?) {
         if (context == null || callback == null) {
@@ -587,13 +594,13 @@ object WalletApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    //地址列表
-    fun getWalletAddressList(context: Context?, page: Int, pageSize: Int, coinType: String?, callback: Callback<HttpRequestResultDataList<WalletWithdrawAddress?>?>?) {
+    //提现地址列表
+    fun getWalletAddressList(context: Context?,coinType: String?, callback: Callback<HttpRequestResultDataList<WalletWithdrawAddress?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWalletAddressList(page, pageSize, coinType)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+                ?.getWalletAddressList(coinType)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -603,7 +610,7 @@ object WalletApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.addWalletAddress(coinType, name, address, memo, verifyCode)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

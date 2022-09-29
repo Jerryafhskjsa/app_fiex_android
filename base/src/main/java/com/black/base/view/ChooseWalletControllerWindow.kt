@@ -34,7 +34,7 @@ class ChooseWalletControllerWindow<T>(private val activity: Activity, title: Str
                 dm.widthPixels,
                 WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+//        popupWindow.setBackgroundDrawable(PaintDrawable())//此处会导致有黑色圆角边缘
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {

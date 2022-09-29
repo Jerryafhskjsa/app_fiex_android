@@ -1,37 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
-
         <variable
             name="listItemWalletWtihdrawAddressModel"
             type="Object" />
     </data>
-
-    <com.black.lib.view.SwipeItemLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <include
-            android:id="@+id/content_layout"
-            layout="@layout/list_item_wallet_withdraw_address_content"
+        android:layout_margin="@dimen/default_padding"
+        android:orientation="vertical"
+        android:background="@drawable/bg_transfer_corner">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <include
-                android:id="@+id/delete_layout"
-                layout="@layout/list_item_wallet_withdraw_address_delete"
+            android:layout_height="50dp"
+            >
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/addr_tag"
+                android:text="JACK"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </com.black.lib.view.SwipeItemLayout>
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/T14"
+                android:layout_marginLeft="@dimen/default_padding">
+            </com.black.base.widget.SpanTextView>
+            <ImageView
+                android:id="@+id/addr_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/addr_delete"
+                android:src="@drawable/icon_edit">
+            </ImageView>
+            <ImageView
+                android:id="@+id/addr_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/default_padding"
+                android:src="@drawable/icon_addr_delete">
+            </ImageView>
+        </RelativeLayout>
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/addr_content"
+            android:text="fgdkjghjghdjjk"
+            android:layout_marginTop="@dimen/default_padding"
+            android:layout_marginLeft="@dimen/default_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T14"
+            android:textSize="@dimen/text_size_14">
+        </com.black.base.widget.SpanTextView>
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/addr_type"
+            android:text="链类型 usdt_trc20"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/T14"
+            android:layout_margin="@dimen/default_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.black.base.widget.SpanTextView>
+    </LinearLayout>
 </layout>

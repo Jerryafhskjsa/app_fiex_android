@@ -305,7 +305,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.logout()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -325,7 +325,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true).getService(UserApiService::class.java)
+        ApiManager.build(context, true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getToken(telCountryCode, username, password)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -335,7 +335,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true).getService(UserApiService::class.java)
+        ApiManager.build(context, true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.register(userName, password, telCountryCode, verifyCode, captcha, inviteCode)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

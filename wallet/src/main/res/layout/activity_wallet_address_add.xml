@@ -31,7 +31,6 @@
                 app:elevation="12dp">
 
                 <include layout="@layout/tool_bar_left_back" />
-
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.base.widget.SkinNestedScrollView
@@ -50,68 +49,74 @@
                     android:paddingLeft="@dimen/double_padding"
                     android:paddingRight="@dimen/double_padding">
 
-                    <com.black.lib.view.InputLinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_input_box"
-                        android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/extract_address_help"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14" />
 
-                        <com.black.base.widget.SpanTextView
+                    <LinearLayout
+                        android:id="@+id/coin_addr_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanEditText
+                            android:id="@+id/extract_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/extract_address"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/scan_qrcode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="@string/wallet_address_title"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/middle_padding"
-                            android:paddingBottom="@dimen/middle_padding">
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/extract_address"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:hint="@string/extract_address"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:padding="0dp"
-                                android:textColor="@color/T1"
-                                android:textColorHint="@color/T3"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <ImageView
-                                android:id="@+id/scan_qrcode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/default_padding"
-                                android:contentDescription="@null"
-                                android:src="@drawable/btn_scan" />
-
-                        </LinearLayout>
-                    </com.black.lib.view.InputLinearLayout>
+                            android:layout_marginLeft="@dimen/default_padding"
+                            android:contentDescription="@null"
+                            android:src="@drawable/btn_scan" />
+                    </LinearLayout>
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
+                        android:layout_height="40dp"
                         android:gravity="center_vertical"
-                        android:text="@string/wallet_address_remark"
-                        android:textColor="@color/T1"
-                        android:textSize="@dimen/text_size_13" />
+                        android:text="@string/addr_remark_des"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14" />
 
-                    <com.black.base.widget.SpanMaterialEditText
-                        android:id="@+id/remark"
+                    <LinearLayout
+                        android:id="@+id/addr_remark_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/extract_remark_hint"
-                        android:inputType="text" />
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanEditText
+                            android:id="@+id/remark"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/addr_remark"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/memo_layout"
@@ -121,110 +126,34 @@
 
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
+                            android:layout_height="40dp"
                             android:gravity="center_vertical"
                             android:text="@string/wallet_address_memo"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_14" />
 
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/memo"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/memo_hint"
-                            android:inputType="text" />
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transfer_corner"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/double_padding"
+                            android:paddingRight="@dimen/double_padding">
+
+                            <com.black.base.widget.SpanEditText
+                                android:id="@+id/memo"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/memo_hint"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
                     </LinearLayout>
-
-                    <com.black.lib.view.InputLinearLayout
-                        android:id="@+id/phone_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_input_box"
-                        android:orientation="vertical"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="@string/phone_check"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/phone_code"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:hint="@string/hint_phone_code"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:padding="0dp" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/get_phone_code"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/send_code"
-                                android:textColor="@color/C1"
-                                android:textSize="@dimen/text_size_16" />
-                        </LinearLayout>
-                    </com.black.lib.view.InputLinearLayout>
-
-                    <com.black.lib.view.InputLinearLayout
-                        android:id="@+id/mail_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_input_box"
-                        android:orientation="vertical"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="@string/mail_check"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_13" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/mail_code"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:hint="@string/hint_input_mail_code"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:padding="0dp" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/get_mail_code"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/send_code"
-                                android:textColor="@color/C1"
-                                android:textSize="@dimen/text_size_16" />
-                        </LinearLayout>
-                    </com.black.lib.view.InputLinearLayout>
                 </LinearLayout>
             </com.black.base.widget.SkinNestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

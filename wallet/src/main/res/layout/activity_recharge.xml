@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <variable
             name="rechargeModel"
             type="Object" />
     </data>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@id/app_bar_layout"
                 android:layout_width="match_parent"
@@ -28,7 +23,6 @@
                 app:elevation="12dp">
                 <include layout="@layout/tool_bar_left_back" />
             </com.google.android.material.appbar.AppBarLayout>
-
             <com.black.base.widget.ObserveScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
@@ -44,14 +38,6 @@
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/default_padding"
                     android:paddingRight="@dimen/default_padding">
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14"
-                        android:gravity="center_vertical"
-                        android:text="@string/select_coin">
-                    </com.black.base.widget.SpanTextView>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -87,7 +73,6 @@
                                 android:layout_marginLeft="6dp"
                                 android:src="@drawable/icon_down" />
                         </LinearLayout>
-
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
@@ -120,7 +105,6 @@
                                 android:layout_marginLeft="6dp"
                                 android:src="@drawable/icon_down" />
                         </LinearLayout>
-
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"

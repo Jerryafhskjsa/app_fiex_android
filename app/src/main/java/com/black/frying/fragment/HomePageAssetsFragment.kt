@@ -186,10 +186,8 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             R.id.lin_withdraw -> {
                 val extras = Bundle()
-                extras.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
                     .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
-                    .with(extras)
                     .go(this)
             }
             R.id.lin_transfer -> {
@@ -206,21 +204,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 }).show()
             }
            }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel!!.getAllWallet(true)
-    }
-
-    override fun getViewModel(): BaseViewModel<*>? {
-        return viewModel!!
-    }
-
-    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        refreshMoneyDisplay()
-        normalFragment?.setVisibility(isChecked)
-        leverFragment?.setVisibility(isChecked)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -242,13 +225,13 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 ConstData.CHOOSE_COIN_WITHDRAW -> {
                     val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
-                        run {
                             val bundle = Bundle()
-                            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel!!.getWalletList())
                             bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                            bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
-                            BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
-                        }
+                            BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                                if (error != null) {
+                                    CommonUtil.printError(mContext, error)
+                                }
+                            }
                     }
                 }
                 ConstData.LEVER_PAIR_CHOOSE -> {
@@ -263,6 +246,21 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel!!.getAllWallet(true)
+    }
+
+    override fun getViewModel(): BaseViewModel<*>? {
+        return viewModel!!
+    }
+
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        refreshMoneyDisplay()
+        normalFragment?.setVisibility(isChecked)
+        leverFragment?.setVisibility(isChecked)
     }
 
     private fun initFragmentList() {

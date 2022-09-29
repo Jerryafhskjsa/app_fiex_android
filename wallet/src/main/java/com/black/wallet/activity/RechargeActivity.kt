@@ -34,13 +34,12 @@ import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.RECHARGE])
 open class RechargeActivity : BaseActivity(), View.OnClickListener {
-    private var walletList: ArrayList<Wallet?>? = null
 
-    private var wallet: Wallet? = null
+    private var wallet: Wallet? = null//在这里只使用了币种名称
     private var coinType: String? = null
     private var coinInfo: CoinInfoType? = null
-    private var coinChain:String? = null
-    private var chainNames:ArrayList<String>? = null
+    private var coinChain: String? = null
+    private var chainNames: ArrayList<String>? = null
 
     private var coinInfoReal: CoinInfo? = null
     private var memoNeeded = false
@@ -49,7 +48,6 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        walletList = intent.getParcelableArrayListExtra(ConstData.WALLET_LIST)
         wallet = intent.getParcelableExtra(ConstData.WALLET)
         coinType = wallet?.coinType
 
@@ -69,12 +67,6 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
             wallet != null -> {
                 selectCoin(wallet)
             }
-            walletList != null -> {
-                selectCoin(0)
-            }
-            else -> {
-                getAllWallet()
-            }
         }
     }
 
@@ -86,46 +78,38 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         return getString(R.string.rechange)
     }
 
-    override fun initToolbarViews(toolbar: Toolbar) {
-        var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
-        actionBarRecord?.visibility = View.VISIBLE
-        actionBarRecord?.setOnClickListener(this)
-    }
-
     override fun onClick(view: View) {
-        when(view.id){
-            R.id.img_action_bar_right ->{
+        when (view.id) {
+            R.id.img_action_bar_right -> {
                 val extras = Bundle()
                 extras.putParcelable(ConstData.WALLET, wallet)
                 extras.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
-                BlackRouter.getInstance().build(RouterConstData.FINANCIAL_RECORD).with(extras).go(this)
+                BlackRouter.getInstance().build(RouterConstData.FINANCIAL_RECORD).with(extras)
+                    .go(this)
             }
-            R.id.btn_copy_address ->{
+            R.id.btn_copy_address -> {
                 if (CommonUtil.copyText(mContext, wallet?.coinWallet)) {
                     FryingUtil.showToast(mContext, getString(R.string.copy_text_success))
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.copy_text_failed))
                 }
             }
-            R.id.choose_chain_layout ->{
+            R.id.choose_chain_layout -> {
                 showChainChooseDialog()
             }
-            R.id.btn_copy_memo ->{
+            R.id.btn_copy_memo -> {
                 if (CommonUtil.copyText(mContext, wallet?.memo)) {
                     FryingUtil.showToast(mContext, getString(R.string.copy_text_success))
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.copy_text_failed))
                 }
             }
-            R.id.choose_coin_layout ->{
-                val extras = Bundle()
-                extras.putParcelableArrayList(ConstData.WALLET_LIST, walletList)
+            R.id.choose_coin_layout -> {
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
                     .withRequestCode(ConstData.CHOOSE_COIN)
-                    .with(extras)
                     .go(this)
             }
-            R.id.btn_save_qrcode ->{
+            R.id.btn_save_qrcode -> {
                 requestStoragePermissions(Runnable {
                     try {
                         ImageUtil.saveScreenShotFromActivit(this)
@@ -144,15 +128,18 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun showChainChooseDialog(){
-        if(coinChain != null && chainNames!!.size >0){
-            var chooseWalletDialog =  ChooseWalletControllerWindow(mContext as Activity,
+    private fun showChainChooseDialog() {
+        if (coinChain != null && chainNames!!.size > 0) {
+            var chooseWalletDialog = ChooseWalletControllerWindow(mContext as Activity,
                 getString(R.string.get_chain_name),
                 coinChain,
                 chainNames,
                 object : ChooseWalletControllerWindow.OnReturnListener<String?> {
-                    override fun onReturn(window: ChooseWalletControllerWindow<String?>, item: String?) {
-                       binding?.currentChain?.setText(item)
+                    override fun onReturn(
+                        window: ChooseWalletControllerWindow<String?>,
+                        item: String?
+                    ) {
+                        binding?.currentChain?.setText(item)
                     }
                 })
             chooseWalletDialog.setTipsText(getString(R.string.chain_tips))
@@ -160,58 +147,6 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
             chooseWalletDialog.show()
         }
 
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                ConstData.CHOOSE_COIN -> {
-                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
-                    if (chooseWallet != null) {
-                        //查找出选中的币种，并做相应跳转
-                        if (walletList != null) {
-                            for (wallet in walletList!!) {
-                                if (TextUtils.equals(wallet?.coinType, chooseWallet.coinType)) {
-                                    this.wallet = wallet
-                                    this.wallet?.coinWallet = null
-                                    this.wallet?.memo = null
-                                    break
-                                }
-                            }
-                        } else {
-                            wallet = chooseWallet
-                            wallet?.coinWallet = null
-                            wallet?.memo = null
-                        }
-                        coinInfo = null
-                        selectCoin(wallet)
-                    }
-                }
-            }
-        }
-    }
-
-    protected fun showWalletList() {
-        if (wallet == null) {
-            if (TextUtils.isEmpty(coinType)) {
-                selectCoin(0)
-            } else {
-                if (walletList != null && walletList!!.isNotEmpty()) {
-                    for (wallet in walletList!!) {
-                        if (TextUtils.equals(coinType, wallet?.coinType)) {
-                            selectCoin(wallet)
-                            break
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun selectCoin(position: Int) {
-        selectCoin(CommonUtil.getItemFromList(walletList, position))
     }
 
     private fun selectCoin(wallet: Wallet?) {
@@ -245,11 +180,30 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         binding?.btnCopyMemo?.isEnabled = false
         if (TextUtils.isEmpty(coinType) && coinInfo != null) {
             if (memoNeeded) {
-                binding?.description01?.setText(getString(R.string.recharge_description_01, coinType))
-                binding?.description02?.setText(getString(R.string.recharge_description_02, NumberUtil.formatNumber(coinInfoReal?.minWithdrawSingle), coinType))
+                binding?.description01?.setText(
+                    getString(
+                        R.string.recharge_description_01,
+                        coinType
+                    )
+                )
+                binding?.description02?.setText(
+                    getString(
+                        R.string.recharge_description_02,
+                        NumberUtil.formatNumber(coinInfoReal?.minWithdrawSingle),
+                        coinType
+                    )
+                )
                 binding?.description02?.visibility = View.VISIBLE
             } else {
-                binding?.description01?.setText(getString(R.string.recharge_description_03, coinType, coinInfoReal?.blockConfirm.toString(), NumberUtil.formatNumber(coinInfoReal?.minimumDepositAmount), coinType))
+                binding?.description01?.setText(
+                    getString(
+                        R.string.recharge_description_03,
+                        coinType,
+                        coinInfoReal?.blockConfirm.toString(),
+                        NumberUtil.formatNumber(coinInfoReal?.minimumDepositAmount),
+                        coinType
+                    )
+                )
                 binding?.description02?.setText("")
                 binding?.description02?.visibility = View.GONE
             }
@@ -281,7 +235,12 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
             if (address != null && address.trim { it <= ' ' }.isNotEmpty()) {
                 var qrcodeBitmap: Bitmap? = null
                 try {
-                    qrcodeBitmap = CommonUtil.createQRCode(address, 300, 0, SkinCompatResources.getColor(mContext, R.color.T14))
+                    qrcodeBitmap = CommonUtil.createQRCode(
+                        address,
+                        300,
+                        0,
+                        SkinCompatResources.getColor(mContext, R.color.T14)
+                    )
                 } catch (e: WriterException) {
                     CommonUtil.printError(applicationContext, e)
                 }
@@ -293,7 +252,12 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
                 binding?.qrcode?.setImageResource(R.drawable.icon_recharge_false)
             }
             if (memoNeeded) {
-                binding?.description01?.setText(getString(R.string.recharge_description_01, wallet?.coinType))
+                binding?.description01?.setText(
+                    getString(
+                        R.string.recharge_description_01,
+                        wallet?.coinType
+                    )
+                )
 //                binding?.description02?.setText(getString(R.string.recharge_description_02, NumberUtil.formatNumber(coinInfo?.minimumDepositAmount), wallet?.coinType))
                 binding?.description02?.visibility = View.VISIBLE
             } else {
@@ -302,19 +266,6 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
                 binding?.description02?.visibility = View.GONE
             }
         }
-    }
-
-    private fun getAllWallet() {
-        WalletApiServiceHelper.getWalletList(mContext, true, object : Callback<ArrayList<Wallet?>?>() {
-            override fun callback(result: ArrayList<Wallet?>?) {
-                walletList = result
-                showWalletList()
-            }
-
-            override fun error(type: Int, message: Any) {
-                FryingUtil.showToast(mContext, message.toString())
-            }
-        })
     }
 
     open fun refreshWallet(wallet: Wallet?, coinInfo: CoinInfoType?) {
@@ -342,11 +293,11 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun setChainNames(info:CoinInfoType?){
+    private fun setChainNames(info: CoinInfoType?) {
         chainNames = ArrayList()
         var chainConfig = info?.config
         if (chainConfig != null) {
-            for (i in chainConfig){
+            for (i in chainConfig) {
                 i.chain?.let { chainNames?.add(it) }
             }
         }
@@ -356,15 +307,16 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         return if (coinType == null) {
             Observable.just(null)
         } else {
-            ApiManager.build(this,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                    ?.getExchangeAddress(coinType,coinChain)
-                    ?.flatMap { addressResult: HttpRequestResultData<WalletAddress?>? ->
-                        if (addressResult != null && addressResult.code == HttpRequestResult.SUCCESS) {
-                            Observable.just(addressResult.data)
-                        } else {
-                            Observable.error(RuntimeException(if (addressResult == null) "null" else addressResult.msg))
-                        }
+            ApiManager.build(this, UrlConfig.ApiType.URL_PRO)
+                .getService(WalletApiService::class.java)
+                ?.getExchangeAddress(coinType, coinChain)
+                ?.flatMap { addressResult: HttpRequestResultData<WalletAddress?>? ->
+                    if (addressResult != null && addressResult.code == HttpRequestResult.SUCCESS) {
+                        Observable.just(addressResult.data)
+                    } else {
+                        Observable.error(RuntimeException(if (addressResult == null) "null" else addressResult.msg))
                     }
+                }
         }
     }
 
@@ -372,39 +324,40 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         if (wallet != null) {
             coinType = wallet?.coinType
             //数据不为空刷新 否则重新请求
-            if (coinInfo != null && coinInfo != null) {
+            if (coinInfo != null) {
                 refreshWallet(wallet, coinInfo)
             } else {
                 //判断充值提现开关是否开启
                 showLoading()
                 getCoinInfo(coinType)
-                        ?.flatMap { info: CoinInfoType? ->
-                            if (info == null) {
-                                Observable.just(null)
-                            } else {
-                                getRechargeAddress(coinType)
-                            }
+                    ?.flatMap { info: CoinInfoType? ->
+                        if (info == null) {
+                            Observable.just(null)
+                        } else {
+                            getRechargeAddress(coinType)
                         }
-                        ?.compose(RxJavaHelper.observeOnMainThread())
-                        ?.subscribe(object : NormalObserver<WalletAddress?>(this) {
-                            override fun afterRequest() {
-                                super.afterRequest()
-                                hideLoading()
-                            }
+                    }
+                    ?.compose(RxJavaHelper.observeOnMainThread())
+                    ?.subscribe(object : NormalObserver<WalletAddress?>(this) {
+                        override fun afterRequest() {
+                            super.afterRequest()
+                            hideLoading()
+                        }
 
-                            override fun error(type: Int, error: Any?) {
-                                super.error(type, error)
-                                refreshWallet(wallet, coinInfo)
-                            }
+                        override fun error(type: Int, error: Any?) {
+                            super.error(type, error)
+                            refreshWallet(wallet, coinInfo)
+                        }
 
-                            override fun callback(result: WalletAddress?) {
-                                wallet?.coinWallet = if (result?.address == null) result?.account else result.address
-                                wallet?.memo = result?.memo
-                                wallet?.minChainDepositAmt = result?.minChainDepositAmt
-                                refreshWallet(wallet, coinInfo)
-                            }
+                        override fun callback(result: WalletAddress?) {
+                            wallet?.coinWallet =
+                                if (result?.address == null) result?.account else result.address
+                            wallet?.memo = result?.memo
+                            wallet?.minChainDepositAmt = result?.minChainDepositAmt
+                            refreshWallet(wallet, coinInfo)
+                        }
 
-                        })
+                    })
 
             }
         }

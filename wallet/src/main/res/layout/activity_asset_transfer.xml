@@ -200,7 +200,7 @@
                             android:hint="Minimum 0.0000001"
                             android:includeFontPadding="false"
                             android:maxLines="1"
-                            android:textSize="@dimen/text_size_14"/>
+                            android:textSize="@dimen/text_size_14" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/tv_name"
