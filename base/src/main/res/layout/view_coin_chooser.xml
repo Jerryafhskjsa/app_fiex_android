@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_asset_coin_corner"
     android:gravity="bottom"
     android:orientation="vertical">
@@ -28,7 +29,7 @@
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_cancel"/>
+            android:src="@drawable/icon_cancel" />
     </RelativeLayout>
 
     <LinearLayout
@@ -44,8 +45,8 @@
             android:background="@drawable/bg_transfer_corner">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -55,16 +56,19 @@
                 android:id="@+id/ed_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null" />
+                android:background="@null"
+                app:use_delete="true"/>
         </LinearLayout>
 
         <com.black.base.widget.SpanTextView
+            android:id="@+id/search_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:text="@string/cancel"
+            android:visibility="gone"
             android:textColor="@color/T14"/>
 
     </LinearLayout>

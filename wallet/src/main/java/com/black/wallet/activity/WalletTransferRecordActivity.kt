@@ -12,15 +12,12 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.WalletApiService
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
-import com.black.base.model.AssetTransfer
-import com.black.base.model.CanTransferCoin
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.PagingData
 import com.black.base.model.wallet.SupportAccount
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
-import com.black.base.view.ChooseCoinControllerWindow
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.view.TransferRecordFilterControllerWindow
 import com.black.lib.refresh.QRefreshLayout
@@ -31,7 +28,6 @@ import com.black.wallet.R
 import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.ActivityWalletTransferRecordBinding
 import skin.support.content.res.SkinCompatResources
-import java.util.*
 import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.WALLET_TRANSFER_RECORD], beforePath = RouterConstData.LOGIN)

@@ -13,7 +13,9 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.*
 import com.black.base.model.user.UserBalance
 import com.black.base.model.user.UserBalanceWarpper
+import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.SupportAccount
+import com.black.base.model.wallet.Wallet
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.ChooseCoinControllerWindow
@@ -26,6 +28,8 @@ import com.black.wallet.R
 import com.black.wallet.databinding.ActivityAssetTransferBinding
 import java.io.Serializable
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 资产划转页面 对应WalletTransferActivity
@@ -49,6 +53,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var coinCount:BigDecimal? = null
     private var userBalanceList:ArrayList<UserBalance?>? = null
     private var userBalance:UserBalance? = null
+
+    private var chooseCoinDialog:ChooseCoinControllerWindow<CanTransferCoin?>? = null
 
 
 
@@ -264,18 +270,44 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         return null
     }
 
-    private fun showCoinChooseDialog(data:ArrayList<CanTransferCoin?>?){
-        ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_wallet),
-            data,
-            object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
-                override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
-                    selectedCoin = item
-                    userBalance = getSelectedCoinInfo(selectedCoin)
-                    binding?.tvChooseName?.text = selectedCoin?.coin
-                    binding?.tvName?.text = selectedCoin?.coin
-                    var maxtCoin = userBalance?.availableBalance + " "+userBalance?.coin
-                    binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
+    private fun search(adapter: ChooseCoinControllerWindow<CanTransferCoin?>.ChooseCoinListAdapter?, data:ArrayList<CanTransferCoin?>?, searchKey: String?) {
+        var result: ArrayList<CanTransferCoin?>? = ArrayList()
+        if (searchKey == null || searchKey.trim { it <= ' ' }.isEmpty()) {
+            result = data
+        } else {
+            for (coin in data!!) {
+                if (coin?.coin != null && coin?.coin!!.uppercase(Locale.getDefault()).trim { it <= ' ' }.contains(
+                        searchKey.uppercase(Locale.getDefault())
+                    )) {
+                    result!!.add(coin)
                 }
-            }).show()
+            }
+        }
+        if (result != null) {
+            Collections.sort(result, CanTransferCoin.COMPARATOR_CHOOSE_COIN)
+        }
+        adapter?.setData(result)
+        adapter?.notifyDataSetChanged()
+    }
+
+    private fun showCoinChooseDialog(data:ArrayList<CanTransferCoin?>?){
+            chooseCoinDialog = ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_wallet),
+                data,
+                object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
+                    override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
+                        selectedCoin = item
+                        userBalance = getSelectedCoinInfo(selectedCoin)
+                        binding?.tvChooseName?.text = selectedCoin?.coin
+                        binding?.tvName?.text = selectedCoin?.coin
+                        var maxtCoin = userBalance?.availableBalance + " "+userBalance?.coin
+                        binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
+                    }
+
+                    override fun onSearch(window: ChooseCoinControllerWindow<CanTransferCoin?>,searchKey: String?) {
+                        var adapter =  window.getAdapter()
+                        search(adapter,data,searchKey)
+                    }
+                })
+            chooseCoinDialog?.show()
     }
 }

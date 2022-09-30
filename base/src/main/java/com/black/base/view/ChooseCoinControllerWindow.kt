@@ -5,11 +5,15 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.PaintDrawable
 import android.media.Image
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.black.base.R
 import com.black.base.model.CanTransferCoin
+import kotlinx.android.synthetic.main.view_coin_chooser.view.*
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
@@ -23,6 +27,7 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
     private val titleView: TextView
     private val listView: ListView
     private val adapter: ChooseCoinListAdapter
+    private val instance:ChooseCoinControllerWindow<T>
 
     init {
         val dm = activity.resources.displayMetrics
@@ -47,6 +52,7 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
             titleView.visibility = View.VISIBLE
             titleView.text = title
         }
+        instance = this
         listView = contentView.findViewById(R.id.list_view)
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1_ALPHA60)
@@ -67,7 +73,22 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
             params.height = (60 * dataCount * density).toInt()
         }
         listView.layoutParams = params
-        contentView.findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
+        contentView.btn_cancel.setOnClickListener(this)
+        contentView.ed_search.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                onReturnListener?.onSearch(this, v.text.toString())
+                return@OnEditorActionListener true
+            }
+            false
+        })
+        contentView.ed_search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                onReturnListener?.onSearch(instance, s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
     }
 
     override fun onClick(v: View) {
@@ -93,11 +114,16 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
         popupWindow.dismiss()
     }
 
+   fun getAdapter():ChooseCoinListAdapter{
+       return adapter
+   }
+
     interface OnReturnListener<T> {
         fun onReturn(window: ChooseCoinControllerWindow<T>, item: T)
+        fun onSearch(window: ChooseCoinControllerWindow<T>,searchKey: String?)
     }
 
-    private inner class ChooseCoinListAdapter(protected var context: Context, data: List<T>?) : BaseAdapter() {
+    inner class ChooseCoinListAdapter(protected var context: Context, data: List<T>?) : BaseAdapter() {
         protected var inflater: LayoutInflater = LayoutInflater.from(context)
         private var data: List<T>
 
