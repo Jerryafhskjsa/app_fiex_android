@@ -7,6 +7,7 @@ import android.os.HandlerThread
 import android.os.Process
 import android.text.TextUtils
 import android.util.Pair
+import com.black.base.activity.BaseActivity
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
@@ -496,43 +497,51 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         })
     }
 
-    fun getKLineDataFiex(){
-        var kLineData = ArrayList<Kline?>()
-        CommonApiServiceHelper.getHistoryKline(
-            context,
-            "BTC_USDT",
-            "15m",
-            1500,
-            false,
-            object : Callback<HttpRequestResultDataList<Kline?>?>() {
-                override fun error(type: Int, error: Any) {
-                }
-
-                override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                        var items = returnData.data!!
-                        onKLineAllEnd = true
-                        if(items != null && items.size>0){
-                            var dataItem = ArrayList<KLineItem?>()
-                            for (i in items.indices){
-                                var klineItem = KLineItem()
-                                var temp = items[i]
-                                klineItem.a = temp?.a?.toDouble()!!
-                                klineItem.c = temp?.c?.toDouble()!!
-                                klineItem.h = temp?.h?.toDouble()!!
-                                klineItem.l = temp?.l?.toDouble()!!
-                                klineItem.o = temp?.o?.toDouble()!!
-                                klineItem.t = temp?.t?.div(1000)
-                                klineItem.v = temp?.v?.toDouble()!!
-                                dataItem?.add(klineItem)
-                            }
-                            onKLineModelListener!!.onKLineDataAll(dataItem)
+    fun getKLineDataFiex(timeStep:String?,kLinePage: Int,startTime:Long,endTime:Long){
+        currentPairStatus.pair?.let {
+            if (timeStep != null) {
+                CommonApiServiceHelper.getHistoryKline(
+                    context,
+                    it,
+                    timeStep,
+                    1500,
+                    true,
+                    startTime,
+                    endTime,
+                    object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                        override fun error(type: Int, error: Any) {
                         }
-                    } else {
+                        override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                var items = returnData.data!!
+                                onKLineAllEnd = true
+                                if(items != null && items.size>0){
+                                    var dataItem = ArrayList<KLineItem?>()
+                                    for (i in items.indices){
+                                        var klineItem = KLineItem()
+                                        var temp = items[i]
+                                        klineItem.a = temp?.a?.toDouble()!!
+                                        klineItem.c = temp?.c?.toDouble()!!
+                                        klineItem.h = temp?.h?.toDouble()!!
+                                        klineItem.l = temp?.l?.toDouble()!!
+                                        klineItem.o = temp?.o?.toDouble()!!
+                                        klineItem.t = temp?.t?.div(1000)
+                                        klineItem.v = temp?.v?.toDouble()!!
+                                        dataItem?.add(klineItem)
+                                    }
+                                    if(kLinePage == 0){
+                                        onKLineModelListener!!.onKLineDataAll(dataItem)
+                                    }else{
+                                        onKLineModelListener!!.onKLineDataMore(kLinePage, dataItem)
+                                    }
+                                }
+                            } else {
 
-                    }
-                }
-            })
+                            }
+                        }
+                    })
+            }
+        }
     }
 
     fun toggleDearPair(isDearPair: Boolean) {

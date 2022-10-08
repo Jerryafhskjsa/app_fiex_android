@@ -16,7 +16,9 @@ interface CommonApiService {
     @GET(UrlConfig.Config.URL_KLINE_HISTORY)
     fun getHistoryKline(@Query("symbol") symbol: String?,
                         @Query("interval") interval: String?,
-                        @Query("limit") limit: Int?): Observable<HttpRequestResultDataList<Kline?>?>?
+                        @Query("limit") limit: Int?,
+                        @Query("startTime") startTime:Long,
+                        @Query("endTime") endTime:Long): Observable<HttpRequestResultDataList<Kline?>?>?
 
     @GET(UrlConfig.Config.URL_UPDATE)
     fun checkUpdate(@Query("platform") platform: String?): Observable<HttpRequestResultData<Update?>?>?

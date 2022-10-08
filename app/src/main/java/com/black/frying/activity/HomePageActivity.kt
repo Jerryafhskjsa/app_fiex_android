@@ -274,15 +274,15 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     override fun openFragment(fragmentClass: Class<*>?, fragmentIndex: Int, extras: Bundle?) {
         if (fragmentIndex != -1) {
             tabHost!!.currentTab = fragmentIndex
-            if (HomePageTransactionFragment::class.java.isAssignableFrom(fragmentClass!!)) {
+            if (HomePageTransactionFragmentFiex::class.java.isAssignableFrom(fragmentClass!!)) {
                 transactionIndex = extras?.getInt(ConstData.TRANSACTION_INDEX, -1) ?: -1
                 transactionTabType = extras?.getInt(ConstData.TRANSACTION_TYPE, -1) ?: -1
                 if (transactionIndex == 1 || transactionIndex == 2) {
                     val tabName = tabs[fragmentIndex]!!.tabName
-                    val homePageTransactionFragment = supportFragmentManager.findFragmentByTag(tabs[fragmentIndex]!!.tabName) as HomePageTransactionFragment?
-                    if (homePageTransactionFragment != null) {
-                        homePageTransactionFragment.setTransactionType(transactionIndex)
-                        homePageTransactionFragment.setTransactionTabType(transactionTabType)
+                    val homePageTransactionFragmentFiex = supportFragmentManager.findFragmentByTag(tabs[fragmentIndex]!!.tabName) as HomePageTransactionFragmentFiex?
+                    if (homePageTransactionFragmentFiex != null) {
+                        homePageTransactionFragmentFiex.setTransactionType(transactionIndex)
+                        homePageTransactionFragmentFiex.setTransactionTabType(transactionTabType)
                     } else {
                         transactionExtras.putInt(ConstData.TRANSACTION_INDEX, transactionIndex)
                         transactionExtras.putInt(ConstData.TRANSACTION_TYPE, transactionTabType)

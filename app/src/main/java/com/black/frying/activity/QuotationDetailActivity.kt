@@ -83,6 +83,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var binding: ActivityQuotationDetailBinding? = null
     private var viewModel: QuotationDetailViewModel? = null
     private var deepBinding: QuotationDetailDeepViewBinding? = null
+    private var kLinePage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +128,14 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         selectKTab(binding?.analyticChart?.getTimeStep())
         binding?.analyticChart?.setAnalyticChartHelper(object : AnalyticChartHelper {
             override fun onLoadMore(page: Int) {
-                viewModel?.listenKLineDataMore(page)
+//                viewModel?.listenKLineDataMore(page)
+                var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*
+                        100
+                ) ?: 0) * (page)
+                var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+                startTime = Math.max(startTime, 1567296000)
+                endTime = Math.max(endTime, 1567296000)
+                viewModel?.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),page,startTime,endTime)
             }
 
         })
@@ -238,7 +246,13 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         viewModel!!.getAllOrder()
         viewModel!!.getQuotationDeals()
 //        listenKLineData()
-        viewModel!!.getKLineDataFiex()
+        var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*
+            100
+        ) ?: 0) * (kLinePage)
+        var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+        startTime = Math.max(startTime, 1567296000)
+        endTime = Math.max(endTime, 1567296000)
+        viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
 
     }
 
@@ -385,6 +399,13 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         if (binding?.analyticChart?.getTimeStep() != timeStep) {
             binding?.analyticChart?.setTimeStep(timeStep)
             listenKLineData()
+            var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(
+                1000*100
+            ) ?: 0) * kLinePage
+            var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+            startTime = Math.max(startTime, 1567296000)
+            endTime = Math.max(endTime, 1567296000)
+            viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
         }
     }
 

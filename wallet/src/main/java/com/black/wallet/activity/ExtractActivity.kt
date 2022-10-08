@@ -1,6 +1,7 @@
 package com.black.wallet.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -45,6 +46,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     private var coinInfoReal: CoinInfo? = null
     private var coinChain:String? = null
     private var chainNames:ArrayList<String>? = null
+    private var address:String? = null
     protected var memoNeeded = false
 
     private var binding: ActivityExtractBinding? = null
@@ -180,6 +182,14 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == ConstData.WALLET_ADDRESS_MANAGE && resultCode == Activity.RESULT_OK) {
+            address = data?.getStringExtra(ConstData.WALLET_WITHDRAW_ADDRESS)
+            binding?.extractAddress?.text = address
+        }
+    }
+
 
     private fun doSubmit(){
             val userInfo = CookieUtil.getUserInfo(mContext)

@@ -165,6 +165,7 @@ class AnalyticChart : SkinCompatView {
     private var minTime: kotlin.Long = 0
 
     private val isHideSub = false //是否隐藏副图
+    private var currentKlinePage = 0
 
     //正在显示的节点
     private var showingKLineChartItemList: MutableList<KLineChartItem?>? = null
@@ -647,7 +648,8 @@ class AnalyticChart : SkinCompatView {
                 postInvalidate()
             } else { //通知加载更多
                 if (analyticChartHelper != null && lastPage > 0) {
-                    analyticChartHelper?.onLoadMore(lastPage + 1)
+                    currentKlinePage = lastPage + 1
+                    analyticChartHelper?.onLoadMore(currentKlinePage)
                 }
             }
         } else if (dx > 0) {
@@ -1936,6 +1938,10 @@ class AnalyticChart : SkinCompatView {
         return timeStep
     }
 
+    fun getCurrentKlinePage():Int{
+        return currentKlinePage
+    }
+
     private fun clearChart() {
         data = Data()
         refreshShowData(true)
@@ -2289,11 +2295,26 @@ class AnalyticChart : SkinCompatView {
         fun onLoadMore(page: Int)
     }
 
+    fun getTimeStepRequestStr():String?{
+        var str:String? = "15m"
+        when(timeStep.text.toString()){
+            context.getString(R.string.min_1) -> str = "1m"
+            context.getString(R.string.min_15) -> str = "15m"
+            context.getString(R.string.min_30) -> str = "30m"
+            context.getString(R.string.hour_1) -> str = "1h"
+            context.getString(R.string.hour_4) -> str = "4h"
+            context.getString(R.string.day_1) -> str = "1d"
+            context.getString(R.string.week_1) -> str = "1w"
+        }
+        return str
+    }
+
     class TimeStep constructor(internal var text: String, val apiText: String, val value: Long) {
 
         override fun toString(): String {
             return text
         }
+
 
         companion object {
             val NONE = TimeStep("", "1", 60)

@@ -24,13 +24,15 @@ object CommonApiServiceHelper {
         interval: String,
         limit: Int,
         isShowLoading: Boolean,
+        startTime:Long,
+        endTime:Long,
         callback: Callback<HttpRequestResultDataList<Kline?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context, true,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
-            ?.getHistoryKline(symbol,interval, limit)
+            ?.getHistoryKline(symbol,interval, limit,startTime,endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

@@ -225,6 +225,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         binding!!.fragmentHomePageTransactionHeader2.totalCurrent.setOnClickListener(this)
     }
 
+    private fun initView(){
+        clearInput()
+        refreshUsable()
+        refreshTransactionHardViews()
+        refreshSubmitButton()
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.tab_transaction_coin -> {
@@ -340,10 +347,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                     if (transactionType != 1) {
                         transactionType = 1
                         //                    refreshSeekBar();
-                        clearInput()
-                        refreshUsable()
-                        refreshTransactionHardViews()
-                        refreshSubmitButton()
+                       initView()
                     }
                 }
             }
@@ -354,10 +358,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                     if (transactionType != 2) {
                         transactionType = 2
                         //                    refreshSeekBar();
-                        clearInput()
-                        refreshUsable()
-                        refreshTransactionHardViews()
-                        refreshSubmitButton()
+                       initView()
                     }
                 }
             }

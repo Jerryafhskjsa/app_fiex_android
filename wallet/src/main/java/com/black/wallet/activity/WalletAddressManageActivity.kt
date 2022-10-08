@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActivity
+import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.adapter.interfaces.OnSwipeItemClickListener
 import com.black.base.api.WalletApiService
 import com.black.base.api.WalletApiServiceHelper
@@ -20,6 +21,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.WalletAddress
 import com.black.base.model.wallet.WalletWithdrawAddress
 import com.black.base.net.NormalObserver2
 import com.black.base.util.*
@@ -39,7 +41,7 @@ import skin.support.content.res.SkinCompatResources
 
 @Route(value = [RouterConstData.WALLET_ADDRESS_MANAGE])
 class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
-    AdapterView.OnItemClickListener {
+    OnItemClickListener {
     private var coinInfo: CoinInfo? = null
     private var coinType: String? = null
     private var coinChain: String? = null
@@ -62,6 +64,7 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
         binding?.recyclerView?.addItemDecoration(decoration)
         binding?.recyclerView?.addOnItemTouchListener(OnSwipeItemTouchListener(this))
         adapter = WalletAddressAdapter(this, BR.listItemWalletWtihdrawAddressModel, null)
+        adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -160,10 +163,10 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
             })
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        val address = adapter?.getItem(position)
+    override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
+        var walletAddr = adapter?.getItem(position) as WalletAddress
         val resultData = Intent()
-        resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, address)
+        resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, walletAddr.address)
         setResult(Activity.RESULT_OK, resultData)
         finish()
     }

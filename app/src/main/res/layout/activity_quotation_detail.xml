@@ -228,7 +228,6 @@
                         <!--android:layout_height="80dp"-->
                         <!--android:layout_gravity="center"-->
                         <!--android:src="@drawable/bg_kline_loading_ring" />-->
-
                         <!--<com.airbnb.lottie.LottieAnimationView-->
                         <!--android:id="@+id/loading_ring"-->
                         <!--android:layout_width="65dp"-->
