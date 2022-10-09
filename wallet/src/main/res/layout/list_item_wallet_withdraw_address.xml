@@ -33,7 +33,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
                 android:layout_toLeftOf="@+id/addr_delete"
-                android:src="@drawable/icon_edit"/>
+                android:src="@drawable/icon_edit" />
             <ImageView
                 android:id="@+id/addr_delete"
                 android:layout_width="24dp"

@@ -155,7 +155,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         listViewMap = HashMap(setSize)
         val viewPagerViews: MutableList<View> = ArrayList()
         for (i in 0 until setSize) {
-            val set = sets.get(i)
+            val set = sets[i]
             try {
                 val view = inflater.inflate(R.layout.list_view_add_empty, null) as FrameLayout
                 val listView = view.findViewById<ListView>(R.id.list_view)
@@ -346,8 +346,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         return type and 0xff00 == PairStatus.LEVER_DATA
     }
 
-    //初始化所有交易对
-//显示当前分组
+    //显示当前分组
     private fun showCurrentSet() {}
 
     private fun updatePairStatusData(value: ArrayList<PairStatus>) {

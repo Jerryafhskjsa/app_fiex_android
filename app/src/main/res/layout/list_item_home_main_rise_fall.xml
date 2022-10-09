@@ -28,12 +28,13 @@
                     android:textColor="@color/T1"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
+
                 <ImageView
-                    android:layout_toRightOf="@+id/pair_name"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/icon_hot"/>
+                    android:layout_toRightOf="@+id/pair_name"
+                    android:src="@drawable/icon_hot" />
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

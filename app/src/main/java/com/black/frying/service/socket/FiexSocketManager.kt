@@ -57,7 +57,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         mCcontext = context
         mHandler = handler
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-        var socketUrl = UrlConfig.getSocketHostFiex(context)+"/websocket"
+        var socketUrl = UrlConfig.getSocketHostFiex(context)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 5

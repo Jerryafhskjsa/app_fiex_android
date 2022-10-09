@@ -278,7 +278,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onCoinlistConfig(data: ArrayList<CoinInfoType?>?) {
-        Log.d("999999","colistListConfigSiz = "+data?.size)
     }
 
     override fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {

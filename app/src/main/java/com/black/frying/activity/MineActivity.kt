@@ -142,14 +142,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             }
             R.id.notifications -> BlackRouter.getInstance().build(RouterConstData.NOTIFICATION_LIST).go(mContext)
             R.id.server_setting -> {
-                //                LoadingDialog loadingDialog = FryingUtil.getLoadDialog(mContext, "");
-//                loadingDialog.show();
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        loadingDialog.dismiss();
-//                    }
-//                }, 5000);
                 DeepControllerWindow(mContext as Activity, getString(R.string.server_setting), currentServerConfig,
                         serverConfigs as List<FryingServerConfig?>?,
                         object : DeepControllerWindow.OnReturnListener<FryingServerConfig?> {
@@ -288,7 +280,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private fun displayCurrentServer() {
         val serverConfig = CommonUtil.getItemFromList(serverConfigs, UrlConfig.getIndex(mContext))
-        val currentServer = if (serverConfig == null) "" else serverConfig.title
+        val currentServer = serverConfig?.title ?: ""
         binding?.currentServer?.text = currentServer
     }
 

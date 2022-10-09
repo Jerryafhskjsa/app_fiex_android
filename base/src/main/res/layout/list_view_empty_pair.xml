@@ -44,10 +44,9 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_add_collect"
                 android:drawablePadding="8dp"
                 android:text="@string/add_collect"
-                android:textColor="@color/C1"
+                android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
         </LinearLayout>
