@@ -41,12 +41,12 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_quotation_main, container, false)
         StatusBarUtil.addStatusBarPadding(binding?.root)
         binding?.btnSearch?.setOnClickListener(this)
+        initQuotationGroup()
         return binding?.root
     }
 
     override fun onResume() {
         super.onResume()
-        initQuotationGroup()
     }
 
     override fun onDestroy() {

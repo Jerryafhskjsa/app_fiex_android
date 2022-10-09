@@ -107,6 +107,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
                 android:layout_above="@+id/bottom_divider_line">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -116,55 +117,63 @@
                         android:id="@+id/btn_transaction_memu"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:scaleType="centerInside"
                         android:src="@drawable/icon_home_trasaction_menu" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
                         android:orientation="horizontal">
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/action_bar_title"
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:clickable="true"
-                            android:includeFontPadding="false"
-                            android:text="Btc"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/pair_set_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:clickable="true"
-                            android:includeFontPadding="false"
-                            android:text="/usdt"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_12" />
+                            android:layout_height="wrap_content">
+
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/current_price_since"
+                                android:id="@+id/action_bar_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                                android:layout_gravity="center"
+                                android:clickable="true"
                                 android:includeFontPadding="false"
-                                android:background="@drawable/trans_raise_bg_corner"
-                                android:paddingLeft="8dp"
-                                android:paddingTop="3dp"
-                                android:paddingRight="8dp"
-                                android:paddingBottom="3dp"
-                                android:text="333.22%"
-                                android:layout_marginLeft="8dp"
-                                android:textColor="@color/T10"
+                                android:text="Btc"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/pair_set_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@+id/action_bar_title"
+                                android:layout_gravity="center"
+                                android:layout_toRightOf="@+id/action_bar_title"
+                                android:clickable="true"
+                                android:includeFontPadding="false"
+                                android:text="/usdt"
+                                android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_12" />
+                        </RelativeLayout>
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/current_price_since"
+                            android:layout_width="wrap_content"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/trans_raise_bg_corner"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="333.22%"
+                            android:textColor="@color/T10"
+                            android:textSize="@dimen/text_size_12" />
+
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     android:gravity="center_vertical">
                     <ImageView
@@ -190,6 +199,7 @@
                         android:src="@drawable/icon_transaction_more" />
                 </LinearLayout>
             </FrameLayout>
+
             <View
                 android:id="@+id/bottom_divider_line"
                 android:layout_width="match_parent"

@@ -72,12 +72,12 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
         binding?.sortRange?.setOnClickListener(this)
+        refreshSets()
         return binding?.root
     }
 
     override fun onResume() {
         super.onResume()
-        refreshSets()
         val currentFragment: Fragment? = CommonUtil.getItemFromList(fragmentList, binding?.setTab?.selectedTabPosition
                 ?: -1)
         if (currentFragment != null && currentFragment.isVisible) {
@@ -242,13 +242,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     companion object {
-        fun newInstance(tab: String?): HomePageQuotationDetailFragment {
-            val args = Bundle()
-            val fragment = HomePageQuotationDetailFragment()
-            fragment.arguments = args
-//            fragment.set = tab
-            return fragment
-        }
         fun newSelfInstance(tab: String?): HomePageQuotationFragment {
             val args = Bundle()
             val fragment = HomePageQuotationFragment()

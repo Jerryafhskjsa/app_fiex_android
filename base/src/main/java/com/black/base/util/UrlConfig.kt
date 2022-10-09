@@ -5,12 +5,13 @@ import com.black.util.CommonUtil
 
 object UrlConfig {
     private val HOSTS = arrayOf(
-            "http://fiex.io",//正式环境
             "http://fiex.matchain.info",//fiex测试环境
+            "https://fiex.io",//正式环境
+
     )
     val API_HOSTS = arrayOf(
-            "http://fiex.io/api/",//正式环境
-            "http://fiex.matchain.info/uc/",//fiex测试环境
+        "http://fiex.matchain.info",//fiex测试环境
+        "https://fiex.io",//正式环境
     )
 
     //    网站切换换成fbsex.top
@@ -25,9 +26,8 @@ object UrlConfig {
 
 
     private val SOCKET_HOSTS_FIEX = arrayOf(
-        "ws://183.222.16.76:8081",
-//        "ws://fiex.matchain.info/socket",
-        "http://fiex.io",//正式环境
+        "ws:fiex.matchain.info/socket",
+        "wss://fiex.io/socket",//正式环境
     )
 
     fun getIndex(context: Context): Int {
@@ -40,16 +40,16 @@ object UrlConfig {
 
     /***fiex***/
     var API_FIEX_UC = arrayOf(
-//        "http://fiex.io/uc/",//fiex uc
-        "http://fiex.matchain.info/uc/"
+        "http://fiex.matchain.info/uc/",
+        "https://fiex.io/uc"
     )
     var API_FIEX_PRO = arrayOf(
-//        "http://fiex.io/pro/",//fiex pro
-        "http://fiex.matchain.info/pro/"
+        "http://fiex.matchain.info/pro/",
+        "https://fiex.io/pro"
     )
     var API_FIEX_API = arrayOf(
-//        "http://fiex.io/api/",//fiex api
-        "http://fiex.matchain.info/api/"
+        "http://fiex.matchain.info/api/",
+        "https://fiex.io/api"
     )
 
     fun getUcHost(context: Context): String {

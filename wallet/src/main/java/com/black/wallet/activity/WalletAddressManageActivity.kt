@@ -3,6 +3,7 @@ package com.black.wallet.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
@@ -57,14 +58,23 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        val drawable = SkinCompatResources.getDrawable(this, R.drawable.divider_list_item_l1)
-        drawable.alpha = (0.6 * 255).toInt()
-        decoration.setDrawable(drawable)
-        binding?.recyclerView?.addItemDecoration(decoration)
-        binding?.recyclerView?.addOnItemTouchListener(OnSwipeItemTouchListener(this))
+//        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+//        val drawable = SkinCompatResources.getDrawable(this, R.drawable.divider_list_item_l1)
+//        drawable.alpha = (0.6 * 255).toInt()
+//        decoration.setDrawable(drawable)
+//        binding?.recyclerView?.addItemDecoration(decoration)
+//        binding?.recyclerView?.addOnItemTouchListener(OnSwipeItemTouchListener(this))
         adapter = WalletAddressAdapter(this, BR.listItemWalletWtihdrawAddressModel, null)
         adapter?.setOnItemClickListener(this)
+        adapter?.setOnSubViewClickListener(object :WalletAddressAdapter.OnSubviewHandleClickListener{
+            override fun onDelete(position: Int) {
+                Log.d("999999", "position = $position")
+            }
+
+            override fun onEdit(position: Int) {
+                Log.d("999999", "position = $position")
+            }
+        })
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -164,11 +174,13 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        var walletAddr = adapter?.getItem(position) as WalletAddress
-        val resultData = Intent()
-        resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, walletAddr.address)
-        setResult(Activity.RESULT_OK, resultData)
-        finish()
+        if(recyclerView != null){
+            var walletAddr = adapter?.getItem(position)
+            val resultData = Intent()
+            resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, walletAddr?.coinWallet)
+            setResult(Activity.RESULT_OK, resultData)
+            finish()
+        }
     }
 
     private val walletAddressList: Unit

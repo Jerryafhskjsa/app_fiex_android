@@ -963,10 +963,10 @@ object SocketDataContainer {
             return if (key == null || key.trim { it <= ' ' }.isEmpty()) {
                 gson.fromJson<ArrayList<PairStatus?>>(gson.toJson(pairDataList), object : TypeToken<ArrayList<PairStatus?>?>() {}.type)
             } else {
-                val realKey = key.toUpperCase(Locale.getDefault())
+                val realKey = key.uppercase(Locale.getDefault())
                 val result = ArrayList<PairStatus?>()
                 for (pairStatus in pairDataList) {
-                    val pair = pairStatus?.pair?.toUpperCase(Locale.getDefault())
+                    val pair = pairStatus?.pair?.uppercase(Locale.getDefault())
                     if (pair != null && pair.contains(realKey)) {
                         result.add(pairStatus)
                     }

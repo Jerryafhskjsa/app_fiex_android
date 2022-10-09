@@ -292,11 +292,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
                         }
                     }))
             R.id.btn_transaction_memu -> mContext?.let {
-                PairApiServiceHelper.getTradeSets(it, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
+                PairApiServiceHelper.getTradeSetsFiex(it, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
                     override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
-                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData.data)
+                            val sets = returnData.data
+                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, sets)
                                     .show(object : OnPairStatusSelectListener {
                                         override fun onPairStatusSelected(pairStatus: PairStatus?) {
                                             if (pairStatus == null) {

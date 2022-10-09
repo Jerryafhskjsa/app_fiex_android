@@ -707,6 +707,7 @@
     <string name="withdraw_amount_limit">24小时提币额度%1$s</string>
     <string name="addr_remark">请输入别名(选填)</string>
     <string name="addr_remark_des">地址别名</string>
+    <string name="price_amplitude">最新价/24h涨跌幅</string>
 
 
 
