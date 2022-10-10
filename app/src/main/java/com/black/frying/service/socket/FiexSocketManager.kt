@@ -3,6 +3,7 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
 import com.black.base.model.trade.TradeOrderDepth
@@ -10,6 +11,7 @@ import com.black.base.model.trade.TradeOrderOneDepth
 import com.black.base.util.*
 import com.black.net.HttpCookieUtil
 import com.black.net.websocket.*
+import com.black.util.CommonUtil
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -29,7 +31,12 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
     private var mCcontext:Context? = null
     private var mHandler:Handler? = null
-    private var currentPair:String? = null
+    var currentPair:String? = null
+
+    var kLineTimeStep: String? = null
+    var kLineTimeStepSecond: Long = 0
+    var kLineId: String? = null
+
     private var userSocketMgr:WebSocketManager
     private var tickerSocketMgr:WebSocketManager
     private var subStatusSocketMgr:WebSocketManager
@@ -45,7 +52,11 @@ class FiexSocketManager(context: Context, handler: Handler){
     //交易对k线相关
     private var pariKlineSocketListener:SocketListener = PairKlineListener(pairKlineKeys)
 
+
     private var listenerMap:HashMap<String,SocketListener> = HashMap()
+
+
+
 
     companion object{
         private const val userKeyS = "userStatus"
@@ -67,7 +78,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         tickerSocketMgr = WebSocketHandler.initGeneralWebSocket("wsTickets",socketSetting)
         addListener(userSocketMgr, userKeyS, userDataListener as SimpleListener)
         addListener(subStatusSocketMgr, subStatusKeys,subStatusSocketListener as SimpleListener)
-//        addListener(pairKlineMgr, pairKlineKeys,pariKlineSocketListener as SimpleListener)
+        addListener(pairKlineMgr, pairKlineKeys,pariKlineSocketListener as SimpleListener)
         addListener(tickerSocketMgr, tickerKeyS,tickerDataListener as SimpleListener)
     }
 
@@ -75,7 +86,7 @@ class FiexSocketManager(context: Context, handler: Handler){
     fun startConnect(){
         userSocketMgr.start()
         subStatusSocketMgr.start()
-//        pairKlineMgr.start()
+        pairKlineMgr.start()
         tickerSocketMgr.start()
     }
 
@@ -120,6 +131,9 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("userData", "$key onMessage = $message")
+            if(message.equals("succeed") || message.equals("invalid_ws_token")){
+                return
+            }
             var data:JSONObject? = null
             try {
                 data = JSONObject(message)
@@ -164,6 +178,9 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("tickerData", "$key onMessage = $message")
+            if(message.equals("succeed")){
+                return
+            }
             var data:JSONObject? = null
             try {
                 data = JSONObject(message)
@@ -172,6 +189,12 @@ class FiexSocketManager(context: Context, handler: Handler){
             }
             if(data != null){
                 Log.d("tickerData","resType = "+data.getString("resType"))
+                Log.d("tickerData","data = "+data.getString("data"))
+                var data = data.getString("data")
+                val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(data.toString(), object : TypeToken<PairQuotation?>() {}.type)
+                if(pairQuo != null){
+                    SocketDataContainer.getCurrentPairQuotation(mHandler,pairQuo)
+                }
             }
         }
     }
@@ -183,23 +206,51 @@ class FiexSocketManager(context: Context, handler: Handler){
         private var key = keyListener
         override fun onConnected() {
             Log.d("kline", "$key onConnected")
-            val jsonObject = JSONObject()
-            jsonObject.put("sub", "subKline")
-            jsonObject.put("symbol", currentPair)
-            jsonObject.put("type", "1m")
-            pairKlineMgr.send(jsonObject.toString())
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("kLine", "$key onMessage = $message")
-//            var data:JSONObject? = null
-//            try {
-//                data = JSONObject(message)
-//            }catch (e:JSONException){
-//                FryingUtil.printError(e)
-//            }
-//            if(data != null){
-//                Log.d("kLine","resType = "+data.getString("resType"))
-//            }
+            if(message.equals("succeed")){
+                return
+            }
+            CommonUtil.postHandleTask(mHandler) {
+                var data:JSONObject? = null
+                try {
+                    data = JSONObject(message)
+                }catch (e:JSONException){
+                    FryingUtil.printError(e)
+                }
+                if(data != null){
+                    Log.d("kLine","resType = "+data.getString("resType"))
+                    var resultData = data.getString("data")
+                    val newData = gson.fromJson<KLineItem>(resultData.toString(), object : TypeToken<KLineItem?>() {}.type)
+                    SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, newData)
+                }
+            }
+        }
+    }
+
+    fun startListenKLine(){
+        Log.d("99999", "startListenKline = $currentPair")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subKline")
+            jsonObject.put("symbol", currentPair)
+            jsonObject.put("type", kLineTimeStep)
+            pairKlineMgr.send(jsonObject.toString())
+        }catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    fun startListenPair(pair:String?){
+        Log.d("99999", "startListenPair = $pair")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subSymbol")
+            jsonObject.put("symbol", pair)
+            subStatusSocketMgr.send(jsonObject.toString())
+        }catch (e: Exception) {
+            FryingUtil.printError(e)
         }
     }
 
@@ -209,19 +260,12 @@ class FiexSocketManager(context: Context, handler: Handler){
     inner class SubStatusDataListener(keyListener: String):SimpleListener(){
         private var key = keyListener
         override fun onConnected() {
-            currentPair?.let { setPair() }
         }
-        private fun setPair() {
-            currentPair
-            Log.d("subStatus", "$key onConnected")
-            val jsonObject2 = JSONObject()
-            jsonObject2.put("sub", "subSymbol")
-            jsonObject2.put("symbol", currentPair)
-            subStatusSocketMgr.send(jsonObject2.toString())
-        }
-
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d("subStatus", "$key onMessage = $message")
+            if(message.equals("succeed")){
+                return
+            }
             var data:JSONObject? = null
             try {
                 data = JSONObject(message)
@@ -260,7 +304,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                         }
                         //当前交易对24小时行情
                         "qStatus" ->{
-                            val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(jsonObject.toString(), object : TypeToken<PairQuotation??>() {}.type)
+                            val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(jsonObject.toString(), object : TypeToken<PairQuotation?>() {}.type)
                             if(pairQuo != null){
                                 SocketDataContainer.getCurrentPairQuotation(mHandler,pairQuo)
                             }

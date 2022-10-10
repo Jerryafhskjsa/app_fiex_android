@@ -686,6 +686,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
             binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
             binding!!.actionBarLayout.pairSetName.setText("/"+viewModel!!.getSetName())
+            binding!!.fragmentHomePageTransactionHeader1.deepPriceP.text =  getString(R.string.brackets,viewModel!!.getSetName())
+            binding!!.fragmentHomePageTransactionHeader1.deepAmountName.text =  getString(R.string.brackets,viewModel!!.getCoinType())
             if (transactionType == 1) {
                 binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
@@ -840,7 +842,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     override fun onPairQuotation(pairQuo: PairQuotation) {
-
+        updatePriceSince(pairQuo.r)
     }
 
     override fun onPairStatusInit(pairStatus: PairStatus) {
@@ -1087,9 +1089,30 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
         binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
-        binding!!.actionBarLayout.currentPriceSince.setText(pairStatus.priceChangeSinceTodayFormat)
-        binding!!.actionBarLayout.currentPriceSince.setTextColor(color)
         computePriceCNY()
+    }
+
+    //更新涨跌幅
+    private fun updatePriceSince(since:String?){
+        var since = since?.toDouble()
+        var background: Drawable?
+        var color: Int?
+        if (since != null) {
+            if(since > 0){//涨
+                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                color = mContext?.getColor(R.color.T10)
+            }else if(since < 0){
+                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                color = mContext?.getColor(R.color.T9)
+            }else{
+                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                color = mContext?.getColor(R.color.B3)
+            }
+            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            binding!!.actionBarLayout.currentPriceSince.setText(result)
+            binding!!.actionBarLayout.currentPriceSince.background = background
+            binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
+        }
     }
 
     private fun intoChatRoom(chatRoomId: String?) {

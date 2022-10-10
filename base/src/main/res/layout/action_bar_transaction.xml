@@ -165,7 +165,7 @@
                             android:includeFontPadding="false"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:text="333.22%"
+                            android:text="0.00%"
                             android:textColor="@color/T10"
                             android:textSize="@dimen/text_size_12" />
 

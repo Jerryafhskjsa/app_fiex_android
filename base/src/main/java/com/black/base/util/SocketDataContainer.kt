@@ -75,7 +75,9 @@ object SocketDataContainer {
     /***fiex***/
     private val orderDepthDataList = ArrayList<QuotationOrderNew?>()
     private val currentPairDeal = PairDeal()
+    //交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
+    //交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
     /***fiex***/
     //成交
@@ -421,7 +423,7 @@ object SocketDataContainer {
      * @param price
      * @return
      */
-    fun computeUSDTPriceCNY(usdtPrice: Double?, price: C2CPrice?): Double? {
+    private fun computeUSDTPriceCNY(usdtPrice: Double?, price: C2CPrice?): Double? {
         return if (price?.sell == null || usdtPrice == null) null else usdtPrice * price.sell!!
     }
 

@@ -26,7 +26,7 @@ object UrlConfig {
 
 
     private val SOCKET_HOSTS_FIEX = arrayOf(
-        "ws:fiex.matchain.info/socket",
+//        "ws:fiex.matchain.info/socket",
         "wss://fiex.io/socket",//正式环境
     )
 
