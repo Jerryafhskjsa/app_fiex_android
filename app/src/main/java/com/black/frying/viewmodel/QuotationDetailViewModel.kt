@@ -355,12 +355,11 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         }
     }
 
-    fun listenKLineData(timeStep: AnalyticChart.TimeStep) {
+    fun listenKLineData(analyticChart: AnalyticChart) {
         kLineId = System.nanoTime().toString()
         onKLineAllEnd = false
         val bundle = Bundle()
-        bundle.putString("timeStep", timeStep.apiText)
-        bundle.putLong("timeStepSecond", timeStep.value)
+        bundle.putString("timeStep", analyticChart.getTimeStepRequestStr())
         bundle.putString("kLineId", kLineId)
         //进行延时请求，数据无法及时返回
         socketHandler?.run {
@@ -510,6 +509,9 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                     endTime,
                     object : Callback<HttpRequestResultDataList<Kline?>?>() {
                         override fun error(type: Int, error: Any) {
+                            if(kLinePage != 0){
+                                onKLineModelListener!!.onKLineLoadingMore()
+                            }
                         }
                         override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
@@ -535,8 +537,10 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                                         onKLineModelListener!!.onKLineDataMore(kLinePage, dataItem)
                                     }
                                 }
-                            } else {
-
+                            }else{
+                                if(kLinePage != 0){
+                                    onKLineModelListener!!.onKLineLoadingMore()
+                                }
                             }
                         }
                     })
@@ -639,6 +643,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onKLineDataAll(items: ArrayList<KLineItem?>)
         fun onKLineDataAdd(item: KLineItem)
         fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>)
+        fun onKLineLoadingMore()//判断是否正在加载更多
 
         fun onTradeOrder(currentPrice: Double, bidOrderList: ArrayList<TradeOrder?>, askOrderList: ArrayList<TradeOrder?>)
         fun onDeal(dealData: ArrayList<TradeOrder?>?)

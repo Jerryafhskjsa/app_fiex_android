@@ -495,7 +495,7 @@
             android:layout_height="match_parent"
             android:layout_weight="145"
             android:orientation="vertical">
-            amountSixty            <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.black.base.widget.SpanTextView
@@ -533,18 +533,19 @@
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12"
                     />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/deep_amount_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/deep_amount"
-                    android:layout_alignParentRight="true"
-                    android:includeFontPadding="false"
-                    android:maxLines="1"
-                    android:paddingTop="4dp"
-                    android:text="(Eth)"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep_amount_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deep_amount"
+                android:layout_alignParentRight="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingTop="4dp"
+                android:text="(Eth)"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"

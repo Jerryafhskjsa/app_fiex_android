@@ -39,10 +39,12 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         } else {
             viewHolder?.totalCny?.setText("****")
         }
-        Glide.with(context)
-            .load(Uri.parse(wallet?.coinIconUrl))
-            .apply(RequestOptions().error(R.drawable.icon_coin_default))
-            .into(viewHolder?.iconCoin!!)
+        if(wallet?.coinIconUrl != null){
+            Glide.with(context)
+                .load(Uri.parse(wallet?.coinIconUrl))
+                .apply(RequestOptions().error(R.drawable.icon_coin_default))
+                .into(viewHolder?.iconCoin!!)
+        }
     }
 
     fun setVisibility(isVisibility: Boolean) {

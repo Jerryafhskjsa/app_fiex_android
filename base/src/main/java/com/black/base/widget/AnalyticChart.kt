@@ -30,6 +30,7 @@ import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 import skin.support.widget.SkinCompatView
 import java.util.*
+import kotlin.math.abs
 
 
 class AnalyticChart : SkinCompatView {
@@ -166,6 +167,7 @@ class AnalyticChart : SkinCompatView {
 
     private val isHideSub = false //是否隐藏副图
     private var currentKlinePage = 0
+    private var isLoadingMore = false
 
     //正在显示的节点
     private var showingKLineChartItemList: MutableList<KLineChartItem?>? = null
@@ -414,6 +416,10 @@ class AnalyticChart : SkinCompatView {
         }
     }
 
+    fun setLoadingMore(loading:Boolean){
+        this.isLoadingMore = loading
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
@@ -629,8 +635,8 @@ class AnalyticChart : SkinCompatView {
 
     //模拟滚动界面 dx < 0 向右滑； dx > 0 向左滑；
     private fun imitateScroll(dx: Float) {
-        var scrollCount = (Math.abs(dx) / itemWidth).toInt()
-        val exd = Math.abs(dx) % itemWidth
+        var scrollCount = (abs(dx) / itemWidth).toInt()
+        val exd = abs(dx) % itemWidth
         scrollCount = if (exd >= itemWidth / 2) scrollCount + 1 else scrollCount
         if (dx < 0) {
             if (showFirstIndex > 0) {
@@ -648,8 +654,10 @@ class AnalyticChart : SkinCompatView {
                 postInvalidate()
             } else { //通知加载更多
                 if (analyticChartHelper != null && lastPage > 0) {
-                    currentKlinePage = lastPage + 1
-                    analyticChartHelper?.onLoadMore(currentKlinePage)
+                    if(!isLoadingMore){
+                        currentKlinePage = lastPage + 1
+                        analyticChartHelper?.onLoadMore(currentKlinePage)
+                    }
                 }
             }
         } else if (dx > 0) {

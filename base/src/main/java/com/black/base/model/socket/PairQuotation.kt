@@ -8,6 +8,6 @@ class PairQuotation {
     var l: String? = null//low 最低价
     var a: String? = null//amount 成交量
     var v:String? = null//volume 成交额
-    var ch:String? = null//change 涨跌幅
+    var r:String? = null//change 涨跌幅
     var t:Long? = null//时间戳
 }

@@ -33,6 +33,24 @@ class SocketService : Service() {
     private val receiver = SocketCommandBroadcastReceiver()
     private val mHandler = Handler(Handler.Callback { msg ->
         when (msg.what) {
+            //交易对变更
+            SocketUtil.COMMAND_PAIR_CHANGED -> {
+                var pair: String? = null
+                if (msg.obj is Bundle) {
+                    pair = (msg.obj as Bundle).getString(ConstData.PAIR)
+                }
+                fiexSocketManager?.currentPair = mContext?.let { SocketUtil.getCurrentPair(it) }
+                fiexSocketManager?.startListenPair(pair)
+            }
+            //k线时间段变更
+            SocketUtil.COMMAND_KTAB_CHANGED -> {
+                if (msg.obj is Bundle) {
+                    fiexSocketManager?.kLineTimeStep = (msg.obj as Bundle).getString("timeStep")
+                    fiexSocketManager?.kLineTimeStepSecond = (msg.obj as Bundle).getLong("timeStepSecond")
+                    fiexSocketManager?.kLineId = (msg.obj as Bundle).getString("kLineId")
+                }
+                fiexSocketManager?.startListenKLine()
+            }
             SocketUtil.COMMAND_RECEIVE, SocketUtil.COMMAND_RESUME -> {
                 qSocket?.startListenQuotationAllConnect()
                 qSocket?.startListenQuotationConnect()
@@ -45,23 +63,8 @@ class SocketService : Service() {
                 factionSocket?.stop()
                 pushSocket?.stop()
             }
-            SocketUtil.COMMAND_PAIR_CHANGED -> {
-                var pair: String? = null
-                if (msg.obj is Bundle) {
-                    pair = (msg.obj as Bundle).getString(ConstData.PAIR)
-                }
-                qSocket?.startListenQuotationNewConnect(pair)
-            }
             SocketUtil.COMMAND_USER_LOGIN -> uSocket?.startListenUserNewConnect()
             SocketUtil.COMMAND_USER_LOGOUT -> uSocket?.startListenUserDisconnect()
-            SocketUtil.COMMAND_KTAB_CHANGED -> {
-                if (msg.obj is Bundle) {
-                    qSocket?.kLineTimeStep = (msg.obj as Bundle).getString("timeStep")
-                    qSocket?.kLineTimeStepSecond = (msg.obj as Bundle).getLong("timeStepSecond")
-                    qSocket?.kLineId = (msg.obj as Bundle).getString("kLineId")
-                }
-                qSocket?.startListenKLine()
-            }
             SocketUtil.COMMAND_K_LOAD_MORE -> {
                 var kLinePage = -1
                 if (msg.obj is Bundle) {
@@ -115,6 +118,7 @@ class SocketService : Service() {
     private val currentPair: String? = null
 
 
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -133,6 +137,10 @@ class SocketService : Service() {
             }
             if (socketServerHandler == null) {
                 socketServerHandler = Handler(handlerThread?.looper)
+            }
+
+            if(fiexSocketManager == null){
+                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
             }
             if (qSocket == null) {
                 qSocket = QuotationSocket(mContext!!, socketServerHandler!!)

@@ -135,6 +135,9 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                 var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
                 startTime = Math.max(startTime, 1567296000)
                 endTime = Math.max(endTime, 1567296000)
+                if(page > 1){
+                    binding?.analyticChart?.setLoadingMore(true)
+                }
                 viewModel?.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),page,startTime,endTime)
             }
 
@@ -250,8 +253,8 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             100
         ) ?: 0) * (kLinePage)
         var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
-        startTime = Math.max(startTime, 1567296000)
-        endTime = Math.max(endTime, 1567296000)
+        startTime = startTime.coerceAtLeast(1567296000)
+        endTime = endTime.coerceAtLeast(1567296000)
         viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
 
     }
@@ -433,17 +436,28 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun onKLineDataAll(items: ArrayList<KLineItem?>) {
         binding?.loadingLayout?.visibility = View.GONE
-        refreshKLineChart(items)
+        if(items.isNotEmpty()){
+            refreshKLineChart(items)
+        }
     }
 
     override fun onKLineDataAdd(item: KLineItem) {
-        binding?.analyticChart?.addData(item)
-        binding?.analyticChart?.postInvalidate()
+        if(item != null){
+            binding?.analyticChart?.addData(item)
+            binding?.analyticChart?.postInvalidate()
+        }
     }
 
     override fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>) {
-        binding?.analyticChart?.addDataList(kLinePage, items)
-        binding?.analyticChart?.postInvalidate()
+        binding?.analyticChart?.setLoadingMore(false)
+        if(items.isNotEmpty()){
+            binding?.analyticChart?.addDataList(kLinePage, items)
+            binding?.analyticChart?.postInvalidate()
+        }
+    }
+
+    override fun onKLineLoadingMore() {
+        binding?.analyticChart?.setLoadingMore(false)
     }
 
     override fun onPairChanged(pair: String?) {
@@ -587,7 +601,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     private fun listenKLineData() {
         binding?.loadingLayout?.visibility = View.VISIBLE
-        viewModel!!.listenKLineData(binding?.analyticChart?.getTimeStep()!!)
+        binding?.analyticChart?.let { viewModel!!.listenKLineData(it!!) }
     }
 
     private fun checkAndShowChatRoomButton() {
