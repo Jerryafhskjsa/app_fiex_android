@@ -35,6 +35,14 @@ object SocketUtil {
     private const val SAVE_USER_MINING = 5
     private const val SAVE_USER_ORDER = 6
     private const val SAVE_USER_WALLET = 6
+
+    const val WS_TYPE = "fiex_ws_type"
+
+    const val WS_USER = "fiex_wsUser"
+    const val WS_SUBSTATUS = "fiex_wsSubStatus"
+    const val WS_PAIR_KLINE = "fiex_wsPairKline"
+    const val WS_TICKETS = "fiex_wsTickets"
+
     const val ACTION_SOCKET_COMMAND = "com.bioko.exchange.socket.command"
     const val SOCKET_COMMAND = "socket_command"
     const val SOCKET_COMMAND_EXTRAS = "socket_command_extras"
@@ -62,7 +70,8 @@ object SocketUtil {
     const val COMMAND_LEVER_DETAIL_START = 21 //监听杠杆详情
     const val COMMAND_LEVER_DETAIL_FINISH = 22 //停止监听杠杆详情
     /***fiex***/
-    const val COMMAND_CURRENT_PAIR_QUOTA = 100//开始监听当前交易对委托行情
+    const val COMMAND_REMOVE_SOCKET_LISTENER = 100//结束socket监听
+    const val COMMAND_ADD_SOCKET_LISTENER = 101//开始socket监听
     /***fiex***/
     //上次保存数据时间记录
     private val lastSaveTimeMap = SparseArray<Long>()
@@ -748,7 +757,6 @@ object SocketUtil {
     //按照价格进行合并委托，只要前N条数据
     fun mergeQuotationOrder(data: List<TradeOrder>?, pair: String?, direction: String?, precision: Int, maxSize: Int): List<TradeOrder>? {
         var precision = precision
-        Log.d("888888", "precision = $precision")
         var maxSize = maxSize
         if (data == null || data.isEmpty() || TextUtils.isEmpty(pair) || TextUtils.isEmpty(direction)) {
             return null
@@ -763,14 +771,10 @@ object SocketUtil {
             val tradeOrder = data[i]
             if (pair.equals(tradeOrder.pair, ignoreCase = true) && TextUtils.equals(direction, tradeOrder.orderType)) {
                 val priceString = tradeOrder.priceString
-                Log.d("888888", "priceString = $priceString")
                 var price = CommonUtil.parseBigDecimal(priceString)
-                Log.d("888888", "price = $price")
                 price = price?.setScale(precision, if ("ASK".equals(direction, ignoreCase = true)) BigDecimal.ROUND_UP else BigDecimal.ROUND_DOWN)
                 //                String formattedPrice = price == null ? null : price.setScale(precision, "ASK".equalsIgnoreCase(direction) ? BigDecimal.ROUND_UP : BigDecimal.ROUND_DOWN).toString();
-                Log.d("888888", "price1 = $price")
                 val formattedPrice = NumberUtil.formatNumberNoGroup(price, precision, precision)
-                Log.d("888888", "formattedPrice = $formattedPrice")
                 val lastFormattedPrice = lastOrder?.formattedPrice
                 if (formattedPrice == null) {
                     continue
@@ -1023,20 +1027,11 @@ object SocketUtil {
     }
 
     //发送数据更新通知
-//发送数据更新通知
     @JvmOverloads
     fun sendSocketCommandBroadcast(context: Context?, type: Int, bundle: Bundle? = null) {
         if (context == null) {
             return
         }
-        //        Intent intent = new Intent();
-//        intent.setAction(ACTION_SOCKET_COMMAND);
-//        intent.setPackage(context.getPackageName());
-//        intent.putExtra(SOCKET_COMMAND, type);
-//        if (bundle != null && !bundle.isEmpty()) {
-//            intent.putExtra(SocketUtil.SOCKET_COMMAND_EXTRAS, bundle);
-//        }
-//        context.sendBroadcast(intent);
         sendSocketCommandObservable(type, bundle)
     }
 
@@ -1071,20 +1066,5 @@ object SocketUtil {
                 observer.onNext(message)
             }
         }
-//        Observable.just(message)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(Schedulers.io())
-//                .subscribe(object : SuccessObserver<Message?>() {
-//                    override fun onSuccess(value: Message?) {
-//                        if (value == null) {
-//                            return
-//                        }
-//                        synchronized(commandObservers) {
-//                            for (observer in commandObservers) {
-//                                observer.onNext(value)
-//                            }
-//                        }
-//                    }
-//                })
     }
 }

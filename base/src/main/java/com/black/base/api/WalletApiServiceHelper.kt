@@ -219,9 +219,9 @@ object WalletApiServiceHelper {
                 walletCallback.callback(resultData)
             }
         }
-        getWalletList(context, null)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, walletCallback))
+//        getWalletList(context, null)
+//                ?.compose(RxJavaHelper.observeOnMainThread())
+//                ?.subscribe(HttpCallbackSimple(context, isShowLoading, walletCallback))
     }
 
     //按类型全部资产
@@ -242,9 +242,9 @@ object WalletApiServiceHelper {
                 observer.onNext(resultData)
             }
         }
-        getWalletList(context, null)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(observer)
+//        getWalletList(context, null)
+//                ?.compose(RxJavaHelper.observeOnMainThread())
+//                ?.subscribe(observer)
     }
 
     //按类型获取普通资产  type 3 现货 4 杠杆 不传全部
@@ -263,20 +263,20 @@ object WalletApiServiceHelper {
             }
         }
         callback.run()
-        getWalletList(context, type)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<WalletConfig?>?>() {
-                    override fun error(type: Int, error: Any) {
-                        errorCallback?.error(type, error)
-                    }
-                    override fun callback(returnData: HttpRequestResultData<WalletConfig?>?) {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            callback.run()
-                        } else {
-                            errorCallback?.error(ConstData.ERROR_NORMAL, returnData?.message)
-                        }
-                    }
-                }))
+//        getWalletList(context, type)
+//                ?.compose(RxJavaHelper.observeOnMainThread())
+//                ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<WalletConfig?>?>() {
+//                    override fun error(type: Int, error: Any) {
+//                        errorCallback?.error(type, error)
+//                    }
+//                    override fun callback(returnData: HttpRequestResultData<WalletConfig?>?) {
+//                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                            callback.run()
+//                        } else {
+//                            errorCallback?.error(ConstData.ERROR_NORMAL, returnData?.message)
+//                        }
+//                    }
+//                }))
     }
 
     //获取普通资产

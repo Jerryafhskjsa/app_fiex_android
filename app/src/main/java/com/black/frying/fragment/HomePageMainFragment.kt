@@ -88,7 +88,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
             override fun onRefresh() {
                 viewModel!!.getAllBanner()
                 viewModel!!.getMiddleBanner()
-                viewModel!!.computeTotalAmount()
+//                viewModel!!.computeTotalAmount()
                 viewModel!!.getNoticeInfo()
                 viewModel!!.getHotPairs()
                 binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
@@ -191,7 +191,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
         if (checkRadio != null) {
             checkRadio!!.isChecked = true
         }
-        viewModel!!.computeTotalAmount()
+//        viewModel!!.computeTotalAmount()
     }
 
     override fun onPause() {
@@ -611,7 +611,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
 
     private fun refreshUserInfo() {
         if (isVisible) {
-            viewModel!!.computeTotalAmount()
+//            viewModel!!.computeTotalAmount()
         }
     }
 

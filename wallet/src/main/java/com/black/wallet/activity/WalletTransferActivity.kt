@@ -78,7 +78,7 @@ class WalletTransferActivity : BaseActionBarActivity(), View.OnClickListener {
 
         onCoinTypeChanged()
         onTypeChanged()
-        getAllWallet()
+//        getAllWallet()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -146,7 +146,7 @@ class WalletTransferActivity : BaseActionBarActivity(), View.OnClickListener {
                             override fun callback(returnData: HttpRequestResultString?) {
                                 if (returnData?.code != null && returnData.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                                     FryingUtil.showToast(mContext, "划转成功")
-                                    getAllWallet()
+//                                    getAllWallet()
                                     getWalletLeverDetail(true)
                                 } else {
                                     FryingUtil.showToast(mContext, if (returnData?.msg == null) "null" else returnData.msg)
@@ -382,6 +382,6 @@ class WalletTransferActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun onUserInfoChanged() {
-        getAllWallet()
+//        getAllWallet()
     }
 }

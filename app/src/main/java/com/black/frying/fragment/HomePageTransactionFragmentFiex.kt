@@ -27,10 +27,8 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.*
 import com.black.base.model.socket.*
-import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
-import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
@@ -41,7 +39,6 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
-import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.view.TransactionDeepViewBinding
 import com.black.frying.view.TransactionDeepViewBinding.OnTransactionDeepListener
 import com.black.frying.view.TransactionMorePopup
@@ -68,9 +65,16 @@ import kotlin.math.pow
 
 //交易
 @Route(value = [RouterConstData.TRANSACTION], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 2)
-class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, OnSeekBarChangeListener, EntrustCurrentHomeAdapter.OnHandleClickListener, OnItemClickListener, OnTransactionMoreClickListener, OnTransactionModelListener, OnTransactionDeepListener {
+class HomePageTransactionFragmentFiex : BaseFragment(),
+    View.OnClickListener,
+    OnSeekBarChangeListener,
+    EntrustCurrentHomeAdapter.OnHandleClickListener,
+    OnItemClickListener,
+    OnTransactionMoreClickListener,
+    OnTransactionModelListener,
+    OnTransactionDeepListener {
     companion object {
-        private const val TAG = "TransFragmentFiex"
+        private var TAG = HomePageTransactionFragmentFiex::class.java.simpleName
     }
 
     private var colorWin = 0
@@ -144,7 +148,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
 
         initHeader1()
         initHeader2()
-        //点击查看全部委托
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -402,8 +405,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         binding?.actionBarLayout?.leverLayout?.visibility = if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
         viewModel!!.setTabType(tabType)
         viewModel!!.changePairSocket()
-        viewModel!!.startListenLeverDetail()
-        viewModel!!.getWalletLeverDetail()
         adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetPriceLength()
         resetAmountLength()
@@ -414,8 +415,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     override fun onPairDeal(value: PairDeal) {
-        binding?.fragmentHomePageTransactionHeader1?.currentPrice?.text = value.p
-        binding?.fragmentHomePageTransactionHeader1?.currentPriceCny?.text = value.p
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            binding?.fragmentHomePageTransactionHeader1?.currentPrice?.text = value.p
+            binding?.fragmentHomePageTransactionHeader1?.currentPriceCny?.text = value.p
+        }
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -636,8 +639,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
         }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
-        viewModel!!.startListenLeverDetail()
-        viewModel!!.getWalletLeverDetail()
         adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetPriceLength()
         resetAmountLength()
@@ -842,7 +843,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     override fun onPairQuotation(pairQuo: PairQuotation) {
-        updatePriceSince(pairQuo.r)
+        CommonUtil.checkActivityAndRunOnUI(mContext) { updatePriceSince(pairQuo.r) }
     }
 
     override fun onPairStatusInit(pairStatus: PairStatus) {
@@ -870,7 +871,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(), View.OnClickListener, On
     }
 
     override fun onPairStatusDataChanged(pairStatus: PairStatus) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) { updateCurrentPair(pairStatus) }
+//        CommonUtil.checkActivityAndRunOnUI(mContext) { updateCurrentPair(pairStatus) }
     }
 
     //用户信息被修改，刷新委托信息和钱包

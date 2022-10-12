@@ -244,7 +244,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         viewModel!!.getTradePairInfo()
         viewModel!!.getChatRoomId()
         deepBinding!!.initList()
-        viewModel!!.checkDearPair()
+//        viewModel!!.checkDearPair()
         viewModel!!.onResume()
         viewModel!!.getAllOrder()
         viewModel!!.getQuotationDeals()
