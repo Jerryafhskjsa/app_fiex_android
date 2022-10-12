@@ -76,7 +76,11 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
             for (i in 0 until setSize) {
                 val set = tabSets!![i]
                 try {
-                    (fragmentList as ArrayList<HomePageQuotationFragment?>)?.add(HomePageQuotationFragment.newSelfInstance(set))
+                    when(i){
+                        0 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        1,2,3 ->fragmentList?.add(EmptyFragment())
+                    }
+
                 } catch (throwable: Throwable) {
                     FryingUtil.printError(throwable)
                 }

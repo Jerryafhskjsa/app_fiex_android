@@ -95,7 +95,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
         if (TextUtils.equals(set, collect)) {
-            SocketDataContainer.refreshDearPairs(mContext)
+//            SocketDataContainer.refreshDearPairs(mContext)
         }
     }
 

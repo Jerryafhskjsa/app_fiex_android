@@ -47,6 +47,7 @@ import java.util.*
 
 class FryingApplication : BaseApplication() {
     companion object {
+        private var tag = FryingApplication::class.java.simpleName
         private const val GO_BACK_TIME_OUT = 60 * 1000.toLong()
         private const val APP_ID = "vetZwzol" //创蓝活体
         private const val APP_KEY = "YsuR9CdK" //创蓝活体
@@ -144,11 +145,10 @@ class FryingApplication : BaseApplication() {
             override fun onActivityResumed(activity: Activity) {
                 MobclickAgent.onResume(activity)
                 currentActivity = activity
-                //                if (FryingUtil.checkActivityRouter(activity, RouterConstData.HOME_PAGE)) {
-//                    //主界面停止时 开启监听行情，挂单
-//                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_QUOTA_OPEN);
-//                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_ORDER_OPEN);
-//                }
+                Log.d(tag, "onActivityResumed->isAppOnForeground = $isAppOnForeground")
+                if(isAppOnForeground){
+                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_RESUME)
+                }
             }
 
             override fun onActivityPaused(activity: Activity) {
@@ -162,8 +162,12 @@ class FryingApplication : BaseApplication() {
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_QUOTA_CLOSE);
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_ORDER_CLOSE);
 //                }
+                Log.d(tag, "onActivityStopped->isAppOnForeground = $isAppOnForeground")
                 if (!isAppOnForeground && FryingUtil.needShowProtectActivity(activity)) { //记录当前退回后台时间
                     goBackTime = System.currentTimeMillis()
+                }
+                if(!isAppOnForeground){
+                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_STOP)
                 }
             }
 

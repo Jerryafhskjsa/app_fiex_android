@@ -66,7 +66,7 @@ import skin.support.content.res.SkinCompatResources
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
     companion object {
         private const val STATUS_PAGE_COUNT = 2
-        private const val TAG = "HomePageMainFragment"
+        private var TAG = HomePageMainFragment::class.java.simpleName
     }
 
     private var userInfo: UserInfo? = null
@@ -118,18 +118,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.noticeTextView.setTextStillTime(3000)//设置停留时长间隔
         binding!!.noticeTextView.setAnimTime(300)//设置进入和退出的时间间隔
 
-        binding!!.statusViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-            }
-        })
-
         binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 homeTabTyoe = tab.position
@@ -178,7 +166,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         super.onResume()
         userInfo = if (activity == null) null else CookieUtil.getUserInfo(activity!!)
         binding!!.noticeTextView.startAutoScroll()
-        viewModel!!.computeTotalAmount()
+//        viewModel!!.computeTotalAmount()
     }
 
     override fun onPause() {
@@ -451,12 +439,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             CookieUtil.setCurrentPair(it, pairStatus.pair)
             sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).go(it)
-        }
-    }
-
-    private fun refreshUserInfo() {
-        if (isVisible) {
-            viewModel!!.computeTotalAmount()
         }
     }
 

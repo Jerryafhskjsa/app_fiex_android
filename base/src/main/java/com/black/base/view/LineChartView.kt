@@ -34,10 +34,8 @@ class LineChartView : View {
     }
 
     constructor(context: Context?) : super(context) {
-        Log.d("LineChartView","constructor")
     }
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        Log.d("LineChartView","constructor111")
         this.xdata = emptyArray()
         this.ydata = floatArrayOf()
         this.linedata = floatArrayOf()
@@ -45,10 +43,6 @@ class LineChartView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        Log.d("LineChartView","onDraw")
-        Log.d("LineChartView","xdata.size = "+xdata.size)
-        Log.d("LineChartView","ydata.size = "+ydata.size)
-        Log.d("LineChartView","linedata.size = "+linedata.size)
         if (xdata.isNotEmpty() && ydata.isNotEmpty() && linedata.isNotEmpty() && xdata.size >= linedata.size) {
             if (yMaxdata() >= lineMaxdata()) {
                 drawAxis(canvas)

@@ -23,6 +23,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.frying.service.socket.FiexSocketManager
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -52,12 +53,15 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
+
+    //深度变化
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
+    //用户相关
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
-    private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
-    private var leverDetailObserver: Observer<WalletLeverDetail?>? = createLeverDetailObserver()
+    //行情涨跌幅变化
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
+    //当前交易对所有用户成交数据
     private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
 
 
@@ -95,25 +99,35 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
 
-        if (userLeverObserver == null) {
-            userLeverObserver = createUserLeverObserver()
-        }
-        SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
-
         if(pairQuotationObserver != null){
            pairQuotationObserver = createPairQuotationObserver()
         }
         SocketDataContainer.subscribePairQuotationObservable(pairQuotationObserver)
 
-        startListenLeverDetail()
-        getWalletLeverDetail()
+        val bundle = Bundle()
+        bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle)
+        val bundle1 = Bundle()
+        bundle1.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle1)
+        val bundle2 = Bundle()
+        bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle2)
         initPairStatus()
         changePairSocket()
-        checkLeverPairConfig()
     }
 
     override fun onStop() {
         super.onStop()
+        val bundle = Bundle()
+        bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle)
+        val bundle1 = Bundle()
+        bundle1.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle1)
+        val bundle2 = Bundle()
+        bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle2)
         if (orderObserver != null) {
             SocketDataContainer.removeOrderObservable(orderObserver)
         }
@@ -123,12 +137,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
-        if (userLeverObserver != null) {
-            SocketDataContainer.removeUserLeverObservable(userLeverObserver)
-        }
-        if (leverDetailObserver != null) {
-            SocketDataContainer.removeUserLeverDetailObservable(leverDetailObserver)
-        }
+
         if(pairQuotationObserver != null){
             SocketDataContainer.removePairQuotationObservable(pairQuotationObserver)
         }
@@ -144,19 +153,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             handlerThread!!.quit()
         }
     }
-
-    fun startListenLeverDetail() {
-        if (tabType == ConstData.TAB_LEVER) {
-            if (leverDetailObserver == null) {
-                leverDetailObserver = createLeverDetailObserver()
-            }
-            SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
-            val bundle = Bundle()
-            bundle.putString(ConstData.PAIR, currentPairStatus.pair)
-            SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
-        }
-    }
-
 
     private fun createPairDealObserver(): Observer<PairDeal?> {
         return object : SuccessObserver<PairDeal?>() {
@@ -242,16 +238,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             override fun onSuccess(value: Pair<String?, TradeOrderPairList?>) {
                 if (TextUtils.equals(currentPairStatus.pair, value.first) && value.second != null && onTransactionModelListener != null) {
                     sortTradeOrder(value.first, value.second)
-                }
-            }
-        }
-    }
-
-    private fun createLeverDetailObserver(): Observer<WalletLeverDetail?>? {
-        return object : SuccessObserver<WalletLeverDetail?>() {
-            override fun onSuccess(value: WalletLeverDetail?) {
-                if (value != null && TextUtils.equals(value.pair, currentPairStatus.pair)) {
-                    onTransactionModelListener?.onWalletLeverDetail(value)
                 }
             }
         }
@@ -646,29 +632,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_PAIR_CHANGED, bundle)
     }
 
-    fun getWalletLeverDetail() {
-        if (tabType == ConstData.TAB_LEVER) {
-            if (CookieUtil.getUserInfo(context) == null) {
-                onTransactionModelListener?.onWalletLeverDetail(null)
-            } else {
-                currentPairStatus.pair?.run {
-                    SocketDataContainer.getWalletLeverDetail(context, currentPairStatus.pair, true)
-                            ?.compose(RxJavaHelper.observeOnMainThread())
-                            ?.subscribe(HttpCallbackSimple(context, false, object : NormalCallback<WalletLeverDetail>(context) {
-                                override fun error(type: Int, error: Any?) {
-                                    onTransactionModelListener?.onWalletLeverDetail(null)
-                                }
-
-                                override fun callback(returnData: WalletLeverDetail?) {
-                                    onTransactionModelListener?.onWalletLeverDetail(returnData)
-                                }
-
-                            }))
-                }
-            }
-        }
-    }
-
     interface OnTransactionModelListener {
         /**
          * 24小时行情
@@ -694,6 +657,11 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
          */
         fun onTradeOrder(pair: String?, bidOrderList: List<TradeOrder?>?, askOrderList: List<TradeOrder?>?)
 
+        /**
+         * 当前交易对成交
+         */
+        fun onPairDeal(value:PairDeal)
+
         fun onTradePairInfo(pairStatus: PairStatus?)
 
         fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
@@ -705,6 +673,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
         fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
 
-        fun onPairDeal(value:PairDeal)
+
     }
 }

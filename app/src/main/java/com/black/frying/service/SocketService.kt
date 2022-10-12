@@ -15,6 +15,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.SocketDataContainer
 import com.black.base.util.SocketUtil
 import com.black.frying.service.socket.*
+import com.black.net.websocket.WebSocketHandler
 import com.google.gson.Gson
 import io.reactivex.Observer
 
@@ -33,6 +34,22 @@ class SocketService : Service() {
     private val receiver = SocketCommandBroadcastReceiver()
     private val mHandler = Handler(Handler.Callback { msg ->
         when (msg.what) {
+            //移除socket监听
+            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER ->{
+                var socketType: String? = null
+                if (msg.obj is Bundle) {
+                    socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
+                }
+                fiexSocketManager?.removeListener(socketType)
+            }
+            //添加socket监听
+            SocketUtil.COMMAND_ADD_SOCKET_LISTENER ->{
+                var socketType: String? = null
+                if (msg.obj is Bundle) {
+                    socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
+                }
+                fiexSocketManager?.addListener(socketType)
+            }
             //交易对变更
             SocketUtil.COMMAND_PAIR_CHANGED -> {
                 var pair: String? = null
@@ -40,7 +57,7 @@ class SocketService : Service() {
                     pair = (msg.obj as Bundle).getString(ConstData.PAIR)
                 }
                 fiexSocketManager?.currentPair = mContext?.let { SocketUtil.getCurrentPair(it) }
-                fiexSocketManager?.startListenPair(pair)
+//                fiexSocketManager?.startListenPair(pair)
             }
             //k线时间段变更
             SocketUtil.COMMAND_KTAB_CHANGED -> {
@@ -52,16 +69,10 @@ class SocketService : Service() {
                 fiexSocketManager?.startListenKLine()
             }
             SocketUtil.COMMAND_RECEIVE, SocketUtil.COMMAND_RESUME -> {
-                qSocket?.startListenQuotationAllConnect()
-                qSocket?.startListenQuotationConnect()
-                uSocket?.startListenUserNewConnect()
-                qSocket?.startListenQuotationNewConnect(qSocket?.currentPair)
+               fiexSocketManager?.startConnectAll()
             }
             SocketUtil.COMMAND_PAUSE, SocketUtil.COMMAND_STOP -> {
-                qSocket?.stop()
-                uSocket?.stop()
-                factionSocket?.stop()
-                pushSocket?.stop()
+                fiexSocketManager?.stopConnectAll()
             }
             SocketUtil.COMMAND_USER_LOGIN -> uSocket?.startListenUserNewConnect()
             SocketUtil.COMMAND_USER_LOGOUT -> uSocket?.startListenUserDisconnect()
@@ -141,27 +152,25 @@ class SocketService : Service() {
 
             if(fiexSocketManager == null){
                 fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
+//                fiexSocketManager?.startConnect()
             }
             if (qSocket == null) {
-                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
+//                qSocket = QuotationSocket(mContext!!, socketServerHandler!!)
 //                qSocket?.start()
             }
             if (uSocket == null) {
-                uSocket = UserSocket(mContext!!, socketServerHandler!!)
+//                uSocket = UserSocket(mContext!!, socketServerHandler!!)
 //                uSocket?.start()
             }
             if (factionSocket == null) {
-                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
+//                factionSocket = FactionSocket(mContext!!, socketServerHandler!!)
 //                factionSocket?.start()
             }
             if (pushSocket == null) {
-                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
+//                pushSocket = PushSocket(mContext!!, socketServerHandler!!)
 //                pushSocket?.start()
             }
-            if(fiexSocketManager == null){
-                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
-                fiexSocketManager?.startConnect()
-            }
+
             if (observer == null) {
                 observer = createCommandObserver()
             }
@@ -216,6 +225,7 @@ class SocketService : Service() {
         }
         stopForeground(true)
     }
+
 
     private fun createErrorNotification() {
         val notification: Notification

@@ -40,16 +40,16 @@ object UrlConfig {
 
     /***fiex***/
     var API_FIEX_UC = arrayOf(
-        "http://fiex.matchain.info/uc/",
-        "https://fiex.io/uc"
+//        "http://fiex.matchain.info/uc/",
+        "https://fiex.io/uc/"
     )
     var API_FIEX_PRO = arrayOf(
-        "http://fiex.matchain.info/pro/",
-        "https://fiex.io/pro"
+//        "http://fiex.matchain.info/pro/",
+        "https://fiex.io/pro/"
     )
     var API_FIEX_API = arrayOf(
-        "http://fiex.matchain.info/api/",
-        "https://fiex.io/api"
+//        "http://fiex.matchain.info/api/",
+        "https://fiex.io/api/"
     )
 
     fun getUcHost(context: Context): String {

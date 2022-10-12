@@ -63,34 +63,25 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         tabHost = findViewById(android.R.id.tabhost)
         tabHost?.setup(this, supportFragmentManager, R.id.home_content)
         tabHost?.tabWidget?.setDividerDrawable(R.color.transparent)
-        //        tabHost.addTab(tabHost.newTabSpec("simple").setIndicator("Simple"),
-//                HomePageMainFragment.class, null);
-//        tabHost.addTab(tabHost.newTabSpec("contacts").setIndicator("Contacts"),
-//                HomePageTransactionFragment.class, null);
-//        tabHost.addTab(tabHost.newTabSpec("custom").setIndicator("Custom"),
-//                HomePageWalletFragment.class, null);
-//        tabHost.addTab(tabHost.newTabSpec("throttle").setIndicator("Throttle"),
-//                HomePageMineFragment.class, null);
-//        tabs[0] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragment::class.java)
         tabs[ConstData.TAB_HOME] = HomeTab(getString(R.string.home_tab_main), R.drawable.home_tab_main, HomePageMainFragmentFiex::class.java)
         tabs[ConstData.TAB_QUOTATION] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
 //        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
         tabs[ConstData.TAB_TRANSATION] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
-        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageMoneyFragment::class.java)
+        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, EmptyFragment::class.java)
         tabs[ConstData.TAB_ASSET] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
             val indicator = View.inflate(applicationContext, R.layout.home_page_tab_indicator, null)
             //            View indicator = layoutInflater.inflate(R.layout.home_page_tab_indicator, null);
             val iconView = indicator.findViewById<ImageView>(R.id.icon)
-            val tv_indicator = indicator.findViewById<TextView>(R.id.tv_indicator)
+            val tvIndicator = indicator.findViewById<TextView>(R.id.tv_indicator)
             iconView.setImageResource(tab.topIconId)
             //            Drawable drawable = SkinCompatResources.getDrawable(this, tab.topIconId);
 //
 //            tv_indicator.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            tv_indicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.home_tab_text_color))
-            tv_indicator.text = tab.tabName
-            tab.setIndicatorTextView(tv_indicator)
+            tvIndicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.home_tab_text_color))
+            tvIndicator.text = tab.tabName
+            tab.setIndicatorTextView(tvIndicator)
             val tabSpec = tabHost?.newTabSpec(tab.tabName)?.setIndicator(indicator)
             if (i == 2) {
                 tabSpec?.let { tabHost?.addTab(it, tab.fragmentClass, transactionExtras) }
@@ -295,13 +286,13 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     //当已经打开了的fragment在换肤过程中，部分元素不能够切换资源，需要手动调用
     fun resetSkinResources() {
         val mainFragment = supportFragmentManager.findFragmentByTag(tabs[0]!!.tabName) as HomePageMainFragmentFiex?
-        mainFragment?.resetSkinResources()
+//        mainFragment?.resetSkinResources()
         val quotationFragment = supportFragmentManager.findFragmentByTag(tabs[1]!!.tabName) as HomePageQuotationFragmentMain?
 //        quotationFragment?.resetSkinResources()
         val transactionFragment = supportFragmentManager.findFragmentByTag(tabs[2]!!.tabName) as HomePageTransactionFragmentFiex?
 //        transactionFragment?.resetSkinResources()
-        val moneyFragment = supportFragmentManager.findFragmentByTag(tabs[3]!!.tabName) as HomePageMoneyFragment?
-        moneyFragment?.resetSkinResources()
+//        val moneyFragment = supportFragmentManager.findFragmentByTag(tabs[3]!!.tabName) as HomePageMoneyFragment?
+//        moneyFragment?.resetSkinResources()
     }
 
     private fun checkUpdate(silent: Boolean) {

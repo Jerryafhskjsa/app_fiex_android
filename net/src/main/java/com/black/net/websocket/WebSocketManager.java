@@ -65,7 +65,7 @@ public class WebSocketManager {
         if (mWebSocket == null) {
             mWebSocket = new WebSocketWrapper(this.mSetting, mSocketWrapperListener);
         }
-        start();
+//        start();
     }
 
     /**

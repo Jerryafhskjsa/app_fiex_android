@@ -16,12 +16,11 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.channels.ticker
 import org.json.JSONException
 import org.json.JSONObject
 
 class FiexSocketManager(context: Context, handler: Handler){
-
+    private var tag: String = FiexSocketManager::class.java.simpleName
     private var gson: Gson = Gson()
         get() {
             if (field == null) {
@@ -37,100 +36,219 @@ class FiexSocketManager(context: Context, handler: Handler){
     var kLineTimeStepSecond: Long = 0
     var kLineId: String? = null
 
-    private var userSocketMgr:WebSocketManager
-    private var tickerSocketMgr:WebSocketManager
-    private var subStatusSocketMgr:WebSocketManager
-    private var pairKlineMgr:WebSocketManager
+//    private var userSocketMgr:WebSocketManager
+//    private var tickerSocketMgr:WebSocketManager
+//    private var subStatusSocketMgr:WebSocketManager
+//    private var pairKlineMgr:WebSocketManager
 
-    private var socketSetting:WebSocketSetting
+    private lateinit var socketSetting:WebSocketSetting
     //用户数据相关
-    private var userDataListener:SocketListener = UserDataListener(userKeyS)
+    private var userDataListener:SocketListener = UserDataListener()
     //所有币种行情相关
-    private var tickerDataListener:SocketListener = TickerStatusListener(tickerKeyS)
+    private var tickerDataListener:SocketListener = TickerStatusListener()
     //交易对行情相关
-    private var subStatusSocketListener:SocketListener = SubStatusDataListener(subStatusKeys)
+    private var subStatusSocketListener:SocketListener = SubStatusDataListener()
     //交易对k线相关
-    private var pariKlineSocketListener:SocketListener = PairKlineListener(pairKlineKeys)
-
-
-    private var listenerMap:HashMap<String,SocketListener> = HashMap()
+    private var pairKlineSocketListener:SocketListener = PairKlineListener()
 
 
 
 
-    companion object{
-        private const val userKeyS = "userStatus"
-        private const val tickerKeyS = "tickerStatus"
-        private const val subStatusKeys = "subStatus"
-        private const val pairKlineKeys = "pairKline"
-    }
     init {
         mCcontext = context
         mHandler = handler
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-        var socketUrl = UrlConfig.getSocketHostFiex(context)
+        initSocketManager(mCcontext)
+        addListenerAll()
+        startConnectAll()
+//        startConnect(SocketUtil.WS_SUBSTATUS)
+    }
+
+    private fun initSocketManager(context:Context?){
+        var socketUrl = UrlConfig.getSocketHostFiex(context!!)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
-        socketSetting.connectionLostTimeout = 5
-        userSocketMgr = WebSocketHandler.initGeneralWebSocket("wsUser",socketSetting)
-        subStatusSocketMgr = WebSocketHandler.initGeneralWebSocket("wsSubStatus",socketSetting)
-        pairKlineMgr = WebSocketHandler.initGeneralWebSocket("wsPairKline",socketSetting)
-        tickerSocketMgr = WebSocketHandler.initGeneralWebSocket("wsTickets",socketSetting)
-        addListener(userSocketMgr, userKeyS, userDataListener as SimpleListener)
-        addListener(subStatusSocketMgr, subStatusKeys,subStatusSocketListener as SimpleListener)
-        addListener(pairKlineMgr, pairKlineKeys,pariKlineSocketListener as SimpleListener)
-        addListener(tickerSocketMgr, tickerKeyS,tickerDataListener as SimpleListener)
+        socketSetting.connectionLostTimeout = 5//心跳间隔时间
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_USER,socketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_SUBSTATUS,socketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE,socketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS,socketSetting)
     }
 
 
-    fun startConnect(){
-        userSocketMgr.start()
-        subStatusSocketMgr.start()
-        pairKlineMgr.start()
-        tickerSocketMgr.start()
+    fun startConnect(socketName:String?){
+        WebSocketHandler.getWebSocket(socketName)?.start()
     }
 
-    fun stopConnect(){
-        userSocketMgr.disConnect()
-        subStatusSocketMgr.disConnect()
-        pairKlineMgr.disConnect()
-        tickerSocketMgr.disConnect()
-    }
-
-    fun destorySocket(){
-        userSocketMgr.destroy()
-        subStatusSocketMgr.destroy()
-        pairKlineMgr.destroy()
-        tickerSocketMgr.destroy()
-    }
-
-    private fun addListener(socketMgr:WebSocketManager,keyListener:String, listener: SimpleListener){
-        if(listenerMap.containsKey(keyListener)){
-            return
+    fun startConnectAll(){
+        var socketMap = WebSocketHandler.getAllWebSocket()
+        addListenerAll()
+        socketMap.forEach{
+            it.value.start()
         }
-        socketMgr.addListener(listener)
-        listenerMap[keyListener] = listener
     }
 
-    fun removeListener(socketMgr:WebSocketManager,keyListener: String){
-        var listener: SocketListener? = listenerMap[keyListener]
-        socketMgr.removeListener(listener)
+    fun stopConnect(socketName:String?){
+        WebSocketHandler.getWebSocket(socketName)?.disConnect()
+    }
+    fun stopConnectAll(){
+        removeListenerAll()
+        var socketMap = WebSocketHandler.getAllWebSocket()
+        socketMap.forEach{
+            it.value.disConnect()
+        }
+    }
+
+    fun destorySocketAll(){
+        var socketMap = WebSocketHandler.getAllWebSocket()
+        socketMap.forEach{
+            it.value.destroy()
+        }
+    }
+
+    fun addListener(socketKey:String?){
+        var socketMar = WebSocketHandler.getWebSocket(socketKey)
+        if(socketMar != null){
+            var listener:SocketListener? = null
+            when(socketKey){
+                SocketUtil.WS_USER ->{
+                    listener = userDataListener
+                }
+                SocketUtil.WS_SUBSTATUS ->{
+                    listener = subStatusSocketListener
+                }
+                SocketUtil.WS_TICKETS ->{
+                    listener = tickerDataListener
+                }
+                SocketUtil.WS_PAIR_KLINE ->{
+                    listener = pairKlineSocketListener
+                }
+            }
+            socketMar.addListener(listener)
+        }
+    }
+
+    fun removeListener(socketKey: String?) {
+        var listener: SocketListener? = null
+        when (socketKey) {
+            SocketUtil.WS_USER -> {
+                listener = userDataListener
+            }
+            SocketUtil.WS_SUBSTATUS -> {
+                listener = subStatusSocketListener
+            }
+            SocketUtil.WS_TICKETS -> {
+                listener = tickerDataListener
+            }
+            SocketUtil.WS_PAIR_KLINE -> {
+                listener = pairKlineSocketListener
+            }
+        }
+        WebSocketHandler.getWebSocket(socketKey)?.removeListener(listener)
+    }
+    fun removeListenerAll(){
+        var socketMgrList = WebSocketHandler.getAllWebSocket()
+        var listener: SocketListener? = null
+            socketMgrList.forEach{
+                when(it.key){
+                    SocketUtil.WS_USER -> {
+                        listener = userDataListener
+                    }
+                    SocketUtil.WS_SUBSTATUS -> {
+                        listener = subStatusSocketListener
+                    }
+                    SocketUtil.WS_TICKETS -> {
+                        listener = tickerDataListener
+                    }
+                    SocketUtil.WS_PAIR_KLINE -> {
+                        listener = pairKlineSocketListener
+                    }
+                }
+                it.value.removeListener(listener)
+            }
+    }
+
+    fun addListenerAll(){
+        var socketMgrList = WebSocketHandler.getAllWebSocket()
+        var listener: SocketListener? = null
+        socketMgrList.forEach{
+            when(it.key){
+                SocketUtil.WS_USER -> {
+                    listener = userDataListener
+                }
+                SocketUtil.WS_SUBSTATUS -> {
+                    listener = subStatusSocketListener
+                }
+                SocketUtil.WS_TICKETS -> {
+                    listener = tickerDataListener
+                }
+                SocketUtil.WS_PAIR_KLINE -> {
+                    listener = pairKlineSocketListener
+                }
+            }
+            it.value.addListener(listener)
+        }
+    }
+
+    fun startListenKLine(){
+        currentPair = SocketUtil.getCurrentPair(mCcontext!!)
+        Log.d(tag, "startListenKline = $currentPair")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subKline")
+            jsonObject.put("symbol", currentPair)
+            jsonObject.put("type", kLineTimeStep)
+            WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE).send(jsonObject.toString())
+        }catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    fun startListenPair(pair:String?){
+        Log.d(tag, "startListenPair = $pair")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subSymbol")
+            jsonObject.put("symbol", pair)
+            WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)?.send(jsonObject.toString())
+        }catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    fun startListenUser(){
+        Log.d(tag, "startListenUser")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subUser")
+            jsonObject.put("token",HttpCookieUtil.getWsToken(mCcontext))
+            WebSocketHandler.getWebSocket(SocketUtil.WS_USER)?.send(jsonObject.toString())
+        }catch (e:Exception){
+            FryingUtil.printError(e)
+        }
+    }
+
+    fun startListenTickers(){
+        Log.d(tag, "startListenTickers")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subStats")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS).send(jsonObject.toString())
+        }catch (e:Exception){
+            FryingUtil.printError(e)
+        }
     }
 
     /**
      * 用户相关
      */
-    inner class UserDataListener(keyListener: String):SimpleListener(){
-        private var key = keyListener
+    inner class UserDataListener():SimpleListener(){
         override fun onConnected() {
-            Log.d("userData", "$key onConnected")
-            val jsonObject = JSONObject()
-            jsonObject.put("sub", "subUser")
-            jsonObject.put("token",HttpCookieUtil.getWsToken(mCcontext))
-            userSocketMgr.send(jsonObject.toString())
+            Log.d(tag, "UserDataListener onConnected")
+            startListenUser()
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d("userData", "$key onMessage = $message")
+            Log.d(tag, "UserDataListener onMessage = $message")
             if(message.equals("succeed") || message.equals("invalid_ws_token")){
                 return
             }
@@ -160,7 +278,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                 FryingUtil.printError(e)
             }
             if(data != null){
-                Log.d("userData","resType = "+data.getString("resType"))
+                Log.d(tag,"userData->resType = "+data.getString("resType"))
             }
         }
     }
@@ -168,16 +286,13 @@ class FiexSocketManager(context: Context, handler: Handler){
     /**
      * 行情相关
      */
-    inner class TickerStatusListener(keyListener: String):SimpleListener(){
-        private var key = keyListener
+    inner class TickerStatusListener():SimpleListener(){
         override fun onConnected() {
-            Log.d("tickerData", "$key onConnected")
-            val jsonObject = JSONObject()
-            jsonObject.put("sub", "subStats")
-            tickerSocketMgr.send(jsonObject.toString())
+            Log.d(tag, "tickerStatus onConnected")
+            startListenTickers()
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d("tickerData", "$key onMessage = $message")
+            Log.d(tag, "tickerStatus->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -188,8 +303,8 @@ class FiexSocketManager(context: Context, handler: Handler){
                 FryingUtil.printError(e)
             }
             if(data != null){
-                Log.d("tickerData","resType = "+data.getString("resType"))
-                Log.d("tickerData","data = "+data.getString("data"))
+                Log.d(tag,"tickerStatus->resType = "+data.getString("resType"))
+                Log.d(tag,"tickerStatus->data = "+data.getString("data"))
                 var data = data.getString("data")
                 val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(data.toString(), object : TypeToken<PairQuotation?>() {}.type)
                 if(pairQuo != null){
@@ -202,13 +317,13 @@ class FiexSocketManager(context: Context, handler: Handler){
     /**
      * k线相关
      */
-    inner class PairKlineListener(keyListener: String):SimpleListener(){
-        private var key = keyListener
+    inner class PairKlineListener():SimpleListener(){
         override fun onConnected() {
-            Log.d("kline", "$key onConnected")
+            Log.d(tag, "PairKline onConnected")
+            startListenKLine()
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d("kLine", "$key onMessage = $message")
+            Log.d(tag, "PairKline->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -220,7 +335,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                     FryingUtil.printError(e)
                 }
                 if(data != null){
-                    Log.d("kLine","resType = "+data.getString("resType"))
+                    Log.d(tag,"PairKline->resType = "+data.getString("resType"))
                     var resultData = data.getString("data")
                     val newData = gson.fromJson<KLineItem>(resultData.toString(), object : TypeToken<KLineItem?>() {}.type)
                     SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, newData)
@@ -229,40 +344,17 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
     }
 
-    fun startListenKLine(){
-        Log.d("99999", "startListenKline = $currentPair")
-        try {
-            val jsonObject = JSONObject()
-            jsonObject.put("sub", "subKline")
-            jsonObject.put("symbol", currentPair)
-            jsonObject.put("type", kLineTimeStep)
-            pairKlineMgr.send(jsonObject.toString())
-        }catch (e: Exception) {
-            FryingUtil.printError(e)
-        }
-    }
-
-    fun startListenPair(pair:String?){
-        Log.d("99999", "startListenPair = $pair")
-        try {
-            val jsonObject = JSONObject()
-            jsonObject.put("sub", "subSymbol")
-            jsonObject.put("symbol", pair)
-            subStatusSocketMgr.send(jsonObject.toString())
-        }catch (e: Exception) {
-            FryingUtil.printError(e)
-        }
-    }
-
     /**
      * 交易对相关
      */
-    inner class SubStatusDataListener(keyListener: String):SimpleListener(){
-        private var key = keyListener
+    inner class SubStatusDataListener():SimpleListener(){
         override fun onConnected() {
+            Log.d(tag, "SubStatusDataListener onConnected")
+            currentPair = SocketUtil.getCurrentPair(mCcontext!!)
+            startListenPair(currentPair)
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d("subStatus", "$key onMessage = $message")
+            Log.d(tag, "subStatus->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -320,6 +412,4 @@ class FiexSocketManager(context: Context, handler: Handler){
             }
         }
     }
-
-
 }
