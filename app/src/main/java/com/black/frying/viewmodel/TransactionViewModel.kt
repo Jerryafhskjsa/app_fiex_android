@@ -38,6 +38,7 @@ import kotlin.collections.ArrayList
 
 class TransactionViewModel(context: Context, private val onTransactionModelListener: OnTransactionModelListener?) : BaseViewModel<Any?>(context) {
     companion object {
+        var tag = TransactionViewModel::class.java.simpleName
         const val LEVER_TYPE_COIN = "PHYSICAL" // 现货
         const val LEVER_TYPE_LEVER = "ISOLATED" //逐仓杠杆
         const val LIMIT = "LIMIT"//现货
@@ -59,7 +60,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     //用户相关
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
-    //行情涨跌幅变化
+    //行情涨跌幅以及价格变化
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
     //当前交易对所有用户成交数据
     private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
@@ -247,7 +248,9 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         return object : SuccessObserver<PairQuotation?>() {
             override fun onSuccess(value: PairQuotation?) {
                 if (value != null && TextUtils.equals(value.s, currentPairStatus.pair)) {
-                    onTransactionModelListener?.onPairQuotation(value)
+                    onTransactionModelListener.run {
+                        onTransactionModelListener?.onPairQuotation(value)
+                    }
                 }
             }
         }
@@ -634,7 +637,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     interface OnTransactionModelListener {
         /**
-         * 24小时行情
+         * 交易对24小时行情变更
          */
         fun onPairQuotation(pairQuo:PairQuotation)
         /**

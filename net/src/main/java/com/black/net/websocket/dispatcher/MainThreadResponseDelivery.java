@@ -38,6 +38,7 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
     public MainThreadResponseDelivery() {
     }
 
+
     @Override
     public void addListener(SocketListener listener) {
         if (listener == null) {

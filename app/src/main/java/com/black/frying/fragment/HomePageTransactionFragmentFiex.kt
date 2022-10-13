@@ -415,10 +415,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     override fun onPairDeal(value: PairDeal) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) {
-            binding?.fragmentHomePageTransactionHeader1?.currentPrice?.text = value.p
-            binding?.fragmentHomePageTransactionHeader1?.currentPriceCny?.text = value.p
-        }
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -842,8 +838,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         })
     }
 
+    //更新当前价格和涨跌幅
     override fun onPairQuotation(pairQuo: PairQuotation) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) { updatePriceSince(pairQuo.r) }
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            updatePriceSince(pairQuo.r)
+            updateCurrentPairPrice(pairQuo.c)
+        }
     }
 
     override fun onPairStatusInit(pairStatus: PairStatus) {
@@ -1093,6 +1093,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         computePriceCNY()
     }
 
+    private fun updateCurrentPairPrice(price:String?){
+        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
+        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+    }
+
     //更新涨跌幅
     private fun updatePriceSince(since:String?){
         var since = since?.toDouble()
@@ -1109,7 +1114,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
                 color = mContext?.getColor(R.color.B3)
             }
+            Log.d(tag,"priceSince0 = $since")
             var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            Log.d(tag,"priceSince1 = $result")
             binding!!.actionBarLayout.currentPriceSince.setText(result)
             binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)

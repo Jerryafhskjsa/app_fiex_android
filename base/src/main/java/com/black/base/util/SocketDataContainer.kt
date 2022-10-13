@@ -64,9 +64,11 @@ object SocketDataContainer {
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
 
+    //行情交易对socket更新数据缓存
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
     //自选交易对数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
+    //所有交易对信息
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
     //委托
     private val orderDataList = ArrayList<QuotationOrderNew?>()
@@ -568,7 +570,7 @@ object SocketDataContainer {
     }
 
     //更新现有交易对信息
-    fun updatePairStatusData(context: Context?, handler: Handler?, dataSource: JSONArray?, isRemoveAll: Boolean) {
+    fun updatePairStatusData(context: Context?, handler: Handler?, dataSource: PairStatusNew?, isRemoveAll: Boolean) {
         if (context == null) {
             return
         }
@@ -936,7 +938,7 @@ object SocketDataContainer {
         if (context == null || callback == null || setName == null) {
             return
         }
-        var symbolList = PairApiServiceHelper.getHomePagePairData()
+        var symbolList = PairApiServiceHelper.getSymboleListPairData()
         if (symbolList != null) {
             synchronized(symbolList) {
                 val result = ArrayList<PairStatus?>()

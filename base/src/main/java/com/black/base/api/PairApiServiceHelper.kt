@@ -34,7 +34,7 @@ object PairApiServiceHelper {
     private var hotPairCache: HttpRequestResultDataList<String?>? = null
 
     //交易对配置的所有数据
-    private var homePagePairData:ArrayList<PairStatus?>? = ArrayList()
+    private var symbolListPairData:ArrayList<PairStatus?>? = ArrayList()
 
     private fun getLastGetTime(type: Int): Long? {
         val lastGetTime = lastGetTimeMap[type]
@@ -45,8 +45,8 @@ object PairApiServiceHelper {
         lastGetTimeMap.put(type, time)
     }
 
-    fun getHomePagePairData():ArrayList<PairStatus?>?{
-        return homePagePairData
+    fun getSymboleListPairData():ArrayList<PairStatus?>?{
+        return symbolListPairData
     }
 
     fun getTradeSetsLocal(context: Context?, isShowLoading: Boolean, callback: Callback<ArrayList<QuotationSet?>?>?) {
@@ -161,14 +161,14 @@ object PairApiServiceHelper {
                 ?.flatMap { result: HttpRequestResultDataList<HomeTickers?>? ->
                     var data = result?.data!!
                     for(i in data.indices){
-                        for(j in homePagePairData!!.indices){
-                            if(homePagePairData!![j]?.pair == data[i]?.s){
+                        for(j in symbolListPairData!!.indices){
+                            if(symbolListPairData!![j]?.pair == data[i]?.s){
                                 //现价
-                                homePagePairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
+                                symbolListPairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
                                 //交易量
-                                homePagePairData!![j]?.tradeVolume = data[i]?.v
+                                symbolListPairData!![j]?.tradeVolume = data[i]?.v
                                 //涨跌幅
-                                homePagePairData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
+                                symbolListPairData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
                             }
                         }
                     }
@@ -188,7 +188,7 @@ object PairApiServiceHelper {
             ?.getHomeSymbolList()
             ?.flatMap { result: HttpRequestResultDataList<HomeSymbolList?>? ->
                 var data = result?.data!!
-                homePagePairData?.clear()//清除数据
+                symbolListPairData?.clear()//清除数据
                 for(i in data.indices){
                     var pair = data[i]?.symbol//交易对名
                     var pairStatus:PairStatus? = PairStatus()
@@ -202,7 +202,7 @@ object PairApiServiceHelper {
                     maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
                     pairStatus?.precision = maxPrecision
                     pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
-                    homePagePairData?.add(pairStatus)
+                    symbolListPairData?.add(pairStatus)
                 }
                 Observable.just(result)
             }
@@ -286,10 +286,10 @@ object PairApiServiceHelper {
             ?.flatMap { result: HttpRequestResultDataList<HomeTickersKline?>? ->
                 var data = result?.data!!
                 for(i in data.indices){
-                    for(j in homePagePairData!!.indices){
-                        if(homePagePairData!![j]?.pair == data[i]?.s){
+                    for(j in symbolListPairData!!.indices){
+                        if(symbolListPairData!![j]?.pair == data[i]?.s){
                             //赋k线数值
-                            homePagePairData!![j]?.kLineDate = data[i]
+                            symbolListPairData!![j]?.kLineDate = data[i]
                         }
                     }
                 }
