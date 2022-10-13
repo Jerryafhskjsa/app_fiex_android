@@ -73,7 +73,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     private var adapter: HomeMainRiseFallAdapter? = null
 
     private val hotPairMap = HashMap<String, PairStatus>()
-    private val hardGridViewMap = HashMap<String, GridView>()
+    private val hardGridViewMap = HashMap<String?, GridView?>()
 
     private var statusAdapter: BaseViewPagerAdapter? = null
     private var chatFloatAdView: FloatAdView? = null
@@ -82,7 +82,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
     private var viewModel: MainViewModel? = null
-    private var homeTabTyoe:Int? = ConstData.HOME_TAB_HOT
+    private var homeTabType:Int? = ConstData.HOME_TAB_HOT
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -120,9 +120,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
         binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                homeTabTyoe = tab.position
+                homeTabType = tab.position
 //                viewModel!!.getRiseFallData(type)
-                viewModel!!.getHomeSybolListData(homeTabTyoe!!)
+                viewModel!!.getHomeSybolListData(homeTabType!!)
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -240,24 +240,29 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     override fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
         observable!!.subscribe { pairStatusList ->
             CommonUtil.checkActivityAndRunOnUI(activity) {
-                val showGridViewList: MutableList<GridView> = ArrayList()
-                for (pairStatus in pairStatusList!!) {
-                    val hotPair = hotPairMap[pairStatus?.pair]
-                    if (hotPair != null) {
-                        hotPair.precision = pairStatus?.precision ?: 0
-                        hotPair.currentPrice = (pairStatus?.currentPrice ?: 0.0)
-                        hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
-                        hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
-                    }
-                    val gridView = hardGridViewMap[pairStatus?.pair]
-                    if (gridView != null && !showGridViewList.contains(gridView)) {
-                        showGridViewList.add(gridView)
-                    }
-                }
-                for (gridView in showGridViewList) {
+//                val showGridViewList: MutableList<GridView> = ArrayList()
+//                for (pairStatus in pairStatusList!!) {
+//                    val hotPair = hotPairMap[pairStatus?.pair]
+//                    if (hotPair != null) {
+//                        hotPair.precision = pairStatus?.precision ?: 0
+//                        hotPair.currentPrice = (pairStatus?.currentPrice ?: 0.0)
+//                        hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
+//                        hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
+//                    }
+//                    val gridView = hardGridViewMap[pairStatus?.pair]
+//                    if (gridView != null && !showGridViewList.contains(gridView)) {
+//                        showGridViewList.add(gridView)
+//                    }
+//                }
+//                for (gridView in showGridViewList) {
 //                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
+//                }
+                showTickersPairs(pairStatusList)
+                homeTabType?.let {
+                    if (pairStatusList != null) {
+                        viewModel?.updateHomeSymbolListData(it,pairStatusList)
+                    }
                 }
-//                viewModel!!.getRiseFallData(if (binding!!.risePairs.isChecked) 1 else 2)
             }
         }.run { }
     }
@@ -322,8 +327,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
 //                    tickersKline = returnData?.data as ArrayList<HomeTickersKline?>
                     Log.d(TAG,"onHomeKLine succ")
-                    showTickersPairs(PairApiServiceHelper.getHomePagePairData())
-                    viewModel!!.getHomeSybolListData(homeTabTyoe!!)
+                    showTickersPairs(PairApiServiceHelper.getSymboleListPairData())
+                    viewModel!!.getHomeSybolListData(homeTabType!!)
                 } else {
                     Log.d(TAG,"onHomeKLine data null or fail")
                 }
@@ -510,6 +515,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             colorLost = SkinCompatResources.getColor(context, R.color.T9)
             colorDefault = SkinCompatResources.getColor(context, R.color.T3)
         }
+
 
         fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>,color:Int?){
             brokenLine?.setDrawBorders(false)

@@ -6,6 +6,7 @@ import android.util.Log
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
+import com.black.base.model.socket.PairStatusNew
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderOneDepth
 import com.black.base.util.*
@@ -16,6 +17,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -36,20 +38,16 @@ class FiexSocketManager(context: Context, handler: Handler){
     var kLineTimeStepSecond: Long = 0
     var kLineId: String? = null
 
-//    private var userSocketMgr:WebSocketManager
-//    private var tickerSocketMgr:WebSocketManager
-//    private var subStatusSocketMgr:WebSocketManager
-//    private var pairKlineMgr:WebSocketManager
 
     private lateinit var socketSetting:WebSocketSetting
     //用户数据相关
-    private var userDataListener:SocketListener = UserDataListener()
+    private var userDataListener:SocketListener? = UserDataListener()
     //所有币种行情相关
-    private var tickerDataListener:SocketListener = TickerStatusListener()
+    private var tickerDataListener:SocketListener? = TickerStatusListener()
     //交易对行情相关
-    private var subStatusSocketListener:SocketListener = SubStatusDataListener()
+    private var subStatusSocketListener:SocketListener? = SubStatusDataListener()
     //交易对k线相关
-    private var pairKlineSocketListener:SocketListener = PairKlineListener()
+    private var pairKlineSocketListener:SocketListener? = PairKlineListener()
 
 
 
@@ -61,7 +59,6 @@ class FiexSocketManager(context: Context, handler: Handler){
         initSocketManager(mCcontext)
         addListenerAll()
         startConnectAll()
-//        startConnect(SocketUtil.WS_SUBSTATUS)
     }
 
     private fun initSocketManager(context:Context?){
@@ -108,20 +105,41 @@ class FiexSocketManager(context: Context, handler: Handler){
 
     fun addListener(socketKey:String?){
         var socketMar = WebSocketHandler.getWebSocket(socketKey)
+        var isConnected = socketMar.isConnect
+        Log.d(tag,"addListener,socketKey = $socketKey,isConnected = $isConnected")
+        if(!isConnected){
+            socketMar.start()
+        }
         if(socketMar != null){
             var listener:SocketListener? = null
             when(socketKey){
                 SocketUtil.WS_USER ->{
-                    listener = userDataListener
+                    listener = if(userDataListener != null){
+                        userDataListener
+                    }else{
+                        UserDataListener()
+                    }
                 }
                 SocketUtil.WS_SUBSTATUS ->{
-                    listener = subStatusSocketListener
+                    listener = if(subStatusSocketListener != null){
+                        subStatusSocketListener
+                    }else{
+                        SubStatusDataListener()
+                    }
                 }
                 SocketUtil.WS_TICKETS ->{
-                    listener = tickerDataListener
+                    listener = if(tickerDataListener != null){
+                        tickerDataListener
+                    }else{
+                        TickerStatusListener()
+                    }
                 }
                 SocketUtil.WS_PAIR_KLINE ->{
-                    listener = pairKlineSocketListener
+                    listener = if(pairKlineSocketListener != null){
+                        pairKlineSocketListener
+                    }else{
+                        PairKlineListener()
+                    }
                 }
             }
             socketMar.addListener(listener)
@@ -129,22 +147,24 @@ class FiexSocketManager(context: Context, handler: Handler){
     }
 
     fun removeListener(socketKey: String?) {
-        var listener: SocketListener? = null
         when (socketKey) {
             SocketUtil.WS_USER -> {
-                listener = userDataListener
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(userDataListener)
+                userDataListener = null
             }
             SocketUtil.WS_SUBSTATUS -> {
-                listener = subStatusSocketListener
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(subStatusSocketListener)
+                subStatusSocketListener = null
             }
             SocketUtil.WS_TICKETS -> {
-                listener = tickerDataListener
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(tickerDataListener)
+                tickerDataListener = null
             }
             SocketUtil.WS_PAIR_KLINE -> {
-                listener = pairKlineSocketListener
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(pairKlineSocketListener)
+                pairKlineSocketListener = null
             }
         }
-        WebSocketHandler.getWebSocket(socketKey)?.removeListener(listener)
     }
     fun removeListenerAll(){
         var socketMgrList = WebSocketHandler.getAllWebSocket()
@@ -166,6 +186,10 @@ class FiexSocketManager(context: Context, handler: Handler){
                 }
                 it.value.removeListener(listener)
             }
+        userDataListener = null
+        subStatusSocketListener = null
+        tickerDataListener = null
+        pairKlineSocketListener = null
     }
 
     fun addListenerAll(){
@@ -174,16 +198,32 @@ class FiexSocketManager(context: Context, handler: Handler){
         socketMgrList.forEach{
             when(it.key){
                 SocketUtil.WS_USER -> {
-                    listener = userDataListener
+                    listener = if(userDataListener != null){
+                        userDataListener
+                    }else{
+                        UserDataListener()
+                    }
                 }
                 SocketUtil.WS_SUBSTATUS -> {
-                    listener = subStatusSocketListener
+                    listener = if(subStatusSocketListener != null){
+                        subStatusSocketListener
+                    }else{
+                        SubStatusDataListener()
+                    }
                 }
                 SocketUtil.WS_TICKETS -> {
-                    listener = tickerDataListener
+                    listener = if(tickerDataListener != null){
+                        tickerDataListener
+                    }else{
+                        TickerStatusListener()
+                    }
                 }
                 SocketUtil.WS_PAIR_KLINE -> {
-                    listener = pairKlineSocketListener
+                    listener = if(pairKlineSocketListener != null){
+                        pairKlineSocketListener
+                    }else{
+                        PairKlineListener()
+                    }
                 }
             }
             it.value.addListener(listener)
@@ -284,7 +324,7 @@ class FiexSocketManager(context: Context, handler: Handler){
     }
 
     /**
-     * 行情相关
+     * 所有交易对行情相关
      */
     inner class TickerStatusListener():SimpleListener(){
         override fun onConnected() {
@@ -303,12 +343,18 @@ class FiexSocketManager(context: Context, handler: Handler){
                 FryingUtil.printError(e)
             }
             if(data != null){
-                Log.d(tag,"tickerStatus->resType = "+data.getString("resType"))
+                var resType = data.getString("resType")
+                Log.d(tag, "tickerStatus->resType = $resType")
                 Log.d(tag,"tickerStatus->data = "+data.getString("data"))
-                var data = data.getString("data")
-                val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(data.toString(), object : TypeToken<PairQuotation?>() {}.type)
-                if(pairQuo != null){
-                    SocketDataContainer.getCurrentPairQuotation(mHandler,pairQuo)
+                when(resType){
+                    "qStats" ->{
+                        var result = data.getString("data")
+                        val jsonObject: JsonObject = JsonParser().parse(result) as JsonObject
+                        val pairQuo:PairStatusNew? = gson.fromJson<PairStatusNew?>(jsonObject.toString(), object : TypeToken<PairStatusNew?>() {}.type)
+                        if(pairQuo != null){
+                            SocketDataContainer.updatePairStatusData(mCcontext, mHandler, pairQuo, true)
+                        }
+                    }
                 }
             }
         }
@@ -354,7 +400,6 @@ class FiexSocketManager(context: Context, handler: Handler){
             startListenPair(currentPair)
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "subStatus->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -363,7 +408,9 @@ class FiexSocketManager(context: Context, handler: Handler){
                 data = JSONObject(message)
                 if(data != null){
                     var resType = data.getString("resType")
+                    Log.d(tag, "subStatus->resType = $resType")
                     var resultData = data.getString("data")
+                    Log.d(tag, "subStatus->data = $resultData")
                     val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
                     when(resType){
                         //50挡深度
@@ -395,15 +442,11 @@ class FiexSocketManager(context: Context, handler: Handler){
                             }
                         }
                         //当前交易对24小时行情
-                        "qStatus" ->{
+                        "qStats" ->{
                             val pairQuo:PairQuotation? = gson.fromJson<PairQuotation?>(jsonObject.toString(), object : TypeToken<PairQuotation?>() {}.type)
                             if(pairQuo != null){
                                 SocketDataContainer.getCurrentPairQuotation(mHandler,pairQuo)
                             }
-                        }
-                        //当前交易对k线
-                        "qKLine" ->{
-
                         }
                     }
                 }

@@ -247,6 +247,14 @@ public class WebSocketManager {
     }
 
     /**
+     * 判断是否还有listener
+     * @return
+     */
+    public boolean isListenerEmpty(){
+        return mDelivery.isEmpty();
+    }
+
+    /**
      * 获取配置类，
      * 部分参数支持动态设定。
      */

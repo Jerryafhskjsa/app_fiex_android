@@ -61,7 +61,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
     init {
-        symbolList = PairApiServiceHelper.getHomePagePairData()
+        symbolList = PairApiServiceHelper.getSymboleListPairData()
         getCoinlistConfig()
     }
 

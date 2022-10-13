@@ -47,7 +47,7 @@ abstract class BaseDataBindAdapter<T, DB : ViewDataBinding?>(protected var conte
         }
     }
 
-    fun addItem(index: Int, item: T?) {
+    open fun addItem(index: Int, item: T?) {
         if (data == null) {
             data = ArrayList()
         }
@@ -56,7 +56,7 @@ abstract class BaseDataBindAdapter<T, DB : ViewDataBinding?>(protected var conte
         }
     }
 
-    fun addAll(data: MutableList<T>?) {
+    open fun addAll(data: MutableList<T>?) {
         if (this.data == null) {
             this.data = ArrayList()
         }

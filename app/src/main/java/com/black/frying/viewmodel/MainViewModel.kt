@@ -64,14 +64,8 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         SocketDataContainer.subscribeHotPairObservable(hotPairObserver)
         val bundle = Bundle()
-        bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
+        bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle)
-        val bundle1 = Bundle()
-        bundle1.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle1)
-        val bundle2 = Bundle()
-        bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle2)
 
 //        getHotPairs()
         getSymbolList()
@@ -297,7 +291,13 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
 
     fun getHomeSybolListData(type: Int) {
-        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,PairApiServiceHelper.getHomePagePairData())
+        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,PairApiServiceHelper.getSymboleListPairData())
+            ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
+            ?.observeOn(AndroidSchedulers.mainThread()))
+    }
+
+    fun updateHomeSymbolListData(type: Int,data: ArrayList<PairStatus?>){
+        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,data)
             ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
             ?.observeOn(AndroidSchedulers.mainThread()))
     }

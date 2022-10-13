@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.*
+import android.util.Log
 import com.black.base.model.SuccessObserver
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -57,7 +58,7 @@ class SocketService : Service() {
                     pair = (msg.obj as Bundle).getString(ConstData.PAIR)
                 }
                 fiexSocketManager?.currentPair = mContext?.let { SocketUtil.getCurrentPair(it) }
-//                fiexSocketManager?.startListenPair(pair)
+                fiexSocketManager?.startListenPair(pair)
             }
             //k线时间段变更
             SocketUtil.COMMAND_KTAB_CHANGED -> {

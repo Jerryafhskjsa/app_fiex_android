@@ -143,7 +143,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updatePairStatusData(context, handler, data, true)
+//                    SocketDataContainer.updatePairStatusData(context, handler, data, true)
                 }
             }
         }
