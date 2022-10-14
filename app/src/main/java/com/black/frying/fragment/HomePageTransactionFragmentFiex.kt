@@ -295,12 +295,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         }
                     }))
             R.id.btn_transaction_memu -> mContext?.let {
-                PairApiServiceHelper.getTradeSetsFiex(it, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
-                    override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                PairApiServiceHelper.getTradeSetsLocal(it, true, object : Callback<ArrayList<QuotationSet?>?>() {
+                    override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                        if (returnData != null) {
                             val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
-                            val sets = returnData.data
-                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, sets)
+                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData)
                                     .show(object : OnPairStatusSelectListener {
                                         override fun onPairStatusSelected(pairStatus: PairStatus?) {
                                             if (pairStatus == null) {
@@ -313,6 +312,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                                         }
                                     })
                         }
+                    }
+
+                    override fun error(type: Int, error: Any?) {
                     }
                 })
             }

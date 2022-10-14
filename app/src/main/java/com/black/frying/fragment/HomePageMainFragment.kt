@@ -483,19 +483,14 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
         }))
     }
 
-    override fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?) {
+    override fun onHomeKLine(observable: Observable<ArrayList<PairStatus?>?>?) {
+    }
+
+    override fun onHomeTickers(observable: Observable<ArrayList<PairStatus?>?>?) {
 
     }
 
     override fun onCoinlistConfig(coinConfigList: ArrayList<CoinInfoType?>?) {
-    }
-
-    override fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?) {
-
-    }
-
-    override fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?) {
-
     }
 
     private fun showHotPairs(pairs: ArrayList<String?>?) {

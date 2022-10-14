@@ -24,6 +24,7 @@ import com.black.im.config.GeneralConfig
 import com.black.im.util.TUIKit
 import com.black.lib.typeface.CustomerTypefaceSpanManager
 import com.black.lib.typeface.TypefaceManager
+import com.black.net.websocket.WebSocketHandler
 import com.black.router.BlackRouter
 import com.black.util.CommonUtil
 import com.tencent.android.tpush.XGIOperateCallback
@@ -148,6 +149,7 @@ class FryingApplication : BaseApplication() {
                 Log.d(tag, "onActivityResumed->isAppOnForeground = $isAppOnForeground")
                 if(isAppOnForeground){
                     SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_RESUME)
+                    WebSocketHandler.registerNetworkChangedReceiver(applicationContext)
                 }
             }
 
@@ -168,6 +170,7 @@ class FryingApplication : BaseApplication() {
                 }
                 if(!isAppOnForeground){
                     SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_STOP)
+                    WebSocketHandler.unRegisterNetworkChangeReceiver(applicationContext)
                 }
             }
 
@@ -184,6 +187,7 @@ class FryingApplication : BaseApplication() {
         initSkinLoader()
 //        initZendesk()
     }
+
 
     fun initZendesk(){
 //        Zendesk.INSTANCE.init(this, "https://fiexsupport.zendesk.com", "a825c816c9ce113e9b2c8e680961e6bf42c2194c1f12709c", "mobile_sdk_client_b6b89bd116298645a3df")

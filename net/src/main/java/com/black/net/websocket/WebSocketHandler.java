@@ -46,6 +46,8 @@ public class WebSocketHandler {
      */
     private static Map<String, WebSocketManager> mWebSocketMap;
 
+    private static NetworkChangedReceiver networkChangedReceiver;
+
     private static Logable mLog;
 
     /**
@@ -159,13 +161,26 @@ public class WebSocketHandler {
         if (PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)) {
             try {
                 IntentFilter filter = new IntentFilter();
+                networkChangedReceiver = new NetworkChangedReceiver();
                 filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-                context.registerReceiver(new NetworkChangedReceiver(), filter);
+                context.registerReceiver(networkChangedReceiver, filter);
             } catch (Exception e) {
                 LogUtil.e(TAG, "网络监听广播注册失败：", e);
             }
         } else {
             LogUtil.e(TAG, "未获取到网络状态权限，广播监听器无法注册");
+        }
+    }
+
+    public static void unRegisterNetworkChangeReceiver(Context context){
+        if (PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)) {
+            try {
+                context.unregisterReceiver(networkChangedReceiver);
+            } catch (Exception e) {
+                LogUtil.e(TAG, "网络监听广播解注册失败：", e);
+            }
+        } else {
+            LogUtil.e(TAG, "未获取到网络状态权限，广播监听器无法解注册");
         }
     }
 

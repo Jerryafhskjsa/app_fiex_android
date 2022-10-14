@@ -56,10 +56,12 @@ object SocketDataContainer {
     private val lastGetTimeMap = SparseArray<Long>()
     private val c2CPrice: C2CPrice? = null
 
+    //所有现货交易对
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
 
-    //所有现货交易对
+    //所有现货交易对Map缓存
     private val allPairStatusMap: MutableMap<String, PairStatus> = HashMap()
+
     //所有杠杆交易对
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
@@ -68,7 +70,7 @@ object SocketDataContainer {
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
     //自选交易对数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
-    //所有交易对信息
+    //所有交易对信息观察者
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
     //委托
     private val orderDataList = ArrayList<QuotationOrderNew?>()
@@ -938,7 +940,7 @@ object SocketDataContainer {
         if (context == null || callback == null || setName == null) {
             return
         }
-        var symbolList = PairApiServiceHelper.getSymboleListPairData()
+        var symbolList = PairApiServiceHelper.getSymboleListPairData(context)
         if (symbolList != null) {
             synchronized(symbolList) {
                 val result = ArrayList<PairStatus?>()
