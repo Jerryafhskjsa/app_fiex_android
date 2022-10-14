@@ -38,7 +38,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
 
     private var noticeList: java.util.ArrayList<NoticeHomeItem?>? = null
-    private var tickerList: ArrayList<HomeTickers>? = null
 
     constructor(context: Context, onMainModelListener: OnMainModelListener?) : this(context) {
         this.onMainModelListener = onMainModelListener
@@ -51,25 +50,18 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
             pairObserver = createPairObserver()
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
+
         if (userInfoObserver == null) {
             userInfoObserver = createUserInfoObserver()
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
-        if (userLeverObserver == null) {
-            userLeverObserver = createUserLeverObserver()
-        }
-        SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
-        if (hotPairObserver == null) {
-            hotPairObserver = createHotPairObserver()
-        }
-        SocketDataContainer.subscribeHotPairObservable(hotPairObserver)
+
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle)
 
 //        getHotPairs()
-        getSymbolList()
-//        getHomeTicker()
+        getHomeTicker()
 //        getHomeKline()
         if (noticeList == null) {
             //获取公告信息
@@ -95,12 +87,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
-        }
-        if (hotPairObserver != null) {
-            SocketDataContainer.removeHotPairObservable(hotPairObserver)
-        }
-        if (userLeverObserver != null) {
-            SocketDataContainer.removeUserLeverObservable(userLeverObserver)
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -276,10 +262,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     //获取涨跌幅数据
     fun getRiseFallData(type: Int) {
-        Log.d("MainViewModel","getRiseFallData->type = "+type)
-        Log.d("MainViewModel","getRiseFallData->socketHandler = "+socketHandler)
-        Log.d("MainViewModel","getRiseFallData->socketHandler.looper = "+socketHandler?.looper)
-        Log.d("MainViewModel","getRiseFallData->onMainModelListener = "+onMainModelListener)
         if (socketHandler == null || socketHandler?.looper == null || onMainModelListener == null) {
             return
         }
@@ -290,8 +272,8 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
 
 
-    fun getHomeSybolListData(type: Int) {
-        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,PairApiServiceHelper.getSymboleListPairData())
+    fun getHomeSybolListData(type: Int,returnData: ArrayList<PairStatus?>?) {
+        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,returnData)
             ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
             ?.observeOn(AndroidSchedulers.mainThread()))
     }
@@ -350,17 +332,10 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
     /**
-     * 获取首页最下面的所有币种列表
-     */
-    fun getSymbolList(){
-        onMainModelListener?.onHomeSymbolList(PairApiServiceHelper.getSymbolList((context!!)))
-    }
-
-    /**
      * 获取首页相关交易对的k线数据
      */
-    fun getHomeKline(){
-        onMainModelListener?.onHomeKLine(PairApiServiceHelper.getHomeKline((context!!)))
+    fun getHomeKline(tickers: ArrayList<PairStatus?>?){
+        onMainModelListener?.onHomeKLine(PairApiServiceHelper.getHomeKline((context!!),tickers))
     }
 
     /**
@@ -398,6 +373,8 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     interface OnMainModelListener {
         fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
+        fun onHomeTickers(observable: Observable<ArrayList<PairStatus?>?>?)
+        fun onHomeKLine(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onNoticeList(observable: Observable<NoticeHome?>?)
@@ -407,9 +384,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onUserInfoChanged()
         fun onMoney(observable: Observable<Money?>?)
         fun getMoneyCallback(): Callback<Money?>?
-        fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?)
-        fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?)
-        fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?)
         fun onCoinlistConfig(coinConfigList: ArrayList<CoinInfoType?>?)
     }
 }

@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
 
 class FiexSocketManager(context: Context, handler: Handler){
     private var tag: String = FiexSocketManager::class.java.simpleName
@@ -59,6 +60,15 @@ class FiexSocketManager(context: Context, handler: Handler){
         initSocketManager(mCcontext)
         addListenerAll()
         startConnectAll()
+        initPingTimer()
+    }
+
+    private fun initPingTimer(){
+        Timer().schedule(object:TimerTask(){
+            override fun run() {
+                sendPing()
+            }
+        }, Date(), 3000)
     }
 
     private fun initSocketManager(context:Context?){
@@ -66,6 +76,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 5//心跳间隔时间
+        socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_USER,socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_SUBSTATUS,socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE,socketSetting)
@@ -256,6 +267,20 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
     }
 
+    fun sendPing(){
+        Log.d(tag, "sendPing")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("ping", "ping")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_USER)?.send(jsonObject.toString())
+            WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)?.send(jsonObject.toString())
+            WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)?.send(jsonObject.toString())
+            WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)?.send(jsonObject.toString())
+        }catch (e:Exception){
+            FryingUtil.printError(e)
+        }
+    }
+
     fun startListenUser(){
         Log.d(tag, "startListenUser")
         try {
@@ -438,7 +463,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                         "qDeal" ->{
                             val pairDeal:PairDeal? = gson.fromJson<PairDeal?>(jsonObject.toString(), object : TypeToken<PairDeal??>() {}.type)
                             if(pairDeal != null){
-                                SocketDataContainer.getCurrentPairDeal(mHandler,pairDeal)
+//                                SocketDataContainer.getCurrentPairDeal(mHandler,pairDeal)
                             }
                         }
                         //当前交易对24小时行情

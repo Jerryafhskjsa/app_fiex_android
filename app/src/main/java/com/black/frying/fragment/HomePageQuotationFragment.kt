@@ -32,6 +32,7 @@ import com.black.frying.util.PairQuotationComparator
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
+import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageQuotationBinding
@@ -153,18 +154,17 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun refreshSets() {
-            PairApiServiceHelper.getTradeSetsFiex(activity, false, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
+            PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {
 //                    refreshSets()这里接口不通目前会引起死循环调用
                 }
-                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                        val sets = returnData.data
+                override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                    if (returnData != null) {
                         var optionalSet = QuotationSet()
                         optionalSet.coinType = getString(R.string.pair_collect)
                         optionalSet.name = getString(R.string.pair_collect)
-                        sets?.add(0,  optionalSet)
-                        setSets(sets)
+                        returnData?.add(0,  optionalSet)
+                        setSets(returnData)
                     } else {
                         refreshSets()
                     }

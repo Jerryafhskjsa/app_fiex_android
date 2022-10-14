@@ -72,7 +72,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     private var userInfo: UserInfo? = null
     private var adapter: HomeMainRiseFallAdapter? = null
 
-    private val hotPairMap = HashMap<String, PairStatus>()
+    private val hotPairMap = HashMap<String?, PairStatus?>()
     private val hardGridViewMap = HashMap<String?, GridView?>()
 
     private var statusAdapter: BaseViewPagerAdapter? = null
@@ -99,7 +99,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             override fun onRefresh() {
                 viewModel!!.getNoticeInfo()
 //                viewModel!!.getHotPairs()
-                viewModel!!.getSymbolList()
 //                viewModel!!.getHomeTicker()
 //                viewModel!!.getHomeKline()
                 binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
@@ -111,8 +110,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
 
         })
-
-
         binding!!.noticeLayout.visibility = View.VISIBLE
         binding!!.noticeTextView.setTextColor(SkinCompatResources.getColor(activity, R.color.T1))
         binding!!.noticeTextView.setTextStillTime(3000)//设置停留时长间隔
@@ -122,7 +119,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             override fun onTabSelected(tab: TabLayout.Tab) {
                 homeTabType = tab.position
 //                viewModel!!.getRiseFallData(type)
-                viewModel!!.getHomeSybolListData(homeTabType!!)
+                viewModel!!.getHomeSybolListData(homeTabType!!,PairApiServiceHelper.getSymboleListPairData(mContext))
+
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -149,7 +147,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 layout?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
             }
         })
-
 //        viewModel!!.getRiseFallData(1)
 //        viewModel!!.getSymbolList()
 //        viewModel!!.getHomeTicker()
@@ -240,24 +237,24 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     override fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
         observable!!.subscribe { pairStatusList ->
             CommonUtil.checkActivityAndRunOnUI(activity) {
-//                val showGridViewList: MutableList<GridView> = ArrayList()
-//                for (pairStatus in pairStatusList!!) {
-//                    val hotPair = hotPairMap[pairStatus?.pair]
-//                    if (hotPair != null) {
-//                        hotPair.precision = pairStatus?.precision ?: 0
-//                        hotPair.currentPrice = (pairStatus?.currentPrice ?: 0.0)
-//                        hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
-//                        hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
-//                    }
-//                    val gridView = hardGridViewMap[pairStatus?.pair]
-//                    if (gridView != null && !showGridViewList.contains(gridView)) {
-//                        showGridViewList.add(gridView)
-//                    }
-//                }
-//                for (gridView in showGridViewList) {
-//                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
-//                }
-                showTickersPairs(pairStatusList)
+                val showGridViewList: MutableList<GridView> = ArrayList()
+                for (pairStatus in pairStatusList!!) {
+                    val hotPair = hotPairMap[pairStatus?.pair]
+                    if (hotPair != null) {
+                        hotPair.precision = pairStatus?.precision ?: 0
+                        hotPair.currentPrice = (pairStatus?.currentPrice ?: 0.0)
+                        hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
+                        hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
+                    }
+                    val gridView = hardGridViewMap[pairStatus?.pair]
+                    if (gridView != null && !showGridViewList.contains(gridView)) {
+                        showGridViewList.add(gridView)
+                    }
+                }
+                for (gridView in showGridViewList) {
+                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
+                }
+//                showTickersPairs(pairStatusList)
                 homeTabType?.let {
                     if (pairStatusList != null) {
                         viewModel?.updateHomeSymbolListData(it,pairStatusList)
@@ -266,6 +263,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
         }.run { }
     }
+
 
     override fun onRiseFallDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
     }
@@ -321,14 +319,14 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }))
     }
 
-    override fun onHomeKLine(observable: Observable<HttpRequestResultDataList<HomeTickersKline?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeTickersKline?>?>() {
-            override fun callback(returnData: HttpRequestResultDataList<HomeTickersKline?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-//                    tickersKline = returnData?.data as ArrayList<HomeTickersKline?>
+    override fun onHomeKLine(observable: Observable<ArrayList<PairStatus?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<ArrayList<PairStatus?>?>() {
+            override fun callback(returnData: ArrayList<PairStatus?>?) {
+                if (returnData != null) {
                     Log.d(TAG,"onHomeKLine succ")
-                    showTickersPairs(PairApiServiceHelper.getSymboleListPairData())
-                    viewModel!!.getHomeSybolListData(homeTabType!!)
+                    showTickersPairs(returnData)
+                    var pairListData = PairApiServiceHelper.getSymboleListPairData(context)
+                    viewModel!!.getHomeSybolListData(homeTabType!!,pairListData)
                 } else {
                     Log.d(TAG,"onHomeKLine data null or fail")
                 }
@@ -340,37 +338,19 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }))
     }
 
-    override fun onHomeTickers(observable: Observable<HttpRequestResultDataList<HomeTickers?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeTickers?>?>() {
-            override fun callback(returnData: HttpRequestResultDataList<HomeTickers?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+    override fun onHomeTickers(observable: Observable<ArrayList<PairStatus?>?>?) {
+        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<ArrayList<PairStatus?>?>() {
+            override fun callback(tickers: ArrayList<PairStatus?>?) {
+                if (tickers != null) {
 //                    tickersData = returnData?.data as ArrayList<HomeTickers?>
                     Log.d(TAG,"onHomeTickers succ")
-                    viewModel?.getHomeKline()
+                    viewModel?.getHomeKline(tickers)
                 } else {
                     Log.d(TAG,"onHomeTickers data null or fail")
                 }
             }
             override fun error(type: Int, error: Any?) {
                 Log.d(TAG,"onHomeTickers error")
-            }
-        }))
-    }
-
-
-    override fun onHomeSymbolList(observable: Observable<HttpRequestResultDataList<HomeSymbolList?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<HomeSymbolList?>?>() {
-            override fun callback(returnData: HttpRequestResultDataList<HomeSymbolList?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-//                    symbolListData = returnData?.data as ArrayList<HomeSymbolList?>
-                    Log.d(TAG,"onHomeSymbolList succ")
-                    viewModel?.getHomeTicker()
-                } else {
-                    Log.d(TAG,"onHomeSymbolList data null or fail")
-                }
-            }
-            override fun error(type: Int, error: Any?) {
-                Log.d(TAG,"onHomeSymbolList error")
             }
         }))
     }
@@ -409,7 +389,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     val rest = if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
                     val gridView = GridView(activity)
                     for (j in 0 until rest) {
-                        gridPairs.add(ticketData[offset + j])
+                        val pairStatus = ticketData[offset + j]
+                        var pairName = pairStatus?.pair
+                        Log.d(TAG, "pairName = $pairName")
+                        Log.d(TAG,"price = "+pairStatus?.currentPrice)
+                        Log.d(TAG,"tradeVolume = "+pairStatus?.tradeVolume)
+                        Log.d(TAG,"priceChangeSinceToday = "+pairStatus?.priceChangeSinceToday)
+                        gridPairs.add(pairStatus)
+                        hotPairMap[pairName] = pairStatus
+                        hardGridViewMap[pairName] = gridView
                     }
                     val adapter = GridViewAdapter(activity!!, gridPairs)
                     gridView.numColumns = STATUS_PAGE_COUNT
@@ -423,6 +411,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         }
         statusAdapter = BaseViewPagerAdapter(viewList)
         binding!!.statusViewPager.adapter = statusAdapter
+//        viewModel!!.getAllPairStatus()
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -576,6 +565,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
+            Log.d(TAG,"bindView,pairStatus = "+pairStatus!!.pair)
             val binding = holder?.dataBing
             val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
             val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
@@ -588,11 +578,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
             binding?.pairSince?.setTextColor(colorDefault)
             binding?.pairPriceCny?.text = String.format("≈ %s", pairStatus.currentPriceCNYFormat)
-//            binding?.pairPriceCny?.text = "≈"+pairStatus.currentPrice*6.5
-            var kLineData = pairStatus?.kLineDate
+            var kLineData = pairStatus?.kLineData
             if(kLineData != null){
                 brokenLine = binding?.lineCart
-                var brokenLineData = getKineYdata(pairStatus?.kLineDate)
+                var brokenLineData = getKineYdata(pairStatus?.kLineData)
                 initBrokenline(brokenLine,brokenLineData,color)
             }
         }

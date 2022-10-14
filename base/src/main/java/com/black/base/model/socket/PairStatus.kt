@@ -17,7 +17,7 @@ import kotlin.math.pow
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
     //k线数据
-    var kLineDate:HomeTickersKline? = null
+    var kLineData:HomeTickersKline? = null
     var supportingPrecisionList //支持深度
             : ArrayList<Deep>? = null
     //交易量

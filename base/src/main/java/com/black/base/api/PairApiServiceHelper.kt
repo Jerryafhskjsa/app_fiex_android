@@ -23,6 +23,7 @@ import com.black.util.NumberUtil
 import io.reactivex.Observable
 
 object PairApiServiceHelper {
+    private var TAG = PairApiServiceHelper::class.java.simpleName
     private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //热门币种，请求缓存时间，20分钟
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
@@ -33,8 +34,6 @@ object PairApiServiceHelper {
     private var tradeSets: ArrayList<QuotationSet?>? = null
     private var hotPairCache: HttpRequestResultDataList<String?>? = null
 
-    //交易对配置的所有数据
-    private var symbolListPairData:ArrayList<PairStatus?>? = ArrayList()
 
     private fun getLastGetTime(type: Int): Long? {
         val lastGetTime = lastGetTimeMap[type]
@@ -45,7 +44,18 @@ object PairApiServiceHelper {
         lastGetTimeMap.put(type, time)
     }
 
-    fun getSymboleListPairData():ArrayList<PairStatus?>?{
+    fun getSymboleListPairData(context: Context?):ArrayList<PairStatus?>?{
+        var symbolListPairData:ArrayList<PairStatus?>? = ArrayList()
+        val callback: Callback<ArrayList<PairStatus?>?> = object : Callback<ArrayList<PairStatus?>?>() {
+            override fun callback(returnData: ArrayList<PairStatus?>?) {
+                if(returnData != null){
+                    symbolListPairData = returnData
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        }
+        SocketDataContainer.getAllPairStatus(context,callback)
         return symbolListPairData
     }
 
@@ -78,29 +88,12 @@ object PairApiServiceHelper {
         }
     }
 
-
-    fun getTradeSetsFiex(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<QuotationSet?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
-            ?.getTradeSetsFiex()
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
-
     fun getTradeSets(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<QuotationSet?>?>?) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
                 ?.getTradeSetsFiex()
-                ?.flatMap {
-                    if (it.code == HttpRequestResult.SUCCESS && it.data != null) {
-                        Observable.just(it.data)
-                    }
-                    Observable.just(null)
-                }
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -152,7 +145,7 @@ object PairApiServiceHelper {
     /**
      * 获取首页tickers
      */
-    fun getHomeTickers(context: Context?): Observable<HttpRequestResultDataList<HomeTickers?>?>? {
+    fun getHomeTickers(context: Context?): Observable<ArrayList<PairStatus?>?>? {
         if (context == null) {
             return null
         }
@@ -160,53 +153,27 @@ object PairApiServiceHelper {
                 ?.getHomeTickersList()
                 ?.flatMap { result: HttpRequestResultDataList<HomeTickers?>? ->
                     var data = result?.data!!
+                    var pairListData =  getSymboleListPairData(context)
+                    var newData = ArrayList<PairStatus?>()
                     for(i in data.indices){
-                        for(j in symbolListPairData!!.indices){
-                            if(symbolListPairData!![j]?.pair == data[i]?.s){
+                        for(j in pairListData!!.indices){
+                            pairListData!![j]?.let { newData.add(it) }
+                            if(pairListData!![j]?.pair == data[i]?.s){
                                 //现价
-                                symbolListPairData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
+                                newData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
+                                Log.d(TAG,"currentPrice = "+newData!![j]?.currentPrice)
                                 //交易量
-                                symbolListPairData!![j]?.tradeVolume = data[i]?.v
+                                newData!![j]?.tradeVolume = data[i]?.v
+                                Log.d(TAG,"tradeVolume = "+newData!![j]?.tradeVolume)
                                 //涨跌幅
-                                symbolListPairData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
+                                newData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
+                                Log.d(TAG,"priceChangeSinceToday = "+newData!![j]?.priceChangeSinceToday)
                             }
                         }
                     }
-                    Observable.just(result)
+                    Observable.just(newData)
                 }
                 ?.compose(RxJavaHelper.observeOnMainThread())
-    }
-
-    /**
-     * 获取首页symbolList
-     */
-    fun getSymbolList(context: Context?): Observable<HttpRequestResultDataList<HomeSymbolList?>?>? {
-        if (context == null) {
-            return null
-        }
-        return ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
-            ?.getHomeSymbolList()
-            ?.flatMap { result: HttpRequestResultDataList<HomeSymbolList?>? ->
-                var data = result?.data!!
-                symbolListPairData?.clear()//清除数据
-                for(i in data.indices){
-                    var pair = data[i]?.symbol//交易对名
-                    var pairStatus:PairStatus? = PairStatus()
-                    var symbol = data[i]
-                    pairStatus?.pair = pair
-                    pairStatus?.hot = symbol?.hot
-                    pairStatus?.setType = symbol?.setType
-                    pairStatus?.order_no = i
-//                    var maxPrecision = CommonUtil.getMax(data[i]?.depthPrecisionMerge)
-                    var maxPrecision = symbol?.pricePrecision?.toInt()
-                    maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
-                    pairStatus?.precision = maxPrecision
-                    pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
-                    symbolListPairData?.add(pairStatus)
-                }
-                Observable.just(result)
-            }
-            ?.compose(RxJavaHelper.observeOnMainThread())
     }
 
     /**
@@ -277,7 +244,7 @@ object PairApiServiceHelper {
     /**
      * 获取首页kline
      */
-    fun getHomeKline(context: Context?): Observable<HttpRequestResultDataList<HomeTickersKline?>?>? {
+    fun getHomeKline(context: Context?,tickers: ArrayList<PairStatus?>?): Observable<ArrayList<PairStatus?>?>? {
         if (context == null) {
             return null
         }
@@ -286,14 +253,14 @@ object PairApiServiceHelper {
             ?.flatMap { result: HttpRequestResultDataList<HomeTickersKline?>? ->
                 var data = result?.data!!
                 for(i in data.indices){
-                    for(j in symbolListPairData!!.indices){
-                        if(symbolListPairData!![j]?.pair == data[i]?.s){
+                    for(j in tickers!!.indices){
+                        if(tickers!![j]?.pair == data[i]?.s){
                             //赋k线数值
-                            symbolListPairData!![j]?.kLineDate = data[i]
+                            tickers!![j]?.kLineData = data[i]
                         }
                     }
                 }
-                Observable.just(result)
+                Observable.just(tickers)
             }
             ?.compose(RxJavaHelper.observeOnMainThread())
     }
