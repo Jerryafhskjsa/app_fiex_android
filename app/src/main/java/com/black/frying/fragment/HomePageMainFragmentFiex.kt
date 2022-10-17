@@ -59,6 +59,9 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  *先取symbolList,在取tickers,然后取kLine数据
@@ -235,29 +238,30 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
-        observable!!.subscribe { pairStatusList ->
+        observable!!.subscribe { updatePairData ->
             CommonUtil.checkActivityAndRunOnUI(activity) {
-                val showGridViewList: MutableList<GridView> = ArrayList()
-                for (pairStatus in pairStatusList!!) {
+                for (pairStatus in updatePairData!!) {
                     val hotPair = hotPairMap[pairStatus?.pair]
                     if (hotPair != null) {
                         hotPair.precision = pairStatus?.precision ?: 0
                         hotPair.currentPrice = (pairStatus?.currentPrice ?: 0.0)
+                        hotPair.tradeVolume = pairStatus?.tradeVolume
                         hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
                         hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
+                        Log.d(TAG,"onPairStatusDataChanged,price = "+hotPair.currentPrice)
+                        Log.d(TAG,"onPairStatusDataChanged,pairName = "+hotPair.pair)
                     }
                     val gridView = hardGridViewMap[pairStatus?.pair]
-                    if (gridView != null && !showGridViewList.contains(gridView)) {
-                        showGridViewList.add(gridView)
+                    Log.d(TAG, "onPairStatusDataChanged,gridView = $gridView")
+                    if(gridView != null){
+                        var gridViewAdapter = gridView?.adapter as GridViewAdapter
+                        gridViewAdapter.updateItem(pairStatus?.pair,hotPair)
+                        gridViewAdapter.notifyDataSetChanged()
                     }
                 }
-                for (gridView in showGridViewList) {
-                    (gridView.adapter as GridViewAdapter).notifyDataSetChanged()
-                }
-//                showTickersPairs(pairStatusList)
                 homeTabType?.let {
-                    if (pairStatusList != null) {
-                        viewModel?.updateHomeSymbolListData(it,pairStatusList)
+                    if (updatePairData != null) {
+                        viewModel?.updateHomeSymbolListData(it,updatePairData,PairApiServiceHelper.getSymboleListPairData(mContext))
                     }
                 }
             }
@@ -382,7 +386,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             val pairCount = ticketData.size
             if (pairCount > 0) {
                 var pageCount = pairCount / STATUS_PAGE_COUNT
-                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
+//                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
+                pageCount = 1//暂时取1，如果有更多的交易对需要暂时，在修改该值
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
@@ -391,10 +396,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     for (j in 0 until rest) {
                         val pairStatus = ticketData[offset + j]
                         var pairName = pairStatus?.pair
-                        Log.d(TAG, "pairName = $pairName")
-                        Log.d(TAG,"price = "+pairStatus?.currentPrice)
-                        Log.d(TAG,"tradeVolume = "+pairStatus?.tradeVolume)
-                        Log.d(TAG,"priceChangeSinceToday = "+pairStatus?.priceChangeSinceToday)
                         gridPairs.add(pairStatus)
                         hotPairMap[pairName] = pairStatus
                         hardGridViewMap[pairName] = gridView
@@ -505,6 +506,16 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             colorDefault = SkinCompatResources.getColor(context, R.color.T3)
         }
 
+        fun updateItem(pairName:String?,pairStatus: PairStatus?){
+            for(i in data!!.indices){
+                if(pairName.equals(data!![i]?.pair)){
+                    updateItem(i,pairStatus)
+                }
+            }
+            for (i in data!!.indices){
+                Log.d(TAG,"updateItem,price = "+data!![i]?.currentPrice)
+            }
+        }
 
         fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>,color:Int?){
             brokenLine?.setDrawBorders(false)
@@ -566,6 +577,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
             Log.d(TAG,"bindView,pairStatus = "+pairStatus!!.pair)
+            Log.d(TAG,"bindView,pairPrice = "+pairStatus!!.currentPrice)
             val binding = holder?.dataBing
             val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
             val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)

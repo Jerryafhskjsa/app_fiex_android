@@ -47,6 +47,15 @@ abstract class BaseDataBindAdapter<T, DB : ViewDataBinding?>(protected var conte
         }
     }
 
+    open fun updateItem(index: Int, item: T?){
+        if (data == null) {
+            data = ArrayList()
+        }
+        if (item != null) {
+            data?.set(index, item)
+        }
+    }
+
     open fun addItem(index: Int, item: T?) {
         if (data == null) {
             data = ArrayList()

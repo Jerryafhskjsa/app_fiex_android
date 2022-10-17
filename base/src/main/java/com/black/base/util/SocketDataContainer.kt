@@ -41,6 +41,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object SocketDataContainer {
+    private var TAG = SocketDataContainer::class.java.simpleName
     private var gson: Gson = Gson()
         get() {
             if (field == null) {
@@ -483,12 +484,13 @@ object SocketDataContainer {
             }
 
             override fun callback(returnData: C2CPrice?) {
+                Log.d(TAG,"computePairStatusCNY->C2CPrice"+returnData?.buy)
                 onGetC2CPriceComplete(returnData)
             }
 
             private fun onGetC2CPriceComplete(price: C2CPrice?) {
                 Observable.create<String> { e ->
-                    e.onNext(updatePairStatusData(price))
+                    e.onNext(reallyUpdatePairStatusData(price))
                     e.onComplete()
                 }
                         .subscribeOn(Schedulers.io())
@@ -497,7 +499,9 @@ object SocketDataContainer {
                             override fun onSuccess(value: String?) {
                                 synchronized(pairObservers) {
                                     for (observer in pairObservers) {
-                                        observer.onNext(gson.fromJson(value, object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
+                                        var updateData:ArrayList<PairStatus?> = gson.fromJson(value, object : TypeToken<ArrayList<PairStatus?>?>() {}.type)
+                                        Log.d(TAG,"send update dataSize = "+updateData.size)
+                                        observer.onNext(updateData)
                                     }
                                 }
                             }
@@ -506,7 +510,7 @@ object SocketDataContainer {
         })
     }
 
-    private fun updatePairStatusData(price: C2CPrice?): String {
+    private fun reallyUpdatePairStatusData(price: C2CPrice?): String {
         val result = ArrayList<PairStatus>()
         synchronized(pairDataSource) {
             synchronized(dearPairMap) {
@@ -528,7 +532,9 @@ object SocketDataContainer {
                             pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
                         }
                         val newPairCompareKey = pairStatus.compareString
+                        Log.d(TAG,"updatePairStatusData1,oldPairCompareKey = $oldPairCompareKey,newPairCompareKey = $newPairCompareKey")
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
+                            Log.d(TAG,"updatePairStatusData1,addChange")
                             result.add(pairStatus)
                         }
                     }
@@ -573,6 +579,7 @@ object SocketDataContainer {
 
     //更新现有交易对信息
     fun updatePairStatusData(context: Context?, handler: Handler?, dataSource: PairStatusNew?, isRemoveAll: Boolean) {
+        Log.d(TAG,"updatePairStatusData,context = $context,handler = $handler,dataSource = $dataSource")
         if (context == null) {
             return
         }
@@ -581,20 +588,20 @@ object SocketDataContainer {
                 if (dataSource == null) {
                     emitter.onComplete()
                 } else {
-                    val data = gson.fromJson<ArrayList<PairStatusNew>>(dataSource.toString(), object : TypeToken<ArrayList<PairStatusNew?>?>() {}.type)
+//                    val data = gson.fromJson<PairStatusNew>(dataSource.toString(), object : TypeToken<PairStatusNew?>() {}.type)
+                    val data:PairStatusNew? = dataSource
+                    Log.d(TAG,"updatePairStatusData,data = "+data?.s)
                     synchronized(pairDataSource) {
                         if (isRemoveAll) {
                             pairDataSource.clear()
                         }
-                        for (dataItem in data) {
-                            val pair = dataItem.pair
-                            pair?.let {
-                                val oldItem = pairDataSource[pair]
-                                if (oldItem == null) {
-                                    pairDataSource[pair] = dataItem
-                                } else {
-                                    PairStatusNew.copyValues(oldItem, dataItem)
-                                }
+                        val pair = data?.s
+                        pair?.let {
+                            val oldItem = pairDataSource[pair]
+                            if (oldItem == null) {
+                                pairDataSource[pair] = data
+                            } else {
+                                PairStatusNew.copyValues(oldItem, data)
                             }
                         }
                     }
@@ -795,7 +802,7 @@ object SocketDataContainer {
     }
 
 
-    fun getHomeTickerTypePairs(context: Context?, type: Int,initPairStatus:ArrayList<PairStatus?>?): Observable<ArrayList<PairStatus?>>? {
+    fun getHomeTickerTypePairs(context: Context?, type: Int,initPairStatus:ArrayList<PairStatus?>?): Observable<ArrayList<PairStatus?>?>? {
             if (context == null) {
                 return null
             }
@@ -828,6 +835,10 @@ object SocketDataContainer {
                         result.addAll(initPairStatus)
                     }
                 }
+            }
+            if(result.size > 10){
+                var limitResult = result.subList(0,9)
+                return Observable.just(gson.fromJson(gson.toJson(limitResult), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
             }
             return Observable.just(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
     }

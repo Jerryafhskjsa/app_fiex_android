@@ -206,7 +206,7 @@ object SocketUtil {
                 for (i in jsonArray.indices) {
                     val pairStatusNew = jsonArray[i]
                     if (pairStatusNew != null) {
-                        val pair = pairStatusNew.pair
+                        val pair = pairStatusNew.s
                         if (!TextUtils.isEmpty(pair)) {
                             val cursor = helper?.rawQuery("select * from pairs_stats where pair = ?", arrayOf(pair))
                             val values = pairStatusNew.contentValues
