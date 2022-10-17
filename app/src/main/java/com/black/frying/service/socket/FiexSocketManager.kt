@@ -241,6 +241,17 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
     }
 
+    fun sendPing(){
+        Log.d(tag, "sendPing")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("ping", "ping")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_USER)?.send(jsonObject.toString())
+        }catch (e:Exception){
+            FryingUtil.printError(e)
+        }
+    }
+
     fun startListenKLine(){
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
         Log.d(tag, "startListenKline = $currentPair")
@@ -263,20 +274,6 @@ class FiexSocketManager(context: Context, handler: Handler){
             jsonObject.put("symbol", pair)
             WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)?.send(jsonObject.toString())
         }catch (e: Exception) {
-            FryingUtil.printError(e)
-        }
-    }
-
-    fun sendPing(){
-        Log.d(tag, "sendPing")
-        try {
-            val jsonObject = JSONObject()
-            jsonObject.put("ping", "ping")
-            WebSocketHandler.getWebSocket(SocketUtil.WS_USER)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)?.send(jsonObject.toString())
-        }catch (e:Exception){
             FryingUtil.printError(e)
         }
     }
@@ -374,8 +371,17 @@ class FiexSocketManager(context: Context, handler: Handler){
                 when(resType){
                     "qStats" ->{
                         var result = data.getString("data")
-                        val jsonObject: JsonObject = JsonParser().parse(result) as JsonObject
-                        val pairQuo:PairStatusNew? = gson.fromJson<PairStatusNew?>(jsonObject.toString(), object : TypeToken<PairStatusNew?>() {}.type)
+                        var pairQuo:PairStatusNew? = null
+                        try {
+                            val jsonObject: JsonObject = JsonParser().parse(result) as JsonObject
+                            Log.d(tag, "tickerStatus->jsonObject = $jsonObject")
+                            pairQuo = gson.fromJson<PairStatusNew?>(jsonObject.toString(), object : TypeToken<PairStatusNew?>() {}.type)
+                            Log.d(tag,"tickerStatus->pairQuo.s = "+pairQuo.s)
+                            Log.d(tag,"tickerStatus->pairQuo price = "+pairQuo.c)
+                        }catch (e:Exception){
+                            Log.d(tag, "tickerStatus->Exception")
+                            FryingUtil.printError(e)
+                        }
                         if(pairQuo != null){
                             SocketDataContainer.updatePairStatusData(mCcontext, mHandler, pairQuo, true)
                         }
@@ -440,7 +446,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                     when(resType){
                         //50挡深度
                         "qAllDepth" -> {
-                            val allDepth:TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(jsonObject.toString(), object : TypeToken<TradeOrderDepth??>() {}.type)
+                            val allDepth:TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(jsonObject.toString(), object : TypeToken<TradeOrderDepth?>() {}.type)
                             SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepth,true)
                         }
                         "qDepth" ->{

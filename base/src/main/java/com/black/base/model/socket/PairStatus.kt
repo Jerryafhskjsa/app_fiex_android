@@ -206,7 +206,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             }
             if (o2.priceChangeSinceToday == null) {
                 -1
-            } else java.lang.Double.compare(o1.priceChangeSinceToday!!, o2.priceChangeSinceToday!!)
+            } else -(o2.priceChangeSinceToday!!).compareTo(o1.priceChangeSinceToday!!)
         }
         var COMPARATOR_SINCE_UP: Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 ->
             if (o1 == null || o2 == null || o1.priceChangeSinceToday == null && o2.priceChangeSinceToday == null) {
@@ -217,7 +217,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             }
             if (o2.priceChangeSinceToday == null) {
                 -1
-            } else -java.lang.Double.compare(o1.priceChangeSinceToday!!, o2.priceChangeSinceToday!!)
+            } else -(o1.priceChangeSinceToday!!).compareTo(o2.priceChangeSinceToday!!)
         }
         var COMPARATOR_QUOTATION: Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 -> 0 }
         var COMPARATOR_VOLUME_24 : Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 ->
@@ -229,7 +229,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             }
             if (o2.tradeAmount == null) {
                 -1
-            } else java.lang.Double.compare(o1.tradeAmount!!, o2.tradeAmount!!)
+            } else (o1.tradeAmount!!).compareTo(o2.tradeAmount!!)
         }
     }
 }

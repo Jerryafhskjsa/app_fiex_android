@@ -25,8 +25,11 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
+    private var TAG = MainViewModel::class.java.simpleName
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
@@ -34,8 +37,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
-    private var hotPairObserver: Observer<java.util.ArrayList<String?>?>? = createHotPairObserver()
-    private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
 
     private var noticeList: java.util.ArrayList<NoticeHomeItem?>? = null
 
@@ -109,9 +110,13 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     private fun createPairObserver(): Observer<ArrayList<PairStatus?>?>? {
         return object : SuccessObserver<ArrayList<PairStatus?>?>() {
             override fun onSuccess(value: ArrayList<PairStatus?>?) {
-                onMainModelListener?.onPairStatusDataChanged(
-                        Observable.just(value!!)
+                    if(value?.size!! > 0){
+                        Log.d(TAG,"createPairObserver onSuccess size = ${value?.size}")
+                        Log.d(TAG,"createPairObserver pair = ${value!![0]?.pair},price = ${value!![0]?.currentPrice}")
+                        onMainModelListener?.onPairStatusDataChanged(
+                            Observable.just(value)
                                 .compose(RxJavaHelper.observeOnMainThread()))
+                    }
             }
         }
     }
@@ -278,10 +283,20 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
             ?.observeOn(AndroidSchedulers.mainThread()))
     }
 
-    fun updateHomeSymbolListData(type: Int,data: ArrayList<PairStatus?>){
-        onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,data)
-            ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
-            ?.observeOn(AndroidSchedulers.mainThread()))
+    fun updateHomeSymbolListData(type: Int,updateData: ArrayList<PairStatus?>,allData: ArrayList<PairStatus?>?){
+            var nullAmount = "-"
+            for(i in allData!!){
+                if(i?.pair.equals(updateData[0]?.pair)){
+                    i?.precision = updateData[0]?.precision ?: 0
+                    i?.currentPrice = (updateData[0]?.currentPrice ?: 0.0)
+                    i?.tradeVolume = updateData[0]?.tradeVolume ?: "0"
+                    i?.setCurrentPriceCNY(updateData[0]?.currentPriceCNY, nullAmount)
+                    i?.priceChangeSinceToday = (updateData[0]?.priceChangeSinceToday)
+                }
+            }
+            onMainModelListener?.onHomeTabDataChanged(SocketDataContainer.getHomeTickerTypePairs(context!!, type,allData)
+                ?.subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
+                ?.observeOn(AndroidSchedulers.mainThread()))
     }
 
     //获取公告信息
