@@ -5,18 +5,18 @@ import com.black.util.CommonUtil
 
 object UrlConfig {
     private val HOSTS = arrayOf(
-            "http://fiex.matchain.info",//fiex测试环境
+//            "http://fiex.matchain.info",//fiex测试环境
             "https://fiex.io",//正式环境
 
     )
     val API_HOSTS = arrayOf(
-        "http://fiex.matchain.info",//fiex测试环境
+//        "http://fiex.matchain.info",//fiex测试环境
         "https://fiex.io",//正式环境
     )
 
     //    网站切换换成fbsex.top
     private val SOCKET_HOSTS = arrayOf(
-            "http://fiex.matchain.info",//fiex测试环境
+//            "http://fiex.matchain.info",//fiex测试环境
             "http://fiex.io",//正式环境
     )
 
@@ -66,8 +66,8 @@ object UrlConfig {
         return SOCKET_HOSTS_FIEX[getIndex(context)]
     }
     //币种图标
-    fun getCoinIconUrl(pairName:String?):String{
-        return "https://fiex.s3.ap-southeast-1.amazonaws.com/coin/${pairName?.lowercase()}.png"
+    fun getCoinIconUrl(context: Context,pairName:String?):String{
+        return getHost(context) +pairName
     }
     /***fiex***/
 

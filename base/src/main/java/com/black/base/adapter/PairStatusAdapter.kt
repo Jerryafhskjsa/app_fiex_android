@@ -2,6 +2,7 @@ package com.black.base.adapter
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,6 +15,7 @@ import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 
 class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?>?, private val dataType: Int) : BaseDataTypeAdapter<PairStatusShowPopup?>(context, data) {
+    private var TAG = PairStatusAdapter::class.java.simpleName
     private var colorSelect = 0
     private var colorTransparent = 0
     private val currentPair: String? = if (dataType == PairStatus.LEVER_DATA) CookieUtil.getCurrentPairLever(context) else CookieUtil.getCurrentPair(context)
@@ -34,6 +36,8 @@ class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?
             viewHolder.setNameView = view.findViewById(R.id.set_name)
             viewHolder.maxLeverView = view.findViewById(R.id.max_lever)
             viewHolder.priceView = view.findViewById(R.id.price)
+            viewHolder.sinceView = view.findViewById(R.id.raise_fall)
+            viewHolder.hotView = view.findViewById(R.id.icon_hot)
             view.tag = viewHolder
         }
         bindView(view!!, pairStatus)
@@ -57,9 +61,24 @@ class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?
             viewHolder.setNameView?.text = pairStatus?.setName
         }
         if (viewHolder.priceView != null) {
-            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
+            val color = colorDefault
             viewHolder.priceView?.text = pairStatus?.currentPriceFormat
             viewHolder.priceView?.setTextColor(color)
+        }
+        if(viewHolder.sinceView != null){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
+            viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
+            viewHolder.sinceView?.setTextColor(color)
+        }
+        if(viewHolder.hotView != null){
+            var visiable: Int? = if(pairStatus?.isHot == true){
+                View.VISIBLE
+            }else{
+                View.GONE
+            }
+            if (visiable != null) {
+                viewHolder.hotView?.visibility = visiable
+            }
         }
         if (TextUtils.equals(currentPair, pairStatus?.pair)) {
             convertView.setBackgroundColor(colorSelect)
@@ -74,6 +93,7 @@ class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?
         var setNameView: TextView? = null
         var maxLeverView: TextView? = null
         var nameView: TextView? = null
+        var hotView:ImageView? = null
         var priceView: TextView? = null
         var sinceView: TextView? = null
     }

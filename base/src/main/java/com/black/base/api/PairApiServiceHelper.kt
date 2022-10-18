@@ -33,6 +33,7 @@ object PairApiServiceHelper {
     private val lastGetTimeMap = SparseArray<Long>()
     private var tradeSets: ArrayList<QuotationSet?>? = null
     private var hotPairCache: HttpRequestResultDataList<String?>? = null
+    private var homeTickersPairStatus:ArrayList<PairStatus?>? = null
 
 
     private fun getLastGetTime(type: Int): Long? {
@@ -159,15 +160,14 @@ object PairApiServiceHelper {
                         for(j in pairListData!!.indices){
                             pairListData!![j]?.let { newData.add(it) }
                             if(pairListData!![j]?.pair == data[i]?.s){
+                                //交易对名
+                                newData!![j]?.pair = data[i]?.s
                                 //现价
                                 newData!![j]?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
-                                Log.d(TAG,"currentPrice = "+newData!![j]?.currentPrice)
                                 //交易量
                                 newData!![j]?.tradeVolume = data[i]?.v
-                                Log.d(TAG,"tradeVolume = "+newData!![j]?.tradeVolume)
                                 //涨跌幅
                                 newData!![j]?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
-                                Log.d(TAG,"priceChangeSinceToday = "+newData!![j]?.priceChangeSinceToday)
                             }
                         }
                     }
@@ -316,7 +316,7 @@ object PairApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollect(pair)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -329,7 +329,7 @@ object PairApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollectCancel(pair)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -342,7 +342,7 @@ object PairApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.getCollectPairs()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))

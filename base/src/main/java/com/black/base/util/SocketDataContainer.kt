@@ -532,7 +532,6 @@ object SocketDataContainer {
                             pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
                         }
                         val newPairCompareKey = pairStatus.compareString
-                        Log.d(TAG,"updatePairStatusData1,oldPairCompareKey = $oldPairCompareKey,newPairCompareKey = $newPairCompareKey")
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
                             Log.d(TAG,"updatePairStatusData1,addChange")
                             result.add(pairStatus)
@@ -579,7 +578,6 @@ object SocketDataContainer {
 
     //更新现有交易对信息
     fun updatePairStatusData(context: Context?, handler: Handler?, dataSource: PairStatusNew?, isRemoveAll: Boolean) {
-        Log.d(TAG,"updatePairStatusData,context = $context,handler = $handler,dataSource = $dataSource")
         if (context == null) {
             return
         }
@@ -626,7 +624,7 @@ object SocketDataContainer {
         if (context == null) {
             return
         }
-        ApiManager.build(context).getService(PairApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.getDearPairs()
                 ?.subscribeOn(Schedulers.io())
                 ?.map { returnData: HttpRequestResultDataList<String?>? ->
@@ -811,6 +809,7 @@ object SocketDataContainer {
                 ConstData.HOME_TAB_HOT ->{
                     for (i in initPairStatus?.indices!!) {
                         val pairStatus = initPairStatus[i]
+                        Log.d(TAG,"hot = "+pairStatus?.hot)
                         if (pairStatus?.hot != null && pairStatus.hot!!) {
                             result.add(pairStatus)
                         }

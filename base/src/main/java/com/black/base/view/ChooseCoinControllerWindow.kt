@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.PaintDrawable
 import android.media.Image
+import android.net.Uri
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -13,6 +14,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.black.base.R
 import com.black.base.model.CanTransferCoin
+import com.black.base.util.UrlConfig
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.view_coin_chooser.view.*
 import skin.support.content.res.SkinCompatResources
 import java.util.*
@@ -150,7 +154,20 @@ class ChooseCoinControllerWindow<T>(private val activity: Activity, title: Strin
             }
             val item = getItem(position) as CanTransferCoin
             var coinNameText = view?.findViewById<View>(R.id.coin_name) as TextView?
+            var coinFullNameText = view?.findViewById<View>(R.id.coin_name_des) as TextView?
+            var coinlogoImg = view?.findViewById<View>(R.id.img_coin) as ImageView?
+            var coinAmountText = view?.findViewById<View>(R.id.coin_count) as TextView?
             coinNameText?.text = item.coin
+            coinFullNameText?.text = item.coinDes
+            coinAmountText?.text = item.amount
+            if(item?.coinIconUrl != null){
+                if (coinlogoImg != null) {
+                    Glide.with(context)
+                        .load(Uri.parse(UrlConfig.getCoinIconUrl(context,item?.coinIconUrl)))
+                        .apply(RequestOptions().error(R.drawable.icon_coin_default))
+                        .into(coinlogoImg)
+                }
+            }
             return view
         }
 

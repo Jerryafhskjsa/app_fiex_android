@@ -1,14 +1,18 @@
 package com.black.wallet.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.View
 import android.widget.SectionIndexer
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
+import com.black.base.util.UrlConfig
 import com.black.util.CommonUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListItemWalletChooseCoinBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class WalletChooseCoinAdapter(context: Context, data: ArrayList<Wallet?>?) : BaseDataTypeBindAdapter<Wallet?, ListItemWalletChooseCoinBinding>(context, data), SectionIndexer {
     override fun getItemLayoutId(): Int {
@@ -28,6 +32,12 @@ class WalletChooseCoinAdapter(context: Context, data: ArrayList<Wallet?>?) : Bas
         viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
         viewHolder?.coinCount?.setText(wallet?.coinAmount.toString())
         viewHolder?.coinNameDes?.setText(wallet?.coinTypeDes)
+        if(wallet?.coinIconUrl != null){
+            Glide.with(context)
+                .load(Uri.parse(UrlConfig.getCoinIconUrl(context,wallet?.coinIconUrl)))
+                .apply(RequestOptions().error(R.drawable.icon_coin_default))
+                .into(viewHolder?.imgCoin!!)
+        }
     }
 
     override fun getSections(): Array<Any> {

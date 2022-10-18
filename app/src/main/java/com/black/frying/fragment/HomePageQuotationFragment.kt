@@ -84,7 +84,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         if (currentFragment != null && currentFragment.isVisible) {
             currentFragment.onResume()
         }
-//        SocketDataContainer.refreshDearPairs(mContext)
     }
 
     override fun onDestroy() {

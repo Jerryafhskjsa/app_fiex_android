@@ -1,6 +1,7 @@
 package com.black.wallet.activity
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -26,6 +27,8 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivityAssetTransferBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import java.io.Serializable
 import java.math.BigDecimal
 import java.util.*
@@ -45,6 +48,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var supportAccountData:ArrayList<SupportAccount?>? = null
     private var supportCoinData:ArrayList<CanTransferCoin?>? = null
     private var showSupportCoin:Boolean? = false
+
+    private var configCoinInfoList:ArrayList<CoinInfoType?>? = null
 
     private var fromAccount:SupportAccount? = null
     private var toAccount:SupportAccount? = null
@@ -71,6 +76,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
     }
+
 
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
@@ -125,6 +131,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         super.onResume()
         supportAccount
         supportTransferCoin
+        allCoinList
         getUserBalance(false)
     }
 
@@ -169,7 +176,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                                 supportCoinData = result
                                 if(supportCoinData != null && supportCoinData?.size!! > 0){
                                     if(showSupportCoin == true){
-                                        showCoinChooseDialog(supportCoinData)
+                                        var result = getNeedCoinInfo()
+                                        showCoinChooseDialog(result)
                                         showSupportCoin = false
                                     }
                                 }else{
@@ -182,6 +190,50 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     })
             }
         }
+
+    /**
+     * 根据获取到的支持币种，然后去拼需要显示的数据
+     * 遍历所有币种跟钱包余额
+     */
+    private fun getNeedCoinInfo():ArrayList<CanTransferCoin?>?{
+        var canTransferCoin:ArrayList<CanTransferCoin?>? = ArrayList()
+        for(i in configCoinInfoList?.indices!!){
+            var coinInfo = configCoinInfoList!![i]
+            for (j in supportCoinData?.indices!!){
+                var supportCoinInfo = supportCoinData!![j]
+                if(coinInfo?.coinType.equals(supportCoinInfo?.coin)){
+                    supportCoinInfo?.coinDes = coinInfo?.config?.get(0)?.coinConfigVO?.coinFullName
+                    supportCoinInfo?.coinIconUrl = coinInfo?.config?.get(0)?.coinConfigVO?.logosUrl
+                    canTransferCoin?.add(supportCoinInfo)
+                    break
+                }
+            }
+        }
+        var result:ArrayList<CanTransferCoin?>? = ArrayList()
+        for (k in canTransferCoin?.indices!!){
+             var canTransferCoin = canTransferCoin[k]
+            for (h in userBalanceList?.indices!!){
+                var balance = userBalanceList!![h]
+                if(canTransferCoin?.coin.equals(balance?.coin)){
+                    canTransferCoin?.amount = balance?.availableBalance
+                    result?.add(canTransferCoin)
+                    break
+                }
+            }
+        }
+        return result
+    }
+
+    private val allCoinList:Unit
+            get() {
+                WalletApiServiceHelper.getCoinInfoList(this, object :Callback<ArrayList<CoinInfoType?>?>(){
+                    override fun callback(returnData: ArrayList<CoinInfoType?>?) {
+                        configCoinInfoList = returnData
+                    }
+                    override fun error(type: Int, error: Any?) {
+                    }
+                })
+            }
 
 
     private val doTransfer:Unit
@@ -291,7 +343,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     }
 
     private fun showCoinChooseDialog(data:ArrayList<CanTransferCoin?>?){
-            chooseCoinDialog = ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_wallet),
+            chooseCoinDialog = ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin),
                 data,
                 object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
                     override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
@@ -299,6 +351,13 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                         userBalance = getSelectedCoinInfo(selectedCoin)
                         binding?.tvChooseName?.text = selectedCoin?.coin
                         binding?.tvName?.text = selectedCoin?.coin
+                        var logoView = binding?.imgIcon
+                        if (logoView != null) {
+                            Glide.with(mContext)
+                                .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext,item?.coinIconUrl)))
+                                .apply(RequestOptions().error(com.black.base.R.drawable.icon_coin_default))
+                                .into(logoView)
+                        }
                         var maxtCoin = userBalance?.availableBalance + " "+userBalance?.coin
                         binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
                     }
