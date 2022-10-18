@@ -152,7 +152,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
 
     //判断是否是HOT
     val isHot: Boolean
-        get() = hot == null || hot!! .equals("true")
+        get() = hot == null || hot!!
 
     //判断是否下跌
     val isDown: Boolean

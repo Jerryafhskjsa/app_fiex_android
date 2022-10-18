@@ -3,16 +3,19 @@ package com.black.frying.adapter
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.model.socket.PairStatus
+import com.black.base.util.ConstData
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemHomeMainRiseFallBinding
 import skin.support.content.res.SkinCompatResources
 
-class HomeMainRiseFallAdapter(context: Context, data: ArrayList<PairStatus?>?) : BaseDataTypeBindAdapter<PairStatus?, ListItemHomeMainRiseFallBinding>(context, data) {
+class HomeMainRiseFallAdapter(context: Context,type:Int?, data: ArrayList<PairStatus?>?) : BaseDataTypeBindAdapter<PairStatus?, ListItemHomeMainRiseFallBinding>(context, data) {
     private var bgDefault: Drawable? = null
     private var bgWin: Drawable? = null
     private var bgLose: Drawable? = null
+    private var type:Int? = type
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -34,6 +37,18 @@ class HomeMainRiseFallAdapter(context: Context, data: ArrayList<PairStatus?>?) :
         val bgColor = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
         val bg = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
         viewHolder?.pairName?.setText(pairStatus?.pair)
+        if(type == ConstData.HOME_TAB_HOT){
+            var hotIconShow: Int? = if(pairStatus?.isHot == true){
+                View.VISIBLE
+            }else{
+                View.GONE
+            }
+            if (hotIconShow != null) {
+                viewHolder?.iconHot?.visibility = hotIconShow
+            }
+        }else{
+            viewHolder?.iconHot?.visibility = View.GONE
+        }
 //        viewHolder?.setName?.setText(pairStatus?.setName)
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
 //        viewHolder?.priceCny?.setText("¥ " + pairStatus?.currentPriceCNYFormat)
@@ -44,6 +59,9 @@ class HomeMainRiseFallAdapter(context: Context, data: ArrayList<PairStatus?>?) :
         var ydata:IntArray = intArrayOf(0,10,20,30,40,50,60,70,80,90)
         var linedata:FloatArray = floatArrayOf(5f,10f,6f,30f,5f,62.5f,6f,2f,3f,6f)
 //        viewHolder?.lineCartTab?.setChartdate(xdata,ydata,linedata, Color.GREEN)
+    }
+    fun setType(type:Int?){
+        this.type = type
     }
 
 }

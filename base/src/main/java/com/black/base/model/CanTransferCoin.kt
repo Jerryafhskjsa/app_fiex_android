@@ -16,6 +16,10 @@ class CanTransferCoin {
     var isTransfer:Int? = null
     var toType:String? = null
 
+    var coinDes:String? = null//币种全名
+    var coinIconUrl:String? = null//图标url
+    var amount:String? = null//可用余额
+
 
     val sortLetter: Char?
         get() = if (coin == null || coin!!.trim { it <= ' ' }.isEmpty()) {

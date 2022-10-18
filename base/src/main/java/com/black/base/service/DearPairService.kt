@@ -13,6 +13,7 @@ import com.black.base.util.FryingUtil.showToast
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.SocketDataContainer.cachePair
 import com.black.base.util.SocketDataContainer.updateDearPairs
+import com.black.base.util.UrlConfig
 import com.black.net.HttpRequestResult
 import com.black.util.CallbackObject
 import io.reactivex.Observable
@@ -248,7 +249,7 @@ object DearPairService {
             val isDear = dearPairMap[pair]
             Observable.just(isDear ?: false)
         } else {
-            ApiManager.build(context).getService(PairApiService::class.java)
+            ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                     ?.getCollectPairs()
                     ?.flatMap { result: HttpRequestResultDataList<String?>? ->
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {

@@ -109,7 +109,7 @@ class GlideEngine : ImageEngine {
             }
             Glide.with(appContext)
                     .load(uri)
-                    .apply(RequestOptions().error(R.drawable.default_user_icon))
+                    .apply(RequestOptions().error(R.drawable.icon_coin_default))
                     .into(imageView!!)
         }
 

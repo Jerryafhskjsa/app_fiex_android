@@ -1097,7 +1097,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private fun updateCurrentPairPrice(price:String?){
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
-        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+//        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+        if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4))
+        } else {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
+        }
     }
 
     //更新涨跌幅

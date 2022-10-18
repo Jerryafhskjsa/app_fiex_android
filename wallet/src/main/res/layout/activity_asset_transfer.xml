@@ -12,10 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/B2">
+
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@id/app_bar_layout"
                 android:layout_width="match_parent"
@@ -24,7 +26,9 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
+
                 <include layout="@layout/tool_bar_left_back" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_padding"
@@ -41,20 +45,24 @@
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="105dp"
-                        android:orientation="horizontal"
-                        android:background="@drawable/bg_transfer_corner">
+                        android:background="@drawable/bg_transfer_corner"
+                        android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_weight="5">
+                            android:layout_weight="5"
+                            android:orientation="vertical">
+
                             <RelativeLayout
                                 android:id="@+id/rel_from"
                                 android:layout_width="match_parent"
@@ -68,7 +76,7 @@
                                     android:layout_centerVertical="true"
                                     android:paddingLeft="10dp"
                                     android:text="@string/from"
-                                    android:textColor="@color/T11_ALPHA40"/>
+                                    android:textColor="@color/T11_ALPHA40" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/tv_from_account"
@@ -77,22 +85,23 @@
                                     android:layout_centerVertical="true"
                                     android:layout_toRightOf="@+id/tv_from"
                                     android:text="@string/number_default"
-                                    android:textColor="@color/T14"/>
+                                    android:textColor="@color/T14" />
+
                                 <ImageView
                                     android:id="@+id/img_from"
-                                    android:layout_alignParentRight="true"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
                                     android:layout_centerVertical="true"
-                                    android:src="@drawable/icon_right_arrow">
-                                </ImageView>
+                                    android:src="@drawable/icon_right_arrow"/>
                             </RelativeLayout>
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginLeft="10dp"
-                                android:background="@color/T11_ALPHA8">
-                            </View>
+                                android:background="@color/T11_ALPHA8"/>
+
                             <RelativeLayout
                                 android:id="@+id/rel_to"
                                 android:layout_width="match_parent"
@@ -106,7 +115,7 @@
                                     android:layout_centerVertical="true"
                                     android:paddingLeft="10dp"
                                     android:text="@string/to"
-                                    android:textColor="@color/T11_ALPHA40"/>
+                                    android:textColor="@color/T11_ALPHA40" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/tv_to_account"
@@ -116,42 +125,42 @@
                                     android:layout_toRightOf="@+id/tv_to"
                                     android:text="@string/number_default"
                                     android:textColor="@color/T14" />
+
                                 <ImageView
                                     android:id="@+id/img_to"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
                                     android:layout_centerVertical="true"
-                                    android:src="@drawable/icon_right_arrow">
-                                </ImageView>
+                                    android:src="@drawable/icon_right_arrow"/>
                             </RelativeLayout>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            >
+                            android:layout_height="match_parent">
+
                             <ImageView
                                 android:id="@+id/img_exchange"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:layout_margin="8dp"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/icon_exchange">
-                            </ImageView>
+                                android:layout_margin="8dp"
+                                android:src="@drawable/icon_exchange"/>
                         </LinearLayout>
                     </LinearLayout>
-                    
+
                     <RelativeLayout
+                        android:id="@+id/rel_choose"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:id="@+id/rel_choose">
+                        android:layout_height="90dp">
+
                         <ImageView
                             android:id="@+id/img_icon"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_launcher_fiex">
-                        </ImageView>
+                            android:src="@mipmap/ic_launcher_fiex" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/tv_choose_name"
@@ -162,33 +171,31 @@
                             android:layout_toRightOf="@+id/img_icon"
                             android:text="@string/select_coin"
                             android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_14">
-                        </com.black.base.widget.SpanTextView>
+                            android:textSize="@dimen/text_size_14"/>
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="15dp"
-                            android:src="@drawable/icon_right_arrow">
-                        </ImageView>
+                            android:src="@drawable/icon_right_arrow"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:background="@drawable/bg_transfer_corner"
                         android:layout_height="50dp"
-                        >
+                        android:background="@drawable/bg_transfer_corner">
+
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/tv_amount"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:includeFontPadding="false"
-                            android:textSize="@dimen/text_size_10"
                             android:gravity="center"
-                            android:text="Amount">
-                        </com.black.base.widget.SpanTextView>
+                            android:includeFontPadding="false"
+                            android:text="Amount"
+                            android:textSize="@dimen/text_size_10"/>
 
                         <com.black.base.widget.SpanEditText
                             android:id="@+id/edit_amount"
@@ -197,6 +204,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/tv_amount"
                             android:background="@null"
+                            android:inputType="number"
                             android:hint="Minimum 0.0000001"
                             android:includeFontPadding="false"
                             android:maxLines="1"
@@ -211,7 +219,7 @@
                             android:layout_toLeftOf="@+id/tv_all"
                             android:includeFontPadding="false"
                             android:text="@string/number_default"
-                            android:textSize="@dimen/text_size_14"/>
+                            android:textSize="@dimen/text_size_14" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/tv_all"
@@ -223,27 +231,27 @@
                             android:includeFontPadding="false"
                             android:text="All"
                             android:textColor="@color/T13"
-                            android:textSize="@dimen/text_size_14">
-                        </com.black.base.widget.SpanTextView>
+                            android:textSize="@dimen/text_size_14"/>
                     </RelativeLayout>
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/max_transfer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Max transfer 0.00">
-                    </com.black.base.widget.SpanTextView>
+                        android:text="Max transfer 0.00"/>
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/btn_confirm_transfer"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
+                        android:layout_margin="@dimen/default_padding"
                         android:background="@drawable/btn_t8"
                         android:checked="false"
-                        android:includeFontPadding="false"
-                        android:layout_margin="@dimen/default_padding"
-                        android:text="@string/confirm_transfer"
                         android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/confirm_transfer"
                         android:textColor="@color/T8"
                         android:textSize="@dimen/text_size_14"
                         android:textStyle="bold" />

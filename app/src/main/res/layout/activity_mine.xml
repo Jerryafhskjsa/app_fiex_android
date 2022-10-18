@@ -161,6 +161,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:paddingTop="@dimen/double_padding"
                         android:paddingBottom="@dimen/double_padding">
                         <LinearLayout
@@ -216,7 +217,7 @@
                 <LinearLayout
                     style="@style/MenuListItem"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <ImageView
                         style="@style/SettingIconStyle"
                         android:src="@drawable/icon_simple_version" />

@@ -129,26 +129,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
     }
 
-    private fun createUserLeverObserver(): Observer<String?> {
-        return object : SuccessObserver<String?>() {
-            override fun onSuccess(value: String?) {
-                onMainModelListener?.onUserInfoChanged()
-            }
-        }
-    }
-
-    private fun createHotPairObserver(): Observer<java.util.ArrayList<String?>?>? {
-        return object : SuccessObserver<java.util.ArrayList<String?>?>() {
-            override fun onSuccess(value: java.util.ArrayList<String?>?) {
-                onMainModelListener?.onHotPairs(Observable.just(value!!)
-                        .flatMap {
-                            val result: HttpRequestResultDataList<String?>? = HttpRequestResultDataList()
-                            Observable.just(result)
-                        }
-                        .compose(RxJavaHelper.observeOnMainThread()))
-            }
-        }
-    }
 
     //获取所有交易对数据
     fun getAllPairStatus() {
@@ -215,53 +195,6 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
                 }))
             }
-//            onMainModelListener?.onMoney(ApiManager.build(context!!).getService(WalletApiService::class.java)
-//                    .getWallet(null)
-//                    .flatMap(object : Function<HttpRequestResultData<WalletConfig?>?, Observable<Double?>> {
-//                        override fun apply(returnData: HttpRequestResultData<WalletConfig?>): Observable<Double?> {
-//                            if (returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-//                                //循环累加
-//                                var total = 0.0
-//                                val normalWalletList: ArrayList<Wallet?>? = returnData.data?.userCoinAccountVO
-//                                normalWalletList?.run {
-//                                    for (wallet in normalWalletList) {
-//                                        total += wallet?.estimatedTotalAmount ?: 0.toDouble()
-//                                    }
-//                                }
-//                                val leverWalletList: ArrayList<WalletLever?>? = returnData.data?.userCoinAccountLeverVO
-//                                leverWalletList?.run {
-//                                    for (wallet in leverWalletList) {
-//                                        total += wallet?.estimatedTotalAmount ?: 0.toDouble()
-//                                    }
-//                                }
-//                                return Observable.just(total)
-//                            } else {
-//                                return Observable.just(null)
-//                            }
-//                        }
-//
-//                    })
-//                    .flatMap { totalAmount: Double? ->
-//                        C2CApiServiceHelper.getC2CPrice(context!!)
-//                                .materialize()
-//                                .flatMap(object : Function<Notification<C2CPrice>, Observable<Money>> {
-//
-//                                    override fun apply(notify: Notification<C2CPrice>): Observable<Money> {
-//                                        val money = Money()
-//                                        money.usdt = totalAmount
-//                                        if (notify.isOnNext) {
-//                                            val cny = SocketDataContainer.computeTotalMoneyCNY(totalAmount, notify.value)
-//                                            money.cny = cny
-//                                            return Observable.just(money)
-//                                        }
-//                                        if (notify.isOnError) {
-//                                            return Observable.just(money)
-//                                        }
-//                                        return Observable.empty()
-//                                    }
-//                                })
-//                    }
-//                    .compose(RxJavaHelper.observeOnMainThread()))
         }
     }
 

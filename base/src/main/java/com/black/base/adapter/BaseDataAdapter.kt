@@ -29,9 +29,9 @@ abstract class BaseDataAdapter<T>(protected var context: Context, data: MutableL
     }
 
     open fun resetSkinResources() {
-        colorWin = SkinCompatResources.getColor(context, R.color.T7)
-        colorLost = SkinCompatResources.getColor(context, R.color.T5)
-        colorDefault = SkinCompatResources.getColor(context, R.color.T3)
+        colorWin = SkinCompatResources.getColor(context, R.color.T9)
+        colorLost = SkinCompatResources.getColor(context, R.color.T10)
+        colorDefault = SkinCompatResources.getColor(context, R.color.T1)
     }
 
     fun addItem(item: T?) {

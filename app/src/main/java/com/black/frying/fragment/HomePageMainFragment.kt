@@ -149,7 +149,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
         drawable.color = SkinCompatResources.getColor(mContext, R.color.L1_ALPHA30)
         binding!!.riseFallListView.divider = drawable
         binding!!.riseFallListView.dividerHeight = 1
-        adapter = HomeMainRiseFallAdapter(mContext!!, null)
+        adapter = HomeMainRiseFallAdapter(mContext!!,0, null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
             onQuotationPairStatusClick(adapter?.getItem(position)!!)

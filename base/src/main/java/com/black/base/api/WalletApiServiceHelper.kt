@@ -348,7 +348,7 @@ object WalletApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    //现货资产提币s 申请
+    //现货资产提币申请
     fun createWithdraw(context: Context?, coinType: String?, withdrawFee: String?, txTo: String?, amount: String?, memo: String?,
                        password: String?, phoneCode: String?, emailCode: String?, googleCode: String?,
                        chainType: String?, callback: Callback<HttpRequestResultString?>?) {
@@ -413,6 +413,7 @@ object WalletApiServiceHelper {
     private fun getCoinInfoFromCache(coinType: String?, callback: Callback<CoinInfoType?>?) {
         if (coinType == null || callback == null) {
             return
+
         }
         var coinInfo: CoinInfoType? = null
         if (coinInfoCache.isNotEmpty()) {

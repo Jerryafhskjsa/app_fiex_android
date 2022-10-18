@@ -121,6 +121,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 homeTabType = tab.position
+                adapter?.setType(homeTabType)
 //                viewModel!!.getRiseFallData(type)
                 viewModel!!.getHomeSybolListData(homeTabType!!,PairApiServiceHelper.getSymboleListPairData(mContext))
 
@@ -128,12 +129,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(mContext, R.color.B2)
         binding!!.riseFallListView.divider = drawable
         binding!!.riseFallListView.dividerHeight = 15
-        adapter = HomeMainRiseFallAdapter(mContext!!, null)
+        adapter = HomeMainRiseFallAdapter(mContext!!, homeTabType,null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
             onQuotationPairStatusClick(adapter?.getItem(position)!!)
@@ -387,7 +387,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             if (pairCount > 0) {
                 var pageCount = pairCount / STATUS_PAGE_COUNT
 //                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
-                pageCount = 1//暂时取1，如果有更多的交易对需要暂时，在修改该值
+                pageCount = 1//暂时取1，如果有更多的交易对需要展示，在修改该值
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
@@ -512,9 +512,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     updateItem(i,pairStatus)
                 }
             }
-            for (i in data!!.indices){
-                Log.d(TAG,"updateItem,price = "+data!![i]?.currentPrice)
-            }
         }
 
         fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>,color:Int?){
@@ -576,8 +573,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
-            Log.d(TAG,"bindView,pairStatus = "+pairStatus!!.pair)
-            Log.d(TAG,"bindView,pairPrice = "+pairStatus!!.currentPrice)
             val binding = holder?.dataBing
             val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
             val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
@@ -589,7 +584,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairPrice?.setTextColor(color)
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
             binding?.pairSince?.setTextColor(colorDefault)
-            binding?.pairPriceCny?.text = String.format("≈ %s", pairStatus.currentPriceCNYFormat)
+            binding?.pairPriceCny?.text = String.format("≈ %sCNY", pairStatus.currentPriceCNYFormat)
             var kLineData = pairStatus?.kLineData
             if(kLineData != null){
                 brokenLine = binding?.lineCart

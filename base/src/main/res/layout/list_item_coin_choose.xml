@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     >
+
     <ImageView
         android:id="@+id/img_coin"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/ic_launcher_fiex">
-    </ImageView>
+        android:src="@mipmap/ic_launcher_fiex"></ImageView>
 
     <com.black.base.widget.SpanTextView
         android:id="@+id/coin_name"
@@ -33,14 +33,15 @@
         android:text="1INCH"
         android:textColor="@color/T11_ALPHA60"
         android:textSize="@dimen/text_size_12" />
+
     <com.black.base.widget.SpanTextView
         android:id="@+id/coin_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:layout_alignParentRight="true"
-        android:textColor="@color/T14"
         android:layout_marginLeft="15dp"
+        android:maxLines="1"
         android:text="0.00"
+        android:textColor="@color/T14"
         android:textSize="@dimen/text_size_14" />
 </RelativeLayout>

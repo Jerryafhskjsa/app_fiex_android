@@ -252,6 +252,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                         var wallet = Wallet()
                         wallet.coinType = coin?.coinType
                         wallet.coinIconUrl = coin?.logosUrl
+                        wallet.coinTypeDes = coin?.coinFullName
                         wallet.coinAmount = BigDecimal(0)
                         wallet.estimatedAvailableAmount = 0.0
                         wallet.estimatedAvailableAmountCny = 0.0

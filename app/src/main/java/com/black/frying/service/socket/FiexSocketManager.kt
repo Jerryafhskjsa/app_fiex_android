@@ -379,7 +379,6 @@ class FiexSocketManager(context: Context, handler: Handler){
                             Log.d(tag,"tickerStatus->pairQuo.s = "+pairQuo.s)
                             Log.d(tag,"tickerStatus->pairQuo price = "+pairQuo.c)
                         }catch (e:Exception){
-                            Log.d(tag, "tickerStatus->Exception")
                             FryingUtil.printError(e)
                         }
                         if(pairQuo != null){
