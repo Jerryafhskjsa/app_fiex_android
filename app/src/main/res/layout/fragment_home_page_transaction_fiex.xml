@@ -103,7 +103,8 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"/>
+                        android:paddingRight="10dp"
+                        android:visibility="gone"/>
 
                     <include
                         android:id="@+id/fragment_home_page_transaction_header1"

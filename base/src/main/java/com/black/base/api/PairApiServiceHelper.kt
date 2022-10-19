@@ -198,10 +198,11 @@ object PairApiServiceHelper {
                         pairStatus?.hot = symbol?.hot
                         pairStatus?.setType = symbol?.setType
                         pairStatus?.order_no = i
-                        var maxPrecision = symbol?.pricePrecision?.toInt()
+                        var maxPrecision = symbol?.pricePrecision
                         maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
-                        pairStatus?.precision = maxPrecision
-                        pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge?.toInt())
+                        pairStatus?.precision = maxPrecision//价格精度
+                        pairStatus?.amountPrecision = symbol?.quantityPrecision//数量精度
+                        pairStatus?.supportingPrecisionList = pairStatus?.setMaxSupportPrecisionList(maxPrecision.toString(),symbol?.depthPrecisionMerge)
                         if (pairStatus != null) {
                             pairStatuses.add(pairStatus)
                         }

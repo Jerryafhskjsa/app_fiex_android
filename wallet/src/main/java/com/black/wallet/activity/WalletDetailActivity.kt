@@ -70,7 +70,6 @@ class WalletDetailActivity : BaseActivity(),
         wallet = intent.getParcelableExtra(ConstData.WALLET)
         coinType = intent.getStringExtra(ConstData.ROUTER_COIN_TYPE)
         var gson = Gson()
-        Log.d("999999","wallet = "+gson.toJson(wallet))
         if (wallet == null) { //没有传入wallet，并且也没有coinType，非法调用
             if (coinType == null) {
                 finish()

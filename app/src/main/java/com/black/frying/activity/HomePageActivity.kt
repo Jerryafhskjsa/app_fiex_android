@@ -91,7 +91,6 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         }
         //资产fragment检查登录状态
         tabHost?.tabWidget?.getChildAt(ConstData.TAB_ASSET)?.setOnClickListener{
-            Log.d("999999","clicked")
             if(CookieUtil.getUserInfo(mContext) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else{

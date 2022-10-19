@@ -433,7 +433,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         activity?.let {
             CookieUtil.setCurrentPair(it, pairStatus.pair)
             sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).go(it)
+            val bundle = Bundle()
+            bundle.putString(ConstData.PAIR, pairStatus.pair)
+            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(it)
         }
     }
 

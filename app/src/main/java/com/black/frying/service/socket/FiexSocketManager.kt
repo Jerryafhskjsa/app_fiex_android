@@ -3,6 +3,7 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.model.clutter.Kline
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
@@ -37,7 +38,7 @@ class FiexSocketManager(context: Context, handler: Handler){
 
     var kLineTimeStep: String? = null
     var kLineTimeStepSecond: Long = 0
-    var kLineId: String? = null
+    var kLineId: String? = ""
 
 
     private lateinit var socketSetting:WebSocketSetting
@@ -413,8 +414,18 @@ class FiexSocketManager(context: Context, handler: Handler){
                 if(data != null){
                     Log.d(tag,"PairKline->resType = "+data.getString("resType"))
                     var resultData = data.getString("data")
-                    val newData = gson.fromJson<KLineItem>(resultData.toString(), object : TypeToken<KLineItem?>() {}.type)
-                    SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, newData)
+                    val kline = gson.fromJson<Kline>(resultData.toString(), object : TypeToken<Kline?>() {}.type)
+                    var klineItem = KLineItem()
+                    klineItem.a = kline?.a?.toDouble()!!
+                    klineItem.c = kline?.c?.toDouble()!!
+                    klineItem.h = kline?.h?.toDouble()!!
+                    klineItem.l = kline?.l?.toDouble()!!
+                    klineItem.o = kline?.o?.toDouble()!!
+                    klineItem.t = kline?.t?.div(1000)
+                    klineItem.v = kline?.v?.toDouble()!!
+                    if(kline?.s.equals(currentPair)){
+                        SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, klineItem)
+                    }
                 }
             }
         }
@@ -468,7 +479,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                         "qDeal" ->{
                             val pairDeal:PairDeal? = gson.fromJson<PairDeal?>(jsonObject.toString(), object : TypeToken<PairDeal??>() {}.type)
                             if(pairDeal != null){
-//                                SocketDataContainer.getCurrentPairDeal(mHandler,pairDeal)
+                                SocketDataContainer.getCurrentPairDeal(mHandler,pairDeal)
                             }
                         }
                         //当前交易对24小时行情
