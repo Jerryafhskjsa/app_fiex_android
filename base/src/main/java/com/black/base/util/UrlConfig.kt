@@ -256,6 +256,8 @@ object UrlConfig {
         const val URL_TRADE_ORDERS_RECORD = "trade/order/list"
         //获取当前交易对的深度
         const val URL_TRADE_ORDERS_DEPTH = "public/depth"
+        //获取当前交易对的成交
+        const val URL_TRADE_ORDERS_DEAL = "public/deal"
     }
 
     object Wallet {

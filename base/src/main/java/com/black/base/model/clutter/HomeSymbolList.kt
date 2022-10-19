@@ -33,14 +33,15 @@ import java.util.*
 class HomeSymbolList {
         var symbol: String? = null//交易对
         var tradeSwitch: String? = null//交易对开关
-        var state: String? = null//状态
+        var state: Int? = null//状态
         var buyCoin: String? = null//买方币种
         var sellCoin: String? = null//卖方币种
-        var buyCoinPrecision: String? = null//买方币种精度
-        var buyCoinDisplayPrecision: String? = null//买方币种显示精度
-        var sellCoinPrecision: String? = null//卖方币种精度
-        var quantityPrecision: String? = null//卖方币种显示精度
-        var pricePrecision: String? = null//价格精度
+        var buyCoinPrecision: Int? = null//买方币种精度
+        var buyCoinDisplayPrecision: Int? = null//买方币种显示精度
+        var sellCoinPrecision: Int? = null//卖方币种精度
+        var sellCoinDisplayPrecision:Int? = null//卖方币种显示精度
+        var quantityPrecision: Int? = null//数量精度
+        var pricePrecision: Int? = null//价格精度
         var supportOrderType: String? = null//支持订单类型
         var supportTimeInForce: String? = null//支持有效方式
         var minPrice: String? = null//最小价格
@@ -51,8 +52,8 @@ class HomeSymbolList {
         var makerFee: String? = null//maker手续费
         var takerFee: String? = null//taker手续费
         var marketTakeBound: String? = null//市价单最多价格偏离
-        var depthPrecisionMerge: String? = null//盘口精度合并
-        var onboardDate: String? = null//上线时间
+        var depthPrecisionMerge: Int? = null//盘口精度合并
+        var onboardDate: Long? = null//上线时间
         var setType: Int? = null//交易区类型
         var hot:Boolean? = null//热搜
 }

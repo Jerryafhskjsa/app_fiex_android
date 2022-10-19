@@ -6,9 +6,11 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
 import android.text.TextUtils
+import android.util.Log
 import android.util.Pair
 import com.black.base.activity.BaseActivity
 import com.black.base.api.*
+import com.black.base.lib.FryingSingleToast
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CPrice
@@ -37,7 +39,7 @@ import kotlin.collections.ArrayList
 
 //K线竖屏数据模型
 class QuotationDetailViewModel(context: Context, private val pair: String?, private val onKLineModelListener: OnKLineModelListener?) : BaseViewModel<Any?>(context) {
-    private val currentPairStatus: PairStatus = PairStatus()
+    private var currentPairStatus: PairStatus = PairStatus()
     private var coinType: String? = null
     private var pairSet: String? = null
     private var nullAmount: String? = null
@@ -56,7 +58,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     private var kLineAddObserver: Observer<KLineItemPair?>? = createKLineAddObserver()
     private var kLineAddMoreObserver: Observer<KLineItemListPair?>? = createKLineAddMoreObserver()
 
-    private var kLineId: String? = null
+    private var kLineId: String? = ""
     private var onKLineAllEnd = false
     var gotoLarge = false
 
@@ -81,10 +83,12 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             orderObserver = createOrderObserver()
         }
         SocketDataContainer.subscribeOrderObservable(orderObserver)
+
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
+
         if (dealObserver == null) {
             dealObserver = createDealObserver()
         }
@@ -94,10 +98,12 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             kLineObserver = createKLineObserver()
         }
         SocketDataContainer.subscribeKLineObservable(kLineObserver)
+
         if (kLineAddObserver == null) {
             kLineAddObserver = createKLineAddObserver()
         }
         SocketDataContainer.subscribeKLineAddObservable(kLineAddObserver)
+
         if (kLineAddMoreObserver == null) {
             kLineAddMoreObserver = createKLineAddMoreObserver()
         }
@@ -165,7 +171,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                 coinType = arr[0]
                 pairSet = arr[1]
             }
-            getTradePairInfo()
+//            getTradePairInfo()
             getPairStatus()
         }
     }
@@ -177,6 +183,13 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                     .observeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .subscribe {
                         refreshPairStatus(it)
+                        currentPairStatus = it
+                        onKLineModelListener?.run {
+                            onPairStatusPrecision(currentPairStatus.precision)
+                            onPairStatusAmountPrecision(getAmountLength())
+                        }
+                        getAllOrder()
+                        getQuotationDeals()
                     }
                     .run { }
         }
@@ -236,7 +249,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                 coinType = arr[0]
                 pairSet = arr[1]
             }
-            getTradePairInfo()
+//            getTradePairInfo()
             getPairStatus()
         }
     }
@@ -247,6 +260,15 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
                 onKLineModelListener?.run {
                     if (value != null && currentPairStatus.pair != null) {
                         onPairDeal(value)
+                        var quotationDealNew = QuotationDealNew()
+                        quotationDealNew.pair = value.s
+                        quotationDealNew.p = value.p
+                        quotationDealNew.a = value?.a?.toDouble()!!
+                        quotationDealNew.d = value.m
+                        quotationDealNew.t = value.t!!
+                        var list = ArrayList<QuotationDealNew?>()
+                        list.add(quotationDealNew)
+                        SocketDataContainer.updateQuotationDealNewData(socketHandler,currentPairStatus.pair,list,false)
                     }
                 }
             }
@@ -402,15 +424,24 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     fun getQuotationDeals() {
         onKLineModelListener?.run {
             CommonUtil.postHandleTask(socketHandler) {
-                SocketDataContainer.getAllQuotationDeal(context, currentPairStatus.pair, object : Callback<ArrayList<TradeOrder?>?>() {
-                    override fun error(type: Int, error: Any) {}
-                    override fun callback(dealOrders: ArrayList<TradeOrder?>?) {
-                        FryingUtil.observableWithHandler(socketHandler, dealOrders)
-                                ?.subscribe(object : SuccessObserver<ArrayList<TradeOrder?>?>() {
-                                    override fun onSuccess(t: ArrayList<TradeOrder?>?) {
-                                        onDeal(t)
-                                    }
-                                })
+                TradeApiServiceHelper.getTradeOrderDeal(context,SocketDataContainer.DEAL_MAX_SIZE,currentPairStatus.pair,false,object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
+                    override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            var dealList = returnData.data
+                            var newData = ArrayList<QuotationDealNew?>()
+                            for (i in dealList?.indices!!){
+                                var quotationDealNew = QuotationDealNew()
+                                quotationDealNew.pair = dealList[i]?.s
+                                quotationDealNew.p = dealList[i]?.p
+                                quotationDealNew.a = dealList[i]?.a?.toDouble()!!
+                                quotationDealNew.d = dealList[i]?.m
+                                quotationDealNew.t = dealList[i]?.t!!
+                                newData.add(quotationDealNew)
+                            }
+                            SocketDataContainer.updateQuotationDealNewData(socketHandler,currentPairStatus.pair,newData,true)
+                        }
+                    }
+                    override fun error(type: Int, error: Any?) {
                     }
                 })
             }
@@ -429,41 +460,25 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
 
     //获取当前交易对深度
     fun getTradePairInfo() {
-        onKLineModelListener?.run {
-            ApiManager.build(context).getService(PairApiService::class.java)
-                    ?.getTradePairInfo(currentPairStatus.pair!!)
-                    ?.materialize()
-                    ?.flatMap { notify: Notification<HttpRequestResultDataList<PairStatus?>?> ->
-                        if (notify.isOnComplete) {
-                            Observable.empty<Int>()
-                        } else {
-                            var precision = 6
-                            if (notify.isOnNext) {
-                                val returnData: HttpRequestResultDataList<PairStatus?>? = notify.value
-                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                    for (pairStatus in returnData.data!!) {
-                                        if (TextUtils.equals(currentPairStatus.pair, pairStatus?.pairName)) {
-                                            var maxPrecision = pairStatus?.precision
-                                            maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
-                                            currentPairStatus.amountPrecision = if (pairStatus?.amountPrecision == null || pairStatus?.amountPrecision == 0) 5 else pairStatus?.amountPrecision
-                                            currentPairStatus.precision = maxPrecision
-                                            precision = maxPrecision
-                                            break
-                                        }
-                                    }
-                                }
-                            }
-                            Observable.just(precision)
-                        }
-                    }
-                    ?.compose(RxJavaHelper.observeOnMainThread())
-                    ?.subscribe {
+        SocketDataContainer.getPairStatus(context, pair, object : Callback<PairStatus?>() {
+            override fun error(type: Int, error: Any) {
+                FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
+            }
+
+            override fun callback(returnData: PairStatus?) {
+                if (returnData == null) {
+                    FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
+                } else {
+                    currentPairStatus = returnData
+                    onKLineModelListener?.run {
                         onPairStatusPrecision(currentPairStatus.precision)
                         onPairStatusAmountPrecision(getAmountLength())
-                        getAllOrder()
-                        getQuotationDeals()
                     }
-        }
+                    getAllOrder()
+                    getQuotationDeals()
+                }
+            }
+        })
     }
 
     fun getAmountLength(): Int {

@@ -270,6 +270,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/wallet/src/main/res/layout/list_item_wallet_withdraw_address_delete.xml" value="0.12280701754385964" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/activity_dear_pair_search.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/activity_mine.xml" value="0.17864583333333334" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/activity_quotation_detail.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_empty.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.264" />
@@ -281,6 +282,8 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_home_page_transaction_header1_1.xml" value="0.24947916666666667" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.15625" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_quotation_detail_deal.xml" value="0.15625" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/fragment_quotation_detail_description.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/list_item_home_main_rise_fall.xml" value="0.17239583333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/list_item_search_pair.xml" value="0.15625" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/app/src/main/res/layout/list_item_search_pair_delete.xml" value="0.15625" />

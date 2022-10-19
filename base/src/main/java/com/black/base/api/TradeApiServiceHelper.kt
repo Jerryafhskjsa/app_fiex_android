@@ -3,10 +3,8 @@ package com.black.base.api
 import android.content.Context
 import com.black.base.fragment.BaseFragment
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
+import com.black.base.model.*
+import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.base.model.trade.TradeOrderDepth
@@ -73,6 +71,16 @@ object TradeApiServiceHelper {
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
             ?.getTradeOrderDepth(level,symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    fun getTradeOrderDeal(context: Context?, level:Int?,symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<PairDeal?>?>) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
+            ?.getTradeOrderDeal(level,symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

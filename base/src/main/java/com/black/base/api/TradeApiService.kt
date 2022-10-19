@@ -1,8 +1,10 @@
 package com.black.base.api
 
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.PagingData
+import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.base.model.trade.TradeOrderDepth
@@ -36,5 +38,8 @@ interface TradeApiService {
 
     @GET(UrlConfig.Trade.URL_TRADE_ORDERS_DEPTH)
     fun getTradeOrderDepth(@Query("level") level: Int?, @Query("symbol") symbol: String?): Observable<HttpRequestResultData<TradeOrderDepth?>?>?
+
+    @GET(UrlConfig.Trade.URL_TRADE_ORDERS_DEAL)
+    fun getTradeOrderDeal(@Query("level") level: Int?, @Query("symbol") symbol: String?): Observable<HttpRequestResultDataList<PairDeal?>?>?
 
 }

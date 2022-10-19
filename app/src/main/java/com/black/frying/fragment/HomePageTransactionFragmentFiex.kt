@@ -178,6 +178,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.setTabType(tabType)
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
+        viewModel?.getCurrentPairDeal(50)
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -417,6 +418,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     override fun onPairDeal(value: PairDeal) {
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            updateCurrentPairPrice(value.p)
+        }
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -717,12 +721,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun refreshData() {
-//        if (!getUserVisibleHint()) {
-//            return;
-//        }
-//        viewModel!!.getTradePairInfo()
         getTradeOrderCurrent()
         viewModel!!.getAllOrder()
+        viewModel?.getCurrentPairDepth(50)
+        viewModel?.getCurrentPairDeal(1)
     }
 
     //刷新当前钱包
@@ -840,11 +842,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         })
     }
 
-    //更新当前价格和涨跌幅
+    //更新涨跌幅
     override fun onPairQuotation(pairQuo: PairQuotation) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             updatePriceSince(pairQuo.r)
-            updateCurrentPairPrice(pairQuo.c)
         }
     }
 

@@ -443,11 +443,30 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                 }
             }
             override fun error(type: Int, error: Any?) {
-                Log.d("11111", "error type = $type")
             }
         })
     }
 
+    /**
+     * 获取当前交易对成交列表
+     */
+    fun getCurrentPairDeal(level:Int){
+        TradeApiServiceHelper.getTradeOrderDeal(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
+            override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    var dealList = returnData.data
+                    var recentDeal = CommonUtil.getItemFromList(dealList, 0)
+                    onTransactionModelListener?.run {
+                        if (recentDeal != null && currentPairStatus.pair != null) {
+                            onTransactionModelListener?.onPairDeal(recentDeal)
+                        }
+                    }
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        })
+    }
 
 
     /**

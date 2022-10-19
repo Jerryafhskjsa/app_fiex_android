@@ -125,7 +125,9 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         CookieUtil.addPairSearchHistory(mContext, pairSearch.pair)
         CookieUtil.setCurrentPair(this, pairSearch.pair)
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-        BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).go(this)
+        val bundle = Bundle()
+        bundle.putString(ConstData.PAIR, pairSearch.pair)
+        BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(this)
     }
 
     private val pairSearchHistory: Unit

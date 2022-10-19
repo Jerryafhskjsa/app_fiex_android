@@ -61,7 +61,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                 ////Log.e(TAG, "qSocket:" + socket + ",onQuotationDealAllNewListener ==============================================\n obj：" + object);
                 val data = CommonUtil.parseJSONArray(`object`)
                 if (data != null) {
-                    SocketDataContainer.updateQuotationDealNewData(context, handler, currentPair, data, true)
+//                    SocketDataContainer.updateQuotationDealNewData(context, handler, currentPair, data, true)
                 }
             }
         }
@@ -81,7 +81,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updateQuotationDealNewData(context, handler, currentPair, data, false)
+//                    SocketDataContainer.updateQuotationDealNewData(context, handler, currentPair, data, false)
                 }
             }
         }

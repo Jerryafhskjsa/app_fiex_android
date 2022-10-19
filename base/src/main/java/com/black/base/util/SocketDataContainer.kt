@@ -87,7 +87,7 @@ object SocketDataContainer {
     /***fiex***/
     //成交
     const val DEAL_MAX_SIZE = 20
-    private val dealList = ArrayList<QuotationDealNew>()
+    private val dealList = ArrayList<QuotationDealNew?>()
     private val dealObservers = ArrayList<Observer<Pair<String?, ArrayList<TradeOrder?>?>>>()
     //K线数据
 //    private static final Map<String, ArrayList<KLineItem>> kLineDataSet = new HashMap<>();
@@ -1378,23 +1378,22 @@ object SocketDataContainer {
             }
     }
 
-    fun updateQuotationDealNewData(context: Context?, handler: Handler?, currentPair: String?, dataSource: JSONArray?, removeAll: Boolean) {
+    fun updateQuotationDealNewData(handler: Handler?, currentPair: String?, dataSource: ArrayList<QuotationDealNew?>?, removeAll: Boolean) {
         CommonUtil.postHandleTask(handler) {
             Observable.create<String> { emitter ->
                 if (dataSource == null) {
                     emitter.onComplete()
                 } else {
-                    val data = gson.fromJson<ArrayList<QuotationDealNew>>(dataSource.toString(), object : TypeToken<ArrayList<QuotationDealNew?>?>() {}.type)
                     val result = ArrayList<TradeOrder>()
                     synchronized(dealList) {
                         if (removeAll) {
                             dealList.clear()
                         }
-                        dealList.addAll(data)
-                        //移除错误交易对的数据
+                        dealList.addAll(dataSource)
+                        //移除错误交易对的数据(这个容错可能不需要)
                         for (i in dealList.indices.reversed()) {
                             val dealNew = dealList[i]
-                            if (!TextUtils.equals(currentPair, dealNew.pair)) {
+                            if (!TextUtils.equals(currentPair, dealNew?.pair)) {
                                 dealList.removeAt(i)
                             }
                         }
@@ -1404,7 +1403,7 @@ object SocketDataContainer {
                             CommonUtil.removeListItem(dealList, DEAL_MAX_SIZE, dealList.size - 1)
                         }
                         for (dealNew in dealList) {
-                            result.add(dealNew.toTradeOrder())
+                            dealNew?.toTradeOrder()?.let { result.add(it) }
                         }
                     }
                     emitter.onNext(gson.toJson(result))
@@ -1440,8 +1439,8 @@ object SocketDataContainer {
                 var count = 0
                 for (i in dealList.indices.reversed()) {
                     val dealNew = dealList[i]
-                    if (TextUtils.equals(pair, dealNew.pair)) {
-                        result.add(dealNew.toTradeOrder())
+                    if (TextUtils.equals(pair, dealNew?.pair)) {
+                        result.add(dealNew?.toTradeOrder())
                         count++
                         if (count >= DEAL_MAX_SIZE) {
                             break
