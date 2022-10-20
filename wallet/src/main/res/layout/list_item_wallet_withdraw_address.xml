@@ -28,16 +28,16 @@
 
             <ImageView
                 android:id="@+id/addr_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
                 android:layout_toLeftOf="@+id/addr_delete"
                 android:src="@drawable/icon_edit" />
             <ImageView
                 android:id="@+id/addr_delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/default_padding"

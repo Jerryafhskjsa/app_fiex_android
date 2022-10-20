@@ -22,6 +22,8 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import skin.support.app.SkinAppCompatViewInflater
 import java.util.*
 import kotlin.collections.ArrayList
@@ -617,21 +619,27 @@ object WalletApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    //删除地址
-    fun deleteWalletAddress(context: Context?, id: String?, verifyCode: String?, callback: Callback<HttpRequestResultString?>?) {
+    //更新地址
+    fun updateWalletAddress(context: Context?,id:String?, coinType: String?, name: String?, address: String?, memo: String?, verifyCode: String?, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.deleteWalletAddress(id, verifyCode)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.updateWalletAddress(id,coinType, name, address, memo, verifyCode)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun clearCache() {
-        lastGetTimeMap.clear()
-        coinInfoCache.clear()
+    fun deleteWithdrawAddress(context: Context?,id:String?,isShowLoading: Boolean,callback: Callback<HttpRequestResultString?>?){
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.deleteWalletAddress(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
 
     //现货资产提币、冲币记录 type 0 充币 1 提币
     fun getWalletRecord(context: Context?, isShowLoading: Boolean, page: Int, pageSize: Int, type: Int, coinType: String?, callback: Callback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?) {
@@ -643,4 +651,11 @@ object WalletApiServiceHelper {
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    fun clearCache() {
+        lastGetTimeMap.clear()
+        coinInfoCache.clear()
+    }
+
+
 }

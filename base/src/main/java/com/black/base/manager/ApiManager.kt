@@ -35,7 +35,7 @@ class ApiManager {
             val language = LanguageUtil.getLanguageSetting(context1)
             val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
             val deviceId = CommonUtil.getDeviceId(context1)
-            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, UrlConfig.getApiApiHost(context1), deviceId, lang, if (noToken) null else HttpCookieUtil.getUcToken(context1), ApiCookieHelperIml(context1), HttpInterceptHelperIml())
+            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, UrlConfig.getFiexHost(context1,UrlConfig.ApiType.URL_API), deviceId, lang, if (noToken) null else HttpCookieUtil.getUcToken(context1), ApiCookieHelperIml(context1), HttpInterceptHelperIml())
             return apiManager
         }
 
@@ -47,18 +47,12 @@ class ApiManager {
          * apiType->uc,api,pro
          */
         fun build(context: Context, noToken: Boolean,apiType : String): ApiManager {
-            var context1 = context
-            context1 = context1.applicationContext
+            var context1 = context.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
             val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
             val deviceId = CommonUtil.getDeviceId(context1)
-            var realUrl = UrlConfig.getApiApiHost(context1)
-            when(apiType){
-                UrlConfig.ApiType.URl_UC -> realUrl = UrlConfig.getUcHost(context1)
-                UrlConfig.ApiType.URL_API -> realUrl = UrlConfig.getApiApiHost(context1)
-                UrlConfig.ApiType.URL_PRO -> realUrl = UrlConfig.getProHost(context1)
-            }
+            var realUrl = UrlConfig.getFiexHost(context1,apiType)
             var token = if (noToken) null else HttpCookieUtil.getUcToken(context1)
             apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, realUrl, deviceId, lang, token, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
             return apiManager

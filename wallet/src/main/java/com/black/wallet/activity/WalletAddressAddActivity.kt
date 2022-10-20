@@ -13,6 +13,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.WalletWithdrawAddress
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
@@ -27,6 +28,7 @@ import com.black.wallet.databinding.ActivityWalletAddressAddBinding
 class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
     private var userInfo: UserInfo? = null
     private var coinInfo: CoinInfo? = null
+    private var coinAddress: WalletWithdrawAddress? = null
     private var coinType: String? = null
     private var coinChain: String? = null
 
@@ -47,6 +49,7 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
         userInfo = CookieUtil.getUserInfo(this)
         coinChain = intent.getStringExtra(ConstData.COIN_CHAIN)
         coinInfo = intent.getParcelableExtra(ConstData.COIN_INFO)
+        coinAddress = intent.getParcelableExtra(ConstData.COIN_ADDRESS)
         coinType = coinInfo?.coinType
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_address_add)
         binding?.extractAddress?.addTextChangedListener(watcher)
@@ -60,6 +63,11 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
             binding?.memoLayout?.visibility = View.VISIBLE
         }
         checkClickable()
+        if(coinAddress != null){
+           binding!!.remark?.setText(coinAddress?.name)
+           binding?.extractAddress?.setText(coinAddress?.coinWallet)
+           binding?.memo?.setText(coinAddress?.memo)
+        }
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -83,26 +91,55 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
                 val name = binding!!.remark?.text.toString()
                 val address = binding?.extractAddress?.text.toString()
                 val memo = binding?.memo?.text.toString()
-                WalletApiServiceHelper.addWalletAddress(
-                    this,
-                    coinType,
-                    name,
-                    address,
-                    memo,
-                    null,
-                    object : NormalCallback<HttpRequestResultString?>() {
-                        override fun callback(returnData: HttpRequestResultString?) {
-                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                setResult(RESULT_OK, null)
-                                finish()
-                            } else {
-                                FryingUtil.showToast(
-                                    mContext,
-                                    if (returnData == null) getString(R.string.error_data) else returnData.msg
-                                )
+                if(coinAddress != null){
+                    var id = coinAddress?.id.toString()
+                    WalletApiServiceHelper.updateWalletAddress(
+                        this,
+                        id,
+                        coinType,
+                        name,
+                        address,
+                        memo,
+                        null,
+                        object : NormalCallback<HttpRequestResultString?>() {
+                            override fun callback(returnData: HttpRequestResultString?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    FryingUtil.showToast(
+                                        mContext,
+                                       returnData.msg
+                                    )
+                                    setResult(RESULT_OK, null)
+                                    finish()
+                                } else {
+                                    FryingUtil.showToast(
+                                        mContext,
+                                        if (returnData == null) getString(R.string.error_data) else returnData.msg
+                                    )
+                                }
                             }
-                        }
-                    })
+                        })
+                }else{
+                    WalletApiServiceHelper.addWalletAddress(
+                        this,
+                        coinType,
+                        name,
+                        address,
+                        memo,
+                        null,
+                        object : NormalCallback<HttpRequestResultString?>() {
+                            override fun callback(returnData: HttpRequestResultString?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    setResult(RESULT_OK, null)
+                                    finish()
+                                } else {
+                                    FryingUtil.showToast(
+                                        mContext,
+                                        if (returnData == null) getString(R.string.error_data) else returnData.msg
+                                    )
+                                }
+                            }
+                        })
+                }
             }
         }
     }
