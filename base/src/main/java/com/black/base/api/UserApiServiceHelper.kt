@@ -392,6 +392,11 @@ object UserApiServiceHelper {
     fun bindEMail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
         enableSecurity(context, null, null, phoneCode, email, emailCode, googleCode, null, "4", callback)
     }
+    fun bindSafe(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null, null, null, emailCode, googleCode, null, "1", callback)
+    }
+
+
 
     /**
      * 查询用户邀请的人数量

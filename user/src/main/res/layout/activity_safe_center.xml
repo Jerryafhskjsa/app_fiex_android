@@ -321,6 +321,41 @@
                                 android:src="@drawable/icon_left" />
 
                         </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/safe_bind_layout"
+                            style="@style/MenuListItem">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/safe_bind"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/safe_bind_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/safe_bind_status_icon"
+                                android:gravity="right"
+                                android:text="@string/unsafe_bind"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <ImageView
+                                android:id="@+id/safe_bind_status_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="6dp"
+                                android:src="@drawable/icon_left" />
+
+                        </RelativeLayout>
                     </LinearLayout>
 
                 </LinearLayout>

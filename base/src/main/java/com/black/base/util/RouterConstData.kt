@@ -46,6 +46,8 @@ object RouterConstData {
     const val GESTURE_PASSWORD_CHECK = "fbsex://gesturePasswordCheck"
     const val GESTURE_PASSWORD_SETTING = "fbsex://gesturePasswordSetting"
     const val SAFE_CENTER = "fbsex://safeCenter"
+    const val SAFE_BIND = "fbsex://safebind"
+    const val SAFE_UNUSED = "fbsex://safeunused"
     const val GOOGLE_GET_KEY = "fbsex://googleGetKey"
     const val GOOGLE_BIND = "fbsex://googleBind"
     const val GOOGLE_SECURITY_STATUS = "fbsex://googleSecurityStatus"
