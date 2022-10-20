@@ -4,29 +4,29 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    private val HOSTS = arrayOf(
-//            "http://fiex.matchain.info",//fiex测试环境
+    val HOSTS = arrayOf(
+            "http://fiex.matchain.info",//fiex测试环境
             "https://fiex.io",//正式环境
 
-    )
-    val API_HOSTS = arrayOf(
-//        "http://fiex.matchain.info",//fiex测试环境
-        "https://fiex.io",//正式环境
-    )
-
-    //    网站切换换成fbsex.top
-    private val SOCKET_HOSTS = arrayOf(
-//            "http://fiex.matchain.info",//fiex测试环境
-            "http://fiex.io",//正式环境
     )
 
     fun getHost(context: Context): String {
         return HOSTS[getIndex(context)]
     }
 
+    fun getFiexHost(context: Context,apiType:String?): String {
+        var apiTypeDes = "/uc/"
+        when(apiType){
+            ApiType.URl_UC ->apiTypeDes = "/uc/"
+            ApiType.URL_API -> apiTypeDes = "/api/"
+            ApiType.URL_PRO -> apiTypeDes = "/pro/"
+        }
+        return HOSTS[getIndex(context)]+apiTypeDes
+    }
+
 
     private val SOCKET_HOSTS_FIEX = arrayOf(
-//        "ws:fiex.matchain.info/socket",
+        "ws://fiex.matchain.info/socket",//测试环境
         "wss://fiex.io/socket",//正式环境
     )
 
@@ -35,33 +35,9 @@ object UrlConfig {
             return 0
         }
         val index = CookieUtil.getHostIndex(context)
-        return if (index < 0 || index > API_HOSTS.size) 0 else index
+        return if (index < 0 || index > HOSTS.size) 0 else index
     }
 
-    /***fiex***/
-    var API_FIEX_UC = arrayOf(
-//        "http://fiex.matchain.info/uc/",
-        "https://fiex.io/uc/"
-    )
-    var API_FIEX_PRO = arrayOf(
-//        "http://fiex.matchain.info/pro/",
-        "https://fiex.io/pro/"
-    )
-    var API_FIEX_API = arrayOf(
-//        "http://fiex.matchain.info/api/",
-        "https://fiex.io/api/"
-    )
-
-    fun getUcHost(context: Context): String {
-        return API_FIEX_UC[getIndex(context)]
-    }
-
-    fun getApiApiHost(context: Context): String {
-        return API_FIEX_API[getIndex(context)]
-    }
-    fun getProHost(context: Context): String {
-        return API_FIEX_PRO[getIndex(context)]
-    }
     fun getSocketHostFiex(context: Context): String {
         return SOCKET_HOSTS_FIEX[getIndex(context)]
     }
@@ -73,7 +49,7 @@ object UrlConfig {
 
 
     fun getSocketHost(context: Context): String {
-        return SOCKET_HOSTS[getIndex(context)]
+        return HOSTS[getIndex(context)]
     }
 
 
@@ -310,8 +286,10 @@ object UrlConfig {
         const val URL_ADDRESS_LIST = "withdraw/address/list"
         //添加地址
         const val URL_ADDRESS_ADD = "withdraw/address/add"
+        //更改地址
+        const val URL_ADDRESS_UPDATE = "withdraw/address/update"
         //删除地址
-        const val URL_ADDRESS_DELETE = "withdraw/address/remove/{id}"
+        const val URL_ADDRESS_DELETE = "withdraw/address/remove"
         //划转
         const val URL_WALLET_TRANSFER = "lever/transfer"
         //杠杆钱包详情

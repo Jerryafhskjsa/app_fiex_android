@@ -128,6 +128,21 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        coinInfo = null
+                        selectCoin(chooseWallet)
+                    }
+                }
+            }
+        }
+    }
+
     private fun showChainChooseDialog() {
         if (coinChain != null && chainNames!!.size > 0) {
             var chooseWalletDialog = ChooseWalletControllerWindow(mContext as Activity,

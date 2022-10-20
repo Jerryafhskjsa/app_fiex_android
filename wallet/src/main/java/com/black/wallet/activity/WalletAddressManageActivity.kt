@@ -19,9 +19,12 @@ import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.manager.ApiManager
+import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.PagingData
 import com.black.base.model.wallet.CoinInfo
+import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.WalletAddress
 import com.black.base.model.wallet.WalletWithdrawAddress
 import com.black.base.net.NormalObserver2
@@ -68,11 +71,19 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
         adapter?.setOnItemClickListener(this)
         adapter?.setOnSubViewClickListener(object :WalletAddressAdapter.OnSubviewHandleClickListener{
             override fun onDelete(position: Int) {
+                var address =  adapter?.getItem(position) as WalletWithdrawAddress
                 Log.d("999999", "position = $position")
+                doDelete(address)
             }
 
             override fun onEdit(position: Int) {
                 Log.d("999999", "position = $position")
+                var address =  adapter?.getItem(position)
+                var bundle = Bundle()
+                bundle.putParcelable(ConstData.COIN_ADDRESS,address)
+                bundle.putString(ConstData.COIN_CHAIN, coinChain)
+                bundle.putParcelable(ConstData.COIN_INFO, coinInfo)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_ADDRESS_ADD).with(bundle).go(mContext)
             }
         })
         binding?.recyclerView?.adapter = adapter
@@ -108,77 +119,28 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
     }
 
     private fun doDelete(address: WalletWithdrawAddress) {
-        val userInfo = CookieUtil.getUserInfo(this) ?: return
-        val target = Target.buildFromUserInfo(userInfo)
-        val verifyWindow = VerifyWindowObservable.getVerifyWindowMultiple(
-            this,
-            if (userInfo.registerFromMail()) VerifyType.MAIL else VerifyType.PHONE,
-            target
-        )
-        verifyWindow
-            .show()
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap { returnTarget: Target? ->
-                if (returnTarget == null) {
-                    verifyWindow.dismiss()
-                    Observable.empty()
+        var id = address.id.toString()
+        WalletApiServiceHelper.deleteWithdrawAddress(mContext, id,true, object : NormalCallback<HttpRequestResultString?>() {
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    adapter?.removeItem(address)
+                    adapter?.notifyDataSetChanged()
                 } else {
-                    showLoading()
-                    val deleteResult = HttpRequestResultString()
-                    deleteResult.code = HttpRequestResult.SUCCESS
-//                        Observable.just(deleteResult)
-                    ApiManager.build(mContext).getService(WalletApiService::class.java)
-                        ?.deleteWalletAddress(
-                            address.id.toString(),
-                            if (userInfo.registerFromMail()) returnTarget.mailCode else returnTarget.phoneCode
-                        )
-                        ?.materialize()
-                        ?.subscribeOn(Schedulers.io())
-                        ?.observeOn(AndroidSchedulers.mainThread())
-                        ?.flatMap(object :
-                            RequestFunction2<HttpRequestResultString?, HttpRequestResultString?>() {
-                            override fun afterRequest() {
-                                hideLoading()
-                            }
-
-                            @Throws(Exception::class)
-                            override fun applyResult(returnData: HttpRequestResultString?): HttpRequestResultString? {
-                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                    runOnUiThread { verifyWindow.dismiss() }
-                                }
-                                return returnData
-                            }
-                        })
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
-            .compose(RxJavaHelper.observeOnMainThread())
-            .subscribe(object : NormalObserver2<HttpRequestResultString?>(this) {
-                override fun onComplete() {
-                    super.onComplete()
-                }
-
-
-                override fun callback(result: HttpRequestResultString?) {
-                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                        adapter?.removeItem(address)
-                        adapter?.notifyDataSetChanged()
-                    } else {
-                        FryingUtil.showToast(
-                            mContext,
-                            if (result == null) getString(R.string.error_data) else result.msg
-                        )
-                    }
-                }
-            })
+            override fun error(type: Int, error: Any?) {
+                FryingUtil.showToast(mContext, error.toString())
+            }
+        })
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
         if(recyclerView != null){
             var walletAddr = adapter?.getItem(position)
             val resultData = Intent()
-            resultData.putExtra(ConstData.WALLET_WITHDRAW_ADDRESS, walletAddr?.coinWallet)
-            setResult(Activity.RESULT_OK, resultData)
+            resultData.putExtra(ConstData.COIN_ADDRESS, walletAddr?.coinWallet)
+            setResult(RESULT_OK, resultData)
             finish()
         }
     }

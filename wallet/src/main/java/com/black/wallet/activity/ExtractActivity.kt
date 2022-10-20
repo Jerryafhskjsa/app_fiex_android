@@ -184,9 +184,21 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ConstData.WALLET_ADDRESS_MANAGE && resultCode == Activity.RESULT_OK) {
-            address = data?.getStringExtra(ConstData.WALLET_WITHDRAW_ADDRESS)
-            binding?.extractAddress?.text = address
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        coinInfo = null
+                        selectCoin(chooseWallet)
+                    }
+                }
+                ConstData.WALLET_ADDRESS_MANAGE ->{
+                    var address:String? = data?.getStringExtra(ConstData.COIN_ADDRESS)
+                    binding?.extractAddress?.setText(address)
+                }
+            }
         }
     }
 

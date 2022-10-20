@@ -18,6 +18,7 @@ import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.frying.service.SocketService
 import com.black.frying.util.UdeskUtil
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -33,6 +34,9 @@ import java.util.*
 //我的界面
 @Route(value = [RouterConstData.MINE])
 class MineActivity : BaseActionBarActivity(), View.OnClickListener {
+    companion object {
+        private val TAG = MineActivity::class.java.simpleName
+    }
     private var userInfo: UserInfo? = null
     private val serverConfigs: ArrayList<FryingServerConfig> = ArrayList()
     private var imageLoader: ImageLoader? = null
@@ -95,7 +99,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
-
         initServiceApi()
     }
 
@@ -150,10 +153,11 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                                     CookieUtil.setHostIndex(mContext, item!!.index)
                                     displayCurrentServer()
                                     CookieUtil.deleteUserInfo(mContext)
+                                    HttpCookieUtil.deleteCookies(mContext)
                                     CookieUtil.deleteToken(mContext)
                                     CookieUtil.setAccountProtectType(mContext, ConstData.ACCOUNT_PROTECT_NONE)
                                     CookieUtil.setGesturePassword(mContext, null)
-                                    //                            CookieUtil.setAccountProtectJump(mContext, false);
+                                    //CookieUtil.setAccountProtectJump(mContext, false);
                                     CookieUtil.saveUserId(mContext, null)
                                     CookieUtil.saveUserName(mContext, null)
                                     closeSocketService()
@@ -272,9 +276,9 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun initServiceApi() {
-        for (i in UrlConfig.API_HOSTS.indices) {
-            val apiHost = UrlConfig.API_HOSTS[i]
-            serverConfigs.add(FryingServerConfig(i, apiHost))
+        for (i in UrlConfig.HOSTS.indices) {
+            val hostUrl = UrlConfig.HOSTS[i]
+            serverConfigs.add(FryingServerConfig(i, hostUrl))
         }
     }
 
@@ -413,7 +417,4 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     private val currentServerConfig: FryingServerConfig?
         get() = CommonUtil.getItemFromList(serverConfigs, UrlConfig.getIndex(applicationContext))
 
-    companion object {
-        private val TAG = MineActivity::class.java.simpleName
-    }
 }

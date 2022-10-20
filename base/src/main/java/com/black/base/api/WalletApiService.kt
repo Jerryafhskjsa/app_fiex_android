@@ -89,8 +89,13 @@ interface WalletApiService {
     fun addWalletAddress(@Field("coinType") coinType: String?, @Field("name") name: String?, @Field("coinWallet") address: String?, @Field("memo") memo: String?, @Field("verifyCode") verifyCode: String?): Observable<HttpRequestResultString?>?
 
     @FormUrlEncoded
+    @POST(UrlConfig.Wallet.URL_ADDRESS_UPDATE)
+    fun updateWalletAddress(@Field("id") id: String?,@Field("coinType") coinType: String?, @Field("name") name: String?, @Field("coinWallet") address: String?, @Field("memo") memo: String?, @Field("verifyCode") verifyCode: String?): Observable<HttpRequestResultString?>?
+
+
+    @FormUrlEncoded
     @POST(UrlConfig.Wallet.URL_ADDRESS_DELETE)
-    fun deleteWalletAddress(@Path("id") id: String?, @Field("verifyCode") verifyCode: String?): Observable<HttpRequestResultString?>?
+    fun deleteWalletAddress(@Field("id") id: String?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_RECORD)
     fun getWalletRecord(@Query("page") page: Int, @Query("size") pageSize: Int, @Query("type") type: Int, @Query("coinType") coinType: String?): Observable<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?

@@ -501,7 +501,9 @@ object SocketDataContainer {
                                     for (observer in pairObservers) {
                                         var updateData:ArrayList<PairStatus?> = gson.fromJson(value, object : TypeToken<ArrayList<PairStatus?>?>() {}.type)
                                         Log.d(TAG,"send update dataSize = "+updateData.size)
-                                        observer.onNext(updateData)
+                                        if(updateData.isNotEmpty()){
+                                            observer.onNext(updateData)
+                                        }
                                     }
                                 }
                             }

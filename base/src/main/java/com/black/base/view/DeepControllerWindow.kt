@@ -15,7 +15,7 @@ import java.util.*
 //深度选择器
 class DeepControllerWindow<T>(private val activity: Activity, title: String?, private val selectObject: T?, data: List<T>?, private val onReturnListener: OnReturnListener<T>?) : View.OnClickListener, AdapterView.OnItemClickListener {
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
-    private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.C1)
+    private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.T13)
     private val COLOR_BG: Int = SkinCompatResources.getColor(activity, R.color.B2)
     private var density: Float
     private val popupWindow: PopupWindow

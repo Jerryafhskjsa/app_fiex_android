@@ -34,6 +34,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         }
     private var mCcontext:Context? = null
     private var mHandler:Handler? = null
+    private var pingTimer:Timer? = null
     var currentPair:String? = null
 
     var kLineTimeStep: String? = null
@@ -65,7 +66,8 @@ class FiexSocketManager(context: Context, handler: Handler){
     }
 
     private fun initPingTimer(){
-        Timer().schedule(object:TimerTask(){
+            pingTimer =  Timer()
+            pingTimer?.schedule(object:TimerTask(){
             override fun run() {
                 sendPing()
             }
@@ -106,6 +108,7 @@ class FiexSocketManager(context: Context, handler: Handler){
         socketMap.forEach{
             it.value.disConnect()
         }
+        pingTimer?.cancel()
     }
 
     fun destorySocketAll(){
@@ -477,6 +480,7 @@ class FiexSocketManager(context: Context, handler: Handler){
                         }
                         //当前交易对成交数据
                         "qDeal" ->{
+                            Log.d(tag, "qDeal->data = $resultData")
                             val pairDeal:PairDeal? = gson.fromJson<PairDeal?>(jsonObject.toString(), object : TypeToken<PairDeal??>() {}.type)
                             if(pairDeal != null){
                                 SocketDataContainer.getCurrentPairDeal(mHandler,pairDeal)

@@ -13,7 +13,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:padding="@dimen/middle_padding"
-        android:textColor="@color/C1"
+        android:textColor="@color/T14"
         android:textSize="@dimen/text_size_16" />
 
     <ListView

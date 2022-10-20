@@ -1,6 +1,7 @@
 package com.black.frying.adapter
 
 import android.content.Context
+import android.util.Log
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.socket.TradeOrder
@@ -14,6 +15,7 @@ class QuotationDetailDealAdapter(context: Context, variableId: Int, data: Mutabl
     private var colorC2 = 0
     private var colorC3 = 0
     private var amountLength = 0
+    private var TAG = QuotationDetailDealAdapter::class.java.simpleName
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -32,11 +34,12 @@ class QuotationDetailDealAdapter(context: Context, variableId: Int, data: Mutabl
         viewHolder?.timeView?.setText(if (dealOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("HH:mm:ss",
             dealOrder.createdTime!!
         ))
-        if ("B".equals(dealOrder?.tradeDealDirection, ignoreCase = true) || "BID".equals(dealOrder?.tradeDealDirection, ignoreCase = true)) {
+        Log.d(TAG,"tradeDealDirection = "+dealOrder?.tradeDealDirection)
+        if ("1".equals(dealOrder?.tradeDealDirection, ignoreCase = true) || "BID".equals(dealOrder?.tradeDealDirection, ignoreCase = true)) {
             viewHolder?.directionView?.setText(R.string.k_buy)
             viewHolder?.directionView?.setTextColor(colorC2)
             viewHolder?.dealPriceView?.setTextColor(colorC2)
-        } else if ("S".equals(dealOrder?.tradeDealDirection, ignoreCase = true) || "ASK".equals(dealOrder?.tradeDealDirection, ignoreCase = true)) {
+        } else if ("2".equals(dealOrder?.tradeDealDirection, ignoreCase = true) || "ASK".equals(dealOrder?.tradeDealDirection, ignoreCase = true)) {
             viewHolder?.directionView?.setText(R.string.k_sale)
             viewHolder?.directionView?.setTextColor(colorC3)
             viewHolder?.dealPriceView?.setTextColor(colorC3)
