@@ -41,12 +41,12 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         var tag = TransactionViewModel::class.java.simpleName
         const val LEVER_TYPE_COIN = "PHYSICAL" // 现货
         const val LEVER_TYPE_LEVER = "ISOLATED" //逐仓杠杆
-        const val LIMIT = "LIMIT"//现货
     }
 
 
     private var tabType = ConstData.TAB_COIN
     private var currentPairStatus = PairStatus()
+    private var currentOrderType:String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
     var askMax = 5
@@ -346,20 +346,25 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                 .subscribe()
     }
 
+    fun getCurrentPairOrderTypeList():ArrayList<String?>?{
+        return currentPairStatus.getSupportOrderTypeList()
+    }
+
+    fun getCurrentPairOrderType():String?{
+        return currentPairStatus.getSupportOrderTypeList()?.get(0)
+    }
+
     fun getCurrentPairStatus(pair: String?) {
         currentPairStatus.pair = (pair)
         initPairCoinSet()
         val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, pair)
         if (pairStatus != null) {
-            currentPairStatus.pair = (pairStatus.pair)
+            currentPairStatus = pairStatus
             initPairCoinSet()
-            currentPairStatus.precision = pairStatus.precision
-            currentPairStatus.amountPrecision = pairStatus.amountPrecision
-            currentPairStatus.supportingPrecisionList = pairStatus.supportingPrecisionList
         } else {
             SocketDataContainer.initAllPairStatusData(context)
         }
-        onTransactionModelListener?.onPairStatusInit(currentPairStatus)
+        onTransactionModelListener?.onPairStatusInit(pairStatus)
         resetPairStatus(pairStatus)
     }
 
@@ -427,7 +432,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         if (pairStatus.pair != null) {
             currentPairStatus.pair = (pairStatus.pair)
         }
-        onTransactionModelListener?.onPairStatusDataChanged(currentPairStatus)
     }
 
     /**
@@ -662,12 +666,8 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         /**
          * 交易对初始化
          */
-        fun onPairStatusInit(pairStatus: PairStatus)
+        fun onPairStatusInit(pairStatus: PairStatus?)
 
-        /**
-         * 交易对行情数据变更
-         */
-        fun onPairStatusDataChanged(pairStatus: PairStatus)
 
         /**
          * 用户信息数据变更

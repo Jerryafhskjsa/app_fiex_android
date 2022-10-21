@@ -197,6 +197,7 @@ object PairApiServiceHelper {
                         pairStatus?.pair = pair
                         pairStatus?.hot = symbol?.hot
                         pairStatus?.setType = symbol?.setType
+                        pairStatus?.supportOrderType = symbol?.supportOrderType//支持的下单类型
                         pairStatus?.order_no = i
                         var maxPrecision = symbol?.pricePrecision
                         maxPrecision = if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
