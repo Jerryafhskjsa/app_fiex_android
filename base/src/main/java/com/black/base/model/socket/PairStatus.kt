@@ -16,6 +16,7 @@ import kotlin.math.pow
 
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
+    var TAG = PairStatus::class.java.simpleName
     //k线数据
     var kLineData:HomeTickersKline? = null
     var supportingPrecisionList //支持深度
@@ -28,6 +29,8 @@ open class PairStatus : BaseAdapterItem(), Findable {
             tradeAmount = value.toDouble()
         }
     }
+    //支持订单下单类型
+    var supportOrderType:String? = null
     var tradeAmount:Double? = null
     var hot:Boolean? = null
     var setType:Int? = null
@@ -92,6 +95,19 @@ open class PairStatus : BaseAdapterItem(), Findable {
             }
             return field
         }
+
+    fun getSupportOrderTypeList():ArrayList<String?>?{
+        var typeList:ArrayList<String?>? = ArrayList()
+        if (supportOrderType != null) {
+            var typeArray = supportOrderType!!.split(",").toTypedArray()
+            var temp = typeArray.toList()
+            for (i in temp.indices){
+                typeList?.add(temp[i])
+            }
+        }
+        return typeList
+    }
+
     var setName: String? = null
         get() {
             if (pair != null) {

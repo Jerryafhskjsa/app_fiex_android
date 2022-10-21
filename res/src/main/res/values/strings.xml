@@ -709,6 +709,9 @@
     <string name="addr_remark_des">地址别名</string>
     <string name="price_amplitude">最新价/24h涨跌幅</string>
     <string name="brackets">(%s)</string>
+    <string name="select_order_type">请选择下单类型</string>
+    <string name="order_type_limit">LIMIT</string>
+    <string name="order_type_market">MARKET</string>
 
 
 

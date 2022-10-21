@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/double_padding" />
             <LinearLayout
+                android:id="@+id/lin_order_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_transaction_input"
@@ -106,6 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
+                        android:id="@+id/lin_price"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -152,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp" />
             <LinearLayout
+                android:id="@+id/lin_prince_cny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -442,6 +445,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_padding" />
             <RelativeLayout
+                android:id="@+id/rel_volume"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.black.base.widget.SpanTextView
@@ -451,12 +455,14 @@
                     android:text="VOL"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_13" />
+
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/tradeValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="4000usdt"
+                    android:text="-"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_13" />
             </RelativeLayout>
