@@ -40,8 +40,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
     private var onWalletModelListener: OnWalletModelListener? = null
-    private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
-    private var userLeverObserver: Observer<String?>? = createUserLeverObserver()
+    private var userBalanceObserver: Observer<UserBalance?>? = null
+    private var userLeverObserver: Observer<String?>? = null
 
     private var walletList: ArrayList<Wallet?>? = ArrayList()
     private var walletLeverList: ArrayList<WalletLever?>? = null
@@ -87,10 +87,11 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     override fun onResume() {
         super.onResume()
-        if (userInfoObserver == null) {
-            userInfoObserver = createUserInfoObserver()
+        if (userBalanceObserver == null) {
+            userBalanceObserver = createUserBalanceObserver()
         }
-        SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
+        SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
+
         if (userLeverObserver == null) {
             userLeverObserver = createUserLeverObserver()
         }
@@ -99,8 +100,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     override fun onStop() {
         super.onStop()
-        if (userInfoObserver != null) {
-            SocketDataContainer.removeUserInfoObservable(userInfoObserver)
+        if (userBalanceObserver != null) {
+            SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
         }
         if (userLeverObserver != null) {
             SocketDataContainer.removeUserLeverObservable(userLeverObserver)
@@ -165,10 +166,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return searchKey
     }
 
-    private fun createUserInfoObserver(): Observer<String?> {
-        return object : SuccessObserver<String?>() {
-            override fun onSuccess(value: String?) {
-                onWalletModelListener?.onUserInfoChanged()
+    private fun createUserBalanceObserver(): Observer<UserBalance?> {
+        return object : SuccessObserver<UserBalance?>() {
+            override fun onSuccess(value: UserBalance?) {
+                onWalletModelListener?.onUserBalanceChanged(value)
             }
         }
     }
@@ -176,7 +177,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private fun createUserLeverObserver(): Observer<String?> {
         return object : SuccessObserver<String?>() {
             override fun onSuccess(value: String?) {
-                onWalletModelListener?.onUserInfoChanged()
+//                onWalletModelListener?.onUserInfoChanged()
             }
         }
     }
@@ -196,8 +197,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         spotBalanceList = returnData.data?.spotBalance
-                        handleResult()
-                    } else {
+                        handleBalanceResult()
                     }
                 }
             }))
@@ -241,11 +241,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return setListSet
     }
 
-    fun handleResult(){
-        if(walletList != null && walletList!!.size>0){
+    fun handleBalanceResult(){
+        if(walletList != null && walletList!!.size > 0){
             walletList!!.clear()
         }
-//        var setList = getSymbolListSets(1, symbolList)
         if(spotBalanceList != null){
             if(coinList != null){
                 for(coin in coinList!!){
@@ -262,7 +261,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 for(i in walletList!!.indices){
                     for (k in spotBalanceList!!.indices){
                         if(spotBalanceList!![k]?.coin == walletList!![i]?.coinType){
-                            walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!)
+                            walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
+                            walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
                             walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
                             break
                         }
@@ -271,6 +271,22 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         onWalletModelListener?.onWallet(Observable.just(walletList)
             .compose(RxJavaHelper.observeOnMainThread()), false)
+
+        var walletTotal = 0.0
+        var walletTotalCNY = 0.0
+        walletList?.run {
+            for (wallet in walletList!!) {
+                walletTotal += wallet?.estimatedAvailableAmount
+                    ?: 0.toDouble()
+                walletTotalCNY += wallet?.estimatedAvailableAmountCny
+                    ?: 0.toDouble()
+            }
+        }
+        onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
+            it.usdt = walletTotal
+            it.cny = walletTotalCNY
+        })
+            .compose(RxJavaHelper.observeOnMainThread()))
     }
 
     private fun getWalletFromServer2(isShowLoading: Boolean) {
@@ -517,6 +533,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
     interface OnWalletModelListener {
+        fun onUserBalanceChanged(userBalance: UserBalance?)
         fun onUserInfoChanged()
         fun onGetWallet(observable: Observable<Int>?, isShowLoading: Boolean)
         fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean)

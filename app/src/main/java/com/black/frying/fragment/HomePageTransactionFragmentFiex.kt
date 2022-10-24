@@ -240,6 +240,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(getString(R.string.number_default))
         binding!!.fragmentHomePageTransactionHeader1.countBar.setOnSeekBarChangeListener(this)
         binding!!.fragmentHomePageTransactionHeader1.btnHandle.setOnClickListener(this)
+        viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
         deepViewBinding!!.init()
     }
@@ -294,6 +295,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         override fun onReturn(window: DeepControllerWindow<String?>, item: String?) {
                                 refreshOrderType(item)
                                 currentOrderType = item
+                                viewModel?.setCurrentPairorderType(item)
                                 if(currentOrderType.equals("LIMIT")){
                                     binding?.fragmentHomePageTransactionHeader1?.relVolume?.visibility = View.VISIBLE
                                 }else if(currentOrderType.equals("MARKET")){
@@ -694,7 +696,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
-        currentOrderType = viewModel?.getCurrentPairOrderType()
+        currentOrderType = "LIMIT"
+        viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
     }
 
@@ -712,7 +715,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 binding!!.fragmentHomePageTransactionHeader1?.linPrinceCny.visibility = View.VISIBLE
             }
         }
-
         binding!!.fragmentHomePageTransactionHeader1?.orderType.text = typeDes
     }
 
@@ -836,10 +838,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             val orderState = 1
             TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), orderState, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
                 override fun error(type: Int, error: Any) {
+                    Log.d(TAG,"getTradeOrderCurrent error")
                     showCurrentOrderList(null)
                 }
                 override fun callback(returnData: HttpRequestResultData<TradeOrderResult?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        Log.d(TAG,"getTradeOrderCurrent data.size = "+returnData.data?.items?.size)
                         showCurrentOrderList(returnData.data?.items)
                     }
                 }
@@ -851,6 +855,26 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun showCurrentOrderList(data: ArrayList<TradeOrderFiex?>?) {
         adapter?.data = data
         adapter?.notifyDataSetChanged()
+    }
+
+    //更新当前委托
+    private fun updateCurrentOrderList(tradeOrder:TradeOrderFiex?){
+        var data = adapter?.data
+        if(data != null){
+            for(i in data?.indices!!){
+                var originData = data[i]
+                if(tradeOrder?.orderId.equals(originData?.orderId)){
+                    originData?.executedQty = tradeOrder?.dealQty
+                    adapter?.updateItem(i,originData)
+                    adapter?.notifyItemChanged(i)
+                    if(tradeOrder?.executedQty.equals(originData?.origQty)){//订单完全成交，更新列表
+                        getTradeOrderCurrent()
+                    }
+                }
+            }
+        }else{
+            getTradeOrderCurrent()
+        }
     }
 
     //下单
@@ -952,7 +976,24 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (pairStatus?.supportingPrecisionList != null) {
             onDeepChoose()
         }
-        currentOrderType = viewModel?.getCurrentPairOrderType()
+        currentOrderType = "LIMIT"
+        viewModel?.setCurrentPairorderType(currentOrderType)
+    }
+
+    override fun onUserBalanceChanged(userBalance: UserBalance?) {
+        Log.d(TAG,"onUserBalanceChanged,coin = "+userBalance?.coin)
+        if(userBalance?.coin.equals(currentBalanceBuy?.coin)){
+            currentBalanceBuy = userBalance
+        }
+        if(userBalance?.coin.equals(currentBalanceSell?.coin)){
+            currentBalanceSell = userBalance
+        }
+        refreshUsable()
+    }
+
+    override fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?) {
+        Log.d(TAG,"onUserTradeOrderChanged,executedQty = "+userTradeOrder?.executedQty)
+        updateCurrentOrderList(userTradeOrder)
     }
 
     //用户信息被修改，刷新委托信息和钱包

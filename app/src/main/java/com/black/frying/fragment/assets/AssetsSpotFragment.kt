@@ -121,6 +121,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
 //        binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getWalletCoinFilter() == null) false else walletActivity?.getWalletCoinFilter()!!)
     }
 
+
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
         val wallet = adapter?.getItem(position)
         //点击账户详情

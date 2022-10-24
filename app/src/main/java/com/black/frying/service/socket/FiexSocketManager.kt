@@ -3,16 +3,18 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.api.UserApiServiceHelper
+import com.black.base.model.HttpRequestResultString
 import com.black.base.model.clutter.Kline
-import com.black.base.model.socket.KLineItem
-import com.black.base.model.socket.PairDeal
-import com.black.base.model.socket.PairQuotation
-import com.black.base.model.socket.PairStatusNew
+import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderOneDepth
+import com.black.base.model.user.UserBalance
 import com.black.base.util.*
 import com.black.net.HttpCookieUtil
+import com.black.net.HttpRequestResult
 import com.black.net.websocket.*
+import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -314,39 +316,74 @@ class FiexSocketManager(context: Context, handler: Handler){
             startListenUser()
         }
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "UserDataListener onMessage = $message")
-            if(message.equals("succeed") || message.equals("invalid_ws_token")){
+            Log.d(tag, "UserDataListener message = $message")
+            if(message.equals("succeed")){
+                return
+            }
+            if(message.equals("invalid_ws_token")){
+                mCcontext?.let { getWsToken(it) }
                 return
             }
             var data:JSONObject? = null
             try {
                 data = JSONObject(message)
-                if(data != null){
-                    var resType = data.getString("resType")
-                    var resultData = data.getString("data")
-                    when(resType){
-                        //余额变更
-                        "uBalance" ->{
-
-                        }
-                        //用户成交
-                        "uTrade" ->{
-
-                        }
-                        //用户订单
-                        "uOrder" ->{
-
-                        }
-
-                    }
-                }
             }catch (e:JSONException){
                 FryingUtil.printError(e)
             }
             if(data != null){
-                Log.d(tag,"userData->resType = "+data.getString("resType"))
+                var resType = data.getString("resType")
+                var resultData = data.getString("data")
+                Log.d(tag, "UserDataListener resType = $resType")
+                Log.d(tag, "UserDataListener resultData = $resultData")
+                when(resType){
+                    //余额变更
+                    "uBalance" ->{
+                        var balance:UserBalance? = null
+                        try {
+                            val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
+                            balance = gson.fromJson<UserBalance?>(jsonObject.toString(), object : TypeToken<UserBalance?>() {}.type)
+                        }catch (e:Exception){
+                            FryingUtil.printError(e)
+                        }
+                        if(balance != null){
+                            SocketDataContainer.onUserBalanceChangedFiex(balance)
+                        }
+                    }
+                    //用户成交(暂时没用)
+                    "uTrade" ->{
+
+                    }
+                    //用户订单
+                    "uOrder" ->{
+                        var tradeOrderFiex:TradeOrderFiex? = null
+                        try {
+                            val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
+                            tradeOrderFiex = gson.fromJson<TradeOrderFiex?>(jsonObject.toString(), object : TypeToken<TradeOrderFiex?>() {}.type)
+                        }catch (e:Exception){
+                            FryingUtil.printError(e)
+                        }
+                        if(tradeOrderFiex != null){
+                            SocketDataContainer.onUserOrderChangedFiex(tradeOrderFiex)
+                        }
+                    }
+                }
             }
         }
+    }
+
+    //获取ws-token
+    private fun getWsToken(context: Context){
+        UserApiServiceHelper.getWsToken(context!!,object : Callback<HttpRequestResultString?>(){
+            override fun error(type: Int, error: Any?) {
+            }
+            override fun callback(result: HttpRequestResultString?) {
+                if(result != null && result.code == HttpRequestResult.SUCCESS){
+                    var wsToken = result.data
+                    HttpCookieUtil.saveWsToken(context,wsToken)
+                    startListenUser()
+                }
+            }
+        })
     }
 
     /**

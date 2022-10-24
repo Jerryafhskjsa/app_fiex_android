@@ -55,15 +55,19 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
 
-    //深度变化
-    private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     //用户相关
+    private var userBalanceObserver: Observer<UserBalance?>? = createUserBalanceObserver()
+    private var userTradeOrderObserver: Observer<TradeOrderFiex?>? = createUserOrderObserver()
+    //交易对相关
+    private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
+    //深度变化
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
-    private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
     //行情涨跌幅以及价格变化
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
     //当前交易对所有用户成交数据
     private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
+    //用户相关
+    private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
 
 
     private var tradeOrderDepthPair:TradeOrderPairList? = null
@@ -79,6 +83,16 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread!!.start()
         socketHandler = Handler(handlerThread!!.looper)
+
+        if(userBalanceObserver == null){
+            userBalanceObserver = createUserBalanceObserver()
+        }
+        SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
+
+        if(userTradeOrderObserver == null){
+            userTradeOrderObserver = createUserOrderObserver()
+        }
+        SocketDataContainer.subscribeUserOrderObservable(userTradeOrderObserver)
 
         if(pairDealObserver == null){
             pairDealObserver = createPairDealObserver()
@@ -129,6 +143,14 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         val bundle2 = Bundle()
         bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle2)
+        if(userBalanceObserver != null){
+            SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
+        }
+
+        if(userTradeOrderObserver != null){
+            SocketDataContainer.removeUserOrderObservable(userTradeOrderObserver)
+        }
+
         if (orderObserver != null) {
             SocketDataContainer.removeOrderObservable(orderObserver)
         }
@@ -154,6 +176,31 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             handlerThread!!.quit()
         }
     }
+
+    private fun createUserBalanceObserver(): Observer<UserBalance?> {
+        return object : SuccessObserver<UserBalance?>() {
+            override fun onSuccess(value: UserBalance?) {
+                onTransactionModelListener?.run {
+                    if (value != null) {
+                        onTransactionModelListener?.onUserBalanceChanged(value)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createUserOrderObserver(): Observer<TradeOrderFiex?> {
+        return object : SuccessObserver<TradeOrderFiex?>() {
+            override fun onSuccess(value: TradeOrderFiex?) {
+                onTransactionModelListener?.run {
+                    if (value != null) {
+                        onTransactionModelListener?.onUserTradeOrderChanged(value)
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun createPairDealObserver(): Observer<PairDeal?> {
         return object : SuccessObserver<PairDeal?>() {
@@ -351,7 +398,14 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     }
 
     fun getCurrentPairOrderType():String?{
-        return currentPairStatus.getSupportOrderTypeList()?.get(0)
+        if(currentPairStatus == null){
+            return currentPairStatus.getSupportOrderTypeList()?.get(0)
+        }else{
+            return currentOrderType
+        }
+    }
+    fun setCurrentPairorderType(type:String?){
+        currentOrderType = type
     }
 
     fun getCurrentPairStatus(pair: String?) {
@@ -659,6 +713,15 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     }
 
     interface OnTransactionModelListener {
+
+        /**
+         * 用户挂单数据变化
+         */
+        fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?)
+        /**
+         * 用户余额变化
+         */
+        fun onUserBalanceChanged(userBalance: UserBalance?)
         /**
          * 交易对24小时行情变更
          */
@@ -667,8 +730,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
          * 交易对初始化
          */
         fun onPairStatusInit(pairStatus: PairStatus?)
-
-
         /**
          * 用户信息数据变更
          */
