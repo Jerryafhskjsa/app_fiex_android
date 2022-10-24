@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.Money
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
@@ -347,6 +348,9 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         } else {
             viewModel!!.computeTotalCNY(total)
         }
+    }
+
+    override fun onUserBalanceChanged(userBalance: UserBalance?) {
     }
 
     //用户信息被修改，刷新委托信息和钱包

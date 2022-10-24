@@ -13,8 +13,8 @@ class Wallet : BaseAdapterItem, Parcelable {
     var coinIconUrl:String? = null//币种icon
     var coinAmount //数量 可使用
             : BigDecimal? = null
-    var estimatedAvailableAmount:Double = 0.0
-    var estimatedAvailableAmountCny:Double? = 0.0
+    var estimatedAvailableAmount:Double = 0.0//可使用折合成u
+    var estimatedAvailableAmountCny:Double? = 0.0//可使用折合成cny
 
     var coinWallet //资产地址
             : String? = null

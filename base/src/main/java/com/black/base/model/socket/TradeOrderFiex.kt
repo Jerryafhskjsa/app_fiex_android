@@ -7,7 +7,7 @@ class TradeOrderFiex{
     var avgPrice:String? = null//成交均价 == dealAvgPrice
     var clientOrderId:String? = null//自定义订单I
     var createdTime: Long? = null//创建时间
-    var executedQty:String? = null//已成交数量
+    var dealQty:String? = null
     var forceClose:Boolean? = false//是否是全平订单
     var marginFrozen:String? = null//占用保证金 == frozenAmountByOrder
     var orderId:String? = null//订单id == id
@@ -26,5 +26,12 @@ class TradeOrderFiex{
             = 0.0
     var beforeAmount //自身和前面所有挂单数量，扫单使用
             = 0.0
+    var executedQty: String? = null
+        get() {
+            if (dealQty != null) {
+                field = dealQty
+            }
+            return field
+        }
     /*fiex********************/
 }

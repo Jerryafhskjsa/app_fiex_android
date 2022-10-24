@@ -61,7 +61,7 @@ class EntrustCurrentHomeAdapter(context: Context, variableId: Int, data: ArrayLi
             tradeOrder.origQty!!.toDoubleOrNull(), amountPrecision, amountPrecision))
         viewHolder?.dealAmount?.setText(if (tradeOrder?.executedQty == null || tradeOrder.executedQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
             tradeOrder.executedQty!!.toDoubleOrNull(), amountPrecision, amountPrecision))
-        viewHolder?.priceDes?.setText(if (tradeOrder?.avgPrice == null || tradeOrder.avgPrice == "0") "0" else NumberUtil.formatNumberNoGroup(tradeOrder.price!!.toDoubleOrNull()))
+        viewHolder?.priceDes?.setText(if (tradeOrder?.price == null || tradeOrder.price == "0") "0" else NumberUtil.formatNumberNoGroup(tradeOrder.price!!.toDoubleOrNull()))
 
     }
 

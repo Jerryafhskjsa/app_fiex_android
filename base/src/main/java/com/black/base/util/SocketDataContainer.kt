@@ -18,6 +18,7 @@ import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.util.FryingUtil.printError
 import com.black.base.util.SharePreferencesUtil.getTextValue
@@ -84,6 +85,10 @@ object SocketDataContainer {
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
     //交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
+    //用户余额变更
+    private val userBalanceObservers = ArrayList<Observer<UserBalance?>>()
+    //用户挂单变更
+    private val userOrderObservers = ArrayList<Observer<TradeOrderFiex?>>()
     /***fiex***/
     //成交
     const val DEAL_MAX_SIZE = 20
@@ -121,6 +126,46 @@ object SocketDataContainer {
 
     fun setLastGetTime(type: Int, time: Long) {
         lastGetTimeMap.put(type, time)
+    }
+
+    //添加用户余额观察者
+    fun subscribeUserBalanceObservable(observer: Observer<UserBalance?>?){
+        if(observer == null){
+            return
+        }
+        synchronized(userBalanceObservers){
+            if(!userBalanceObservers.contains(observer)){
+                userBalanceObservers.add(observer)
+            }
+        }
+    }
+
+    //移除用户余额观察者
+    fun removeUserBalanceObservable(observer: Observer<UserBalance?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(userBalanceObservers) { userBalanceObservers.remove(observer) }
+    }
+
+    //添加用户Order观察者
+    fun subscribeUserOrderObservable(observer: Observer<TradeOrderFiex?>?){
+        if(observer == null){
+            return
+        }
+        synchronized(userOrderObservers){
+            if(!userOrderObservers.contains(observer)){
+                userOrderObservers.add(observer)
+            }
+        }
+    }
+
+    //移除用户Order观察者
+    fun removeUserOrderObservable(observer: Observer<TradeOrderFiex?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(userOrderObservers) { userOrderObservers.remove(observer) }
     }
 
     //添加当前交易对deal观察者
@@ -1596,6 +1641,27 @@ object SocketDataContainer {
 //            kLineDataSet.clear();
 //        }
     }
+
+    fun onUserBalanceChangedFiex(balance: UserBalance?) {
+        synchronized(userBalanceObservers) {
+            for (observer in userBalanceObservers) {
+                if (balance != null) {
+                    observer.onNext(balance)
+                }
+            }
+        }
+    }
+
+    fun onUserOrderChangedFiex(tradeorder:TradeOrderFiex?) {
+        synchronized(userOrderObservers) {
+            for (observer in userOrderObservers) {
+                if (tradeorder != null) {
+                    observer.onNext(tradeorder)
+                }
+            }
+        }
+    }
+
 
     fun onUserInfoChanged() {
         synchronized(userInfoObservers) {

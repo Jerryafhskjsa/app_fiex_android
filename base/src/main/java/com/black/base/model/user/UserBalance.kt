@@ -6,11 +6,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class UserBalance : Parcelable {
     var coin: String? = null//币种
-    var balance: String? = null//现货余额
+    var balance: String? = null//现货总余额
     var freeze:String? = null//现货冻结
     var availableBalance:String? = null//可用余额
     var estimatedTotalAmount:String? = null//总折合u
-    var estimatedCynAmount:String? = null//折合cny
+    var estimatedCynAmount:String? = null//总折合cny
     var estimatedAvailableAmount:String? = null//可用折合
     var estimatedCoinType:String? = null//折合币种
     //合约数据

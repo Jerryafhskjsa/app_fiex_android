@@ -69,6 +69,15 @@ abstract class BaseRecycleDataBindAdapter<T, K : ViewDataBinding?>(protected var
         }
     }
 
+    open fun updateItem(index: Int, item: T?){
+        if (data == null) {
+            data = ArrayList()
+        }
+        if (item != null) {
+            data?.set(index, item)
+        }
+    }
+
     fun addItem(index: Int, item: T?) {
         if (data == null) {
             data = ArrayList()
