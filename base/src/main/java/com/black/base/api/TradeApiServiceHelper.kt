@@ -55,7 +55,7 @@ object TradeApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun getTradeOrderRecordFiex(context: Context?, symbol: String?, state:Int, startTime: String?, endTime: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderResult?>?>?) {
+    fun getTradeOrderRecordFiex(context: Context?, symbol: String?, state:Int?, startTime: String?, endTime: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderResult?>?>?) {
         if (context == null || callback == null) {
             return
         }
