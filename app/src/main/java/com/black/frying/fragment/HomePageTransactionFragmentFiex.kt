@@ -63,6 +63,8 @@ import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -185,6 +187,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(50)
+        getTradeOrderCurrent()
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -793,7 +796,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun refreshData() {
-        getTradeOrderCurrent()
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(1)
@@ -835,8 +837,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun getTradeOrderCurrent() {
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
 //            mContext?.runOnUiThread { }
-            val orderState = 1
-            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), orderState, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
+//            val orderState = 1
+            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), null, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
                 override fun error(type: Int, error: Any) {
                     Log.d(TAG,"getTradeOrderCurrent error")
                     showCurrentOrderList(null)
@@ -867,7 +869,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     originData?.executedQty = tradeOrder?.dealQty
                     adapter?.updateItem(i,originData)
                     adapter?.notifyItemChanged(i)
-                    if(tradeOrder?.executedQty.equals(originData?.origQty)){//订单完全成交，更新列表
+                    if(tradeOrder?.executedQty?.toDouble() == originData?.origQty?.toDouble()){//订单完全成交，更新列表
                         getTradeOrderCurrent()
                     }
                 }
@@ -917,7 +919,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
 //                        viewModel!!.getWalletLeverDetail()
                         viewModel!!.getCurrentUserBalance(ConstData.BalanceType.SPOT)
-                        refreshData()
+                        withTimerGetCurrentTradeOrder()
                         FryingUtil.showToast(mContext, getString(R.string.trade_success))
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -930,6 +932,20 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             })
         }
         createRunnable.run()
+    }
+
+    fun withTimerGetCurrentTradeOrder(){
+        var count = 0
+        var timer = Timer()
+        timer?.schedule(object:TimerTask(){
+            override fun run() {
+                getTradeOrderCurrent()
+                count++
+                if(count >= 3){
+                    timer.cancel()
+                }
+            }
+        }, Date(), 1000)
     }
 
     //撤销新单

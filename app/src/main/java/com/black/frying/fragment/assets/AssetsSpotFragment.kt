@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -98,27 +99,27 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         binding?.coinSearch?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (doSearch)
                     eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
-                    doSearch = true
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
         binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
-            if (doSearch) {
                 eventListener?.setWalletCoinFilter(isChecked)
                 eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
-            }
-            doSearch = true
+                doSearch = isChecked
         }
         return layout
     }
 
     override fun onResume() {
         super.onResume()
-        doSearch = false
-//        binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getWalletCoinFilter() == null) false else walletActivity?.getWalletCoinFilter()!!)
+        doSearch = (if (eventListener?.getWalletCoinFilter() == null) false else eventListener?.getWalletCoinFilter()!!)
+        binding?.btnWalletFilter?.isChecked = doSearch
+    }
+
+    fun isSearch():Boolean?{
+        return doSearch
     }
 
 
@@ -137,6 +138,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         binding?.refreshLayout?.setRefreshing(false)
         adapter?.data = data
         adapter?.notifyDataSetChanged()
+
     }
 
     fun setTotal(total: Money?) {
@@ -178,6 +180,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     fun setSearchKey(searchKey: String?) {
         doSearch = false
         binding?.coinSearch?.setText(searchKey)
+        binding?.coinSearch?.text?.length?.let { binding?.coinSearch?.setSelection(it) }
     }
 
     interface EventResponseListener {

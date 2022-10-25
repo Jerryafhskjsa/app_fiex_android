@@ -34,7 +34,7 @@ interface TradeApiService {
      * state 1：新建订单;未成交; 2：部分成交；3：全部成交；4：已撤销；5：下单失败；6：已过期; 9:未完成；10：历史订单
      */
     @GET(UrlConfig.Trade.URL_TRADE_ORDERS_RECORD)
-    fun getTradeOrderRecordFiex(@Query("symbol") symbol: String?, @Query("state") state: Int, @Query("startTime") startTime: String?, @Query("endTime") endTime: String?): Observable<HttpRequestResultData<TradeOrderResult?>?>?
+    fun getTradeOrderRecordFiex(@Query("symbol") symbol: String?, @Query("state") state: Int?, @Query("startTime") startTime: String?, @Query("endTime") endTime: String?): Observable<HttpRequestResultData<TradeOrderResult?>?>?
 
     @GET(UrlConfig.Trade.URL_TRADE_ORDERS_DEPTH)
     fun getTradeOrderDepth(@Query("level") level: Int?, @Query("symbol") symbol: String?): Observable<HttpRequestResultData<TradeOrderDepth?>?>?

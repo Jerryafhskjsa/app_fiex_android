@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,9 +76,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var normalFragment: AssetsSpotFragment? = null
-    private var assetsContractFragment: AssetsContractFragment? = null
-    private var assetsFinanceFragment: AssetsFinanceFragment? = null
-    private var assetsWalletFragment: AssetsWalletFragment? = null
+    private var assetsContractFragment: EmptyFragment? = null
+    private var assetsFinanceFragment: EmptyFragment? = null
+    private var assetsWalletFragment: EmptyFragment? = null
+//    private var assetsContractFragment: AssetsContractFragment? = null
+//    private var assetsFinanceFragment: AssetsFinanceFragment? = null
+//    private var assetsWalletFragment: AssetsWalletFragment? = null
 
     private var leverFragment: WalletLeverFragment? = null
 
@@ -278,32 +282,32 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             normalFragment = it
             normalFragment?.setEventListener(this)
         })
-        fragmentList?.add(AssetsContractFragment().also {
+        fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
-            assetsContractFragment = it
-            assetsContractFragment?.setEventListener(this)
+//            assetsContractFragment = it
+//            assetsContractFragment?.setEventListener(this)
         })
-        fragmentList?.add(AssetsFinanceFragment().also {
+        fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
-            assetsFinanceFragment = it
-            assetsFinanceFragment?.setEventListener(this)
+//            assetsFinanceFragment = it
+//            assetsFinanceFragment?.setEventListener(this)
         })
-        fragmentList?.add(AssetsWalletFragment().also {
+        fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
-            assetsWalletFragment = it
-            assetsWalletFragment?.setEventListener(this)
+//            assetsWalletFragment = it
+//            assetsWalletFragment?.setEventListener(this)
         })
     }
     private fun refreshMoneyDisplay() {
@@ -351,6 +355,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun onUserBalanceChanged(userBalance: UserBalance?) {
+            viewModel?.updateBalance(userBalance)
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -370,25 +375,30 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean) {
+        Log.d("iiiiii","onWallet")
         mContext?.runOnUiThread {
             normalFragment?.run {
                 observable?.subscribe {
-                    setData(it)
+                    if(normalFragment!!.isSearch() == true){
+                        setData(viewModel?.filterWallet())
+                    }else{
+                        setData(it)
+                    }
                 }
             }
             assetsContractFragment?.run {
                 observable?.subscribe {
-                    setData(it)
+//                    setData(it)
                 }
             }
             assetsFinanceFragment?.run {
                 observable?.subscribe {
-                    setData(it)
+//                    setData(it)
                 }
             }
             assetsWalletFragment?.run {
                 observable?.subscribe {
-                    setData(it)
+//                    setData(it)
                 }
             }
         }
@@ -460,7 +470,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun search(searchKey: String, walletType: Int) {
         viewModel!!.search(searchKey)
-        normalFragment?.setSearchKey(searchKey)
+//        normalFragment?.setSearchKey(searchKey)
         mContext?.hideSoftKeyboard()
     }
 

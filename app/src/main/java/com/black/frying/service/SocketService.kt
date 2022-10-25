@@ -41,7 +41,7 @@ class SocketService : Service() {
                 if (msg.obj is Bundle) {
                     socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
                 }
-                fiexSocketManager?.removeListener(socketType)
+//                fiexSocketManager?.removeListener(socketType)
             }
             //添加socket监听
             SocketUtil.COMMAND_ADD_SOCKET_LISTENER ->{
@@ -49,7 +49,7 @@ class SocketService : Service() {
                 if (msg.obj is Bundle) {
                     socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
                 }
-                fiexSocketManager?.addListener(socketType)
+//                fiexSocketManager?.addListener(socketType)
             }
             //交易对变更
             SocketUtil.COMMAND_PAIR_CHANGED -> {

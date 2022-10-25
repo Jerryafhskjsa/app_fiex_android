@@ -197,7 +197,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         spotBalanceList = returnData.data?.spotBalance
-                        handleBalanceResult()
+                        handleBalanceResult(walletList)
                     }
                 }
             }))
@@ -241,7 +241,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return setListSet
     }
 
-    fun handleBalanceResult(){
+    fun handleBalanceResult(walletList:ArrayList<Wallet?>?){
         if(walletList != null && walletList!!.size > 0){
             walletList!!.clear()
         }
@@ -287,6 +287,22 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             it.cny = walletTotalCNY
         })
             .compose(RxJavaHelper.observeOnMainThread()))
+    }
+
+    fun updateBalance(balance: UserBalance?){
+        var updateWalletList = ArrayList<Wallet?>()
+        for (j in walletList?.indices!!){
+            var newWallet = Wallet()
+            var wallet = walletList!![j]
+            if(balance?.coin.equals(wallet?.coinType)){
+                newWallet?.totalAmount = balance?.balance?.toDouble()!!
+                newWallet?.coinAmount = BigDecimal( balance?.availableBalance?.toDouble()!!)
+                newWallet?.estimatedAvailableAmount = balance?.estimatedAvailableAmount?.toDouble()!!
+                newWallet?.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()!!
+            }
+            updateWalletList.add(newWallet)
+        }
+        handleBalanceResult(updateWalletList)
     }
 
     private fun getWalletFromServer2(isShowLoading: Boolean) {
@@ -375,7 +391,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
 
-    private fun filterWallet(): ArrayList<Wallet?>? {
+    fun filterWallet(): ArrayList<Wallet?>? {
         var showData: ArrayList<Wallet?>? = ArrayList<Wallet?>()
         if (walletList != null && walletList?.isNotEmpty()!!) {
             if (walletCoinFilter!!) {
