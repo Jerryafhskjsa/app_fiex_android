@@ -300,6 +300,13 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_deep_chooser.xml" value="0.1859375" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_pair_status_choose_tab.xml" value="0.17239583333333333" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_pair_status_popup_window.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_google_layout.xml" value="0.15729166666666666" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_mail_layout.xml" value="0.15729166666666666" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_money_password_layout.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_multiple.xml" value="0.15729166666666666" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_password_layout.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_phone_layout.xml" value="0.15729166666666666" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android_1/base/src/main/res/layout/view_verify_single.xml" value="0.15729166666666666" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/res/src/main/res/drawable/btn_collect.xml" value="0.1655" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/res/src/main/res/drawable/my_cursor.xml" value="0.2105" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/res/src/main/res/drawable/trans_default_bg_corner.xml" value="0.148" />

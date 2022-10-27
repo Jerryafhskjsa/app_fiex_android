@@ -122,7 +122,10 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
                 override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultString?>> {
                     if (returnData != null) {
                         when (returnData.code) {
-                            -10021, -10022, -10023, -10024 -> {
+                            ConstData.AUTHENTICATE_CODE_MAIL,
+                            ConstData.AUTHENTICATE_CODE_PHONE,
+                            ConstData.AUTHENTICATE_CODE_GOOGLE,
+                            ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE -> {
                                 val prefixAuth = returnData.msg
                                 val target = Target()
                                 if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
@@ -146,10 +149,10 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
                                 }
                                 var verifyType = VerifyType.NONE
                                 when (returnData.code) {
-                                    -10021 -> verifyType = verifyType or VerifyType.MAIL
-                                    -10022 -> verifyType = verifyType or VerifyType.PHONE
-                                    -10023 -> verifyType = verifyType or VerifyType.GOOGLE
-                                    -10024 -> verifyType = verifyType or VerifyType.PHONE or VerifyType.GOOGLE
+                                    ConstData.AUTHENTICATE_CODE_MAIL -> verifyType = verifyType or VerifyType.MAIL
+                                    ConstData.AUTHENTICATE_CODE_PHONE -> verifyType = verifyType or VerifyType.PHONE
+                                    ConstData.AUTHENTICATE_CODE_GOOGLE -> verifyType = verifyType or VerifyType.GOOGLE
+                                    ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE -> verifyType = verifyType or VerifyType.PHONE or VerifyType.GOOGLE
                                 }
                                 return verify(verifyType, target, returnData.code!!, prefixAuth)
                                     ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
@@ -200,23 +203,23 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
                         verifyWindow.dismiss()
                         return Observable.empty()
                     }
-                    if (-10021 == errorCode && TextUtils.isEmpty(target.mailCode)) {
+                    if (ConstData.AUTHENTICATE_CODE_MAIL == errorCode && TextUtils.isEmpty(target.mailCode)) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
                         return Observable.empty()
                     }
-                    if (-10022 == errorCode) {
+                    if (ConstData.AUTHENTICATE_CODE_PHONE == errorCode) {
                         if (TextUtils.isEmpty(target.phoneCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_sms_code))
                             return Observable.empty()
                         }
                     }
-                    if (-10023 == errorCode) {
+                    if (ConstData.AUTHENTICATE_CODE_GOOGLE == errorCode) {
                         if (TextUtils.isEmpty(target.googleCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_google_code))
                             return Observable.empty()
                         }
                     }
-                    if (-10024 == errorCode) {
+                    if (ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE == errorCode) {
                         if (TextUtils.isEmpty(target.phoneCode) || TextUtils.isEmpty(target.googleCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_google_and_phone_code))
                             return Observable.empty()

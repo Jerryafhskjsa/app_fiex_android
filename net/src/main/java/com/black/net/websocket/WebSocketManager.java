@@ -1,6 +1,7 @@
 package com.black.net.websocket;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.black.net.websocket.dispatcher.MainThreadResponseDelivery;
 import com.black.net.websocket.dispatcher.ResponseDelivery;
@@ -86,6 +87,16 @@ public class WebSocketManager {
      */
     public boolean isConnect() {
         return mWebSocket != null && mWebSocket.getConnectState() == 2;
+    }
+
+    public int getSocketState(){
+        if(mWebSocket != null){
+            return  mWebSocket.getConnectState();
+        }else{
+            Log.d("FiexSocketManager","websocket null");
+            return 0;
+        }
+
     }
 
     /**

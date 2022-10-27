@@ -19,7 +19,9 @@ import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.WalletLeverDetail
+import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.FryingUtil.printError
 import com.black.base.util.SharePreferencesUtil.getTextValue
 import com.black.base.util.SharePreferencesUtil.setTextValue
@@ -545,8 +547,8 @@ object SocketDataContainer {
                                 synchronized(pairObservers) {
                                     for (observer in pairObservers) {
                                         var updateData:ArrayList<PairStatus?> = gson.fromJson(value, object : TypeToken<ArrayList<PairStatus?>?>() {}.type)
-                                        Log.d(TAG,"send update dataSize = "+updateData.size)
                                         if(updateData.isNotEmpty()){
+                                            Log.d(TAG,"send update dataSize = "+updateData.size)
                                             observer.onNext(updateData)
                                         }
                                     }
@@ -997,25 +999,33 @@ object SocketDataContainer {
         if (context == null || callback == null || setName == null) {
             return
         }
-        var symbolList = PairApiServiceHelper.getSymboleListPairData(context)
-        if (symbolList != null) {
-            synchronized(symbolList) {
-                val result = ArrayList<PairStatus?>()
-                for (i in symbolList.indices) {
-                    val pairStatus = symbolList[i]
-                    if (context.getString(R.string.pair_collect) == setName) {
-                        if (true == pairStatus?.is_dear) {
-                            result.add(pairStatus)
+        PairApiServiceHelper.getHomeTickersLocal(context)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, object : Callback<ArrayList<PairStatus?>?>() {
+                override fun error(type: Int, error: Any) {
+                    callback?.error(type, error)
+                }
+                override fun callback(returnData: ArrayList<PairStatus?>?) {
+                    if (returnData != null) {
+                        val result = ArrayList<PairStatus?>()
+                        for (i in returnData.indices) {
+                            val pairStatus = returnData[i]
+                            if (context.getString(R.string.pair_collect) == setName) {
+                                if (true == pairStatus?.is_dear) {
+                                    result.add(pairStatus)
+                                }
+                            } else {
+                                if (TextUtils.equals(pairStatus?.setName, setName)) {
+                                    result.add(pairStatus)
+                                }
+                            }
                         }
+                        callback.callback(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
                     } else {
-                        if (TextUtils.equals(pairStatus?.setName, setName)) {
-                            result.add(pairStatus)
-                        }
+                        callback?.error(ConstData.ERROR_NORMAL,context.getString(R.string.error_data))
                     }
                 }
-                callback.callback(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
-            }
-        }
+            }))
     }
 
     fun getPairStatusListByKey(context: Context?, key: String?): ArrayList<PairStatus?>? {
@@ -1860,8 +1870,6 @@ object SocketDataContainer {
         synchronized(allPairStatusMap) { allPairStatusMap.clear() }
         synchronized(pairDataSource) { pairDataSource.clear() }
         synchronized(dearPairMap) { dearPairMap.clear() }
-        synchronized(pairObservers) {}
-        synchronized(pairDataList) { pairDataList.clear() }
         synchronized(allLeverPairMap) { allLeverPairMap.clear() }
         synchronized(orderDataList) { orderDataList.clear() }
         synchronized(dealList) { dealList.clear() }

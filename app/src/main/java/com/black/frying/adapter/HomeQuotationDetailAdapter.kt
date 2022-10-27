@@ -41,7 +41,7 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         }
         viewHolder?.pairName?.setText(pairStatus?.name)
         viewHolder?.setName?.setText(pairStatus?.setName)
-        viewHolder?.volume24?.setText(context.getString(R.string.volumn_24, pairStatus?.totalAmountFromat
+        viewHolder?.volume24?.setText(context.getString(R.string.volumn_24, pairStatus?.tradeVolueFormat
                 ?: "0.00"))
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
         viewHolder?.priceCny?.setText(String.format("≈ %s", pairStatus?.currentPriceCNYFormat))

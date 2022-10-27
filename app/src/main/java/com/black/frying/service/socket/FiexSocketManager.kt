@@ -120,6 +120,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         socketMap.forEach {
             it.value.start()
             Log.d(tag,"start all socketMap,key = "+it.key)
+            Log.d(tag,"start all socketMap,isListenerEmpty = "+it.value.isListenerEmpty)
         }
         startPingTimer()
     }
@@ -279,10 +280,34 @@ class FiexSocketManager(context: Context, handler: Handler) {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("ping", "ping")
-            WebSocketHandler.getWebSocket(SocketUtil.WS_USER)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)?.send(jsonObject.toString())
-            WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)?.send(jsonObject.toString())
+            var userSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_USER)
+            var subStatusSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)
+            var ticketSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)
+            var pairKlineSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)
+            Log.d(tag, "userSocket state =,"+userSocket.socketState+"listener is empty= "+userSocket.isListenerEmpty)
+            Log.d(tag, "subStatusSocket state =,"+subStatusSocket.socketState+"listener is empty= "+subStatusSocket.isListenerEmpty)
+            Log.d(tag, "ticketSocket state =,"+ticketSocket.socketState+"listener is empty= "+ticketSocket.isListenerEmpty)
+            Log.d(tag, "pairKlineSocket state =,"+pairKlineSocket.socketState+"listener is empty= "+pairKlineSocket.isListenerEmpty)
+            if(userSocket.isConnect){
+                userSocket?.send(jsonObject.toString())
+            }else{
+                userSocket.start()
+            }
+            if(subStatusSocket.isConnect){
+                subStatusSocket?.send(jsonObject.toString())
+            }else{
+                subStatusSocket.start()
+            }
+            if(ticketSocket.isConnect){
+                ticketSocket?.send(jsonObject.toString())
+            }else{
+                ticketSocket.start()
+            }
+            if(pairKlineSocket.isConnect){
+                pairKlineSocket?.send(jsonObject.toString())
+            }else{
+                pairKlineSocket.start()
+            }
         } catch (e: Exception) {
             FryingUtil.printError(e)
         }
@@ -341,6 +366,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
      * 用户相关
      */
     inner class UserDataListener() : SimpleListener() {
+        override fun onDisconnect() {
+            Log.d(tag, "UserDataListener onDisconnect")
+        }
         override fun onConnected() {
             Log.d(tag, "UserDataListener onConnected")
             startListenUser()
@@ -430,6 +458,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
      * 所有交易对行情相关
      */
     inner class TickerStatusListener() : SimpleListener() {
+        override fun onDisconnect() {
+            Log.d(tag, "tickerStatus onDisconnect")
+        }
         override fun onConnected() {
             Log.d(tag, "tickerStatus onConnected")
             startListenTickers()
@@ -484,6 +515,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
      * k线相关
      */
     inner class PairKlineListener() : SimpleListener() {
+        override fun onDisconnect() {
+            Log.d(tag, "PairKline onDisconnect")
+        }
         override fun onConnected() {
             Log.d(tag, "PairKline onConnected")
             startListenKLine()
@@ -528,6 +562,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
      * 交易对相关
      */
     inner class SubStatusDataListener() : SimpleListener() {
+        override fun onDisconnect() {
+            Log.d(tag, "SubStatusDataListener onDisconnect")
+        }
         override fun onConnected() {
             Log.d(tag, "SubStatusDataListener onConnected")
             currentPair = SocketUtil.getCurrentPair(mCcontext!!)
