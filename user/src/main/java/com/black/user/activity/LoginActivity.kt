@@ -276,7 +276,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                     }
                                     Observable.empty()
                                 }
-                                -10021 -> {
+                                ConstData.AUTHENTICATE_CODE_MAIL -> {
                                     val prefixAuth = returnData.msg
                                     val target = Target()
                                     val type = VerifyType.MAIL
@@ -292,7 +292,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 "data": "86#15308206311"
                                 }
                                  */
-                                -10022 -> {
+                                ConstData.AUTHENTICATE_CODE_PHONE -> {
                                     val prefixAuth = returnData.msg
                                     val target = Target()
                                     val type = VerifyType.PHONE
@@ -304,13 +304,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                     }
                                     verifyObserve(type, target, returnData.code!!, prefixAuth)
                                 }
-                                -10023 -> {
+                                ConstData.AUTHENTICATE_CODE_GOOGLE -> {
                                     val prefixAuth = returnData.msg
                                     val target = Target()
                                     val type = VerifyType.GOOGLE
                                     verifyObserve(type, target, returnData.code!!, prefixAuth)
                                 }
-                                -10024 -> {
+                                ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE -> {
                                     val prefixAuth = returnData.msg
                                     val target = Target()
                                     val phoneArr: Array<String> = returnData.data?.split("#")?.toTypedArray()
@@ -443,19 +443,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             verifyWindow.dismiss()
                             return Observable.empty()
                         }
-                        if (-10021 == errorCode && TextUtils.isEmpty(target.mailCode)) {
+                        if (ConstData.AUTHENTICATE_CODE_MAIL == errorCode && TextUtils.isEmpty(target.mailCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
                             return Observable.empty()
                         }
-                        if (-10022 == errorCode && TextUtils.isEmpty(target.phoneCode)) {
+                        if (ConstData.AUTHENTICATE_CODE_PHONE == errorCode && TextUtils.isEmpty(target.phoneCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_sms_code))
                             return Observable.empty()
                         }
-                        if (-10023 == errorCode && TextUtils.isEmpty(target.googleCode)) {
+                        if (ConstData.AUTHENTICATE_CODE_GOOGLE == errorCode && TextUtils.isEmpty(target.googleCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_input_google_code))
                             return Observable.empty()
                         }
-                        if (-10024 == errorCode && TextUtils.isEmpty(target.phoneCode) && TextUtils.isEmpty(target.googleCode)) {
+                        if (ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE == errorCode && TextUtils.isEmpty(target.phoneCode) && TextUtils.isEmpty(target.googleCode)) {
                             FryingUtil.showToast(mContext, getString(R.string.alert_phone_or_google_code))
                             return Observable.empty()
                         }

@@ -25,10 +25,11 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var tradeVolume:String? = null
     set(value) {
         field = value
-        if(value != null){
-            tradeAmount = value.toDouble()
-        }
+        tradeAmount = value?.toDouble()
+        tradeVolueFormat = NumberUtil.formatNumberNoGroup(tradeAmount , 2, 5)
+
     }
+    var tradeVolueFormat:String? = null
     //支持订单下单类型
     var supportOrderType:String? = null
     var tradeAmount:Double? = null
@@ -163,7 +164,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
     val priceChangeSinceTodayDisplay: String
         get() {
             val sign = if (priceChangeSinceToday != null && priceChangeSinceToday!! > 0) "+" else ""
-            return sign + NumberUtil.formatNumberDynamicScaleNoGroup(priceChangeSinceToday, 4, 0, 2) + "%"
+            return sign + NumberUtil.formatNumberDynamicScaleNoGroup(priceChangeSinceToday?.times(100), 4, 0, 2) + "%"
         }
 
     //判断是否是HOT
@@ -240,12 +241,12 @@ open class PairStatus : BaseAdapterItem(), Findable {
             if (o1 == null || o2 == null || o1.tradeAmount == null && o2.tradeAmount == null) {
                 return@Comparator 0
             }
-            if (o1.tradeAmount == null) {
+            if (o1.tradeVolume == null) {
                 return@Comparator 1
             }
-            if (o2.tradeAmount == null) {
+            if (o2.tradeVolume == null) {
                 -1
-            } else (o1.tradeAmount!!).compareTo(o2.tradeAmount!!)
+            } else (o1.tradeVolume!!).compareTo(o2.tradeVolume!!)
         }
     }
 }

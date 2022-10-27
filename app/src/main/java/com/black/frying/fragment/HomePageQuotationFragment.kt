@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -46,12 +47,13 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private var binding: FragmentHomePageQuotationBinding? = null
 
-    private var sets: List<QuotationSet?>? = null
+    private var sets: ArrayList<QuotationSet?>? = null
     private var fragmentList: MutableList<Fragment?>? = null
 
     //异步获取数据
     private val handlerThread: HandlerThread? = null
     private val socketHandler: Handler? = null
+    private var currentTabPosition:Int = 0
 
     var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
 
@@ -73,22 +75,23 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
         binding?.sortRange?.setOnClickListener(this)
-        refreshSets()
         return binding?.root
     }
 
     override fun onResume() {
         super.onResume()
-        val currentFragment: Fragment? = CommonUtil.getItemFromList(fragmentList, binding?.setTab?.selectedTabPosition
-                ?: -1)
-        if (currentFragment != null && currentFragment.isVisible) {
-            currentFragment.onResume()
-        }
+        Log.d("iiiiii","HomePageQuotationFragment onResume")
+        refreshSets()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("iiiiii","onStop currentTabPosition= "+binding?.setTab?.selectedTabPosition!!)
+        currentTabPosition = binding?.setTab?.selectedTabPosition!!
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handlerThread?.quit()
     }
 
     override fun onClick(v: View) {
@@ -155,17 +158,21 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private fun refreshSets() {
             PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {
-//                    refreshSets()这里接口不通目前会引起死循环调用
                 }
                 override fun callback(returnData: ArrayList<QuotationSet?>?) {
                     if (returnData != null) {
+                        Log.d("iiiiii","returnDataSize = "+returnData.size)
+                        var setData = ArrayList<QuotationSet?>()
+                        setData.addAll(returnData)
                         var optionalSet = QuotationSet()
                         optionalSet.coinType = getString(R.string.pair_collect)
                         optionalSet.name = getString(R.string.pair_collect)
-                        returnData?.add(0,  optionalSet)
-                        setSets(returnData)
-                    } else {
-                        refreshSets()
+                        setData?.add(0,  optionalSet)
+                        if (setData != null && setData?.isNotEmpty()) {
+                            sets = setData
+                            Log.d("iiiiii","setsSize = "+sets?.size)
+                            initQuotationGroup()
+                        }
                     }
                 }
             })
@@ -175,6 +182,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private fun initQuotationGroup() {
         if (sets != null && sets!!.isNotEmpty()) {
             val setSize = sets!!.size
+            if(fragmentList != null){
+                return
+            }
             fragmentList = ArrayList(setSize)
             for (i in 0 until setSize) {
                 val set = sets!![i]
@@ -213,13 +223,28 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                     FryingUtil.printError(throwable)
                 }
             }
+            binding?.quotationViewPager?.currentItem = currentTabPosition
+            Log.d("iiiiii", "currentTabPosition = $currentTabPosition")
+            binding?.setTab?.getTabAt(currentTabPosition)?.select()//默认选中自选
+            val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
+            if (currentFragment != null && currentFragment.isVisible) {
+//                currentFragment.onResume()
+            }
             binding?.setTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 var textSize20 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
                 var textSize16 = resources.getDimensionPixelSize(R.dimen.text_size_16).toFloat()
                 override fun onTabSelected(tab: TabLayout.Tab) {
+                    Log.d("iiiiii","onTabSelected  "+tab.position)
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
                     textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize20)
+                    Log.d("iiiiii","onTabSelected  currentTabPosition="+tab.position)
+                    binding?.quotationViewPager?.currentItem = tab.position
+                    val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
+                    Log.d("iiiiii","onTabSelected  isVisible="+currentFragment.isVisible)
+                    if (currentFragment != null && currentFragment.isVisible) {
+//                        currentFragment.onResume()
+                    }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -230,16 +255,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
             })
+
         }
     }
-
-    fun setSets(sets: List<QuotationSet?>?) {
-        if (sets != null && sets.isNotEmpty()) {
-            this.sets = sets
-            initQuotationGroup()
-        }
-    }
-
     companion object {
         fun newSelfInstance(tab: String?): HomePageQuotationFragment {
             val args = Bundle()
