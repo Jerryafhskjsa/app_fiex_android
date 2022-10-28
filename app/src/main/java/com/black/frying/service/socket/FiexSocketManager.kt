@@ -82,7 +82,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
             }
         }
         if(!timerStart){
-            pingTimer?.schedule(pingTimerTask, Date(), 1000)
+            pingTimer?.schedule(pingTimerTask, Date(), 5000)
             timerStart = true
         }
     }
@@ -101,7 +101,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         var socketUrl = UrlConfig.getSocketHostFiex(context!!)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
-        socketSetting.connectionLostTimeout = 5//心跳间隔时间
+        socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_USER, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_SUBSTATUS, socketSetting)
@@ -118,9 +118,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
         var socketMap = WebSocketHandler.getAllWebSocket()
         addListenerAll()
         socketMap.forEach {
-            it.value.start()
             Log.d(tag,"start all socketMap,key = "+it.key)
+            Log.d(tag,"start all socketMap,state = "+it.value.socketState)
             Log.d(tag,"start all socketMap,isListenerEmpty = "+it.value.isListenerEmpty)
+            it.value.start()
         }
         startPingTimer()
     }
@@ -130,10 +131,11 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     fun stopConnectAll() {
-//        removeListenerAll()
+        removeListenerAll()
         var socketMap = WebSocketHandler.getAllWebSocket()
         socketMap.forEach {
             Log.d(tag,"stop all socketMap,key = "+it.key)
+            Log.d(tag,"stop all socketMap,state = "+it.value.socketState)
             it.value.disConnect()
         }
        endPingTimer()
@@ -290,23 +292,15 @@ class FiexSocketManager(context: Context, handler: Handler) {
             Log.d(tag, "pairKlineSocket state =,"+pairKlineSocket.socketState+"listener is empty= "+pairKlineSocket.isListenerEmpty)
             if(userSocket.isConnect){
                 userSocket?.send(jsonObject.toString())
-            }else{
-                userSocket.start()
             }
             if(subStatusSocket.isConnect){
                 subStatusSocket?.send(jsonObject.toString())
-            }else{
-                subStatusSocket.start()
             }
             if(ticketSocket.isConnect){
                 ticketSocket?.send(jsonObject.toString())
-            }else{
-                ticketSocket.start()
             }
             if(pairKlineSocket.isConnect){
                 pairKlineSocket?.send(jsonObject.toString())
-            }else{
-                pairKlineSocket.start()
             }
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -376,9 +370,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(tag, "UserDataListener message = $message")
-//            if(message.equals("succeed")){
-//                return
-//            }
+            if(message.equals("succeed")){
+                return
+            }
             if (message.equals("invalid_ws_token")) {
                 mCcontext?.let { getWsToken(it) }
                 return
@@ -468,9 +462,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(tag, "tickerStatus->onMessage = $message")
-//            if(message.equals("succeed")){
-//                return
-//            }
+            if(message.equals("succeed")){
+                return
+            }
             var data: JSONObject? = null
             try {
                 data = JSONObject(message)
@@ -525,9 +519,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(tag, "PairKline->onMessage = $message")
-//            if(message.equals("succeed")){
-//                return
-//            }
+            if(message.equals("succeed")){
+                return
+            }
             CommonUtil.postHandleTask(mHandler) {
                 var data: JSONObject? = null
                 try {
@@ -572,9 +566,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-//            if(message.equals("succeed")){
-//                return
-//            }
+            if(message.equals("succeed")){
+                return
+            }
             var data: JSONObject? = null
             try {
                 data = JSONObject(message)

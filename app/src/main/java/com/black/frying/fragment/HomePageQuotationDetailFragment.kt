@@ -44,8 +44,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
-    private var dataInitFinish:Boolean? = false
-    private var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
+    private var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL,PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -116,7 +115,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         if (handlerThread != null) {
             handlerThread?.quit()
         }
-        dataInitFinish = false
     }
 
     override fun doResetSkinResources() {
@@ -163,8 +161,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                             if (showPair != null) {//更新已有的交易对
                                 if (TextUtils.equals(set, collect) && !pairStatus.is_dear) {
                                     //如果是自选，并且交易对现在不再是自选，删除该交易对
-//                                    adapter?.removeItem(pairStatus)
-//                                    dataList.remove(pairStatus)
+//                                    adapter?.removeItem(showPair)
+//                                    dataList.remove(showPair)
 //                                    dataMap.remove(it)
 //                                    hasPairListChanged = true
                                 } else {
@@ -205,7 +203,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     Log.d("iiiiii", "update userVisibleHint = $userVisibleHint")
                     Log.d("iiiiii", "update set = $set")
                     mContext?.runOnUiThread {
-                        if (hasPairListChanged && userVisibleHint && dataInitFinish == true) {
+                        if (hasPairListChanged && userVisibleHint) {
                             var result = ArrayList<PairStatus?>()
                             dataMap.forEach{
                                 result.add(it.value)
@@ -251,7 +249,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         adapter?.notifyDataSetChanged()
                                     }
                                 }
-                                dataInitFinish = true
                             }
                         }
                     }

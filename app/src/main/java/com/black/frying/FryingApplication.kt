@@ -26,6 +26,7 @@ import com.black.lib.typeface.CustomerTypefaceSpanManager
 import com.black.lib.typeface.TypefaceManager
 import com.black.net.websocket.WebSocketHandler
 import com.black.router.BlackRouter
+import com.black.user.R
 import com.black.util.CommonUtil
 import com.tencent.android.tpush.XGIOperateCallback
 import com.tencent.android.tpush.XGPushConfig
@@ -56,19 +57,40 @@ class FryingApplication : BaseApplication() {
 
         private const val BIND_ALIAS = 100001
         private const val BIND_TAG = 100002
+        private var STAY_BACKGROUND_TIME = ConstData.APP_STAY_BACKGROUND_TIME//app退回到后台的时间
 
-        var currentActivity: Activity? = null
-            private set
+        private var instance:FryingApplication? = null
+        fun instance() = instance!!
     }
+    private var currentActivity: Activity? = null
     private var goBackTime: Long? = null
     private val handler = Handler()
+    //退回到后台60s后关闭socket连接
+    private val backStayedTimerRunnable = object : Runnable {
+        override fun run() {
+            STAY_BACKGROUND_TIME--
+            if (STAY_BACKGROUND_TIME <= 0) {
+                if(!isAppOnForeground){
+                    SocketUtil.sendSocketCommandBroadcast(currentActivity, SocketUtil.COMMAND_STOP)
+                }
+            } else {
+                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
+            }
+        }
+    }
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(base)
     }
 
+    fun getCurrentActivity():Activity?{
+        return currentActivity
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         //初始化信鸽
 //        initXGPush()
         RxJavaPlugins.setErrorHandler { throwable -> CommonUtil.printError(applicationContext, throwable) }
@@ -146,9 +168,11 @@ class FryingApplication : BaseApplication() {
             override fun onActivityResumed(activity: Activity) {
                 MobclickAgent.onResume(activity)
                 currentActivity = activity
-                Log.d(tag, "onActivityResumed->isAppOnForeground = $isAppOnForeground")
                 if(isAppOnForeground){
-                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_RESUME)
+                    if(STAY_BACKGROUND_TIME <= 0){
+                        SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_RESUME)
+                    }
+                    STAY_BACKGROUND_TIME = ConstData.APP_STAY_BACKGROUND_TIME
                     WebSocketHandler.registerNetworkChangedReceiver(applicationContext)
                 }
             }
@@ -164,13 +188,12 @@ class FryingApplication : BaseApplication() {
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_QUOTA_CLOSE);
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_ORDER_CLOSE);
 //                }
-                Log.d(tag, "onActivityStopped->isAppOnForeground = $isAppOnForeground")
                 if (!isAppOnForeground && FryingUtil.needShowProtectActivity(activity)) { //记录当前退回后台时间
                     goBackTime = System.currentTimeMillis()
                 }
                 if(!isAppOnForeground){
-                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_STOP)
                     WebSocketHandler.unRegisterNetworkChangeReceiver(applicationContext)
+                    mHandler.post(backStayedTimerRunnable)
                 }
             }
 

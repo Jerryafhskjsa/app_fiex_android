@@ -60,6 +60,7 @@ object ConstData {
 
     const val ONE_SECOND_MILLIS = 1000
     const val GET_CODE_LOCK_TIME = 60
+    const val APP_STAY_BACKGROUND_TIME = 60
 
     //认证类型code
     const val AUTHENTICATE_CODE_MAIL = -10021
