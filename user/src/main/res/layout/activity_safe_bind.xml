@@ -70,37 +70,93 @@
                             android:layout_width="match_parent"
                             android:layout_height="20dp" />
 
-                        <RelativeLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default">
-
-                            <LinearLayout
+                            android:layout_height="30dp"
+                            >
+                            <View
                                 android:layout_width="match_parent"
+                                android:layout_height="4dp"
+                                android:background="@drawable/bg_login_devide_bar"
+                                android:layout_gravity="bottom"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
                                 android:orientation="horizontal">
-
-                                <com.black.base.widget.SpanMaterialEditText
+                                <LinearLayout
                                     android:id="@+id/google_code"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/google_code1"
-                                    android:textSize="@dimen/text_size_16" />
-
-
-
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/mail_code"
-                                    style="@style/EditTextStyle"
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/google_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/google_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    android:id="@+id/view1"
+                                    android:layout_width="20dp"
+                                    android:layout_height="wrap_content"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/phone_code"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/default_padding"
-                                    android:text="@string/mail_code1"
-                                    android:maxLines="1"
-                                    android:textSize="@dimen/text_size_16"
-                                    app:useDelete="true" />
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/phone_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/phone_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    android:id="@+id/view2"
+                                    android:layout_width="20dp"
+                                    android:layout_height="wrap_content"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/mail_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/mail_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/mail_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:visibility="gone"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
                             </LinearLayout>
-                        </RelativeLayout>
+                        </FrameLayout>
 
                         <View
                             android:layout_width="match_parent"
@@ -131,7 +187,7 @@
                                 android:textSize="40sp"
                                 android:maxLength="1"
                                 android:textCursorDrawable="@null"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
                                 android:layout_margin="5dp"/>
@@ -143,7 +199,7 @@
                                 android:inputType="number"
                                 android:textSize="40sp"
                                 android:maxLength="1"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textCursorDrawable="@null"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
@@ -157,7 +213,7 @@
                                 android:inputType="number"
                                 android:textSize="40sp"
                                 android:maxLength="1"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textCursorDrawable="@null"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
@@ -170,7 +226,7 @@
                                 android:inputType="number"
                                 android:textSize="40sp"
                                 android:maxLength="1"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textCursorDrawable="@null"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
@@ -183,7 +239,7 @@
                                 android:inputType="number"
                                 android:textSize="40sp"
                                 android:maxLength="1"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textCursorDrawable="@null"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
@@ -196,7 +252,7 @@
                                 android:inputType="number"
                                 android:textSize="40sp"
                                 android:maxLength="1"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/dialog_line_bg"
                                 android:textCursorDrawable="@null"
                                 android:textAlignment="center"
                                 android:background="@drawable/selector_code_edit"
@@ -210,7 +266,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <com.black.base.widget.SpanMaterialEditText
+                            <com.black.base.widget.SpanTextView
                                 android:id="@+id/safe_unused"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -220,13 +276,22 @@
 
 
 
-                            <com.black.base.widget.SpanMaterialEditText
+                            <com.black.base.widget.SpanTextView
                                 android:id="@+id/code"
-                                style="@style/EditTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="210dp"
                                 android:text="@string/code"
+                                android:textColor="@color/font_blue"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:useDelete="true" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/sent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="180dp"
+                                android:text="@string/sent"
                                 android:textColor="@color/font_blue"
                                 android:maxLines="1"
                                 android:textSize="@dimen/text_size_16"

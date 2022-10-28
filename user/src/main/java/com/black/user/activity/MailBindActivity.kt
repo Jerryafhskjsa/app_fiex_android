@@ -123,6 +123,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.btn_submit -> {
                 bindMail()
+
             }
         }
     }
@@ -230,10 +231,9 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
-                    //回到安全中心界面
-                    BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .go(mContext)
+                    val intent = Intent(this@MailBindActivity, SafeBindActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 

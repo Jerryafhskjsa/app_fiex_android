@@ -1,5 +1,6 @@
 package com.black.user.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -16,6 +17,7 @@ import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.net.HttpRequestResult
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityChangePasswordBinding
@@ -258,10 +260,13 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onGetTokenSuccess() {
+
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
                     FryingUtil.showToast(mContext, getString(R.string.change_password_success_02))
+                      val intent = Intent(this@ChangePasswordActivity, SafeBindActivity::class.java)
+                    startActivity(intent)
                     finish()
                 }
             }
@@ -270,5 +275,6 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, error.toString())
             }
         }, true)
-    }
+
+}
 }
