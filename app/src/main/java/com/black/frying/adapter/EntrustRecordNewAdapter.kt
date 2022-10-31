@@ -42,8 +42,8 @@ class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList
         var orderType = tradeOrder?.orderType
         var orderTypeDes:String? = null
         when(orderType){
-            "LIMIT" -> orderType = getString(R.string.order_type_limit)
-            "MARKET" -> orderType = getString(R.string.order_type_market)
+            "LIMIT" -> orderTypeDes = getString(R.string.order_type_limit)
+            "MARKET" -> orderTypeDes = getString(R.string.order_type_market)
         }
         val type = StringBuilder()
         type.append(orderTypeDes)
