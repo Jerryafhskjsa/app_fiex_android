@@ -23,15 +23,6 @@
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
                 <include layout="@layout/tool_bar_left_back" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/double_padding"
-                    android:layout_marginRight="@dimen/double_padding"
-                    android:text="@string/number_default"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.lib.refresh.QRefreshLayout

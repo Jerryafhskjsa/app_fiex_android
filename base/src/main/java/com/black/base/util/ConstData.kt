@@ -304,4 +304,6 @@ object ConstData {
     const val HOME_TAB_VOLUME_BAND = 3
 
     const val ASSET_SUPPORT_ACCOUNT_TYPE = "asset_support_account_type"
+    const val ASSET_SUPPORT_SPOT_ACCOUNT_TYPE = "asset_support_spot_account_type"
+    const val ASSET_SUPPORT_OTHER_ACCOUNT_TYPE = "asset_support_other_account_type"
 }

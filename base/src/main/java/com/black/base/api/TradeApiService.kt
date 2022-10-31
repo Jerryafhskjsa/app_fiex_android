@@ -8,6 +8,7 @@ import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.model.trade.TradeOrderHistoryResult
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -29,6 +30,9 @@ interface TradeApiService {
 
     @GET(UrlConfig.Trade.URL_TRADE_ORDERS_RECORD)
     fun getTradeOrderRecord(@Query("pair") pair: String?, @Query("ended") ended: Boolean, @Query("page") page: Int, @Query("size") size: Int, @Query("asc") asc: Boolean, @Query("startTime") startTime: String?, @Query("endTime") endTime: String?, @Query("leverType") leverType: String?): Observable<HttpRequestResultData<PagingData<TradeOrder?>?>?>?
+
+    @GET(UrlConfig.Trade.URL_TRADE_ORDERS_HISTORY_RECORD)
+    fun getTradeOrderHistoryRecord(@Query("symbol") pair: String?): Observable<HttpRequestResultData<TradeOrderHistoryResult?>?>?
 
     /**
      * state 1：新建订单;未成交; 2：部分成交；3：全部成交；4：已撤销；5：下单失败；6：已过期; 9:未完成；10：历史订单

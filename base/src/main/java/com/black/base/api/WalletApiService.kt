@@ -21,7 +21,7 @@ interface WalletApiService {
     fun getCoins(@Query("coinTypes") coinType: String?): Observable<HttpRequestResultData<CoinInfoConfig?>?>?
 
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_ACCOUNT)
-    fun getSupportAccount(): Observable<HttpRequestResultDataList<String?>?>?
+    fun getSupportAccount(): Observable<HttpRequestResultData<AssetTransferTypeList?>?>?
 
     @GET(UrlConfig.Wallet.URL_GET_SUPPORT_COIN)
     fun getSupportCoin(@Query("fromWalletType") fromAccount:String?,@Query("toWalletType") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?

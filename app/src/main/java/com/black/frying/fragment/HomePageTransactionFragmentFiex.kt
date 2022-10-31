@@ -364,6 +364,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         BlackRouter.getInstance().build(RouterConstData.LOGIN).go(it)
                     } else if (!TextUtils.isEmpty(viewModel?.getCurrentPair())) {
                         val extras = Bundle()
+                        extras.putInt(ConstData.OPEN_TYPE, 0)
                         extras.putString(ConstData.PAIR, viewModel?.getCurrentPair())
                         extras.putString(ConstData.LEVEL_TYPE, if (tabType == ConstData.TAB_LEVER) TransactionViewModel.LEVER_TYPE_LEVER else TransactionViewModel.LEVER_TYPE_COIN)
                         BlackRouter.getInstance().build(RouterConstData.ENTRUST_RECORDS_NEW).with(extras).go(it)

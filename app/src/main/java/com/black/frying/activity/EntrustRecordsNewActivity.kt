@@ -27,6 +27,8 @@ import com.black.base.model.filter.EntrustStatus
 import com.black.base.model.filter.EntrustType
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
+import com.black.base.model.socket.TradeOrderFiex
+import com.black.base.model.trade.TradeOrderHistoryResult
 import com.black.base.util.*
 import com.black.base.view.PairStatusPopupWindow
 import com.black.frying.adapter.EntrustRecordNewAdapter
@@ -45,7 +47,7 @@ import com.fbsex.exchange.databinding.ActivityEntrustRecordsNewBinding
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
-//w委托记录
+//委托记录
 @Route(value = [RouterConstData.ENTRUST_RECORDS_NEW], beforePath = RouterConstData.LOGIN)
 class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustRecordNewAdapter.OnHandleClickListener, QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener, OnItemClickListener {
     companion object {
@@ -142,13 +144,13 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         if (routerPair != null) {
             pair = routerPair
         }
-        if (openType == 1) {
-            //我的订单进入
+        if (openType == 0) {
+            //交易页当前交易对订单记录
             pair = null
             entrustStatus = EntrustStatus.NEW
             dateFilter = DateFilter.ALL
             currentType = TYPE_NEW
-        } else { //历史订单
+        } else { //历史所有交易对订单订单记录
             entrustStatus = EntrustStatus.HIS
             dateFilter = DateFilter.DAYS_3
             currentType = TYPE_HIS
@@ -296,23 +298,26 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
 
     //当前委托
     private fun getTradeOrderCurrent(isShowLoading: Boolean) {
-        TradeApiServiceHelper.getTradeOrderRecord(mContext, if (pair == null) "" else pair, entrustStatus.code, currentPage, 10, false, dateFilter.startTime, dateFilter.endTime, entrustType?.code, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<TradeOrder?>?>?>() {
+        var pair = pair
+        if(currentType == TYPE_HIS){
+            pair = null
+        }
+        TradeApiServiceHelper.getTradeOrderHistoryRecord(mContext, pair,  isShowLoading, object : NormalCallback<HttpRequestResultData<TradeOrderHistoryResult?>?>() {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
                 binding?.refreshLayout?.setLoading(false)
             }
 
-            override fun callback(returnData: HttpRequestResultData<PagingData<TradeOrder?>?>?) {
+            override fun callback(returnData: HttpRequestResultData<TradeOrderHistoryResult?>?) {
                 binding?.refreshLayout?.setRefreshing(false)
                 binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    total = returnData.data?.total!!
-                    hasMore = returnData.data?.more != null && returnData.data?.more!!
+                    hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
                     if (currentPage == 1) {
-                        adapter?.data = returnData.data?.data
+                        adapter?.data = returnData?.data?.items
                     } else {
-                        adapter?.addAll(returnData.data?.data)
+                        adapter?.addAll(returnData?.data?.items)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {
@@ -322,7 +327,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         })
     }
 
-    override fun onPairClick(tradeOrder: TradeOrder?) {
+    override fun onPairClick(tradeOrder: TradeOrderFiex?) {
         val bundle = Bundle()
         bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, 2)
         bundle.putInt(ConstData.TRANSACTION_INDEX, 1)
@@ -341,17 +346,17 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 }
     }
 
-    override fun onHandleClick(tradeOrder: TradeOrder?) {
-        TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder!!.id, tradeOrder.pair, tradeOrder.direction, object : NormalCallback<HttpRequestResultString?>() {
-            override fun callback(returnData: HttpRequestResultString?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    adapter?.removeItem(tradeOrder)
-                    adapter?.notifyDataSetChanged()
-                } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
-            }
-        })
+    override fun onHandleClick(tradeOrder: TradeOrderFiex?) {
+//        TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder!!.id, tradeOrder.pair, tradeOrder.direction, object : NormalCallback<HttpRequestResultString?>() {
+//            override fun callback(returnData: HttpRequestResultString?) {
+//                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                    adapter?.removeItem(tradeOrder)
+//                    adapter?.notifyDataSetChanged()
+//                } else {
+//                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+//                }
+//            }
+//        })
     }
 
     override fun onRefresh() {

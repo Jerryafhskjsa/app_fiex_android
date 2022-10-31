@@ -56,7 +56,7 @@
     <string name="loading">加载中...</string>
     <string name="error_data">数据错误</string>
     <string name="trade_deal">已成交</string>
-    <string name="trade_canceled">已撤销</string>
+    <string name="trade_canceled_all">已撤销</string>
     <string name="trade_failed">失败</string>
     <string name="alert_choose_country">请选择国家区码！</string>
     <string name="alert_not_phone">请填写手机号码！</string>
@@ -278,6 +278,12 @@
     <string name="no_image">图片不能为空</string>
     <string name="trade_start">进行中</string>
     <string name="trade_part">部分成交</string>
+    <string name="trade_part_cancel">部分撤销</string>
+    <string name="trade_new">新建订单</string>
+    <string name="trade_cancel_all">已撤销</string>
+    <string name="trade_fail">下单失败</string>
+    <string name="trade_expired">已过期</string>
+    <string name="trade_all_deal">全部成交</string>
     <string name="total">全部</string>
     <string name="wallet_bill_deposit">充值</string>
     <string name="wallet_bill_withdraw">提现</string>
@@ -658,6 +664,7 @@
     <string name="to">to</string>
     <string name="spot_account">现货账户</string>
     <string name="contract_account">合约账户</string>
+    <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财账户</string>
     <string name="wallet_account">钱包账户</string>
     <string name="confirm_transfer">Confirm transfer</string>
