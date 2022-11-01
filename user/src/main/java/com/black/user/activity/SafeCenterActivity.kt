@@ -106,9 +106,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
 //            } else {
 ////                BlackRouter.getInstance().build(RouterConstData.GOOGLE_SECURITY_STATUS).go(mContext);
 //            }
-        } else if (i == R.id.safe_bind_layout) {
-            BlackRouter.getInstance().build(RouterConstData.SAFE_BIND).go(this)
-        }  else if (i == R.id.change_password) {
+        }   else if (i == R.id.change_password) {
             BlackRouter.getInstance().build(RouterConstData.CHANGE_PASSWORD).go(this)
         } else if (i == R.id.payment_method_layout) {
             BlackRouter.getInstance().build(RouterConstData.PAYMENT_METHOD_MANAGER).go(this)

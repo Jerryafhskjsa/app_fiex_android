@@ -176,6 +176,7 @@
                             android:layout_height="10dp" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/google_window"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/google_code_input_hint"></com.black.base.widget.SpanTextView>

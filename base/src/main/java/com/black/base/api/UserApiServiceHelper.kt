@@ -385,15 +385,15 @@ object UserApiServiceHelper {
         enableSecurity(context, null, null, phoneCode, null, emailCode, googleCode, password, "2", callback)
     }
 
-    fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, telCountryCode, phone, phoneCode, email, emailCode, googleCode, null, "0", callback)
+    fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, newPhone: String?, newPhoneCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, telCountryCode, phone, phoneCode, newPhone, newPhoneCode, googleCode, null, "0", callback)
     }
 
     fun bindEMail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
         enableSecurity(context, null, null, phoneCode, email, emailCode, googleCode, null, "4", callback)
     }
-    fun bindSafe(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, null, null, emailCode, googleCode, null, "1", callback)
+    fun bindSafe(context: Context?, telCountryCode: String? , phoneCode: String? , emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null, phoneCode, null, emailCode, googleCode, null, "1", callback)
     }
 
 

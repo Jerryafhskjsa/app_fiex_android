@@ -90,8 +90,14 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
         binding?.googleCode?.addTextChangedListener(watcher)
         if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
             binding?.googleCode?.visibility = View.VISIBLE
+            binding?.googleCodeLayout?.visibility = View.VISIBLE
+            binding?.googleCodeCopy?.visibility = View.VISIBLE
+            binding?.googleWindow?.visibility =View.VISIBLE
         } else {
             binding?.googleCode?.visibility = View.GONE
+            binding?.googleCodeLayout?.visibility = View.GONE
+            binding?.googleCodeCopy?.visibility = View.GONE
+            binding?.googleWindow?.visibility =View.GONE
         }
         binding?.btnSubmit?.setOnClickListener(this)
         checkClickable()

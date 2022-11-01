@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -28,7 +29,6 @@ import com.black.util.RSAUtil
 @Route(value = [RouterConstData.CHANGE_PASSWORD], beforePath = RouterConstData.LOGIN)
 class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
     private var userInfo: UserInfo? = null
-
     private var binding: ActivityChangePasswordBinding? = null
 
     private val mHandler = Handler()
@@ -265,7 +265,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
                     FryingUtil.showToast(mContext, getString(R.string.change_password_success_02))
-                      val intent = Intent(this@ChangePasswordActivity, SafeBindActivity::class.java)
+                      val intent = Intent(this@ChangePasswordActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

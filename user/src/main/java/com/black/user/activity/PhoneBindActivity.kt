@@ -28,6 +28,7 @@ import com.black.user.R
 import com.black.user.databinding.ActivityPhoneBindBinding
 import com.black.util.Callback
 import com.black.util.CommonUtil
+import kotlinx.android.synthetic.main.activity_phone_bind.*
 
 //手机验证绑定
 @Route(value = [RouterConstData.PHONE_BIND], beforePath = RouterConstData.LOGIN)
@@ -54,16 +55,16 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    private var getMailCodeLocked = false
-    private var getMailCodeLockedTime = 0
+    private var getPhoneCodeVerifyLocked = false
+    private var getPhoneCodeVerifyLockedTime = 0
     private val getMailCodeLockTimer = object : Runnable {
         override fun run() {
-            getMailCodeLockedTime--
-            if (getMailCodeLockedTime <= 0) {
-                getMailCodeLocked = false
-                binding?.getMailCode?.setText(R.string.get_check_code)
+            getPhoneCodeVerifyLockedTime--
+            if (getPhoneCodeVerifyLockedTime <= 0) {
+                getPhoneCodeVerifyLocked = false
+                binding?.phoneCodeVieify?.setText(R.string.get_check_code)
             } else {
-                binding?.getMailCode?.setText(getString(R.string.aler_get_code_locked, getMailCodeLockedTime.toString()))
+                binding?.getPhoneCodeVerify?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeVerifyLockedTime.toString()))
                 mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
             }
         }
@@ -97,13 +98,19 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         binding?.phoneAccount?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
         binding?.getPhoneCode?.setOnClickListener(this)
-        binding?.mailCode?.addTextChangedListener(watcher)
-        binding?.getMailCode?.setOnClickListener(this)
+        binding?.phoneCodeVieify?.addTextChangedListener(watcher)
+        binding?.getPhoneCodeVerify?.setOnClickListener(this)
         binding?.googleCode?.addTextChangedListener(watcher)
         if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
             binding?.googleCode?.visibility = View.VISIBLE
+            binding?.googleCodeLayout?.visibility = View.VISIBLE
+            binding?.googleCodeCopy?.visibility = View.VISIBLE
+            binding?.googleWindow?.visibility =View.VISIBLE
         } else {
             binding?.googleCode?.visibility = View.GONE
+            binding?.googleCodeLayout?.visibility = View.GONE
+            binding?.googleCodeCopy?.visibility = View.GONE
+            binding?.googleWindow?.visibility =View.GONE
         }
         binding?.btnSubmit?.setOnClickListener(this)
         if (thisCountry == null) {
@@ -139,8 +146,8 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             R.id.get_phone_code -> {
                 phoneVerifyCode
             }
-            R.id.get_mail_code -> {
-                mailVerifyCode
+            R.id.get_phone_code_verify -> {
+                newPhoneVerifyCode
             }
             R.id.btn_copy_google_code -> {
                 CommonUtil.pasteText(mContext, object : Callback<String?>() {
@@ -173,16 +180,23 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
     private fun checkClickable() {
         if (TextUtils.isEmpty(binding?.phoneAccount?.text.toString().trim { it <= ' ' })
                 || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.mailCode?.text.toString().trim { it <= ' ' })) {
+                || TextUtils.isEmpty(binding?.phoneCodeVieify?.text.toString().trim { it <= ' ' })) {
             binding?.btnSubmit?.isEnabled = false
-        } else {
-            binding?.btnSubmit?.isEnabled = !(TextUtils.equals("1", userInfo!!.googleSecurityStatus)
-                    && TextUtils.isEmpty(binding?.googleCode?.text.toString().trim { it <= ' ' }))
         }
-    }
 
-    //获取手机验证码
-    private val phoneVerifyCode: Unit
+       else {
+            if (binding?.googleCode?.visibility == View.VISIBLE
+                    && TextUtils.isEmpty(binding?.googleCode?.text.toString().trim { it <= ' ' }))
+                {
+                    binding?.btnSubmit?.isEnabled = false
+            }
+
+        binding?.btnSubmit?.isEnabled = true
+    }
+       }
+
+    //获取新手机验证码
+    private val newPhoneVerifyCode: Unit
         get() {
             if (getPhoneCodeLocked) {
                 return
@@ -214,20 +228,20 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             })
         }
 
-    //获取邮箱验证码
-    private val mailVerifyCode: Unit
+    //获取当前手机验证码
+    private val phoneVerifyCode: Unit
         get() {
-            if (getMailCodeLocked) {
+            if (getPhoneCodeVerifyLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>() {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                         //锁定发送按钮
-                        if (!getMailCodeLocked) {
-                            getMailCodeLocked = true
-                            getMailCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
+                        if (!getPhoneCodeVerifyLocked) {
+                            getPhoneCodeVerifyLocked = true
+                            getPhoneCodeVerifyLockedTime = ConstData.GET_CODE_LOCK_TIME
                             mHandler.post(getMailCodeLockTimer)
                         }
                     } else {
@@ -237,7 +251,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             })
         }
 
-    //绑定邮箱验证
+    //绑定手机验证
     private fun bindPhone() {
         val telCountryCode = if (binding?.countryCode?.tag == null) null else binding?.countryCode?.tag.toString()
         if (TextUtils.isEmpty(telCountryCode)) {
@@ -254,10 +268,10 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_phone_code))
             return
         }
-        val userName = userInfo!!.email
-        val mailCode = binding?.mailCode?.text.toString().trim { it <= ' ' }
-        if (TextUtils.isEmpty(mailCode)) {
-            FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
+        val userName = userInfo!!.username
+        val newPhoneCode = binding?.phoneCodeVieify?.text.toString().trim { it <= ' ' }
+        if (TextUtils.isEmpty(newPhoneCode)){
+            FryingUtil.showToast(mContext, getString(R.string.input_phone_code_veifily))
             return
         }
         //        String password = passwordEditText.getText().toString().trim();
@@ -273,7 +287,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                 return
             }
         }
-        UserApiServiceHelper.bindPhone(mContext, telCountryCode, phone, phoneCode, userName, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindPhone(mContext, telCountryCode, phone, phoneCode, userName, newPhoneCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))

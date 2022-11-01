@@ -41,7 +41,8 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
     private lateinit var editFourth:EditText
     private lateinit var editFiveth:EditText
     private lateinit var editSixth:EditText
-
+    private var sub1 = false
+    private var sub2 = false
     private val mHandler = Handler()
 
     private var getPhoneCodeLocked = false
@@ -183,8 +184,10 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
                 R.id.sent -> {
                     if ( binding?.mailCode?.visibility == View.GONE){
                         phoneVerifyCode
+                        sub1 = true
                     }else
                         mailVerifyCode
+                        sub2 = true
                 }
 
                 R.id.code ->{
@@ -319,9 +322,31 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
             })
         }
     private fun safeBind(){
-        val googleCode = binding?.code?.text.toString().trim { it <= ' ' }
-        val mailCode = binding?.code?.text.toString().trim { it <= ' ' }
-        UserApiServiceHelper.bindSafe(mContext, null, null, null,null, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        val editFirst = binding?.editFirst?.text.toString().trim{it <= ' '}
+        val editSecond = binding?.editSecond?.text.toString().trim { it <= ' ' }
+        val editThird = binding?.editThird?.text.toString().trim { it <= ' ' }
+        val editFourth = binding?.editFourth?.text.toString().trim { it <= ' ' }
+        val editFiveth = binding?.editFiveth?.text.toString().trim {  it <= ' ' }
+        val editSixth = binding?.editSixth?.text.toString().trim { it <= ' ' }
+        val phoneCode : String?
+        val googleCode: String?
+        val mailCode: String?
+       if (sub1){
+            phoneCode = editFirst + editSecond + editThird + editFourth + editFiveth + editSixth
+            mailCode = null
+            googleCode = null
+       }
+       else if (sub2){
+                phoneCode = null
+                mailCode = editFirst + editSecond + editThird + editFourth + editFiveth + editSixth
+                googleCode = null
+        }
+        else {
+             phoneCode = null
+             mailCode = null
+             googleCode = editFirst + editSecond + editThird + editFourth + editFiveth + editSixth
+        }
+        UserApiServiceHelper.bindSafe(mContext, null, phoneCode, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.bind_success))
@@ -337,7 +362,6 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
-                    //回到安全中心界面
                     BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         .go(mContext)
@@ -345,11 +369,8 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
             }
 
             override fun error(type: Int, error: Any) {
-                //回到安全中心界面
-                BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)
+                FryingUtil.showToast(mContext, error.toString())
             }
-        })
+        }, true)
     }
 }
