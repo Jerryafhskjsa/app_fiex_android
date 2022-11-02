@@ -86,30 +86,44 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
         binding?.newPassword?.addTextChangedListener(watcher)
         binding?.newPasswordAgain?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
-        //        binding?.phoneCode?.setAssistButtonCallback(this);
         binding?.getPhoneCode?.setOnClickListener(this)
-        binding?.mailCode?.addTextChangedListener(watcher)
-        //        binding?.mailCode?.setAssistButtonCallback(this);
-        binding?.getMailCode?.setOnClickListener(this)
         binding?.googleCode?.addTextChangedListener(watcher)
+        binding?.googleCodeCopy?.setOnClickListener(this)
+        binding?.mailCode?.addTextChangedListener(watcher)
+        binding?.getMailCode?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
-        var check = false
         if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
-            check = true
-//            binding?.phoneLayout?.visibility = View.VISIBLE
+            binding?.phoneLayout?.visibility = View.VISIBLE
+            binding?.phoneAccount?.visibility = View.VISIBLE
+            binding?.phoneCode?.visibility = View.VISIBLE
+            binding?.getPhoneCode?.visibility = View.VISIBLE
         } else {
             binding?.phoneLayout?.visibility = View.GONE
+            binding?.phoneAccount?.visibility = View.GONE
+            binding?.mailCode?.visibility = View.GONE
+            binding?.getMailCode?.visibility = View.GONE
         }
         if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
-            check = true
+            binding?.googleCodeLayout?.visibility = View.VISIBLE
+            binding?.googleAccount?.visibility = View.VISIBLE
             binding?.googleCode?.visibility = View.VISIBLE
+            binding?.googleCodeCopy?.visibility = View.VISIBLE
         } else {
+            binding?.googleCodeLayout?.visibility = View.GONE
+            binding?.googleAccount?.visibility = View.GONE
             binding?.googleCode?.visibility = View.GONE
+            binding?.googleCodeCopy?.visibility = View.GONE
         }
-        if (!check) {
+        if (TextUtils.equals("1", userInfo!!.emailSecurityStatus)) {
             binding?.mailLayout?.visibility = View.VISIBLE
+            binding?.mailAccount?.visibility = View.VISIBLE
+            binding?.mailCode?.visibility = View.VISIBLE
+            binding?.getMailCode?.visibility = View.VISIBLE
         } else {
             binding?.mailLayout?.visibility = View.GONE
+            binding?.mailAccount?.visibility = View.GONE
+            binding?.mailCode?.visibility = View.GONE
+            binding?.getMailCode?.visibility = View.GONE
         }
         checkClickable()
     }
@@ -128,7 +142,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_copy_google_code -> {
+            R.id.google_code_copy -> {
                 CommonUtil.pasteText(mContext, object : Callback<String?>() {
                     override fun error(type: Int, error: Any) {}
                     override fun callback(returnData: String?) {
@@ -243,11 +257,33 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.password_not_same))
             return
         }
+        var phoneCode: String? = null
+        if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
+            phoneCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
+            if (TextUtils.isEmpty(phoneCode)) {
+                FryingUtil.showToast(mContext, getString(R.string.input_phone_code_veifily))
+                return
+            }
+        }
+        var mailCode: String? = null
+        if (TextUtils.equals("1", userInfo!!.emailSecurityStatus)) {
+          mailCode = binding?.mailCode?.text.toString().trim { it <= ' ' }
+        if (TextUtils.isEmpty(mailCode)) {
+            FryingUtil.showToast(mContext, getString(R.string.input_mail_code))
+            return
+        }
+        }
+        var googleCode: String? = null
+        if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
+            googleCode = binding?.googleCode?.text.toString().trim { it <= ' ' }
+            if (TextUtils.isEmpty(googleCode)) {
+                FryingUtil.showToast(mContext, getString(R.string.input_google_code))
+                return
+            }
+        }
         password = RSAUtil.encryptDataByPublicKey(password)
         newPassword = RSAUtil.encryptDataByPublicKey(newPassword)
-        val phoneCode = binding?.phoneCode?.text.toString()
-        val mailCode = binding?.mailCode?.text.toString()
-        val googleCode = binding?.googleCode?.text.toString()
+
         UserApiServiceHelper.changePassword(mContext, password, newPassword, phoneCode, googleCode, mailCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //密码修改成功，使用新密码登录

@@ -212,6 +212,51 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="10dp" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/mail_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_mail_code"></com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
+                            android:id="@+id/mail_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_edittext_default"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/mail_code"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/mail_code"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="21dp"
+                                android:background="@color/T11_ALPHA5"></View>
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/get_mail_code"
+                                style="@style/EditTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="15dp"
+                                android:text="@string/send_code"
+                                android:textColor="@color/T13"
+                                android:textSize="@dimen/text_size_16" />
+                        </com.black.lib.view.InputLinearLayout>
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/google_window"

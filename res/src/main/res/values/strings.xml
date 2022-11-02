@@ -659,6 +659,7 @@
     <string name="input_new_phone_number">输入新手机号</string>
     <string name="input_mail_number">输入电子邮箱号</string>
     <string name="input_mail_code">请输入邮箱验证码</string>
+    <string name="input_google_code">请输入谷歌验证码</string>
     <string name="input_phone_code">请输入手机验证码</string>
     <string name="input_phone_now_code">请输入当前手机验证码</string>
     <string name="input_code">请输入验证码</string>

@@ -362,9 +362,10 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
-                    BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        .go(mContext)
+                    FryingUtil.showToast(mContext, getString(R.string.change_password_success))
+                    val intent = Intent(this@SafeBindActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 

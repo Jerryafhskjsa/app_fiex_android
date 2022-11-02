@@ -77,7 +77,7 @@ interface UserApiService {
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_ENABLE_SECURITY)
-    fun enableSecurity(@Field("telCountryCode") telCountryCode: String?, @Field("phone") phone: String?, @Field("phoneCode") phoneCode: String?, @Field("email") email: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?, @Field("password") password: String?, @Field("action") action: String?): Observable<HttpRequestResultString?>?
+    fun enableSecurity(@Field("telCountryCode") telCountryCode: String?, @Field("phone") phone: String?, @Field("phoneCode") phoneCode: String?,@Field("newPhone") newPhone: String?, @Field("newPhoneCode") newPhoneCode: String?,  @Field("email") email: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?, @Field("password") password: String?, @Field("action") action: String?): Observable<HttpRequestResultString?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_IDENTITY_BIND)
