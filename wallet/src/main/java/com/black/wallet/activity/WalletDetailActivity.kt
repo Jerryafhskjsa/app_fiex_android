@@ -3,9 +3,7 @@ package com.black.wallet.activity
 import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -39,7 +37,6 @@ import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.WalletBillAdapter
 import com.black.wallet.databinding.ActivityWalletDetailBinding
-import com.google.android.material.appbar.AppBarLayout
 import com.google.gson.Gson
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
@@ -102,39 +99,9 @@ class WalletDetailActivity : BaseActivity(),
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-
         refreshWallet()
-        typeData
-        if (coinType != null) {
-            currentWallet
-        }
+        getBillData(true)
     }
-
-    private val currentWallet: Unit
-        get() {
-            WalletApiServiceHelper.getWalletList(this, true, object : Callback<ArrayList<Wallet?>?>() {
-                override fun error(type: Int, error: Any) {}
-                override fun callback(returnData: ArrayList<Wallet?>?) {
-                    if (returnData == null || returnData.isEmpty()) {
-                        return
-                    }
-                    var thisWallet: Wallet? = null
-                    for (wallet in returnData) {
-                        if (TextUtils.equals(coinType, wallet?.coinType)) {
-                            thisWallet = wallet
-                            break
-                        }
-                    }
-                    if (thisWallet != null) {
-                        wallet = thisWallet
-                        refreshWallet()
-                        getBillData(true)
-                    } else {
-                        finish()
-                    }
-                }
-            })
-        }
 
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
@@ -168,26 +135,6 @@ class WalletDetailActivity : BaseActivity(),
             }
         }
     }
-
-    private val typeData: Unit
-        get() {
-            WalletApiServiceHelper.getWalletBillType(this, object : NormalCallback<HttpRequestResultDataList<WalletBillType?>?>() {
-                override fun error(type: Int, error: Any?) {
-                    super.error(type, error)
-                    getBillData(true)
-                }
-
-                override fun callback(returnData: HttpRequestResultDataList<WalletBillType?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        walletBillType = returnData.data
-                        translateToTypeMap()
-                    } else {
-                        FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                    }
-                    getBillData(true)
-                }
-            })
-        }
 
     private fun refreshWallet() {
 

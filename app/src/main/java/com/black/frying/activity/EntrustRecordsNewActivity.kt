@@ -58,7 +58,6 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     private var currentType = 0
     private var openType = 0
     private var levelType: String? = TransactionViewModel.LEVER_TYPE_COIN
-    private var pair: String? = null
     private var routerPair: String? = null
 
     private var entrustType: EntrustType? = EntrustType.ALL
@@ -78,9 +77,8 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrust_records_new)
 
-        pair = CookieUtil.getCurrentPair(mContext)
         openType = intent.getIntExtra(ConstData.OPEN_TYPE, 0)
-        routerPair = intent.getStringExtra(ConstData.ROUTER_PAIR)
+        routerPair = intent.getStringExtra(ConstData.PAIR)
         levelType = intent.getStringExtra(ConstData.LEVEL_TYPE)
         entrustType = when (levelType) {
             TransactionViewModel.LEVER_TYPE_LEVER -> {
@@ -97,7 +95,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         initHeaderLayout()
 
         binding?.pairChooseMenu?.setOnClickListener(this)
-        binding?.pairChooseMenu?.setText(if (pair == null) getString(R.string.all_coin) else pair!!.replace("_", "/"))
+        binding?.pairChooseMenu?.setText(if (routerPair == null) getString(R.string.all_coin) else routerPair!!.replace("_", "/"))
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -141,12 +139,8 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         headTitleView = findViewById(R.id.action_bar_title)
         binding?.entrustNew?.setOnClickListener(this)
         binding?.entrustHis?.setOnClickListener(this)
-        if (routerPair != null) {
-            pair = routerPair
-        }
         if (openType == 0) {
             //交易页当前交易对订单记录
-            pair = null
             entrustStatus = EntrustStatus.NEW
             dateFilter = DateFilter.ALL
             currentType = TYPE_NEW
@@ -216,8 +210,8 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         if (entrustFilter == null) {
             var coinType: String? = null
             var setName: String? = null
-            if (pair != null) {
-                val arr = pair!!.split("_").toTypedArray()
+            if (routerPair != null) {
+                val arr = routerPair!!.split("_").toTypedArray()
                 if (arr.size > 1) {
                     coinType = arr[0]
                     setName = arr[1]
@@ -230,7 +224,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                     var useSet = set
                     this@EntrustRecordsNewActivity.entrustType = entrustType
                     if (TextUtils.isEmpty(useCinType) && TextUtils.isEmpty(useSet)) {
-                        pair = null
+                        routerPair = null
                         entrustFilter.dismiss()
                         currentPage = 1
                         getTradeOrderCurrent(true)
@@ -250,7 +244,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                                 if (returnData == null) {
                                     FryingUtil.showToast(mContext, resources.getString(R.string.pair_error), FryingSingleToast.ERROR)
                                 } else {
-                                    this@EntrustRecordsNewActivity.pair = returnData.pair
+                                    this@EntrustRecordsNewActivity.routerPair = returnData.pair
                                     currentPage = 1
                                     getTradeOrderCurrent(true)
                                 }
@@ -283,8 +277,8 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     }
 
     private fun setCurrentPairStatus(pairStatus: PairStatus?) {
-        pair = pairStatus?.pair
-        binding?.pairChooseMenu?.text = if (pair == null) getString(R.string.all_coin) else pair!!.replace("_", "/")
+        routerPair = pairStatus?.pair
+        binding?.pairChooseMenu?.text = if (routerPair == null) getString(R.string.all_coin) else routerPair!!.replace("_", "/")
         currentPage = 1
         getTradeOrderCurrent(true)
     }
@@ -298,7 +292,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
 
     //当前委托
     private fun getTradeOrderCurrent(isShowLoading: Boolean) {
-        var pair = pair
+        var pair = routerPair
         if(currentType == TYPE_HIS){
             pair = null
         }

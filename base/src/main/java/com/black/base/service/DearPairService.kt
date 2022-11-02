@@ -197,7 +197,7 @@ object DearPairService {
                     }
                     dearPairMap.clear()
                     dearPairMap.putAll(tempMap)
-                    updateDearPairs(context, handler, dearPairMap, false)
+                    updateDearPairs(context, handler, dearPairMap, true)
                 } else { //FryingUtil.showToast(context, returnData == null ? "null" : returnData.msg);
                 }
                 callback?.callback(returnData?.data)

@@ -187,6 +187,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(50)
+        viewModel?.onResume()
         getTradeOrderCurrent()
     }
 

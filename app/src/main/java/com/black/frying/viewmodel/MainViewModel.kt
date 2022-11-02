@@ -47,6 +47,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     override fun onResume() {
         super.onResume()
         initHandler()
+        Log.d(TAG,"onResume")
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
@@ -73,6 +74,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     override fun onStop() {
         super.onStop()
+        Log.d(TAG,"onStop")
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle)
@@ -276,7 +278,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
      * 获取交易对的详细数据
      */
     fun getHomeTicker(){
-        onMainModelListener?.onHomeTickers(PairApiServiceHelper.getHomeTickers((context!!)))
+        onMainModelListener?.onHomeTickers(PairApiServiceHelper.getHomeTickersLocal((context!!)))
     }
 
     /**
