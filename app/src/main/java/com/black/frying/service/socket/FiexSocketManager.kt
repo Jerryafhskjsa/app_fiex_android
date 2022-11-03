@@ -486,8 +486,6 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 jsonObject.toString(),
                                 object : TypeToken<PairStatusNew?>() {}.type
                             )
-                            Log.d(tag, "tickerStatus->pairQuo.s = " + pairQuo.s)
-                            Log.d(tag, "tickerStatus->pairQuo price = " + pairQuo.c)
                         } catch (e: Exception) {
                             FryingUtil.printError(e)
                         }
@@ -496,7 +494,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 mCcontext,
                                 mHandler,
                                 pairQuo,
-                                true
+                                false
                             )
                         }
                     }

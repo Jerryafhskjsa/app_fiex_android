@@ -22,17 +22,38 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var supportingPrecisionList //支持深度
             : ArrayList<Deep>? = null
     //交易量
-    var tradeVolume:String? = null
+    var tradeVolume:Double? = null
     set(value) {
         field = value
-        tradeAmount = value?.toDouble()
-        tradeVolueFormat = NumberUtil.formatNumberNoGroup(tradeAmount , 2, 5)
+        tradeVolueFormat = NumberUtil.formatNumberNoGroup(tradeVolume , 2, 5)
 
     }
     var tradeVolueFormat:String? = null
+
+    //交易额(同tradeAmount，优化会删掉)
+    var totalAmount = 0.0
+        set(value) {
+            field = value
+            totalAmountFromat = NumberUtil.formatNumberNoGroup(value, 2, 5)
+        }
+    var totalAmountFromat: String? = null
+    //交易额
+    var tradeAmount:Double? = null
+        set(value) {
+            field = value
+            tradeAmountFormat = NumberUtil.formatNumberNoGroup(tradeAmount, 2, 5)
+        }
+    var tradeAmountFormat:String? = null
+
+    var priceChangeSinceToday: Double? = null //涨跌百分比
+        set(value) {
+            field = value
+            priceChangeSinceTodayFormat = priceChangeSinceTodayDisplay
+        }
     //支持订单下单类型
     var supportOrderType:String? = null
-    var tradeAmount:Double? = null
+
+
     var hot:Boolean? = null
     var setType:Int? = null
 
@@ -65,16 +86,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             field = value
             minPriceFormat = NumberUtil.formatNumberNoGroup(value, precision)
         }
-    var totalAmount = 0.0
-        set(value) {
-            field = value
-            totalAmountFromat = NumberUtil.formatNumberNoGroup(value, 2, 5)
-        }
-    var priceChangeSinceToday: Double? = null //涨跌百分比
-        set(value) {
-            field = value
-            priceChangeSinceTodayFormat = priceChangeSinceTodayDisplay
-        }
+
     var statDate: Long = 0
     var precision = 15 //价格精度
     var order_no = Int.MAX_VALUE //排序
@@ -124,7 +136,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var currentPriceCNYFormat: String? = null
     var maxPriceFormat: String? = null
     var minPriceFormat: String? = null
-    var totalAmountFromat: String? = null
+
     var priceChangeSinceTodayFormat: String? = null
 
     /*=====用于显示字段 =====*/

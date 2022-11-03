@@ -224,7 +224,9 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
                 if(i?.pair.equals(updateData[0]?.pair)){
                     i?.precision = updateData[0]?.precision ?: 0
                     i?.currentPrice = (updateData[0]?.currentPrice ?: 0.0)
-                    i?.tradeVolume = updateData[0]?.tradeVolume ?: "0"
+                    i?.tradeVolume = updateData[0]?.tradeVolume ?: 0.0
+                    i?.tradeAmount =  updateData[0]?.tradeAmount ?: 0.0
+                    i?.totalAmount = updateData[0]?.totalAmount ?: 0.0
                     i?.setCurrentPriceCNY(updateData[0]?.currentPriceCNY, nullAmount)
                     i?.priceChangeSinceToday = (updateData[0]?.priceChangeSinceToday)
                 }

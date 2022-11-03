@@ -6,19 +6,20 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
-import com.black.base.model.FryingServerConfig
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
+import com.black.base.model.*
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.frying.service.SocketService
 import com.black.frying.util.UdeskUtil
 import com.black.net.HttpCookieUtil
+import com.black.net.HttpInterceptHelper
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -30,6 +31,7 @@ import skin.support.SkinCompatManager
 import skin.support.SkinCompatManager.SkinLoaderListener
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 
 //我的界面
 @Route(value = [RouterConstData.MINE])
@@ -39,6 +41,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     }
     private var userInfo: UserInfo? = null
     private val serverConfigs: ArrayList<FryingServerConfig> = ArrayList()
+    private val fryingLinesConfig:MutableList<FryingLinesConfig?> = ArrayList()
     private var imageLoader: ImageLoader? = null
     private var binding: ActivityMineBinding? = null
 
@@ -106,6 +109,38 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         return !super.isStatusBarDark()
     }
 
+    fun getNetworkLines(){
+        CommonApiServiceHelper.getNetworkLines(this, object : Callback<HttpRequestResultDataList<FryingLinesConfig?>?>() {
+            override fun error(type: Int, error: Any) {}
+            override fun callback(returnData: HttpRequestResultDataList<FryingLinesConfig?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    var lines = returnData.data ?: return
+                    fryingLinesConfig.clear()
+                    fryingLinesConfig.addAll(lines)
+                    for (i in fryingLinesConfig){
+                        getLineSpeed(i)
+                    }
+                }
+            }
+        })
+    }
+
+    fun getLineSpeed(linesConfig: FryingLinesConfig?){
+        linesConfig?.startTime = System.currentTimeMillis()
+        CommonApiServiceHelper.getLinesSpeed(this,linesConfig?.lineUrl, object : Callback<HttpRequestResultString?>() {
+            override fun error(type: Int, error: Any) {
+                Log.d("uuuuuu error","type = "+type)
+                Log.d("uuuuuu error","error = "+error.toString())
+            }
+            override fun callback(returnData: HttpRequestResultString?) {
+                linesConfig?.endTime = System.currentTimeMillis()
+                Log.d("uuuuuu","speed = "+(linesConfig?.endTime!! - linesConfig?.startTime!!))
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                }
+            }
+        })
+    }
+
     override fun onClick(view: View) {
         when (view.id) {
             R.id.img_back -> finish()
@@ -145,6 +180,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             }
             R.id.notifications -> BlackRouter.getInstance().build(RouterConstData.NOTIFICATION_LIST).go(mContext)
             R.id.server_setting -> {
+                getNetworkLines()
                 DeepControllerWindow(mContext as Activity, getString(R.string.server_setting), currentServerConfig,
                         serverConfigs as List<FryingServerConfig?>?,
                         object : DeepControllerWindow.OnReturnListener<FryingServerConfig?> {
@@ -170,7 +206,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                                             }
                                 }
                             }
-
                         }).show()
             }
             R.id.more_language -> BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(mContext)

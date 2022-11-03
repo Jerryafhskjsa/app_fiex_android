@@ -11,8 +11,14 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     override fun compare(o1: PairStatus?, o2: PairStatus?): Int {
-        if (o1 == null || o2 == null) {
-            return 0
+        if (o2 == null) {
+            return -1
+        }
+        if (o1 == null) {
+            return -1
+        }
+        if (o1 == null && o2 == null) {
+            return -1
         }
         if (coinType != NORMAL) {
             return compareByCoin(o1, o2)
@@ -23,22 +29,52 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
         if (priceType != NORMAL) {
             return compareByPrice(o1, o2)
         }
-        return if (rangeType != NORMAL) {
-            compareBySince(o1, o2)
-        } else compareDefault(o1, o2)
+        if (rangeType != NORMAL) {
+            return compareBySince(o1, o2)
+        }
+        return compareDefault(o1, o2)
     }
 
     private fun compareDefault(o1: PairStatus?, o2: PairStatus?): Int {
-        return if (o1 == null || o2 == null) {
-            0
-        } else Integer.compare(o1.order_no, o2.order_no)
+        if(o1 == null){
+            return 0
+        }
+        if(o2 == null){
+            return 0
+        }
+        if(o1 == null && o2 == null){
+            return 0
+        }
+        if(o1.order_no == null){
+            return 0
+        }
+        if(o2.order_no == null){
+            return 0
+        }
+        if(o1.order_no == null && o2.order_no == null){
+            return 0
+        }
+        return o1.order_no.compareTo(o2.order_no)
     }
 
     private fun compareByCoin(o1: PairStatus?, o2: PairStatus?): Int {
-        if (o1 == null || o2 == null) {
+        if(o1 == null){
             return 0
         }
-        if (o1.pair == null || o2.pair == null) {
+        if(o2 == null){
+            return 0
+        }
+        if(o1 == null && o2 == null){
+            return 0
+        }
+
+        if(o1.pair == null){
+            return 0
+        }
+        if(o2.pair == null){
+            return 0
+        }
+        if(o1.pair == null && o2.pair == null){
             return 0
         }
         return if (coinType == UP) {
@@ -51,10 +87,23 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     private fun compareByTradeVolume(o1: PairStatus?, o2: PairStatus?): Int {
-        if (o1 == null || o2 == null) {
+        if(o1 == null){
             return 0
         }
-        if (o1.tradeAmount == null || o2.tradeAmount == null) {
+        if(o2 == null){
+            return 0
+        }
+        if(o1 == null && o2 == null){
+            return 0
+        }
+
+        if(o1.tradeAmount == null){
+            return 0
+        }
+        if(o2.tradeAmount == null){
+            return 0
+        }
+        if(o1.tradeAmount == null && o2.tradeAmount == null){
             return 0
         }
         return if (tradeVolmeType == UP) {
@@ -67,7 +116,23 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     private fun compareByPrice(o1: PairStatus?, o2: PairStatus?): Int {
-        if (o1 == null || o2 == null) {
+        if(o1 == null){
+            return 0
+        }
+        if(o2 == null){
+            return 0
+        }
+        if(o1 == null && o2 == null){
+            return 0
+        }
+
+        if(o1.currentPrice == null){
+            return 0
+        }
+        if(o2.currentPrice == null){
+            return 0
+        }
+        if(o1.currentPrice == null && o2.currentPrice == null){
             return 0
         }
         return if (priceType == UP) {
@@ -80,7 +145,23 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     fun compareBySince(o1: PairStatus?, o2: PairStatus?): Int {
-        if (o1 == null || o2 == null || o1.priceChangeSinceToday == null || o2.priceChangeSinceToday == null) {
+        if(o1 == null){
+            return 0
+        }
+        if(o2 == null){
+            return 0
+        }
+        if(o1 == null && o2 == null){
+            return 0
+        }
+
+        if(o1.priceChangeSinceToday == null){
+            return 0
+        }
+        if(o2.priceChangeSinceToday == null){
+            return 0
+        }
+        if(o1.priceChangeSinceToday == null && o2.priceChangeSinceToday == null){
             return 0
         }
         return if (rangeType == UP) {

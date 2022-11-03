@@ -33,7 +33,8 @@ import kotlin.collections.ArrayList
 /**
  * @author 行情tab页
  */
-class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickListener, View.OnClickListener {
+class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickListener,
+    View.OnClickListener {
     private var set: String? = null
     private var collect: String? = null
 
@@ -43,19 +44,34 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     private val dataList = ArrayList<PairStatus?>()
     private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
     private val dearPairs = java.util.ArrayList<String?>()
+
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
-    private var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL,PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
+    private var comparator = PairQuotationComparator(
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL
+    )
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (binding != null) {
             return binding?.root
         }
         collect = getString(R.string.pair_collect)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_quotation_detail, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_home_page_quotation_detail,
+            container,
+            false
+        )
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -77,9 +93,14 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
             binding?.listView?.emptyView = emptyView
         }
         binding?.marketRefreshLayout?.setRefreshHolder(RefreshHolderFrying(activity!!))
-        binding?.marketRefreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+        binding?.marketRefreshLayout?.setOnRefreshListener(object :
+            QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-                binding!!.marketRefreshLayout.postDelayed({ binding!!.marketRefreshLayout.setRefreshing(false) }, 300)
+                binding!!.marketRefreshLayout.postDelayed({
+                    binding!!.marketRefreshLayout.setRefreshing(
+                        false
+                    )
+                }, 300)
             }
 
         })
@@ -104,14 +125,16 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     override fun error(type: Int, error: Any) {
                         thisSetPairStatusData
                     }
+
                     override fun callback(returnData: java.util.ArrayList<String?>?) {
                         if (returnData != null && returnData.isNotEmpty()) {
+                            dearPairs.clear()
                             dearPairs.addAll(returnData)
                         }
                         thisSetPairStatusData
                     }
                 })
-        }else{
+        } else {
             thisSetPairStatusData
         }
     }
@@ -162,68 +185,89 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                 synchronized(dataList) {
                     var hasPairListChanged = false
                     //size>1，表示更新所有数据，会造成行情页面空白,size = 1表示单条行情更新，此处需要优化
-                    if(value.size > 1){
+                    if (value.size > 1) {
                         return@Runnable
                     }
                     for (pairStatus in value) {
+                        Log.d("uuuuuu", "set = " + set)
+                        Log.d("uuuuuu", "pair = " + pairStatus?.pair)
+                        Log.d("uuuuuu", "isDear = " + pairStatus?.is_dear)
+                        Log.d("uuuuuu", "tradeAmount = " + pairStatus?.tradeAmount)
+                        Log.d("uuuuuu", "tradeVolume = " + pairStatus?.tradeVolume)
                         pairStatus?.pair?.let {
                             var showPair = dataMap[it]
+                            var isDear = dearPairs.contains(it)
+                            Log.d("uuuuuu", "showPair = " + showPair)
                             if (showPair != null) {
                                 //更新已有的交易对
                                 if (TextUtils.equals(set, collect)) {
                                     //如果是自选，并且交易对现在不再是自选，删除该交易对
-                                    if(pairStatus?.is_dear != null && !pairStatus.is_dear){
-                                        dataList.remove(showPair)
-                                        dataMap.remove(it)
-                                        hasPairListChanged = true
-                                    }else{
-                                        if(pairStatus?.setName.equals(set)){
-                                            showPair.currentPrice = (pairStatus.currentPrice)
-                                            showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                                            showPair.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                                            showPair.totalAmount = (pairStatus.totalAmount)
-                                            dataMap.replace(it,showPair)
+                                    if (!isDear) {
+                                        if(dataMap.containsKey(it)){
+                                            dataMap.remove(it)
                                             hasPairListChanged = true
                                         }
-
+                                    } else {
+                                        if (pairStatus?.pair.equals(showPair.pair)) {
+                                            showPair.currentPrice = (pairStatus.currentPrice)
+                                            showPair.setCurrentPriceCNY(
+                                                pairStatus.currentPriceCNY,
+                                                nullAmount
+                                            )
+                                            showPair.priceChangeSinceToday =
+                                                (pairStatus.priceChangeSinceToday)
+                                            showPair.tradeVolume = (pairStatus.tradeVolume)
+                                            showPair.tradeAmount = (pairStatus.tradeAmount)
+                                            dataMap.replace(it, showPair)
+                                            hasPairListChanged = true
+                                        }
                                     }
                                 } else {
-                                    Log.d("iiiiii","currentPrice = "+pairStatus.currentPrice)
-                                    Log.d("iiiiii","isDear = "+showPair?.is_dear)
                                     //更新行情相关数据
-                                    if(pairStatus?.setName.equals(set)){
+                                    if (pairStatus?.setName.equals(set) && pairStatus?.pair.equals(showPair.pair)) {
                                         showPair.currentPrice = (pairStatus.currentPrice)
-                                        showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                                        showPair.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                                        showPair.totalAmount = (pairStatus.totalAmount)
-                                        dataMap.replace(it,showPair)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
+                                        dataMap.replace(it, showPair)
                                         hasPairListChanged = true
                                     }
                                 }
                             } else {
-//                                //是新的交易对
-                                if(TextUtils.equals(set, collect)){
-                                    if(pairStatus?.is_dear != null && pairStatus.is_dear){
+                               //是新的交易对
+                                if (TextUtils.equals(set, collect) && isDear) {
+                                    if (pairStatus?.is_dear != null && pairStatus.is_dear) {
                                         showPair = PairStatus()
                                         showPair.currentPrice = (pairStatus.currentPrice)
-                                        showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                                        showPair.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                                        showPair.totalAmount = (pairStatus.totalAmount)
-                                        dataList.add(showPair)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
                                         dataMap[it] = showPair
-                                        adapter?.addItem(showPair)
                                         hasPairListChanged = true
                                     }
-                                }else{
-                                    if(pairStatus?.setName.equals(set)){
+                                } else {
+                                    if (pairStatus?.setName.equals(set)) {
                                         showPair = PairStatus()
                                         showPair.currentPrice = (pairStatus.currentPrice)
-                                        showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                                        showPair.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                                        showPair.totalAmount = (pairStatus.totalAmount)
-                                        dataList.add(showPair)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
                                         dataMap[it] = showPair
-                                        adapter?.addItem(showPair)
                                         hasPairListChanged = true
                                     }
                                 }
@@ -233,12 +277,13 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     mContext?.runOnUiThread {
                         if (hasPairListChanged) {
                             var result = ArrayList<PairStatus?>()
-                            dataMap.forEach{
+                            dataMap.forEach {
                                 result.add(it.value)
                             }
                             adapter?.data = result
-                            adapter?.sortData(comparator)
-                            adapter?.notifyDataSetChanged()
+                            updateCompare(comparator)
+//                            adapter?.sortData(comparator)
+//                            adapter?.notifyDataSetChanged()
                         }
                     }
                 }
@@ -253,33 +298,34 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     private val thisSetPairStatusData: Unit
         get() {
             postHandleTask(socketHandler, Runnable {
-                SocketDataContainer.getPairsWithSet(activity, set, object : Callback<ArrayList<PairStatus?>?>() {
-                    override fun error(type: Int, error: Any) {}
-                    override fun callback(returnData: ArrayList<PairStatus?>?) {
-                        if (returnData == null) {
-                            return
-                        }
-                        synchronized(dataMap) {
-                            synchronized(dataList) {
-                                dataMap.clear()
-                                dataList.clear()
-                                dataList.addAll(returnData)
-                                Log.d("iiiiii", "returnData,set = $set")
-                                Log.d("iiiiii","returnData->size = "+dataList?.size)
-                                for (pairStatus in returnData) {
-                                    pairStatus?.pair?.let {
-                                        dataMap[it] = pairStatus
+                SocketDataContainer.getPairsWithSet(
+                    activity,
+                    set,
+                    object : Callback<ArrayList<PairStatus?>?>() {
+                        override fun error(type: Int, error: Any) {}
+                        override fun callback(returnData: ArrayList<PairStatus?>?) {
+                            if (returnData == null) {
+                                return
+                            }
+                            synchronized(dataMap) {
+                                synchronized(dataList) {
+                                    dataMap.clear()
+                                    dataList.clear()
+                                    dataList.addAll(returnData)
+                                    for (pairStatus in returnData) {
+                                        pairStatus?.pair?.let {
+                                            dataMap[it] = pairStatus
+                                        }
                                     }
-                                }
-                                mContext?.runOnUiThread {
-                                        adapter?.data =  dataList
+                                    mContext?.runOnUiThread {
+                                        adapter?.data = dataList
                                         adapter?.sortData(comparator)
                                         adapter?.notifyDataSetChanged()
+                                    }
                                 }
                             }
                         }
-                    }
-                })
+                    })
             })
         }
 
@@ -306,7 +352,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext) { _, _ -> }
+            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
+                .go(mContext) { _, _ -> }
         }
     }
 

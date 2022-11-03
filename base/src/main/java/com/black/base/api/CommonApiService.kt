@@ -13,6 +13,12 @@ import retrofit2.http.Query
 
 interface CommonApiService {
 
+    @GET(UrlConfig.Config.URL_NETWORK_LINES)
+    fun getNetworkLines():Observable<HttpRequestResultDataList<FryingLinesConfig?>?>?
+
+    @GET(UrlConfig.Config.RUL_LINE_SPEED)
+    fun getLinesSpeed():Observable<HttpRequestResultString?>?
+
     @GET(UrlConfig.Config.URL_KLINE_HISTORY)
     fun getHistoryKline(@Query("symbol") symbol: String?,
                         @Query("interval") interval: String?,

@@ -2,6 +2,7 @@ package com.black.base.util
 
 import android.content.Context
 import com.black.util.CommonUtil
+import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
@@ -303,6 +304,10 @@ object UrlConfig {
     }
 
     object Config {
+        //获取网络线路
+        const val URL_NETWORK_LINES = "app/line/url/findAll"
+        //线路测速
+        const val RUL_LINE_SPEED = "app/line/url/speed"
         //K线
         const val URL_KLINE_HISTORY="public/kline"
         //fiex 获取所有交易对配置

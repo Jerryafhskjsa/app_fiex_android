@@ -36,12 +36,6 @@ public abstract class RxObserver<T> implements Observer<T> {
         }
     }
 
-    private void refreshTokens(String requestUrl){
-        if(requestUrl.contains("/uc/") || requestUrl.contains("/pro/")){
-
-        }
-    }
-
     @Override
     final public void onError(Throwable e) {
         e.printStackTrace();

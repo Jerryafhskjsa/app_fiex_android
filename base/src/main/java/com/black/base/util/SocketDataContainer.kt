@@ -582,7 +582,9 @@ object SocketDataContainer {
                         }
                         val newPairCompareKey = pairStatus.compareString
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
-                            Log.d(TAG,"updatePairStatusData1,addChange")
+                            Log.d(TAG,"updatePairStatusData1,tradeAmount = "+pairStatus.tradeAmount)
+                            Log.d(TAG,"updatePairStatusData1,totalAmount = "+pairStatus.totalAmount)
+                            Log.d(TAG,"updatePairStatusData1,pair = "+pairStatus.pair)
                             result.add(pairStatus)
                         }
                     }
@@ -637,7 +639,6 @@ object SocketDataContainer {
                 } else {
 //                    val data = gson.fromJson<PairStatusNew>(dataSource.toString(), object : TypeToken<PairStatusNew?>() {}.type)
                     val data:PairStatusNew? = dataSource
-                    Log.d(TAG,"updatePairStatusData,data = "+data?.s)
                     synchronized(pairDataSource) {
                         if (isRemoveAll) {
                             pairDataSource.clear()

@@ -200,24 +200,24 @@ object PairApiServiceHelper {
                     var pairStatusMap: MutableMap<String?, PairStatus?> = HashMap()
                     for (j in pairListData!!.indices) {
                         for (i in data.indices) {
-//                            pairListData!![j]?.let { newData.add(it) }
                             var temp = pairListData!![j]
                             if (pairListData!![j]?.pair == data[i]?.s) {
                                 var temp = pairListData!![j]
                                 //现价
-                                temp?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
+                                temp?.currentPrice = data[i]?.c?.toDouble()!!
                                 //交易量
-                                temp?.tradeVolume = data[i]?.v
+                                temp?.tradeVolume = data[i]?.v?.toDouble()!!
+                                //交易额
+                                temp?.tradeAmount = data[i]?.a?.toDouble()!!
+                                temp?.totalAmount = data[i]?.a?.toDouble()!!
                                 //涨跌幅
-                                temp?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
-                                Log.d("iiiii","buy = "+c2CPrice?.buy)
-                                Log.d("iiiii","price = "+temp?.currentPrice)
+                                temp?.priceChangeSinceToday = data[i]?.r?.toDouble()!!
                                 if(c2CPrice != null){
                                     var price = BigDecimal(temp!!.currentPrice)
                                     var usdt = BigDecimal(c2CPrice?.buy!!)
-                                    var priceCny = price.minus(usdt)
-                                    Log.d("iiiii","priceCny = "+priceCny)
-                                    temp?.setCurrentPriceCNY(priceCny?.toDouble(),"0.0000")
+                                    var priceCny = price.times(usdt)
+                                    var priceCnyStr =  NumberUtil.formatNumberNoGroup(priceCny, 4, 4)
+                                    temp?.setCurrentPriceCNY(priceCnyStr.toDouble(),"0.0000")
                                 }
                             }
                             pairStatusMap[temp?.pair] = temp
