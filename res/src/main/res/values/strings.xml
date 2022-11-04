@@ -647,6 +647,10 @@
     <string name="system_setup">System Setup</string>
     <string name="system_version">System Version</string>
     <string name="server_setting">Link Line</string>
+    <string name="link_line_exception">线路异常</string>
+    <string name="link_line_normal">线路正常</string>
+    <string name="link_line_one">线路1</string>
+    <string name="link_line_two">线路2</string>
 
     <string name="old_psw">旧密码</string>
     <string name="new_psw">新密码</string>

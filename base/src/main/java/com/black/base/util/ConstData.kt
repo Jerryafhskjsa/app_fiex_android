@@ -130,6 +130,7 @@ object ConstData {
     const val CELL_PRICE = "cell_price"
     const val BUY_PRICE = "buy_price"
     const val HOST_INDEX = "host_index"
+    const val HOST_DATA = "host_data"
     const val PAIR_SEARCH_HISTORY = "pair_search_history"
     const val COIN_SEARCH_HISTORY = "coin_search_history"
     const val LEVEL_TYPE = "level_type"
