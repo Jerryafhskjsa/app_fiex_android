@@ -131,6 +131,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             override fun error(type: Int, error: Any) {
                 Log.d("uuuuuu error","type = "+type)
                 Log.d("uuuuuu error","error = "+error.toString())
+
             }
             override fun callback(returnData: HttpRequestResultString?) {
                 linesConfig?.endTime = System.currentTimeMillis()
