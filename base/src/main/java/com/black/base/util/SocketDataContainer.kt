@@ -582,9 +582,6 @@ object SocketDataContainer {
                         }
                         val newPairCompareKey = pairStatus.compareString
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
-                            Log.d(TAG,"updatePairStatusData1,tradeAmount = "+pairStatus.tradeAmount)
-                            Log.d(TAG,"updatePairStatusData1,totalAmount = "+pairStatus.totalAmount)
-                            Log.d(TAG,"updatePairStatusData1,pair = "+pairStatus.pair)
                             result.add(pairStatus)
                         }
                     }
@@ -666,7 +663,7 @@ object SocketDataContainer {
     }
 
     /**
-     * 更新交易对是否添加已自选
+     * 更新交易对是否添加自选
      *
      * @param context
      * @param handler
@@ -684,6 +681,7 @@ object SocketDataContainer {
                     synchronized(pairDataList!!) {
                         synchronized(allPairStatusMap!!) {
                             synchronized(pairDataSource) {
+                                dearPairMap.clear()
                                 for (pair in dearPairs.keys) {
                                     val isDear = dearPairs[pair]
                                     val pairStatus = allPairStatusMap[pair]
@@ -717,7 +715,7 @@ object SocketDataContainer {
      * @param isDear
      */
     private fun updateFavoriteToCache(pair: String, isDear: Boolean) {
-        updateDearPairMap()
+//        updateDearPairMap()
         if (isDear) {
             dearPairMap[pair] = isDear
         } else {

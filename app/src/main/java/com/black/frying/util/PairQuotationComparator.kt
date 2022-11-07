@@ -11,15 +11,16 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     override fun compare(o1: PairStatus?, o2: PairStatus?): Int {
+        if (o1 == null && o2 == null) {
+            return 0
+        }
+        if (o1 == null) {
+            return 1
+        }
         if (o2 == null) {
             return -1
         }
-        if (o1 == null) {
-            return -1
-        }
-        if (o1 == null && o2 == null) {
-            return -1
-        }
+
         if (coinType != NORMAL) {
             return compareByCoin(o1, o2)
         }
@@ -36,138 +37,140 @@ class PairQuotationComparator(var coinType: Int,var tradeVolmeType:Int, var pric
     }
 
     private fun compareDefault(o1: PairStatus?, o2: PairStatus?): Int {
-        if(o1 == null){
-            return 0
-        }
-        if(o2 == null){
-            return 0
-        }
         if(o1 == null && o2 == null){
             return 0
         }
-        if(o1.order_no == null){
-            return 0
+        if(o1 == null){
+            return 1
         }
-        if(o2.order_no == null){
-            return 0
+        if(o2 == null){
+            return -1
         }
+
         if(o1.order_no == null && o2.order_no == null){
             return 0
+        }
+        if(o1.order_no == null){
+            return 1
+        }
+        if(o2.order_no == null){
+            return -1
         }
         return o1.order_no.compareTo(o2.order_no)
     }
 
     private fun compareByCoin(o1: PairStatus?, o2: PairStatus?): Int {
-        if(o1 == null){
-            return 0
-        }
-        if(o2 == null){
-            return 0
-        }
         if(o1 == null && o2 == null){
             return 0
         }
+        if(o1 == null){
+            return 1
+        }
+        if(o2 == null){
+            return -1
+        }
 
-        if(o1.pair == null){
-            return 0
-        }
-        if(o2.pair == null){
-            return 0
-        }
         if(o1.pair == null && o2.pair == null){
             return 0
+        }
+        if(o1.pair == null){
+            return 1
+        }
+        if(o2.pair == null){
+            return -1
         }
         return if (coinType == UP) {
             o1.pair!!.compareTo(o2.pair!!)
         } else if (coinType == DOWN) {
-            -o1.pair!!.compareTo(o2.pair!!)
+            -(o1.pair!!.compareTo(o2.pair!!))
         } else {
             compareDefault(o1, o2)
         }
     }
 
     private fun compareByTradeVolume(o1: PairStatus?, o2: PairStatus?): Int {
-        if(o1 == null){
-            return 0
-        }
-        if(o2 == null){
-            return 0
-        }
         if(o1 == null && o2 == null){
             return 0
         }
+        if(o1 == null){
+            return 1
+        }
+        if(o2 == null){
+            return -1
+        }
 
-        if(o1.tradeAmount == null){
-            return 0
-        }
-        if(o2.tradeAmount == null){
-            return 0
-        }
         if(o1.tradeAmount == null && o2.tradeAmount == null){
             return 0
         }
+        if(o1.tradeAmount == null){
+            return 1
+        }
+        if(o2.tradeAmount == null){
+            return -1
+        }
+
         return if (tradeVolmeType == UP) {
             (o1.tradeAmount!!).compareTo(o2.tradeAmount!!)
         } else if (tradeVolmeType == DOWN) {
-            -o1.tradeAmount!!.compareTo(o2.tradeAmount!!)
+            -(o1.tradeAmount!!.compareTo(o2.tradeAmount!!))
         } else {
             compareDefault(o1, o2)
         }
     }
 
     private fun compareByPrice(o1: PairStatus?, o2: PairStatus?): Int {
-        if(o1 == null){
-            return 0
-        }
-        if(o2 == null){
-            return 0
-        }
         if(o1 == null && o2 == null){
             return 0
         }
+        if(o1 == null){
+            return 1
+        }
+        if(o2 == null){
+            return -1
+        }
 
-        if(o1.currentPrice == null){
-            return 0
-        }
-        if(o2.currentPrice == null){
-            return 0
-        }
         if(o1.currentPrice == null && o2.currentPrice == null){
             return 0
+        }
+        if(o1.currentPrice == null){
+            return 1
+        }
+        if(o2.currentPrice == null){
+            return -1
         }
         return if (priceType == UP) {
             o1.currentPrice.compareTo(o2.currentPrice)
         } else if (priceType == DOWN) {
-            -o1.currentPrice.compareTo(o2.currentPrice)
+            -(o1.currentPrice.compareTo(o2.currentPrice))
         } else {
             compareDefault(o1, o2)
         }
     }
 
-    fun compareBySince(o1: PairStatus?, o2: PairStatus?): Int {
-        if(o1 == null){
-            return 0
-        }
-        if(o2 == null){
-            return 0
-        }
+    private fun compareBySince(o1: PairStatus?, o2: PairStatus?): Int {
         if(o1 == null && o2 == null){
             return 0
         }
+        if(o1 == null){
+            return 1
+        }
+        if(o2 == null){
+            return -1
+        }
 
-        if(o1.priceChangeSinceToday == null){
-            return 0
-        }
-        if(o2.priceChangeSinceToday == null){
-            return 0
-        }
         if(o1.priceChangeSinceToday == null && o2.priceChangeSinceToday == null){
             return 0
+        }
+        if(o1.priceChangeSinceToday == null){
+            return 1
+        }
+        if(o2.priceChangeSinceToday == null){
+            return -1
         }
         return if (rangeType == UP) {
             (o1.priceChangeSinceToday!!).compareTo(o2.priceChangeSinceToday!!)
         } else if (rangeType == DOWN) {
-            -(o1.priceChangeSinceToday!!).compareTo(o2.priceChangeSinceToday!!)
+            -((o1.priceChangeSinceToday!!).compareTo(o2.priceChangeSinceToday!!))
         } else {
             compareDefault(o1, o2)
         }

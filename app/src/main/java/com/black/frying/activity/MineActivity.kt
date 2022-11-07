@@ -152,7 +152,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     ) {
         linesConfig?.startTime = System.currentTimeMillis()
         linesConfig?.index = index
-        Log.d("uuuuuu","index = " +index)
         CommonApiServiceHelper.getLinesSpeed(
             this,
             linesConfig?.lineUrl,
@@ -160,47 +159,39 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 override fun error(type: Int, error: Any) {
                     linesConfig?.statusDes = getString(R.string.link_line_exception)
                     linesConfig?.endTime = Long.MAX_VALUE
-                    Log.d(
-                        "uuuuuu",
-                        "error speed = " + (linesConfig?.endTime!! - linesConfig?.startTime!!)
-                    )
                     when (netType) {
                         0 -> {
-                            Log.d(
-                                "uuuuuu",
-                                "error localLinesConfig endTime = " + localLinesConfig[index!!]?.endTime
-                            )
                             if (localLinesConfig.size > 0 && localLinesConfig.size-1 == index) {
                                 if (showDialog == true) {
                                     showServerDialog(netType)
                                 }
                                 displayCurrentServer()
                             }else{
-                                getLineSpeed(
-                                    index + 1,
-                                    netType,
-                                    showDialog,
-                                    localLinesConfig[index + 1]
-                                )
+                                if (index != null) {
+                                    getLineSpeed(
+                                        index + 1,
+                                        netType,
+                                        showDialog,
+                                        localLinesConfig[index + 1]
+                                    )
+                                }
                             }
                         }
                         1 -> {
-                            Log.d(
-                                "uuuuuu",
-                                "error fryingLinesConfig endTime = " + fryingLinesConfig[index!!]?.endTime
-                            )
                             if (fryingLinesConfig.size > 0 && fryingLinesConfig.size-1  == index) {
                                 if (showDialog == true) {
                                     showServerDialog(netType)
                                 }
                                 displayCurrentServer()
                             }else{
-                                getLineSpeed(
-                                    index + 1,
-                                    netType,
-                                    showDialog,
-                                    fryingLinesConfig[index + 1]
-                                )
+                                if (index != null) {
+                                    getLineSpeed(
+                                        index + 1,
+                                        netType,
+                                        showDialog,
+                                        fryingLinesConfig[index + 1]
+                                    )
+                                }
                             }
                         }
                     }
@@ -210,47 +201,39 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         linesConfig?.endTime = System.currentTimeMillis()
                         linesConfig?.statusDes = getString(R.string.link_line_normal)
-                        Log.d(
-                            "uuuuuu",
-                            "callback speed = " + (linesConfig?.endTime!! - linesConfig?.startTime!!)
-                        )
                         when (netType) {
                             0 -> {
-                                Log.d(
-                                    "uuuuuu",
-                                    "callback localLinesConfig endTime = " + localLinesConfig[index!!]?.endTime
-                                )
                                 if (localLinesConfig.size > 0 && localLinesConfig.size-1  == index) {
                                     if (showDialog == true) {
                                         showServerDialog(netType)
                                     }
                                     displayCurrentServer()
                                 }else{
-                                    getLineSpeed(
-                                        index + 1,
-                                        netType,
-                                        showDialog,
-                                        localLinesConfig[index + 1]
-                                    )
+                                    if (index != null) {
+                                        getLineSpeed(
+                                            index + 1,
+                                            netType,
+                                            showDialog,
+                                            localLinesConfig[index + 1]
+                                        )
+                                    }
                                 }
                             }
                             1 -> {
-                                Log.d(
-                                    "uuuuuu",
-                                    "callback fryingLinesConfig endTime = " + fryingLinesConfig[index!!]?.endTime
-                                )
                                 if (fryingLinesConfig.size > 0 && fryingLinesConfig.size-1  == index) {
                                     if (showDialog == true) {
                                         showServerDialog(netType)
                                     }
                                     displayCurrentServer()
                                 }else{
-                                    getLineSpeed(
-                                        index + 1,
-                                        netType,
-                                        showDialog,
-                                        fryingLinesConfig[index + 1]
-                                    )
+                                    if (index != null) {
+                                        getLineSpeed(
+                                            index + 1,
+                                            netType,
+                                            showDialog,
+                                            fryingLinesConfig[index + 1]
+                                        )
+                                    }
                                 }
                             }
                         }

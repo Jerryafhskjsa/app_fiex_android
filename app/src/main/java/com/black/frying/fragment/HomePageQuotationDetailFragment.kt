@@ -1,10 +1,12 @@
 package com.black.frying.fragment
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -55,6 +57,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         PairQuotationComparator.NORMAL
     )
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
+    private var gettingPairsData:Boolean? = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +83,23 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         adapter = HomeQuotationDetailAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
+        //解决add empty view之后下拉刷新异常
+        binding?.listView?.setOnTouchListener(object :View.OnTouchListener{
+            @SuppressLint("ClickableViewAccessibility")
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_MOVE ->{
+                        if (binding?.listView?.getFirstVisiblePosition() == 0 &&
+                            binding?.listView?.getChildAt(0)?.getTop()!! >= 0) {//或者 listView.getChildAt(0).getTop() >= listView.getListPaddingTop())
+                            binding?.marketRefreshLayout?.setEnabled(true)
+                        } else {
+                            binding?.marketRefreshLayout?.setEnabled(false)
+                        }
+                    }
+                }
+                return false
+            }
+        })
         if (collect != null && collect.equals(set, ignoreCase = true)) {
             val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
             emptyView.findViewById<View>(R.id.btn_action).setOnClickListener(this)
@@ -100,9 +120,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     binding!!.marketRefreshLayout.setRefreshing(
                         false
                     )
-                }, 300)
+                }, 100)
             }
-
         })
         return binding?.root
     }
@@ -118,6 +137,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
         if (TextUtils.equals(set, collect)) {
+            gettingPairsData = true
             DearPairService.getDearPairList(
                 context,
                 socketHandler,
@@ -189,37 +209,33 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                         return@Runnable
                     }
                     for (pairStatus in value) {
-                        Log.d("uuuuuu", "set = " + set)
-                        Log.d("uuuuuu", "pair = " + pairStatus?.pair)
-                        Log.d("uuuuuu", "isDear = " + pairStatus?.is_dear)
-                        Log.d("uuuuuu", "tradeAmount = " + pairStatus?.tradeAmount)
-                        Log.d("uuuuuu", "tradeVolume = " + pairStatus?.tradeVolume)
                         pairStatus?.pair?.let {
                             var showPair = dataMap[it]
                             var isDear = dearPairs.contains(it)
-                            Log.d("uuuuuu", "showPair = " + showPair)
                             if (showPair != null) {
                                 //更新已有的交易对
                                 if (TextUtils.equals(set, collect)) {
                                     //如果是自选，并且交易对现在不再是自选，删除该交易对
-                                    if (!isDear) {
-                                        if(dataMap.containsKey(it)){
-                                            dataMap.remove(it)
-                                            hasPairListChanged = true
-                                        }
-                                    } else {
-                                        if (pairStatus?.pair.equals(showPair.pair)) {
-                                            showPair.currentPrice = (pairStatus.currentPrice)
-                                            showPair.setCurrentPriceCNY(
-                                                pairStatus.currentPriceCNY,
-                                                nullAmount
-                                            )
-                                            showPair.priceChangeSinceToday =
-                                                (pairStatus.priceChangeSinceToday)
-                                            showPair.tradeVolume = (pairStatus.tradeVolume)
-                                            showPair.tradeAmount = (pairStatus.tradeAmount)
-                                            dataMap.replace(it, showPair)
-                                            hasPairListChanged = true
+                                    if(gettingPairsData == false){
+                                        if (!isDear) {
+                                            if(dataMap.containsKey(it)){
+                                                dataMap.remove(it)
+                                                hasPairListChanged = true
+                                            }
+                                        } else {
+                                            if (pairStatus?.pair.equals(showPair.pair)) {
+                                                showPair.currentPrice = (pairStatus.currentPrice)
+                                                showPair.setCurrentPriceCNY(
+                                                    pairStatus.currentPriceCNY,
+                                                    nullAmount
+                                                )
+                                                showPair.priceChangeSinceToday =
+                                                    (pairStatus.priceChangeSinceToday)
+                                                showPair.tradeVolume = (pairStatus.tradeVolume)
+                                                showPair.tradeAmount = (pairStatus.tradeAmount)
+                                                dataMap.replace(it, showPair)
+                                                hasPairListChanged = true
+                                            }
                                         }
                                     }
                                 } else {
@@ -282,8 +298,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                             }
                             adapter?.data = result
                             updateCompare(comparator)
-//                            adapter?.sortData(comparator)
-//                            adapter?.notifyDataSetChanged()
                         }
                     }
                 }
@@ -302,9 +316,12 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     activity,
                     set,
                     object : Callback<ArrayList<PairStatus?>?>() {
-                        override fun error(type: Int, error: Any) {}
+                        override fun error(type: Int, error: Any) {
+                            gettingPairsData = false
+                        }
                         override fun callback(returnData: ArrayList<PairStatus?>?) {
                             if (returnData == null) {
+                                gettingPairsData = false
                                 return
                             }
                             synchronized(dataMap) {
@@ -321,9 +338,11 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         adapter?.data = dataList
                                         adapter?.sortData(comparator)
                                         adapter?.notifyDataSetChanged()
+                                        gettingPairsData = false
                                     }
                                 }
                             }
+                            gettingPairsData = false
                         }
                     })
             })
