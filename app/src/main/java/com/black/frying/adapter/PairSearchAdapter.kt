@@ -1,9 +1,11 @@
 package com.black.frying.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckedTextView
+import android.widget.ImageView
 import android.widget.TextView
 import com.black.base.adapter.BaseDataTypeAdapter
 import com.black.frying.model.PairSearch
@@ -26,8 +28,14 @@ class PairSearchAdapter(context: Context, data: MutableList<PairSearch?>?) : Bas
                         onSearchHandleListener?.onPairClick(pairSearch)
                     }
                 }
-                val btnCollect = convertView.findViewById<CheckedTextView>(R.id.btn_collect)
-                btnCollect.isChecked = pairSearch?.is_dear ?: false
+                val btnCollect = convertView.findViewById<ImageView>(R.id.btn_collect)
+                var isDear = pairSearch?.is_dear
+                var img = if(isDear == true){
+                    context.getDrawable(R.drawable.btn_collect_dis)
+                }else{
+                    context.getDrawable(R.drawable.btn_collect_default)
+                }
+                btnCollect.setImageDrawable(img)
                 btnCollect.setOnClickListener {
                     pairSearch?.let {
                         onSearchHandleListener?.onCollect(pairSearch)

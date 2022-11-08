@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.CheckedTextView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +46,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_FIXED
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
-import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -66,7 +65,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var dealAdapter: QuotationDetailDealAdapter? = null
     private var quotationList: MutableList<TradeOrder?> = ArrayList()
 
-    private var btnCollect: CheckedTextView? = null
+    private var btnCollect: ImageView? = null
     private var coinTypeView: TextView? = null
     private var chatRoomId: String? = null
     private var btnChatRoom: View? = null
@@ -84,6 +83,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var viewModel: QuotationDetailViewModel? = null
     private var deepBinding: QuotationDetailDeepViewBinding? = null
     private var kLinePage = 0
+    private var isDear:Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -275,7 +275,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                     }
                 }
             }
-            R.id.btn_collect -> viewModel!!.toggleDearPair(btnCollect!!.isChecked)
+            R.id.btn_collect -> viewModel!!.toggleDearPair(isDear!!)
             R.id.btn_buy -> {
                 val bundle = Bundle()
                 bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, 2)
@@ -549,24 +549,19 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onCheckDearPair(isDearPair: Boolean?) {
-        btnCollect!!.isChecked = isDearPair!!
-        if (btnCollect!!.isChecked) {
-            btnCollect!!.setText(R.string.collect_delete)
+        if (isDearPair == true) {
+            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_dis))
         } else {
-            btnCollect!!.setText(R.string.collect_add)
+            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_default))
         }
+        isDear = isDearPair
     }
 
-    override fun onToggleDearPair(isSuccess: Boolean?) {
+    override fun onToggleDearPair(isSuccess: Boolean?,isDearPair: Boolean?) {
         if (isSuccess!!) {
-            val showMsg = if (btnCollect!!.isChecked) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
             FryingUtil.showToast(mContext, showMsg)
-            btnCollect!!.toggle()
-            if (btnCollect!!.isChecked) {
-                btnCollect!!.setText(R.string.collect_delete)
-            } else {
-                btnCollect!!.setText(R.string.collect_add)
-            }
+            onCheckDearPair(isDearPair)
         }
     }
 

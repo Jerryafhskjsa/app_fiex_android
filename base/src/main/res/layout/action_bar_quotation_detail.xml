@@ -62,19 +62,14 @@
                 android:paddingRight="@dimen/default_padding"
                 android:textSize="0sp" />
 
-            <CheckedTextView
+            <ImageView
                 android:id="@+id/btn_collect"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right|center_vertical"
-                android:background="@null"
-                android:button="@null"
-                android:drawableLeft="@drawable/btn_collect"
-                android:gravity="center"
-                android:padding="@dimen/default_padding"
-                android:paddingLeft="@dimen/default_padding"
-                android:paddingRight="@dimen/default_padding"
-                android:textSize="0sp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_collect"
+                android:scaleType="centerInside"
+                android:padding="10dp"
+                />
 
             <ImageButton
                 android:id="@+id/full_screen"
