@@ -235,7 +235,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
                 return
             }
         }*/
-        UserApiServiceHelper.bindEmail(mContext, null, userName, mailCode, null, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindEmail(mContext,  userName, mailCode,  object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))

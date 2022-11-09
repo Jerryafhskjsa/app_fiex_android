@@ -9,6 +9,7 @@ import android.webkit.WebView
 import androidx.multidex.MultiDex
 import com.black.base.model.FryingExchangeRates
 import com.black.base.model.FryingLanguage
+import com.black.base.model.FryingStyleChange
 import com.black.base.model.filter.*
 import com.black.base.model.wallet.WalletBillType
 import java.util.*
@@ -19,6 +20,7 @@ open class BaseApplication : Application() {
             private set
         private var languages: ArrayList<FryingLanguage?>? = null
         private var exchangeRates: ArrayList<FryingExchangeRates?>? = null
+        private var styleChanges: ArrayList<FryingStyleChange?>? = null
         var checkTokenError = true
         var isXGRegister = false
         var hasInitJGPush = false
@@ -71,6 +73,11 @@ open class BaseApplication : Application() {
         exchangeRates!!.add(FryingExchangeRates(3, context.getString(R.string.exchange_rates_krw)))
         exchangeRates!!.add(FryingExchangeRates(4, context.getString(R.string.exchange_rates_vnd)))
     }
+    fun initStyleItems(context: Context){
+        styleChanges = ArrayList()
+        styleChanges!!.add(FryingStyleChange(0, context.getString(R.string.red_down)))
+        styleChanges!!.add(FryingStyleChange(1, context.getString(R.string.red_up)))
+    }
 
     open fun getLanguage(type:Int): FryingLanguage? {
         if (languages == null || languages!!.isEmpty()) {
@@ -84,6 +91,13 @@ open class BaseApplication : Application() {
             initExchangeItems(this)
         }
         return exchangeRates?.get(type)
+    }
+
+    open fun getStyleChange(type:Int): FryingStyleChange? {
+        if (styleChanges == null || styleChanges!!.isEmpty()) {
+            initStyleItems(this)
+        }
+        return styleChanges?.get(type)
     }
 
     fun initFilters() {

@@ -66,7 +66,7 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                 val userIdHeader = IMHelper.getUserIdHeader(mContext)
                 IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
                     override fun callback(returnData: Boolean?) {
-                        if (returnData != null && returnData) {
+                        if (returnData != null) {
                             UserApiServiceHelper.modifyUserInfo(mContext, null, nickName, object : NormalCallback<HttpRequestResultString?>() {
                                 override fun callback(modifyResult: HttpRequestResultString?) {
                                     if (modifyResult != null && modifyResult.code == HttpRequestResult.SUCCESS) {
@@ -90,7 +90,8 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                                     FryingUtil.showToast(mContext, "昵称同步成功")
                                 }
                             })
-                        } else {
+
+                        } else{
                             FryingUtil.showToast(mContext, "初始化失败，稍后重试！")
                         }
                     }

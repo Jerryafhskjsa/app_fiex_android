@@ -75,14 +75,14 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
             val userIdHeader = IMHelper.getUserIdHeader(mContext)
             IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
                 override fun callback(returnData: Boolean?) {
-                    if (returnData != null && returnData) {
+                    if (returnData != null) {
                         imageSelectorHelper!!.showSelectPhoto(mContext as Activity, mContext as PermissionHelper, Size(480, 480))
                     } else {
                         FryingUtil.showToast(mContext, "初始化失败，稍后重试！")
                     }
                 }
 
-                override fun error(type: Int, error: Any) {}
+                override fun error(type: Int, error: Any) { FryingUtil.showToast(mContext, "头像同步失败")}
             })
         } else if (i == R.id.nick_name_layout) {
             BlackRouter.getInstance().build(RouterConstData.NICK_NAME_CHANGE).go(mContext)

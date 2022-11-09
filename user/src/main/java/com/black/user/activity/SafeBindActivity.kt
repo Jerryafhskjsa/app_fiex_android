@@ -28,13 +28,15 @@ import com.black.util.CommonUtil
 
 
 
-@Route(value = [RouterConstData.SAFE_BIND], beforePath = RouterConstData.LOGIN)
+@Route(value = [RouterConstData.SAFE_BIND])
 class SafeBindActivity: BaseActivity(), View.OnClickListener{
 
-    private var userInfo: UserInfo? = null
     private var code1 = ArrayList<EditText>()
     private var type = ConstData.AUTHENTICATE_TYPE_PHONE
+    private var account:String? = null
     private var binding: ActivitySafeBindBinding? = null
+    private var phoneAccount: String? = null
+    private var mailAccount: String? =null
     private lateinit var editFirst:EditText
     private lateinit var editSecond:EditText
     private lateinit var editThird:EditText
@@ -92,11 +94,8 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userInfo = CookieUtil.getUserInfo(mContext)
-        if (userInfo == null) {
-            finish()
-            return
-        }
+        type = intent.getIntExtra(ConstData.TYPE, ConstData.AUTHENTICATE_TYPE_NONE)
+        account = intent.getStringExtra(ConstData.ACCOUNT)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_safe_bind)
         editFirst = findViewById(R.id.edit_first)
         code1.add(editFirst)
@@ -124,35 +123,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
         binding?.editFourth?.addTextChangedListener(watcher)
         binding?.editFiveth?.addTextChangedListener(watcher)
         binding?.editSixth?.addTextChangedListener(watcher)
-      if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
-            binding?.googleCode?.visibility = View.VISIBLE
-        } else {
-            binding?.googleCode?.visibility = View.GONE
-        }
-        if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
-            binding?.phoneCode?.visibility = View.VISIBLE
-            if (TextUtils.equals("0", userInfo!!.googleSecurityStatus)){
-                binding?.phoneBarB?.visibility = View.VISIBLE
-                binding?.view1?.visibility = View.GONE
-                binding?.sent?.visibility = View.VISIBLE
-                binding?.code?.visibility = View.GONE
-            }
-        } else {
-            binding?.phoneCode?.visibility = View.GONE
-
-        }
-        if (TextUtils.equals("1", userInfo!!.emailSecurityStatus)) {
-            binding?.mailCode?.visibility = View.VISIBLE
-            if (TextUtils.equals("0", userInfo!!.googleSecurityStatus) && TextUtils.equals("0", userInfo!!.phoneSecurityStatus)){
-                binding?.mailBarB?.visibility = View.VISIBLE
-                binding?.view2?.visibility = View.GONE
-                binding?.sent?.visibility = View.VISIBLE
-                binding?.code?.visibility = View.GONE
-            }
-        } else {
-            binding?.mailCode?.visibility = View.GONE
-
-        }
+        change()
 
     }
     override fun isStatusBarDark(): Boolean {
@@ -162,20 +133,44 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
     override fun getTitleText(): String {
         return getString(R.string.safe_bind_check)
     }
+    private fun change() {
+        if (account != null) {
+            when (type) {
+                ConstData.AUTHENTICATE_TYPE_PHONE -> {
+                    binding?.mailBarB?.visibility = View.GONE
+                    binding?.phoneBarB?.visibility = View.GONE
+                    binding?.googleBarB?.visibility = View.VISIBLE
+                    binding?.mailCode?.visibility = View.GONE
+                    binding?.phoneCode?.visibility = View.VISIBLE
+                    binding?.googleCode?.visibility = View.VISIBLE
+                    binding?.sent?.visibility = View.GONE
+                    binding?.code?.visibility = View.VISIBLE
+                }
+                ConstData.AUTHENTICATE_TYPE_MAIL -> {
+                    binding?.mailBarB?.visibility = View.GONE
+                    binding?.phoneBarB?.visibility = View.GONE
+                    binding?.googleBarB?.visibility = View.VISIBLE
+                    binding?.view2?.visibility = View.GONE
+                    binding?.mailCode?.visibility = View.VISIBLE
+                    binding?.phoneCode?.visibility = View.GONE
+                    binding?.googleCode?.visibility = View.VISIBLE
+                    binding?.sent?.visibility = View.GONE
+                    binding?.code?.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id){
                 R.id.google_code -> {
-                    type = ConstData.AUTHENTICATE_TYPE_GOOGLE
                     changeLoinType(type)
                 }
                 R.id.mail_code -> {
-                    type = ConstData.AUTHENTICATE_TYPE_MAIL
                     changeLoinType(type)
                 }
                 R.id.phone_code ->{
-                    type = ConstData.AUTHENTICATE_TYPE_PHONE
                     changeLoinType(type)
                 }
                 R.id.safe_unused -> {
@@ -226,14 +221,20 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
                 binding?.googleBarB?.visibility = View.GONE
                 binding?.sent?.visibility = View.VISIBLE
                 binding?.code?.visibility = View.GONE
-
+              phoneAccount = account
+              mailAccount = null
             }
             ConstData.AUTHENTICATE_TYPE_MAIL ->{
+                binding?.mailCode?.visibility = View.VISIBLE
+                binding?.phoneCode?.visibility = View.GONE
+                binding?.googleCode?.visibility = View.VISIBLE
                 binding?.mailBarB?.visibility = View.VISIBLE
                 binding?.phoneBarB?.visibility = View.GONE
                 binding?.googleBarB?.visibility = View.GONE
                 binding?.sent?.visibility = View.VISIBLE
                 binding?.code?.visibility = View.GONE
+                phoneAccount = null
+                mailAccount = account
 
             }
         }
@@ -287,7 +288,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
     }
     private val phoneVerifyCode: Unit
         get() {
-            UserApiServiceHelper.getVerifyCode(this, null, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, phoneAccount, null, object : NormalCallback<HttpRequestResultString?>() {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -306,7 +307,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
 
     private val mailVerifyCode: Unit
         get(){
-            UserApiServiceHelper.getVerifyCode(this, null, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, mailAccount, null, object : NormalCallback<HttpRequestResultString?>() {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -346,11 +347,16 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
              mailCode = null
              googleCode = editFirst + editSecond + editThird + editFourth + editFiveth + editSixth
         }
-        UserApiServiceHelper.bindSafe(mContext, null, phoneCode, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindSafe(mContext,phoneAccount, phoneCode,mailAccount, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.bind_success))
-                    onBindSuccess()
+                    BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext) { routeResult, _ ->
+                        if (routeResult) {
+                            finish()
+                        }
+                    }
+
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -358,20 +364,5 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
         })
     }
 
-    private fun onBindSuccess() {
-        getUserInfo(object : Callback<UserInfo?>() {
-            override fun callback(result: UserInfo?) {
-                if (result != null) {
-                    FryingUtil.showToast(mContext, getString(R.string.change_password_success))
-                    val intent = Intent(this@SafeBindActivity, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }
 
-            override fun error(type: Int, error: Any) {
-                FryingUtil.showToast(mContext, error.toString())
-            }
-        }, true)
-    }
 }

@@ -389,11 +389,11 @@ object UserApiServiceHelper {
         enableSecurity(context, telCountryCode, phone, phoneCode, newPhone, newPhoneCode, email, emailCode, googleCode,null,"0", callback)
     }
 
-    fun bindEmail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode,null, null, email, emailCode, googleCode, null, "4", callback)
+    fun bindEmail(context: Context?,  email: String?, emailCode: String? , callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null,  null,null, null, email, emailCode, null, null, "4", callback)
     }
-    fun bindSafe(context: Context?, telCountryCode: String? , phoneCode: String? , emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode,null, null, null, emailCode, googleCode, null, "1", callback)
+    fun bindSafe(context: Context?, phone: String? , phoneCode: String? , email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, phone, phoneCode,null, null, email, emailCode, googleCode, null, "1", callback)
     }
 
 
@@ -469,7 +469,7 @@ object UserApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(UserApiService::class.java)
-                ?.postUserInfoModify(avatarUrl, nickName)
+                ?.modifyUserInfo(avatarUrl, nickName)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

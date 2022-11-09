@@ -360,7 +360,6 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         UserApiServiceHelper.bindPhone(mContext, telCountryCode, userInfo!!.username , phoneCode , newPhone , newPhoneCode, userInfo!!.email, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))
                     onBindSuccess()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -373,9 +372,10 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
-                    BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        .go(mContext)
+                    FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))
+                    val intent = Intent(this@PhoneBindActivity, SafeCenterActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 

@@ -28,11 +28,11 @@ class FryingExchangeRates(rateCode: Int, rateText: String) {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || rateCode == null || !isValid) {
+        if (other == null || !isValid) {
             return false
         }
         if (other is FryingExchangeRates) {
-            return if (other.rateCode == null || !other.isValid) {
+            return if (!other.isValid) {
                 false
             } else rateCode == other.rateCode && rateText == other.rateText
         }
