@@ -82,7 +82,7 @@ object DearPairService {
             return Observable.just(result)
         }
         //登录情况同步接口
-        return ApiManager.build(context!!).getService(PairApiService::class.java)
+        return ApiManager.build(context!!,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollect(pair)
                 ?.flatMap { result: HttpRequestResultString? ->
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {
@@ -154,7 +154,7 @@ object DearPairService {
             return Observable.just(result)
         }
         //已登录同步接口
-        return ApiManager.build(context!!).getService(PairApiService::class.java)
+        return ApiManager.build(context!!,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollectCancel(pair)
                 ?.flatMap { result: HttpRequestResultString? ->
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {

@@ -49,8 +49,8 @@
     <string name="warm_notice">温馨提示</string>
     <string name="exit">确认退出当前账号吗？</string>
     <string name="number_default">－</string>
-    <string name="high">高</string>
-    <string name="low">低</string>
+    <string name="high">24h高</string>
+    <string name="low">24h低</string>
     <string name="_1_day" tools:ignore="UnusedResources">1天</string>
     <string name="pull_down_refresh">下拉刷新</string>
     <string name="loading">加载中...</string>
@@ -207,7 +207,7 @@
     <string name="alert_close_success">关闭成功</string>
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
-    <string name="volumn">量</string>
+    <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
     <string name="collect_delete">删自选</string>
     <string name="total_amount">总账户资产 (≈）</string>
@@ -721,9 +721,8 @@
     <string name="price_amplitude">最新价/24h涨跌幅</string>
     <string name="brackets">(%s)</string>
     <string name="select_order_type">请选择下单类型</string>
-    <string name="order_type_limit">LIMIT</string>
-    <string name="order_type_market">MARKET</string>
-
-
-
+    <string name="order_type_limit">限价</string>
+    <string name="order_type_market">市价</string>
+    <string name="total_entrust_amount">累计数量</string>
+    <string name="total_price">累计金额</string>
 </resources>

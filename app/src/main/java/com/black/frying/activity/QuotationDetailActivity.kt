@@ -91,8 +91,8 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         viewModel = QuotationDetailViewModel(this, intent.getStringExtra(ConstData.PAIR), this)
         deepBinding = QuotationDetailDeepViewBinding(this, binding?.quotationDetailDeepLayout!!, MAX_SHOW_COUNT)
 
-        colorT7 = SkinCompatResources.getColor(this, R.color.T7)
-        colorT5 = SkinCompatResources.getColor(this, R.color.T5)
+        colorT7 = SkinCompatResources.getColor(this, R.color.T17)
+        colorT5 = SkinCompatResources.getColor(this, R.color.T16)
         colorT3 = SkinCompatResources.getColor(this, R.color.T3)
         bgT7 = SkinCompatResources.getDrawable(this, R.drawable.bg_t7_corner3)
         bgT5 = SkinCompatResources.getDrawable(this, R.drawable.bg_t5_corner3)
@@ -467,11 +467,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun onPairStatusPrecision(precision: Int) {
         binding?.analyticChart?.setPrecision(precision)
-        deepBinding!!.setPrecision(precision);
+        deepBinding!!.setPrecision(precision)
     }
 
     override fun onPairStatusAmountPrecision(amountPrecision: Int) {
-        deepBinding!!.setAmountPrecision(amountPrecision);
+        deepBinding!!.setAmountPrecision(amountPrecision)
     }
 
     override fun onPairStatusDataChanged(pairStatus: PairStatus?) {
@@ -497,7 +497,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.low?.setText(pairStatus.minPriceFormat)
         binding?.volumeH24?.setText(pairStatus.totalAmountFromat)
         binding?.analyticChart?.setCurrentPrice(pairStatus.currentPrice)
-        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
+//        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
     }
 
     override fun onTradeOrder(currentPrice: Double, bidOrderList: ArrayList<TradeOrder?>, askOrderList: ArrayList<TradeOrder?>) {
@@ -615,7 +615,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             val userIdHeader = IMHelper.getUserIdHeader(mContext)
             val userId = userInfo.id
             val groupId = chatRoomId
-            val groupName = "FBSexer"
+            val groupName = "Fiexer"
             val bundle = Bundle()
             bundle.putString(ConstData.IM_GROUP_ID, groupId)
             bundle.putString(ConstData.IM_GROUP_NAME, groupName)

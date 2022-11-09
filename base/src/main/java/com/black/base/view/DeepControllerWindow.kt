@@ -131,7 +131,14 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
                 } else {
                     textView?.setTextColor(COLOR_DEFAULT)
                 }
-                text = item.toString()
+                text = if(item == "LIMIT"){
+                    context.getString(R.string.order_type_limit)
+                }else if(item == "MARKET"){
+                    context.getString(R.string.order_type_market)
+                }else{
+                    item.toString()
+                }
+
             }
             if(item is Deep){
                 if (item == selectObject) {

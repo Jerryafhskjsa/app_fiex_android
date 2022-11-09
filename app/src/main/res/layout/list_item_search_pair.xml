@@ -16,8 +16,8 @@
 
     <ImageView
         android:id="@+id/btn_collect"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_gravity="right|center_vertical"
         android:src="@drawable/btn_collect"
         android:gravity="center"

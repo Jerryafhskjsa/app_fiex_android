@@ -182,7 +182,7 @@
                         android:layout_height="18dp"
                         android:layout_marginRight="15dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_collected" />
+                        android:src="@drawable/btn_collect_default" />
                     <ImageView
                         android:id="@+id/head_charts"
                         android:layout_width="18dp"

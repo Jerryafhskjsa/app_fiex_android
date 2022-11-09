@@ -3,6 +3,7 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.airbnb.lottie.model.layer.NullLayer
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.clutter.Kline
@@ -535,15 +536,31 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         object : TypeToken<Kline?>() {}.type
                     )
                     var klineItem = KLineItem()
-                    klineItem.a = kline?.a?.toDouble()!!
-                    klineItem.c = kline?.c?.toDouble()!!
-                    klineItem.h = kline?.h?.toDouble()!!
-                    klineItem.l = kline?.l?.toDouble()!!
-                    klineItem.o = kline?.o?.toDouble()!!
-                    klineItem.t = kline?.t?.div(1000)
-                    klineItem.v = kline?.v?.toDouble()!!
-                    if (kline?.s.equals(currentPair)) {
-                        SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, klineItem)
+                    if(kline != null){
+                        if(kline?.a != null){
+                            klineItem.a = kline?.a?.toDouble()!!
+                        }
+                        if(kline?.c != null){
+                            klineItem.c = kline?.c?.toDouble()!!
+                        }
+                        if(kline?.h != null){
+                            klineItem.h = kline?.h?.toDouble()!!
+                        }
+                        if(kline?.l != null){
+                            klineItem.l = kline?.l?.toDouble()!!
+                        }
+                        if(kline?.o != null){
+                            klineItem.o = kline?.o?.toDouble()!!
+                        }
+                        if(kline?.t != null){
+                            klineItem.t = kline?.t?.div(1000)
+                        }
+                        if(kline?.v != null){
+                            klineItem.v = kline?.v?.toDouble()!!
+                        }
+                        if (kline?.s.equals(currentPair)) {
+                            SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, klineItem)
+                        }
                     }
                 }
             }
@@ -583,32 +600,36 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 jsonObject.toString(),
                                 object : TypeToken<TradeOrderDepth?>() {}.type
                             )
-                            SocketDataContainer.updateQuotationOrderNewDataFiex(
-                                mCcontext,
-                                mHandler,
-                                currentPair,
-                                allDepth,
-                                true
-                            )
+                            if(allDepth != null){
+                                SocketDataContainer.updateQuotationOrderNewDataFiex(
+                                    mCcontext,
+                                    mHandler,
+                                    currentPair,
+                                    allDepth,
+                                    true
+                                )
+                            }
                         }
                         "qDepth" -> {
                             val oneDepth: TradeOrderOneDepth? = gson.fromJson<TradeOrderOneDepth?>(
                                 jsonObject.toString(),
                                 object : TypeToken<TradeOrderOneDepth??>() {}.type
                             )
-                            var allDepthData = TradeOrderDepth()
-                            var direction = oneDepth?.m
-                            var desArray = arrayOf(oneDepth?.p?.toDouble(), oneDepth?.q?.toDouble())
-                            if (direction.equals("1")) {//BID
-                                var bidArray = arrayOf(desArray)
-                                allDepthData?.b = bidArray
-                            }
-                            if (direction.equals("2")) {//ASK
-                                var askArray = arrayOf(desArray)
-                                allDepthData?.a = askArray
-                            }
-                            allDepthData.s = oneDepth?.s
+                            if(oneDepth != null){
+                                var allDepthData = TradeOrderDepth()
+                                var direction = oneDepth?.m
+                                var desArray = arrayOf(oneDepth?.p?.toDouble(), oneDepth?.q?.toDouble())
+                                if (direction.equals("1")) {//BID
+                                    var bidArray = arrayOf(desArray)
+                                    allDepthData?.b = bidArray
+                                }
+                                if (direction.equals("2")) {//ASK
+                                    var askArray = arrayOf(desArray)
+                                    allDepthData?.a = askArray
+                                }
+                                allDepthData.s = oneDepth?.s
 //                            SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepthData,false)
+                            }
                         }
                         //当前交易对成交数据
                         "qDeal" -> {

@@ -62,14 +62,15 @@
                 android:paddingRight="@dimen/default_padding"
                 android:textSize="0sp" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/btn_collect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/btn_collect"
+                android:layout_height="22dp"
+                android:layout_width="22dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
                 android:scaleType="centerInside"
-                android:padding="10dp"
-                />
+                android:src="@drawable/btn_collect_default" />
 
             <ImageButton
                 android:id="@+id/full_screen"

@@ -94,6 +94,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private var countProgressSale: Drawable? = null
     private var currentOrderType:String? = "LIMIT"
     private var inputNumber:Boolean? = false//是否手动输入数量
+    private var isDear:Boolean? = null
 
     private var adapter: EntrustCurrentHomeAdapter? = null
 
@@ -153,7 +154,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
         binding?.actionBarLayout?.leverLayout?.visibility = if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
-
+        binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
         initHeader1()
         initHeader2()
         val layoutManager = LinearLayoutManager(mContext)
@@ -189,6 +190,31 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.getCurrentPairDeal(50)
         viewModel?.onResume()
         getTradeOrderCurrent()
+        updateDear(isDear)
+    }
+
+    private fun updateDear(dear:Boolean?){
+        if(dear == null){
+            viewModel!!.checkDearPair()
+                ?.subscribe(HttpCallbackSimple(mContext, false, object : Callback<Boolean>() {
+                    override fun error(type: Int, error: Any) {}
+                    override fun callback(dearResult: Boolean) {
+                        isDear = dearResult
+                        if(isDear!!){
+                            binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_dis))
+                        }else{
+                            binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_default))
+                        }
+                    }
+                }))
+        }else{
+            isDear = dear
+            if(isDear!!){
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_dis))
+            }else{
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_default))
+            }
+        }
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -281,6 +307,21 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                                 .show()
                     }
                 }
+            }
+            R.id.img_collect ->{
+                viewModel!!.toggleDearPair(isDear!!)
+                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                        override fun callback(result: HttpRequestResultString?) {
+                            if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                                isDear = !isDear!!
+                                updateDear(isDear)
+                                val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                                FryingUtil.showToast(mContext, showMsg)
+                            } else {
+                                FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
+                            }
+                        }
+                    }))
             }
             R.id.lever_handle -> {
                 if (tabType == ConstData.TAB_LEVER) {
@@ -1153,9 +1194,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            val showMsg = if (btnCollect.isChecked) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                            isDear = !isDear!!
+                            updateDear(isDear)
+                            val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
                             FryingUtil.showToast(mContext, showMsg)
-                            btnCollect.toggle()
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
                         }
