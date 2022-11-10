@@ -3,16 +3,12 @@
     <item android:id="@android:id/background">
         <shape>
             <solid android:color="@color/L1" />
+            <corners android:radius="3dp"/>
         </shape>
     </item>
     <item android:id="@android:id/progress">
-        <scale android:scaleWidth="100%">
-            <selector>
-                <item android:state_enabled="false">
-                    <color android:color="@android:color/transparent" />
-                </item>
-                <item android:drawable="@color/T13" />
-            </selector>
+        <scale android:scaleWidth="100%"
+            android:drawable="@drawable/bg_transaction_progress_corner">
         </scale>
     </item>
 </layer-list>

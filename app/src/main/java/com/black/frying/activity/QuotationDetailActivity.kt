@@ -406,8 +406,8 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                 1000*100
             ) ?: 0) * kLinePage
             var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
-            startTime = Math.max(startTime, 1567296000)
-            endTime = Math.max(endTime, 1567296000)
+            startTime = startTime.coerceAtLeast(1567296000)
+            endTime = endTime.coerceAtLeast(1567296000)
             viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
         }
     }

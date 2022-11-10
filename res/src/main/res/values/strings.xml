@@ -260,7 +260,7 @@
     <string name="entrust_type_buy">买入</string>
     <string name="entrust_type_sale">卖出</string>
     <string name="trade_value">交易额</string>
-    <string name="point_count">深度 %1$s</string>
+    <string name="point_count">%1$s</string>
     <string name="trade_sale_over_price">卖单价格低于当前成交价20%</string>
     <string name="trade_buy_over_price">买单价格高于当前成交价20%</string>
     <string name="trade_success">创建委托成功！</string>

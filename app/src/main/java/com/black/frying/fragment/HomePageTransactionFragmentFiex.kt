@@ -237,7 +237,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 refreshSubmitButton()
             }
 
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                binding!!.fragmentHomePageTransactionHeader1.price.setSelection(s.toString().length)
+            }
         })
         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.filters = arrayOf(NumberFilter(), PointLengthFilter(4))
         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.addTextChangedListener(object : TextWatcher {
@@ -258,12 +260,15 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             }
             override fun afterTextChanged(s: Editable) {
                 inputNumber = false
+                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setSelection(s.toString().length)
             }
         })
         countProgressBuy = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
         countProgressSale = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
         binding!!.fragmentHomePageTransactionHeader1.priceSub.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader1.priceAdd.setOnClickListener(this)
+        binding!!.fragmentHomePageTransactionHeader1.amountAdd.setOnClickListener(this)
+        binding!!.fragmentHomePageTransactionHeader1.amountSub.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader1.useable.setText(getString(R.string.number_default))
         binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(getString(R.string.number_default))
         binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(getString(R.string.number_default))
@@ -428,6 +433,23 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 val onUnitPrice: Double = getOnUnitPrice()
                 currentInputPrice += onUnitPrice
                 binding!!.fragmentHomePageTransactionHeader1.price.setText(String.format("%." + viewModel!!.getPrecision() + "f", currentInputPrice))
+            }
+            R.id.amount_add ->{
+                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+                currentInputAmount = currentInputAmount ?: 0.toDouble()
+                val onUnitAmount: Double = getOnUnitAmount()
+                currentInputAmount += onUnitAmount
+                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
+            }
+            R.id.amount_sub ->{
+                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+                currentInputAmount = currentInputAmount ?: 0.toDouble()
+                val onUnitAmount: Double = getOnUnitAmount()
+                if (currentInputAmount > 0) {
+                    currentInputAmount -= onUnitAmount
+                    currentInputAmount = max(currentInputAmount, 0.0)
+                    binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
+                }
             }
             R.id.btn_buy -> context?.let {
                 if (CookieUtil.getUserInfo(it) == null) {
@@ -648,6 +670,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     //获取一个单位的价格，根据深度计算
     private fun getOnUnitPrice(): Double {
         return 10.0.pow(-(viewModel?.getPrecision() ?: 6).toDouble())
+    }
+
+    //获取一个单位的数量
+    private fun getOnUnitAmount(): Double {
+        return 10.0.pow(-(viewModel?.getAmountLength() ?: 6).toDouble())
     }
 
     //计算总额
