@@ -582,6 +582,7 @@ object SocketDataContainer {
                         }
                         val newPairCompareKey = pairStatus.compareString
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
+                            Log.d(TAG,"updatePairStatusData1,addChange")
                             result.add(pairStatus)
                         }
                     }

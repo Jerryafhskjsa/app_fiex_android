@@ -7,6 +7,7 @@ import com.black.util.CommonUtil
 class UserInfo : BaseAdapterItem() {
     var id: String? = null
     var tel: String? = null
+    var google: String? = null
     var telCountryCode: String? = null
     var countryZh: String? = null
     var countryEn: String? = null

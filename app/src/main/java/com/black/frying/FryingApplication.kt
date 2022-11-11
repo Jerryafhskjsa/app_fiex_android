@@ -188,6 +188,7 @@ class FryingApplication : BaseApplication() {
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_QUOTA_CLOSE);
 //                    SocketUtil.sendSocketCommandBroadcast(activity, SocketUtil.COMMAND_ORDER_CLOSE);
 //                }
+                Log.d(tag, "onActivityStopped->isAppOnForeground = $isAppOnForeground")
                 if (!isAppOnForeground && FryingUtil.needShowProtectActivity(activity)) { //记录当前退回后台时间
                     goBackTime = System.currentTimeMillis()
                 }

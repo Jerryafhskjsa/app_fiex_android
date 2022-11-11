@@ -31,9 +31,13 @@
     <string name="google_code_input_hint">请输入谷歌Code码</string>
     <string name="submit">提交</string>
     <string name="mail_code">邮箱验证码</string>
+    <string name="mail_code1">邮箱验证</string>
+    <string name="phone_code1">手机验证</string>
+    <string name="google_code1">谷歌验证</string>
     <string name="safe_verify">安全认证</string>
     <string name="alert_input_sms_code">请填写短信验证码！</string>
     <string name="alert_input_mail_code">请填写邮箱验证码！</string>
+    <string name="input_phone_code_veifily">请新手机短信验证码！</string>
     <string name="deep">深度</string>
     <string name="direction">方向</string>
     <string name="cny_maybe">≈</string>
@@ -45,6 +49,7 @@
     <string name="list_view_empty_default">暂无记录</string>
     <string name="invite_code_hint">邀请码（选填）</string>
     <string name="safe_mail_check">开启邮箱认证</string>
+    <string name="safe_bind_check">开启安全认证</string>
     <string name="jump">跳过</string>
     <string name="warm_notice">温馨提示</string>
     <string name="exit">确认退出当前账号吗？</string>
@@ -70,6 +75,7 @@
     <string name="alert_password_too_short">密码不能低于8位！</string>
     <string name="aler_get_code_locked">%1$ss</string>
     <string name="alert_bind_success">绑定成功</string>
+    <string name="bind_success">认证成功</string>
     <string name="financial_deal">已完成</string>
     <string name="financial_wait_check">待审核</string>
     <string name="financial_checked">审核通过</string>
@@ -367,6 +373,7 @@
     <string name="please_choose_country">请选择</string>
     <string name="please_upload_pic">请上传照片</string>
     <string name="alert_input_login_password">请填写当前登录密码</string>
+    <string name="password_error">旧密码错误</string>
     <string name="password_not_same">两次密码不一致！</string>
     <string name="change_password_success_02">密码修改成功！</string>
     <string name="personal_center">个人中心</string>
@@ -414,6 +421,11 @@
     <string name="recommended_share_text">“Fiex”全球领先的区块链金融衍生品服务平台</string>
     <string name="recharge_amount">充币数量</string>
     <string name="recharge_confirm">确认数</string>
+    <string name="safe_bind">安全认证</string>
+    <string name="unsafe_bind">未认证</string>
+    <string name="safe_unused">安全不可用</string>
+    <string name="code">粘贴</string>
+    <string name="sent">获取验证码</string>
     <string name="recharge_status">充币状态</string>
     <string name="recharge_time">充币时间</string>
     <string name="wallet_total_usdt">总资产(USDT)</string>
@@ -655,8 +667,13 @@
     <string name="old_psw">旧密码</string>
     <string name="new_psw">新密码</string>
     <string name="input_new_phone_number">输入新手机号</string>
-    <string name="input_new_phone_code">请输入新手机验证码</string>
-    <string name="input_new_phone_code_verify">请输入手机15******251的验证码</string>
+    <string name="input_mail_number">输入电子邮箱号</string>
+    <string name="input_mail_code">请输入邮箱验证码</string>
+    <string name="input_google_code">请输入谷歌验证码</string>
+    <string name="input_phone_code">请输入手机验证码</string>
+    <string name="input_phone_now_code">请输入当前手机验证码</string>
+    <string name="input_code">请输入验证码</string>
+    <string name="input_new_phone_code_verify">请输入新手机的验证码</string>
     <string name="google_code_1">谷歌Code码</string>
     <string name="google_key">谷歌密钥:</string>
     <string name="style_setting">风格设置</string>

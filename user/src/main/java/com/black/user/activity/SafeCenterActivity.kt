@@ -106,7 +106,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
 //            } else {
 ////                BlackRouter.getInstance().build(RouterConstData.GOOGLE_SECURITY_STATUS).go(mContext);
 //            }
-        } else if (i == R.id.change_password) {
+        }   else if (i == R.id.change_password) {
             BlackRouter.getInstance().build(RouterConstData.CHANGE_PASSWORD).go(this)
         } else if (i == R.id.payment_method_layout) {
             BlackRouter.getInstance().build(RouterConstData.PAYMENT_METHOD_MANAGER).go(this)
@@ -290,7 +290,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
     private fun changeSecurityStatus(action: String, target: Target) {
         var password = target.password
         password = RSAUtil.encryptDataByPublicKey(password)
-        UserApiServiceHelper.enableSecurity(mContext, target.poneCountyCode, target.phone, target.phoneCode, target.mail, target.mailCode, target.googleCode, password, action, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.enableSecurity(mContext, target.poneCountyCode, target.phone, target.phoneCode,null,null, target.mail, target.mailCode, target.googleCode, password, action, object : NormalCallback<HttpRequestResultString?>() {
             override fun error(type: Int, error: Any?) {
                 FryingUtil.showToast(mContext, error.toString())
                 binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")

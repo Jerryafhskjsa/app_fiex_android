@@ -371,27 +371,32 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun enableSecurity(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, password: String?, action: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun enableSecurity(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, newPhone: String?, newPhoneCode: String?, email: String?, emailCode: String?, googleCode: String?, password: String?, action: String?, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(UserApiService::class.java)
-                ?.enableSecurity(telCountryCode, phone, phoneCode, email, emailCode, googleCode, password, action)
+                ?.enableSecurity(telCountryCode, phone, phoneCode,newPhone,newPhoneCode, email, emailCode, googleCode, password, action)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     fun bindGoogle(context: Context?, phoneCode: String?, emailCode: String?, googleCode: String?, password: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode, null, emailCode, googleCode, password, "2", callback)
+        enableSecurity(context, null, null, phoneCode, null, null, null, emailCode, googleCode, password, "2", callback)
     }
 
-    fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, telCountryCode, phone, phoneCode, email, emailCode, googleCode, null, "0", callback)
+    fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?,newPhone: String?, newPhoneCode: String?,email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, telCountryCode, phone, phoneCode, newPhone, newPhoneCode, email, emailCode, googleCode,null,"0", callback)
     }
 
-    fun bindEMail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode, email, emailCode, googleCode, null, "4", callback)
+    fun bindEmail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null, phoneCode,null, null, email, emailCode, googleCode, null, "4", callback)
     }
+    fun bindSafe(context: Context?, telCountryCode: String? , phoneCode: String? , emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null, phoneCode,null, null, null, emailCode, googleCode, null, "1", callback)
+    }
+
+
 
     /**
      * 查询用户邀请的人数量

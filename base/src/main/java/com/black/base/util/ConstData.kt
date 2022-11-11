@@ -68,6 +68,12 @@ object ConstData {
     const val AUTHENTICATE_CODE_GOOGLE = -10023
     const val AUTHENTICATE_CODE_GOOGLE_OR_PHONE = -10024
 
+    //认证类型code
+    const val AUTHENTICATE_CODE_MAIL = -10021
+    const val AUTHENTICATE_CODE_PHONE = -10022
+    const val AUTHENTICATE_CODE_GOOGLE = -10023
+    const val AUTHENTICATE_CODE_GOOGLE_OR_PHONE = -10024
+
     //认证类型
     const val AUTHENTICATE_TYPE_NONE = 0
     const val AUTHENTICATE_TYPE_PHONE = 1

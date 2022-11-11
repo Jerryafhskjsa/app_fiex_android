@@ -129,6 +129,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
 
     override fun onResume() {
         super.onResume()
+        Log.d("iiiiii", "onResume  userVisibleHint=$userVisibleHint")
+        Log.d("iiiiii", "onResume ,set =$set")
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
@@ -172,6 +174,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         if (handlerThread != null) {
             handlerThread?.quit()
         }
+        dataInitFinish = false
     }
 
     override fun doResetSkinResources() {
@@ -290,6 +293,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                             }
                         }
                     }
+                    Log.d("iiiiii", "update userVisibleHint = $userVisibleHint")
+                    Log.d("iiiiii", "update set = $set")
                     mContext?.runOnUiThread {
                         if (hasPairListChanged) {
                             var result = ArrayList<PairStatus?>()
@@ -341,6 +346,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         gettingPairsData = false
                                     }
                                 }
+                                dataInitFinish = true
                             }
                             gettingPairsData = false
                         }

@@ -33,7 +33,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
 
     private val mHandler = Handler()
 
-    private var getPhoneCodeLocked = false
+ /*   private var getPhoneCodeLocked = false
     private var getPhoneCodeLockedTime = 0
     private val getPhoneCodeLockTimer = object : Runnable {
         override fun run() {
@@ -48,7 +48,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
         }
 
     }
-
+*/
     private var getMailCodeLocked = false
     private var getMailCodeLockedTime = 0
     private val getMailCodeLockTimer = object : Runnable {
@@ -82,17 +82,34 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
             return
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mail_bind)
-        binding?.phoneCode?.addTextChangedListener(watcher)
-        binding?.getPhoneCode?.setOnClickListener(this)
+//        binding?.phoneCode?.addTextChangedListener(watcher)
+//        binding?.getPhoneCode?.setOnClickListener(this)
         binding?.mailAccount?.addTextChangedListener(watcher)
         binding?.mailCode?.addTextChangedListener(watcher)
         binding?.getMailCode?.setOnClickListener(this)
-        binding?.googleCode?.addTextChangedListener(watcher)
-        if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
+//        binding?.googleCode?.addTextChangedListener(watcher)
+ /*       if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
             binding?.googleCode?.visibility = View.VISIBLE
+            binding?.googleCodeLayout?.visibility = View.VISIBLE
+            binding?.googleCodeCopy?.visibility = View.VISIBLE
+            binding?.googleWindow?.visibility =View.VISIBLE
         } else {
             binding?.googleCode?.visibility = View.GONE
+            binding?.googleCodeLayout?.visibility = View.GONE
+            binding?.googleCodeCopy?.visibility = View.GONE
+            binding?.googleWindow?.visibility =View.GONE
         }
+        if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
+            binding?.phoneCode?.visibility = View.VISIBLE
+            binding?.phoneLayout?.visibility = View.VISIBLE
+            binding?.getPhoneCode?.visibility = View.VISIBLE
+            binding?.phoneAccount?.visibility =View.VISIBLE
+        } else {
+            binding?.phoneCode?.visibility = View.GONE
+            binding?.phoneLayout?.visibility = View.GONE
+            binding?.getPhoneCode?.visibility = View.GONE
+            binding?.phoneAccount?.visibility =View.GONE
+        }*/
         binding?.btnSubmit?.setOnClickListener(this)
         checkClickable()
     }
@@ -107,39 +124,40 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.get_phone_code -> {
+           /* R.id.get_phone_code -> {
                 phoneVerifyCode
-            }
+            }*/
             R.id.get_mail_code -> {
                 mailVerifyCode
             }
-            R.id.btn_copy_google_code -> {
+           /* R.id.btn_copy_google_code -> {
                 CommonUtil.pasteText(mContext, object : Callback<String?>() {
                     override fun error(type: Int, error: Any) {}
                     override fun callback(returnData: String?) {
                         binding?.googleCode?.setText(returnData ?: "")
                     }
                 })
-            }
+            }*/
             R.id.btn_submit -> {
                 bindMail()
+
             }
         }
     }
 
     private fun checkClickable() {
         if (TextUtils.isEmpty(binding?.mailAccount?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' })
+       //         || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' })
                 || TextUtils.isEmpty(binding?.mailCode?.text.toString().trim { it <= ' ' })) {
             binding?.btnSubmit?.isEnabled = false
         } else {
-            binding?.btnSubmit?.isEnabled = !(TextUtils.equals("1", userInfo!!.googleSecurityStatus)
-                    && TextUtils.isEmpty(binding?.googleCode?.text.toString().trim { it <= ' ' }))
+            binding?.btnSubmit?.isEnabled = !(TextUtils.equals("1", userInfo!!.googleSecurityStatus))
+                    //&& TextUtils.isEmpty(binding?.googleCode?.text.toString().trim { it <= ' ' }))
         }
     }
 
     //获取手机验证码
-    private val phoneVerifyCode: Unit
+/*    private val phoneVerifyCode: Unit
         get() {
             if (getPhoneCodeLocked) {
                 return
@@ -160,7 +178,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
                 }
             })
         }
-
+*/
     //获取邮箱验证码
     private val mailVerifyCode: Unit
         get() {
@@ -191,11 +209,14 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
 
     //绑定邮箱验证
     private fun bindMail() {
-        val phoneCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
-        if (TextUtils.isEmpty(phoneCode)) {
-            FryingUtil.showToast(mContext, getString(R.string.alert_input_phone_code))
-            return
-        }
+     /*   var phoneCode: String? = null
+        if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
+         phoneCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
+            if (TextUtils.isEmpty(phoneCode)) {
+                FryingUtil.showToast(mContext, getString(R.string.alert_input_phone_code))
+                return
+            }
+        }*/
         val userName = binding?.mailAccount?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(userName)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
@@ -206,15 +227,15 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
             return
         }
-        var googleCode: String? = null
+      /*  var googleCode: String? = null
         if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
             googleCode = binding?.googleCode?.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(googleCode)) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_input_google_code))
                 return
             }
-        }
-        UserApiServiceHelper.bindEMail(mContext, phoneCode, userName, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        }*/
+        UserApiServiceHelper.bindEmail(mContext, null, userName, mailCode, null, object : NormalCallback<HttpRequestResultString?>() {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))
@@ -230,10 +251,9 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 if (result != null) {
-                    //回到安全中心界面
                     BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .go(mContext)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .go(mContext)
                 }
             }
 

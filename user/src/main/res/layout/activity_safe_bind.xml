@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="safeBindModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/safe_bind"
+                            android:textSize="30sp"
+                            android:textColor="@color/black_real">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            >
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="4dp"
+                                android:background="@drawable/bg_login_devide_bar"
+                                android:layout_gravity="bottom"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:id="@+id/google_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/google_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/google_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    android:id="@+id/view1"
+                                    android:layout_width="20dp"
+                                    android:layout_height="wrap_content"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/phone_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/phone_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/phone_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    android:id="@+id/view2"
+                                    android:layout_width="20dp"
+                                    android:layout_height="wrap_content"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/mail_code"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textColor="@color/T14"
+                                        android:text="@string/mail_code1">
+                                    </com.black.base.widget.SpanTextView>
+                                    <View
+                                        android:id="@+id/mail_bar_b"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:visibility="gone"
+                                        android:background="@drawable/bg_login_devide_bar_title"
+                                        />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp" />
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_15"
+                            android:text="@string/input_code">
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:gravity="center">
+
+                            <EditText
+                                android:id="@+id/edit_first"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textCursorDrawable="@null"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+                            <EditText
+                                android:id="@+id/edit_second"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textCursorDrawable="@null"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/edit_third"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textCursorDrawable="@null"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+                            <EditText
+                                android:id="@+id/edit_fourth"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textCursorDrawable="@null"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+                            <EditText
+                                android:id="@+id/edit_fiveth"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textCursorDrawable="@null"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+                            <EditText
+                                android:id="@+id/edit_sixth"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:textSize="40sp"
+                                android:maxLength="1"
+                                android:textColor="@color/dialog_line_bg"
+                                android:textCursorDrawable="@null"
+                                android:textAlignment="center"
+                                android:background="@drawable/selector_code_edit"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/safe_unused"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/font_blue"
+                                android:text="@string/safe_unused"
+                                android:textSize="@dimen/text_size_16" />
+
+
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="210dp"
+                                android:text="@string/code"
+                                android:textColor="@color/font_blue"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:useDelete="true" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/sent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="180dp"
+                                android:text="@string/sent"
+                                android:textColor="@color/font_blue"
+                                android:maxLines="1"
+                                android:textSize="@dimen/text_size_16"
+                                app:useDelete="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>
