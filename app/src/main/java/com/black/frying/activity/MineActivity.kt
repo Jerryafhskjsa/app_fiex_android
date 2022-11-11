@@ -92,10 +92,17 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
         val currentLanguage = LanguageUtil.getLanguageSetting(applicationContext)
+        val exchange = ExchangeRatesUtil.getExchangeRatesSetting(applicationContext)
         if (currentLanguage == null) {
             binding?.currentLanguage?.setText(R.string.language_chinese)
         } else {
             binding?.currentLanguage?.setText(currentLanguage.languageText)
+        }
+        if (exchange == null) {
+            binding?.currentExchangeRates?.setText(" CNY ")
+        }
+        else {
+            binding?.currentExchangeRates?.setText(exchange.rateText)
         }
         if (CommonUtil.isApkInDebug(applicationContext)) {
             binding?.serverSetting?.visibility = View.VISIBLE

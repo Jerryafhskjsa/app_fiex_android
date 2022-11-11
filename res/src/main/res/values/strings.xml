@@ -718,6 +718,7 @@
     <string name="phone_number">手机号码</string>
     <string name="pls_input_phone_number">请输入手机号</string>
     <string name="email">邮箱</string>
+    <string name="change_successful">切换成功</string>
     <string name="pls_input_password">请输入密码</string>
     <string name="pls_input_new_password">请输入新密码</string>
     <string name="pls_input_email">请输入邮箱</string>

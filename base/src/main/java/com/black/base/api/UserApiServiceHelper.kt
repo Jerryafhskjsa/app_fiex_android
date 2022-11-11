@@ -469,7 +469,7 @@ object UserApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(UserApiService::class.java)
-                ?.modifyUserInfo(avatarUrl, nickName)
+                ?.postUserInfoModify(avatarUrl, nickName)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

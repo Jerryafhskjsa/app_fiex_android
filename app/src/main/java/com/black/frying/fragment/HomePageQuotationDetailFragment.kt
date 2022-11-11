@@ -257,7 +257,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                     }
                                 }
                             } else {
-                               //是新的交易对
+                                //是新的交易对
                                 if (TextUtils.equals(set, collect) && isDear) {
                                     if (pairStatus?.is_dear != null && pairStatus.is_dear) {
                                         showPair = PairStatus()
