@@ -81,13 +81,11 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        Log.d("iiiiii","HomePageQuotationFragment onResume")
         refreshSets()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("iiiiii","onStop currentTabPosition= "+binding?.setTab?.selectedTabPosition!!)
         currentTabPosition = binding?.setTab?.selectedTabPosition!!
     }
 
@@ -174,7 +172,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 }
                 override fun callback(returnData: ArrayList<QuotationSet?>?) {
                     if (returnData != null) {
-                        Log.d("iiiiii","returnDataSize = "+returnData.size)
                         var setData = ArrayList<QuotationSet?>()
                         setData.addAll(returnData)
                         var optionalSet = QuotationSet()
@@ -183,7 +180,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                         setData?.add(0,  optionalSet)
                         if (setData != null && setData?.isNotEmpty()) {
                             sets = setData
-                            Log.d("iiiiii","setsSize = "+sets?.size)
                             initQuotationGroup()
                         }
                     }
@@ -237,7 +233,6 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 }
             }
             binding?.quotationViewPager?.currentItem = currentTabPosition
-            Log.d("iiiiii", "currentTabPosition = $currentTabPosition")
             binding?.setTab?.getTabAt(currentTabPosition)?.select()//默认选中自选
             val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
             if (currentFragment != null && currentFragment.isVisible) {
@@ -247,14 +242,11 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 var textSize20 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
                 var textSize16 = resources.getDimensionPixelSize(R.dimen.text_size_16).toFloat()
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    Log.d("iiiiii","onTabSelected  "+tab.position)
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
                     textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize20)
-                    Log.d("iiiiii","onTabSelected  currentTabPosition="+tab.position)
                     binding?.quotationViewPager?.currentItem = tab.position
                     val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
-                    Log.d("iiiiii","onTabSelected  isVisible="+currentFragment.isVisible)
                     if (currentFragment != null && currentFragment.isVisible) {
 //                        currentFragment.onResume()
                     }

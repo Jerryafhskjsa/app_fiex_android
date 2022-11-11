@@ -13,6 +13,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -49,7 +50,10 @@ import com.black.util.CommonUtil
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.Request
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.File
 import java.util.*
 import kotlin.math.abs
@@ -602,15 +606,21 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
     //token过期的处理
     open fun onTokenError(error: Any?) {
         if (BaseApplication.checkTokenError) {
-            BaseApplication.checkTokenError = false
             refreshToken(error)
+            BaseApplication.checkTokenError = false
         }
     }
 
     private fun refreshToken(error: Any?){
-        if(CookieUtil.getUserInfo(mContext) != null && error is Request){
-            var urlStr = error.url().toString()
-            if(urlStr.contains("/pro/")){
+        var path:String? = null
+        if(error is Request){
+            path = error?.url()?.url()?.path
+        }
+        if(CookieUtil.getUserInfo(mContext) != null && path != null){
+            if(path.contains("/user/infos")){
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }
+            if(path.contains("/pro/")){
                 UserApiServiceHelper.getProToken(mContext!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
                     override fun error(type: Int, error: Any?) {
                         if(type == ConstData.ERROR_TOKEN_INVALID){

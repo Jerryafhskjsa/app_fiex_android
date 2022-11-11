@@ -375,7 +375,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean) {
-        Log.d("iiiiii","onWallet")
         mContext?.runOnUiThread {
             normalFragment?.run {
                 observable?.subscribe {

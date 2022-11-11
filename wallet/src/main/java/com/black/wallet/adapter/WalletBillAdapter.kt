@@ -30,7 +30,6 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-        Log.d("iiiiii","bussiness time = "+walletBill?.businessTime)
         viewHolder?.action?.setText(walletBill?.type)
         viewHolder?.date?.setText(if (walletBill?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createdTime!!))
         viewHolder?.amount?.setText(if (walletBill?.availableChange == null) nullAmount else NumberUtil.formatNumberNoGroup(walletBill.availableChange?.toDouble(), 2, 8))

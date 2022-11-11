@@ -14,6 +14,7 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.black.base.R
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultBase
 import com.black.base.model.HttpRequestResultData
@@ -31,6 +32,7 @@ import com.google.gson.Gson
 
 open class BaseFragment : Fragment(), RouteCheckHelper {
     companion object {
+        private val TAG = BaseFragment::class.java.simpleName
         const val MAIN_INDEX = 0
         const val TRADE_INDEX = 2
         const val MONEY_INDEX = 3
@@ -251,7 +253,7 @@ open class BaseFragment : Fragment(), RouteCheckHelper {
         override fun error(type: Int, error: Any) {
             when (type) {
                 ConstData.ERROR_NORMAL -> showToast(activity, error.toString())
-                ConstData.ERROR_TOKEN_INVALID -> if (activity is BaseActionBarActivity) {
+                ConstData.ERROR_TOKEN_INVALID -> if (activity is BaseActionBarActivity || activity is BaseActivity) {
                     (activity as BaseActionBarActivity).onTokenError(error)
                 }
                 ConstData.ERROR_UNKNOWN ->  //根據情況處理，error 是返回的HttpRequestResultError

@@ -65,7 +65,7 @@ open class HttpCallbackSimple<T> : NetObserver<T> {
                 HttpRequestResult.OTHER_ERROR -> error = context?.getString(R.string.alert_server_error)
                 HttpRequestResult.ERROR_TOKEN_INVALID -> {
                     type = ConstData.ERROR_TOKEN_INVALID
-                    error = context?.getString(R.string.login_over_time)
+                    error = returnString
                 }
                 HttpRequestResult.ERROR_MISS_MONEY_PASSWORD -> {
                     type = ConstData.ERROR_MISS_MONEY_PASSWORD
