@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.CheckedTextView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +46,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_FIXED
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
-import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -66,7 +65,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var dealAdapter: QuotationDetailDealAdapter? = null
     private var quotationList: MutableList<TradeOrder?> = ArrayList()
 
-    private var btnCollect: CheckedTextView? = null
+    private var btnCollect: ImageView? = null
     private var coinTypeView: TextView? = null
     private var chatRoomId: String? = null
     private var btnChatRoom: View? = null
@@ -84,6 +83,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var viewModel: QuotationDetailViewModel? = null
     private var deepBinding: QuotationDetailDeepViewBinding? = null
     private var kLinePage = 0
+    private var isDear:Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,8 +91,8 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         viewModel = QuotationDetailViewModel(this, intent.getStringExtra(ConstData.PAIR), this)
         deepBinding = QuotationDetailDeepViewBinding(this, binding?.quotationDetailDeepLayout!!, MAX_SHOW_COUNT)
 
-        colorT7 = SkinCompatResources.getColor(this, R.color.T7)
-        colorT5 = SkinCompatResources.getColor(this, R.color.T5)
+        colorT7 = SkinCompatResources.getColor(this, R.color.T17)
+        colorT5 = SkinCompatResources.getColor(this, R.color.T16)
         colorT3 = SkinCompatResources.getColor(this, R.color.T3)
         bgT7 = SkinCompatResources.getDrawable(this, R.drawable.bg_t7_corner3)
         bgT5 = SkinCompatResources.getDrawable(this, R.drawable.bg_t5_corner3)
@@ -275,7 +275,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                     }
                 }
             }
-            R.id.btn_collect -> viewModel!!.toggleDearPair(btnCollect!!.isChecked)
+            R.id.btn_collect -> viewModel!!.toggleDearPair(isDear!!)
             R.id.btn_buy -> {
                 val bundle = Bundle()
                 bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, 2)
@@ -406,8 +406,8 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                 1000*100
             ) ?: 0) * kLinePage
             var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
-            startTime = Math.max(startTime, 1567296000)
-            endTime = Math.max(endTime, 1567296000)
+            startTime = startTime.coerceAtLeast(1567296000)
+            endTime = endTime.coerceAtLeast(1567296000)
             viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
         }
     }
@@ -467,11 +467,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun onPairStatusPrecision(precision: Int) {
         binding?.analyticChart?.setPrecision(precision)
-        deepBinding!!.setPrecision(precision);
+        deepBinding!!.setPrecision(precision)
     }
 
     override fun onPairStatusAmountPrecision(amountPrecision: Int) {
-        deepBinding!!.setAmountPrecision(amountPrecision);
+        deepBinding!!.setAmountPrecision(amountPrecision)
     }
 
     override fun onPairStatusDataChanged(pairStatus: PairStatus?) {
@@ -497,7 +497,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.low?.setText(pairStatus.minPriceFormat)
         binding?.volumeH24?.setText(pairStatus.totalAmountFromat)
         binding?.analyticChart?.setCurrentPrice(pairStatus.currentPrice)
-        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
+//        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
     }
 
     override fun onTradeOrder(currentPrice: Double, bidOrderList: ArrayList<TradeOrder?>, askOrderList: ArrayList<TradeOrder?>) {
@@ -549,24 +549,19 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onCheckDearPair(isDearPair: Boolean?) {
-        btnCollect!!.isChecked = isDearPair!!
-        if (btnCollect!!.isChecked) {
-            btnCollect!!.setText(R.string.collect_delete)
+        if (isDearPair == true) {
+            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_dis))
         } else {
-            btnCollect!!.setText(R.string.collect_add)
+            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_default))
         }
+        isDear = isDearPair
     }
 
-    override fun onToggleDearPair(isSuccess: Boolean?) {
+    override fun onToggleDearPair(isSuccess: Boolean?,isDearPair: Boolean?) {
         if (isSuccess!!) {
-            val showMsg = if (btnCollect!!.isChecked) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
             FryingUtil.showToast(mContext, showMsg)
-            btnCollect!!.toggle()
-            if (btnCollect!!.isChecked) {
-                btnCollect!!.setText(R.string.collect_delete)
-            } else {
-                btnCollect!!.setText(R.string.collect_add)
-            }
+            onCheckDearPair(isDearPair)
         }
     }
 
@@ -620,7 +615,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             val userIdHeader = IMHelper.getUserIdHeader(mContext)
             val userId = userInfo.id
             val groupId = chatRoomId
-            val groupName = "FBSexer"
+            val groupName = "Fiexer"
             val bundle = Bundle()
             bundle.putString(ConstData.IM_GROUP_ID, groupId)
             bundle.putString(ConstData.IM_GROUP_NAME, groupName)

@@ -129,7 +129,7 @@ object WalletApiServiceHelper {
 
 
     //查询支持的账户划转类型
-    fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<String?>?>) {
+    fun getSupportAccount(context: Context?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<AssetTransferTypeList?>?>) {
         if (context == null || callback == null) {
             return
         }

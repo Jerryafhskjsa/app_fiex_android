@@ -165,6 +165,7 @@
                             android:includeFontPadding="false"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
+                            android:layout_marginBottom="2dp"
                             android:text="0.00%"
                             android:textColor="@color/T10"
                             android:textSize="@dimen/text_size_12" />
@@ -182,7 +183,7 @@
                         android:layout_height="18dp"
                         android:layout_marginRight="15dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_collected" />
+                        android:src="@drawable/btn_collect_default" />
                     <ImageView
                         android:id="@+id/head_charts"
                         android:layout_width="18dp"

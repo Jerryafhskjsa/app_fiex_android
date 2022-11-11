@@ -317,11 +317,11 @@ class AnalyticChart : SkinCompatView {
         POPPER_POINTER_INNER_COLOR = SkinCompatResources.getColor(context, R.color.T1)
         //        POPPER_POINTER_OUTER_COLOR = 0x66364365;
         MAXMIN_COLOR = SkinCompatResources.getColor(context, R.color.T2)
-        WIN_COLOR = -0xff5271
-        LOSE_COLOR = -0x2eb59d
-        MA5_COLOR = -0x3be0
-        MA10_COLOR = -0xe73e3e
-        MA30_COLOR = -0x366e04
+        WIN_COLOR =  SkinCompatResources.getColor(context, R.color.T17)
+        LOSE_COLOR = SkinCompatResources.getColor(context, R.color.T16)
+        MA5_COLOR = SkinCompatResources.getColor(context, R.color.T18)
+        MA10_COLOR = SkinCompatResources.getColor(context, R.color.T19)
+        MA30_COLOR = SkinCompatResources.getColor(context, R.color.T20)
         MA_OTHER01_COLOR = -0x9c6c5
         MA_OTHER02_COLOR = -0x8f2ff9
         MA_OTHER03_COLOR = -0x90df02

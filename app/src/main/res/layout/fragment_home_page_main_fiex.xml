@@ -13,8 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/default_padding"
+            android:paddingRight="@dimen/default_padding"
             android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -123,12 +123,13 @@
                                     android:paddingTop="15dp"
                                     android:textColor="#99000000"
                                     android:text="Discover, buy, sell and even create NFTs in just a few clicks"/>
+
                                 <ImageView
                                     android:id="@+id/type_go"
                                     android:layout_width="26dp"
                                     android:layout_height="26dp"
                                     android:layout_alignParentBottom="true"
-                                    android:src="@drawable/icon_type_right_arrow"/>
+                                    android:background="@drawable/icon_type_right_arrow" />
                             </RelativeLayout>
                         </RelativeLayout>
                         <LinearLayout
@@ -140,122 +141,79 @@
                             >
                             <RelativeLayout
                                 android:id="@+id/rel_deposit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                style="@style/HomeFeturesItem"
+                                android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_deposit"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerHorizontal="true"
-                                    android:src="@drawable/fiex_icon_deposit"/>
+                                    style="@style/HomeFeturesItemImage"
+                                    android:src="@drawable/fiex_icon_deposit" />
                                 <CheckedTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:layout_below="@+id/icon_deposit"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:maxLines="1"
                                     android:text="@string/deposit"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_12" />
+                                    style="@style/HomeFeturesItemText" />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_referral"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                style="@style/HomeFeturesItem"
+                                android:layout_weight="2">
                                 <ImageView
                                     android:id="@+id/icon_referral"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerHorizontal="true"
+                                    style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_deposit"/>
                                 <CheckedTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_referral"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:maxLines="1"
                                     android:text="@string/referral"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_12" />
+                                    />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_support"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                style="@style/HomeFeturesItem"
+                                android:layout_weight="2">
                                 <ImageView
                                     android:id="@+id/icon_support"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerHorizontal="true"
+                                    style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_support"/>
                                 <CheckedTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_support"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:maxLines="1"
                                     android:text="@string/support"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_12" />
+                                    />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_futures"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                style="@style/HomeFeturesItem"
+                                android:layout_weight="2">
                                 <ImageView
                                     android:id="@+id/icon_futures"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerHorizontal="true"
+                                    style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_futures"/>
                                 <CheckedTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:maxLines="1"
                                     android:text="@string/futures"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_12" />
+                                    />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_more"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                style="@style/HomeFeturesItem"
                                 android:layout_weight="1">
-
                                 <ImageView
                                     android:id="@+id/icon_more"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerHorizontal="true"
+                                    style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_more" />
                                 <CheckedTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_more"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:maxLines="1"
                                     android:text="@string/more"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_12" />
+                                    />
                             </RelativeLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:background="@color/B2"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
@@ -288,9 +246,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingLeft="15dp"
                             android:paddingTop="13dp"
-                            android:paddingRight="15dp"
                             android:paddingBottom="13dp">
                             <ImageView
                                 android:layout_width="20dp"
@@ -330,7 +286,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/main_1_bg"/>
+                                    android:background="@drawable/main_1_bg"/>
                             </androidx.cardview.widget.CardView>
                             <ImageView
                                 android:layout_width="70dp"
@@ -383,7 +339,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Win Rate (LM)"
-                                            android:textColor="#99FFFFFF"/>
+                                            android:textColor="@color/B3"/>
                                         <TextView
                                             android:id="@+id/tf_1_des"
                                             android:layout_width="wrap_content"
@@ -401,7 +357,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Total Revenue"
-                                            android:textColor="#99FFFFFF"/>
+                                            android:textColor="@color/B3"/>
                                         <TextView
                                             android:id="@+id/tf_2_des"
                                             android:layout_width="wrap_content"
@@ -419,7 +375,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Follower"
-                                            android:textColor="#99FFFFFF"/>
+                                            android:textColor="@color/B3"/>
                                         <TextView
                                             android:id="@+id/tf_3_des"
                                             android:layout_width="wrap_content"
@@ -454,7 +410,7 @@
                                     <ImageView
                                         android:layout_width="match_parent"
                                         android:layout_height="100dp"
-                                        android:src="@drawable/main_2_bg"/>
+                                        android:background="@drawable/main_2_bg"/>
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -500,7 +456,7 @@
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
-                                    android:src="@drawable/main_3_bg"/>
+                                    android:background="@drawable/main_3_bg"/>
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -543,16 +499,14 @@
                             android:id="@+id/main_tab"
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:layout_marginTop="20dp"
                             android:background="@drawable/bg_tab_corner"
                             app:tabRippleColor="@android:color/transparent"
                             app:tabTextAppearance="@style/MainTabStyle"
                             app:tabIndicator="@drawable/bg_tab_indicator"
-                            app:tabIndicatorColor="#1571FF"
-                            app:tabSelectedTextColor="#ffffff"
-                            app:tabTextColor="#000000"
+                            app:tabIndicatorColor="@color/T13"
+                            app:tabSelectedTextColor="@color/white"
+                            app:tabTextColor="@color/black_real"
                             app:tabIndicatorHeight="32dp"
                             app:tabIndicatorGravity="center"
                             app:tabMode="fixed"

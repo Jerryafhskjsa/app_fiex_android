@@ -89,7 +89,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tv_from"
                     android:text="@string/number_default"
-                    android:textColor="@color/T14"></com.black.base.widget.SpanTextView>
+                    android:textColor="@color/T14"/>
                 <ImageView
                     android:id="@+id/img_from"
                     android:layout_alignParentRight="true"

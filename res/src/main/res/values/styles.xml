@@ -262,4 +262,23 @@
         <item name="android:background">@null</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
+    <style name="HomeFeturesItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+    </style>
+    <style name="HomeFeturesItemImage">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    <style name="HomeFeturesItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
 </resources>

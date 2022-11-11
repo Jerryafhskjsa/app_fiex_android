@@ -1,5 +1,8 @@
 package com.black.base.model.socket
 
+import android.content.Context
+import com.black.base.R
+
 
 //委托订单
 class TradeOrderFiex{
@@ -16,7 +19,7 @@ class TradeOrderFiex{
     var origQty:String? = null//数量(张)
     var price: String? = null//委托价格
     var sourceId:String? = null//条件触发id
-    var state:String? = null//订单状态 = status
+    var state:String? = null//订单状态 NEW：新建订单（未成交）；PARTIALLY_FILLED：部分成交；PARTIALLY_CANCELED：部分撤销；FILLED：全部成交；CANCELED：已撤销；REJECTED：下单失败；EXPIRED：已过期
     var symbol:String? = null//交易对 = pair
     var timeInForce:String? = null//有效类型
     var triggerProfitPrice:String? = null//止盈触发价
@@ -33,5 +36,17 @@ class TradeOrderFiex{
             }
             return field
         }
+    fun getStatusDisplay(context: Context): String {
+        return when (state) {
+            "NEW" -> context.getString(R.string.trade_new)
+            "PARTIALLY_FILLED" -> context.getString(R.string.trade_part)
+            "PARTIALLY_CANCELED" -> context.getString(R.string.trade_part_cancel)
+            "FILLED" -> context.getString(R.string.trade_all_deal)
+            "CANCELED" -> context.getString(R.string.trade_cancel_all)
+            "REJECTED" -> context.getString(R.string.trade_fail)
+            "EXPIRED" -> context.getString(R.string.trade_expired)
+            else -> context.getString(R.string.trade_start)
+        }
+    }
     /*fiex********************/
 }

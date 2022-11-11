@@ -7,20 +7,28 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.black.base.model.socket.TradeOrder
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.widget.DepthChart
 import com.black.base.widget.SpanTextView
+import com.black.base.widget.deeepView.DepthBuySellData
 import com.black.frying.activity.QuotationDetailActivity
 import com.black.lib.view.ProgressDrawable
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentQuotationDetailDepthBinding
+import com.google.gson.reflect.TypeToken
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 
-class QuotationDetailDeepViewBinding(private val context: Context, private val binding: FragmentQuotationDetailDepthBinding, private val maxCount: Int) {
+class QuotationDetailDeepViewBinding(
+    private val context: Context,
+    private val binding: FragmentQuotationDetailDepthBinding,
+    private val maxCount: Int
+) {
     private var contentLayoutInited = false
 
     private var colorT7 = 0
@@ -62,14 +70,21 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
     private fun createDeepContentLayoutItem(): View {
         val viewHolder = QuotationDetailActivity.OrderViewHolder()
         val linearLayout = LinearLayout(context)
-        linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        linearLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         linearLayout.orientation = LinearLayout.VERTICAL
         val fistLine = LinearLayout(context)
-        fistLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        fistLine.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         fistLine.orientation = LinearLayout.HORIZONTAL
         fistLine.gravity = Gravity.CENTER_VERTICAL
         val buyLayout = LinearLayout(context)
-        buyLayout.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.toFloat())
+        buyLayout.layoutParams =
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.toFloat())
         buyLayout.orientation = LinearLayout.HORIZONTAL
         buyLayout.gravity = Gravity.CENTER_VERTICAL
         buyLayout.setPadding(0, padding!!.toInt(), (padding!! / 2).toInt(), padding!!.toInt())
@@ -89,7 +104,8 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
         viewHolder.buyLayout = buyLayout
         fistLine.addView(buyLayout)
         val saleLayout = LinearLayout(context)
-        saleLayout.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.toFloat())
+        saleLayout.layoutParams =
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.toFloat())
         saleLayout.orientation = LinearLayout.HORIZONTAL
         saleLayout.gravity = Gravity.CENTER_VERTICAL
         saleLayout.setPadding((padding!! / 2).toInt(), padding!!.toInt(), 0, padding!!.toInt())
@@ -116,7 +132,8 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
 
     private fun createTextView(weight: Int, textColor: Int, textSize: Float): TextView {
         val textView = SpanTextView(context)
-        val textViewParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weight.toFloat())
+        val textViewParams =
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weight.toFloat())
         textView.layoutParams = textViewParams
         textView.maxLines = 1
         textView.setTextColor(textColor)
@@ -125,25 +142,47 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
     }
 
     //刷新深度图
-    private fun refreshDepthChart(currentPrice: Double, bidOrders: List<TradeOrder?>, askOrders: List<TradeOrder?>) {
+    private fun refreshDepthChart(
+        currentPrice: Double,
+        bidOrders: List<TradeOrder?>,
+        askOrders: List<TradeOrder?>
+    ) {
         //组装深度图数据
-        val data = DepthChart.Data()
-        data.middlePrice = currentPrice
-        val buyItems: MutableList<DepthChart.Item> = ArrayList(bidOrders.size)
+//        val data = DepthChart.Data()
+//        data.middlePrice = currentPrice
+//        val buyItems: MutableList<DepthChart.Item> = ArrayList(bidOrders.size)
+//        for (bidOrder in bidOrders) {
+//            buyItems.add(DepthChart.Item(bidOrder!!.price ?: 0.0, bidOrder.exchangeAmount))
+//        }
+//        val saleItems: MutableList<DepthChart.Item> = ArrayList(askOrders.size)
+//        for (askOrder in askOrders) {
+//            saleItems.add(DepthChart.Item(askOrder!!.price ?: 0.0, askOrder.exchangeAmount))
+//        }
+//        data.buyItems = buyItems
+//        data.saleItems = saleItems
+//        binding.depthChart.setData(data)
+        var buyList: ArrayList<DepthBuySellData>? = ArrayList()
+        var sellList: ArrayList<DepthBuySellData>? = ArrayList()
         for (bidOrder in bidOrders) {
-            buyItems.add(DepthChart.Item(bidOrder!!.price ?: 0.0, bidOrder.exchangeAmount))
+            sellList?.add(DepthBuySellData(bidOrder!!.price.toString() ?: "0.0", bidOrder.exchangeAmount.toString()))
         }
-        val saleItems: MutableList<DepthChart.Item> = ArrayList(askOrders.size)
         for (askOrder in askOrders) {
-            saleItems.add(DepthChart.Item(askOrder!!.price ?: 0.0, askOrder.exchangeAmount))
+            buyList?.add(DepthBuySellData(askOrder!!.price.toString() ?: "0.0", askOrder.exchangeAmount.toString()))
         }
-        data.buyItems = buyItems
-        data.saleItems = saleItems
-        binding.depthChart.setData(data)
+        if (buyList?.isNotEmpty()!! && sellList?.isEmpty()!!) {
+            sellList.add(0, DepthBuySellData("0", "0"))
+        } else if (buyList.isEmpty() && sellList?.isNotEmpty()!!) {
+            buyList.add(0, DepthBuySellData("0", "0"))
+        }
+        binding.depthChart.setData(buyList, sellList, CookieUtil.getCurrentPair(context), 6, 4)
     }
 
     //刷新当前交易数据
-    fun refreshQuotationOrders(currentPrice: Double, bid: List<TradeOrder?>?, ask: List<TradeOrder?>?) {
+    fun refreshQuotationOrders(
+        currentPrice: Double,
+        bid: List<TradeOrder?>?,
+        ask: List<TradeOrder?>?
+    ) {
         var bidOrders: List<TradeOrder?> = bid ?: ArrayList()
         var askOrders: List<TradeOrder?> = ask ?: ArrayList()
         //显示列表
@@ -159,7 +198,12 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
         if (oldSize >= size) {
             for (i in 0 until size) {
                 val itemView = binding.orderContentLayout?.getChildAt(i)
-                showOrderItem(itemView!!, CommonUtil.getItemFromList(bidOrders, i), CommonUtil.getItemFromList(askOrders, i), i)
+                showOrderItem(
+                    itemView!!,
+                    CommonUtil.getItemFromList(bidOrders, i),
+                    CommonUtil.getItemFromList(askOrders, i),
+                    i
+                )
                 itemView.visibility = View.VISIBLE
             }
             for (i in oldSize - 1 downTo size) {
@@ -169,13 +213,23 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
         } else {
             for (i in 0 until size) {
                 val itemView = binding.orderContentLayout?.getChildAt(i)
-                showOrderItem(itemView!!, CommonUtil.getItemFromList(bidOrders, i), CommonUtil.getItemFromList(askOrders, i), i)
+                showOrderItem(
+                    itemView!!,
+                    CommonUtil.getItemFromList(bidOrders, i),
+                    CommonUtil.getItemFromList(askOrders, i),
+                    i
+                )
                 itemView.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun showOrderItem(itemView: View, bidOrder: TradeOrder?, askOrder: TradeOrder?, position: Int) {
+    private fun showOrderItem(
+        itemView: View,
+        bidOrder: TradeOrder?,
+        askOrder: TradeOrder?,
+        position: Int
+    ) {
         val viewHolder = itemView.tag as QuotationDetailActivity.OrderViewHolder
         if (bidOrder != null) {
 //            viewHolder.buyAmountView!!.text = CommonUtil.formatNumberNoGroup(bidOrder.exchangeAmount, amountLength, amountLength)
@@ -223,9 +277,11 @@ class QuotationDetailDeepViewBinding(private val context: Context, private val b
             }
         }
         coinType = coinType
-                ?: nullAmount
+            ?: nullAmount
         binding.orderAmountBuyTitle.setText(context.getString(R.string.k_buy_amount, coinType))
-        binding.orderPriceTitle.setText(context.getString(R.string.price).toString() + "(" + coinType + ")")
+        binding.orderPriceTitle.setText(
+            context.getString(R.string.price).toString() + "(" + coinType + ")"
+        )
         binding.orderAmountSaleTitle.setText(context.getString(R.string.k_sale_amount, coinType))
     }
 

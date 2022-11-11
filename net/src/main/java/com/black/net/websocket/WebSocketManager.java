@@ -148,7 +148,7 @@ public class WebSocketManager {
             LogUtil.e(TAG, "This WebSocketManager is destroyed!");
             return this;
         }
-        if (mWebSocket.getConnectState() != 0) {
+        if (mWebSocket.getConnectState() != 0 ) {
             mWebSocketEngine.disConnect(mWebSocket, mSocketWrapperListener);
         }
         return this;

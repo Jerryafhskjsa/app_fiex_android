@@ -8,6 +8,7 @@ import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.model.trade.TradeOrderHistoryResult
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
@@ -45,12 +46,12 @@ object TradeApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getTradeOrderRecord(context: Context?, pair: String?, ended: Boolean, page: Int, size: Int, asc: Boolean, startTime: String?, endTime: String?, leverType: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<PagingData<TradeOrder?>?>?>?) {
+    fun getTradeOrderHistoryRecord(context: Context?, symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderHistoryResult?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(TradeApiService::class.java)
-                ?.getTradeOrderRecord(pair, ended, page, size, asc, startTime, endTime, leverType)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
+                ?.getTradeOrderHistoryRecord(symbol)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

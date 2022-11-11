@@ -3,7 +3,9 @@ package com.black.wallet.activity
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
@@ -46,6 +48,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityAssetTransferBinding? = null
 
     private var supportAccountData:ArrayList<SupportAccount?>? = null
+    private var supportFromAccountData:ArrayList<SupportAccount?>? = null
+    private var supportToAccountData:ArrayList<SupportAccount?>? = null
     private var supportCoinData:ArrayList<CanTransferCoin?>? = null
     private var showSupportCoin:Boolean? = false
 
@@ -62,7 +66,14 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var chooseCoinDialog:ChooseCoinControllerWindow<CanTransferCoin?>? = null
 
 
+    private val watcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            updateComfirmTransferBtn()
+        }
 
+        override fun afterTextChanged(s: Editable) {}
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_asset_transfer)
@@ -71,10 +82,12 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         binding?.relChoose?.setOnClickListener(this)
         binding?.btnConfirmTransfer?.setOnClickListener(this)
         binding?.imgExchange?.setOnClickListener(this)
+        binding?.editAmount?.addTextChangedListener(watcher)
         binding?.tvAll?.setOnClickListener(this)
         var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
+        updateComfirmTransferBtn()
     }
 
 
@@ -110,13 +123,20 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 val bundle = Bundle()
                 var pair = selectedCoin?.coin
                 bundle.putString(ConstData.PAIR, pair)
-                bundle.putParcelableArrayList(ConstData.ASSET_SUPPORT_ACCOUNT_TYPE,supportAccountData)
+                bundle.putParcelableArrayList(ConstData.ASSET_SUPPORT_SPOT_ACCOUNT_TYPE,supportFromAccountData)
+                bundle.putParcelableArrayList(ConstData.ASSET_SUPPORT_OTHER_ACCOUNT_TYPE,supportToAccountData)
                 BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER_RECORD).with(bundle).go(this)
             }
         }
     }
 
     private fun exchange(){
+        if(supportFromAccountData != null && supportToAccountData != null){
+            var tem1 = supportFromAccountData
+            var tem2 = supportToAccountData
+            supportFromAccountData = tem2
+            supportToAccountData = tem1
+        }
         if(fromAccount != null && toAccount != null){
             var tem1 = fromAccount
             var tem2 = toAccount
@@ -125,6 +145,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             binding?.tvFromAccount?.text = fromAccount?.name
             binding?.tvToAccount?.text = toAccount?.name
         }
+        selectedCoin = null
+        userBalance = null
+        updateSelectCoinInfo(selectedCoin,userBalance)
+        updateComfirmTransferBtn()
     }
 
     override fun onResume() {
@@ -137,11 +161,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private val supportAccount: Unit
         get() {
-            WalletApiServiceHelper.getSupportAccount(this, false, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+            WalletApiServiceHelper.getSupportAccount(this, false, object : NormalCallback<HttpRequestResultData<AssetTransferTypeList?>?>() {
+                override fun callback(returnData: HttpRequestResultData<AssetTransferTypeList?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         var result = returnData.data
-                        supportAccountData =  initAccountData(result)
+                       initAccountData(result)
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
                     }
@@ -264,35 +288,74 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             })
         }
 
-    private fun initAccountData(supportAccount:ArrayList<String?>?):ArrayList<SupportAccount?>?{
-        var initSupportAccountData:ArrayList<SupportAccount?>? = ArrayList()
-        if(supportAccount != null && supportAccount.size > 0){
-            for(i in supportAccount){
-                var initData =  SupportAccount("","",false)
+    private fun initAccountData(supportAccount:AssetTransferTypeList?){
+        var spot = supportAccount?.mainName
+        var transName = supportAccount?.transferName
+        if(supportFromAccountData == null){
+            supportFromAccountData = ArrayList()
+        }else{
+            supportFromAccountData?.clear()
+        }
+        if(supportToAccountData == null){
+            supportToAccountData = ArrayList()
+        }else{
+            supportToAccountData?.clear()
+        }
+        if (supportAccountData == null){
+            supportAccountData = ArrayList()
+        }else{
+            supportAccountData?.clear()
+        }
+        if (spot != null) {
+            for (i in spot){
+                var initFromData =  SupportAccount("","",false)
+                initFromData.type = i
                 when(i){
-                    "SPOT" ->{
-                        initData.name = getString(R.string.spot_account)
-                    }
-                    "CONTRACT" ->{
-                        initData.name = getString(R.string.contract_account)
-                    }
+                    "SPOT" -> initFromData.name = getString(R.string.spot_account)
                 }
-                initData.type = i
-                initData.selected = false
-                initSupportAccountData?.add(initData)
+                supportFromAccountData?.add(initFromData)
+                supportAccountData?.add(initFromData)
             }
         }
-        return initSupportAccountData
+        if(transName != null){
+            for (j in transName){
+                var initToData =  SupportAccount("","",false)
+                initToData.type = j
+                when(j){
+                    "CONTRACT" -> initToData.name = getString(R.string.contract_account)
+                    "OTC" -> initToData.name = getString(R.string.otc_account)
+                }
+                supportToAccountData?.add(initToData)
+                supportAccountData?.add(initToData)
+            }
+        }
+        if(fromAccount == null){
+            fromAccount = supportFromAccountData!![0]
+            fromAccount?.selected = true
+        }
+        if (toAccount == null){
+            toAccount = supportToAccountData!![0]
+            toAccount?.selected = true
+        }
+        binding?.tvFromAccount?.text = fromAccount?.name
+        binding?.tvToAccount?.text = toAccount?.name
     }
 
     private fun showWalletChooseDialog(accountType:String){
         var clickAccout:SupportAccount? = null
+        var accountData:ArrayList<SupportAccount?>? = null
         when(accountType){
-            fromAccountType -> clickAccout = fromAccount
-            toAccountType -> clickAccout = toAccount
+            fromAccountType -> {
+                clickAccout = fromAccount
+                accountData = supportFromAccountData
+            }
+            toAccountType -> {
+                clickAccout = toAccount
+                accountData = supportToAccountData
+            }
         }
         ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet),clickAccout,
-            supportAccountData,
+            accountData,
             object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
                 override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {
                     when(accountType){
@@ -342,6 +405,34 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         adapter?.notifyDataSetChanged()
     }
 
+    private fun updateComfirmTransferBtn(){
+        binding?.btnConfirmTransfer?.isEnabled = (
+                fromAccount != null && toAccount != null && selectedCoin != null && !TextUtils.isEmpty(binding!!.editAmount.text.toString().trim { it <= ' ' })
+                )
+    }
+
+    private fun updateSelectCoinInfo(selectedCoin: CanTransferCoin?,userBalance: UserBalance?){
+        binding?.tvChooseName?.text = if(selectedCoin == null){
+            getString(R.string.coin_choose)
+        }else selectedCoin?.coin
+
+        binding?.tvName?.text = if(selectedCoin == null){
+            "-"
+        }else selectedCoin?.coin
+        var logoView = binding?.imgIcon
+        if (logoView != null) {
+            Glide.with(mContext)
+                .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext,selectedCoin?.coinIconUrl)))
+                .apply(RequestOptions().error(com.black.base.R.drawable.icon_coin_default))
+                .into(logoView)
+        }
+        var maxtCoin = if(userBalance != null)userBalance?.availableBalance + " "+userBalance?.coin else{
+            "0.00"
+        }
+        binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
+        binding?.editAmount?.setText("")
+    }
+
     private fun showCoinChooseDialog(data:ArrayList<CanTransferCoin?>?){
             chooseCoinDialog = ChooseCoinControllerWindow(mContext as Activity, getString(R.string.select_coin),
                 data,
@@ -349,17 +440,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
                         selectedCoin = item
                         userBalance = getSelectedCoinInfo(selectedCoin)
-                        binding?.tvChooseName?.text = selectedCoin?.coin
-                        binding?.tvName?.text = selectedCoin?.coin
-                        var logoView = binding?.imgIcon
-                        if (logoView != null) {
-                            Glide.with(mContext)
-                                .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext,item?.coinIconUrl)))
-                                .apply(RequestOptions().error(com.black.base.R.drawable.icon_coin_default))
-                                .into(logoView)
-                        }
-                        var maxtCoin = userBalance?.availableBalance + " "+userBalance?.coin
-                        binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
+                        updateSelectCoinInfo(selectedCoin,userBalance)
                     }
 
                     override fun onSearch(window: ChooseCoinControllerWindow<CanTransferCoin?>,searchKey: String?) {

@@ -2,26 +2,44 @@ package com.black.base.util
 
 import android.content.Context
 import com.black.util.CommonUtil
+import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
-            "http://fiex.matchain.info",//fiex测试环境
-            "https://fiex.io",//正式环境
-
+            "http://fiex.matchain.info/",//fiex测试环境
+            "https://fiex.io/",//正式环境
     )
 
-    fun getHost(context: Context): String {
+    var serverHost = ArrayList<String?>()
+
+    fun getHost(context: Context): String? {
+        if(serverHost.size > 0){
+            return serverHost[getIndex(context)]
+        }
         return HOSTS[getIndex(context)]
     }
 
-    fun getFiexHost(context: Context,apiType:String?): String {
-        var apiTypeDes = "/uc/"
+    fun setRemoteHost(serverHost:ArrayList<String?>?){
+        serverHost?.clear()
+        serverHost?.addAll(serverHost)
+    }
+
+    fun getFiexHost(context: Context,apiType:String?): String? {
+        var apiTypeDes = "uc/"
         when(apiType){
-            ApiType.URl_UC ->apiTypeDes = "/uc/"
-            ApiType.URL_API -> apiTypeDes = "/api/"
-            ApiType.URL_PRO -> apiTypeDes = "/pro/"
+            ApiType.URl_UC ->apiTypeDes = "uc/"
+            ApiType.URL_API -> apiTypeDes = "api/"
+            ApiType.URL_PRO -> apiTypeDes = "pro/"
         }
-        return HOSTS[getIndex(context)]+apiTypeDes
+        var index = getIndex(context)
+        var serverHost = CookieUtil.getServerHost(context)
+        if(serverHost != null && serverHost.size > 0){
+            return serverHost[index]+apiTypeDes
+        }
+        if(index > HOSTS.size -1){
+            index = 1
+        }
+        return HOSTS[index]+apiTypeDes
     }
 
 
@@ -34,8 +52,7 @@ object UrlConfig {
         if (!CommonUtil.isApkInDebug(context)) {
             return 0
         }
-        val index = CookieUtil.getHostIndex(context)
-        return if (index < 0 || index > HOSTS.size) 0 else index
+        return CookieUtil.getHostIndex(context)
     }
 
     fun getSocketHostFiex(context: Context): String {
@@ -230,6 +247,8 @@ object UrlConfig {
         const val URL_URL_CANCEL_TRADE_ORDER_NEW = "trade/order/cancel"
         //获取交易委托记录
         const val URL_TRADE_ORDERS_RECORD = "trade/order/list"
+        //获取交易历史委托记录
+        const val URL_TRADE_ORDERS_HISTORY_RECORD = "trade/order/history"
         //获取当前交易对的深度
         const val URL_TRADE_ORDERS_DEPTH = "public/depth"
         //获取当前交易对的成交
@@ -301,6 +320,10 @@ object UrlConfig {
     }
 
     object Config {
+        //获取网络线路
+        const val URL_NETWORK_LINES = "app/line/url/findAll"
+        //线路测速
+        const val RUL_LINE_SPEED = "app/line/url/speed"
         //K线
         const val URL_KLINE_HISTORY="public/kline"
         //fiex 获取所有交易对配置

@@ -6,13 +6,14 @@ import android.view.View
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.socket.TradeOrder
+import com.black.base.model.socket.TradeOrderFiex
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemEntrustRecordNewBinding
 import skin.support.content.res.SkinCompatResources
 
-class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList<TradeOrder?>?) : BaseRecycleDataBindAdapter<TradeOrder?, ListItemEntrustRecordNewBinding>(context, variableId, data) {
+class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList<TradeOrderFiex?>?) : BaseRecycleDataBindAdapter<TradeOrderFiex?, ListItemEntrustRecordNewBinding>(context, variableId, data) {
     companion object {
         private const val TYPE_NEW = 0
         private const val TYPE_HIS = 1
@@ -38,17 +39,24 @@ class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList
         super.onBindViewHolder(holder, position)
         val tradeOrder = getItem(position)
         val viewHolder: ListItemEntrustRecordNewBinding? = holder.dataBing
+        var orderType = tradeOrder?.orderType
+        var orderTypeDes:String? = null
+        when(orderType){
+            "LIMIT" -> orderTypeDes = getString(R.string.order_type_limit)
+            "MARKET" -> orderTypeDes = getString(R.string.order_type_market)
+        }
         val type = StringBuilder()
-        if (TextUtils.equals(tradeOrder?.direction, "ASK")) {
+        type.append(orderTypeDes)
+        if (TextUtils.equals(tradeOrder?.orderSide, "SELL")) {
             viewHolder?.type?.setTextColor(t5)
             type.append(getString(R.string.entrust_type_sale))
-        } else if (TextUtils.equals(tradeOrder?.direction, "BID")) {
+        } else if (TextUtils.equals(tradeOrder?.orderSide, "BUY")) {
             viewHolder?.type?.setTextColor(c1)
             type.append(getString(R.string.entrust_type_buy))
         } else {
             viewHolder?.type?.setTextColor(c1)
         }
-        type.append(" ").append(if (tradeOrder?.pair == null) "" else tradeOrder.pair?.replace("_", "/"))
+        type.append(" ").append(if (tradeOrder?.symbol == null) "" else tradeOrder.symbol?.replace("_", "/"))
         viewHolder?.type?.setText(type.toString())
         viewHolder?.type?.setOnClickListener {
             onHandleClickListener?.onPairClick(tradeOrder)
@@ -57,17 +65,15 @@ class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList
             onHandleClickListener?.onHandleClick(tradeOrder)
         }
         viewHolder?.status?.setText(tradeOrder?.getStatusDisplay(context))
-        viewHolder?.date?.setText(if (this.type == TYPE_NEW)
-            (if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.createdTime!!))
-        else (if (tradeOrder?.updateTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.updateTime)))
-        viewHolder?.entrustPrice?.setText(if (tradeOrder?.price == null || tradeOrder.price == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.price))
-        viewHolder?.entrustAmount?.setText(if (tradeOrder?.totalAmount == null || tradeOrder.totalAmount == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.totalAmount, amountPrecision, amountPrecision))
-        val dealTotalAmount: Double = if (tradeOrder?.dealAvgPrice != null && tradeOrder.dealAmount != null) tradeOrder.dealAvgPrice!! * tradeOrder.dealAmount!! else 0.toDouble()
+        viewHolder?.date?.setText(if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", tradeOrder.createdTime!!))
+        viewHolder?.entrustPrice?.setText(if (tradeOrder?.price == null) "0" else NumberUtil.formatNumberNoGroup(tradeOrder?.price?.toDouble()))
+        viewHolder?.entrustAmount?.setText(if (tradeOrder?.origQty == null || tradeOrder?.origQty?.toDouble() == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder?.origQty?.toDouble(), amountPrecision, amountPrecision))
+        val dealTotalAmount: Double = if (tradeOrder?.avgPrice != null && tradeOrder.origQty != null) tradeOrder?.avgPrice!!.toDouble().times(tradeOrder?.origQty!!.toDouble()) else 0.toDouble()
         viewHolder?.dealTotalAmount?.setText(NumberUtil.formatNumberNoGroup(dealTotalAmount))
-        viewHolder?.dealPrice?.setText(if (tradeOrder?.dealAvgPrice == null || tradeOrder.dealAvgPrice == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.dealAvgPrice))
-        viewHolder?.dealAmount?.setText(if (tradeOrder?.dealAmount == null || tradeOrder.dealAmount == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder.dealAmount, amountPrecision, amountPrecision))
-        when (tradeOrder?.status) {
-            0, 1 -> {
+        viewHolder?.dealPrice?.setText(if (tradeOrder?.avgPrice == null || tradeOrder?.avgPrice?.toDouble() == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder?.avgPrice?.toDouble()))
+        viewHolder?.dealAmount?.setText(if (tradeOrder?.dealQty == null || tradeOrder?.dealQty?.toDouble() == 0.0) "0" else NumberUtil.formatNumberNoGroup(tradeOrder?.dealQty?.toDouble(), amountPrecision, amountPrecision))
+        when (tradeOrder?.state) {
+            "NEW", "PARTIALLY_FILLED" -> {
                 //新订单，未结束的
                 viewHolder?.cancel?.visibility = View.VISIBLE
                 viewHolder?.status?.visibility = View.GONE
@@ -94,7 +100,7 @@ class EntrustRecordNewAdapter(context: Context, variableId: Int, data: ArrayList
     }
 
     interface OnHandleClickListener {
-        fun onPairClick(tradeOrder: TradeOrder?)
-        fun onHandleClick(tradeOrder: TradeOrder?)
+        fun onPairClick(tradeOrder: TradeOrderFiex?)
+        fun onHandleClick(tradeOrder: TradeOrderFiex?)
     }
 }

@@ -31,6 +31,7 @@
                     android:background="@drawable/trans_bg_entrust_title_line">
                 </View>
             </LinearLayout>
+
             <com.black.base.widget.SpanTextView
                 android:id="@+id/total_current"
                 android:layout_width="wrap_content"
@@ -38,7 +39,7 @@
                 android:layout_alignParentRight="true"
                 android:text="@string/trade_history"
                 android:textColor="@color/T13"
-                android:textSize="@dimen/text_size_13"/>
+                android:textSize="@dimen/text_size_13" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"

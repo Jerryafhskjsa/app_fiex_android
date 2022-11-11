@@ -19,6 +19,7 @@ class PairStatusNew {
     var r:String? //24小时涨跌
             = "0.0"
     var v:String? = "0.0"//成交额
+    var t:Long? = null
 
 
     val contentValues: ContentValues
@@ -41,8 +42,9 @@ class PairStatusNew {
         pairStatus.maxPrice = h?.toDouble()!!
         pairStatus.minPrice = l?.toDouble()!!
         pairStatus.totalAmount = a?.toDouble()!!
+        pairStatus.tradeAmount = a?.toDouble()!!
         pairStatus.priceChangeSinceToday = r?.toDouble()!!
-        pairStatus.tradeVolume = v
+        pairStatus.tradeVolume = v?.toDouble()!!
         return pairStatus
     }
 
@@ -55,6 +57,8 @@ class PairStatusNew {
         pairStatus.maxPrice = h?.toDouble()!!
         pairStatus.minPrice = l?.toDouble()!!
         pairStatus.totalAmount = a?.toDouble()!!
+        pairStatus.tradeAmount = a?.toDouble()!!
+        pairStatus.tradeVolume = v?.toDouble()!!
         pairStatus.priceChangeSinceToday = r?.toDouble()!!
     }
 
@@ -69,6 +73,7 @@ class PairStatusNew {
             oldObj.l = newObj.l
             oldObj.a = newObj.a
             oldObj.r = newObj.r
+            oldObj.v = newObj.v
         }
     }
 }

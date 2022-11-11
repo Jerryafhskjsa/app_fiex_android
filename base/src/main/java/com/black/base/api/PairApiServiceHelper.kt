@@ -9,6 +9,7 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.QuotationSet
+import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.clutter.HomeTickersKline
@@ -21,10 +22,11 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import io.reactivex.Observable
+import java.math.BigDecimal
 
 object PairApiServiceHelper {
     private var TAG = PairApiServiceHelper::class.java.simpleName
-    private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //热门币种，请求缓存时间，20分钟
+    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //热门币种，请求缓存时间，20分钟
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
     private const val TRADE_PAIR = 3
@@ -38,6 +40,7 @@ object PairApiServiceHelper {
 
     //所有交易对行情数据
     private var homeTickersPairStatus: ArrayList<PairStatus?>? = ArrayList()
+
 
 
     private fun getLastGetTime(type: Int): Long? {
@@ -181,27 +184,50 @@ object PairApiServiceHelper {
                 var data = result?.data!!
                 if (data.isNotEmpty()) {
                     setLastGetTime(HOME_TICKER_LIST, System.currentTimeMillis())
+                    var c2CPrice:C2CPrice? = null
+                    //获取c2c usdt价格
+                    C2CApiServiceHelper.getC2CPrice(context,object :Callback<C2CPrice?>(){
+                        override fun callback(returnData: C2CPrice?) {
+                            c2CPrice = returnData
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                        }
+
+                    })
                     var pairListData = getSymboleListPairData(context)
                     var newData = ArrayList<PairStatus?>()
-                    for (i in data.indices) {
-                        for (j in pairListData!!.indices) {
-//                            pairListData!![j]?.let { newData.add(it) }
+                    var pairStatusMap: MutableMap<String?, PairStatus?> = HashMap()
+                    for (j in pairListData!!.indices) {
+                        for (i in data.indices) {
+                            var temp = pairListData!![j]
                             if (pairListData!![j]?.pair == data[i]?.s) {
-                                var pairStatus = PairStatus()
-                                //交易对名
-                                pairStatus?.pair = data[i]?.s
+                                var temp = pairListData!![j]
                                 //现价
-                                pairStatus?.currentPrice = data[i]?.c?.toDoubleOrNull()!!
+                                temp?.currentPrice = data[i]?.c?.toDouble()!!
                                 //交易量
-                                pairStatus?.tradeVolume = data[i]?.v
+                                temp?.tradeVolume = data[i]?.v?.toDouble()!!
+                                //交易额
+                                temp?.tradeAmount = data[i]?.a?.toDouble()!!
+                                temp?.totalAmount = data[i]?.a?.toDouble()!!
                                 //涨跌幅
-                                pairStatus?.priceChangeSinceToday = data[i]?.r?.toDoubleOrNull()!!
-                                newData.add(pairStatus)
+                                temp?.priceChangeSinceToday = data[i]?.r?.toDouble()!!
+                                if(c2CPrice != null){
+                                    var price = BigDecimal(temp!!.currentPrice)
+                                    var usdt = BigDecimal(c2CPrice?.buy!!)
+                                    var priceCny = price.times(usdt)
+                                    var priceCnyStr =  NumberUtil.formatNumberNoGroup(priceCny, 4, 4)
+                                    temp?.setCurrentPriceCNY(priceCnyStr.toDouble(),"0.0000")
+                                }
                             }
+                            pairStatusMap[temp?.pair] = temp
                         }
                     }
                     if (homeTickersPairStatus?.isNotEmpty() == true) {
                         homeTickersPairStatus?.clear()
+                    }
+                    for ((key,value) in pairStatusMap){
+                        newData.add(value)
                     }
                     homeTickersPairStatus?.addAll(newData)
                     Observable.just(newData)

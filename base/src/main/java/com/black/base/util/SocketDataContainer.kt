@@ -72,7 +72,7 @@ object SocketDataContainer {
 
     //行情交易对socket更新数据缓存
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
-    //自选交易对数据
+    //自选交易对缓存数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
     //所有交易对信息观察者
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
@@ -437,10 +437,6 @@ object SocketDataContainer {
         return if (totalAmount == null || price == null || price.sell == null) null else totalAmount * price.sell!!
     }
 
-    private fun computeTotalMoneyCNY(totalAmount: Number?, price: C2CPrice?): Double? {
-        return if (totalAmount == null || price == null || price.sell == null) null else totalAmount.toDouble() * price.sell!!
-    }
-
     private fun getCoinPairUsdtPrice(sourcePrice: Double?, coinPairStatus: PairStatus?): Double? {
         if (coinPairStatus == null || sourcePrice == null) {
             return null
@@ -466,6 +462,10 @@ object SocketDataContainer {
                 }
             }
         }
+    }
+
+    private fun computeTotalMoneyCNY(totalAmount: Number?, price: C2CPrice?): Double? {
+        return if (totalAmount == null || price == null || price.sell == null) null else totalAmount.toDouble() * price.sell!!
     }
 
     /**
@@ -637,7 +637,6 @@ object SocketDataContainer {
                 } else {
 //                    val data = gson.fromJson<PairStatusNew>(dataSource.toString(), object : TypeToken<PairStatusNew?>() {}.type)
                     val data:PairStatusNew? = dataSource
-                    Log.d(TAG,"updatePairStatusData,data = "+data?.s)
                     synchronized(pairDataSource) {
                         if (isRemoveAll) {
                             pairDataSource.clear()
@@ -665,44 +664,7 @@ object SocketDataContainer {
     }
 
     /**
-     * 查询自选交易对
-     *
-     * @param context
-     */
-    fun refreshDearPairs(context: Context?) {
-        if (context == null) {
-            return
-        }
-        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
-                ?.getDearPairs()
-                ?.subscribeOn(Schedulers.io())
-                ?.map { returnData: HttpRequestResultDataList<String?>? ->
-                    synchronized(dearPairMap) {
-                        //未登录时获取本地自选or
-                        if (CookieUtil.getUserInfo(context) != null) {
-                            dearPairMap.clear()
-                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                for (pair in returnData.data!!) {
-                                    pair?.let {
-                                        dearPairMap[pair] = true
-                                    }
-                                }
-                            }
-                        } else {
-                            updateDearPairMap()
-                        }
-                    }
-                    ""
-                }?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : SuccessObserver<String?>() {
-                    override fun onSuccess(value: String?) {
-                        computePairStatusCNY(context)
-                    }
-                })
-    }
-
-    /**
-     * 更新交易对是否添加已自选
+     * 更新交易对是否添加自选
      *
      * @param context
      * @param handler
@@ -720,6 +682,7 @@ object SocketDataContainer {
                     synchronized(pairDataList!!) {
                         synchronized(allPairStatusMap!!) {
                             synchronized(pairDataSource) {
+                                dearPairMap.clear()
                                 for (pair in dearPairs.keys) {
                                     val isDear = dearPairs[pair]
                                     val pairStatus = allPairStatusMap[pair]
@@ -740,7 +703,7 @@ object SocketDataContainer {
                     .observeOn(Schedulers.trampoline())
                     .subscribe(object : SuccessObserver<String?>() {
                         override fun onSuccess(s: String?) {
-                            //                        computePairStatusCNY(context);
+                             computePairStatusCNY(context)
                         }
                     })
         }
@@ -753,7 +716,7 @@ object SocketDataContainer {
      * @param isDear
      */
     private fun updateFavoriteToCache(pair: String, isDear: Boolean) {
-        updateDearPairMap()
+//        updateDearPairMap()
         if (isDear) {
             dearPairMap[pair] = isDear
         } else {
@@ -1011,7 +974,9 @@ object SocketDataContainer {
                         for (i in returnData.indices) {
                             val pairStatus = returnData[i]
                             if (context.getString(R.string.pair_collect) == setName) {
-                                if (true == pairStatus?.is_dear) {
+                                var dearPair = dearPairMap[pairStatus?.pair]
+                                if(dearPair != null){
+                                    pairStatus?.is_dear = true
                                     result.add(pairStatus)
                                 }
                             } else {

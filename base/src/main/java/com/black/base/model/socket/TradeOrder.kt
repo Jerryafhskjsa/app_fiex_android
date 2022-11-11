@@ -154,7 +154,7 @@ class TradeOrder : BaseAdapterItem, Parcelable {
         return when (status) {
             1 -> context.getString(R.string.trade_part)
             8 -> context.getString(R.string.trade_deal)
-            9 -> context.getString(R.string.trade_canceled)
+            9 -> context.getString(R.string.trade_canceled_all)
             10 -> context.getString(R.string.trade_failed)
             else -> context.getString(R.string.trade_start)
         }

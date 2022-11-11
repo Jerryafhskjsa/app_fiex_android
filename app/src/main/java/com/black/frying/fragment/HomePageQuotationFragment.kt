@@ -55,7 +55,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private val socketHandler: Handler? = null
     private var currentTabPosition:Int = 0
 
-    var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
+    var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL,PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
@@ -73,6 +73,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
 
         binding?.sortCoin?.setOnClickListener(this)
+        binding?.sortVolume?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
         binding?.sortRange?.setOnClickListener(this)
         return binding?.root
@@ -98,16 +99,25 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         when (v.id) {
             R.id.sort_coin -> {
                 comparator.coinType = getNextType(comparator.coinType)
+                comparator.tradeVolmeType =  PairQuotationComparator.NORMAL
+                comparator.priceType = PairQuotationComparator.NORMAL
+                comparator.rangeType = PairQuotationComparator.NORMAL
+            }
+            R.id.sort_volume ->{
+                comparator.coinType =  PairQuotationComparator.NORMAL
+                comparator.tradeVolmeType = getNextType(comparator.tradeVolmeType)
                 comparator.priceType = PairQuotationComparator.NORMAL
                 comparator.rangeType = PairQuotationComparator.NORMAL
             }
             R.id.sort_price -> {
                 comparator.coinType = PairQuotationComparator.NORMAL
+                comparator.tradeVolmeType =  PairQuotationComparator.NORMAL
                 comparator.priceType = getNextType(comparator.priceType)
                 comparator.rangeType = PairQuotationComparator.NORMAL
             }
             R.id.sort_range -> {
                 comparator.coinType = PairQuotationComparator.NORMAL
+                comparator.tradeVolmeType =  PairQuotationComparator.NORMAL
                 comparator.priceType = PairQuotationComparator.NORMAL
                 comparator.rangeType = getNextType(comparator.rangeType)
             }
@@ -134,6 +144,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private fun updateSortIcons() {
         binding?.iconSortCoin?.setImageDrawable(getIcon(comparator.coinType))
+        binding?.iconSortVolume?.setImageDrawable(getIcon(comparator.tradeVolmeType))
         binding?.iconSortPrice?.setImageDrawable(getIcon(comparator.priceType))
         binding?.iconSortRange?.setImageDrawable(getIcon(comparator.rangeType))
     }
@@ -151,7 +162,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             return
         }
         for (fragment in fragmentList!!) {
-//            fragment?.updateCompare(comparator)
+            if(fragment is HomePageQuotationDetailFragment){
+                fragment?.updateCompare(comparator)
+            }
         }
     }
 
