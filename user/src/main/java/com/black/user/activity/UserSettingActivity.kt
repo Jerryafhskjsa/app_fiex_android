@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.model.FryingStyleChange
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.StyleChangeUtil
 import com.black.router.BlackRouter
@@ -97,6 +98,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
 private fun change(styleChange: FryingStyleChange){
     if(styleChange != StyleChangeUtil.getStyleChangeSetting(this)){
         StyleChangeUtil.setStyleChangeSetting(this,styleChange)
+        FryingUtil.showToast(mContext, getString(com.black.base.R.string.change_successful))
     }
 }
 
