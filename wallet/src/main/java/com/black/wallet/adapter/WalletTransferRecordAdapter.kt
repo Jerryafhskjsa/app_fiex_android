@@ -22,7 +22,7 @@ class WalletTransferRecordAdapter(context: Context, variableId: Int, data: Array
         viewHolder?.amount?.setText(if (record?.amount == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(record.amount, 9, 0, 8))
         viewHolder?.type?.setText(if (record?.getTypeText(context) == null) nullAmount else record.getTypeText(context))
 //        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else CommonUtil.formatDate("yyyy/MM/dd HH:mm", record.createdTime!!))
-        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else record.createdTime!!)
+        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else record.getDateDes(context))
 
     }
 }

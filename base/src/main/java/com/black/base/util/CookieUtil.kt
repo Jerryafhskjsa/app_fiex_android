@@ -7,6 +7,7 @@ import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData.CURRENT_PAIR_LEVER
 import com.google.gson.Gson
 import java.util.*
+import kotlin.collections.ArrayList
 
 object CookieUtil {
     fun getSharedPreferences(context: Context): SharedPreferences {
@@ -296,8 +297,22 @@ object CookieUtil {
         getSharedPreferences(context).edit().putInt(ConstData.HOST_INDEX, index).apply()
     }
 
+    fun setServerHost(context: Context,data:ArrayList<String?>){
+        var set = data.toSet()
+        getSharedPreferences(context).edit().putStringSet(ConstData.HOST_DATA, set).apply()
+    }
+
+    fun getServerHost(context: Context):ArrayList<String?>?{
+        var sets =  getSharedPreferences(context).getStringSet(ConstData.HOST_DATA,null)
+        var data:ArrayList<String?>? = null
+        if(sets != null){
+             data = sets.toList() as ArrayList<String?>?
+        }
+        return data
+    }
+
     fun getHostIndex(context: Context): Int {
-        return getSharedPreferences(context).getInt(ConstData.HOST_INDEX, 0)
+        return getSharedPreferences(context).getInt(ConstData.HOST_INDEX, 1)
     }
 
     fun addPairSearchHistory(context: Context, pair: String?) {

@@ -1,10 +1,12 @@
 package com.black.frying.fragment
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -15,6 +17,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.QuotationSet
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
+import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.frying.adapter.HomeQuotationDetailAdapter
 import com.black.frying.util.PairQuotationComparator
@@ -32,7 +35,8 @@ import kotlin.collections.ArrayList
 /**
  * @author 行情tab页
  */
-class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickListener, View.OnClickListener {
+class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickListener,
+    View.OnClickListener {
     private var set: String? = null
     private var collect: String? = null
 
@@ -41,20 +45,36 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     private var adapter: HomeQuotationDetailAdapter? = null
     private val dataList = ArrayList<PairStatus?>()
     private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
+    private val dearPairs = java.util.ArrayList<String?>()
+
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
-    private var dataInitFinish:Boolean? = false
-    private var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
+    private var comparator = PairQuotationComparator(
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL,
+        PairQuotationComparator.NORMAL
+    )
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
+    private var gettingPairsData:Boolean? = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (binding != null) {
             return binding?.root
         }
         collect = getString(R.string.pair_collect)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_quotation_detail, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_home_page_quotation_detail,
+            container,
+            false
+        )
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -63,6 +83,23 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         adapter = HomeQuotationDetailAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
+        //解决add empty view之后下拉刷新异常
+        binding?.listView?.setOnTouchListener(object :View.OnTouchListener{
+            @SuppressLint("ClickableViewAccessibility")
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_MOVE ->{
+                        if (binding?.listView?.getFirstVisiblePosition() == 0 &&
+                            binding?.listView?.getChildAt(0)?.getTop()!! >= 0) {//或者 listView.getChildAt(0).getTop() >= listView.getListPaddingTop())
+                            binding?.marketRefreshLayout?.setEnabled(true)
+                        } else {
+                            binding?.marketRefreshLayout?.setEnabled(false)
+                        }
+                    }
+                }
+                return false
+            }
+        })
         if (collect != null && collect.equals(set, ignoreCase = true)) {
             val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
             emptyView.findViewById<View>(R.id.btn_action).setOnClickListener(this)
@@ -76,11 +113,15 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
             binding?.listView?.emptyView = emptyView
         }
         binding?.marketRefreshLayout?.setRefreshHolder(RefreshHolderFrying(activity!!))
-        binding?.marketRefreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+        binding?.marketRefreshLayout?.setOnRefreshListener(object :
+            QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-                binding!!.marketRefreshLayout.postDelayed({ binding!!.marketRefreshLayout.setRefreshing(false) }, 300)
+                binding!!.marketRefreshLayout.postDelayed({
+                    binding!!.marketRefreshLayout.setRefreshing(
+                        false
+                    )
+                }, 100)
             }
-
         })
         return binding?.root
     }
@@ -93,13 +134,30 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        thisSetPairStatusData
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
         if (TextUtils.equals(set, collect)) {
-            SocketDataContainer.refreshDearPairs(mContext)
+            gettingPairsData = true
+            DearPairService.getDearPairList(
+                context,
+                socketHandler,
+                object : Callback<java.util.ArrayList<String?>?>() {
+                    override fun error(type: Int, error: Any) {
+                        thisSetPairStatusData
+                    }
+
+                    override fun callback(returnData: java.util.ArrayList<String?>?) {
+                        if (returnData != null && returnData.isNotEmpty()) {
+                            dearPairs.clear()
+                            dearPairs.addAll(returnData)
+                        }
+                        thisSetPairStatusData
+                    }
+                })
+        } else {
+            thisSetPairStatusData
         }
     }
 
@@ -149,70 +207,102 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
             synchronized(dataMap) {
                 synchronized(dataList) {
                     var hasPairListChanged = false
-                    Log.d("iiiiii","updatePairStatusData.size = "+value.size)
                     //size>1，表示更新所有数据，会造成行情页面空白,size = 1表示单条行情更新，此处需要优化
-                    if(value.size > 1){
+                    if (value.size > 1) {
                         return@Runnable
                     }
                     for (pairStatus in value) {
                         pairStatus?.pair?.let {
-                            val showPair = dataMap[it]
-                            Log.d("iiiiii","dataMap.size = "+dataMap.size)
-                            Log.d("iiiiii", "pair = $it")
-                            Log.d("iiiiii","showPair = "+showPair?.pair)
-                            if (showPair != null) {//更新已有的交易对
-                                if (TextUtils.equals(set, collect) && !pairStatus.is_dear) {
+                            var showPair = dataMap[it]
+                            var isDear = dearPairs.contains(it)
+                            if (showPair != null) {
+                                //更新已有的交易对
+                                if (TextUtils.equals(set, collect)) {
                                     //如果是自选，并且交易对现在不再是自选，删除该交易对
-//                                    adapter?.removeItem(pairStatus)
-//                                    dataList.remove(pairStatus)
-//                                    dataMap.remove(it)
-//                                    hasPairListChanged = true
+                                    if(gettingPairsData == false){
+                                        if (!isDear) {
+                                            if(dataMap.containsKey(it)){
+                                                dataMap.remove(it)
+                                                hasPairListChanged = true
+                                            }
+                                        } else {
+                                            if (pairStatus?.pair.equals(showPair.pair)) {
+                                                showPair.currentPrice = (pairStatus.currentPrice)
+                                                showPair.setCurrentPriceCNY(
+                                                    pairStatus.currentPriceCNY,
+                                                    nullAmount
+                                                )
+                                                showPair.priceChangeSinceToday =
+                                                    (pairStatus.priceChangeSinceToday)
+                                                showPair.tradeVolume = (pairStatus.tradeVolume)
+                                                showPair.tradeAmount = (pairStatus.tradeAmount)
+                                                dataMap.replace(it, showPair)
+                                                hasPairListChanged = true
+                                            }
+                                        }
+                                    }
                                 } else {
-                                    //重新设置相关参数
-                                    showPair.currentPrice = (pairStatus.currentPrice)
-                                    showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                                    showPair.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-                                    showPair.totalAmount = (pairStatus.totalAmount)
-                                    dataMap.replace(it,showPair)
-                                    hasPairListChanged = true
+                                    //更新行情相关数据
+                                    if (pairStatus?.setName.equals(set) && pairStatus?.pair.equals(showPair.pair)) {
+                                        showPair.currentPrice = (pairStatus.currentPrice)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
+                                        dataMap.replace(it, showPair)
+                                        hasPairListChanged = true
+                                    }
                                 }
                             } else {
-//                                //是新的交易对
-//                                var newPair = PairStatus()
-//                                pairStatus.currentPrice = (pairStatus.currentPrice)
-//                                pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-//                                pairStatus.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
-//                                pairStatus.totalAmount = (pairStatus.totalAmount)
-//                                //判断是不是该交易对的
-//                                if (TextUtils.equals(set, collect)) {
-//                                    if (pairStatus.is_dear) {
-//                                        dataList.add(pairStatus)
-//                                        dataMap[it] = pairStatus
-//                                        adapter?.addItem(pairStatus)
-//                                        hasPairListChanged = true
-//                                    }
-//                                } else {
-//                                    if (TextUtils.equals(pairStatus.setName, set)) {
-//                                        dataList.add(pairStatus)
-//                                        dataMap[it] = pairStatus
-//                                        adapter?.addItem(pairStatus)
-//                                        hasPairListChanged = true
-//                                    }
-//                                }
+                               //是新的交易对
+                                if (TextUtils.equals(set, collect) && isDear) {
+                                    if (pairStatus?.is_dear != null && pairStatus.is_dear) {
+                                        showPair = PairStatus()
+                                        showPair.currentPrice = (pairStatus.currentPrice)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
+                                        dataMap[it] = showPair
+                                        hasPairListChanged = true
+                                    }
+                                } else {
+                                    if (pairStatus?.setName.equals(set)) {
+                                        showPair = PairStatus()
+                                        showPair.currentPrice = (pairStatus.currentPrice)
+                                        showPair.setCurrentPriceCNY(
+                                            pairStatus.currentPriceCNY,
+                                            nullAmount
+                                        )
+                                        showPair.priceChangeSinceToday =
+                                            (pairStatus.priceChangeSinceToday)
+                                        showPair.tradeVolume = (pairStatus.tradeVolume)
+                                        showPair.tradeAmount = (pairStatus.tradeAmount)
+                                        dataMap[it] = showPair
+                                        hasPairListChanged = true
+                                    }
+                                }
                             }
                         }
                     }
                     Log.d("iiiiii", "update userVisibleHint = $userVisibleHint")
                     Log.d("iiiiii", "update set = $set")
                     mContext?.runOnUiThread {
-                        if (hasPairListChanged && userVisibleHint && dataInitFinish == true) {
+                        if (hasPairListChanged) {
                             var result = ArrayList<PairStatus?>()
-                            dataMap.forEach{
+                            dataMap.forEach {
                                 result.add(it.value)
                             }
                             adapter?.data = result
-                            adapter?.sortData(comparator)
-                            adapter?.notifyDataSetChanged()
+                            updateCompare(comparator)
                         }
                     }
                 }
@@ -220,42 +310,47 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         })
     }
 
+
     /**
      * 根据tab获取对应list数据
      */
     private val thisSetPairStatusData: Unit
         get() {
             postHandleTask(socketHandler, Runnable {
-                SocketDataContainer.getPairsWithSet(activity, set, object : Callback<ArrayList<PairStatus?>?>() {
-                    override fun error(type: Int, error: Any) {}
-                    override fun callback(returnData: ArrayList<PairStatus?>?) {
-                        if (returnData == null) {
-                            return
+                SocketDataContainer.getPairsWithSet(
+                    activity,
+                    set,
+                    object : Callback<ArrayList<PairStatus?>?>() {
+                        override fun error(type: Int, error: Any) {
+                            gettingPairsData = false
                         }
-                        synchronized(dataMap) {
-                            synchronized(dataList) {
-                                dataMap.clear()
-                                dataList.clear()
-                                dataList.addAll(returnData)
-                                Log.d("iiiiii", "returnData,set = $set")
-                                Log.d("iiiiii","returnData->size = "+dataList?.size)
-                                for (pairStatus in returnData) {
-                                    pairStatus?.pair?.let {
-                                        dataMap[it] = pairStatus
+                        override fun callback(returnData: ArrayList<PairStatus?>?) {
+                            if (returnData == null) {
+                                gettingPairsData = false
+                                return
+                            }
+                            synchronized(dataMap) {
+                                synchronized(dataList) {
+                                    dataMap.clear()
+                                    dataList.clear()
+                                    dataList.addAll(returnData)
+                                    for (pairStatus in returnData) {
+                                        pairStatus?.pair?.let {
+                                            dataMap[it] = pairStatus
+                                        }
                                     }
-                                }
-                                mContext?.runOnUiThread {
-                                    if (userVisibleHint) {
-                                        adapter?.data =  dataList
+                                    mContext?.runOnUiThread {
+                                        adapter?.data = dataList
                                         adapter?.sortData(comparator)
                                         adapter?.notifyDataSetChanged()
+                                        gettingPairsData = false
                                     }
                                 }
                                 dataInitFinish = true
                             }
+                            gettingPairsData = false
                         }
-                    }
-                })
+                    })
             })
         }
 
@@ -282,7 +377,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext) { _, _ -> }
+            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
+                .go(mContext) { _, _ -> }
         }
     }
 

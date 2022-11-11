@@ -94,11 +94,12 @@
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/price"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:textColor="@color/T1"
                     android:textSize="@dimen/text_size_16"
+                    android:gravity="right"
                     android:textStyle="bold" />
 
                 <View
@@ -107,9 +108,10 @@
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/price_cny"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:gravity="right"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />
             </LinearLayout>
@@ -125,7 +127,7 @@
                     android:id="@+id/since"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="right"
                     android:maxLines="1"
                     android:padding="6dp"
                     android:textColor="@color/T3"

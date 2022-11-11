@@ -2,6 +2,7 @@ package com.black.base.service
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import com.black.base.api.PairApiService
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.manager.ApiManager
@@ -22,7 +23,7 @@ import java.util.*
 object DearPairService {
     const val ACTION_UPDATE = 1
     const val ACTION_REPLACE = 2
-    val dearPairMap: MutableMap<String, Boolean?> = HashMap()
+    var dearPairMap: MutableMap<String, Boolean?> = HashMap()
     var hasGotAll = false
     /**
      * 添加自选
@@ -81,7 +82,7 @@ object DearPairService {
             return Observable.just(result)
         }
         //登录情况同步接口
-        return ApiManager.build(context!!).getService(PairApiService::class.java)
+        return ApiManager.build(context!!,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollect(pair)
                 ?.flatMap { result: HttpRequestResultString? ->
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {
@@ -153,7 +154,7 @@ object DearPairService {
             return Observable.just(result)
         }
         //已登录同步接口
-        return ApiManager.build(context!!).getService(PairApiService::class.java)
+        return ApiManager.build(context!!,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollectCancel(pair)
                 ?.flatMap { result: HttpRequestResultString? ->
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {
@@ -186,18 +187,20 @@ object DearPairService {
 
             override fun callback(returnData: HttpRequestResultDataList<String?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    hasGotAll = true
-                    val tempMap: MutableMap<String, Boolean> = HashMap()
-                    returnData.data?.let { it ->
-                        for (i in it.indices) {
-                            it[i]?.let {
-                                tempMap[it] = true
+                    synchronized(dearPairMap){
+                        hasGotAll = true
+                        val tempMap: MutableMap<String, Boolean> = HashMap()
+                        returnData.data?.let { it ->
+                            for (i in it.indices) {
+                                it[i]?.let {
+                                    tempMap[it] = true
+                                }
                             }
                         }
+                        dearPairMap.clear()
+                        dearPairMap.putAll(tempMap)
+                        updateDearPairs(context, handler, dearPairMap, true)
                     }
-                    dearPairMap.clear()
-                    dearPairMap.putAll(tempMap)
-                    updateDearPairs(context, handler, dearPairMap, false)
                 } else { //FryingUtil.showToast(context, returnData == null ? "null" : returnData.msg);
                 }
                 callback?.callback(returnData?.data)

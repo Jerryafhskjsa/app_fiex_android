@@ -47,6 +47,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     override fun onResume() {
         super.onResume()
         initHandler()
+        Log.d(TAG,"onResume")
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
@@ -73,6 +74,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     override fun onStop() {
         super.onStop()
+        Log.d(TAG,"onStop")
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle)
@@ -222,7 +224,9 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
                 if(i?.pair.equals(updateData[0]?.pair)){
                     i?.precision = updateData[0]?.precision ?: 0
                     i?.currentPrice = (updateData[0]?.currentPrice ?: 0.0)
-                    i?.tradeVolume = updateData[0]?.tradeVolume ?: "0"
+                    i?.tradeVolume = updateData[0]?.tradeVolume ?: 0.0
+                    i?.tradeAmount =  updateData[0]?.tradeAmount ?: 0.0
+                    i?.totalAmount = updateData[0]?.totalAmount ?: 0.0
                     i?.setCurrentPriceCNY(updateData[0]?.currentPriceCNY, nullAmount)
                     i?.priceChangeSinceToday = (updateData[0]?.priceChangeSinceToday)
                 }
@@ -276,7 +280,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
      * 获取交易对的详细数据
      */
     fun getHomeTicker(){
-        onMainModelListener?.onHomeTickers(PairApiServiceHelper.getHomeTickers((context!!)))
+        onMainModelListener?.onHomeTickers(PairApiServiceHelper.getHomeTickersLocal((context!!)))
     }
 
     /**

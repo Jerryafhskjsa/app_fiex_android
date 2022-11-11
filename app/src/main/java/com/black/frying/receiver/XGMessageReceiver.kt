@@ -48,7 +48,7 @@ class XGMessageReceiver : XGPushBaseReceiver() {
         try {
             val uri = Uri.parse(customContent)
             if (uri != null && uri.isHierarchical) {
-                val currentActivity = FryingApplication.currentActivity
+                val currentActivity = FryingApplication.instance().getCurrentActivity()
                 //锁屏界面不可跳转
                 if (currentActivity != null && !FryingUtil.cannotJumpNotificationRouter(currentActivity)) {
                     BlackRouter.getInstance().build(customContent).go(currentActivity)

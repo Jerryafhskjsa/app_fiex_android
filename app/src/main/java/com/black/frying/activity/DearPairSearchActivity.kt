@@ -71,6 +71,11 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         pairSearchHistory
     }
 
+    override fun onResume() {
+        super.onResume()
+        searchPair("")
+    }
+
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
     }

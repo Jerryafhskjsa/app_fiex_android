@@ -60,6 +60,13 @@ object ConstData {
 
     const val ONE_SECOND_MILLIS = 1000
     const val GET_CODE_LOCK_TIME = 60
+    const val APP_STAY_BACKGROUND_TIME = 60
+
+    //认证类型code
+    const val AUTHENTICATE_CODE_MAIL = -10021
+    const val AUTHENTICATE_CODE_PHONE = -10022
+    const val AUTHENTICATE_CODE_GOOGLE = -10023
+    const val AUTHENTICATE_CODE_GOOGLE_OR_PHONE = -10024
 
     //认证类型code
     const val AUTHENTICATE_CODE_MAIL = -10021
@@ -129,6 +136,7 @@ object ConstData {
     const val CELL_PRICE = "cell_price"
     const val BUY_PRICE = "buy_price"
     const val HOST_INDEX = "host_index"
+    const val HOST_DATA = "host_data"
     const val PAIR_SEARCH_HISTORY = "pair_search_history"
     const val COIN_SEARCH_HISTORY = "coin_search_history"
     const val LEVEL_TYPE = "level_type"
@@ -303,4 +311,6 @@ object ConstData {
     const val HOME_TAB_VOLUME_BAND = 3
 
     const val ASSET_SUPPORT_ACCOUNT_TYPE = "asset_support_account_type"
+    const val ASSET_SUPPORT_SPOT_ACCOUNT_TYPE = "asset_support_spot_account_type"
+    const val ASSET_SUPPORT_OTHER_ACCOUNT_TYPE = "asset_support_other_account_type"
 }

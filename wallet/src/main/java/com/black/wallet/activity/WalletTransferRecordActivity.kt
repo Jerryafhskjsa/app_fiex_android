@@ -41,7 +41,8 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
     private var pageSize = 10
     private var total = 0
     private var all:Boolean? = true
-    private var supportAccoutTypeList:ArrayList<SupportAccount>? = null
+    private var supportFromAccoutTypeList:ArrayList<SupportAccount?>? = null
+    private var supportToAccoutTypeList:ArrayList<SupportAccount?>? = null
     private var fromAccount:SupportAccount? = null
     private var toAccount:SupportAccount? = null
     private var filterDialog:TransferRecordFilterControllerWindow? = null
@@ -54,9 +55,9 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pair = intent.getStringExtra(ConstData.PAIR)
-        supportAccoutTypeList = intent.getParcelableArrayListExtra(ConstData.ASSET_SUPPORT_ACCOUNT_TYPE)
+        supportFromAccoutTypeList = intent.getParcelableArrayListExtra(ConstData.ASSET_SUPPORT_SPOT_ACCOUNT_TYPE)
+        supportToAccoutTypeList = intent.getParcelableArrayListExtra(ConstData.ASSET_SUPPORT_OTHER_ACCOUNT_TYPE)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_transfer_record)
-        binding?.type?.setText(pair?.replace("_", "/") ?: "")
         var selectIcon: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         selectIcon?.setImageDrawable(getDrawable(R.drawable.icon_selected_type))
         selectIcon?.visibility = View.VISIBLE
@@ -83,7 +84,6 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-
         getRecord(true,all)
     }
 
@@ -131,14 +131,21 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
 
     private fun showWalletChooseDialog(accountType:String){
         var clickAccout:SupportAccount? = null
+        var selectDataList:ArrayList<SupportAccount?>? = null
         when(accountType){
-            fromAccountType -> clickAccout = fromAccount
-            toAccountType -> clickAccout = toAccount
+            fromAccountType -> {
+                clickAccout = fromAccount
+                selectDataList = supportFromAccoutTypeList
+            }
+            toAccountType -> {
+                clickAccout = toAccount
+                selectDataList = supportToAccoutTypeList
+            }
         }
         ChooseWalletControllerWindow(mContext as Activity,
             getString(R.string.select_wallet),
             clickAccout,
-            supportAccoutTypeList,
+            selectDataList,
             object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
                 override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {
                     when(accountType){

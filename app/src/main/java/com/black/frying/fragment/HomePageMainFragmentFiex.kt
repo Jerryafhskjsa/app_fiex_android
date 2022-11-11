@@ -248,15 +248,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                         hotPair.tradeVolume = pairStatus?.tradeVolume
                         hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
                         hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
-                        Log.d(TAG,"onPairStatusDataChanged,price = "+hotPair.currentPrice)
-                        Log.d(TAG,"onPairStatusDataChanged,pairName = "+hotPair.pair)
-                    }
-                    val gridView = hardGridViewMap[pairStatus?.pair]
-                    Log.d(TAG, "onPairStatusDataChanged,gridView = $gridView")
-                    if(gridView != null){
-                        var gridViewAdapter = gridView?.adapter as GridViewAdapter
-                        gridViewAdapter.updateItem(pairStatus?.pair,hotPair)
-                        gridViewAdapter.notifyDataSetChanged()
+                        val gridView = hardGridViewMap[pairStatus?.pair]
+                        if(gridView != null && hotPair?.currentPrice!! > 0){
+                            var gridViewAdapter = gridView?.adapter as GridViewAdapter
+                            gridViewAdapter.updateItem(pairStatus?.pair,hotPair)
+                            gridViewAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
                 homeTabType?.let {
@@ -396,22 +393,39 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                     for (j in 0 until rest) {
                         val pairStatus = ticketData[offset + j]
                         var pairName = pairStatus?.pair
-                        gridPairs.add(pairStatus)
-                        hotPairMap[pairName] = pairStatus
-                        hardGridViewMap[pairName] = gridView
+                        var temp = hardGridViewMap[pairStatus?.pair]
+                        if(temp != null){
+                            if(pairStatus?.currentPrice!! > 0){
+                                var gridViewAdapter = temp?.adapter as GridViewAdapter
+                                gridViewAdapter.updateItem(pairStatus?.pair,pairStatus)
+                                gridViewAdapter.notifyDataSetChanged()
+                                hotPairMap[pairName] = pairStatus
+                            }
+                        }else{
+                            gridPairs.add(pairStatus)
+                            hotPairMap[pairName] = pairStatus
+                            val adapter = GridViewAdapter(activity!!, gridPairs)
+                            gridView?.numColumns = STATUS_PAGE_COUNT
+                            gridView?.adapter = adapter
+                            gridView?.scrollBarSize = 0
+                            gridView?.horizontalSpacing = 15
+                            gridView?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
+                            hardGridViewMap[pairName] = gridView
+                            viewList.add(gridView)
+                        }
                     }
-                    val adapter = GridViewAdapter(activity!!, gridPairs)
-                    gridView.numColumns = STATUS_PAGE_COUNT
-                    gridView.adapter = adapter
-                    gridView.scrollBarSize = 0
-                    gridView.horizontalSpacing = 15
-                    gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
-                    viewList.add(gridView)
+                }
+                Log.d(TAG, "viewList.size = "+viewList.size)
+                if(viewList.size > 0){
+                    if(statusAdapter == null){
+                        statusAdapter = BaseViewPagerAdapter(viewList)
+                    }else{
+                        statusAdapter?.setViewList(viewList)
+                    }
+                    binding!!.statusViewPager.adapter = statusAdapter
                 }
             }
         }
-        statusAdapter = BaseViewPagerAdapter(viewList)
-        binding!!.statusViewPager.adapter = statusAdapter
 //        viewModel!!.getAllPairStatus()
     }
 
@@ -585,7 +599,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             binding?.pairPrice?.text = pairStatus.currentPriceFormat
             binding?.pairPrice?.setTextColor(color)
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-            binding?.pairSince?.setTextColor(colorDefault)
+            binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
             binding?.pairPriceCny?.text = String.format("≈ %sCNY", pairStatus.currentPriceCNYFormat)
             var kLineData = pairStatus?.kLineData
             if(kLineData != null){

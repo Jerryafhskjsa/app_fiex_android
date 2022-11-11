@@ -54,14 +54,14 @@
     <string name="warm_notice">温馨提示</string>
     <string name="exit">确认退出当前账号吗？</string>
     <string name="number_default">－</string>
-    <string name="high">高</string>
-    <string name="low">低</string>
+    <string name="high">24h高</string>
+    <string name="low">24h低</string>
     <string name="_1_day" tools:ignore="UnusedResources">1天</string>
     <string name="pull_down_refresh">下拉刷新</string>
     <string name="loading">加载中...</string>
     <string name="error_data">数据错误</string>
     <string name="trade_deal">已成交</string>
-    <string name="trade_canceled">已撤销</string>
+    <string name="trade_canceled_all">已撤销</string>
     <string name="trade_failed">失败</string>
     <string name="alert_choose_country">请选择国家区码！</string>
     <string name="alert_not_phone">请填写手机号码！</string>
@@ -213,7 +213,7 @@
     <string name="alert_close_success">关闭成功</string>
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
-    <string name="volumn">量</string>
+    <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
     <string name="collect_delete">删自选</string>
     <string name="total_amount">总账户资产 (≈）</string>
@@ -266,7 +266,7 @@
     <string name="entrust_type_buy">买入</string>
     <string name="entrust_type_sale">卖出</string>
     <string name="trade_value">交易额</string>
-    <string name="point_count">深度 %1$s</string>
+    <string name="point_count">%1$s</string>
     <string name="trade_sale_over_price">卖单价格低于当前成交价20%</string>
     <string name="trade_buy_over_price">买单价格高于当前成交价20%</string>
     <string name="trade_success">创建委托成功！</string>
@@ -284,6 +284,12 @@
     <string name="no_image">图片不能为空</string>
     <string name="trade_start">进行中</string>
     <string name="trade_part">部分成交</string>
+    <string name="trade_part_cancel">部分撤销</string>
+    <string name="trade_new">新建订单</string>
+    <string name="trade_cancel_all">已撤销</string>
+    <string name="trade_fail">下单失败</string>
+    <string name="trade_expired">已过期</string>
+    <string name="trade_all_deal">全部成交</string>
     <string name="total">全部</string>
     <string name="wallet_bill_deposit">充值</string>
     <string name="wallet_bill_withdraw">提现</string>
@@ -653,6 +659,10 @@
     <string name="system_setup">System Setup</string>
     <string name="system_version">System Version</string>
     <string name="server_setting">Link Line</string>
+    <string name="link_line_exception">线路异常</string>
+    <string name="link_line_normal">线路正常</string>
+    <string name="link_line_one">线路1</string>
+    <string name="link_line_two">线路2</string>
 
     <string name="old_psw">旧密码</string>
     <string name="new_psw">新密码</string>
@@ -675,6 +685,7 @@
     <string name="to">to</string>
     <string name="spot_account">现货账户</string>
     <string name="contract_account">合约账户</string>
+    <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财账户</string>
     <string name="wallet_account">钱包账户</string>
     <string name="confirm_transfer">Confirm transfer</string>
@@ -727,9 +738,8 @@
     <string name="price_amplitude">最新价/24h涨跌幅</string>
     <string name="brackets">(%s)</string>
     <string name="select_order_type">请选择下单类型</string>
-    <string name="order_type_limit">LIMIT</string>
-    <string name="order_type_market">MARKET</string>
-
-
-
+    <string name="order_type_limit">限价</string>
+    <string name="order_type_market">市价</string>
+    <string name="total_entrust_amount">累计数量</string>
+    <string name="total_price">累计金额</string>
 </resources>

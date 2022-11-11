@@ -41,7 +41,9 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                             }
                             if (WebSocketHandler.getDefault() != null) {
                                 if (WebSocketHandler.getDefault().getSetting().reconnectWithNetworkChanged()) {
-                                    WebSocketHandler.getDefault().reconnect();
+                                    if(!WebSocketHandler.getDefault().isConnect()){
+                                        WebSocketHandler.getDefault().reconnect();
+                                    }
                                 }
                             }
                             if (!WebSocketHandler.getAllWebSocket().isEmpty()) {
@@ -49,7 +51,9 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                                 for (String key : webSocketManagerMap.keySet()) {
                                     WebSocketManager item = webSocketManagerMap.get(key);
                                     if (item != null && item.getSetting().reconnectWithNetworkChanged()) {
-                                        item.reconnect();
+                                        if(!item.isConnect()){
+                                            item.reconnect();
+                                        }
                                     }
                                 }
                             }

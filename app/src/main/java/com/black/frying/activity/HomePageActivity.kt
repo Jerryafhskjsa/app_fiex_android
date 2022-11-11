@@ -16,10 +16,12 @@ import android.widget.TabHost
 import android.widget.TextView
 import androidx.fragment.app.FragmentTabHost
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.Update
+import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.GlobalAd
 import com.black.base.model.user.UserInfo
 import com.black.base.service.DownloadServiceHelper
@@ -107,6 +109,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         UdeskUtil.initUdesk(applicationContext)
         //获取所有配置币种并且缓存
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
+        //获取所有交易对数据并缓存
+        SocketDataContainer.initAllPairStatusData(this)
         checkUpdate(true)
     }
 
@@ -139,6 +143,15 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             }
 
         })
+        //获取c2c usdt价格
+        C2CApiServiceHelper.getC2CPrice(mContext,object :Callback<C2CPrice?>(){
+            override fun callback(returnData: C2CPrice?) {
+            }
+
+            override fun error(type: Int, error: Any?) {
+            }
+
+        })
         //判断socket的service 是否存活
         if (!CommonUtil.isServiceWorked(this, SocketService::class.java)) {
             startSocketService()
@@ -148,7 +161,6 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         }
 //        getDialogAd()
         //获取了所有交易对信息
-        SocketDataContainer.initAllPairStatusData(this)
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_QUOTA_OPEN)
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_ORDER_OPEN)
     }

@@ -135,6 +135,8 @@ object C2CApiServiceHelper {
                             }
                             c2CPrice!!.buy = price
                             c2CPrice!!.sell = price
+                            CookieUtil.setC2CCellPrice(context, c2CPrice!!.sell!!.toFloat())
+                            CookieUtil.setC2CBuyPrice(context, c2CPrice!!.buy!!.toFloat())
                             setLastGetTime(C2C_PRICE, System.currentTimeMillis())
                         }
                     }

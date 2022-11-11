@@ -98,26 +98,26 @@
             android:padding="@dimen/default_padding">
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_withdraw"
+                android:id="@+id/btn_exchange"
                 style="@style/ButtonReturn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/reback" />
+                android:text="@string/rechange" />
 
             <View
                 android:layout_width="@dimen/double_padding"
                 android:layout_height="@dimen/line" />
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_exchange"
+                android:id="@+id/btn_withdraw"
                 style="@style/ButtonBlue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/borrow" />
+                android:text="@string/extract" />
 
         </LinearLayout>
     </RelativeLayout>

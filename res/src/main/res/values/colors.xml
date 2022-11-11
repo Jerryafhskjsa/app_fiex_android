@@ -73,11 +73,20 @@
     <color name="T12">#F5F5F5</color>
 
     <color name="T13">#1571FF</color>
+    <color name="T13_ALPHA20">#3371FF</color>
+    <color name="T13_ALPHA2">#0571FF</color>
     <color name="T13_ALPHA10">#191571FF</color>
     <color name="T13_ALPHA50">#801571FF</color>
     <color name="T13_ALPHA80">#cc1571FF</color>
     <color name="T15">#FF8B00</color>
     <color name="T15_ALPHA20">#33FF8B00</color>
     <color name="T15_ALPHA10">#1AFF8B00</color>
+    <color name="T16">#FD5760</color>
+    <color name="T17">#83CD13</color>
+    <color name="T18">#FEBE40</color>
+    <color name="T19">#AA00E6</color>
+    <color name="T20">#40DCFE</color>
+
+
 
 </resources>

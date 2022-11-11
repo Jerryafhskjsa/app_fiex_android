@@ -113,6 +113,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_QUOTA_OPEN)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ORDER_OPEN)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_DEAL_OPEN)
+        checkDearPair()
     }
 
     override fun onPause() {
@@ -564,14 +565,19 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     }
 
     fun toggleDearPair(isDearPair: Boolean) {
+        var dearState = isDearPair
         if (onKLineModelListener == null) {
             return
         }
         val callback: CallbackObject<Boolean> = object : CallbackObject<Boolean>() {
             override fun callback(returnData: Boolean) {
-                onKLineModelListener.onToggleDearPair(returnData)
+                if(returnData){
+                    onKLineModelListener.onToggleDearPair(returnData,dearState)
+                }
+
             }
         }
+        dearState = !isDearPair
         if (isDearPair) {
             DearPairService.removeDearPair(context, socketHandler, currentPairStatus.pair, callback)
         } else {
@@ -666,7 +672,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         fun onChatRoomId(chatRoomId: String?)
         fun onCheckIntoChatRoom(observable: Observable<HttpRequestResultString>?)
         fun onCheckDearPair(isDearPair: Boolean?)
-        fun onToggleDearPair(isSuccess: Boolean?)
+        fun onToggleDearPair(isSuccess: Boolean?,isDear:Boolean?)
     }
 
 }

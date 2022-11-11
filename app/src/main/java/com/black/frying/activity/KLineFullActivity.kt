@@ -1,6 +1,5 @@
 package com.black.frying.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.PairApiServiceHelper
-import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.QuotationSet
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairStatus
@@ -22,8 +20,8 @@ import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AnalyticChart.TimeStep
 import com.black.frying.viewmodel.KLineFullViewModel
 import com.black.frying.viewmodel.KLineFullViewModel.OnKLineFullListener
-import com.black.net.HttpRequestResult
 import com.black.router.annotation.Route
+import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityKLineFullBinding
 import com.google.android.material.tabs.TabLayout
@@ -37,6 +35,7 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
     private var colorT7 = 0
     private var colorT5 = 0
     private var colorT3 = 0
+    private var kLinePage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +53,16 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
         binding!!.analyticChart.setType(AnalyticChart.BOLL or AnalyticChart.KDJ)
         binding!!.analyticChart.setAnalyticChartHelper(object : AnalyticChart.AnalyticChartHelper {
             override fun onLoadMore(page: Int) {
-                viewModel?.listenKLineDataMore(page)
+                var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*
+                        100
+                ) ?: 0) * (page)
+                var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+                startTime = Math.max(startTime, 1567296000)
+                endTime = Math.max(endTime, 1567296000)
+                if(page > 1){
+                    binding?.analyticChart?.setLoadingMore(true)
+                }
+                viewModel?.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),page,startTime,endTime)
             }
 
         })
@@ -67,24 +75,32 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.coin_type_layout -> PairApiServiceHelper.getTradeSets(mContext, true, object : NormalCallback<HttpRequestResultDataList<QuotationSet?>?>() {
-                override fun callback(returnData: HttpRequestResultDataList<QuotationSet?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        PairStatusPopupWindow.getInstance(mContext as Activity, PairStatusPopupWindow.TYPE_K_LINE_FULL, returnData.data)
-                                .show(object : OnPairStatusSelectListener {
-                                    override fun onPairStatusSelected(pairStatus: PairStatus?) {
-                                        if (pairStatus == null) {
-                                            return
+            R.id.coin_type_layout -> {
+                mContext?.let {
+                    PairApiServiceHelper.getTradeSetsLocal(it, true, object : Callback<ArrayList<QuotationSet?>?>() {
+                        override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                            if (returnData != null) {
+                                val dataType = PairStatus.NORMAL_DATA
+                                PairStatusPopupWindow.getInstance(this@KLineFullActivity, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData)
+                                    .show(object : OnPairStatusSelectListener {
+                                        override fun onPairStatusSelected(pairStatus: PairStatus?) {
+                                            if (pairStatus == null) {
+                                                return
+                                            }
+                                            //交易对切换
+                                            if (!TextUtils.equals(viewModel?.getCurrentPair(), pairStatus.pair)) { //清空价格，数量
+                                                onPairStatusChanged(pairStatus)
+                                            }
                                         }
-                                        //交易对切换
-                                        if (!TextUtils.equals(pairStatus.pair, pairStatus.pair)) {
-                                            onPairStatusChanged(pairStatus)
-                                        }
-                                    }
-                                })
-                    }
+                                    })
+                            }
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                        }
+                    })
                 }
-            })
+            }
             R.id.btn_close -> finish()
         }
         onQuotaControlViewClick(v)
@@ -93,6 +109,14 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
     override fun onResume() {
         super.onResume()
         listenKLineData()
+        viewModel!!.getTradePairInfo()
+        var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*
+                100
+        ) ?: 0) * (kLinePage)
+        var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+        startTime = startTime.coerceAtLeast(1567296000)
+        endTime = endTime.coerceAtLeast(1567296000)
+        viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
     }
 
     public override fun getViewModel(): KLineFullViewModel {
@@ -263,16 +287,22 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
         if (timeStep == null) {
             return
         }
-        viewModel!!.finishListenKLine()
-        if (binding!!.analyticChart.getTimeStep() != timeStep) {
-            binding!!.analyticChart.setTimeStep(timeStep)
+        if (binding?.analyticChart?.getTimeStep() != timeStep) {
+            binding?.analyticChart?.setTimeStep(timeStep)
             listenKLineData()
+            var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(
+                1000*100
+            ) ?: 0) * kLinePage
+            var startTime = endTime - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+            startTime = Math.max(startTime, 1567296000)
+            endTime = Math.max(endTime, 1567296000)
+            viewModel!!.getKLineDataFiex(binding?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
         }
     }
 
     private fun listenKLineData() {
-        binding!!.loadingLayout.visibility = View.VISIBLE
-        viewModel!!.listenKLineData(binding!!.analyticChart.getTimeStep())
+        binding?.loadingLayout?.visibility = View.VISIBLE
+        binding?.analyticChart?.let { viewModel!!.listenKLineData(it!!) }
     }
 
     private fun refreshKLineChart(kLineItems: ArrayList<KLineItem?>) {
@@ -310,18 +340,29 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
     }
 
     override fun onKLineDataAll(items: ArrayList<KLineItem?>) {
-        binding!!.loadingLayout.visibility = View.GONE
-        refreshKLineChart(items)
+        binding?.loadingLayout?.visibility = View.GONE
+        if(items.isNotEmpty()){
+            refreshKLineChart(items)
+        }
     }
 
     override fun onKLineDataAdd(item: KLineItem) {
-        binding!!.analyticChart.addData(item)
-        binding!!.analyticChart.postInvalidate()
+        if(item != null){
+            binding?.analyticChart?.addData(item)
+            binding?.analyticChart?.postInvalidate()
+        }
     }
 
     override fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>) {
-        binding!!.analyticChart.addDataList(kLinePage, items)
-        binding!!.analyticChart.postInvalidate()
+        binding?.analyticChart?.setLoadingMore(false)
+        if(items.isNotEmpty()){
+            binding?.analyticChart?.addDataList(kLinePage, items)
+            binding?.analyticChart?.postInvalidate()
+        }
+    }
+
+    override fun onKLineLoadingMore() {
+        binding?.analyticChart?.setLoadingMore(false)
     }
 
     override fun onPairChanged(pair: String?) {

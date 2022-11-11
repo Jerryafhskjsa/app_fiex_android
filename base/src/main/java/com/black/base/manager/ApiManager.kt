@@ -28,6 +28,20 @@ class ApiManager {
             return build(context.applicationContext, false)
         }
 
+        /**
+         * 测速专用
+         */
+        fun buildTestSpeed(context: Context,url:String?):ApiManager{
+            var context1 = context
+            context1 = context1.applicationContext
+            val apiManager = instance
+            val language = LanguageUtil.getLanguageSetting(context1)
+            val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
+            val deviceId = CommonUtil.getDeviceId(context1)
+            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, url+"pro/", deviceId, lang,null, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
+            return apiManager
+        }
+
         fun build(context: Context, noToken: Boolean): ApiManager {
             var context1 = context
             context1 = context1.applicationContext

@@ -32,6 +32,8 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
     private var toTextView:SpanTextView? = null
     private var selectedAll:ImageView? = null
     private var linALl:RelativeLayout? = null
+    private var imgExcharge:ImageView? = null
+    private var btnSure:SpanTextView? = null
 
 
     init {
@@ -42,7 +44,7 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
                 dm.widthPixels,
                 WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+//        popupWindow.setBackgroundDrawable(PaintDrawable())//背景黑色边框
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {
@@ -59,15 +61,19 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
         }
         selectedImg = contentView.findViewById(R.id.img_all)
         updateSelectedAll(mAll)
+        updateSureBtn()
         fromTextView = contentView.findViewById(R.id.tv_from_account)
         toTextView = contentView.findViewById(R.id.tv_to_account)
         selectedAll = contentView.findViewById(R.id.img_all)
         linALl = contentView.findViewById(R.id.lin_all)
         linALl?.setOnClickListener(this)
+        imgExcharge = contentView.findViewById(R.id.img_exchange)
+        imgExcharge?.setOnClickListener(this)
+        btnSure = contentView.findViewById(R.id.btn_confirm)
         contentView.findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
         contentView.findViewById<View>(R.id.rel_from).setOnClickListener(this)
         contentView.findViewById<View>(R.id.rel_to).setOnClickListener(this)
-        contentView.findViewById<View>(R.id.btn_confirm).setOnClickListener(this)
+        btnSure?.setOnClickListener(this)
     }
 
     private fun updateSelectedAll(all: Boolean?){
@@ -83,20 +89,31 @@ class TransferRecordFilterControllerWindow(private val activity: Activity, title
             R.id.btn_cancel -> dismiss()
             R.id.rel_from ->{
                 onReturnListener?.onWalletTypeChoose(this,mFrom,1)
+                updateSureBtn()
             }
             R.id.rel_to ->{
                 onReturnListener?.onWalletTypeChoose(this,mTo,2)
+                updateSureBtn()
             }
             R.id.btn_confirm ->{
                 onReturnListener?.onConfirm(this,mAll,mFrom,mTo)
+            }
+            R.id.img_exchange ->{
+
             }
             R.id.lin_all ->{
                 mAll = !mAll!!
                 updateSelectedAll(mAll)
                 onReturnListener?.onSelectedAll(this,mAll)
+                updateSureBtn()
             }
         }
+    }
 
+    private fun updateSureBtn(){
+        var fromTextEmpty = fromTextView?.text?.equals("-")
+        var toTextEmpty = toTextView?.text?.equals("-")
+        btnSure?.isEnabled = (fromTextEmpty !=true  && toTextEmpty != true) || (mAll == true)
     }
 
     fun show() {

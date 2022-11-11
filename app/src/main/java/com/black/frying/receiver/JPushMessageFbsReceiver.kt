@@ -37,7 +37,7 @@ class JPushMessageFbsReceiver : JPushMessageReceiver() {
             val url = if (extrasJson == null) null else extrasJson["url"].asString
             val uri = if (url == null) null else Uri.parse(url)
             if (uri != null && uri.isHierarchical) {
-                val currentActivity = FryingApplication.currentActivity
+                val currentActivity = FryingApplication.instance().getCurrentActivity()
                 //锁屏界面不可跳转
                 if (currentActivity != null && !FryingUtil.cannotJumpNotificationRouter(currentActivity)) {
                     BlackRouter.getInstance().build(url).go(currentActivity)

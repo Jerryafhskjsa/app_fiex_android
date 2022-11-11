@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.*
 import com.black.base.R
+import com.black.base.model.FryingLinesConfig
 import com.black.base.model.socket.Deep
 import skin.support.content.res.SkinCompatResources
 import java.util.*
@@ -123,14 +124,38 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
             }
             val item = getItem(position)
             val textView = view?.findViewById<View>(R.id.text) as TextView?
-            if (item == selectObject) {
-                textView?.setTextColor(COLOR_SELECT)
-            } else {
-                textView?.setTextColor(COLOR_DEFAULT)
+            var text:String? = null
+            if(item is String){
+                if (item == selectObject) {
+                    textView?.setTextColor(COLOR_SELECT)
+                } else {
+                    textView?.setTextColor(COLOR_DEFAULT)
+                }
+                text = if(item == "LIMIT"){
+                    context.getString(R.string.order_type_limit)
+                }else if(item == "MARKET"){
+                    context.getString(R.string.order_type_market)
+                }else{
+                    item.toString()
+                }
+
             }
-            var text = item.toString()
             if(item is Deep){
+                if (item == selectObject) {
+                    textView?.setTextColor(COLOR_SELECT)
+                } else {
+                    textView?.setTextColor(COLOR_DEFAULT)
+                }
                 text = item.deep.toString()
+            }
+            if(item is FryingLinesConfig){
+                var selected  = selectObject as FryingLinesConfig
+                if (item.lineUrl.equals(selected.lineUrl)){
+                    textView?.setTextColor(COLOR_SELECT)
+                } else {
+                    textView?.setTextColor(COLOR_DEFAULT)
+                }
+                text = item?.lineUrl+"("+item?.speed+"ms)"
             }
             textView?.text = text
             view?.setBackgroundColor(COLOR_BG)

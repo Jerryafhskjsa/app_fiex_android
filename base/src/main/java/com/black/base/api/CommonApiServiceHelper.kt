@@ -15,6 +15,33 @@ import com.google.gson.JsonObject
 
 object CommonApiServiceHelper {
 
+
+    /**
+     * 获取网络链路
+     */
+    fun getNetworkLines(context: Context?, callback: Callback<HttpRequestResultDataList<FryingLinesConfig?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
+            ?.getNetworkLines()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    /**
+     * 获取网络链路
+     */
+    fun getLinesSpeed(context: Context?,url:String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.buildTestSpeed(context, url).getService(CommonApiService::class.java)
+            ?.getLinesSpeed()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
     /**
      * 获取K线历史数据
      */

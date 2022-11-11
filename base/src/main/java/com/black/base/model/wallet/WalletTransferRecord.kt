@@ -2,6 +2,8 @@ package com.black.base.model.wallet
 
 import android.content.Context
 import com.black.base.R
+import com.black.base.util.TimeUtil
+import java.text.SimpleDateFormat
 
 class WalletTransferRecord {
     var id: Long? = null
@@ -20,13 +22,18 @@ class WalletTransferRecord {
         var fromTypeText = "-"
         var toTypeText = "-"
         when(fromWalletType){
-            "spot" ->fromTypeText = context.getString(R.string.spot_account)
-            "contract" ->fromTypeText = context.getString(R.string.contract_account)
+            "SPOT" ->fromTypeText = context.getString(R.string.spot_account)
+            "CONTRACT" ->fromTypeText = context.getString(R.string.contract_account)
+            "OTC" ->fromTypeText = context.getString(R.string.otc_account)
         }
         when(toWalletType){
-            "spot" ->toTypeText = context.getString(R.string.spot_account)
-            "contract" ->toTypeText = context.getString(R.string.contract_account)
+            "SPOT" ->toTypeText = context.getString(R.string.spot_account)
+            "CONTRACT" ->toTypeText = context.getString(R.string.contract_account)
+            "OTC" ->fromTypeText = context.getString(R.string.otc_account)
         }
         return fromTypeText+context.getString(R.string.arrival)+toTypeText
+    }
+    fun getDateDes(context: Context):String?{
+        return createdTime?.toLong()?.let { TimeUtil.getTimeStr(it,"yyyy/MM/dd HH:mm:ss") }
     }
 }

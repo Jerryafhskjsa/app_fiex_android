@@ -8,19 +8,20 @@ import android.os.Process
 import android.text.TextUtils
 import android.util.Log
 import com.black.base.api.C2CApiServiceHelper
+import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.PairApiService
+import com.black.base.lib.FryingSingleToast
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
-import com.black.base.model.socket.KLineItem
-import com.black.base.model.socket.KLineItemListPair
-import com.black.base.model.socket.KLineItemPair
-import com.black.base.model.socket.PairStatus
+import com.black.base.model.clutter.Kline
+import com.black.base.model.socket.*
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.base.widget.AnalyticChart
 import com.black.net.HttpRequestResult
+import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import io.reactivex.Notification
@@ -33,7 +34,7 @@ import java.util.*
 
 class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
 
-    private val currentPairStatus: PairStatus = PairStatus()
+    private var currentPairStatus: PairStatus = PairStatus()
     private var coinType: String? = null
     private var pairSet: String? = null
     private var nullAmount: String? = null
@@ -43,10 +44,12 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var socketHandler: Handler? = null
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
+    private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
     private var kLineObserver: Observer<KLineItemListPair?>? = createKLineObserver()
     private var kLineAddObserver: Observer<KLineItemPair?>? = createKLineAddObserver()
     private var kLineAddMoreObserver: Observer<KLineItemListPair?>? = createKLineAddMoreObserver()
     private var kLineId: String? = null
+    private var onKLineAllEnd = false
 
     private var onKLineFullListener: OnKLineFullListener? = null
 
@@ -65,6 +68,11 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
+        if(pairDealObserver == null){
+            pairDealObserver = createPairDealObserver()
+        }
+        SocketDataContainer.subscribePairDealObservable(pairDealObserver)
+
         if (kLineObserver == null) {
             kLineObserver = createKLineObserver()
         }
@@ -78,6 +86,7 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         SocketDataContainer.subscribeKLineAddMoreObservable(kLineAddMoreObserver)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_QUOTA_OPEN)
+
     }
 
     override fun onStop() {
@@ -94,6 +103,9 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         if (pairObserver != null) {
             SocketDataContainer.removePairObservable(pairObserver)
         }
+        if(pairDealObserver != null){
+            SocketDataContainer.removePairDealObservable(pairDealObserver)
+        }
         if (kLineObserver != null) {
             SocketDataContainer.removeKLineObservable(kLineObserver)
         }
@@ -102,6 +114,26 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         if (kLineAddMoreObserver != null) {
             SocketDataContainer.removeKLineAddMoreObservable(kLineAddMoreObserver)
+        }
+    }
+
+    private fun createPairDealObserver(): Observer<PairDeal?> {
+        return object : SuccessObserver<PairDeal?>() {
+            override fun onSuccess(value: PairDeal?) {
+                onKLineFullListener?.run {
+                    if (value != null && currentPairStatus.pair != null) {
+                        var quotationDealNew = QuotationDealNew()
+                        quotationDealNew.pair = value.s
+                        quotationDealNew.p = value.p
+                        quotationDealNew.a = value?.a?.toDouble()!!
+                        quotationDealNew.d = value.m
+                        quotationDealNew.t = value.t!!
+                        var list = ArrayList<QuotationDealNew?>()
+                        list.add(quotationDealNew)
+                        SocketDataContainer.updateQuotationDealNewData(socketHandler,currentPairStatus.pair,list,false)
+                    }
+                }
+            }
         }
     }
 
@@ -127,9 +159,10 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
                 onKLineFullListener?.run {
                     if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.items != null) {
                         FryingUtil.observableWithHandler(socketHandler, value.items!!)
-                                ?.subscribe {
-                                    onKLineDataAll(it)
-                                }
+                            ?.subscribe {
+                                onKLineAllEnd = true
+                                onKLineDataAll(it)
+                            }
                     }
                 }
             }
@@ -180,6 +213,63 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
     }
 
+    fun getCurrentPair(): String? {
+        return currentPairStatus.pair
+    }
+
+
+    fun getKLineDataFiex(timeStep:String?,kLinePage: Int,startTime:Long,endTime:Long){
+        currentPairStatus.pair?.let {
+            if (timeStep != null) {
+                CommonApiServiceHelper.getHistoryKline(
+                    context,
+                    it,
+                    timeStep,
+                    1500,
+                    true,
+                    startTime,
+                    endTime,
+                    object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                        override fun error(type: Int, error: Any) {
+                            if(kLinePage != 0){
+                                onKLineFullListener!!.onKLineLoadingMore()
+                            }
+                        }
+                        override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                var items = returnData.data!!
+                                onKLineAllEnd = true
+                                if(items != null && items.size>0){
+                                    var dataItem = ArrayList<KLineItem?>()
+                                    for (i in items.indices){
+                                        var klineItem = KLineItem()
+                                        var temp = items[i]
+                                        klineItem.a = temp?.a?.toDouble()!!
+                                        klineItem.c = temp?.c?.toDouble()!!
+                                        klineItem.h = temp?.h?.toDouble()!!
+                                        klineItem.l = temp?.l?.toDouble()!!
+                                        klineItem.o = temp?.o?.toDouble()!!
+                                        klineItem.t = temp?.t?.div(1000)
+                                        klineItem.v = temp?.v?.toDouble()!!
+                                        dataItem?.add(klineItem)
+                                    }
+                                    if(kLinePage == 0){
+                                        onKLineFullListener!!.onKLineDataAll(dataItem)
+                                    }else{
+                                        onKLineFullListener!!.onKLineDataMore(kLinePage, dataItem)
+                                    }
+                                }
+                            }else{
+                                if(kLinePage != 0){
+                                    onKLineFullListener!!.onKLineLoadingMore()
+                                }
+                            }
+                        }
+                    })
+            }
+        }
+    }
+
     private fun initPairStatus() {
         if (TextUtils.isEmpty(currentPairStatus.pair)) {
             currentPairStatus.pair = CookieUtil.getCurrentPair(context)
@@ -192,44 +282,29 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
                 coinType = arr[0]
                 pairSet = arr[1]
             }
-            getTradePairInfo()
+//            getTradePairInfo()
             getPairStatus()
         }
     }
 
     //获取当前交易对深度
-    private fun getTradePairInfo() {
-        onKLineFullListener?.run {
-            ApiManager.build(context).getService(PairApiService::class.java)
-                    ?.getTradePairInfo(currentPairStatus.pair)
-                    ?.materialize()
-                    ?.flatMap { notify: Notification<HttpRequestResultDataList<PairStatus?>?> ->
-                        if (notify.isOnComplete) {
-                            Observable.empty<Int>()
-                        } else {
-                            var precision = 6
-                            if (notify.isOnNext) {
-                                val returnData: HttpRequestResultDataList<PairStatus?>? = notify.value
-                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                    for (pairStatus in returnData.data!!) {
-                                        if (TextUtils.equals(currentPairStatus.pair, pairStatus?.pairName)) {
-                                            var maxPrecision = pairStatus?.precision
-                                            maxPrecision = if (maxPrecision == null || maxPrecision == 0) 6 else maxPrecision
-                                            precision = maxPrecision
-                                            break
-                                        }
-                                    }
-                                }
-                            }
-                            Observable.just(precision)
-                        }
+    fun getTradePairInfo() {
+        SocketDataContainer.getPairStatus(context, currentPairStatus.pair, object : Callback<PairStatus?>() {
+            override fun error(type: Int, error: Any) {
+                FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
+            }
+
+            override fun callback(returnData: PairStatus?) {
+                if (returnData == null) {
+                    FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
+                } else {
+                    currentPairStatus = returnData
+                    onKLineFullListener?.run {
+                        onPairStatusPrecision(currentPairStatus.precision)
                     }
-                    ?.compose(RxJavaHelper.observeOnMainThread())
-                    ?.subscribe {
-                        currentPairStatus.precision = it
-                        onPairStatusPrecision(it)
-                    }
-        }
+                }
+            }
+        })
     }
 
     fun changePairStatus(pairStatus: PairStatus) {
@@ -254,6 +329,9 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
                     .observeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .subscribe {
                         refreshPairStatus(it!!)
+                        onKLineFullListener?.run {
+                            onPairStatusPrecision(currentPairStatus.precision)
+                        }
                     }
                     .run { }
         }
@@ -303,16 +381,16 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
     }
 
-    fun listenKLineData(timeStep: AnalyticChart.TimeStep) {
+    fun listenKLineData(analyticChart: AnalyticChart) {
         kLineId = System.nanoTime().toString()
+        onKLineAllEnd = false
         val bundle = Bundle()
-        bundle.putString("timeStep", timeStep.apiText)
-        bundle.putLong("timeStepSecond", timeStep.value)
+        bundle.putString("timeStep", analyticChart.getTimeStepRequestStr())
         bundle.putString("kLineId", kLineId)
         //进行延时请求，数据无法及时返回
         socketHandler?.run {
             post {
-                SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_KTAB_CHANGED, bundle)
+                SocketUtil.sendSocketCommandBroadcast(context!!, SocketUtil.COMMAND_KTAB_CHANGED, bundle)
             }
         }
 //        CommonUtil.postHandleTask(socketHandler!!, {
@@ -338,5 +416,6 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onKLineDataAll(items: ArrayList<KLineItem?>)
         fun onKLineDataAdd(item: KLineItem)
         fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>)
+        fun onKLineLoadingMore()//判断是否正在加载更多
     }
 }
