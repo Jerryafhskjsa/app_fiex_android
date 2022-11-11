@@ -207,7 +207,6 @@
                             android:inputType="number"
                             android:hint="Minimum 0.0000001"
                             android:includeFontPadding="false"
-                            android:inputType="number"
                             android:maxLines="1"
                             android:textSize="@dimen/text_size_14" />
 

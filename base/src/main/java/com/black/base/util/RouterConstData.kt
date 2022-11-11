@@ -48,6 +48,8 @@ object RouterConstData {
     const val SAFE_CENTER = "fiex://safeCenter"
     const val GOOGLE_GET_KEY = "fiex://googleGetKey"
     const val GOOGLE_BIND = "fiex://googleBind"
+    const val SAFE_BIND = "fiex://safeBind"
+    const val SAFE_UNUSED = "fiex://safeUnuse"
     const val GOOGLE_SECURITY_STATUS = "fiex://googleSecurityStatus"
     const val PHONE_BIND = "fiex://phoneBind"
     const val PHONE_SECURITY_STATUS = "fiex://phoneSecurityStatus"

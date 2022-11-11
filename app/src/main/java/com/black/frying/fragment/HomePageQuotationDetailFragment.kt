@@ -174,7 +174,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         if (handlerThread != null) {
             handlerThread?.quit()
         }
-        dataInitFinish = false
     }
 
     override fun doResetSkinResources() {
@@ -346,7 +345,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         gettingPairsData = false
                                     }
                                 }
-                                dataInitFinish = true
                             }
                             gettingPairsData = false
                         }
