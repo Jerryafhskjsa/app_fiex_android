@@ -12,6 +12,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.WalletApiService
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
@@ -216,7 +217,7 @@ class LeverBackActivity : BaseActionBarActivity(), View.OnClickListener {
     private fun getWalletLeverDetail(force: Boolean) {
         SocketDataContainer.getWalletLeverDetail(this, pair, force)
                 ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(this, false, object : NormalCallback<WalletLeverDetail>() {
+                ?.subscribe(HttpCallbackSimple(this, false, object : NormalCallback<WalletLeverDetail>(mContext!!) {
 
                     override fun callback(returnData: WalletLeverDetail?) {
                         leverDetail = returnData
@@ -278,7 +279,7 @@ class LeverBackActivity : BaseActionBarActivity(), View.OnClickListener {
         ApiManager.build(this).getService(WalletApiService::class.java)
                 ?.walletLeverBorrow(amountString, coinType, pair, "REPAYMENT")
                 ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>() {
+                ?.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData?.code != null && returnData.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                             FryingUtil.showToast(mContext, "归还成功")

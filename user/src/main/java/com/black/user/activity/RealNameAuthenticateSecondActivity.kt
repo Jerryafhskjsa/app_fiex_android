@@ -17,6 +17,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.FryingLanguage
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
@@ -368,7 +369,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         for (path in pathList) { //先上传图片，根据返回的路径，进行验证
             val fileParams: MutableMap<String, File> = HashMap()
             fileParams["file"] = File(path)
-            UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
                         callBack?.callback(returnData.data)
@@ -384,7 +385,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         val fryingLanguage = LanguageUtil.getLanguageSetting(this)
         //idType   护照 1 身份证 0
         val idType = if (fryingLanguage == null || fryingLanguage.languageCode == FryingLanguage.Chinese) 1 else 0
-        UserApiServiceHelper.bindIdentity(mContext, idType, realName, idNo, idNoImg, countryId, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindIdentity(mContext, idType, realName, idNo, idNoImg, countryId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.submit_success))

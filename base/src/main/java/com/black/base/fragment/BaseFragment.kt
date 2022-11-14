@@ -230,40 +230,6 @@ open class BaseFragment : Fragment(), RouteCheckHelper {
         return 0
     }
 
-    protected fun lazyLoad() {}
-    protected var loginCallback: Runnable? = null
-    //    protected void checkUserAndDoing(Runnable callback, int homeFragmentIndex) {
-//        if (CookieUtil.getUserInfo(getActivity()) == null) {
-//            loginAndCallback(callback, homeFragmentIndex);
-//        } else {
-//            callback.run();
-//        }
-//    }
-    protected fun loginAndCallback(callback: Runnable?, homeFragmentIndex: Int) {
-        loginCallback = callback
-        val bundle = Bundle()
-        bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, homeFragmentIndex)
-        //        openActivity(CommonUtil.getLoginActivity(mContext), bundle);
-    }
-
-    protected fun openShareWindow() { //        ((HomePageActivity) getActivity()).showShareView();
-    }
-
-    protected inner abstract class NormalCallback<T> : Callback<T>() {
-        override fun error(type: Int, error: Any) {
-            when (type) {
-                ConstData.ERROR_NORMAL -> showToast(activity, error.toString())
-                ConstData.ERROR_TOKEN_INVALID -> if (activity is BaseActionBarActivity || activity is BaseActivity) {
-                    (activity as BaseActionBarActivity).onTokenError(error)
-                }
-                ConstData.ERROR_UNKNOWN ->  //根據情況處理，error 是返回的HttpRequestResultError
-                    if (error != null && error is HttpRequestResultBase) {
-                        showToast(activity, error.message)
-                    }
-            }
-        }
-    }
-
     protected fun initSpinnerSelectItem(spinner: Spinner, list: List<*>?) {
         val spAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(mContext, R.layout.spinner_item_2, list)
         spAdapter.setDropDownViewResource(R.layout.spinner_drop_down_item)

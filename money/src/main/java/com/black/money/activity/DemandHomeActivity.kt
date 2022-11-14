@@ -12,6 +12,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.DemandConfig
 import com.black.base.model.money.RegularConfig
 import com.black.base.util.ConstData
@@ -126,7 +127,7 @@ class DemandHomeActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshList
     }
 
     private fun getDemandConfig() {
-        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>() {
+        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 refreshDemandConfig(null)
@@ -157,7 +158,7 @@ class DemandHomeActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshList
     }
 
     private fun getRegularConfig() {
-        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>() {
+        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 refreshRegularConfig(null)
             }

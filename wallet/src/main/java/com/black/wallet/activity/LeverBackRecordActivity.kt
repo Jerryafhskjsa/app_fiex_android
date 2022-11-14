@@ -10,6 +10,7 @@ import com.black.base.api.WalletApiService
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.wallet.LeverBorrowRecord
 import com.black.base.net.HttpCallbackSimple
@@ -100,7 +101,7 @@ class LeverBackRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnRefres
         ApiManager.build(this).getService(WalletApiService::class.java)
                 ?.getLeverBorrowRecord(currentPage, 10, pair, "REPAYMENT")
                 ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<LeverBorrowRecord?>?>?>() {
+                ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<LeverBorrowRecord?>?>?>(mContext!!) {
 
                     override fun error(type: Int, error: Any?) {
                         super.error(type, error)

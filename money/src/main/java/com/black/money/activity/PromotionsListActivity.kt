@@ -18,6 +18,7 @@ import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.PromotionsConfig
 import com.black.base.model.money.PromotionsRush
 import com.black.base.util.FryingUtil
@@ -113,7 +114,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
     }
 
     private fun getPromotionsList(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsList(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsConfig?>?>() {
+        MoneyApiServiceHelper.getPromotionsList(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsConfig?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -206,7 +207,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                 FryingUtil.showToast(mContext, getString(R.string.alert_c2c_create_amount_error, ""))
                 return@OnClickListener
             }
-            MoneyApiServiceHelper.rushPromotions(mContext, promotions.id.toString(), amountText, object : NormalCallback<HttpRequestResultString?>() {
+            MoneyApiServiceHelper.rushPromotions(mContext, promotions.id.toString(), amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.rush_success))

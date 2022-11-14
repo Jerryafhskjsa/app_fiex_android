@@ -14,6 +14,7 @@ import com.black.base.lib.filter.FilterResult
 import com.black.base.lib.filter.FilterWindow
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.MenuEntity
+import com.black.base.model.NormalCallback
 import com.black.base.model.filter.CoinFilter
 import com.black.base.model.filter.DemandRecordStatus
 import com.black.base.model.filter.RegularRecordStatus
@@ -268,7 +269,7 @@ class MoneyRecordActivity : BaseActionBarActivity(), View.OnClickListener, OnMen
 
     private val demandConfig: Unit
         get() {
-            MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>() {
+            MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     refreshDemandConfig(null)
                 }
@@ -305,7 +306,7 @@ class MoneyRecordActivity : BaseActionBarActivity(), View.OnClickListener, OnMen
 
     private val regularConfig: Unit
         get() {
-            MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>() {
+            MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     refreshRegularConfig(null)
                 }

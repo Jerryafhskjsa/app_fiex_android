@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.ConstData
@@ -536,7 +537,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onCheckIntoChatRoom(observable: Observable<HttpRequestResultString>?) {
-        observable!!.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>() {
+        observable!!.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) =
                     if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                         intoChatRoom(chatRoomId!!)

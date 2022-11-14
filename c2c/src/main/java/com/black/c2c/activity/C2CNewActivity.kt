@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CSupportCoin
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -110,7 +111,7 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private val c2CSupportCoins: Unit
         get() {
-            C2CApiServiceHelper.getCoinTypeList(this, object : NormalCallback<HttpRequestResultDataList<C2CSupportCoin?>?>() {
+            C2CApiServiceHelper.getCoinTypeList(this, object : NormalCallback<HttpRequestResultDataList<C2CSupportCoin?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultDataList<C2CSupportCoin?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         supportCoins = returnData.data

@@ -18,6 +18,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.listener.OnHandlerListener
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.money.CloudPowerProject
 import com.black.base.model.wallet.Wallet
@@ -217,7 +218,7 @@ class CloudPowerProjectActivity : BaseActionBarActivity(), View.OnClickListener,
                                 if (project.distributionCoinType == null) nullAmount else project.distributionCoinType))
                         return
                     }
-                    MoneyApiServiceHelper.buyCloudPower(mContext, if (project.id == null) null else NumberUtil.formatNumberNoGroup(project.id), amountText, object : NormalCallback<HttpRequestResultString?>() {
+                    MoneyApiServiceHelper.buyCloudPower(mContext, if (project.id == null) null else NumberUtil.formatNumberNoGroup(project.id), amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun error(type: Int, error: Any?) {
                             super.error(type, error)
                             if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {
@@ -267,7 +268,7 @@ class CloudPowerProjectActivity : BaseActionBarActivity(), View.OnClickListener,
             return
         }
         isLoadData = true
-        MoneyApiServiceHelper.getCloudPowerConfig(this, isShowLoading, object : NormalCallback<HttpRequestResultDataList<CloudPowerProject?>?>() {
+        MoneyApiServiceHelper.getCloudPowerConfig(this, isShowLoading, object : NormalCallback<HttpRequestResultDataList<CloudPowerProject?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showCloudPowerProject(null)

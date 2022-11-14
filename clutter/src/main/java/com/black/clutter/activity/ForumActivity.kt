@@ -10,6 +10,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.clutter.Forum
 import com.black.base.util.FryingUtil
@@ -100,7 +101,7 @@ class ForumActivity : BaseActionBarActivity(), View.OnClickListener, QRefreshLay
     }
 
     private fun getForumList(isShowLoading: Boolean) {
-        CommonApiServiceHelper.getForumList(this, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<Forum?>?>?>() {
+        CommonApiServiceHelper.getForumList(this, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<Forum?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

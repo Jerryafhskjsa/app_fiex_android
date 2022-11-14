@@ -12,6 +12,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.CommunityApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.community.FactionItem
 import com.black.base.util.*
@@ -132,7 +133,7 @@ class FactionListActivity : BaseActionBarActivity(), OnItemClickListener, QRefre
     }
 
     private fun getFactionList(isShowLoading: Boolean) {
-        CommunityApiServiceHelper.getFactionList(this, isShowLoading, object : NormalCallback<HttpRequestResultDataList<FactionItem?>?>() {
+        CommunityApiServiceHelper.getFactionList(this, isShowLoading, object : NormalCallback<HttpRequestResultDataList<FactionItem?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

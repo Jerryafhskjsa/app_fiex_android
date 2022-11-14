@@ -111,6 +111,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("777777","onDestroy")
         BaseApplication.checkTokenError = true
     }
 
@@ -149,7 +150,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initChooseWindowData() {
-        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>() {
+        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
                 if (returnData != null && returnData.code == 0 && returnData.data != null) {
                     chooseWindow!!.setCountryList(returnData.data)
@@ -381,24 +382,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         })
-//        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
-//            ?.getProToken()
-//            ?.compose(RxJavaHelper.observeOnMainThread())
-//            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultData<ProTokenResult?>?>(){
-//                override fun error(type: Int, error: Any?) {
-//                }
-//
-//                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
-//                    if(result != null && result.code == HttpRequestResult.SUCCESS){
-//                        var proTokenResult: ProTokenResult? = result.data
-//                        var proToken = proTokenResult?.proToken
-//                        var proTokenExpiredTime =proTokenResult?.expireTime
-//                        HttpCookieUtil.saveProToken(context,proToken)
-//                        HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
-//                        getWsToken(mContext)
-//                    }
-//                }
-//            }))
     }
 
     //获取ws-token
@@ -414,21 +397,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         })
-//        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService<UserApiService>(UserApiService::class.java)
-//            ?.getWsToken()
-//            ?.compose(RxJavaHelper.observeOnMainThread())
-//            ?.subscribe(HttpCallbackSimple(context,object :NormalCallback<HttpRequestResultString?>(){
-//                override fun error(type: Int, error: Any?) {
-//                }
-//
-//                override fun callback(result: HttpRequestResultString?) {
-//                    if(result != null && result.code == HttpRequestResult.SUCCESS){
-//                        var wsToken = result.data
-//                        HttpCookieUtil.saveWsToken(context,wsToken)
-//                        onGetTokenSuccess()
-//                    }
-//                }
-//            }))
     }
 
 

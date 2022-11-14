@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -288,7 +289,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
     }
     private val phoneVerifyCode: Unit
         get() {
-            UserApiServiceHelper.getVerifyCode(this, phoneAccount, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, phoneAccount, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -307,7 +308,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
 
     private val mailVerifyCode: Unit
         get(){
-            UserApiServiceHelper.getVerifyCode(this, mailAccount, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, mailAccount, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -347,7 +348,7 @@ class SafeBindActivity: BaseActivity(), View.OnClickListener{
              mailCode = null
              googleCode = editFirst + editSecond + editThird + editFourth + editFiveth + editSixth
         }
-        UserApiServiceHelper.bindSafe(mContext,phoneAccount, phoneCode,mailAccount, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindSafe(mContext,phoneAccount, phoneCode,mailAccount, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.bind_success))

@@ -18,6 +18,7 @@ import com.black.base.lib.filter.FilterWindow
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.filter.DateFilter
 import com.black.base.model.wallet.Wallet
@@ -157,7 +158,7 @@ class WalletDetailActivity : BaseActivity(),
         if (wallet == null) {
             return
         }
-        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>() {
+        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -207,7 +208,7 @@ class WalletDetailActivity : BaseActivity(),
                     })
         }
         if (walletBillType == null) {
-            WalletApiServiceHelper.getWalletBillType(this, object : NormalCallback<HttpRequestResultDataList<WalletBillType?>?>() {
+            WalletApiServiceHelper.getWalletBillType(this, object : NormalCallback<HttpRequestResultDataList<WalletBillType?>?>(mContext!!) {
 
                 override fun callback(returnData: HttpRequestResultDataList<WalletBillType?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {

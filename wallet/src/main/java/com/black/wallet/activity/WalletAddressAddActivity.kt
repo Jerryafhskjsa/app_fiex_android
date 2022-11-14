@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.WalletWithdrawAddress
@@ -101,7 +102,7 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
                         address,
                         memo,
                         null,
-                        object : NormalCallback<HttpRequestResultString?>() {
+                        object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                             override fun callback(returnData: HttpRequestResultString?) {
                                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                     FryingUtil.showToast(
@@ -126,7 +127,7 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
                         address,
                         memo,
                         null,
-                        object : NormalCallback<HttpRequestResultString?>() {
+                        object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                             override fun callback(returnData: HttpRequestResultString?) {
                                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                     setResult(RESULT_OK, null)

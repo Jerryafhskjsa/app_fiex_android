@@ -16,6 +16,7 @@ import com.black.base.lib.FryingSingleToast
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CDetail
 import com.black.base.model.c2c.C2COrder
 import com.black.base.model.c2c.C2CPayment
@@ -228,7 +229,7 @@ class C2COrderDetailActivity : BaseActionBarActivity(), View.OnClickListener, QR
                         payMessage,
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                C2CApiServiceHelper.confirmPaid(mContext, orderId, if (currentPayment == null) null else NumberUtil.formatNumberNoGroup(currentPayment!!.id), object : NormalCallback<HttpRequestResultString?>() {
+                                C2CApiServiceHelper.confirmPaid(mContext, orderId, if (currentPayment == null) null else NumberUtil.formatNumberNoGroup(currentPayment!!.id), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun callback(returnData: HttpRequestResultString?) {
                                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                             confirmDialog.dismiss()
@@ -247,7 +248,7 @@ class C2COrderDetailActivity : BaseActionBarActivity(), View.OnClickListener, QR
                         "确认已收款？",
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                C2CApiServiceHelper.releaseCoin(mContext, orderId, object : NormalCallback<HttpRequestResultString?>() {
+                                C2CApiServiceHelper.releaseCoin(mContext, orderId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun callback(returnData: HttpRequestResultString?) {
                                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                             confirmDialog.dismiss()
@@ -266,7 +267,7 @@ class C2COrderDetailActivity : BaseActionBarActivity(), View.OnClickListener, QR
                         "如已向商家付款，请千万不要取消交易。\n取消规则：买家当日累计3笔取消，会限制当日买入功能。",
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                C2CApiServiceHelper.cancelOrder(mContext, orderId, object : NormalCallback<HttpRequestResultString?>() {
+                                C2CApiServiceHelper.cancelOrder(mContext, orderId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun callback(returnData: HttpRequestResultString?) {
                                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                             confirmDialog.dismiss()
@@ -307,7 +308,7 @@ class C2COrderDetailActivity : BaseActionBarActivity(), View.OnClickListener, QR
 
     private val c2COrderDetail: Unit
         get() {
-            C2CApiServiceHelper.getC2COrderDetail(this, orderId, object : NormalCallback<HttpRequestResultData<C2CDetail?>?>() {
+            C2CApiServiceHelper.getC2COrderDetail(this, orderId, object : NormalCallback<HttpRequestResultData<C2CDetail?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
                     binding?.refreshLayout?.setRefreshing(false)

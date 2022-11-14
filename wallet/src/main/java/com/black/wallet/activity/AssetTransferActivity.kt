@@ -161,7 +161,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private val supportAccount: Unit
         get() {
-            WalletApiServiceHelper.getSupportAccount(this, false, object : NormalCallback<HttpRequestResultData<AssetTransferTypeList?>?>() {
+            WalletApiServiceHelper.getSupportAccount(this, false, object : NormalCallback<HttpRequestResultData<AssetTransferTypeList?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<AssetTransferTypeList?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         var result = returnData.data
@@ -193,7 +193,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             var from = fromAccount?.type?.lowercase()
             var to = toAccount?.type?.lowercase()
             if (to != null && from != null) {
-                    WalletApiServiceHelper.getSupportTransferCoin(this,  from, to,true, object : NormalCallback<HttpRequestResultDataList<CanTransferCoin?>?>() {
+                    WalletApiServiceHelper.getSupportTransferCoin(this,  from, to,true, object : NormalCallback<HttpRequestResultDataList<CanTransferCoin?>?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultDataList<CanTransferCoin?>?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 var result = returnData.data
@@ -277,7 +277,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             transferCoin.coin = selectedCoin?.coin
             transferCoin.fromWalletType = fromAccount?.type?.lowercase()
             transferCoin.toWalletType = toAccount?.type?.lowercase()
-            WalletApiServiceHelper.doTransfer(this, transferCoin,true, object : NormalCallback<HttpRequestResultString?>() {
+            WalletApiServiceHelper.doTransfer(this, transferCoin,true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.transfer_succ))

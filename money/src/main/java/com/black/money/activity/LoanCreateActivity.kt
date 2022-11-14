@@ -16,6 +16,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.money.LoanConfig
 import com.black.base.model.money.LoanConfigStage
@@ -333,7 +334,7 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                 mortgageAmountText,
                 lanAmountText,
                 if (loanConfigStage?.numberDays == null) null else NumberUtil.formatNumberNoGroup(loanConfigStage.numberDays),
-                object : NormalCallback<HttpRequestResultString?>() {
+                object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                             FryingUtil.showToast(mContext, "借入成功")

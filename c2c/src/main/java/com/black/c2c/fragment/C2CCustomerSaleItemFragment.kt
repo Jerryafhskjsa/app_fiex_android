@@ -12,6 +12,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.c2c.C2COrder
 import com.black.base.model.c2c.C2CSeller
@@ -124,8 +125,8 @@ class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefr
 
     fun getSellerList(isShowLoading: Boolean) {
         isHasGotData = true
-        C2CApiServiceHelper.getC2CSellerList(activity, isShowLoading, if (supportCoin == null) null else supportCoin!!.coinType, C2COrder.ORDER_SELL, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<C2CSeller?>?>?>() {
-            override fun error(type: Int, error: Any) {
+        C2CApiServiceHelper.getC2CSellerList(activity, isShowLoading, if (supportCoin == null) null else supportCoin!!.coinType, C2COrder.ORDER_SELL, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<C2CSeller?>?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 super.error(type, error)
             }

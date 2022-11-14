@@ -18,10 +18,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.CommunityApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.listener.OnHandlerListener
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.SuccessObserver
+import com.black.base.model.*
 import com.black.base.model.community.*
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.*
@@ -329,7 +326,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
                     FryingUtil.showToast(mContext, getString(R.string.alert_c2c_create_amount_error, ""))
                     return
                 }
-                CommunityApiServiceHelper.postFactionLock(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), widget.amountText, object : NormalCallback<HttpRequestResultString?>() {
+                CommunityApiServiceHelper.postFactionLock(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), widget.amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             widget.dismiss()
@@ -346,7 +343,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
 
     //退出
     private fun exit() {
-        CommunityApiServiceHelper.postFactionUnLock(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultString?>() {
+        CommunityApiServiceHelper.postFactionUnLock(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     factionNotice
@@ -380,7 +377,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
         }
 
     private fun getFactionConfig() {
-        CommunityApiServiceHelper.getFactionConfig(mContext, object : NormalCallback<HttpRequestResultData<FactionConfig?>?>() {
+        CommunityApiServiceHelper.getFactionConfig(mContext, object : NormalCallback<HttpRequestResultData<FactionConfig?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultData<FactionConfig?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     factionConfig = returnData.data
@@ -394,7 +391,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private val factionDetail: Unit
         get() {
-            CommunityApiServiceHelper.getFactionDetail(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionItem?>?>() {
+            CommunityApiServiceHelper.getFactionDetail(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionItem?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<FactionItem?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         factionItem = returnData.data
@@ -415,7 +412,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private val factionNotice: Unit
         get() {
-            CommunityApiServiceHelper.getFactionNotice(this, 1, 55, object : NormalCallback<HttpRequestResultData<FactionNotice?>?>() {
+            CommunityApiServiceHelper.getFactionNotice(this, 1, 55, object : NormalCallback<HttpRequestResultData<FactionNotice?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<FactionNotice?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         factionNoticeFragment.setWebViewData(returnData.data?.text)
@@ -428,7 +425,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
 
     val factionMemberList: Unit
         get() {
-            CommunityApiServiceHelper.getFactionMemberList(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultDataList<FactionMember?>?>() {
+            CommunityApiServiceHelper.getFactionMemberList(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultDataList<FactionMember?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
                     factionMemberFragment.refreshMemberList(null)
@@ -446,7 +443,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private val factionUserInfo: Unit
         get() {
-            CommunityApiServiceHelper.getFactionUserInfo(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionUserInfo?>?>() {
+            CommunityApiServiceHelper.getFactionUserInfo(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionUserInfo?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<FactionUserInfo?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         userInfo = returnData.data

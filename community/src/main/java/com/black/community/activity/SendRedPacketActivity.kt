@@ -14,6 +14,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.community.RedPacketPub
 import com.black.base.model.wallet.CoinInfo
@@ -441,7 +442,7 @@ open class SendRedPacketActivity : BaseActionBarActivity(), View.OnClickListener
                 if (currentWallet == null || currentWallet!!.coinType == null) nullAmount else currentWallet!!.coinType)
         ConfirmDialog(this, "提示", toastText, object : OnConfirmCallback {
             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                CommunityApiServiceHelper.sendRedPacket(mContext, redPacketType, currentWallet!!.coinType, amount, count, finalPacketText, object : NormalCallback<HttpRequestResultString?>() {
+                CommunityApiServiceHelper.sendRedPacket(mContext, redPacketType, currentWallet!!.coinType, amount, count, finalPacketText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun error(type: Int, error: Any?) {
                         super.error(type, error)
                         if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {

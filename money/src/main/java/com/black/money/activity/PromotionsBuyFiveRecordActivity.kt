@@ -8,6 +8,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.PromotionsBuyFive
 import com.black.base.model.money.PromotionsBuyFiveRecord
 import com.black.base.util.ConstData
@@ -69,7 +70,7 @@ class PromotionsBuyFiveRecordActivity : BaseActivity(), QRefreshLayout.OnRefresh
 
     private fun getPromotionsRecord(isShowLoading: Boolean) {
         //        showTest();
-        MoneyApiServiceHelper.getPromotionsBuyFiveRecord(this, isShowLoading, if (promotionsBuyFive == null) null else NumberUtil.formatNumberNoGroup(promotionsBuyFive!!.id), object : NormalCallback<HttpRequestResultDataList<PromotionsBuyFiveRecord?>?>() {
+        MoneyApiServiceHelper.getPromotionsBuyFiveRecord(this, isShowLoading, if (promotionsBuyFive == null) null else NumberUtil.formatNumberNoGroup(promotionsBuyFive!!.id), object : NormalCallback<HttpRequestResultDataList<PromotionsBuyFiveRecord?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

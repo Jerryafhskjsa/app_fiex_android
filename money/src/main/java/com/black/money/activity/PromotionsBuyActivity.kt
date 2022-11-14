@@ -13,6 +13,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.PromotionsBuy
 import com.black.base.util.ConstData
@@ -120,7 +121,7 @@ class PromotionsBuyActivity : BaseActivity(), View.OnClickListener, QRefreshLayo
     }
 
     private fun getPromotionsBuy(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsBuyList(this, 1, currentPage, 8, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsBuy?>?>?>() {
+        MoneyApiServiceHelper.getPromotionsBuyList(this, 1, currentPage, 8, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsBuy?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

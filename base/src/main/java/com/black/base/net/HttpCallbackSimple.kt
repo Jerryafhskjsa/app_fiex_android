@@ -3,6 +3,8 @@ package com.black.base.net
 import android.app.Activity
 import android.content.Context
 import com.black.base.R
+import com.black.base.activity.BaseActionBarActivity
+import com.black.base.activity.BaseActivity
 import com.black.base.api.RetryRequestHelper
 import com.black.base.model.HttpRequestResultBase
 import com.black.base.util.ConstData
@@ -66,6 +68,11 @@ open class HttpCallbackSimple<T> : NetObserver<T> {
                 HttpRequestResult.ERROR_TOKEN_INVALID -> {
                     type = ConstData.ERROR_TOKEN_INVALID
                     error = returnString
+                    if (context is BaseActionBarActivity) {
+                        (context as BaseActionBarActivity).onTokenError(returnString)
+                    } else if (context is BaseActivity) {
+                        (context as BaseActivity).onTokenError(returnString)
+                    }
                 }
                 HttpRequestResult.ERROR_MISS_MONEY_PASSWORD -> {
                     type = ConstData.ERROR_MISS_MONEY_PASSWORD

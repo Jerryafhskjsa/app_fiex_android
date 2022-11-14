@@ -11,7 +11,7 @@ abstract class NormalCallback<T>(protected var context: Context) : Callback<T>()
     override fun error(type: Int, error: Any?) {
         when (type) {
             ConstData.ERROR_NORMAL -> showToast(context, error.toString())
-            ConstData.ERROR_TOKEN_INVALID -> if (context is BaseActionBarActivity || context is BaseActivity) {
+            ConstData.ERROR_TOKEN_INVALID -> if (context is BaseActionBarActivity) {
                 (context as BaseActionBarActivity).onTokenError(error)
             } else if (context is BaseActivity) {
                 (context as BaseActivity).onTokenError(error)

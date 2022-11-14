@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.net.HttpRequestResult
@@ -61,7 +62,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
     //获取谷歌密钥
     private val googleKey: Unit
         get() {
-            UserApiServiceHelper.getGoogleKey(mContext, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getGoogleKey(mContext, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && !TextUtils.isEmpty(returnData.data)) {
                         //解析url参数，获取secret参数，即google密钥

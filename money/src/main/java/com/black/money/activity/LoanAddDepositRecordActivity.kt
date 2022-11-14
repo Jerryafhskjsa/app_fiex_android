@@ -10,6 +10,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.LoanAddDepositRecord
 import com.black.base.model.money.LoanRecord
@@ -104,7 +105,7 @@ class LoanAddDepositRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
     }
 
     private fun getLoanRecord(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getLoanAddDepositRecord(this, isShowLoading, loanRecord?.id, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<LoanAddDepositRecord?>?>?>() {
+        MoneyApiServiceHelper.getLoanAddDepositRecord(this, isShowLoading, loanRecord?.id, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<LoanAddDepositRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

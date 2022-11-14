@@ -10,6 +10,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.FryingSingleToast
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ConfirmDialog
@@ -174,16 +175,16 @@ class IMGroupMemberInfoActivity : BaseActionBarActivity(), View.OnClickListener,
     }
 
     override fun onImageGet(path: String?) {
-        UserApiServiceHelper.uploadPublic(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.uploadPublic(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
                     val avatarUrl = UrlConfig.getHost(mContext) + returnData.data
-                    UserApiServiceHelper.modifyUserInfo(mContext, avatarUrl, null, object : NormalCallback<HttpRequestResultString?>() {
+                    UserApiServiceHelper.modifyUserInfo(mContext, avatarUrl, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(modifyResult: HttpRequestResultString?) {
                             if (modifyResult != null && modifyResult.code == HttpRequestResult.SUCCESS) {
                                 val bitmap = ImageSelectorHelper.getImageAndSave(path, currentImagePath)
                                 binding?.iconAvatar?.setImageBitmap(bitmap)
-                                getUserInfo(object : NormalCallback<UserInfo?>() {
+                                getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
                                     override fun callback(returnData: UserInfo?) {
                                         userInfo = returnData
                                     }

@@ -8,6 +8,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.PromotionsRecord
 import com.black.base.util.FryingUtil
@@ -79,7 +80,7 @@ class PromotionsRecordActivity : BaseActivity(), QRefreshLayout.OnRefreshListene
     }
 
     private fun getPromotionsRecord(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsRecord(this, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsRecord?>?>?>() {
+        MoneyApiServiceHelper.getPromotionsRecord(this, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

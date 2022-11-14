@@ -9,6 +9,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.DemandRecord
 import com.black.base.util.FryingUtil
@@ -83,7 +84,7 @@ class DemandRecordActivity : BaseActivity(), QRefreshLayout.OnRefreshListener, O
     }
 
     private fun getDemandRecord(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getDemandRewardRecord(this, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<DemandRecord?>?>?>() {
+        MoneyApiServiceHelper.getDemandRewardRecord(this, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<DemandRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

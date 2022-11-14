@@ -7,6 +7,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.PushSwitch
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -74,7 +75,7 @@ class PushSettingActivity : BaseActionBarActivity(), CompoundButton.OnCheckedCha
 
     override fun onResume() {
         super.onResume()
-        UserApiServiceHelper.getPushSwitchList(this, object : NormalCallback<HttpRequestResultData<PushSwitch?>?>() {
+        UserApiServiceHelper.getPushSwitchList(this, object : NormalCallback<HttpRequestResultData<PushSwitch?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultData<PushSwitch?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     pushSwitch = returnData.data
@@ -124,7 +125,7 @@ class PushSettingActivity : BaseActionBarActivity(), CompoundButton.OnCheckedCha
                     submitPushSwitch.orderSwitch != null && true == submitPushSwitch.orderSwitch,
                     submitPushSwitch.investSwitch != null && true == submitPushSwitch.investSwitch,
                     submitPushSwitch.withdrawSwitch != null && true == submitPushSwitch.withdrawSwitch,
-                    object : NormalCallback<HttpRequestResultString?>() {
+                    object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 pushSwitch = PushSwitch.copyPushSwitch(submitPushSwitch)

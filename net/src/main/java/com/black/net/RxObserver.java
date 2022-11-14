@@ -43,7 +43,6 @@ public abstract class RxObserver<T> implements Observer<T> {
             com.jakewharton.retrofit2.adapter.rxjava2.HttpException httpException = (com.jakewharton.retrofit2.adapter.rxjava2.HttpException) e;
             int code = httpException.code();
             HttpUrl url = httpException.response().raw().request().url();
-            String urlStr = url.url().toString();
             if (code == ERROR_TOKEN_INVALID_CODE) {
                 error(httpException.response().raw().request(), HttpRequestResult.ERROR_TOKEN_INVALID);
             } else if (code == HttpRequestResult.ERROR_MISS_MONEY_PASSWORD_CODE) {

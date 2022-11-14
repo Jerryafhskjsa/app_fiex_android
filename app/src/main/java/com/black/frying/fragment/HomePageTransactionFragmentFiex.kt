@@ -315,7 +315,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             }
             R.id.img_collect ->{
                 viewModel!!.toggleDearPair(isDear!!)
-                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(result: HttpRequestResultString?) {
                             if (result != null && result.code == HttpRequestResult.SUCCESS) {
                                 isDear = !isDear!!
@@ -908,8 +908,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
 //            mContext?.runOnUiThread { }
 //            val orderState = 1
-            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), null, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
-                override fun error(type: Int, error: Any) {
+            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), null, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>(mContext!!) {
+                override fun error(type: Int, error: Any?) {
                     Log.d(TAG,"getTradeOrderCurrent error")
                     showCurrentOrderList(null)
                 }
@@ -981,7 +981,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             price = null
         }
         val createRunnable = Runnable {
-            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>() {
+            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding!!.fragmentHomePageTransactionHeader1.price.setText("")
@@ -996,7 +996,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     }
                 }
 
-                override fun error(type: Int, error: Any) {
+                override fun error(type: Int, error: Any?) {
                     FryingUtil.showToast(mContext, error.toString())
                 }
             })
@@ -1020,7 +1020,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //撤销新单
     private fun cancelTradeOrder(tradeOrder: TradeOrderFiex) {
-        TradeApiServiceHelper.cancelTradeOrderFiex(mContext, tradeOrder.orderId, object : NormalCallback<HttpRequestResultString?>() {
+        TradeApiServiceHelper.cancelTradeOrderFiex(mContext, tradeOrder.orderId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     adapter?.removeItem(tradeOrder)
@@ -1102,7 +1102,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     override fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?) {
-        observable?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<Pair<Wallet?, Wallet?>?>() {
+        observable?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<Pair<Wallet?, Wallet?>?>(mContext!!) {
             override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
                 if (returnData != null) {
                     currentWallet = returnData.first
@@ -1111,7 +1111,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 refreshUsable()
             }
 
-            override fun error(type: Int, error: Any) {
+            override fun error(type: Int, error: Any?) {
                 refreshUsable()
             }
         }))
@@ -1218,7 +1218,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     override fun onCollectClick(transactionMorePopup: TransactionMorePopup, btnCollect: CheckedTextView) {
         viewModel!!.toggleDearPair(btnCollect.isChecked)
-                ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
                             isDear = !isDear!!
@@ -1236,7 +1236,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         fryingHelper.checkUserAndDoing(Runnable {
             transactionMorePopup.dismiss()
             viewModel!!.checkIntoChatRoom()
-                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) =
                                 if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                                     intoChatRoom(chatRoomId)

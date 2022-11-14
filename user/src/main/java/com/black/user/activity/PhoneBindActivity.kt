@@ -14,6 +14,7 @@ import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.CountryCode
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -195,7 +196,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initChooseWindowData() {
-        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>() {
+        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
                 if (returnData != null && returnData.code == 0 && returnData.data != null) {
                     chooseWindow?.setCountryList(returnData.data)
@@ -247,7 +248,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userName, telCountryCode, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userName, telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -270,7 +271,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             if (getPhoneCodeVerifyLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -296,7 +297,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userName, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userName, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -357,7 +358,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
 
         }
             }
-        UserApiServiceHelper.bindPhone(mContext, telCountryCode, userInfo!!.username , phoneCode , newPhone , newPhoneCode, userInfo!!.email, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindPhone(mContext, telCountryCode, userInfo!!.username , phoneCode , newPhone , newPhoneCode, userInfo!!.email, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     onBindSuccess()

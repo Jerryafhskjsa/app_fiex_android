@@ -17,6 +17,7 @@ import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.Regular
 import com.black.base.model.money.RegularConfig
@@ -165,7 +166,7 @@ class RegularLockActivity : BaseActionBarActivity(), View.OnClickListener, Obser
                 String.format("亲，提前退出将扣除本金 %s%% 的违约金", if (regularLock.defaultRate == null) nullAmount else NumberUtil.formatNumberNoGroupHardScale(regularLock.defaultRate!! * 100, 2)),
                 object : OnConfirmCallback {
                     override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                        MoneyApiServiceHelper.postRegularChangeOut(mContext, regularLock.id, object : NormalCallback<HttpRequestResultString?>() {
+                        MoneyApiServiceHelper.postRegularChangeOut(mContext, regularLock.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                             override fun error(type: Int, error: Any?) {
                                 super.error(type, error)
                                 if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {
@@ -220,7 +221,7 @@ class RegularLockActivity : BaseActionBarActivity(), View.OnClickListener, Obser
     }
 
     private fun refreshDemandData() {
-        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>() {
+        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>(mContext!!) {
 
             override fun callback(returnData: HttpRequestResultData<RegularConfig?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
@@ -240,7 +241,7 @@ class RegularLockActivity : BaseActionBarActivity(), View.OnClickListener, Obser
     }
 
     private fun getRegularLockRecord(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getRegularLockRecord(this, null, regular?.coinType, null, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<RegularLock?>?>?>() {
+        MoneyApiServiceHelper.getRegularLockRecord(this, null, regular?.coinType, null, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<RegularLock?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

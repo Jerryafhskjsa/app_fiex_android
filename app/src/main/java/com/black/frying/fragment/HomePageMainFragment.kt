@@ -20,6 +20,7 @@ import com.black.base.lib.banner.FryingUrlImageNormalBanner
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.Money
+import com.black.base.model.NormalCallback
 import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
@@ -633,7 +634,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
             chatFloatAdView!!.setOnClickListener(View.OnClickListener {
                 fryingHelper.checkUserAndDoing(Runnable {
                     viewModel!!.checkIntoMainChat()
-                            ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<ChatRoomEnable>() {
+                            ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<ChatRoomEnable>(mContext!!) {
                                 override fun callback(chatRoomEnable: ChatRoomEnable?) {
                                     intoPublicChat(chatRoomEnable!!)
                                 }

@@ -72,6 +72,7 @@ object SocketUtil {
     /***fiex***/
     const val COMMAND_REMOVE_SOCKET_LISTENER = 100//结束socket监听
     const val COMMAND_ADD_SOCKET_LISTENER = 101//开始socket监听
+    const val COMMAND_REFRESH_TOKEN = 102//refresh token
     /***fiex***/
     //上次保存数据时间记录
     private val lastSaveTimeMap = SparseArray<Long>()

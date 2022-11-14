@@ -20,6 +20,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.Update
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.GlobalAd
@@ -230,7 +231,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     private fun getDialogAd() {
         val language = LanguageUtil.getLanguageSetting(this)
         val lang = if (language != null && language.languageCode == 4) "4" else "1"
-        CommonApiServiceHelper.getGlobalAd(this, lang, "top", object : NormalCallback<HttpRequestResultData<GlobalAd?>?>() {
+        CommonApiServiceHelper.getGlobalAd(this, lang, "top", object : NormalCallback<HttpRequestResultData<GlobalAd?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {}
             override fun callback(returnData: HttpRequestResultData<GlobalAd?>?) {
                 if (returnData != null && returnData.code == 0 && returnData.data != null) {
@@ -239,7 +240,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                         currentDemandAdId = globalAd!!.id
                         val displayMetrics = resources.displayMetrics
                         //來去图片并显示
-                        DownloadServiceHelper.downloadImage(mContext, globalAd.content, (311 * displayMetrics.density).toInt(), (445 * displayMetrics.density).toInt(), false, object : NormalCallback<Bitmap?>() {
+                        DownloadServiceHelper.downloadImage(mContext, globalAd.content, (311 * displayMetrics.density).toInt(), (445 * displayMetrics.density).toInt(), false, object : NormalCallback<Bitmap?>(mContext!!) {
                             override fun error(type: Int, error: Any?) {}
                             override fun callback(returnData: Bitmap?) {
                                 returnData?.let { showDialogAd(it, globalAd) }

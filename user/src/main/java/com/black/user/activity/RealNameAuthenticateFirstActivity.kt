@@ -10,6 +10,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.model.CountryCode
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -94,7 +95,7 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initChooseWindowData() {
-        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>() {
+        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
                 if (returnData != null && returnData.code == 0 && returnData.data != null) {
                     chooseWindow?.setCountryList(returnData.data)

@@ -11,6 +11,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.LoanConfig
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -90,7 +91,7 @@ class LoanConfigActivity : BaseActionBarActivity(), View.OnClickListener, QRefre
     private val loanConfig: Unit
         get() {
             checkClickEnable()
-            MoneyApiServiceHelper.getLoanConfig(this, object : NormalCallback<HttpRequestResultDataList<LoanConfig?>?>() {
+            MoneyApiServiceHelper.getLoanConfig(this, object : NormalCallback<HttpRequestResultDataList<LoanConfig?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
                     binding?.refreshLayout?.setRefreshing(false)

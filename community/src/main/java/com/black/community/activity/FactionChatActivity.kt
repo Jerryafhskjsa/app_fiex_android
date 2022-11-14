@@ -8,10 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.CommunityApiServiceHelper
 import com.black.base.lib.FryingSingleToast
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.MemberChatProfile
-import com.black.base.model.SuccessObserver
+import com.black.base.model.*
 import com.black.base.model.community.FactionItem
 import com.black.base.model.community.FactionMember
 import com.black.base.model.community.FactionUserInfo
@@ -197,7 +194,7 @@ class FactionChatActivity : BaseActionBarActivity() {
     }
 
     private fun getFactionUserInfo() {
-        CommunityApiServiceHelper.getFactionUserInfo(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionUserInfo?>?>() {
+        CommunityApiServiceHelper.getFactionUserInfo(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultData<FactionUserInfo?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultData<FactionUserInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     factionUserInfo = returnData.data
@@ -211,7 +208,7 @@ class FactionChatActivity : BaseActionBarActivity() {
 
     val factionMemberList: Unit
         get() {
-            CommunityApiServiceHelper.getFactionMemberList(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultDataList<FactionMember?>?>() {
+            CommunityApiServiceHelper.getFactionMemberList(this, if (factionId == -1L) "" else NumberUtil.formatNumberNoGroup(factionId), object : NormalCallback<HttpRequestResultDataList<FactionMember?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultDataList<FactionMember?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         profileHashMap = getFactionMemberChatDefaultProfile(returnData.data)

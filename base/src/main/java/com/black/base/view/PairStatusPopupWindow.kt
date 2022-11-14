@@ -346,37 +346,6 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
         return type and 0xff00 == PairStatus.LEVER_DATA
     }
 
-    //显示当前分组
-    private fun showCurrentSet() {}
-
-    private fun updatePairStatusData(value: ArrayList<PairStatus>) {
-        for (pairStatus in value) {
-            val showPair: PairStatus? = allPairStatusShowMap[pairStatus.pair]
-            if (showPair != null) {
-                showPair.currentPrice = pairStatus.currentPrice
-                showPair.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                showPair.priceChangeSinceToday = pairStatus.priceChangeSinceToday
-                showPair.totalAmount = pairStatus.totalAmount
-            }
-        }
-        mActivity.runOnUiThread {
-            for (setName in listViewDataMap.keys) {
-                if (setName.equals(myPairSet, ignoreCase = true)) {
-                    if (!dearPairs.isEmpty()) {
-                        initDearPairsShow()
-                    }
-                } else {
-                    val adapter = adapterMap[setName]
-                    if (adapter != null) {
-                        adapter.data = listViewDataMap[setName]
-                        adapter.sortData(PairStatusShowPopup.COMPARATOR)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        }
-    }
-
     private fun initAllPairStatus() {
         CommonUtil.postHandleTask(socketHandler) {
             val callback: Callback<ArrayList<PairStatus?>?> = object : Callback<ArrayList<PairStatus?>?>() {
@@ -424,7 +393,7 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                             //将分组对应到响应的listView
                             for (setName in listViewDataMap.keys) {
                                 if (setName.equals(myPairSet, ignoreCase = true)) {
-                                    if (!dearPairs.isEmpty()) {
+                                    if (dearPairs.isNotEmpty()) {
                                         initDearPairsShow()
                                     }
                                 } else {
@@ -438,7 +407,6 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                             }
                             //获取所有交易对数据信息，填充并显示
                             pairInitialled = true
-                            showCurrentSet()
                         }
                     }
                 }
@@ -532,12 +500,6 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                             pairStatusShowPopup.updateData(pairStatus)
                             val dearPairShow = dearPairsShowMap[it]
                             dearPairShow?.updateData(pairStatus)
-                            //                        mActivity.runOnUiThread(new Runnable() {
-                            //                            @Override
-                            //                            public void run() {
-                            //                                finalStatusShowMain.updateView();
-                            //                            }
-                            //                        });
                         }
                     }
                 }
@@ -549,11 +511,6 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                 }
                 mActivity.runOnUiThread {
                     search(searchKey)
-                    //                        for (String setName : listViewDataMap.keySet()) {
-                    //                            final PairStatusAdapter adapter = adapterMap.get(setName);
-                    //                            adapter.setData(listViewDataMap.get(setName));
-                    //                            adapter.notifyDataSetChanged();
-                    //                        }
                 }
             }
         }
