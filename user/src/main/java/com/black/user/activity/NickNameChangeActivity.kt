@@ -82,15 +82,15 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                                     }
                                 }
                             })
-                            IMHelper.updateNickName(nickName, object : Callback<Boolean?>() {
-                                override fun error(type: Int, error: Any) {
-                                    FryingUtil.showToast(mContext, "昵称同步失败")
-                                }
-
-                                override fun callback(returnData: Boolean?) {
-                                    FryingUtil.showToast(mContext, "昵称同步成功")
-                                }
-                            })
+//                            IMHelper.updateNickName(nickName, object : Callback<Boolean?>() {
+//                                override fun error(type: Int, error: Any) {
+//                                    FryingUtil.showToast(mContext, "昵称同步失败")
+//                                }
+//
+//                                override fun callback(returnData: Boolean?) {
+//                                    FryingUtil.showToast(mContext, "昵称同步成功")
+//                                }
+//                            })
 
                         } else{
                             FryingUtil.showToast(mContext, "初始化失败，稍后重试！")

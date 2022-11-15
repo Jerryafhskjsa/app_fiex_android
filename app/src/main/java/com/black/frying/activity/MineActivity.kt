@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -27,6 +28,9 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityMineBinding
 import skin.support.SkinCompatManager
@@ -441,8 +445,11 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     public override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
-        refreshUserViews()
-        reloadUserInfo()
+        if(userInfo != null){
+            refreshUserViews()
+        }else{
+            reloadUserInfo()
+        }
         fryingHelper.onResume()
     }
 
@@ -509,14 +516,16 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     //刷新用户信息
     private fun refreshUserViews() {
-        imageLoader!!.loadImage(
-            binding?.iconAvatar,
-            if (userInfo == null) null else userInfo!!.headPortrait,
-            com.black.user.R.drawable.icon_avatar,
-            true
-        )
         binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
         if (userInfo != null) {
+            if(userInfo?.headPortrait != null){
+                binding?.iconAvatar?.let {
+                    Glide.with(mContext)
+                        .load(Uri.parse(userInfo?.headPortrait!!))
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                        .into(it)
+                }
+            }
             val userName = if (userInfo!!.username == null) "" else userInfo!!.username
             binding?.name?.text = String.format("%s", userName)
 

@@ -6,8 +6,8 @@ import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
-            "http://fiex.matchain.info/",//fiex测试环境
-            "https://fiex.io/",//正式环境
+            "http://fiex.matchain.info",//fiex测试环境
+            "https://fiex.io",//正式环境
     )
 
     var serverHost = ArrayList<String?>()
@@ -25,11 +25,11 @@ object UrlConfig {
     }
 
     fun getFiexHost(context: Context,apiType:String?): String? {
-        var apiTypeDes = "uc/"
+        var apiTypeDes = "/uc/"
         when(apiType){
-            ApiType.URl_UC ->apiTypeDes = "uc/"
-            ApiType.URL_API -> apiTypeDes = "api/"
-            ApiType.URL_PRO -> apiTypeDes = "pro/"
+            ApiType.URl_UC ->apiTypeDes = "/uc/"
+            ApiType.URL_API -> apiTypeDes = "/api/"
+            ApiType.URL_PRO -> apiTypeDes = "/pro/"
         }
         var index = getIndex(context)
         var serverHost = CookieUtil.getServerHost(context)

@@ -31,9 +31,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManagerImpl {
     private static final String TAG = "ApiManagerImpl";
-    public static final int DEFAULT_TIME_OUT = 5;//超时时间5s
-    public static final int DEFAULT_READ_TIME_OUT = 10;//读取时间
-    public static final int DEFAULT_WRITE_TIME_OUT = 10;//读取时间
+    public static final int DEFAULT_TIME_OUT = 15;//超时时间5s
+    public static final int DEFAULT_READ_TIME_OUT = 30;//读取时间
+    public static final int DEFAULT_WRITE_TIME_OUT = 30;//读取时间
     private static final Map<String, SoftReference<ApiManagerImpl>> managerCache = Collections.synchronizedMap(new HashMap<String, SoftReference<ApiManagerImpl>>());// 软引用
     private static String globalCookie;
     public String JSESSIONIDCookie = null;

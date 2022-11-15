@@ -91,17 +91,20 @@
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:text="@string/please_choose_country"
-                                android:textColor="@color/C1"
+                                android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_16" />
                         </LinearLayout>
-
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/name"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="45dp"
+                            android:background="@drawable/bg_login_editbox"
+                            android:gravity="center_vertical"
                             android:hint="@string/hint_input_user_name"
-                            android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingLeft="5dp"
+                            android:textSize="@dimen/text_size_12"
+                            app:use_delete="true" />
 
                         <View
                             android:layout_width="@dimen/line"
@@ -110,10 +113,14 @@
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/identity"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="45dp"
+                            android:background="@drawable/bg_login_editbox"
+                            android:gravity="center_vertical"
                             android:hint="@string/input_identity_no_hit"
-                            android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingLeft="5dp"
+                            android:textSize="@dimen/text_size_12"
+                            app:use_delete="true" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/failed_reason"
