@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -421,7 +422,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     private fun refreshDescription(description: PairDescription?) {
         binding?.quotationDetailDescriptionLayout?.coinName?.setText(String.format("%s(%s)", checkedString(description?.coinName), checkedString(description?.coin)))
-        binding?.quotationDetailDescriptionLayout?.date?.setText(if (description?.issueDate == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd", description.issueDate!!))
+        binding?.quotationDetailDescriptionLayout?.date?.setText(if (description?.issueDate == null) nullAmount else description.issueDate!!)
         binding?.quotationDetailDescriptionLayout?.total?.setText(if (description?.totalAmount == null) nullAmount else NumberUtil.formatNumberNoGroup(description.totalAmount))
         binding?.quotationDetailDescriptionLayout?.useTotal?.setText(if (description?.flowAmount == null) nullAmount else NumberUtil.formatNumberNoGroup(description.flowAmount))
         binding?.quotationDetailDescriptionLayout?.joinPrice?.setText(checkedString(description?.issuePrice))
@@ -521,8 +522,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun onPairDescription(observable: Observable<HttpRequestResultData<PairDescription?>?>?) {
         observable!!.subscribe(HttpCallbackSimple(this, false,
                 object : Callback<HttpRequestResultData<PairDescription?>?>() {
-                    override fun error(type: Int, error: Any) {}
+                    override fun error(type: Int, error: Any) {
+                        Log.d("777777","error")
+                    }
                     override fun callback(returnData: HttpRequestResultData<PairDescription?>?) {
+                        Log.d("777777","callback")
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                             refreshDescription(returnData.data)
                         }
