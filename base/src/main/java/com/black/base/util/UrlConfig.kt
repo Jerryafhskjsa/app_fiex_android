@@ -23,13 +23,15 @@ object UrlConfig {
         serverHost?.clear()
         serverHost?.addAll(serverHost)
     }
-
+    //https://fiex.io/futures/fapi/market/v1/public/q/deal?symbol=btc_usdt&num=30
     fun getFiexHost(context: Context,apiType:String?): String? {
         var apiTypeDes = "/uc/"
         when(apiType){
             ApiType.URl_UC ->apiTypeDes = "/uc/"
             ApiType.URL_API -> apiTypeDes = "/api/"
             ApiType.URL_PRO -> apiTypeDes = "/pro/"
+            ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi"
+            ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi"
         }
         var index = getIndex(context)
         var serverHost = CookieUtil.getServerHost(context)
@@ -129,6 +131,8 @@ object UrlConfig {
         const val URl_UC = "uc"
         const val URL_API = "api"
         const val URL_PRO = "pro"
+        const val URL_FUT_F= "fut_f" //合约U本位
+        const val URL_FUT_D= "fut_d" //合约币本位
     }
 
     object User {
@@ -385,6 +389,14 @@ object UrlConfig {
         //检查更新
         const val URL_UPDATE = "commons/app/version/check"
     }
+
+    //合约相关
+    object Future{
+
+        const val URL_DEPTH="market/v1/public/q/depth";
+
+    }
+
 
     object Money {
         //发售列表
