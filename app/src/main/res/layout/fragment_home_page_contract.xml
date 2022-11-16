@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="homePageContractModel"
+            type="java.lang.Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/B2"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/action_bar_layout"
+            layout="@layout/action_bar_transaction" />
+
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/fragment_home_page_contract_header"
+                    layout="@layout/fragment_home_page_contract_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <include
+                    android:id="@+id/fragment_home_page_contract_header1"
+                    layout="@layout/fragment_home_page_contract_header1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <include
+                    android:id="@+id/fragment_home_page_transaction_header2"
+                    layout="@layout/fragment_home_page_transaction_header2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/B2"
+                    android:descendantFocusability="blocksDescendants">
+
+                    <com.black.base.view.EmptyRecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding"
+                        android:scrollbars="none" />
+
+                    <include
+                        android:id="@+id/empty_view"
+                        layout="@layout/list_view_empty_short" />
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.black.base.widget.NoScrollListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:fadingEdge="none"
+                        android:scrollbars="none" />
+                </FrameLayout>
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
+    </LinearLayout>
+</layout>
