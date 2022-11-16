@@ -1,7 +1,6 @@
 package com.black.frying.fragment
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
@@ -42,14 +41,13 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
-import com.black.frying.view.TransactionDeepViewBinding
+import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.TransactionDeepViewBinding.OnTransactionDeepListener
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
+import com.black.frying.viewmodel.ContractViewModel
 import com.black.frying.viewmodel.TransactionViewModel
-import com.black.frying.viewmodel.TransactionViewModel.OnTransactionModelListener
 import com.black.im.util.IMHelper
-import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -58,7 +56,7 @@ import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
-import com.fbsex.exchange.databinding.FragmentHomePageTransactionFiexBinding
+import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
@@ -66,21 +64,27 @@ import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.pow
 
-//首页交易
-@Route(value = [RouterConstData.TRANSACTION], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 2)
-class HomePageTransactionFragmentFiex : BaseFragment(),
+//首页合约
+@Route(value = [RouterConstData.HOME_CONTRACT], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 3)
+class HomePageContractFragment : BaseFragment(),
     View.OnClickListener,
     OnSeekBarChangeListener,
     EntrustCurrentHomeAdapter.OnHandleClickListener,
     OnItemClickListener,
     OnTransactionMoreClickListener,
-    OnTransactionModelListener,
-    OnTransactionDeepListener {
+    ContractViewModel.OnContractModelListener,
+    ContractDeepViewBinding.OnTransactionDeepListener {
     companion object {
-        private var TAG = HomePageTransactionFragmentFiex::class.java.simpleName
+        private var TAG = HomePageContractFragment::class.java.simpleName
+        fun newSelfInstance(tag: String?): HomePageContractFragment {
+            val args = Bundle()
+            val fragment = HomePageContractFragment()
+            fragment.arguments = args
+//            fragment.tag = tag
+            return fragment
+        }
     }
 
     private var colorWin = 0
@@ -118,9 +122,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private var currentBalanceSell:UserBalance? = null
 
     private var layout: View? = null
-    private var binding: FragmentHomePageTransactionFiexBinding? = null
-    private var viewModel: TransactionViewModel? = null
-    private var deepViewBinding: TransactionDeepViewBinding? = null
+    private var binding: FragmentHomePageContractBinding? = null
+    private var viewModel: ContractViewModel? = null
+    private var deepViewBinding: ContractDeepViewBinding? = null
 
     /**
      * 用户资产
@@ -141,11 +145,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_transaction_fiex, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_contract, container, false)
         layout = binding?.root
-        StatusBarUtil.addStatusBarPadding(layout)
-        viewModel = TransactionViewModel(mContext!!, this)
-        deepViewBinding = TransactionDeepViewBinding(mContext!!, viewModel!!, binding!!.fragmentHomePageTransactionHeader1)
+        viewModel = ContractViewModel(mContext!!, this)
+        deepViewBinding = ContractDeepViewBinding(mContext!!, viewModel!!, binding!!.fragmentHomePageContractHeader1)
         deepViewBinding?.setOnTransactionDeepListener(this)
 
         binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
@@ -178,7 +181,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         return layout
     }
 
-    override fun getViewModel(): TransactionViewModel? {
+    override fun getViewModel(): ContractViewModel? {
         return viewModel
     }
 
@@ -226,10 +229,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //买卖功能
     private fun initHeader1() {
-        binding!!.fragmentHomePageTransactionHeader1.linOrderType.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.btnBuy.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.btnSale.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.price.addTextChangedListener(object : TextWatcher {
+        binding!!.fragmentHomePageContractHeader1.linOrderType.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.btnBuy.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.btnSale.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.price.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 computeTotal()
@@ -238,43 +241,43 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             }
 
             override fun afterTextChanged(s: Editable) {
-                binding!!.fragmentHomePageTransactionHeader1.price.setSelection(s.toString().length)
+                binding!!.fragmentHomePageContractHeader1.price.setSelection(s.toString().length)
             }
         })
-        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.filters = arrayOf(NumberFilter(), PointLengthFilter(4))
-        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.addTextChangedListener(object : TextWatcher {
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.filters = arrayOf(NumberFilter(), PointLengthFilter(4))
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 inputNumber = true
                 computeTotal()
                 refreshSubmitButton()
-                val count = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+                val count = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().trim { it <= ' ' })
                 if(count != null){
                     val max: BigDecimal? = getMaxAmount()
                     if(max != null){
                         var countB = count?.let { BigDecimal(it) }
                         var progress = (countB?.divide(max,2,BigDecimal.ROUND_HALF_DOWN))?.times(BigDecimal(100))
-                        binding!!.fragmentHomePageTransactionHeader1.countBar.progress = progress?.toInt()!!
+                        binding!!.fragmentHomePageContractHeader1.countBar.progress = progress?.toInt()!!
                     }
                 }
             }
             override fun afterTextChanged(s: Editable) {
                 inputNumber = false
-                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setSelection(s.toString().length)
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setSelection(s.toString().length)
             }
         })
         countProgressBuy = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
         countProgressSale = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
-        binding!!.fragmentHomePageTransactionHeader1.priceSub.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.priceAdd.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.amountAdd.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.amountSub.setOnClickListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.useable.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageTransactionHeader1.countBar.setOnSeekBarChangeListener(this)
-        binding!!.fragmentHomePageTransactionHeader1.btnHandle.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.priceSub.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.priceAdd.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.amountAdd.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.amountSub.setOnClickListener(this)
+        binding!!.fragmentHomePageContractHeader1.useable.setText(getString(R.string.number_default))
+        binding!!.fragmentHomePageContractHeader1.useableUnit.setText(getString(R.string.number_default))
+        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(getString(R.string.number_default))
+        binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(getString(R.string.number_default))
+        binding!!.fragmentHomePageContractHeader1.countBar.setOnSeekBarChangeListener(this)
+        binding!!.fragmentHomePageContractHeader1.btnHandle.setOnClickListener(this)
         viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
         deepViewBinding!!.init()
@@ -347,9 +350,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                                 currentOrderType = item
                                 viewModel?.setCurrentPairorderType(item)
                                 if(currentOrderType.equals("LIMIT")){
-                                    binding?.fragmentHomePageTransactionHeader1?.relVolume?.visibility = View.VISIBLE
+                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                                 }else if(currentOrderType.equals("MARKET")){
-                                    binding?.fragmentHomePageTransactionHeader1?.relVolume?.visibility = View.GONE
+                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.GONE
                                 }
                         }
                     }).show()
@@ -418,37 +421,37 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     }
                 }
             R.id.price_sub -> {
-                var currentInputPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
+                var currentInputPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
                 currentInputPrice = currentInputPrice ?: 0.toDouble()
                 val onUnitPrice: Double = getOnUnitPrice()
                 if (currentInputPrice > 0) {
                     currentInputPrice -= onUnitPrice
                     currentInputPrice = max(currentInputPrice, 0.0)
-                    binding!!.fragmentHomePageTransactionHeader1.price.setText(String.format("%." + viewModel!!.getPrecision() + "f", currentInputPrice))
+                    binding!!.fragmentHomePageContractHeader1.price.setText(String.format("%." + viewModel!!.getPrecision() + "f", currentInputPrice))
                 }
             }
             R.id.price_add -> {
-                var currentInputPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
+                var currentInputPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
                 currentInputPrice = currentInputPrice ?: 0.toDouble()
                 val onUnitPrice: Double = getOnUnitPrice()
                 currentInputPrice += onUnitPrice
-                binding!!.fragmentHomePageTransactionHeader1.price.setText(String.format("%." + viewModel!!.getPrecision() + "f", currentInputPrice))
+                binding!!.fragmentHomePageContractHeader1.price.setText(String.format("%." + viewModel!!.getPrecision() + "f", currentInputPrice))
             }
             R.id.amount_add ->{
-                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().trim { it <= ' ' })
                 currentInputAmount = currentInputAmount ?: 0.toDouble()
                 val onUnitAmount: Double = getOnUnitAmount()
                 currentInputAmount += onUnitAmount
-                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
             }
             R.id.amount_sub ->{
-                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+                var currentInputAmount = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().trim { it <= ' ' })
                 currentInputAmount = currentInputAmount ?: 0.toDouble()
                 val onUnitAmount: Double = getOnUnitAmount()
                 if (currentInputAmount > 0) {
                     currentInputAmount -= onUnitAmount
                     currentInputAmount = max(currentInputAmount, 0.0)
-                    binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
+                    binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(String.format("%." + viewModel!!.getAmountLength() + "f", currentInputAmount))
                 }
             }
             R.id.btn_buy -> context?.let {
@@ -529,14 +532,14 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         //显示滑块选择的数量
-        binding!!.fragmentHomePageTransactionHeader1.countProgress.progress = progress
+        binding!!.fragmentHomePageContractHeader1.countProgress.progress = progress
         val amountPercent = progress.toDouble() / seekBar.max
         val max: BigDecimal? = getMaxAmount()
         if(!inputNumber!!){
             if (max == null || max == BigDecimal.ZERO) {
-                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("0.00")
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("0.00")
             } else {
-                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(max * BigDecimal(amountPercent), RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(max * BigDecimal(amountPercent), RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
             }
         }
         onCountProgressClick(progress * 5 / 100)
@@ -564,8 +567,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         drawable.alpha = (0.6 * 255).toInt()
         decoration.setDrawable(drawable)
         binding!!.recyclerView.addItemDecoration(decoration)
-        binding!!.fragmentHomePageTransactionHeader1.price.resetRes()
-        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.resetRes()
+        binding!!.fragmentHomePageContractHeader1.price.resetRes()
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.resetRes()
         countProgressBuy = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
         countProgressSale = SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
         //        countProgress.setEnabled(false);
@@ -575,52 +578,52 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun onCountProgressClick(type: Int) {
         when (type) {
             0 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
             }
             1 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
             }
             2 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
             }
             3 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
             }
             4 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
             }
             5 -> {
-                binding!!.fragmentHomePageTransactionHeader1.amountZero.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = true
-                binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountZero.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = true
+                binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = true
             }
         }
     }
@@ -635,7 +638,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun getMaxAmount(): BigDecimal? {
         if (transactionType == 1) {
             val usable = currentBalanceSell?.availableBalance
-            val price = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString())
+            val price = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString())
             return if (usable == null || price == null || price == 0.0) null else  BigDecimal(usable).divide(BigDecimal(price),2,BigDecimal.ROUND_HALF_DOWN)
         } else if (transactionType == 2) {
             return currentBalanceBuy?.availableBalance?.toBigDecimal()
@@ -645,11 +648,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
 
     private fun resetAmountLength() {
-        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.filters = arrayOf(NumberFilter(), PointLengthFilter(viewModel!!.getAmountLength()))
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.filters = arrayOf(NumberFilter(), PointLengthFilter(viewModel!!.getAmountLength()))
     }
 
     private fun resetPriceLength() {
-        binding!!.fragmentHomePageTransactionHeader1.price.filters = arrayOf(NumberFilter(), PointLengthFilter(viewModel?.getPrecision()
+        binding!!.fragmentHomePageContractHeader1.price.filters = arrayOf(NumberFilter(), PointLengthFilter(viewModel?.getPrecision()
                 ?: 8))
     }
 
@@ -679,72 +682,72 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //计算总额
     private fun computeTotal() {
-        val price = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
-        val count = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' })
+        val price = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
+        val count = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().trim { it <= ' ' })
         if (price != null) {
             if (count != null && (count != 0.0)) {
                 if(currentOrderType.equals("LIMIT")){
-                    binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                 }
             } else { //只有价格
                 if (transactionType == 1) {
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
+                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                     if (price > 0 && currentBalanceSell != null) {
                         //总的钱数除以输入价格
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.availableBalance!!.toDouble().div(price.toDouble()), RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength()))
+                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.availableBalance!!.toDouble().div(price.toDouble()), RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength()))
                     } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                     }
                 } else if (transactionType == 2) {
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
+                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
+                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
                     if (price > 0 && currentBalanceBuy != null) {
                         //总的钱数乘以输入价格
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.availableBalance!!.toDouble() * price.toDouble(), RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength()))
+                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.availableBalance!!.toDouble() * price.toDouble(), RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength()))
                     } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                     }
                 }
                 if(currentOrderType.equals("LIMIT")){
                     if(price != null && count != null){
-                        binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count!!, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count!!, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                         }
                     }
                 }
             } else {
                 if (transactionType == 1) {
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
+                    binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                 } else if (transactionType == 2) {
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
+                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
+                    binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
                 }
             }
     }
 
     //计算当前输入价格CNY
     private fun computePriceCNY() {
-        val price = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
+        val price = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
         if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageTransactionHeader1.priceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price / viewModel!!.getCurrentPrice(), 4, 4))
+            binding!!.fragmentHomePageContractHeader1.priceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price / viewModel!!.getCurrentPrice(), 4, 4))
         } else {
-            binding!!.fragmentHomePageTransactionHeader1.priceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
+            binding!!.fragmentHomePageContractHeader1.priceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
         }
     }
 
     private fun clearInput() {
-        binding!!.fragmentHomePageTransactionHeader1.price.setText("")
-        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
-        binding!!.fragmentHomePageTransactionHeader1.countBar.progress = 0
-        binding!!.fragmentHomePageTransactionHeader1.countProgress.progress = 0
-        binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = false
-        binding!!.fragmentHomePageTransactionHeader1.amountFourty.isChecked = false
-        binding!!.fragmentHomePageTransactionHeader1.amountSixty.isChecked = false
-        binding!!.fragmentHomePageTransactionHeader1.amountEighty.isChecked = false
-        binding!!.fragmentHomePageTransactionHeader1.amountAll.isChecked = false
+        binding!!.fragmentHomePageContractHeader1.price.setText("")
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("")
+        binding!!.fragmentHomePageContractHeader1.countBar.progress = 0
+        binding!!.fragmentHomePageContractHeader1.countProgress.progress = 0
+        binding!!.fragmentHomePageContractHeader1.amountTwenty.isChecked = false
+        binding!!.fragmentHomePageContractHeader1.amountFourty.isChecked = false
+        binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = false
+        binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
+        binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
         refreshSubmitButton()
     }
 
@@ -779,29 +782,29 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         when(type){
             "MARKET" -> {
                 typeDes = getString(R.string.order_type_market)
-                binding!!.fragmentHomePageTransactionHeader1?.linPrice.visibility = View.GONE
-                binding!!.fragmentHomePageTransactionHeader1?.linPrinceCny.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1?.linPrice.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1?.linPrinceCny.visibility = View.GONE
             }
             "LIMIT" -> {
                 typeDes = getString(R.string.order_type_limit)
-                binding!!.fragmentHomePageTransactionHeader1?.linPrice.visibility = View.VISIBLE
-                binding!!.fragmentHomePageTransactionHeader1?.linPrinceCny.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1?.linPrice.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1?.linPrinceCny.visibility = View.VISIBLE
             }
         }
-        binding!!.fragmentHomePageTransactionHeader1?.orderType.text = typeDes
+        binding!!.fragmentHomePageContractHeader1?.orderType.text = typeDes
     }
 
     private fun refreshSubmitButton() {
         val userInfo = if (mContext == null) null else CookieUtil.getUserInfo(mContext!!)
         if (userInfo == null) {
-            binding!!.fragmentHomePageTransactionHeader1.btnHandle.isEnabled = true
+            binding!!.fragmentHomePageContractHeader1.btnHandle.isEnabled = true
         } else {
-            val price = binding!!.fragmentHomePageTransactionHeader1.price.text.toString()
-            val count = binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
+            val price = binding!!.fragmentHomePageContractHeader1.price.text.toString()
+            val count = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString()
             if(currentOrderType.equals("LIMIT")){
-                binding!!.fragmentHomePageTransactionHeader1.btnHandle.isEnabled = !(TextUtils.isEmpty(price) || TextUtils.isEmpty(count))
+                binding!!.fragmentHomePageContractHeader1.btnHandle.isEnabled = !(TextUtils.isEmpty(price) || TextUtils.isEmpty(count))
             }else if (currentOrderType.equals("MARKET")){
-                binding!!.fragmentHomePageTransactionHeader1.btnHandle.isEnabled = !TextUtils.isEmpty(count)
+                binding!!.fragmentHomePageContractHeader1.btnHandle.isEnabled = !TextUtils.isEmpty(count)
             }
         }
     }
@@ -809,54 +812,54 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     //刷新交易区控件
     private fun refreshTransactionHardViews() {
         if (transactionType == 1) {
-            binding!!.fragmentHomePageTransactionHeader1.btnBuy.isChecked = true
-            binding!!.fragmentHomePageTransactionHeader1.btnSale.isChecked = false
-            binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable = countProgressBuy
-            binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageTransactionHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t7)
+            binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = true
+            binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = false
+            binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable = countProgressBuy
+            binding!!.fragmentHomePageContractHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+            binding!!.fragmentHomePageContractHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t7)
         } else if (transactionType == 2) {
-            binding!!.fragmentHomePageTransactionHeader1.btnBuy.isChecked = false
-            binding!!.fragmentHomePageTransactionHeader1.btnSale.isChecked = true
-            binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable = countProgressSale
-            binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageTransactionHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t5)
+            binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = false
+            binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = true
+            binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable = countProgressSale
+            binding!!.fragmentHomePageContractHeader1.amountZero.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.amountTwenty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.amountFourty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.amountSixty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.amountEighty.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.amountAll.buttonDrawable = SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+            binding!!.fragmentHomePageContractHeader1.btnHandle.background = SkinCompatResources.getDrawable(activity, R.drawable.btn_t5)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
             binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
             binding!!.actionBarLayout.pairSetName.setText("/"+viewModel!!.getSetName())
-            binding!!.fragmentHomePageTransactionHeader1.deepPriceP.text =  getString(R.string.brackets,viewModel!!.getSetName())
-            binding!!.fragmentHomePageTransactionHeader1.deepAmountName.text =  getString(R.string.brackets,viewModel!!.getCoinType())
+            binding!!.fragmentHomePageContractHeader1.deepPriceP.text =  getString(R.string.brackets,viewModel!!.getSetName())
+            binding!!.fragmentHomePageContractHeader1.deepAmountName.text =  getString(R.string.brackets,viewModel!!.getCoinType())
             if (transactionType == 1) {
-                binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageTransactionHeader1.useableFreezUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(resources.getString(R.string.buy).toString() + viewModel!!.getCoinType())
+                binding!!.fragmentHomePageContractHeader1.useableUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                binding!!.fragmentHomePageContractHeader1.useableFreezUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageContractHeader1.btnHandle.setText(resources.getString(R.string.buy).toString() + viewModel!!.getCoinType())
             } else if (transactionType == 2) {
-                binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageTransactionHeader1.useableFreezUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(resources.getString(R.string.sale).toString() + viewModel!!.getCoinType())
+                binding!!.fragmentHomePageContractHeader1.useableUnit.setText(viewModel!!.getCoinType())
+                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageContractHeader1.useableFreezUnit.setText(viewModel!!.getCoinType())
+                binding!!.fragmentHomePageContractHeader1.btnHandle.setText(resources.getString(R.string.sale).toString() + viewModel!!.getCoinType())
             }
         }
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
-            binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(R.string.login)
+            binding!!.fragmentHomePageContractHeader1.btnHandle.setText(R.string.login)
         }
         refreshCurrentWallet()
     }
 
     private fun refreshDeepView() {
         var deep = viewModel!!.getPrecisionDeep(viewModel!!.getPrecision())
-        binding!!.fragmentHomePageTransactionHeader1.deep.setText(getString(R.string.point_count,deep?.deep?: ""))
+        binding!!.fragmentHomePageContractHeader1.deep.setText(getString(R.string.point_count,deep?.deep?: ""))
     }
 
     private fun onDeepChoose() {
@@ -883,22 +886,22 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             //买入
             if (transactionType == 1) {
                 if (currentBalanceSell != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
-                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageContractHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceSell?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
                 } else {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
                 }
-                binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
+                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
             } else if (transactionType == 2) {
                 if (currentBalanceBuy != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
-                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageContractHeader1.useable.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.availableBalance?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
+                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(NumberUtil.formatNumberNoGroup(currentBalanceBuy?.freeze?.toDoubleOrNull(), RoundingMode.FLOOR, 0, 8))
                 } else {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
                 }
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
+                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
             }
         }
     }
@@ -951,14 +954,14 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //下单
     private fun createOrder(direction: String) {
-        var price:String? = binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' }
+        var price:String? = binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' }
         val priceDouble = CommonUtil.parseDouble(price)
         if(currentOrderType.equals("LIMIT")){
             if (priceDouble == null || priceDouble == 0.0) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
                 return
             }
-            val currentPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.currentPrice.text.toString())
+            val currentPrice = CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.currentPrice.text.toString())
             if (currentPrice != null && currentPrice != 0.0) {
                 if ("SELL" != direction && java.lang.Double.compare(priceDouble, currentPrice * 0.8) < 0) {
                     FryingUtil.showToast(mContext, getString(R.string.trade_sale_over_price))
@@ -970,7 +973,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 }
             }
         }
-        val totalAmount = binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().trim { it <= ' ' }
+        val totalAmount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().trim { it <= ' ' }
         val totalAmountDouble = CommonUtil.parseDouble(totalAmount)
         if (totalAmountDouble == null || totalAmountDouble == 0.0) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
@@ -984,9 +987,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        binding!!.fragmentHomePageTransactionHeader1.price.setText("")
-                        binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
-                        binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+                        binding!!.fragmentHomePageContractHeader1.price.setText("")
+                        binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("")
+                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
 //                        viewModel!!.getWalletLeverDetail()
                         viewModel!!.getCurrentUserBalance(ConstData.BalanceType.SPOT)
                         withTimerGetCurrentTradeOrder()
@@ -1041,7 +1044,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     override fun onPairStatusInit(pairStatus: PairStatus?) {
         clearInput()
-        binding!!.fragmentHomePageTransactionHeader1.price.filters = arrayOf(NumberFilter(),
+        binding!!.fragmentHomePageContractHeader1.price.filters = arrayOf(NumberFilter(),
             pairStatus?.precision?.let { PointLengthFilter(it) })
         resetPriceLength()
         resetAmountLength()
@@ -1251,10 +1254,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if(currentOrderType.equals("MARKET")){
             return
         }
-        binding!!.fragmentHomePageTransactionHeader1.price.setText(tradeOrder.formattedPrice)
+        binding!!.fragmentHomePageContractHeader1.price.setText(tradeOrder.formattedPrice)
         val scaleAnim = AnimationUtils.loadAnimation(mContext, R.anim.transaction_price_anim)
-        binding!!.fragmentHomePageTransactionHeader1.price.startAnimation(scaleAnim)
-//        val amount = binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString().toDouble()
+        binding!!.fragmentHomePageContractHeader1.price.startAnimation(scaleAnim)
+//        val amount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().toDouble()
 //        val price = CommonUtil.parseDouble(tradeOrder.formattedPrice) ?: 0.0
 //        var usableAmount = 0.0
 //        if (transactionType == 1) {
@@ -1271,9 +1274,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 //            }
 //        }
 //        if (usableAmount != 0.0) {
-//            binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(usableAmount, RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
+//            binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(usableAmount, RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
 //        } else {
-//            binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("0.0")
+//            binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("0.0")
 //        }
     }
 
@@ -1299,19 +1302,19 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private fun updateCurrentPair(pairStatus: PairStatus) {
         val color = if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
-        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
-        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
+        binding!!.fragmentHomePageContractHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+        binding!!.fragmentHomePageContractHeader1.currentPrice.setTextColor(color)
+        binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
         computePriceCNY()
     }
 
     private fun updateCurrentPairPrice(price:String?){
-        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
-//        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+        binding!!.fragmentHomePageContractHeader1.currentPrice.setText(price)
+//        binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(String.format("≈ %s", price))
         if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4))
+            binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4))
         } else {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
+            binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
         }
     }
 

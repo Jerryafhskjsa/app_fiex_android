@@ -750,4 +750,13 @@
     <string name="order_type_market">市价</string>
     <string name="total_entrust_amount">累计数量</string>
     <string name="total_price">累计金额</string>
+    <string name="usdt_base">U本位</string>
+    <string name="coin_base">币本位</string>
+    <string name="simulation_base">模拟盘</string>
+    <string name="contract_buy">开仓</string>
+    <string name="contract_sell">平仓</string>
+    <string name="contract_with_limit">止盈止损</string>
+    <string name="contract_buy_raise">买入/开多</string>
+    <string name="contract_sell_fall">卖出/开空</string>
+
 </resources>

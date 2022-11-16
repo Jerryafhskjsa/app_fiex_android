@@ -133,6 +133,7 @@ object RouterConstData {
     const val C2C_ORDER_DETAIL_TALK_NEW = "fiex://c2cOrderDetailTalkNew"
 
     const val TRANSACTION = "fiex://transaction"
+    const val HOME_CONTRACT = "fiex://contract"
     const val HOME_ASSET = "fiex://homeAsset"
     const val C2C_HOME = "fiex://c2cHome"
 
