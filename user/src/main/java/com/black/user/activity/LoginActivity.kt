@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.UserApiService
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
@@ -21,10 +22,10 @@ import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindowSingle
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
+import com.black.base.model.future.DepthBean
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
-import com.black.base.net.HttpCallbackSimple
 import com.black.base.net.NormalObserver2
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
@@ -79,14 +80,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         binding?.phoneBar?.setOnClickListener(this)
         binding?.emailBar?.setOnClickListener(this)
         binding?.imgCountryCode?.setOnClickListener(this)
-        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.text = getString(R.string.register_title)
-        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.setOnClickListener(this)
+        binding?.btnTest?.setOnClickListener(this)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.text =
+            getString(R.string.register_title)
+        binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)
+            ?.setOnClickListener(this)
         if (thisCountry == null) {
             thisCountry = CountryCode()
             thisCountry?.code = "86"
         }
         chooseWindow = CountryChooseWindow(this, thisCountry, object : OnCountryChooseListener {
-            override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {
+            override fun onCountryChoose(
+                chooseWindow: CountryChooseWindow,
+                countryCode: CountryCode?
+            ) {
                 chooseWindow.dismiss()
                 thisCountry = countryCode
                 binding?.countryCode?.tag = thisCountry?.code
@@ -111,68 +118,100 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("777777","onDestroy")
+        Log.d("777777", "onDestroy")
         BaseApplication.checkTokenError = true
     }
 
-    override fun routeCheck(uri: String, beforePath: String?, requestCode: Int, flags: Int, extras: Bundle?) {
+    override fun routeCheck(
+        uri: String,
+        beforePath: String?,
+        requestCode: Int,
+        flags: Int,
+        extras: Bundle?
+    ) {
         //不需要打开需要登录的目标
     }
 
     override fun onClick(v: View) {
         val id = v.id
-        when(id){
+        when (id) {
             R.id.forget_password -> {
                 //找回密码
                 val bundle = Bundle()
                 bundle.putInt(ConstData.TYPE, type)
                 if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
-                    bundle.putString(ConstData.ACCOUNT, binding!!.phoneAccount.text.toString().trim { it <= ' ' })
+                    bundle.putString(
+                        ConstData.ACCOUNT,
+                        binding!!.phoneAccount.text.toString().trim { it <= ' ' })
                 } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
-                    bundle.putString(ConstData.ACCOUNT, binding!!.mailAccount.text.toString().trim { it <= ' ' })
+                    bundle.putString(
+                        ConstData.ACCOUNT,
+                        binding!!.mailAccount.text.toString().trim { it <= ' ' })
                 }
-                BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD_FIEX).with(bundle).go(mContext)
+                BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD_FIEX).with(bundle)
+                    .go(mContext)
             }
             R.id.btn_login -> login()
-            R.id.text_action_bar_right ->{//注册
+            R.id.text_action_bar_right -> {//注册
                 BlackRouter.getInstance().build(RouterConstData.REGISTER).go(mContext)
             }
-            R.id.email_bar ->{
+            R.id.email_bar -> {
                 type = ConstData.AUTHENTICATE_TYPE_MAIL
                 changeLoinType(type)
             }
-            R.id.phone_bar ->{
+            R.id.phone_bar -> {
                 type = ConstData.AUTHENTICATE_TYPE_PHONE
                 changeLoinType(type)
             }
             R.id.img_country_code -> chooseCountryCode()
+
+            R.id.btn_test -> testBtn()
+
         }
     }
 
-    private fun initChooseWindowData() {
-        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
-            override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
-                if (returnData != null && returnData.code == 0 && returnData.data != null) {
-                    chooseWindow!!.setCountryList(returnData.data)
+    private fun testBtn() {
+        FutureApiServiceHelper.getDepthData(this, "btc_usdt", 30, false,
+            object : Callback<HttpRequestResultBean<DepthBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+
                 }
-            }
-        })
+
+                override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
+                    Log.d("sss", returnData.toString());
+                }
+
+
+            })
+    }
+
+    private fun initChooseWindowData() {
+        CommonApiServiceHelper.getCountryCodeList(
+            this,
+            false,
+            object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
+                override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
+                    if (returnData != null && returnData.code == 0 && returnData.data != null) {
+                        chooseWindow!!.setCountryList(returnData.data)
+                    }
+                }
+            })
     }
 
     private fun chooseCountryCode() {
         chooseWindow!!.show(thisCountry)
     }
 
-    private fun changeLoinType(loginType:Int?){
-        when(loginType){
-            ConstData.AUTHENTICATE_TYPE_PHONE ->{
+    private fun changeLoinType(loginType: Int?) {
+        when (loginType) {
+            ConstData.AUTHENTICATE_TYPE_PHONE -> {
                 binding?.mailBarB?.visibility = View.GONE
                 binding?.phoneBarB?.visibility = View.VISIBLE
                 binding?.mailAccount?.visibility = View.GONE
                 binding?.relPhone?.visibility = View.VISIBLE
                 binding?.loginType?.text = getString(R.string.phone_number)
             }
-            ConstData.AUTHENTICATE_TYPE_MAIL ->{
+            ConstData.AUTHENTICATE_TYPE_MAIL -> {
                 binding?.mailBarB?.visibility = View.VISIBLE
                 binding?.phoneBarB?.visibility = View.GONE
                 binding?.mailAccount?.visibility = View.VISIBLE
@@ -196,10 +235,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private fun checkClickable() {
         when (type) {
-            ConstData.AUTHENTICATE_TYPE_PHONE -> binding!!.btnLogin.isEnabled = !(TextUtils.isEmpty(binding!!.phoneAccount.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
-            ConstData.AUTHENTICATE_TYPE_MAIL -> binding!!.btnLogin.isEnabled = !(TextUtils.isEmpty(binding!!.mailAccount.text.toString().trim { it <= ' ' })
-                    || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
+            ConstData.AUTHENTICATE_TYPE_PHONE -> binding!!.btnLogin.isEnabled =
+                !(TextUtils.isEmpty(binding!!.phoneAccount.text.toString().trim { it <= ' ' })
+                        || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
+            ConstData.AUTHENTICATE_TYPE_MAIL -> binding!!.btnLogin.isEnabled =
+                !(TextUtils.isEmpty(binding!!.mailAccount.text.toString().trim { it <= ' ' })
+                        || TextUtils.isEmpty(binding!!.password.text.toString().trim { it <= ' ' }))
             else -> binding!!.btnLogin.isEnabled = false
         }
     }
@@ -253,146 +294,166 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
-        ApiManager.build(this,false,UrlConfig.ApiType.URl_UC).getService<UserApiService>(UserApiService::class.java)
-                ?.getToken(telCountryCode, username, password)
-                ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
-                ?.subscribeOn(Schedulers.io())//事件产生的线程
-                ?.observeOn(AndroidSchedulers.mainThread())//事件消费的线程
-                ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>() {//Func1表示包装有返回值的方法，Actcion无返回值
-                    override fun afterRequest() {
-                        hideLoading()
-                    }
-                    override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
-                        return if (returnData != null) {
-                            when (returnData.code) {
-                                HttpRequestResult.SUCCESS -> {
-                                    //token获取成功，获取用户信息，进入app
-                                    val token = returnData.data
-                                    if (TextUtils.isEmpty(token)) {
-                                        FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
-                                    } else {
-                                        HttpCookieUtil.saveUcToken(mContext,token)
-                                        CookieUtil.saveToken(mContext,token)
+        ApiManager.build(this, false, UrlConfig.ApiType.URl_UC)
+            .getService<UserApiService>(UserApiService::class.java)
+            ?.getToken(telCountryCode, username, password)
+            ?.materialize()//Materialize将数据项和事件通知都当做数据项发射
+            ?.subscribeOn(Schedulers.io())//事件产生的线程
+            ?.observeOn(AndroidSchedulers.mainThread())//事件消费的线程
+            ?.flatMap(object :
+                RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>() {
+                //Func1表示包装有返回值的方法，Actcion无返回值
+                override fun afterRequest() {
+                    hideLoading()
+                }
+
+                override fun applyResult(returnData: HttpRequestResultString?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
+                    return if (returnData != null) {
+                        when (returnData.code) {
+                            HttpRequestResult.SUCCESS -> {
+                                //token获取成功，获取用户信息，进入app
+                                val token = returnData.data
+                                if (TextUtils.isEmpty(token)) {
+                                    FryingUtil.showToast(
+                                        mContext,
+                                        getString(R.string.get_token_failed)
+                                    )
+                                } else {
+                                    HttpCookieUtil.saveUcToken(mContext, token)
+                                    CookieUtil.saveToken(mContext, token)
 //                                        onGetTokenSuccess()
-                                    }
-                                    Observable.empty()
                                 }
-                                ConstData.AUTHENTICATE_CODE_MAIL -> {
-                                    val prefixAuth = returnData.msg
-                                    val target = Target()
-                                    val type = VerifyType.MAIL
-                                    val mailArr: Array<String> = prefixAuth?.split("#")?.toTypedArray()
-                                            ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
-                                    target.mail = if (mailArr.size >= 2) mailArr[1] else null
-                                    verifyObserve(type, target, returnData.code!!, prefixAuth)
-                                }
-                                /**
-                                 * {
-                                "msg": "038e9725-349b-4e09-9578-45e85f2a6d09#15308206311",
-                                "code": -10022,
-                                "data": "86#15308206311"
-                                }
-                                 */
-                                ConstData.AUTHENTICATE_CODE_PHONE -> {
-                                    val prefixAuth = returnData.msg
-                                    val target = Target()
-                                    val type = VerifyType.PHONE
-                                    val phoneArr: Array<String> = returnData.data?.split("#")?.toTypedArray()
-                                            ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
-                                    if (phoneArr.size >= 2) {
-                                        target.poneCountyCode = phoneArr[0]
-                                        target.phone = phoneArr[1]
-                                    }
-                                    verifyObserve(type, target, returnData.code!!, prefixAuth)
-                                }
-                                ConstData.AUTHENTICATE_CODE_GOOGLE -> {
-                                    val prefixAuth = returnData.msg
-                                    val target = Target()
-                                    val type = VerifyType.GOOGLE
-                                    verifyObserve(type, target, returnData.code!!, prefixAuth)
-                                }
-                                ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE -> {
-                                    val prefixAuth = returnData.msg
-                                    val target = Target()
-                                    val phoneArr: Array<String> = returnData.data?.split("#")?.toTypedArray()
-                                            ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
-                                    if (phoneArr.size >= 2) {
-                                        target.poneCountyCode = phoneArr[0]
-                                        target.phone = phoneArr[1]
-                                    }
-                                    val type = VerifyType.PHONE or VerifyType.GOOGLE
-                                    verifyObserve(type, target, returnData.code!!, prefixAuth)
-                                }
-                                else -> {
-                                    FryingUtil.showToast(mContext, returnData.msg)
-                                    Observable.empty()
-                                }
+                                Observable.empty()
                             }
-                        } else {
-                            FryingUtil.showToast(mContext, getString(R.string.login_data_error))
-                            Observable.empty()
-                        }
-                    }
-                })
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
-                    override fun afterRequest() {
-                        hideLoading()
-                    }
-                    override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
-                        if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            val ucToken = result?.data?.ucToken
-                            val ticket = result?.data?.ticket
-                            Log.d(TAG,"ucToken = "+ucToken)
-                            Log.d(TAG,"ticket = "+ticket)
-                            if (TextUtils.isEmpty(ucToken)) {
-                                FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
-                            } else {
-                                HttpCookieUtil.saveUcToken(mContext, ucToken)
-                                CookieUtil.saveToken(mContext,ucToken)
-                                Log.d(TAG,"currentThread = "+Thread.currentThread().name)
-                                HttpCookieUtil.saveTicket(mContext,ticket)
-                                if (user != null) {
-                                    user!!.token = ucToken
-                                    user!!.ucToken = ucToken
-                                    user!!.ticket = ticket
-                                }
-                                getProToken(mContext)
+                            ConstData.AUTHENTICATE_CODE_MAIL -> {
+                                val prefixAuth = returnData.msg
+                                val target = Target()
+                                val type = VerifyType.MAIL
+                                val mailArr: Array<String> = prefixAuth?.split("#")?.toTypedArray()
+                                    ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
+                                target.mail = if (mailArr.size >= 2) mailArr[1] else null
+                                verifyObserve(type, target, returnData.code!!, prefixAuth)
                             }
-                        } else {
-                            FryingUtil.showToast(mContext, if (result == null) getString(R.string.login_data_error) else result.msg)
+                            /**
+                             * {
+                            "msg": "038e9725-349b-4e09-9578-45e85f2a6d09#15308206311",
+                            "code": -10022,
+                            "data": "86#15308206311"
+                            }
+                             */
+                            ConstData.AUTHENTICATE_CODE_PHONE -> {
+                                val prefixAuth = returnData.msg
+                                val target = Target()
+                                val type = VerifyType.PHONE
+                                val phoneArr: Array<String> =
+                                    returnData.data?.split("#")?.toTypedArray()
+                                        ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
+                                if (phoneArr.size >= 2) {
+                                    target.poneCountyCode = phoneArr[0]
+                                    target.phone = phoneArr[1]
+                                }
+                                verifyObserve(type, target, returnData.code!!, prefixAuth)
+                            }
+                            ConstData.AUTHENTICATE_CODE_GOOGLE -> {
+                                val prefixAuth = returnData.msg
+                                val target = Target()
+                                val type = VerifyType.GOOGLE
+                                verifyObserve(type, target, returnData.code!!, prefixAuth)
+                            }
+                            ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE -> {
+                                val prefixAuth = returnData.msg
+                                val target = Target()
+                                val phoneArr: Array<String> =
+                                    returnData.data?.split("#")?.toTypedArray()
+                                        ?: return Observable.error(RuntimeException(getString(R.string.alert_server_error)))
+                                if (phoneArr.size >= 2) {
+                                    target.poneCountyCode = phoneArr[0]
+                                    target.phone = phoneArr[1]
+                                }
+                                val type = VerifyType.PHONE or VerifyType.GOOGLE
+                                verifyObserve(type, target, returnData.code!!, prefixAuth)
+                            }
+                            else -> {
+                                FryingUtil.showToast(mContext, returnData.msg)
+                                Observable.empty()
+                            }
                         }
+                    } else {
+                        FryingUtil.showToast(mContext, getString(R.string.login_data_error))
+                        Observable.empty()
                     }
-                })
+                }
+            })
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
+                override fun afterRequest() {
+                    hideLoading()
+                }
+
+                override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        val ucToken = result?.data?.ucToken
+                        val ticket = result?.data?.ticket
+                        Log.d(TAG, "ucToken = " + ucToken)
+                        Log.d(TAG, "ticket = " + ticket)
+                        if (TextUtils.isEmpty(ucToken)) {
+                            FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
+                        } else {
+                            HttpCookieUtil.saveUcToken(mContext, ucToken)
+                            CookieUtil.saveToken(mContext, ucToken)
+                            Log.d(TAG, "currentThread = " + Thread.currentThread().name)
+                            HttpCookieUtil.saveTicket(mContext, ticket)
+                            if (user != null) {
+                                user!!.token = ucToken
+                                user!!.ucToken = ucToken
+                                user!!.ticket = ticket
+                            }
+                            getProToken(mContext)
+                        }
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (result == null) getString(R.string.login_data_error) else result.msg
+                        )
+                    }
+                }
+            })
     }
 
     //获取pro-token
-    private fun getProToken(context: Context){
-        UserApiServiceHelper.getProToken(context!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
-            override fun error(type: Int, error: Any?) {
-            }
-            override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
-                if(result != null && result.code == HttpRequestResult.SUCCESS){
-                    var proTokenResult: ProTokenResult? = result.data
-                    var proToken = proTokenResult?.proToken
-                    var proTokenExpiredTime =proTokenResult?.expireTime
-                    HttpCookieUtil.saveProToken(context,proToken)
-                    HttpCookieUtil.saveProTokenExpiredTime(context,proTokenExpiredTime.toString())
-                    getWsToken(mContext)
+    private fun getProToken(context: Context) {
+        UserApiServiceHelper.getProToken(
+            context!!,
+            object : Callback<HttpRequestResultData<ProTokenResult?>?>() {
+                override fun error(type: Int, error: Any?) {
                 }
-            }
-        })
+
+                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        var proTokenResult: ProTokenResult? = result.data
+                        var proToken = proTokenResult?.proToken
+                        var proTokenExpiredTime = proTokenResult?.expireTime
+                        HttpCookieUtil.saveProToken(context, proToken)
+                        HttpCookieUtil.saveProTokenExpiredTime(
+                            context,
+                            proTokenExpiredTime.toString()
+                        )
+                        getWsToken(mContext)
+                    }
+                }
+            })
     }
 
     //获取ws-token
-    private fun getWsToken(context: Context){
-        UserApiServiceHelper.getWsToken(context!!,object :Callback<HttpRequestResultString?>(){
+    private fun getWsToken(context: Context) {
+        UserApiServiceHelper.getWsToken(context!!, object : Callback<HttpRequestResultString?>() {
             override fun error(type: Int, error: Any?) {
             }
+
             override fun callback(result: HttpRequestResultString?) {
-                if(result != null && result.code == HttpRequestResult.SUCCESS){
+                if (result != null && result.code == HttpRequestResult.SUCCESS) {
                     var wsToken = result.data
-                    HttpCookieUtil.saveWsToken(context,wsToken)
+                    HttpCookieUtil.saveWsToken(context, wsToken)
                     onGetTokenSuccess()
                 }
             }
@@ -400,71 +461,92 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-    private fun verifyObserve(type: Int, target: Target, errorCode: Int, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
+    private fun verifyObserve(
+        type: Int,
+        target: Target,
+        errorCode: Int,
+        prefixAuth: String?
+    ): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
         hideSoftKeyboard()
         val verifyWindow = getVerifyWindowSingle(this, type, true, target)
         return verifyWindow.show()
-                .flatMap(object : Function<Target?, ObservableSource<Target>> {
-                    @Throws(Exception::class)
-                    override fun apply(target: Target): ObservableSource<Target> {
-                        if (target == null) {
-                            verifyWindow.dismiss()
-                            return Observable.empty()
-                        }
-                        if (ConstData.AUTHENTICATE_CODE_MAIL == errorCode && TextUtils.isEmpty(target.mailCode)) {
-                            FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
-                            return Observable.empty()
-                        }
-                        if (ConstData.AUTHENTICATE_CODE_PHONE == errorCode && TextUtils.isEmpty(target.phoneCode)) {
-                            FryingUtil.showToast(mContext, getString(R.string.alert_input_sms_code))
-                            return Observable.empty()
-                        }
-                        if (ConstData.AUTHENTICATE_CODE_GOOGLE == errorCode && TextUtils.isEmpty(target.googleCode)) {
-                            FryingUtil.showToast(mContext, getString(R.string.alert_input_google_code))
-                            return Observable.empty()
-                        }
-                        if (ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE == errorCode && TextUtils.isEmpty(target.phoneCode) && TextUtils.isEmpty(target.googleCode)) {
-                            FryingUtil.showToast(mContext, getString(R.string.alert_phone_or_google_code))
-                            return Observable.empty()
-                        }
-                        //verifyWindow.dismiss();
-                        target.prefixAuth = prefixAuth
-                        target.type = type
-                        return Observable.just(target)
+            .flatMap(object : Function<Target?, ObservableSource<Target>> {
+                @Throws(Exception::class)
+                override fun apply(target: Target): ObservableSource<Target> {
+                    if (target == null) {
+                        verifyWindow.dismiss()
+                        return Observable.empty()
                     }
-
-                })
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
-                .flatMap { targetNew ->
-                    loginSuffix(verifyWindow, type, targetNew, prefixAuth)
-                            ?: Observable.error(RuntimeException(getString(R.string.alert_server_error)))
+                    if (ConstData.AUTHENTICATE_CODE_MAIL == errorCode && TextUtils.isEmpty(target.mailCode)) {
+                        FryingUtil.showToast(mContext, getString(R.string.alert_input_mail_code))
+                        return Observable.empty()
+                    }
+                    if (ConstData.AUTHENTICATE_CODE_PHONE == errorCode && TextUtils.isEmpty(target.phoneCode)) {
+                        FryingUtil.showToast(mContext, getString(R.string.alert_input_sms_code))
+                        return Observable.empty()
+                    }
+                    if (ConstData.AUTHENTICATE_CODE_GOOGLE == errorCode && TextUtils.isEmpty(target.googleCode)) {
+                        FryingUtil.showToast(mContext, getString(R.string.alert_input_google_code))
+                        return Observable.empty()
+                    }
+                    if (ConstData.AUTHENTICATE_CODE_GOOGLE_OR_PHONE == errorCode && TextUtils.isEmpty(
+                            target.phoneCode
+                        ) && TextUtils.isEmpty(target.googleCode)
+                    ) {
+                        FryingUtil.showToast(
+                            mContext,
+                            getString(R.string.alert_phone_or_google_code)
+                        )
+                        return Observable.empty()
+                    }
+                    //verifyWindow.dismiss();
+                    target.prefixAuth = prefixAuth
+                    target.type = type
+                    return Observable.just(target)
                 }
+
+            })
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
+            .flatMap { targetNew ->
+                loginSuffix(verifyWindow, type, targetNew, prefixAuth)
+                    ?: Observable.error(RuntimeException(getString(R.string.alert_server_error)))
+            }
     }
 
     //使用验证码验证
-    private fun loginSuffix(verifyWindow: VerifyWindowObservable, type: Int, target: Target, prefixAuth: String?): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
-        val phoneCode = if (type and VerifyType.PHONE == VerifyType.PHONE) target.phoneCode else null
+    private fun loginSuffix(
+        verifyWindow: VerifyWindowObservable,
+        type: Int,
+        target: Target,
+        prefixAuth: String?
+    ): Observable<RequestObserveResult<HttpRequestResultData<SuffixResult?>?>?>? {
+        val phoneCode =
+            if (type and VerifyType.PHONE == VerifyType.PHONE) target.phoneCode else null
         val emailCode = if (type and VerifyType.MAIL == VerifyType.MAIL) target.mailCode else null
-        val googleCode = if (type and VerifyType.GOOGLE == VerifyType.GOOGLE) target.googleCode else null
+        val googleCode =
+            if (type and VerifyType.GOOGLE == VerifyType.GOOGLE) target.googleCode else null
         showLoading()
-        return ApiManager.build(mContext,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
-                ?.loginSuffixResultObj(prefixAuth, phoneCode, emailCode, googleCode)
-                ?.materialize()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.flatMap(object : RequestFunction2<HttpRequestResultData<SuffixResult?>?, HttpRequestResultData<SuffixResult?>?>() {
-                    override fun afterRequest() {
-                        hideLoading()
+        return ApiManager.build(mContext, true, UrlConfig.ApiType.URl_UC)
+            .getService(UserApiService::class.java)
+            ?.loginSuffixResultObj(prefixAuth, phoneCode, emailCode, googleCode)
+            ?.materialize()
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.flatMap(object :
+                RequestFunction2<HttpRequestResultData<SuffixResult?>?, HttpRequestResultData<SuffixResult?>?>() {
+                override fun afterRequest() {
+                    hideLoading()
+                }
+
+                @Throws(Exception::class)
+                override fun applyResult(returnData: HttpRequestResultData<SuffixResult?>?): HttpRequestResultData<SuffixResult?>? {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        runOnUiThread { verifyWindow.dismiss() }
                     }
-                    @Throws(Exception::class)
-                    override fun applyResult(returnData: HttpRequestResultData<SuffixResult?>?): HttpRequestResultData<SuffixResult?>? {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            runOnUiThread { verifyWindow.dismiss() }
-                        }
-                        return returnData
-                    }
-                })
+                    return returnData
+                }
+            })
     }
 
     private fun onGetTokenSuccess() {
@@ -503,12 +585,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         bundle.putBoolean(ConstData.CHECK_UN_BACK, true)
                         if (forResult) {
                             BlackRouter.getInstance().build(RouterConstData.ACCOUNT_PROTECT)
-                                    .with(bundle)
-                                    .withRequestCode(FOR_GESTURE_PASSWORD)
-                                    .go(mContext)
+                                .with(bundle)
+                                .withRequestCode(FOR_GESTURE_PASSWORD)
+                                .go(mContext)
                         } else {
                             BlackRouter.getInstance().build(RouterConstData.ACCOUNT_PROTECT)
-                                    .with(bundle).go(mContext)
+                                .with(bundle).go(mContext)
                         }
                     } else {
                         if (forResult) {

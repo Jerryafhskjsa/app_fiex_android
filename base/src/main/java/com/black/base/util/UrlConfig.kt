@@ -30,8 +30,8 @@ object UrlConfig {
             ApiType.URl_UC ->apiTypeDes = "/uc/"
             ApiType.URL_API -> apiTypeDes = "/api/"
             ApiType.URL_PRO -> apiTypeDes = "/pro/"
-            ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi"
-            ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi"
+            ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi/"
+            ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi/"
         }
         var index = getIndex(context)
         var serverHost = CookieUtil.getServerHost(context)
@@ -388,6 +388,8 @@ object UrlConfig {
         const val URL_INVITE_URL = "poster/invited/url"
         //检查更新
         const val URL_UPDATE = "commons/app/version/check"
+
+        const val URL_DEPTH="market/v1/public/q/depth";
     }
 
     //合约相关

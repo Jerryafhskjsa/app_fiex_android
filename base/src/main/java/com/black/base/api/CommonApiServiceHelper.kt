@@ -4,6 +4,7 @@ import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.clutter.*
+import com.black.base.model.future.DepthBean
 import com.black.base.model.socket.PairDescription
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
@@ -19,11 +20,15 @@ object CommonApiServiceHelper {
     /**
      * 获取网络链路
      */
-    fun getNetworkLines(context: Context?, callback: Callback<HttpRequestResultDataList<FryingLinesConfig?>?>?) {
+    fun getNetworkLines(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<FryingLinesConfig?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO)
+            .getService(CommonApiService::class.java)
             ?.getNetworkLines()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -32,7 +37,11 @@ object CommonApiServiceHelper {
     /**
      * 获取网络链路
      */
-    fun getLinesSpeed(context: Context?,url:String?, callback: Callback<HttpRequestResultString?>?) {
+    fun getLinesSpeed(
+        context: Context?,
+        url: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
@@ -51,15 +60,16 @@ object CommonApiServiceHelper {
         interval: String,
         limit: Int,
         isShowLoading: Boolean,
-        startTime:Long,
-        endTime:Long,
+        startTime: Long,
+        endTime: Long,
         callback: Callback<HttpRequestResultDataList<Kline?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
-            ?.getHistoryKline(symbol,interval, limit,startTime,endTime)
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_PRO)
+            .getService(CommonApiService::class.java)
+            ?.getHistoryKline(symbol, interval, limit, startTime, endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -86,7 +96,8 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
+        ApiManager.build(context, false, UrlConfig.ApiType.URl_UC)
+            .getService(CommonApiService::class.java)
             ?.getCountryCodeList()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -194,7 +205,8 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO)
+            .getService(CommonApiService::class.java)
             ?.getUsdtCnyPrice()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -204,7 +216,8 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true,UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
+        ApiManager.build(context, true, UrlConfig.ApiType.URl_UC)
+            .getService(CommonApiService::class.java)
             ?.geetestInit()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -232,4 +245,6 @@ object CommonApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+
+
 }

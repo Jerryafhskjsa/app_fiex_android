@@ -1,0 +1,74 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4.1"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "src/main/cpp/sec",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/main/cpp/sec",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "Project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "fryingSecret::@09e5848878c25dc89533",
+					"jsonFile" : "target-fryingSecret-Debug-9d88cde2e235caddb531.json",
+					"name" : "fryingSecret",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/shenyiya/app_fiex_android/base/.cxx/Debug/4k1t1w69/arm64-v8a",
+		"source" : "/Users/shenyiya/app_fiex_android/base"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}
