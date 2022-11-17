@@ -758,5 +758,12 @@
     <string name="contract_with_limit">止盈止损</string>
     <string name="contract_buy_raise">买入/开多</string>
     <string name="contract_sell_fall">卖出/开空</string>
+    <string name="contract_bond">保证金</string>
+    <string name="contract_can_buy_raise">可开多</string>
+    <string name="contract_can_buy_fall">可开空</string>
+    <string name="contract_buy_in">买入</string>
+    <string name="contract_sell_out">卖出</string>
+    <string name="contract_stop_surplus_price">止盈价</string>
+    <string name="contract_stop_lose_price">止损价</string>
 
 </resources>

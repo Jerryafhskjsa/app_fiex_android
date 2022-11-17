@@ -72,18 +72,6 @@
                         android:id="@+id/empty_view"
                         layout="@layout/list_view_empty_short" />
                 </RelativeLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.black.base.widget.NoScrollListView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clipToPadding="false"
-                        android:fadingEdge="none"
-                        android:scrollbars="none" />
-                </FrameLayout>
             </LinearLayout>
         </com.black.base.widget.ObserveScrollView>
     </LinearLayout>

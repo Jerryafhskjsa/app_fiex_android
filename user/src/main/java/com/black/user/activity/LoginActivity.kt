@@ -174,11 +174,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         FutureApiServiceHelper.getDepthData(this, "btc_usdt", 30, false,
             object : Callback<HttpRequestResultBean<DepthBean?>?>() {
                 override fun error(type: Int, error: Any?) {
-
+                    Log.d("ttttttt-->error", error.toString());
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
-                    Log.d("sss", returnData.toString());
+                    Log.d("ttttttt-->callback", returnData.toString())
                 }
 
 
