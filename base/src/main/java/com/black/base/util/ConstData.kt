@@ -185,6 +185,7 @@ object ConstData {
     const val NEWS = "news"
     const val ADD_USER = "add_user"
     const val IDENTITY_NO = "identity_no"
+    const val BIRTH = "birth"
     const val TRADE_ORDER = "trade_order"
     const val AMOUNT_PRECISION = "amount_precision"
     const val COIN_INFO = "coin_info"

@@ -29,6 +29,7 @@ import com.black.wallet.R
 import com.black.wallet.databinding.ActivityRechargeBinding
 import com.google.zxing.WriterException
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_recharge.*
 import skin.support.content.res.SkinCompatResources
 import kotlin.collections.ArrayList
 
@@ -154,9 +155,11 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
                         window: ChooseWalletControllerWindow<String?>,
                         item: String?
                     ) {
-                        binding?.currentChain?.setText(item)
+                          binding?.currentChain?.setText(item)
+                          coinChain = item
                     }
                 })
+
             chooseWalletDialog.setTipsText(getString(R.string.chain_tips))
             chooseWalletDialog.setTipsTextVisible(true)
             chooseWalletDialog.show()

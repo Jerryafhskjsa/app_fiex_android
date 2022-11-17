@@ -108,6 +108,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 object : ChooseWalletControllerWindow.OnReturnListener<String?> {
                     override fun onReturn(window: ChooseWalletControllerWindow<String?>, item: String?) {
                         binding?.currentChain?.setText(item)
+                        coinChain = item
                     }
                 })
             chooseWalletDialog.setTipsText(getString(R.string.chain_tips))

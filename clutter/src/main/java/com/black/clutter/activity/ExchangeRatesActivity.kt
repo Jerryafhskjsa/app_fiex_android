@@ -1,5 +1,6 @@
 package com.black.clutter.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -12,6 +13,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.clutter.R
 import com.black.clutter.databinding.ActivityExchangeRatesBinding
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import skin.support.content.res.SkinCompatResources
@@ -30,13 +32,12 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
 
     private fun initExchangeRates(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exchange_rates)
-
         binding?.exchangeCny?.setOnClickListener(this)
         binding?.exchangeCny?.tag = application!!.getExhcangeRates(FryingExchangeRates.cny)
-        binding?.exchangeJpy?.setOnClickListener(this)
-        binding?.exchangeJpy?.tag = application!!.getExhcangeRates(FryingExchangeRates.usd)
         binding?.exchangeUsd?.setOnClickListener(this)
-        binding?.exchangeUsd?.tag = application!!.getExhcangeRates(FryingExchangeRates.jpy)
+        binding?.exchangeUsd?.tag = application!!.getExhcangeRates(FryingExchangeRates.usd)
+        binding?.exchangeJpy?.setOnClickListener(this)
+        binding?.exchangeJpy?.tag = application!!.getExhcangeRates(FryingExchangeRates.jpy)
         binding?.exchangeKrw?.setOnClickListener(this)
         binding?.exchangeKrw?.tag = application!!.getExhcangeRates(FryingExchangeRates.krw)
         binding?.exchangeVnd?.setOnClickListener(this)
@@ -53,18 +54,22 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when(v.id){
-            R.id.exchange_cny,R.id.exchange_jpy,R.id.exchange_krw,R.id.exchange_usd,R.id.exchange_vnd -> changeExchangeRates(v.tag as FryingExchangeRates)
+            R.id.exchange_cny,R.id.exchange_krw,R.id.exchange_jpy,R.id.exchange_usd,R.id.exchange_vnd -> changeExchangeRates(v.tag as FryingExchangeRates)
         }
     }
 
     private fun changeExchangeRates(exchangeRates: FryingExchangeRates) {
-        if (exchangeRates.rateCode != 0 && exchangeRates.rateCode != 1) {
+        if (exchangeRates.rateCode != 0 && exchangeRates.rateCode != 2) {
             FryingUtil.showToast(this, getString(R.string.please_waiting))
             return
         }
         if (exchangeRates != ExchangeRatesUtil.getExchangeRatesSetting(this)) {
             ExchangeRatesUtil.setExchangeRatesSetting(this, exchangeRates)
             onExchangeRatesChanged()
+            BlackRouter.getInstance().build(RouterConstData.START_PAGE)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .go(this)
         }
     }
 

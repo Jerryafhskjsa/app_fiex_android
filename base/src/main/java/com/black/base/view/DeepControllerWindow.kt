@@ -33,7 +33,7 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
                 WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(PaintDrawable())
-        popupWindow.softInputMode = PopupWindow.INPUT_METHOD_NEEDED
+        popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {
             val lp = activity.window.attributes
