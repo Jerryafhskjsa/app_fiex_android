@@ -75,7 +75,8 @@ class HomePageContractFragment : BaseFragment(),
     OnItemClickListener,
     OnTransactionMoreClickListener,
     ContractViewModel.OnContractModelListener,
-    ContractDeepViewBinding.OnTransactionDeepListener {
+    ContractDeepViewBinding.OnTransactionDeepListener
+{
     companion object {
         private var TAG = HomePageContractFragment::class.java.simpleName
         fun newSelfInstance(tag: String?): HomePageContractFragment {
@@ -350,9 +351,9 @@ class HomePageContractFragment : BaseFragment(),
                                 currentOrderType = item
                                 viewModel?.setCurrentPairorderType(item)
                                 if(currentOrderType.equals("LIMIT")){
-                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
+//                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                                 }else if(currentOrderType.equals("MARKET")){
-                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.GONE
+//                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.GONE
                                 }
                         }
                     }).show()
@@ -687,7 +688,7 @@ class HomePageContractFragment : BaseFragment(),
         if (price != null) {
             if (count != null && (count != 0.0)) {
                 if(currentOrderType.equals("LIMIT")){
-                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+//                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                 }
             } else { //只有价格
                 if (transactionType == 1) {
@@ -711,7 +712,7 @@ class HomePageContractFragment : BaseFragment(),
                 }
                 if(currentOrderType.equals("LIMIT")){
                     if(price != null && count != null){
-                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count!!, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+//                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count!!, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                         }
                     }
                 }
@@ -989,7 +990,7 @@ class HomePageContractFragment : BaseFragment(),
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding!!.fragmentHomePageContractHeader1.price.setText("")
                         binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("")
-                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
+//                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
 //                        viewModel!!.getWalletLeverDetail()
                         viewModel!!.getCurrentUserBalance(ConstData.BalanceType.SPOT)
                         withTimerGetCurrentTradeOrder()

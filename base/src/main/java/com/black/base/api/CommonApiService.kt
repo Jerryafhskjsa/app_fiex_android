@@ -2,6 +2,7 @@ package com.black.base.api
 
 import com.black.base.model.*
 import com.black.base.model.clutter.*
+import com.black.base.model.future.DepthBean
 import com.black.base.model.socket.PairDescription
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.UrlConfig
@@ -25,6 +26,12 @@ interface CommonApiService {
                         @Query("limit") limit: Int?,
                         @Query("startTime") startTime:Long,
                         @Query("endTime") endTime:Long): Observable<HttpRequestResultDataList<Kline?>?>?
+    /**
+     * 获取深度
+     */
+    @GET(UrlConfig.Config.URL_DEPTH)
+    fun getDepth(@Query("symbol") symbol: String?,
+                 @Query("level") level: Int?): Observable<HttpRequestResultBean<DepthBean?>?>?
 
     @GET(UrlConfig.Config.URL_UPDATE)
     fun checkUpdate(@Query("platform") platform: String?): Observable<HttpRequestResultData<Update?>?>?
@@ -68,4 +75,7 @@ interface CommonApiService {
 
     @GET(UrlConfig.Config.URL_INVITE_URL)
     fun getInviteUrl(): Observable<HttpRequestResultString?>?
+
+
+
 }
