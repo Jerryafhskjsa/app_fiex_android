@@ -23,6 +23,8 @@ import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindo
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.future.DepthBean
+import com.black.base.model.future.MarkPriceBean
+import com.black.base.model.future.SymbolBean
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
@@ -171,18 +173,43 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun testBtn() {
-        FutureApiServiceHelper.getDepthData(this, "btc_usdt", 30, false,
-            object : Callback<HttpRequestResultBean<DepthBean?>?>() {
+//        FutureApiServiceHelper.getDepthData(this, "btc_usdt", 30, false,
+//            object : Callback<HttpRequestResultBean<DepthBean?>?>() {
+//                override fun error(type: Int, error: Any?) {
+//                    Log.d("ttttttt-->error", error.toString());
+//                }
+//
+//                override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
+//                    if (returnData != null) {
+//                        Log.d("ttttttt-->callback", returnData.result?.s +"---")
+//                    };
+//                }
+//            })
+//        FutureApiServiceHelper.getSymbolList(this, false,
+//            object : Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>() {
+//                override fun error(type: Int, error: Any?) {
+//                    Log.d("ttttttt-->error", error.toString());
+//                }
+//
+//                override fun callback(returnData: HttpRequestResultBean<ArrayList<SymbolBean>?>?) {
+//                    if (returnData != null) {
+//                        Log.d("ttttttt-->callback", returnData.result.toString())
+//                    };
+//                }
+//            })
+        FutureApiServiceHelper.getMarkPrice(this, false,
+            object : Callback<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->error", error.toString());
                 }
 
-                override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
-                    Log.d("ttttttt-->callback", returnData.toString())
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<MarkPriceBean>?>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->callback", returnData.result.toString())
+                    };
                 }
-
-
             })
+
     }
 
     private fun initChooseWindowData() {

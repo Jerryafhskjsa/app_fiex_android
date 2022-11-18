@@ -389,13 +389,16 @@ object UrlConfig {
         //检查更新
         const val URL_UPDATE = "commons/app/version/check"
 
-        const val URL_DEPTH="market/v1/public/q/depth";
     }
 
     //合约相关
     object Future{
 
         const val URL_DEPTH="market/v1/public/q/depth";
+
+        const val URL_SYMBOL_LIST="market/v1/public/symbol/list";
+
+        const val URL_MARK_PRICE="market/v1/public/q/mark-price";
 
     }
 
