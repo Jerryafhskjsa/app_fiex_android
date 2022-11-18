@@ -120,7 +120,7 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
             var view = convertView
             if (view == null) {
-                view = inflater.inflate(R.layout.list_item_deep_choose, null)
+                view = inflater.inflate(R.layout.list_item_deep_choose, null )
             }
             val item = getItem(position)
             val textView = view?.findViewById<View>(R.id.text) as TextView?
