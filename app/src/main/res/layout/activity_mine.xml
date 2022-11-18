@@ -107,7 +107,6 @@
                                         android:src="@drawable/userinfo_edit" />
                                 </LinearLayout>
                                 <LinearLayout
-                                    android:id="@+id/uid"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
                                     android:gravity="center_vertical"

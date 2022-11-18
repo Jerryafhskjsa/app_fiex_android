@@ -81,7 +81,7 @@ interface UserApiService {
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_IDENTITY_BIND)
-    fun bindIdentity(@Field("idType") idType: Int, @Field("realName") realName: String?, @Field("idNo") idNo: String?, @Field("idNoImg") idNoImg: String?, @Field("country") countryId: String?,@Field("birthday") birthday: String?): Observable<HttpRequestResultString?>?
+    fun bindIdentity(@Field("idType") idType: Int, @Field("realName") realName: String?, @Field("idNo") idNo: String?, @Field("idNoImg") idNoImg: String?, @Field("country") countryId: String?): Observable<HttpRequestResultString?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_IDENTITY_BIND_AI)

@@ -1,13 +1,10 @@
 package com.black.user.activity
 
-
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
-import android.widget.DatePicker
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
@@ -25,7 +22,6 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityRealNameAuthenticateFirstBinding
-import java.util.*
 
 //实名认证
 @Route(value = [RouterConstData.REAL_NAME_AUTHENTICATE_FIRST], beforePath = RouterConstData.LOGIN)
@@ -51,8 +47,6 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
 
         binding?.country?.setOnClickListener(this)
         binding?.country?.addTextChangedListener(watcher)
-        binding?.birth?.setOnClickListener(this)
-        binding?.birth?.addTextChangedListener(watcher)
         binding?.name?.addTextChangedListener(watcher)
         binding?.identity?.addTextChangedListener(watcher)
         if (userInfo == null || TextUtils.isEmpty(userInfo!!.backReason)) {
@@ -89,11 +83,7 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
         val i = v.id
         if (i == R.id.country) {
             chooseCountryCode()
-        }
-        if (i == R.id.birth){
-             birthChooseDialog()
-        }
-        else if (i == R.id.btn_submit) {
+        } else if (i == R.id.btn_submit) {
             submitRealNameAuthenticate()
         }
     }
@@ -101,55 +91,8 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
     private fun checkClickable() {
         binding?.btnSubmit?.isEnabled = !(binding?.country?.tag == null
                 || TextUtils.isEmpty(binding?.name?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.identity?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.birth?.text.toString().trim { it <= ' ' }))
+                || TextUtils.isEmpty(binding?.name?.text.toString().trim { it <= ' ' }))
     }
-
-    private fun birthChooseDialog() {
-        val calendar: Calendar = Calendar.getInstance()
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.birth_choose, null)
-        var year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) + 1
-        var day = calendar.get(Calendar.DAY_OF_MONTH)
-        val dialog = Dialog(mContext, R.style.AlertDialog)
-        val window = dialog.window
-        if (window != null) {
-            val params = window.attributes
-            //设置背景昏暗度
-            params.dimAmount = 0.2f
-            params.gravity = Gravity.BOTTOM
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            //设置dialog动画
-            window.setWindowAnimations(R.style.anim_bottom_in_out)
-            window.attributes = params
-        }
-        //设置dialog的宽高为屏幕的宽高
-        val display = resources.displayMetrics
-        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.setContentView(contentView, layoutParams)
-        dialog.show()
-        /*val datePickerDialog: DatePicker = findViewById<DatePicker>(R.id.data_picker)
-        year = datePickerDialog.year
-        month = datePickerDialog.month
-        day = datePickerDialog.dayOfMonth*/
-            dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-                formatDate(year, month, day)
-                dialog.dismiss()
-            }
-
-        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {  v ->
-            dialog.dismiss()
-        }
-
-    }
-
-    private  fun  formatDate(year: Int, month: Int, day: Int): String {
-        return binding?.birth?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day))
-            .toString()
-
-    }
-
 
     private fun initChooseWindowData() {
         CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
@@ -182,21 +125,10 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.please_choose_country))
             return
         }
-        val birthCode = binding?.birth?.text.toString().trim { it <= ' ' }
-        if (birthCode == "请选择出生年月") {
-            FryingUtil.showToast(mContext, getString(R.string.please_choose_birth))
-            return
-        }
         val bundle = Bundle()
         bundle.putString(ConstData.NAME, name)
         bundle.putString(ConstData.IDENTITY_NO, identity)
         bundle.putString(ConstData.COUNTRY, countryCode.id)
-        bundle.putString(ConstData.BIRTH, birthCode)
         BlackRouter.getInstance().build(RouterConstData.REAL_NAME_AUTHENTICATE_SECOND).with(bundle).go(this)
     }
-
-
 }
-
-
-

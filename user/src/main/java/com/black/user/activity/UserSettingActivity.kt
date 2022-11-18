@@ -19,6 +19,7 @@ import com.black.user.databinding.ActivityUserSettingBinding
 @Route(value = [RouterConstData.USER_SETTING], beforePath = RouterConstData.LOGIN)
 class UserSettingActivity : BaseActivity(), View.OnClickListener {
     private var application: BaseApplication? = null
+    private val mHandler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityUserSettingBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_setting)

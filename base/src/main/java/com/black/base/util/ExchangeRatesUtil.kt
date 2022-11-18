@@ -12,7 +12,7 @@ object ExchangeRatesUtil {
         val preferences = CookieUtil.getSharedPreferences(context)
         val editor = preferences.edit()
         val rateCode = fryingExchangeRates.rateCode
-        val rateText = fryingExchangeRates.rateText
+        var rateText = fryingExchangeRates.rateText
         editor.putInt(EXCHANGE_RATE_CODE, rateCode)
         editor.putString(EXCHANGE_RATE_TEXT, rateText)
         editor.commit()
@@ -27,7 +27,6 @@ object ExchangeRatesUtil {
         } else {
             FryingExchangeRates(exchangeRateCode,exchangeRateText)
         }
-
     }
 
 }

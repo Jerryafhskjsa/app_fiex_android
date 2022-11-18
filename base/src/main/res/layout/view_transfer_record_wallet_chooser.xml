@@ -127,9 +127,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tv_to"
                     android:text="@string/number_default"
-                    android:textColor="@color/T14">
-                </com.black.base.widget.SpanTextView>
-
+                    android:textColor="@color/T14"></com.black.base.widget.SpanTextView>
                 <ImageView
                     android:id="@+id/img_to"
                     android:layout_width="wrap_content"

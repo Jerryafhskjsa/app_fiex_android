@@ -74,12 +74,6 @@
                                 android:text="@string/upload_info"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_16" />
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/need_three"
-                                android:textColor="@color/read_dot_bg"
-                                android:textSize="@dimen/text_size_16" />
                         </LinearLayout>
 
                         <View

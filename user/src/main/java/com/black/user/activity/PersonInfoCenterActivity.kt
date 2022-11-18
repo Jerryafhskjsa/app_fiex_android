@@ -190,7 +190,7 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
         binding?.nickName?.text = if (userInfo == null || userInfo!!.nickname == null) "" else userInfo!!.nickname
         binding?.iconAvatar?.let {
             Glide.with(mContext)
-                .load(Uri.parse(userInfo!!.headPortrait!!))
+                .load(Uri.parse(userInfo!!.headPortrait))
                 .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
                 .into(it)
         }

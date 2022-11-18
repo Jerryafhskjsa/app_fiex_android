@@ -47,7 +47,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
     private var name: String? = null
     private var identity: String? = null
     private var countryId: String? = null
-    private var birthCode: String? = null
+
     private var binding: ActivityRealNameAuthenticateSecondBinding? = null
     private val photoImageList: MutableList<PhotoImageItem> = ArrayList()
 
@@ -81,7 +81,6 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         name = intent.getStringExtra(ConstData.NAME)
         identity = intent.getStringExtra(ConstData.IDENTITY_NO)
         countryId = intent.getStringExtra(ConstData.COUNTRY)
-        birthCode = intent.getStringExtra(ConstData.BIRTH)
         userInfo = CookieUtil.getUserInfo(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_real_name_authenticate_second)
         binding?.btnSubmit?.setOnClickListener(this)
@@ -348,18 +347,17 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
                 result?.also {
                     imgUrlList.add(result)
                 }
-                    if (upLoadCount >= needUploadCount) {
-                        val imageStrings = StringBuilder()
-                        for (imUrl in imgUrlList) {
-                            if (imageStrings.isEmpty()) {
-                                imageStrings.append(imgUrlList)
-                            } else {
-                                imageStrings.append(",").append(imgUrlList)
-                            }
+                if (upLoadCount >= needUploadCount) {
+                    val imageStrings = StringBuilder()
+                    for (imgUrl in imgUrlList) {
+                        if (imageStrings.isEmpty()) {
+                            imageStrings.append(imgUrl)
+                        } else {
+                            imageStrings.append(",").append(imgUrl)
                         }
-                        doSubmit(name, identity, imageStrings.toString(), countryId, birthCode)
                     }
-
+                    doSubmit(name, identity, imageStrings.toString(), countryId)
+                }
             }
 
             override fun error(type: Int, error: Any) {}
@@ -383,11 +381,11 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         }
     }
 
-    private fun doSubmit(realName: String?, idNo: String?, idNoImg: String, countryId: String?,birthday:String?) {
+    private fun doSubmit(realName: String?, idNo: String?, idNoImg: String, countryId: String?) {
         val fryingLanguage = LanguageUtil.getLanguageSetting(this)
         //idType   护照 1 身份证 0
         val idType = if (fryingLanguage == null || fryingLanguage.languageCode == FryingLanguage.Chinese) 1 else 0
-        UserApiServiceHelper.bindIdentity(mContext, idType, realName, idNo, idNoImg, countryId, birthday, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+        UserApiServiceHelper.bindIdentity(mContext, idType, realName, idNo, idNoImg, countryId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.submit_success))
