@@ -61,7 +61,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.btnLoginOut?.setOnClickListener(this)
         binding?.name?.setOnClickListener(this)
         binding?.userLayout?.setOnClickListener(this)
-        binding?.uuid?.setOnClickListener(this)
+        binding?.uid?.setOnClickListener(this)
         binding?.darkMode?.setOnClickListener(this)
         binding?.lightMode?.setOnClickListener(this)
         binding?.nightModeToggle?.setOnCheckedChangeListener { _, isChecked ->
@@ -267,7 +267,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     BlackRouter.getInstance().build(RouterConstData.PERSON_INFO_CENTER).go(mContext)
                 }
             }
-            R.id.uuid -> if (CommonUtil.copyText(
+            R.id.uid -> if (CommonUtil.copyText(
                     mContext,
                     if (userInfo!!.id == null) "" else userInfo!!.id
                 )

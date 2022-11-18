@@ -3,23 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
+
     <com.black.base.widget.SpanTextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:paddingTop="20dp"
         android:text="现货账户"
         android:textColor="@color/T14"
-        android:paddingTop="20dp"
         android:textSize="@dimen/text_size_14" />
+
     <ImageView
         android:id="@+id/img_select"
         android:layout_width="16dp"
         android:layout_height="11dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
-        android:visibility="visible"
         android:layout_marginTop="31dp"
-        android:src="@drawable/icon_selected">
-    </ImageView>
+        android:layout_marginRight="15dp"
+        android:src="@drawable/icon_selected"
+        android:visibility="visible"></ImageView>
 </RelativeLayout>

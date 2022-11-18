@@ -253,12 +253,12 @@ object UserApiServiceHelper {
     }
 
     //绑定身份证
-    fun bindIdentity(context: Context?, idType: Int, realName: String?, idNo: String?, idNoImg: String?, countryId: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun bindIdentity(context: Context?, idType: Int, realName: String?, idNo: String?, idNoImg: String?, countryId: String?, birthday: String?,callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
-                ?.bindIdentity(idType, realName, idNo, idNoImg, countryId)
+                ?.bindIdentity(idType, realName, idNo, idNoImg, countryId, birthday)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -268,7 +268,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.bindIdentityAI(idNo, score, idNoImg, realName, countyId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -375,7 +375,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.enableSecurity(telCountryCode, phone, phoneCode,newPhone,newPhoneCode, email, emailCode, googleCode, password, action)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -478,7 +478,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getPushSwitchList()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
