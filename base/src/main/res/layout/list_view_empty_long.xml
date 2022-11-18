@@ -8,30 +8,36 @@
             type="Object" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="120dp"
-        android:paddingBottom="0dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_list_empty" />
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/double_padding" />
-
-        <com.black.base.widget.SpanTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
             android:gravity="center"
-            android:text="@string/list_view_empty_default"
-            android:textColor="@color/T2"
-            android:textSize="@dimen/text_size_14" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_list_empty" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/double_padding" />
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/list_view_empty_default"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+
+    </FrameLayout>
+
 </layout>

@@ -29,8 +29,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:orientation="vertical">
 
                 <include
@@ -45,33 +45,12 @@
                     layout="@layout/fragment_home_page_contract_header1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
                 <include
-                    android:id="@+id/fragment_home_page_transaction_header2"
-                    layout="@layout/fragment_home_page_transaction_header2"
+                    android:id="@+id/fragment_home_page_contract_header2"
+                    layout="@layout/fragment_home_page_contract_header2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/B2"
-                    android:descendantFocusability="blocksDescendants">
-
-                    <com.black.base.view.EmptyRecyclerView
-                        android:id="@+id/recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fadingEdge="none"
-                        android:overScrollMode="never"
-                        android:paddingLeft="@dimen/double_padding"
-                        android:paddingRight="@dimen/double_padding"
-                        android:scrollbars="none" />
-
-                    <include
-                        android:id="@+id/empty_view"
-                        layout="@layout/list_view_empty_short" />
-                </RelativeLayout>
             </LinearLayout>
         </com.black.base.widget.ObserveScrollView>
     </LinearLayout>

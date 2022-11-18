@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="homePageContractHeader2"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/T11_ALPHA5"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/contract_tab"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            app:tabBackground="@color/transparent"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabIndicator="@drawable/tabs_rounded_line_indicator"
+            app:tabIndicatorColor="@color/T13"
+            app:tabMaxWidth="200dp"
+            app:tabMinWidth="20dp"
+            app:tabPaddingBottom="0dp"
+            app:tabPaddingEnd="@dimen/default_padding"
+            app:tabPaddingStart="@dimen/default_padding"
+            app:tabPaddingTop="0dp"
+            app:tabIndicatorFullWidth="false"
+            app:tabTextAppearance="@style/DefaultTabStyle" />
+        <com.black.base.widget.AutoHeightViewPager
+            android:id="@+id/contract_record_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:flipInterval="30"
+            android:persistentDrawingCache="animation" />
+    </LinearLayout>
+</layout>
