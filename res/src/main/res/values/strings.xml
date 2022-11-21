@@ -784,8 +784,14 @@
     <string name="contract_force_finish_pirce">强平价格</string>
     <string name="contract_already_profits">已实现盈亏</string>
     <string name="contract_auto_add_bond">自动追加保证金</string>
-    <string name="contract_adjust">调整</string>
+    <string name="contract_adjust">杠杆调整</string>
     <string name="contract_disturb">止盈止损</string>
+    <string name="contract_fiexble_position">逐仓</string>
+    <string name="contract_all_position">全仓</string>
+    <string name="contract_adjust_multiple">杠杆调整</string>
+    <string name="contract_do_down">开空</string>
+    <string name="contract_do_raise">开多</string>
+    <string name="contract_multiple">倍数</string>
 
 
 </resources>

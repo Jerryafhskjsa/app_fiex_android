@@ -2,6 +2,7 @@ package com.black.frying.fragment
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -21,7 +22,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.interfaces.OnItemClickListener
@@ -31,6 +31,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
@@ -41,6 +42,7 @@ import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.AlertMessageDialog
+import com.black.base.view.ContractMultipleSelectWindow
 import com.black.base.view.DeepControllerWindow
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
@@ -51,15 +53,14 @@ import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
-import com.black.frying.viewmodel.TransactionViewModel
 import com.black.im.util.IMHelper
+import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
-import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import com.google.android.material.tabs.TabLayout
@@ -111,9 +112,11 @@ class HomePageContractFragment : BaseFragment(),
     private var inputNumber: Boolean? = false//是否手动输入数量
     private var isDear: Boolean? = null
 
-    private var adapter: EntrustCurrentHomeAdapter? = null
     private var recordViewPager: AutoHeightViewPager? = null
     private var recordTab: TabLayout? = null
+
+    //方向和倍数
+    private var currentOrientationMultiple: String? = "50X"
 
     /**
      * 卖出使用 当前币种
@@ -173,6 +176,17 @@ class HomePageContractFragment : BaseFragment(),
         )
         layout = binding?.root
         viewModel = ContractViewModel(mContext!!, this)
+
+        binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
+        binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding!!.refreshLayout.postDelayed(
+                    { binding!!.refreshLayout.setRefreshing(false) },
+                    300
+                )
+            }
+
+        })
         deepViewBinding = ContractDeepViewBinding(
             mContext!!,
             viewModel!!,
@@ -180,26 +194,10 @@ class HomePageContractFragment : BaseFragment(),
         )
         deepViewBinding?.setOnTransactionDeepListener(this)
 
-        binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
-        binding?.actionBarLayout?.headCharts?.setOnClickListener(this)
-        binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
-        binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
-        binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
-        binding?.actionBarLayout?.leverLayout?.visibility =
-            if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
-        binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
+        initActionBar()
+        initHeader()
         initHeader1()
         initHeader2()
-        val layoutManager = LinearLayoutManager(mContext)
-        layoutManager.orientation = RecyclerView.VERTICAL
-        layoutManager.isSmoothScrollbarEnabled = true
-        val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
-        val drawable = SkinCompatResources.getDrawable(context, R.drawable.divider_list_item_l1)
-        drawable.alpha = (0.6 * 255).toInt()
-        decoration.setDrawable(drawable)
-        adapter = EntrustCurrentHomeAdapter(mContext!!, BR.listItemEntrustCurrentHomeModel, null)
-        adapter?.setOnHandleClickListener(this)
-        adapter?.setOnItemClickListener(this)
         return layout
     }
 
@@ -255,6 +253,22 @@ class HomePageContractFragment : BaseFragment(),
 //        Bundle bundle = new Bundle();
 //        bundle.putParcelable(ConstData.TRADE_ORDER, tradeOrder);
 //        BlackRouter.getInstance().build(RouterConstData.ENTRUST_DETAIL).with(bundle).go(this);
+    }
+
+    private fun initActionBar() {
+        binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
+        binding?.actionBarLayout?.headCharts?.setOnClickListener(this)
+        binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
+        binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
+        binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
+        binding?.actionBarLayout?.leverLayout?.visibility =
+            if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
+        binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
+    }
+
+    private fun initHeader() {
+        binding?.fragmentHomePageContractHeader?.linBuyMultiple?.setOnClickListener(this)
+        binding?.fragmentHomePageContractHeader?.linSellMultiple?.setOnClickListener(this)
     }
 
     //买卖功能
@@ -351,12 +365,15 @@ class HomePageContractFragment : BaseFragment(),
         var tab1 = ContractRecordTabBean()
         tab1.name = getString(R.string.contract_record_tab1)
         tab1.amount = 0
+        tab1.type = ConstData.CONTRACT_REC_HOLD_AMOUNT
         var tab2 = ContractRecordTabBean()
         tab2.name = getString(R.string.contract_record_tab2)
         tab2.amount = 0
+        tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
         var tab3 = ContractRecordTabBean()
         tab3.name = getString(R.string.contract_record_tab3)
         tab3.amount = 0
+        tab3.type = ConstData.CONTRACT_REC_CURRENT
         tabData?.add(tab1)
         tabData?.add(tab2)
         tabData?.add(tab3)
@@ -369,13 +386,23 @@ class HomePageContractFragment : BaseFragment(),
             recordFragmentList = ArrayList(tabSize)
             for (i in 0 until tabSize) {
                 val tabData = tabData!![i]
+                var fragment: BaseFragment? = null
                 try {
-                    var fragment = HomePageContractDetailFragment.newInstance(tabData)
-//                    var fragment = EmptyFragment.newInstance(tabData?.name)
-                    fragment.setAutoHeightViewPager(recordViewPager)
+                    when (tabData?.type) {
+                        ConstData.CONTRACT_REC_HOLD_AMOUNT -> fragment =
+                            HomePageContractDetailFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_WITH_LIMIE, ConstData.CONTRACT_REC_CURRENT -> fragment =
+                            EmptyFragment.newInstance("")
+                    }
+                    if (fragment is HomePageContractDetailFragment) {
+                        fragment?.setAutoHeightViewPager(recordViewPager)
+                    }
+                    if (fragment is EmptyFragment) {
+                        fragment?.setAutoHeightViewPager(recordViewPager)
+                    }
                     var bundle = Bundle()
                     bundle.putInt(AutoHeightViewPager.POSITION, i)
-                    fragment.arguments = bundle
+                    fragment?.arguments = bundle
                     recordFragmentList?.add(fragment)
                 } catch (throwable: Throwable) {
                     FryingUtil.printError(throwable)
@@ -383,7 +410,13 @@ class HomePageContractFragment : BaseFragment(),
             }
             recordViewPager?.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
                 override fun getItem(position: Int): Fragment {
-                    return recordFragmentList!![position] as HomePageContractDetailFragment
+                    if (recordFragmentList!![position] is HomePageContractDetailFragment) {
+                        return recordFragmentList!![position] as HomePageContractDetailFragment
+                    } else if (recordFragmentList!![position] is EmptyFragment) {
+                        return recordFragmentList!![position] as EmptyFragment
+                    } else {
+                        return recordFragmentList!![position] as EmptyFragment
+                    }
                 }
 
                 override fun getCount(): Int {
@@ -410,6 +443,7 @@ class HomePageContractFragment : BaseFragment(),
                 }
 
             })
+            recordViewPager?.updateHeight(0)
             recordTab?.setupWithViewPager(
                 binding?.fragmentHomePageContractHeader2?.contractRecordViewPager,
                 true
@@ -453,20 +487,35 @@ class HomePageContractFragment : BaseFragment(),
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
             })
-
         }
+    }
+
+
+    private fun showOrientationMultipleDialog() {
+        var bean = ContractMultiChooseBean()
+        ContractMultipleSelectWindow(mContext as Activity,
+            getString(R.string.contract_adjust),
+            bean,
+            object : ContractMultipleSelectWindow.OnReturnListener<ContractMultiChooseBean?> {
+                override fun onReturn(
+                    window: ContractMultipleSelectWindow<ContractMultiChooseBean?>,
+                    item: ContractMultiChooseBean?
+                ) {
+                }
+            }).show()
     }
 
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.lin_buy_multiple -> {
+                showOrientationMultipleDialog()
+            }
+            R.id.lin_sell_multiple -> {
+                showOrientationMultipleDialog()
+            }
             R.id.tab_transaction_coin -> {
                 if (tabType != ConstData.TAB_COIN) {
                     changeTabType(ConstData.TAB_COIN)
-                }
-            }
-            R.id.tab_transaction_lever -> {
-                if (tabType != ConstData.TAB_LEVER) {
-                    changeTabType(ConstData.TAB_LEVER)
                 }
             }
             R.id.risk_info -> {
@@ -516,17 +565,7 @@ class HomePageContractFragment : BaseFragment(),
                             })
                     )
             }
-            R.id.lever_handle -> {
-                if (tabType == ConstData.TAB_LEVER) {
-                    val pair = viewModel?.getCurrentPair()
-                    pair?.run {
-                        val bundle = Bundle()
-                        bundle.putString(ConstData.PAIR, pair)
-                        BlackRouter.getInstance().build(RouterConstData.WALLET_LEVER_DETAIL)
-                            .with(bundle).go(mContext)
-                    }
-                }
-            }
+
             R.id.lin_order_type -> {
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
@@ -601,22 +640,6 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     })
             }
-            R.id.total_current ->  //全部委托
-                mContext?.let {
-                    if (CookieUtil.getUserInfo(it) == null) {
-                        BlackRouter.getInstance().build(RouterConstData.LOGIN).go(it)
-                    } else if (!TextUtils.isEmpty(viewModel?.getCurrentPair())) {
-                        val extras = Bundle()
-                        extras.putInt(ConstData.OPEN_TYPE, 0)
-                        extras.putString(ConstData.PAIR, viewModel?.getCurrentPair())
-                        extras.putString(
-                            ConstData.LEVEL_TYPE,
-                            if (tabType == ConstData.TAB_LEVER) TransactionViewModel.LEVER_TYPE_LEVER else TransactionViewModel.LEVER_TYPE_COIN
-                        )
-                        BlackRouter.getInstance().build(RouterConstData.ENTRUST_RECORDS_NEW)
-                            .with(extras).go(it)
-                    }
-                }
             R.id.price_sub -> {
                 var currentInputPrice = CommonUtil.parseDouble(
                     binding!!.fragmentHomePageContractHeader1.price.text.toString()
@@ -685,7 +708,7 @@ class HomePageContractFragment : BaseFragment(),
                 } else {
                     if (transactionType != 1) {
                         transactionType = 1
-                        //                    refreshSeekBar();
+                        //refreshSeekBar();
                         refreshView()
                     }
                 }
@@ -756,7 +779,6 @@ class HomePageContractFragment : BaseFragment(),
             if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
         viewModel!!.setTabType(tabType)
         viewModel!!.changePairSocket()
-        adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetPriceLength()
         resetAmountLength()
         refreshCurrentWallet()
@@ -880,7 +902,6 @@ class HomePageContractFragment : BaseFragment(),
     //处理点击，撤销订单
     override fun onHandleClick(tradeOrder: TradeOrderFiex) {
         //新订单可以撤销
-        cancelTradeOrder(tradeOrder)
     }
 
     //计算最大交易数量
@@ -1055,7 +1076,6 @@ class HomePageContractFragment : BaseFragment(),
         }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
-        adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetPriceLength()
         resetAmountLength()
         refreshCurrentWallet()
@@ -1268,7 +1288,6 @@ class HomePageContractFragment : BaseFragment(),
                 object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>(mContext!!) {
                     override fun error(type: Int, error: Any?) {
                         Log.d(TAG, "getTradeOrderCurrent error")
-                        showCurrentOrderList(null)
                     }
 
                     override fun callback(returnData: HttpRequestResultData<TradeOrderResult?>?) {
@@ -1277,36 +1296,9 @@ class HomePageContractFragment : BaseFragment(),
                                 TAG,
                                 "getTradeOrderCurrent data.size = " + returnData.data?.items?.size
                             )
-                            showCurrentOrderList(returnData.data?.items)
                         }
                     }
                 })
-        }
-    }
-
-    //显示当前委托
-    private fun showCurrentOrderList(data: ArrayList<TradeOrderFiex?>?) {
-        adapter?.data = data
-        adapter?.notifyDataSetChanged()
-    }
-
-    //更新当前委托
-    private fun updateCurrentOrderList(tradeOrder: TradeOrderFiex?) {
-        var data = adapter?.data
-        if (data != null) {
-            for (i in data?.indices!!) {
-                var originData = data[i]
-                if (tradeOrder?.orderId.equals(originData?.orderId)) {
-                    originData?.executedQty = tradeOrder?.dealQty
-                    adapter?.updateItem(i, originData)
-                    adapter?.notifyItemChanged(i)
-                    if (tradeOrder?.executedQty?.toDouble() == originData?.origQty?.toDouble()) {//订单完全成交，更新列表
-                        getTradeOrderCurrent()
-                    }
-                }
-            }
-        } else {
-            getTradeOrderCurrent()
         }
     }
 
@@ -1400,26 +1392,6 @@ class HomePageContractFragment : BaseFragment(),
         }, Date(), 1000)
     }
 
-    //撤销新单
-    private fun cancelTradeOrder(tradeOrder: TradeOrderFiex) {
-        TradeApiServiceHelper.cancelTradeOrderFiex(
-            mContext,
-            tradeOrder.orderId,
-            object : NormalCallback<HttpRequestResultString?>(mContext!!) {
-                override fun callback(returnData: HttpRequestResultString?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        adapter?.removeItem(tradeOrder)
-                        adapter?.notifyDataSetChanged()
-                    } else {
-                        FryingUtil.showToast(
-                            mContext,
-                            if (returnData == null) "null" else returnData.msg
-                        )
-                    }
-                }
-            })
-    }
-
     //更新涨跌幅
     override fun onPairQuotation(pairQuo: PairQuotation) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
@@ -1433,10 +1405,6 @@ class HomePageContractFragment : BaseFragment(),
             pairStatus?.precision?.let { PointLengthFilter(it) })
         resetPriceLength()
         resetAmountLength()
-        //清空当前委托
-        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
-            showCurrentOrderList(null)
-        }
         refreshTransactionHardViews()
         refreshSubmitButton()
         refreshData()
@@ -1444,7 +1412,6 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
             binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName())
         }
-        adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetAmountLength()
         resetPriceLength()
         if (pairStatus?.supportingPrecisionList != null) {
@@ -1467,7 +1434,6 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?) {
         Log.d(TAG, "onUserTradeOrderChanged,executedQty = " + userTradeOrder?.executedQty)
-        updateCurrentOrderList(userTradeOrder)
     }
 
     //用户信息被修改，刷新委托信息和钱包

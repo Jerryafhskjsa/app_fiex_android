@@ -14,11 +14,10 @@ class AutoHeightViewPager : ViewPager {
     private var mHeight = 0
     private val mChildrenViews: HashMap<Int, View> = LinkedHashMap()
 
-    constructor(context: Context?) : super(context!!) {}
+    constructor(context: Context?) : super(context!!)
     constructor(context: Context?, attrs: AttributeSet?) : super(
         context!!, attrs
-    ) {
-    }
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var heightMeasureSpec = heightMeasureSpec

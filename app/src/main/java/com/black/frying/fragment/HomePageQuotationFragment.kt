@@ -239,12 +239,12 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 //                currentFragment.onResume()
             }
             binding?.setTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                var textSize20 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
-                var textSize16 = resources.getDimensionPixelSize(R.dimen.text_size_16).toFloat()
+                var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+                var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize20)
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
                     binding?.quotationViewPager?.currentItem = tab.position
                     val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
                     if (currentFragment != null && currentFragment.isVisible) {
@@ -255,7 +255,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 override fun onTabUnselected(tab: TabLayout.Tab) {
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize16)
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
