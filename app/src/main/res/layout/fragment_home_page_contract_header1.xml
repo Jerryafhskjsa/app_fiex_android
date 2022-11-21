@@ -346,7 +346,6 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:paddingLeft="8dp"
                     android:text="@string/contract_with_limit"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />

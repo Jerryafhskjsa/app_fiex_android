@@ -768,5 +768,24 @@
     <string name="contract_sell_out">卖出</string>
     <string name="contract_stop_surplus_price">止盈价</string>
     <string name="contract_stop_lose_price">止损价</string>
+    <string name="contract_record_tab1">持有仓位(%s)</string>
+    <string name="contract_record_tab2">止盈止损(%s)</string>
+    <string name="contract_record_tab3">当前委托(%s)</string>
+    <string name="contract_show_all">显示全部</string>
+    <string name="contract_fast_done">一键平仓</string>
+    <string name="contract_see_down">做空</string>
+    <string name="contract_see_up">做多</string>
+    <string name="contract_profits">未实现盈亏(%s)</string>
+    <string name="contract_profits_per">收益率</string>
+    <string name="contract_hold_amount">持仓数量(%s)</string>
+    <string name="contract_hold_avg_price">持仓均价</string>
+    <string name="contract_hold_tag_price">标记价格)</string>
+    <string name="contract_can_finish_amount">可平数量(%s)</string>
+    <string name="contract_force_finish_pirce">强平价格</string>
+    <string name="contract_already_profits">已实现盈亏</string>
+    <string name="contract_auto_add_bond">自动追加保证金</string>
+    <string name="contract_adjust">调整</string>
+    <string name="contract_disturb">止盈止损</string>
+
 
 </resources>
