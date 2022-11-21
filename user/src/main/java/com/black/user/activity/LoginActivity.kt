@@ -82,7 +82,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         binding?.phoneBar?.setOnClickListener(this)
         binding?.emailBar?.setOnClickListener(this)
         binding?.imgCountryCode?.setOnClickListener(this)
-        binding?.btnTest?.setOnClickListener(this)
+
         binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)?.text =
             getString(R.string.register_title)
         binding?.root?.findViewById<SpanTextView>(R.id.text_action_bar_right)
@@ -167,49 +167,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.img_country_code -> chooseCountryCode()
 
-            R.id.btn_test -> testBtn()
-
         }
-    }
-
-    private fun testBtn() {
-//        FutureApiServiceHelper.getDepthData(this, "btc_usdt", 30, false,
-//            object : Callback<HttpRequestResultBean<DepthBean?>?>() {
-//                override fun error(type: Int, error: Any?) {
-//                    Log.d("ttttttt-->error", error.toString());
-//                }
-//
-//                override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
-//                    if (returnData != null) {
-//                        Log.d("ttttttt-->callback", returnData.result?.s +"---")
-//                    };
-//                }
-//            })
-//        FutureApiServiceHelper.getSymbolList(this, false,
-//            object : Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>() {
-//                override fun error(type: Int, error: Any?) {
-//                    Log.d("ttttttt-->error", error.toString());
-//                }
-//
-//                override fun callback(returnData: HttpRequestResultBean<ArrayList<SymbolBean>?>?) {
-//                    if (returnData != null) {
-//                        Log.d("ttttttt-->callback", returnData.result.toString())
-//                    };
-//                }
-//            })
-        FutureApiServiceHelper.getMarkPrice(this, false,
-            object : Callback<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                    Log.d("ttttttt-->error", error.toString());
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<ArrayList<MarkPriceBean>?>?) {
-                    if (returnData != null) {
-                        Log.d("ttttttt-->callback", returnData.result.toString())
-                    };
-                }
-            })
-
     }
 
     private fun initChooseWindowData() {

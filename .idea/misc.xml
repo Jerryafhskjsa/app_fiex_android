@@ -332,6 +332,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.20208333333333334" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_choose_coin.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_withdraw_address.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/activity_test.xml" value="0.2526041666666667" />
         <entry key="user/src/main/res/layout/activity_login.xml" value="0.14895833333333333" />
       </map>
     </option>

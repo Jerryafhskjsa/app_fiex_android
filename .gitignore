@@ -2,7 +2,7 @@
 *.apk
 *.ap_
 *.aab
-
+.dea/
 # Files for the ART/Dalvik VM
 *.dex
 

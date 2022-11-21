@@ -37,9 +37,11 @@ object FutureApiServiceHelper {
     /**
      * 获取交易对列表
      */
-    fun getSymbolList(context: Context?,
-                      isShowLoading: Boolean,
-                      callback: Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>?){
+    fun getSymbolList(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
@@ -53,9 +55,11 @@ object FutureApiServiceHelper {
     /**
      * 获取交易对列表
      */
-    fun getMarkPrice(context: Context?,
-                      isShowLoading: Boolean,
-                      callback: Callback<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>?){
+    fun getMarkPrice(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }

@@ -12,8 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:text="test" />
         <include
+            android:visibility="gone"
             android:id="@+id/action_bar_transaction"
             layout="@layout/action_bar_transaction" />
 

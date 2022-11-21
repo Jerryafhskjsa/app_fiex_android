@@ -2,6 +2,22 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="app_fiex_android.app" target="11" />
+      <module name="app_fiex_android.base" target="11" />
+      <module name="app_fiex_android.c2c" target="11" />
+      <module name="app_fiex_android.clutter" target="11" />
+      <module name="app_fiex_android.community" target="11" />
+      <module name="app_fiex_android.im" target="11" />
+      <module name="app_fiex_android.lib" target="11" />
+      <module name="app_fiex_android.money" target="11" />
+      <module name="app_fiex_android.net" target="11" />
+      <module name="app_fiex_android.res" target="11" />
+      <module name="app_fiex_android.router" target="11" />
+      <module name="app_fiex_android.tuikit" target="11" />
+      <module name="app_fiex_android.UdeskSDKUI" target="11" />
+      <module name="app_fiex_android.user" target="11" />
+      <module name="app_fiex_android.util" target="11" />
+      <module name="app_fiex_android.wallet" target="11" />
       <module name="FryingPub.app" target="11" />
       <module name="FryingPub.base" target="11" />
       <module name="FryingPub.c2c" target="11" />
