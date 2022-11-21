@@ -5,6 +5,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.future.DepthBean
+import com.black.base.model.future.FundingRateBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.SymbolBean
 import com.black.base.net.HttpCallbackSimple
@@ -53,7 +54,7 @@ object FutureApiServiceHelper {
     }
 
     /**
-     * 获取交易对列表
+     * 获取标记价格
      */
     fun getMarkPrice(
         context: Context?,
@@ -69,6 +70,23 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
-
+    /**
+     * 获取标记价格
+     */
+    fun getFundingRate(
+        symbol: String,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<FundingRateBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getFundingRate(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 
 }

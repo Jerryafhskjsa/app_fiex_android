@@ -5,6 +5,7 @@ import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultData
 
 import com.black.base.model.future.DepthBean
+import com.black.base.model.future.FundingRateBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.SymbolBean
 import com.black.base.util.UrlConfig
@@ -34,4 +35,9 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_MARK_PRICE)
     fun getMarkPrice(): Observable<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>?
 
+    /**
+     * 获取资金费率
+     */
+    @GET(UrlConfig.Future.ULR_FUNDING_RATE)
+    fun getFundingRate(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<FundingRateBean?>?>?
 }

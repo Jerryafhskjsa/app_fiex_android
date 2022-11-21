@@ -25,6 +25,7 @@ class TestActivity() : BaseActivity(), QRefreshLayout.OnRefreshListener, QRefres
             FutureService.getDepthOrder(this,"btc_usdt");
         })
         FutureService.initSymbol(this);
+        FutureService.initMarkPrice(this);
     }
     var button:Button?=null
     var refreshLayout: QRefreshLayout? = null

@@ -400,6 +400,8 @@ object UrlConfig {
 
         const val URL_MARK_PRICE="market/v1/public/q/mark-price";
 
+        const val ULR_FUNDING_RATE="market/v1/public/q/funding-rate"
+
     }
 
 
