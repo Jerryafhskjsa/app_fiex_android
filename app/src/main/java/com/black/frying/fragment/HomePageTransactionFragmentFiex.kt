@@ -27,6 +27,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
@@ -49,6 +50,7 @@ import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.TransactionViewModel
 import com.black.frying.viewmodel.TransactionViewModel.OnTransactionModelListener
 import com.black.im.util.IMHelper
+import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -145,6 +147,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         layout = binding?.root
         StatusBarUtil.addStatusBarPadding(layout)
         viewModel = TransactionViewModel(mContext!!, this)
+        binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
+        binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
+            }
+
+        })
         deepViewBinding = TransactionDeepViewBinding(mContext!!, viewModel!!, binding!!.fragmentHomePageTransactionHeader1)
         deepViewBinding?.setOnTransactionDeepListener(this)
 

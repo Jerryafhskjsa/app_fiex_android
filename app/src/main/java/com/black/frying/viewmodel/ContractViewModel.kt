@@ -38,9 +38,7 @@ import kotlin.collections.ArrayList
 
 class ContractViewModel(context: Context, private val onContractModelListener: OnContractModelListener?) : BaseViewModel<Any?>(context) {
     companion object {
-        var tag = ContractViewModel::class.java.simpleName
-        const val LEVER_TYPE_COIN = "PHYSICAL" // 现货
-        const val LEVER_TYPE_LEVER = "ISOLATED" //逐仓杠杆
+        var TAG = ContractViewModel::class.java.simpleName
     }
 
 
@@ -241,13 +239,6 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
     }
 
-    private fun createUserLeverObserver(): Observer<String?> {
-        return object : SuccessObserver<String?>() {
-            override fun onSuccess(value: String?) {
-                onContractModelListener?.onUserInfoChanged()
-            }
-        }
-    }
 
     private fun createPairObserver(): Observer<ArrayList<PairStatus?>?> {
         return object : SuccessObserver<ArrayList<PairStatus?>?>() {
@@ -397,13 +388,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         return currentPairStatus.getSupportOrderTypeList()
     }
 
-    fun getCurrentPairOrderType():String?{
-        if(currentPairStatus == null){
-            return currentPairStatus.getSupportOrderTypeList()?.get(0)
-        }else{
-            return currentOrderType
-        }
-    }
+
     fun setCurrentPairorderType(type:String?){
         currentOrderType = type
     }

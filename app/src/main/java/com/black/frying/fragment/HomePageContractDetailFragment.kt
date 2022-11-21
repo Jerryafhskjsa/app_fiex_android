@@ -1,31 +1,20 @@
 package com.black.frying.fragment
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.*
-import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.black.base.fragment.BaseFragment
-import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.ContractRecordTabBean
-import com.black.base.model.QuotationSet
-import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
-import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.HomeContractDetailAdapter
-import com.black.frying.util.PairQuotationComparator
-import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
 import com.black.util.Callback
-import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
@@ -80,8 +69,6 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
-        binding?.listView?.divider = drawable
-        binding?.listView?.dividerHeight = 1
         for(i in 0 until  5){
             var pairStatus = PairStatus()
             dataList.add(pairStatus)
@@ -91,10 +78,7 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         binding?.listView?.onItemClickListener = this
 
 
-        val emptyView = inflater.inflate(R.layout.list_view_empty_long, null)
-        val group = binding?.listView?.parent as ViewGroup
-        group.addView(emptyView)
-        binding?.listView?.emptyView = emptyView
+
 
         if (arguments != null) {
             val position = arguments!!.getInt(AutoHeightViewPager.POSITION)

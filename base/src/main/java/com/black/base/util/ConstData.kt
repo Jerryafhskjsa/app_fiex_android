@@ -11,6 +11,11 @@ object ConstData {
         CONTRACT
     }
 
+
+    const val CONTRACT_REC_HOLD_AMOUNT = 0
+    const val CONTRACT_REC_WITH_LIMIE = 1
+    const val CONTRACT_REC_CURRENT = 2
+
     const val USER_VERIFY_NO = "0"
     const val USER_VERIFY_ED = "1"
     const val USER_VERIFY_ING = "2"

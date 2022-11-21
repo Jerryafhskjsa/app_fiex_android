@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import com.black.base.fragment.BaseFragment
-import com.black.base.model.ContractRecordTabBean
 import com.black.base.widget.AutoHeightViewPager
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentEmptyBinding
