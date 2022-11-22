@@ -95,6 +95,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.helpCenter?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
+        binding?.version?.setText(String.format("V%s" ,CommonUtil.getVersionName(this, "1.0.0")))
         val currentLanguage = LanguageUtil.getLanguageSetting(applicationContext)
         val exchange = ExchangeRatesUtil.getExchangeRatesSetting(applicationContext)
         if (currentLanguage == null) {
@@ -479,7 +480,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         } else {
             CommonUtil.getItemFromList(localLinesConfig, UrlConfig.getIndex(mContext))
         }
-        val serverText = currentServerConfig?.lineUrl + "(" + currentServerConfig?.speed + ")"
+        val serverText = currentServerConfig?.speed + "ms"
         binding?.currentServer?.text = serverText
     }
 

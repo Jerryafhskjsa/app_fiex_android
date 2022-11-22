@@ -391,14 +391,10 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.submit_success))
-                    //提交成功后回到个人中心
-                    BlackRouter.getInstance().build(RouterConstData.PERSON_INFO_CENTER)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .go(mContext) { routeResult, _ ->
-                                if (routeResult) {
-                                    finish()
-                                }
-                            }
+                    BlackRouter.getInstance().build(RouterConstData.START_PAGE)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .go(mContext)
                 } else {
                     FryingUtil.showToast(mContext, returnData?.msg)
                 }

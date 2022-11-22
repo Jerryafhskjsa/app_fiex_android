@@ -80,6 +80,10 @@ interface UserApiService {
     fun enableSecurity(@Field("telCountryCode") telCountryCode: String?, @Field("phone") phone: String?, @Field("phoneCode") phoneCode: String?,@Field("newPhone") newPhone: String?, @Field("newPhoneCode") newPhoneCode: String?,  @Field("email") email: String?, @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?, @Field("password") password: String?, @Field("action") action: String?): Observable<HttpRequestResultString?>?
 
     @FormUrlEncoded
+    @POST(UrlConfig.User.URL_PHONE_SECURITY)
+    fun phoneSecurity(@Field("telCountryCode") telCountryCode: String?, @Field("phone") phone: String?, @Field("phoneCode") phoneCode: String?, @Field("newPhoneCode") newPhoneCode: String?,  @Field("emailCode") emailCode: String?, @Field("googleCode") googleCode: String?): Observable<HttpRequestResultString?>?
+
+    @FormUrlEncoded
     @POST(UrlConfig.User.URL_IDENTITY_BIND)
     fun bindIdentity(@Field("idType") idType: Int, @Field("realName") realName: String?, @Field("idNo") idNo: String?, @Field("idNoImg") idNoImg: String?, @Field("country") countryId: String?,@Field("birthday") birthday: String?): Observable<HttpRequestResultString?>?
 

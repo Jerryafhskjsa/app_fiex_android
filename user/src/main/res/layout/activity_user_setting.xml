@@ -66,7 +66,7 @@
                             android:gravity="center"
                             android:text="@string/red_down"
                             android:textColor="@color/T2"
-                            android:textSize="@dimen/text_size_14"/>
+                            android:textSize="@dimen/text_size_14" />
 
                     </RelativeLayout>
                     <RelativeLayout
@@ -79,6 +79,18 @@
                             android:text="@string/about_us"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left"
+                            android:drawablePadding="6dp"
+                            android:gravity="center"
+                            android:text="@string/version"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -59,6 +59,7 @@
                             android:text="FIEX产品介绍，建立加密世界 从FIEX开始。简单实现买卖加密货币，立即注册并开始使用吧。FIEX产品介绍，建立加密世界 从FIEX开始。简单实现买卖加密货币，立即注册并开始使用吧。"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_14" />
+
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/check_update"
                             android:layout_width="wrap_content"

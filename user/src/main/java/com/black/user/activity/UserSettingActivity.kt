@@ -15,6 +15,7 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityUserSettingBinding
+import com.black.util.CommonUtil
 
 @Route(value = [RouterConstData.USER_SETTING], beforePath = RouterConstData.LOGIN)
 class UserSettingActivity : BaseActivity(), View.OnClickListener {
@@ -26,6 +27,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         binding.changeUser.setOnClickListener(this)
         binding.aboutUs.setOnClickListener(this)
         binding.styleSetting.setOnClickListener(this)
+        binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,"1.0.0")))
         application = getApplication() as BaseApplication
         val style = StyleChangeUtil.getStyleChangeSetting(applicationContext)
         if (style == null) {

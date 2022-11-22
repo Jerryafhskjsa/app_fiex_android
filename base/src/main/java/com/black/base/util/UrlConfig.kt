@@ -170,6 +170,8 @@ object UrlConfig {
         //开启/关闭认证 开启关闭类型 action：0-开启手机，1-关闭手机，2-开启google，3-关闭google，4-开启邮箱
         const val URL_ENABLE_SECURITY = "user/security/enable"
         //身份认证-绑定
+        const val URL_PHONE_SECURITY = "user/security/phone"
+        //手机号修改认证
         const val URL_IDENTITY_BIND = "user/identity/auth"
         //身份认证-上传图片
         const val URL_UPLOAD = "commons/upload"

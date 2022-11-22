@@ -365,7 +365,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getGoogleCode()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -386,7 +386,7 @@ object UserApiServiceHelper {
     }
 
     fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?,newPhone: String?, newPhoneCode: String?,email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, telCountryCode, phone, phoneCode, newPhone, newPhoneCode, email, emailCode, googleCode,null,"0", callback)
+        enableSecurity(context, telCountryCode, phone, phoneCode, null, null, email, emailCode, googleCode,null,"0", callback)
     }
 
     fun bindEmail(context: Context?,  email: String?, emailCode: String? , callback: Callback<HttpRequestResultString?>?) {
@@ -397,7 +397,15 @@ object UserApiServiceHelper {
     }
 
 
-
+    fun phoneSecurity(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, newPhoneCode: String?,  emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+            ?.phoneSecurity(telCountryCode, phone, phoneCode,newPhoneCode,  emailCode, googleCode)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
     /**
      * 查询用户邀请的人数量
      */

@@ -358,7 +358,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
 
         }
             }
-        UserApiServiceHelper.bindPhone(mContext, telCountryCode, userInfo!!.username , phoneCode , newPhone , newPhoneCode, userInfo!!.email, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+        UserApiServiceHelper.phoneSecurity(mContext, telCountryCode, newPhone , phoneCode , newPhoneCode,  mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     onBindSuccess()

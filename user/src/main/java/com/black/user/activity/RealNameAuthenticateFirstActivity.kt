@@ -129,11 +129,11 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        /*val datePickerDialog: DatePicker = findViewById<DatePicker>(R.id.data_picker)
-        year = datePickerDialog.year
-        month = datePickerDialog.month
-        day = datePickerDialog.dayOfMonth*/
+        val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
             dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                year = datePickerDialog.year
+                month = datePickerDialog.month + 1
+                day = datePickerDialog.dayOfMonth
                 formatDate(year, month, day)
                 dialog.dismiss()
             }

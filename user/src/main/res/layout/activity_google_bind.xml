@@ -157,25 +157,43 @@
                                 android:textSize="@dimen/text_size_16" />
                         </com.black.lib.view.InputLinearLayout>
 
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="10dp" />
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/password"
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/password_window"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_password">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/middle_padding"
                             android:background="@drawable/bg_edittext_default"
-                            android:hint="@string/long_password"
-                            android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:textSize="@dimen/text_size_16"
-                            app:useDelete="true" />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/password"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/password"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
 
+                        </com.black.lib.view.InputLinearLayout>
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/google_window"
                             android:layout_width="wrap_content"

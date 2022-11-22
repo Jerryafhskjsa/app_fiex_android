@@ -7,7 +7,6 @@
     <string name="green">绿涨红跌</string>
     <string name="login">登录/注册</string>
     <string name="switching">自动切换</string>
-    <string name="password">密码</string>
     <string name="register_agreement_label">我已阅读并同意</string>
     <string name="home_tab_main">首页</string>
     <string name="home_tab_transaction">交易</string>
@@ -32,6 +31,8 @@
     <string name="bind_google_note">请妥善备份密钥以防遗失</string>
     <string name="next">下一步</string>
     <string name="google_code_input_hint">请输入谷歌Code码</string>
+    <string name="google_code_1">谷歌Code码</string>
+    <string name="input_password">请输入账号密码</string>
     <string name="submit">提交</string>
     <string name="mail_code">邮箱验证码</string>
     <string name="mail_code1">邮箱验证</string>
@@ -681,7 +682,7 @@
     <string name="input_phone_now_code">请输入当前手机验证码</string>
     <string name="input_code">请输入验证码</string>
     <string name="input_new_phone_code_verify">请输入新手机的验证码</string>
-    <string name="google_code_1">谷歌Code码</string>
+    <string name="password">账号密码</string>
     <string name="google_key">谷歌密钥:</string>
     <string name="style_setting">风格设置</string>
     <string name="first_server">服务器1</string>
@@ -689,6 +690,7 @@
     <string name="third_server">服务器3</string>
     <string name="red_down">绿涨红跌</string>
     <string name="red_up">红涨绿跌</string>
+    <string name="version">V1.0.0</string>
     <string name="view_more">View more</string>
     <string name="asset_transfer">Asset transfer</string>
     <string name="from">from</string>

@@ -547,9 +547,9 @@
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16" />
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/icon_left" />
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_share" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -632,7 +632,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/icon_left" />
+                                android:src="@drawable/udesk_online_status" />
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
