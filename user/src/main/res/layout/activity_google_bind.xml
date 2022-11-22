@@ -59,6 +59,7 @@
                         android:paddingRight="@dimen/double_padding">
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/phone_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/input_phone_code"></com.black.base.widget.SpanTextView>
@@ -116,6 +117,7 @@
                             android:text="@string/input_mail_code"></com.black.base.widget.SpanTextView>
 
                         <View
+                            android:id="@+id/mail_bar"
                             android:layout_width="match_parent"
                             android:layout_height="10dp" />
 
@@ -159,6 +161,7 @@
 
 
                         <View
+                            android:id="@+id/mail_bar_b"
                             android:layout_width="match_parent"
                             android:layout_height="10dp" />
 

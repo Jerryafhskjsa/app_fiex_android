@@ -156,6 +156,7 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
                                 getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
                                     override fun callback(returnData: UserInfo?) {
                                         userInfo = returnData
+                                        FryingUtil.showToast(mContext, getString(R.string.image_success))
                                         refreshView()
                                     }
                                 })

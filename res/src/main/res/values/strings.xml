@@ -80,6 +80,8 @@
     <string name="alert_password_too_short">密码不能低于8位！</string>
     <string name="aler_get_code_locked">%1$ss</string>
     <string name="alert_bind_success">绑定成功</string>
+    <string name="image_success">头像同步成功</string>
+    <string name="name_success">昵称同步成功</string>
     <string name="bind_success">认证成功</string>
     <string name="financial_deal">已完成</string>
     <string name="financial_wait_check">待审核</string>

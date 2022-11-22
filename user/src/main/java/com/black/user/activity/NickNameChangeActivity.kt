@@ -74,6 +74,7 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                                         getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
                                             override fun error(type: Int, error: Any?) {}
                                             override fun callback(returnData: UserInfo?) {
+                                                FryingUtil.showToast(mContext, getString(R.string.name_success))
                                                 finish()
                                             }
                                         })

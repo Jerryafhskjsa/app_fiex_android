@@ -564,7 +564,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun onToggleDearPair(isSuccess: Boolean?,isDearPair: Boolean?) {
         if (isSuccess!!) {
-            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
             FryingUtil.showToast(mContext, showMsg)
             onCheckDearPair(isDearPair)
         }

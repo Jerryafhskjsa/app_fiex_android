@@ -551,8 +551,8 @@ class HomePageContractFragment : BaseFragment(),
                                         isDear = !isDear!!
                                         updateDear(isDear)
                                         val showMsg =
-                                            if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(
-                                                R.string.pair_collect_add_ok
+                                            if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(
+                                                R.string.pair_collect_cancel_ok
                                             )
                                         FryingUtil.showToast(mContext, showMsg)
                                     } else {
@@ -1639,8 +1639,8 @@ class HomePageContractFragment : BaseFragment(),
                                 isDear = !isDear!!
                                 updateDear(isDear)
                                 val showMsg =
-                                    if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(
-                                        R.string.pair_collect_add_ok
+                                    if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(
+                                        R.string.pair_collect_cancel_ok
                                     )
                                 FryingUtil.showToast(mContext, showMsg)
                             } else {

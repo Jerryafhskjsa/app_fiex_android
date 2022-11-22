@@ -91,12 +91,20 @@ class GoogleBindActivity : BaseActivity(), View.OnClickListener {
         binding?.password?.addTextChangedListener(watcher)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.phoneLayout?.visibility = View.GONE
+        binding?.phoneAccount?.visibility = View.GONE
+        binding?.mailAccount?.visibility = View.GONE
         binding?.mailLayout?.visibility = View.GONE
+        binding?.mailBar?.visibility = View.GONE
+        binding?.mailBarB?.visibility = View.GONE
         if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
             binding?.phoneLayout?.visibility = View.VISIBLE
+            binding?.phoneAccount?.visibility = View.VISIBLE
         }
         if (TextUtils.equals("1", userInfo!!.emailSecurityStatus)) {
             binding?.mailLayout?.visibility = View.VISIBLE
+            binding?.mailBar?.visibility = View.VISIBLE
+            binding?.mailAccount?.visibility = View.VISIBLE
+            binding?.mailBarB?.visibility = View.VISIBLE
         }
     }
 

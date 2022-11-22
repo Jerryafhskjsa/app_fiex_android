@@ -329,7 +329,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                             if (result != null && result.code == HttpRequestResult.SUCCESS) {
                                 isDear = !isDear!!
                                 updateDear(isDear)
-                                val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                                val showMsg = if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
                                 FryingUtil.showToast(mContext, showMsg)
                             } else {
                                 FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
@@ -1232,7 +1232,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
                             isDear = !isDear!!
                             updateDear(isDear)
-                            val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                            val showMsg = if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
                             FryingUtil.showToast(mContext, showMsg)
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)

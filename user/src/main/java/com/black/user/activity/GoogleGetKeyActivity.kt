@@ -3,7 +3,9 @@ package com.black.user.activity
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
@@ -29,6 +31,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_google_get_key)
         binding?.btnCopy?.setOnClickListener(this)
+        binding?.newPasswordAgain?.addTextChangedListener(watcher)
         binding?.btnNext?.setOnClickListener(this)
         binding?.btnNext?.isEnabled = false
         googleKey
@@ -36,6 +39,21 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
 
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
+    }
+
+    private val watcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            checkClickable()
+        }
+        override fun afterTextChanged(s: Editable?) {
+        }
+    }
+
+    private fun checkClickable() {
+        if (TextUtils.isEmpty(binding?.newPasswordAgain?.text.toString().trim { it <= ' ' })) {
+            binding?.btnNext?.isEnabled = false
+        }
     }
 
     override fun getTitleText(): String {
