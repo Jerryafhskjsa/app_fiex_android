@@ -32,12 +32,9 @@
                     />
                 <ImageView
                     android:id="@+id/buy_type_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ContractSmallArrow"
                     android:layout_marginLeft="5dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/icon_selector_down" />
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/lin_sell_multiple"
@@ -59,12 +56,8 @@
                     />
                 <ImageView
                     android:id="@+id/sell_type_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/icon_selector_down" />
+                    style="@style/ContractSmallArrow"/>
             </LinearLayout>
         </LinearLayout>
         <View

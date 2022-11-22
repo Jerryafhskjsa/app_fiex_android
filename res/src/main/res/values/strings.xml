@@ -794,8 +794,12 @@
     <string name="contract_all_position">全仓</string>
     <string name="contract_adjust_multiple">杠杆调整</string>
     <string name="contract_do_down">开空</string>
+    <string name="contract_down">空</string>
     <string name="contract_do_raise">开多</string>
+    <string name="contract_raise">多</string>
     <string name="contract_multiple">倍数</string>
+    <string name="contract_tag_price">标记价格</string>
+    <string name="contract_index_price">指数价格</string>
 
 
 </resources>

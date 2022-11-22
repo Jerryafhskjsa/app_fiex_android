@@ -3,6 +3,7 @@ package com.black.frying.fragment
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -18,6 +19,7 @@ import android.widget.CheckedTextView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -61,6 +63,7 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
+import com.black.wallet.viewmodel.WalletViewModel
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import com.google.android.material.tabs.TabLayout
@@ -103,7 +106,7 @@ class HomePageContractFragment : BaseFragment(),
     private var colorLost = 0
     private var colorT3 = 0
 
-    private var transactionType = 1 //1 买入 2卖出
+    private var transactionType = 1 //1 开仓 2平仓
     private var tabType = ConstData.TAB_COIN
 
     private var countProgressBuy: Drawable? = null
@@ -115,8 +118,15 @@ class HomePageContractFragment : BaseFragment(),
     private var recordViewPager: AutoHeightViewPager? = null
     private var recordTab: TabLayout? = null
 
-    //方向和倍数
-    private var currentOrientationMultiple: String? = "50X"
+
+    //开仓倍数设置
+    private var buyMultiChooseBean: ContractMultiChooseBean? = null
+
+    //平仓倍数设置
+    private var sellMultiChooseBean: ContractMultiChooseBean? = null
+
+    //是否选中止盈止损
+    private var withLimitFlag: Boolean? = false
 
     /**
      * 卖出使用 当前币种
@@ -193,12 +203,27 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1
         )
         deepViewBinding?.setOnTransactionDeepListener(this)
-
+        initData()
         initActionBar()
         initHeader()
         initHeader1()
         initHeader2()
         return layout
+    }
+
+    private fun initData() {
+        buyMultiChooseBean = ContractMultiChooseBean()
+        buyMultiChooseBean?.maxMultiple = 100
+        buyMultiChooseBean?.defaultMultiple = 10
+        buyMultiChooseBean?.orientation = "BUY"
+        buyMultiChooseBean?.type = 0
+        binding?.fragmentHomePageContractHeader?.buyMultiple?.text = getMultipleDes(buyMultiChooseBean)
+        sellMultiChooseBean = ContractMultiChooseBean()
+        sellMultiChooseBean?.maxMultiple = 100
+        sellMultiChooseBean?.defaultMultiple = 10
+        sellMultiChooseBean?.orientation = "SELL"
+        sellMultiChooseBean?.type = 0
+        binding?.fragmentHomePageContractHeader?.sellMultiple?.text = getMultipleDes(sellMultiChooseBean)
     }
 
     override fun getViewModel(): ContractViewModel? {
@@ -261,8 +286,6 @@ class HomePageContractFragment : BaseFragment(),
         binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
-        binding?.actionBarLayout?.leverLayout?.visibility =
-            if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
         binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
     }
 
@@ -271,8 +294,16 @@ class HomePageContractFragment : BaseFragment(),
         binding?.fragmentHomePageContractHeader?.linSellMultiple?.setOnClickListener(this)
     }
 
-    //买卖功能
+    //开仓平仓
     private fun initHeader1() {
+        binding!!.fragmentHomePageContractHeader1?.contractWithLimit.setOnCheckedChangeListener { _, isChecked ->
+            withLimitFlag = isChecked
+            binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = if (isChecked) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
         binding!!.fragmentHomePageContractHeader1.linOrderType.setOnClickListener(this)
         binding!!.fragmentHomePageContractHeader1.btnBuy.setOnClickListener(this)
         binding!!.fragmentHomePageContractHeader1.btnSale.setOnClickListener(this)
@@ -490,28 +521,55 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    private fun getMultipleDes(bean: ContractMultiChooseBean?): String? {
+        var des: String? = null
+        var typeDes: String? = null
+        var orientationDes: String? = null
+        var multiDes: String? = null
+        typeDes = if (bean?.type == 0) {
+            getString(R.string.contract_fiexble_position)
+        } else {
+            getString(R.string.contract_all_position)
+        }
+        multiDes = bean?.defaultMultiple.toString() + "X"
+        orientationDes = if (bean?.orientation.equals("BUY")) {
+            getString(R.string.contract_raise)
+        } else {
+            getString(R.string.contract_down)
+        }
+        des = typeDes + multiDes + orientationDes
+        return des
+    }
 
-    private fun showOrientationMultipleDialog() {
-        var bean = ContractMultiChooseBean()
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun showOrientationMultipleDialog(bean: ContractMultiChooseBean?) {
         ContractMultipleSelectWindow(mContext as Activity,
             getString(R.string.contract_adjust),
             bean,
-            object : ContractMultipleSelectWindow.OnReturnListener<ContractMultiChooseBean?> {
+            object : ContractMultipleSelectWindow.OnReturnListener {
                 override fun onReturn(
-                    window: ContractMultipleSelectWindow<ContractMultiChooseBean?>,
+                    window: ContractMultipleSelectWindow,
                     item: ContractMultiChooseBean?
                 ) {
+                    if (item?.orientation.equals("BUY")) {
+                        buyMultiChooseBean = item
+                        binding?.fragmentHomePageContractHeader?.buyMultiple?.text = getMultipleDes(buyMultiChooseBean)
+                    } else {
+                        sellMultiChooseBean = item
+                        binding?.fragmentHomePageContractHeader?.sellMultiple?.text = getMultipleDes(sellMultiChooseBean)
+                    }
                 }
             }).show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onClick(v: View) {
         when (v.id) {
             R.id.lin_buy_multiple -> {
-                showOrientationMultipleDialog()
+                showOrientationMultipleDialog(buyMultiChooseBean)
             }
             R.id.lin_sell_multiple -> {
-                showOrientationMultipleDialog()
+                showOrientationMultipleDialog(sellMultiChooseBean)
             }
             R.id.tab_transaction_coin -> {
                 if (tabType != ConstData.TAB_COIN) {
@@ -775,8 +833,6 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun changeTabType(tabType: Int) {
         this.tabType = tabType
-        binding?.actionBarLayout?.leverLayout?.visibility =
-            if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
         viewModel!!.setTabType(tabType)
         viewModel!!.changePairSocket()
         resetPriceLength()
@@ -1124,6 +1180,13 @@ class HomePageContractFragment : BaseFragment(),
     //刷新交易区控件
     private fun refreshTransactionHardViews() {
         if (transactionType == 1) {
+            binding!!.fragmentHomePageContractHeader1.contractWithLimit.visibility = View.VISIBLE
+            if (withLimitFlag == true) {
+                binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.VISIBLE
+            } else {
+                binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.GONE
+            }
+
             binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = true
             binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = false
             binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable =
@@ -1143,6 +1206,8 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1.btnHandle.background =
                 SkinCompatResources.getDrawable(activity, R.drawable.btn_t7)
         } else if (transactionType == 2) {
+            binding!!.fragmentHomePageContractHeader1.contractWithLimit.visibility = View.GONE
+            binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.GONE
             binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = false
             binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = true
             binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable =
