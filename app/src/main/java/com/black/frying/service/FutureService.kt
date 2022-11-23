@@ -5,6 +5,7 @@ import android.util.Log
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.DepthBean
+import com.black.base.model.future.FundingRateBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.SymbolBean
 import com.black.frying.model.OrderItem
@@ -80,6 +81,24 @@ object FutureService {
         return contractSize
     }
 
+    fun getFundingRate(context: Context?, symbol: String) {
+        FutureApiServiceHelper.getFundingRate(
+            symbol,
+            context,
+            false,
+            object : Callback<HttpRequestResultBean<FundingRateBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<FundingRateBean?>?) {
+                    Log.d("ttttttt-->getFundingRate", returnData.toString());
+                }
+
+            })
+    }
+
+
     fun getDepthOrder(context: Context?, symbol: String) {
         var contractSize = getSymbolValue(symbol)
         getMarkPrice(symbol);
@@ -101,14 +120,22 @@ object FutureService {
                         if (a != null) {
                             var t = 0.0;
                             for (buy in a) {
+                                //价格
                                 var price = buy?.get(0)
+                                //张数
                                 var count = buy?.get(1)
+                                //计算出每个订单的USDT数量
                                 var quantity =
                                     BigDecimal(count).multiply(BigDecimal(contractSize.toString()))
                                         .multiply(BigDecimal(markPrice?.p))
                                 t = t.toBigDecimal().add(quantity).toDouble()
                                 var orderBean =
-                                    price?.let { OrderItem(it.toDouble(), quantity.toDouble(), t) }
+                                    price?.let {
+                                        OrderItem(
+                                            it.toDouble(), quantity.toDouble(),
+                                            count?.toInt() ?: 0, t
+                                        )
+                                    }
                                 if (orderBean != null) {
                                     buyList!!.add(orderBean)
                                 }
@@ -122,9 +149,17 @@ object FutureService {
                                 var quantity =
                                     BigDecimal(count).multiply(BigDecimal(contractSize.toString()))
                                         .multiply(BigDecimal(markPrice?.p))
+
                                 t = t.toBigDecimal().add(quantity).toDouble()
                                 var orderBean =
-                                    price?.let { OrderItem(it.toDouble(), quantity.toDouble(), t) }
+                                    price?.let {
+                                        OrderItem(
+                                            it.toDouble(),
+                                            quantity.toDouble(),
+                                            count?.toInt() ?: 0,
+                                            t
+                                        )
+                                    }
                                 if (orderBean != null) {
                                     sellList!!.add(orderBean)
                                 }

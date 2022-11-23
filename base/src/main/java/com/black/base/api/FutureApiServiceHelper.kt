@@ -4,10 +4,7 @@ import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultData
-import com.black.base.model.future.DepthBean
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.SymbolBean
+import com.black.base.model.future.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
@@ -70,8 +67,9 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
     /**
-     * 获取标记价格
+     * 获取资金费率
      */
     fun getFundingRate(
         symbol: String,
@@ -85,6 +83,80 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.getFundingRate(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取实时成交
+     */
+    fun getDealList(
+        symbol: String,
+        num: Int,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<DealBean>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getDealList(symbol, num)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取币种列表
+     */
+    fun getCoinList(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<String>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getCoinList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取用户账户信息
+     */
+    fun getAccountInfo(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<AccountInfoBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getAccountInfo()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 用户登录
+     */
+    fun login(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.login()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

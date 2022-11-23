@@ -10,7 +10,8 @@ import com.black.frying.service.FutureService
 import com.black.lib.refresh.QRefreshLayout
 import com.fbsex.exchange.R
 
-class TestActivity() : BaseActivity(), QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
+class TestActivity() : BaseActivity(), QRefreshLayout.OnRefreshListener,
+    QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
@@ -20,14 +21,16 @@ class TestActivity() : BaseActivity(), QRefreshLayout.OnRefreshListener, QRefres
         refreshLayout?.setOnRefreshListener(this)
         refreshLayout?.setOnLoadListener(this)
         refreshLayout?.setOnLoadMoreCheckListener(this)
-        button=findViewById<Button>(R.id.btn_test);
+        button = findViewById<Button>(R.id.btn_test);
         button?.setOnClickListener(View.OnClickListener {
-            FutureService.getDepthOrder(this,"btc_usdt");
+//            FutureService.getDepthOrder(this,"btc_usdt");
+            FutureService.getFundingRate(this, "btc_usdt");
         })
         FutureService.initSymbol(this);
         FutureService.initMarkPrice(this);
     }
-    var button:Button?=null
+
+    var button: Button? = null
     var refreshLayout: QRefreshLayout? = null
     val handler = Handler()
     override fun onRefresh() {
