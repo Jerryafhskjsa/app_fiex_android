@@ -8,6 +8,7 @@ import com.black.base.model.future.*
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 
@@ -63,6 +64,19 @@ interface FutureApiService {
     /**
      * 用户登录
      */
-    @GET(UrlConfig.Future.URL_LOGIN)
+    @POST(UrlConfig.Future.URL_LOGIN)
     fun login(): Observable<HttpRequestResultBean<String?>?>?
+
+    /**
+     * 开通合约
+     */
+    @GET(UrlConfig.Future.URL_OPEN_ACCOUNT)
+    fun openAccount(): Observable<HttpRequestResultBean<String?>?>?
+
+    /**
+     * 获取用户持仓
+     */
+    @GET(UrlConfig.Future.URL_POSITION_LIST)
+    fun getPositionList(): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
+
 }

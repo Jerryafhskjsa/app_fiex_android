@@ -53,12 +53,12 @@ public class ApiManagerImpl {
         String key = getKey(url, deviceId, lang, ucToken);
         SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
         ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
-        Log.d(TAG,"url = "+url);
+//        Log.d(TAG, "url = " + url);
         if (apiManager == null) {
-            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, ucToken,apiCookieHelper, interceptHelper);
+            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, ucToken, apiCookieHelper, interceptHelper);
             managerCache.put(key, new SoftReference<>(apiManager));
         }
-        Log.d(TAG,"apiManager = "+apiManager);
+//        Log.d(TAG, "apiManager = " + apiManager);
         return apiManager;
     }
 
@@ -129,7 +129,7 @@ public class ApiManagerImpl {
                 }
             }
         });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         Interceptor headerInterceptor = new Interceptor() {
             @Override
@@ -139,6 +139,7 @@ public class ApiManagerImpl {
                 String ticket = HttpCookieUtil.getTicket(context);
                 String trade_token = HttpCookieUtil.getTradeToken(context);
                 String pro_token = HttpCookieUtil.getProToken(context);
+                String future_token = HttpCookieUtil.geFutureToken(context);
                 String ws_token = HttpCookieUtil.getWsToken(context);
 
                 Request original = chain.request();
@@ -163,39 +164,46 @@ public class ApiManagerImpl {
                         .header("Cache-Control", "no-cache");
 
                 JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
-                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)){
-                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
-                        JSESSIONIDCookie += ";uc-token="+ucToken+";";
-                    }else{
-                        JSESSIONIDCookie += "uc-token="+ucToken+";";
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";uc-token=" + ucToken + ";";
+                    } else {
+                        JSESSIONIDCookie += "uc-token=" + ucToken + ";";
                     }
                 }
-                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)){
-                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
-                        JSESSIONIDCookie += ";ticket="+ticket+";";
-                    }else{
-                        JSESSIONIDCookie += "ticket="+ticket+";";
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";ticket=" + ticket + ";";
+                    } else {
+                        JSESSIONIDCookie += "ticket=" + ticket + ";";
                     }
                 }
-                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)){
-                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
-                        JSESSIONIDCookie += ";trade-token="+trade_token+";";
-                    }else{
-                        JSESSIONIDCookie += "trade-token="+trade_token+";";
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";trade-token=" + trade_token + ";";
+                    } else {
+                        JSESSIONIDCookie += "trade-token=" + trade_token + ";";
                     }
                 }
-                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)){
-                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
-                        JSESSIONIDCookie += ";pro-token="+pro_token+";";
-                    }else{
-                        JSESSIONIDCookie += "pro-token="+pro_token+";";
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";pro-token=" + pro_token + ";";
+                    } else {
+                        JSESSIONIDCookie += "pro-token=" + pro_token + ";";
                     }
                 }
-                if(JSESSIONIDCookie != null && !TextUtils.isEmpty(ws_token)){
-                    if(JSESSIONIDCookie.lastIndexOf(";") == -1){
-                        JSESSIONIDCookie += ";ws-token="+ws_token+";";
-                    }else{
-                        JSESSIONIDCookie += "ws-token="+ws_token+";";
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";token=" + future_token + ";";
+                    } else {
+                        JSESSIONIDCookie += "token=" + future_token + ";";
+                    }
+                }
+                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ws_token)) {
+                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                        JSESSIONIDCookie += ";ws-token=" + ws_token + ";";
+                    } else {
+                        JSESSIONIDCookie += "ws-token=" + ws_token + ";";
                     }
                 }
                 if (JSESSIONIDCookie != null) {
@@ -276,7 +284,7 @@ public class ApiManagerImpl {
                             cookie = cookie.substring(0, cookie.length() - 1);
                         }
                         JSESSIONIDCookie = cookie;
-                        HttpCookieUtil.saveJsessionId(context,JSESSIONIDCookie);
+                        HttpCookieUtil.saveJsessionId(context, JSESSIONIDCookie);
                     }
                 }
                 Log.d(TAG, "fullUrl：" + request.url());

@@ -191,6 +191,7 @@ object UrlConfig {
 
         //身份认证-绑定
         const val URL_PHONE_SECURITY = "user/security/phone"
+
         //手机号修改认证
         const val URL_IDENTITY_BIND = "user/identity/auth"
 
@@ -524,6 +525,11 @@ object UrlConfig {
         const val URL_ACCOUNT_INFO = "user/v1/account/info"
 
         const val URL_LOGIN = "user/v1/user/login"
+
+        const val URL_POSITION_LIST = "user/v1/position/list";
+
+        const val URL_OPEN_ACCOUNT = "user/v1/account/open";
+
     }
 
 

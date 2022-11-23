@@ -531,7 +531,7 @@ object SocketDataContainer {
             }
 
             override fun callback(returnData: C2CPrice?) {
-                Log.d(TAG,"computePairStatusCNY->C2CPrice"+returnData?.buy)
+//                Log.d(TAG,"computePairStatusCNY->C2CPrice"+returnData?.buy)
                 onGetC2CPriceComplete(returnData)
             }
 
@@ -821,7 +821,7 @@ object SocketDataContainer {
                 ConstData.HOME_TAB_HOT ->{
                     for (i in initPairStatus?.indices!!) {
                         val pairStatus = initPairStatus[i]
-                        Log.d(TAG,"hot = "+pairStatus?.hot)
+//                        Log.d(TAG,"hot = "+pairStatus?.hot)
                         if (pairStatus?.hot != null && pairStatus.hot!!) {
                             result.add(pairStatus)
                         }

@@ -394,6 +394,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 user!!.ticket = ticket
                             }
                             getProToken(mContext)
+                            getFutureToken(mContext)
                         }
                     } else {
                         FryingUtil.showToast(
@@ -404,6 +405,28 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
             })
     }
+
+    /**
+     *
+     */
+    private fun getFutureToken(context: Context) {
+        FutureApiServiceHelper.getFutureToken(context!!, false,
+            object : Callback<HttpRequestResultBean<String?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->getFutureToken", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String?>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->getFutureToken", returnData.toString());
+                        var token = returnData.result
+                        HttpCookieUtil.saveFutureToken(context, token)
+                    }
+                }
+
+            })
+    }
+
 
     //获取pro-token
     private fun getProToken(context: Context) {

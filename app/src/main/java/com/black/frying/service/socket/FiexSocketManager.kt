@@ -462,7 +462,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "tickerStatus->onMessage = $message")
+//            Log.d(tag, "tickerStatus->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -474,15 +474,15 @@ class FiexSocketManager(context: Context, handler: Handler) {
             }
             if (data != null) {
                 var resType = data.getString("resType")
-                Log.d(tag, "tickerStatus->resType = $resType")
-                Log.d(tag, "tickerStatus->data = " + data.getString("data"))
+//                Log.d(tag, "tickerStatus->resType = $resType")
+//                Log.d(tag, "tickerStatus->data = " + data.getString("data"))
                 when (resType) {
                     "qStats" -> {
                         var result = data.getString("data")
                         var pairQuo: PairStatusNew? = null
                         try {
                             val jsonObject: JsonObject = JsonParser().parse(result) as JsonObject
-                            Log.d(tag, "tickerStatus->jsonObject = $jsonObject")
+//                            Log.d(tag, "tickerStatus->jsonObject = $jsonObject")
                             pairQuo = gson.fromJson<PairStatusNew?>(
                                 jsonObject.toString(),
                                 object : TypeToken<PairStatusNew?>() {}.type
@@ -589,9 +589,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 data = JSONObject(message)
                 if (data != null) {
                     var resType = data.getString("resType")
-                    Log.d(tag, "subStatus->resType = $resType")
+//                    Log.d(tag, "subStatus->resType = $resType")
                     var resultData = data.getString("data")
-                    Log.d(tag, "subStatus->data = $resultData")
+//                    Log.d(tag, "subStatus->data = $resultData")
                     val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
                     when (resType) {
                         //50挡深度
@@ -633,7 +633,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         }
                         //当前交易对成交数据
                         "qDeal" -> {
-                            Log.d(tag, "qDeal->data = $resultData")
+//                            Log.d(tag, "qDeal->data = $resultData")
                             val pairDeal: PairDeal? = gson.fromJson<PairDeal?>(
                                 jsonObject.toString(),
                                 object : TypeToken<PairDeal??>() {}.type

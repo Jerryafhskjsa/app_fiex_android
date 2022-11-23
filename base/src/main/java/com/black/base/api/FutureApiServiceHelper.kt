@@ -146,7 +146,7 @@ object FutureApiServiceHelper {
     /**
      * 用户登录
      */
-    fun login(
+    fun getFutureToken(
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String?>?>?
@@ -160,5 +160,42 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    /**
+     * 用户开通合约
+     */
+    fun openAccount(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.openAccount()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取用户持仓
+     */
+    fun getPositionList(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getPositionList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
 
 }

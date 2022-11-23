@@ -51,6 +51,7 @@ import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
+import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
@@ -239,6 +240,7 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.onResume()
         getTradeOrderCurrent()
         updateDear(isDear)
+        FutureService.getAccountInfo(mContext);
     }
 
     private fun updateDear(dear: Boolean?) {

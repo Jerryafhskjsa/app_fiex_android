@@ -4,11 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.future.DepthBean
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.SymbolBean
+import com.black.base.model.future.*
 import com.black.frying.model.OrderItem
+import com.black.net.HttpCookieUtil
 import com.black.util.Callback
 import io.reactivex.Observable
 import java.math.BigDecimal
@@ -127,7 +125,7 @@ object FutureService {
                                 //计算出每个订单的USDT数量
                                 var quantity =
                                     BigDecimal(count).multiply(BigDecimal(contractSize.toString()))
-                                        .multiply(BigDecimal(markPrice?.p))
+//                                        .multiply(BigDecimal(markPrice?.p))
                                 t = t.toBigDecimal().add(quantity).toDouble()
                                 var orderBean =
                                     price?.let {
@@ -148,7 +146,7 @@ object FutureService {
                                 var count = sell?.get(1)
                                 var quantity =
                                     BigDecimal(count).multiply(BigDecimal(contractSize.toString()))
-                                        .multiply(BigDecimal(markPrice?.p))
+//                                        .multiply(BigDecimal(markPrice?.p))
 
                                 t = t.toBigDecimal().add(quantity).toDouble()
                                 var orderBean =
@@ -172,5 +170,32 @@ object FutureService {
             })
     }
 
+    fun getAccountInfo(context: Context?){
+        FutureApiServiceHelper.getFutureToken(context!!, false,
+            object : Callback<HttpRequestResultBean<String?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->getFutureToken", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String?>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->getFutureToken", returnData.toString());
+                        var token = returnData.result
+                        HttpCookieUtil.saveFutureToken(context, token)
+                    }
+                }
+            })
+        FutureApiServiceHelper.getAccountInfo(context,false,
+            object :Callback<HttpRequestResultBean<AccountInfoBean?>?>(){
+            override fun error(type: Int, error: Any?) {
+                Log.d("ttttttt-->error", error.toString());
+            }
+
+            override fun callback(returnData: HttpRequestResultBean<AccountInfoBean?>?) {
+                Log.d("ttttttt-->account", returnData.toString());
+            }
+
+        })
+    }
 
 }

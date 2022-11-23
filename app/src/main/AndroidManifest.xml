@@ -40,7 +40,7 @@
             android:value="fbsex_jie" />
 
         <activity
-            android:name="com.black.frying.activity.TestActivity"
+            android:name="com.black.frying.activity.StartPageActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/app_name"
