@@ -213,6 +213,28 @@ object CookieUtil {
     }
 
     /**
+     * 获取当前U本位交易对
+     *
+     * @param context
+     * @return
+     */
+    fun getCurrentFutureUPair(context: Context): String? {
+        return getSharedPreferences(context).getString(ConstData.CURRENT_FUTURE_U_PAIR, null)
+    }
+
+    /**
+     * 保存当前U本位交易对
+     *
+     * @param context
+     * @param pair
+     * @return
+     */
+    fun setCurrentFutureUPair(context: Context, pair: String?) {
+        getSharedPreferences(context).edit().putString(ConstData.CURRENT_FUTURE_U_PAIR, pair).apply()
+    }
+
+
+    /**
      * 获取当前杠杆交易对
      *
      * @param context

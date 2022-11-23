@@ -12,6 +12,10 @@ object ConstData {
     }
 
 
+    const val DEPTH_SPOT_TYPE = 0
+    const val DEPTH_CONTRACT_U_TYPE = 1
+    const val DEPTH_CONTRACT_COIN_TYPE = 2
+
     const val CONTRACT_REC_HOLD_AMOUNT = 0
     const val CONTRACT_REC_WITH_LIMIE = 1
     const val CONTRACT_REC_CURRENT = 2
@@ -124,6 +128,7 @@ object ConstData {
     const val GESTURE_PASSWORD = "gesture_password"
     const val GESTURE_PASSWORD_FAILED_COUNT = "gesture_password_failed_count"
     const val CURRENT_PAIR = "current_pair"
+    const val CURRENT_FUTURE_U_PAIR = "current_future_u_pair"
     const val CURRENT_PAIR_LEVER = "current_pair_lever"
     const val REQUEST_CAMERA = "request_camera"
     const val REQUEST_STORAGE = "request_storage"

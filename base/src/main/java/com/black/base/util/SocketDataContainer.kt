@@ -60,6 +60,11 @@ object SocketDataContainer {
     private val lastGetTimeMap = SparseArray<Long>()
     private val c2CPrice: C2CPrice? = null
 
+    //所有u本位交易对
+    private val pairFutureUDataList: ArrayList<PairStatus?> = ArrayList()
+    //所有u本位交易对Map缓存
+    private val allFutureUPairStatusMap: MutableMap<String, PairStatus> = HashMap()
+
     //所有现货交易对
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
 
@@ -70,12 +75,17 @@ object SocketDataContainer {
     private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
 
+    //行情U本位交易对socket更新数据缓存
+    private val pairFutureUDataSource: MutableMap<String, PairStatusNew> = HashMap()
+
     //行情交易对socket更新数据缓存
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
     //自选交易对缓存数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
     //所有交易对信息观察者
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
+    //所有U本位交易对信息观察者
+    private val pairFutureUObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
     //委托
     private val orderDataList = ArrayList<QuotationOrderNew?>()
     private val orderObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
@@ -228,6 +238,26 @@ object SocketDataContainer {
             return
         }
         synchronized(pairObservers) { pairObservers.remove(observer) }
+    }
+
+    //添加u本位交易对观察者
+    fun subscribeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(pairFutureUObservers) {
+            if (!pairFutureUObservers.contains(observer)) {
+                pairFutureUObservers.add(observer)
+            }
+        }
+    }
+
+    //移除u本位交易对观察者
+    fun removeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(pairFutureUObservers) { pairFutureUObservers.remove(observer) }
     }
 
     //添加委托观察者
@@ -521,6 +551,49 @@ object SocketDataContainer {
      *
      * @param context
      */
+    private fun computeFutureUPairStatusCNY(context: Context?) {
+        if (context == null) {
+            return
+        }
+        C2CApiServiceHelper.getC2CPrice(context, object : Callback<C2CPrice?>() {
+            override fun error(type: Int, error: Any) {
+                onGetC2CPriceComplete(null)
+            }
+
+            override fun callback(returnData: C2CPrice?) {
+                Log.d(TAG,"computePairStatusCNY->C2CPrice"+returnData?.buy)
+                onGetC2CPriceComplete(returnData)
+            }
+
+            private fun onGetC2CPriceComplete(price: C2CPrice?) {
+                Observable.create<String> { e ->
+                    e.onNext(reallyUpdateFutureUPairStatusData(price))
+                    e.onComplete()
+                }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(object : SuccessObserver<String?>() {
+                        override fun onSuccess(value: String?) {
+                            synchronized(pairFutureUObservers) {
+                                for (observer in pairFutureUObservers) {
+                                    var updateData:ArrayList<PairStatus?> = gson.fromJson(value, object : TypeToken<ArrayList<PairStatus?>?>() {}.type)
+                                    if(updateData.isNotEmpty()){
+                                        Log.d(TAG,"send update dataSize = "+updateData.size)
+                                        observer.onNext(updateData)
+                                    }
+                                }
+                            }
+                        }
+                    })
+            }
+        })
+    }
+
+    /**
+     * 计算coinType对应的cny价格,并赋值到交易对数据bean
+     *
+     * @param context
+     */
     private fun computePairStatusCNY(context: Context?) {
         if (context == null) {
             return
@@ -559,6 +632,39 @@ object SocketDataContainer {
         })
     }
 
+    private fun reallyUpdateFutureUPairStatusData(price: C2CPrice?): String {
+        val result = ArrayList<PairStatus>()
+        synchronized(pairFutureUDataSource) {
+            synchronized(dearPairMap) {
+                synchronized(pairFutureUDataList!!) {
+                    if (pairFutureUDataList.isEmpty()) {
+                        return gson.toJson(result)
+                    }
+                    refreshAllPairStatus(pairFutureUDataList)
+                    for (pairStatus in pairFutureUDataList) {
+                        if (pairStatus == null) {
+                            continue
+                        }
+                        val oldPairCompareKey = pairStatus.compareString
+                        val dataSource = pairFutureUDataSource[pairStatus.pair]
+                        dataSource?.copyValues(pairStatus)
+                        val isDear = dearPairMap[pairStatus.pair]
+                        pairStatus.is_dear = isDear ?: false
+                        if (price != null) { //计算折合CNY
+                            pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
+                        }
+                        val newPairCompareKey = pairStatus.compareString
+                        if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
+                            Log.d(TAG,"updatePairStatusData1,addChange")
+                            result.add(pairStatus)
+                        }
+                    }
+                }
+            }
+        }
+        return gson.toJson(result)
+    }
+
     private fun reallyUpdatePairStatusData(price: C2CPrice?): String {
         val result = ArrayList<PairStatus>()
         synchronized(pairDataSource) {
@@ -591,6 +697,34 @@ object SocketDataContainer {
         }
         return gson.toJson(result)
     }
+
+    fun initAllFutureUsdtPairStatusData(context: Context?) {
+        if (context == null) {
+            return
+        }
+        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(context)
+        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
+            synchronized(pairFutureUDataList!!) {
+                pairFutureUDataList.clear()
+                pairFutureUDataList.addAll(pairStatuses)
+                Collections.sort(pairFutureUDataList, PairStatus.COMPARATOR)
+                synchronized(allFutureUPairStatusMap!!) {
+                    allFutureUPairStatusMap.clear()
+                        for (pairStatus in pairStatuses) {
+                            pairStatus.pair?.let {
+                                allFutureUPairStatusMap[it] = pairStatus
+                            }
+                        }
+                }
+            }
+            ""
+        }?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : SuccessObserver<String?>() {
+            override fun onSuccess(s: String?) {
+                computeFutureUPairStatusCNY(context)
+            }
+        })
+    }
+
 
     fun initAllPairStatusData(context: Context?) {
         if (context == null) {
@@ -1097,13 +1231,13 @@ object SocketDataContainer {
         }
     }
 
-    fun updateQuotationOrderNewDataFiex(context: Context?, handler: Handler?, currentPair: String?, tradeOrderDepth: TradeOrderDepth?, isRemoveAll: Boolean) {
+    fun updateQuotationOrderNewDataFiex(context: Context?,depthType:Int?, handler: Handler?, currentPair: String?, tradeOrderDepth: TradeOrderDepth?, isRemoveAll: Boolean) {
         CommonUtil.postHandleTask(handler) {
             Observable.create<String>(ObservableOnSubscribe { emitter ->
                 if (tradeOrderDepth == null) {
                     emitter.onComplete()
                 } else {
-                    var tradeOrderPairList  = parseOrderDepthData(tradeOrderDepth)
+                    var tradeOrderPairList  = parseOrderDepthData(depthType,tradeOrderDepth)
                     var orderDepthData = tradeOrderPairList?.let { parseOrderDepthToList(it) }
                     synchronized(orderDataList) {
                         if (isRemoveAll) {
@@ -1183,8 +1317,9 @@ object SocketDataContainer {
 
     /**
      * 请求得到的数据转换成TradeOrderPairList
+     * type 0现货 1 u本位合约 2币本位合约
      */
-    fun parseOrderDepthData(depth: TradeOrderDepth):TradeOrderPairList?{
+    fun parseOrderDepthData(type:Int?,depth: TradeOrderDepth):TradeOrderPairList?{
         var pairListData = TradeOrderPairList()
         var askOrderList = ArrayList<TradeOrder?>()
         var bidOrderList = ArrayList<TradeOrder?>()
@@ -1195,10 +1330,21 @@ object SocketDataContainer {
         if (bidArray != null) {
             for(bidItem in bidArray){
                 var tradeOrder = TradeOrder()
-                tradeOrder.price = bidItem[0]
-                tradeOrder.priceString = bidItem[0].toString()
+                //价格
+                var price = bidItem?.get(0)?.toDouble()
+                //张数/数量
+                var count = bidItem?.get(1)?.toDouble()
+                tradeOrder.price = price
+                tradeOrder.priceString = bidItem?.get(0)
                 tradeOrder.orderType = "BID"
-                tradeOrder.exchangeAmount = bidItem[1]!!
+                if(type == ConstData.DEPTH_SPOT_TYPE){
+                    tradeOrder.exchangeAmount = count!!
+                }
+                if(type == ConstData.DEPTH_CONTRACT_U_TYPE){
+                    //计算出每个订单的USDT数量
+//                    var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
+//                    tradeOrder.exchangeAmount = quantity?.toDouble()
+                }
                 tradeOrder.direction = "BID"
                 tradeOrder.pair = pair
                 bidOrderList.add(tradeOrder)
@@ -1208,10 +1354,10 @@ object SocketDataContainer {
         if (askArray != null) {
             for(askItem in askArray){
                 var tradeOrder = TradeOrder()
-                tradeOrder.price = askItem[0]
-                tradeOrder.priceString = askItem[0].toString()
+                tradeOrder.price = askItem?.get(0)?.toDouble()
+                tradeOrder.priceString = askItem?.get(0)
                 tradeOrder.orderType = "ASK"
-                tradeOrder.exchangeAmount = askItem[1]!!
+                tradeOrder.exchangeAmount = askItem?.get(1)?.toDouble()!!
                 tradeOrder.direction = "ASK"
                 tradeOrder.pair = pair
                 askOrderList.add(tradeOrder)

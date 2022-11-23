@@ -112,6 +112,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
         //获取所有交易对数据并缓存
         SocketDataContainer.initAllPairStatusData(this)
+        //获取所有u本位交易对数据并缓存
+        SocketDataContainer.initAllFutureUsdtPairStatusData(this)
         checkUpdate(true)
     }
 

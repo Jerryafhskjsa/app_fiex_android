@@ -603,6 +603,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                             if(allDepth != null){
                                 SocketDataContainer.updateQuotationOrderNewDataFiex(
                                     mCcontext,
+                                    ConstData.DEPTH_SPOT_TYPE,
                                     mHandler,
                                     currentPair,
                                     allDepth,
@@ -618,7 +619,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                             if(oneDepth != null){
                                 var allDepthData = TradeOrderDepth()
                                 var direction = oneDepth?.m
-                                var desArray = arrayOf(oneDepth?.p?.toDouble(), oneDepth?.q?.toDouble())
+                                var desArray:Array<String?>? = arrayOf(oneDepth?.p, oneDepth?.q)
                                 if (direction.equals("1")) {//BID
                                     var bidArray = arrayOf(desArray)
                                     allDepthData?.b = bidArray

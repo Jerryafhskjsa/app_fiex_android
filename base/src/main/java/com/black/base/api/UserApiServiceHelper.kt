@@ -60,6 +60,14 @@ object UserApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context,callback))
     }
 
+    //获取futures-token
+    fun getFutureToken(context: Context,callback:Callback<HttpRequestResultString?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+            ?.getWsToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
     fun upload(context: Context?, key: String, file: File, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return

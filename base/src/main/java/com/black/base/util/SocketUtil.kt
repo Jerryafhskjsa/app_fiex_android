@@ -72,7 +72,7 @@ object SocketUtil {
     /***fiex***/
     const val COMMAND_REMOVE_SOCKET_LISTENER = 100//结束socket监听
     const val COMMAND_ADD_SOCKET_LISTENER = 101//开始socket监听
-    const val COMMAND_REFRESH_TOKEN = 102//refresh token
+    const val COMMAND_FUTURE_U_PAIR_CHANGED = 102 //u本位合约交易对发生改变
     /***fiex***/
     //上次保存数据时间记录
     private val lastSaveTimeMap = SparseArray<Long>()
@@ -1025,6 +1025,10 @@ object SocketUtil {
 
     fun notifyPairChanged(context: Context?) {
         sendSocketCommandBroadcast(context, COMMAND_PAIR_CHANGED)
+    }
+
+    fun notifyFutureUPairChanged(context: Context?) {
+        sendSocketCommandBroadcast(context, COMMAND_FUTURE_U_PAIR_CHANGED)
     }
 
     //发送数据更新通知

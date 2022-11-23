@@ -113,10 +113,6 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
         }
     }
 
-    fun updateCurrentPrice(){
-
-    }
-
     fun setOnTransactionDeepListener(onTransactionDeepListener: OnTransactionDeepListener?) {
         this.onTransactionDeepListener = onTransactionDeepListener
     }

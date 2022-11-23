@@ -480,7 +480,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         TradeApiServiceHelper.getTradeOrderDepth(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultData<TradeOrderDepth?>?>() {
             override fun callback(returnData: HttpRequestResultData<TradeOrderDepth?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    tradeOrderDepthPair = returnData.data?.let { SocketDataContainer.parseOrderDepthData(it) }
+                    tradeOrderDepthPair = returnData.data?.let { SocketDataContainer.parseOrderDepthData(ConstData.DEPTH_CONTRACT_U_TYPE,it) }
                     singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
                     getAllOrderFiex()
                 }
