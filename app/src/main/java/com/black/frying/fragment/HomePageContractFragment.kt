@@ -240,7 +240,7 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.onResume()
         getTradeOrderCurrent()
         updateDear(isDear)
-        FutureService.getAccountInfo(mContext);
+        FutureService.getOrderPosition(mContext);
     }
 
     private fun updateDear(dear: Boolean?) {

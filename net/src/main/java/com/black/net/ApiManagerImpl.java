@@ -129,182 +129,173 @@ public class ApiManagerImpl {
                 }
             }
         });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        Interceptor headerInterceptor = new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
+        Interceptor headerInterceptor = chain -> {
 
-                String ucToken = HttpCookieUtil.getUcToken(context);
-                String ticket = HttpCookieUtil.getTicket(context);
-                String trade_token = HttpCookieUtil.getTradeToken(context);
-                String pro_token = HttpCookieUtil.getProToken(context);
-                String future_token = HttpCookieUtil.geFutureToken(context);
-                String ws_token = HttpCookieUtil.getWsToken(context);
+            String ucToken1 = HttpCookieUtil.getUcToken(context);
+            String ticket = HttpCookieUtil.getTicket(context);
+            String trade_token = HttpCookieUtil.getTradeToken(context);
+            String pro_token = HttpCookieUtil.getProToken(context);
+            String future_token = HttpCookieUtil.geFutureToken(context);
+            String ws_token = HttpCookieUtil.getWsToken(context);
 
-                Request original = chain.request();
-                Request.Builder requestBuilder = original.newBuilder();
-                requestBuilder
-                        .header("charset", "UTF-8")
+            Request original = chain.request();
+            Request.Builder requestBuilder = original.newBuilder();
+            requestBuilder
+                    .header("charset", "UTF-8")
 //                        .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                        .header("Accept", "application/json")
-                        .header("User-Agent", getUserAgent(context))
-                        .header("ASI-UUID", deviceId)
-                        .header("platform", "Android")
+                    .header("Accept", "application/json")
+                    .header("User-Agent", getUserAgent(context))
+                    .header("ASI-UUID", deviceId)
+                    .header("platform", "Android")
 //                        .header("lang", lang)
-                        .header("Client-Type", "Android")
+                    .header("Client-Type", "Android")
 //                        .header("Accept-Language", "Android")
 //                        .header("platform", "Android")
 //                        .addHeader("cookie", "lang=" + lang)
-                        .header("Authorization", ucToken == null ? "" : ucToken)
+                    .header("Authorization", ucToken1 == null ? "" : ucToken1)
 //                        .header("Authorization-uc", ucToken == null ? "" : ucToken)
 //                        .header("Authorization-pro", pro_token == null ? "" : pro_token)
 //                        .header("Authorization-ft", "")
-                        .header("Accept-Encoding", "gzip, deflate")
-                        .header("Cache-Control", "no-cache");
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("Cache-Control", "no-cache");
 
-                JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";uc-token=" + ucToken + ";";
-                    } else {
-                        JSESSIONIDCookie += "uc-token=" + ucToken + ";";
-                    }
+            JSESSIONIDCookie = HttpCookieUtil.getJsessionId(context);
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ucToken1)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";uc-token=" + ucToken1 + ";";
+                } else {
+                    JSESSIONIDCookie += "uc-token=" + ucToken1 + ";";
                 }
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";ticket=" + ticket + ";";
-                    } else {
-                        JSESSIONIDCookie += "ticket=" + ticket + ";";
-                    }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ticket)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";ticket=" + ticket + ";";
+                } else {
+                    JSESSIONIDCookie += "ticket=" + ticket + ";";
                 }
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";trade-token=" + trade_token + ";";
-                    } else {
-                        JSESSIONIDCookie += "trade-token=" + trade_token + ";";
-                    }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";trade-token=" + trade_token + ";";
+                } else {
+                    JSESSIONIDCookie += "trade-token=" + trade_token + ";";
                 }
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";pro-token=" + pro_token + ";";
-                    } else {
-                        JSESSIONIDCookie += "pro-token=" + pro_token + ";";
-                    }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(pro_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";pro-token=" + pro_token + ";";
+                } else {
+                    JSESSIONIDCookie += "pro-token=" + pro_token + ";";
                 }
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";token=" + future_token + ";";
-                    } else {
-                        JSESSIONIDCookie += "token=" + future_token + ";";
-                    }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";token=" + future_token + ";";
+                } else {
+                    JSESSIONIDCookie += "token=" + future_token + ";";
                 }
-                if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ws_token)) {
-                    if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                        JSESSIONIDCookie += ";ws-token=" + ws_token + ";";
-                    } else {
-                        JSESSIONIDCookie += "ws-token=" + ws_token + ";";
-                    }
+                requestBuilder.addHeader("Authorization-ft", future_token);
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(ws_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";ws-token=" + ws_token + ";";
+                } else {
+                    JSESSIONIDCookie += "ws-token=" + ws_token + ";";
                 }
-                if (JSESSIONIDCookie != null) {
-                    requestBuilder.addHeader("Cookie", JSESSIONIDCookie);
-                    requestBuilder.addHeader("cookie", JSESSIONIDCookie);
+            }
+            if (JSESSIONIDCookie != null) {
+                requestBuilder.addHeader("Cookie", JSESSIONIDCookie);
+//                requestBuilder.addHeader("cookie", JSESSIONIDCookie);
+            }
+            if (apiCookieHelper != null && apiCookieHelper.useGlobalCookie(original)) {
+                if (globalCookie != null) {
+                    requestBuilder.addHeader("Cookie", globalCookie);
+                    requestBuilder.addHeader("cookie", globalCookie);
                 }
-                if (apiCookieHelper != null && apiCookieHelper.useGlobalCookie(original)) {
-                    if (globalCookie != null) {
-                        requestBuilder.addHeader("Cookie", globalCookie);
-                        requestBuilder.addHeader("cookie", globalCookie);
-                    }
-                }
-//                String fullUrl = original.url().toString();
-//                if (fullUrl.endsWith("foundation/addFoundationOrder")) {
-//                    if (globalCookie != null) {
-//                        requestBuilder.addHeader("Cookie", globalCookie);
-//                        requestBuilder.addHeader("cookie", globalCookie);
-//                    }
-//                }
-                Request request = requestBuilder.method(original.method(), original.body()).build();
-                RequestBody requestBody = request.body();
-                if (requestBody != null) {
-                    Buffer buffer = new Buffer();
-                    requestBody.writeTo(buffer);
+            }
 
-                    Charset charset = Charset.forName("UTF-8");
-                    MediaType contentType = requestBody.contentType();
-                    if (contentType != null) {
-                        charset = contentType.charset(Charset.forName("UTF-8"));
-                    }
+            Request request = requestBuilder.method(original.method(), original.body()).build();
+            RequestBody requestBody = request.body();
+            if (requestBody != null) {
+                Buffer buffer = new Buffer();
+                requestBody.writeTo(buffer);
+
+                Charset charset = Charset.forName("UTF-8");
+                MediaType contentType = requestBody.contentType();
+                if (contentType != null) {
+                    charset = contentType.charset(Charset.forName("UTF-8"));
                 }
-                Response response = chain.proceed(request);
-                List<String> cookies = response.headers("Set-Cookie");
-                if (JSESSIONIDCookie == null && !cookies.isEmpty()) {
-                    Map<String, String> allParam = new HashMap<>();
-                    for (String key : cookies) {
-                        //只取我们需要的那一段cookie
+            }
+            Response response = chain.proceed(request);
+            List<String> cookies = response.headers("Set-Cookie");
+            if (JSESSIONIDCookie == null && !cookies.isEmpty()) {
+                Map<String, String> allParam = new HashMap<>();
+                for (String key : cookies) {
+                    //只取我们需要的那一段cookie
 //                        String compareKey = key == null ? null : key.toUpperCase();
 //                        if (compareKey != null && compareKey.contains("HTTPONLY") && compareKey.contains("JSESSIONID")) {
 //                            JSESSIONIDCookie = key;
 //                            break;
 //                        }
-                        Map<String, String> param = getParam(key);
+                    Map<String, String> param = getParam(key);
 //                        Log.e("interceptor", "set key：" + key);
 //                        Log.e("interceptor", "set param：" + param);
-                        if (param != null) {
-                            allParam.putAll(param);
-                        }
+                    if (param != null) {
+                        allParam.putAll(param);
                     }
-                    // Log.e("interceptor", "set allParam：" + allParam);
-                    String __cdnuid = allParam.get("__cdnuid");
-                    String AWSALB = allParam.get("AWSALB");
-                    String __cdnuid_h = allParam.get("__cdnuid_h");
-                    String __cdnuid_s = allParam.get("__cdnuid_s");
-                    String JSESSIONID = allParam.get("JSESSIONID");
-                    String SERVERID = allParam.get("SERVERID");
+                }
+                // Log.e("interceptor", "set allParam：" + allParam);
+                String __cdnuid = allParam.get("__cdnuid");
+                String AWSALB = allParam.get("AWSALB");
+                String __cdnuid_h = allParam.get("__cdnuid_h");
+                String __cdnuid_s = allParam.get("__cdnuid_s");
+                String JSESSIONID = allParam.get("JSESSIONID");
+                String SERVERID = allParam.get("SERVERID");
+                if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
+                    String cookie = "";
+                    if (AWSALB != null && AWSALB.trim().length() > 0) {
+                        cookie += "AWSALB=" + AWSALB + ";";
+                    }
+                    if (__cdnuid_h != null && __cdnuid_h.trim().length() > 0) {
+                        cookie += "__cdnuid_h=" + __cdnuid_h + ";";
+                    }
+                    if (__cdnuid_s != null && __cdnuid_s.trim().length() > 0) {
+                        cookie += "__cdnuid_s=" + __cdnuid_s + ";";
+                    }
+                    if (__cdnuid != null && __cdnuid.trim().length() > 0) {
+                        cookie += "__cdnuid=" + __cdnuid + ";";
+                    }
                     if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
-                        String cookie = "";
-                        if (AWSALB != null && AWSALB.trim().length() > 0) {
-                            cookie += "AWSALB=" + AWSALB + ";";
-                        }
-                        if (__cdnuid_h != null && __cdnuid_h.trim().length() > 0) {
-                            cookie += "__cdnuid_h=" + __cdnuid_h + ";";
-                        }
-                        if (__cdnuid_s != null && __cdnuid_s.trim().length() > 0) {
-                            cookie += "__cdnuid_s=" + __cdnuid_s + ";";
-                        }
-                        if (__cdnuid != null && __cdnuid.trim().length() > 0) {
-                            cookie += "__cdnuid=" + __cdnuid + ";";
-                        }
-                        if (JSESSIONID != null && JSESSIONID.trim().length() > 0) {
-                            cookie += "JSESSIONID=" + JSESSIONID + ";";
-                        }
-                        if (SERVERID != null && SERVERID.trim().length() > 0) {
-                            cookie += "SERVERID=" + SERVERID + ";";
-                        }
-                        if (cookie.length() > 0 && cookie.charAt(cookie.length() - 1) == ';') {
-                            cookie = cookie.substring(0, cookie.length() - 1);
-                        }
-                        JSESSIONIDCookie = cookie;
-                        HttpCookieUtil.saveJsessionId(context, JSESSIONIDCookie);
+                        cookie += "JSESSIONID=" + JSESSIONID + ";";
                     }
+                    if (SERVERID != null && SERVERID.trim().length() > 0) {
+                        cookie += "SERVERID=" + SERVERID + ";";
+                    }
+                    if (cookie.length() > 0 && cookie.charAt(cookie.length() - 1) == ';') {
+                        cookie = cookie.substring(0, cookie.length() - 1);
+                    }
+                    JSESSIONIDCookie = cookie;
+                    HttpCookieUtil.saveJsessionId(context, JSESSIONIDCookie);
                 }
-                Log.d(TAG, "fullUrl：" + request.url());
-                // Log.e("interceptor", "JSESSIONIDCookie：" + JSESSIONIDCookie);
-                if (apiCookieHelper != null && apiCookieHelper.canSaveGlobalCookie(original)) {
-                    globalCookie = JSESSIONIDCookie;
-                }
+            }
+            // Log.e("interceptor", "JSESSIONIDCookie：" + JSESSIONIDCookie);
+            if (apiCookieHelper != null && apiCookieHelper.canSaveGlobalCookie(original)) {
+                globalCookie = JSESSIONIDCookie;
+            }
 //                if (fullUrl.endsWith("gt/init")) {
 //                    globalCookie = JSESSIONIDCookie;
 //                }
 //                response = chain.proceed(request);
-                return response;
-            }
+            return response;
         };
         //头部参数拦截
         builder.addNetworkInterceptor(headerInterceptor);
         //日志拦截
-        if (Util.isApkInDebug(context)) {
-            builder.addInterceptor(loggingInterceptor);
-        }
+//        if (Util.isApkInDebug(context)) {
+        builder.addInterceptor(loggingInterceptor);
+//        }
         builder.addInterceptor(new SelfInterceptor(builder, interceptHelper));
 
 //        builder.addInterceptor(new CookieReadInterceptor(context));

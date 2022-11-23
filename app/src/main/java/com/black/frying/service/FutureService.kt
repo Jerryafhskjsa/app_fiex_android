@@ -170,32 +170,48 @@ object FutureService {
             })
     }
 
-    fun getAccountInfo(context: Context?){
-        FutureApiServiceHelper.getFutureToken(context!!, false,
-            object : Callback<HttpRequestResultBean<String?>?>() {
+    fun getAccountInfo(context: Context?) {
+        FutureApiServiceHelper.getAccountInfo(context, false,
+            object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("ttttttt-->getFutureToken", error.toString());
+                    Log.d("ttttttt-->error", error.toString());
                 }
 
-                override fun callback(returnData: HttpRequestResultBean<String?>?) {
+                override fun callback(returnData: HttpRequestResultBean<AccountInfoBean?>?) {
+                    Log.d("ttttttt-->account", returnData.toString());
+                }
+
+            })
+    }
+
+    /**
+     * 持仓接口:/futures/fapi/user/v1/position/list
+     * 持仓/可平：positionSize/availableCloseSize 单位:张；
+     *仓位保证金：逐仓（isolatedMargin）,全仓（根据标记价格实时计算）;
+     *开仓均价：entryPrice;
+     *浮动盈亏/收益率：根据标记价格实时计算；
+     *已实现盈亏:realizedProfit
+     *自动减仓：调用接口/futures/fapi/user/v1/position/adl
+     */
+    fun getOrderPosition(context: Context?) {
+        FutureApiServiceHelper.getPositionList(context, false,
+            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->error", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
-                        Log.d("ttttttt-->getFutureToken", returnData.toString());
-                        var token = returnData.result
-                        HttpCookieUtil.saveFutureToken(context, token)
+                        var positionList = returnData.result
+                        if (positionList != null) {
+                            for (positionBean in positionList) {
+                                Log.d("ttttttt-->account", positionBean.toString());
+                            }
+                        }
                     }
                 }
+
             })
-        FutureApiServiceHelper.getAccountInfo(context,false,
-            object :Callback<HttpRequestResultBean<AccountInfoBean?>?>(){
-            override fun error(type: Int, error: Any?) {
-                Log.d("ttttttt-->error", error.toString());
-            }
-
-            override fun callback(returnData: HttpRequestResultBean<AccountInfoBean?>?) {
-                Log.d("ttttttt-->account", returnData.toString());
-            }
-
-        })
     }
 
 }
