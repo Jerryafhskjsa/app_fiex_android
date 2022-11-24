@@ -27,16 +27,19 @@ class SocketService : Service() {
     }
 
     private val gson = Gson()
-    private var fiexSocketManager:FiexSocketManager? = null
+    private var fiexSocketManager: FiexSocketManager? = null
+    private var futureSocketManager: FutureSocketManager? = null
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
+    private var handlerFutureThread: HandlerThread? = null
     private var socketServerHandler: Handler? = null
+    private var socketFutureServerHandler: Handler? = null
     private val receiver = SocketCommandBroadcastReceiver()
     private val mHandler = Handler(Handler.Callback { msg ->
         when (msg.what) {
             //移除socket监听
-            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER ->{
+            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER -> {
                 var socketType: String? = null
                 if (msg.obj is Bundle) {
                     socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
@@ -44,7 +47,7 @@ class SocketService : Service() {
 //                fiexSocketManager?.removeListener(socketType)
             }
             //添加socket监听
-            SocketUtil.COMMAND_ADD_SOCKET_LISTENER ->{
+            SocketUtil.COMMAND_ADD_SOCKET_LISTENER -> {
                 var socketType: String? = null
                 if (msg.obj is Bundle) {
                     socketType = (msg.obj as Bundle).getString(SocketUtil.WS_TYPE)
@@ -64,13 +67,14 @@ class SocketService : Service() {
             SocketUtil.COMMAND_KTAB_CHANGED -> {
                 if (msg.obj is Bundle) {
                     fiexSocketManager?.kLineTimeStep = (msg.obj as Bundle).getString("timeStep")
-                    fiexSocketManager?.kLineTimeStepSecond = (msg.obj as Bundle).getLong("timeStepSecond")
+                    fiexSocketManager?.kLineTimeStepSecond =
+                        (msg.obj as Bundle).getLong("timeStepSecond")
                     fiexSocketManager?.kLineId = (msg.obj as Bundle).getString("kLineId")
                 }
                 fiexSocketManager?.startListenKLine()
             }
             SocketUtil.COMMAND_RECEIVE, SocketUtil.COMMAND_RESUME -> {
-               fiexSocketManager?.startConnectAll()
+                fiexSocketManager?.startConnectAll()
             }
             SocketUtil.COMMAND_PAUSE, SocketUtil.COMMAND_STOP -> {
                 fiexSocketManager?.stopConnectAll()
@@ -130,7 +134,6 @@ class SocketService : Service() {
     private val currentPair: String? = null
 
 
-
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -144,15 +147,24 @@ class SocketService : Service() {
         createErrorNotification()
         try {
             if (handlerThread == null) {
-                handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
+                handlerThread =
+                    HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
                 handlerThread?.start()
+            }
+            if (handlerFutureThread == null) {
+                handlerFutureThread =
+                    HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
+                handlerFutureThread?.start()
             }
             if (socketServerHandler == null) {
                 socketServerHandler = Handler(handlerThread?.looper)
             }
-
-            if(fiexSocketManager == null){
-                fiexSocketManager = FiexSocketManager(mContext!!,socketServerHandler!!)
+            if (socketFutureServerHandler == null) {
+                socketFutureServerHandler = Handler(handlerFutureThread?.looper)
+            }
+            if (fiexSocketManager == null) {
+                fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
+                futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
 //                fiexSocketManager?.startConnect()
             }
             if (qSocket == null) {
@@ -204,6 +216,10 @@ class SocketService : Service() {
             handlerThread?.quit()
             handlerThread = null
         }
+        if (handlerFutureThread != null) {
+            handlerFutureThread?.quit()
+            handlerFutureThread = null
+        }
         try {
             unregisterReceiver(receiver)
         } catch (ignored: Exception) {
@@ -231,7 +247,11 @@ class SocketService : Service() {
     private fun createErrorNotification() {
         val notification: Notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("socketServiceNotify", "socketService", NotificationManager.IMPORTANCE_LOW)
+            val channel = NotificationChannel(
+                "socketServiceNotify",
+                "socketService",
+                NotificationManager.IMPORTANCE_LOW
+            )
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
             notification = Notification.Builder(this, "socketServiceNotify").build()

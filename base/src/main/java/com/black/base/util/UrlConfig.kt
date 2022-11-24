@@ -49,7 +49,10 @@ object UrlConfig {
     private val SOCKET_HOSTS_FIEX = arrayOf(
         "ws://fiex.matchain.info/socket",//测试环境
         "wss://fiex.io/socket",//正式环境
+        "wss://fiex.io/ws/market",
+        "wss://fiex.io/ws/user"
     )
+
 
     fun getIndex(context: Context): Int {
         if (!CommonUtil.isApkInDebug(context)) {
@@ -60,6 +63,14 @@ object UrlConfig {
 
     fun getSocketHostFiex(context: Context): String {
         return SOCKET_HOSTS_FIEX[getIndex(context)]
+    }
+
+    fun getFutureMarketSocketUrl(): String {
+        return SOCKET_HOSTS_FIEX[2];
+    }
+
+    fun getFutureUserSocketUrl(): String {
+        return SOCKET_HOSTS_FIEX[3];
     }
 
     //币种图标
