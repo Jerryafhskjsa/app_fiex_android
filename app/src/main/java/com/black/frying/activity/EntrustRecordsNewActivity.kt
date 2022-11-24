@@ -232,7 +232,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                         useCinType = useCinType?.toUpperCase(Locale.getDefault()) ?: ""
                         useSet = useSet?.toUpperCase(Locale.getDefault()) ?: ""
                         val pair = useCinType + "_" + useSet
-                        SocketDataContainer.getPairStatus(mContext, pair, object : Callback<PairStatus?>() {
+                        SocketDataContainer.getPairStatus(mContext,ConstData.PairStatusType.SPOT, pair, object : Callback<PairStatus?>() {
                             override fun error(type: Int, error: Any) {
                                 FryingUtil.showToast(mContext, resources.getString(R.string.pair_error), FryingSingleToast.ERROR)
                             }

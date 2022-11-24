@@ -11,6 +11,12 @@ object ConstData {
         CONTRACT
     }
 
+    //当前pairStatus类型
+    enum class PairStatusType{
+        SPOT,
+        FUTURE_U,
+        FUTURE_COIN
+    }
 
     const val DEPTH_SPOT_TYPE = 0
     const val DEPTH_CONTRACT_U_TYPE = 1
@@ -129,6 +135,7 @@ object ConstData {
     const val GESTURE_PASSWORD_FAILED_COUNT = "gesture_password_failed_count"
     const val CURRENT_PAIR = "current_pair"
     const val CURRENT_FUTURE_U_PAIR = "current_future_u_pair"
+    const val CURRENT_FUTURE_U_PAIR_OBJ = "current_future_u_pair_obj"
     const val CURRENT_PAIR_LEVER = "current_pair_lever"
     const val REQUEST_CAMERA = "request_camera"
     const val REQUEST_STORAGE = "request_storage"
@@ -145,6 +152,7 @@ object ConstData {
     const val PAIR_SEARCH_HISTORY = "pair_search_history"
     const val COIN_SEARCH_HISTORY = "coin_search_history"
     const val LEVEL_TYPE = "level_type"
+    const val DEAR_PAIR_SP = "spot_dear_pair_sp"
     /*----------Pref KEys-------*/
 
     /*----------intent KEys-------*/

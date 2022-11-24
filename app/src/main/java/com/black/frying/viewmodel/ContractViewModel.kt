@@ -11,6 +11,7 @@ import android.util.Pair
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
+import com.black.base.model.future.DepthBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
@@ -97,15 +98,15 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
         SocketDataContainer.subscribePairDealObservable(pairDealObserver)
 
-        if (orderObserver == null) {
-            orderObserver = createOrderObserver()
-        }
-        SocketDataContainer.subscribeOrderObservable(orderObserver)
+//        if (orderObserver == null) {
+//            orderObserver = createOrderObserver()
+//        }
+//        SocketDataContainer.subscribeOrderObservable(orderObserver)
 
-        if (pairObserver == null) {
-            pairObserver = createPairObserver()
-        }
-        SocketDataContainer.subscribePairObservable(pairObserver)
+//        if (pairObserver == null) {
+//            pairObserver = createPairObserver()
+//        }
+//        SocketDataContainer.subscribePairObservable(pairObserver)
 
         if (userInfoObserver == null) {
             userInfoObserver = createUserInfoObserver()
@@ -149,12 +150,12 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
             SocketDataContainer.removeUserOrderObservable(userTradeOrderObserver)
         }
 
-        if (orderObserver != null) {
-            SocketDataContainer.removeOrderObservable(orderObserver)
-        }
-        if (pairObserver != null) {
-            SocketDataContainer.removePairObservable(pairObserver)
-        }
+//        if (orderObserver != null) {
+//            SocketDataContainer.removeOrderObservable(orderObserver)
+//        }
+//        if (pairObserver != null) {
+//            SocketDataContainer.removePairObservable(pairObserver)
+//        }
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
@@ -396,12 +397,12 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     fun getCurrentPairStatus(pair: String?) {
         currentPairStatus.pair = (pair)
         initPairCoinSet()
-        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, pair)
+        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U, pair)
         if (pairStatus != null) {
             currentPairStatus = pairStatus
             initPairCoinSet()
         } else {
-            SocketDataContainer.initAllPairStatusData(context)
+            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
         }
         onContractModelListener?.onPairStatusInit(pairStatus)
         resetPairStatus(pairStatus)
@@ -477,12 +478,22 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
      * 获取当前交易对深度
      */
     fun getCurrentPairDepth(level:Int){
-        TradeApiServiceHelper.getTradeOrderDepth(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultData<TradeOrderDepth?>?>() {
-            override fun callback(returnData: HttpRequestResultData<TradeOrderDepth?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    tradeOrderDepthPair = returnData.data?.let { SocketDataContainer.parseOrderDepthData(ConstData.DEPTH_CONTRACT_U_TYPE,it) }
-                    singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
-                    getAllOrderFiex()
+        FutureApiServiceHelper.getDepthData(context,currentPairStatus.pair,level,false,object : Callback<HttpRequestResultBean<DepthBean?>?>() {
+            override fun callback(returnData: HttpRequestResultBean<DepthBean?>?) {
+                if (returnData != null && returnData.returnCode == HttpRequestResult.SUCCESS) {
+                    var fDepth = returnData.result
+                    if(fDepth != null){
+                        var depth = TradeOrderDepth()
+                        depth.s = fDepth.s
+                        depth.a = fDepth.a
+                        depth.b = fDepth.b
+                        depth.t = fDepth.t
+                        depth.u = fDepth.u
+                        tradeOrderDepthPair = depth?.let { SocketDataContainer.parseOrderDepthData(context,ConstData.DEPTH_CONTRACT_U_TYPE,it) }
+                        singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
+                        getAllOrderFiex()
+                    }
+
                 }
             }
             override fun error(type: Int, error: Any?) {

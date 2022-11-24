@@ -247,7 +247,7 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                         computeScale = loanScale
                     } else {
                         //USDT 直接取出相应交易对计算价格
-                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, loanCoinType + "_" + coinType)
+                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext,ConstData.PairStatusType.SPOT, loanCoinType + "_" + coinType)
                         if (loanUsdtPairStatus != null) {
                             computeScale = if (loanScale == null || loanUsdtPairStatus.currentPrice == 0.0) null else loanScale / loanUsdtPairStatus.currentPrice
                         }
@@ -257,14 +257,14 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                         computeScale = loanScale
                     } else if (TextUtils.equals("USDT", loanCoinType)) {
                         //借入USDT 直接取出相应交易对计算价格
-                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, coinType + "_" + loanCoinType)
+                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, ConstData.PairStatusType.SPOT,coinType + "_" + loanCoinType)
                         if (mortgageUsdtPairStatus != null) {
                             computeScale = if (loanScale == null) null else loanScale * mortgageUsdtPairStatus.currentPrice
                         }
                     } else {
                         //抵押和借入都不是usdt,取出两种价格进行计算
-                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, coinType + "_USDT")
-                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, loanCoinType + "_USDT")
+                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext,ConstData.PairStatusType.SPOT, coinType + "_USDT")
+                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, ConstData.PairStatusType.SPOT,loanCoinType + "_USDT")
                         if (loanUsdtPairStatus != null && mortgageUsdtPairStatus != null) {
                             computeScale = if (loanScale == null || loanUsdtPairStatus.currentPrice == 0.0) null else loanScale * (mortgageUsdtPairStatus.currentPrice / loanUsdtPairStatus.currentPrice)
                         }

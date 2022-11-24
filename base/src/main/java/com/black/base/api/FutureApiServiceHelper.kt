@@ -17,7 +17,7 @@ object FutureApiServiceHelper {
      */
     fun getDepthData(
         context: Context?,
-        symbol: String,
+        symbol: String?,
         level: Int,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<DepthBean?>?>?

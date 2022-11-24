@@ -3,6 +3,7 @@ package com.black.base.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData.CURRENT_PAIR_LEVER
 import com.google.gson.Gson
@@ -231,6 +232,33 @@ object CookieUtil {
      */
     fun setCurrentFutureUPair(context: Context, pair: String?) {
         getSharedPreferences(context).edit().putString(ConstData.CURRENT_FUTURE_U_PAIR, pair).apply()
+    }
+
+    /**
+     * 保存当前用户信息
+     *
+     * @param context
+     * @param userInfo
+     */
+    fun setCurrentFutureUPairObjrInfo(context: Context, pair: PairStatus?) {
+        val prefs = getSharedPreferences(context)
+        prefs.edit().putString(ConstData.CURRENT_FUTURE_U_PAIR_OBJ, if (pair == null) null else Gson().toJson(pair)).apply()
+    }
+
+    /**
+     * 获取保存的用户信息
+     *
+     * @param context
+     * @return
+     */
+    fun getCurrentFutureUPairObjrInfo(context: Context): PairStatus? {
+        val prefs = getSharedPreferences(context)
+        val pairStatusJsonString = prefs.getString(ConstData.CURRENT_FUTURE_U_PAIR_OBJ, null)
+        return try {
+            Gson().fromJson(pairStatusJsonString, PairStatus::class.java)
+        } catch (e: Exception) {
+            null
+        }
     }
 
 

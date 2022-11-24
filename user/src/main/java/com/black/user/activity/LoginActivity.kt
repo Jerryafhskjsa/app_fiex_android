@@ -394,7 +394,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 user!!.ticket = ticket
                             }
                             getProToken(mContext)
-                            getFutureToken(mContext)
                         }
                     } else {
                         FryingUtil.showToast(
@@ -447,6 +446,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             proTokenExpiredTime.toString()
                         )
                         getWsToken(mContext)
+                        getFutureToken(mContext)
                     }
                 }
             })

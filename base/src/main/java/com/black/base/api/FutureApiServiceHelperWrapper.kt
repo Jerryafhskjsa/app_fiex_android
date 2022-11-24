@@ -20,6 +20,7 @@ import io.reactivex.Observable
 object FutureApiServiceHelperWrapper {
     private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
     private const val FUTURE_SYMBOL_U_LIST = 0
+    //u本位交易对列表
     var futureSymbolPairList: ArrayList<PairStatus>? = null
     var markPriceBeanList: ArrayList<MarkPriceBean>? = null
     var markPrice: MarkPriceBean? = null
@@ -120,6 +121,8 @@ object FutureApiServiceHelperWrapper {
                     currentPair = CommonUtil.getItemFromList(allPair, 0)
                     if (currentPair != null) {
                         CookieUtil.setCurrentFutureUPair(context, currentPair)
+                        CookieUtil.setCurrentFutureUPairObjrInfo(context,CommonUtil.getItemFromList(
+                            futureSymbolPairList, 0))
 //                        SocketUtil.notifyFutureUPairChanged(context)
                     }
                 }

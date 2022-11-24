@@ -538,7 +538,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                             if (money == 0.0) {
                                 Observable.just(0.0)
                             }
-                            val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, "BTC_USDT")
+                            val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, ConstData.PairStatusType.SPOT,"BTC_USDT")
                             if (pairStatus == null || pairStatus.currentPrice == 0.0) {
                                 Observable.just(null)
                             } else {

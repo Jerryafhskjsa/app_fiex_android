@@ -1,5 +1,6 @@
 package com.black.base.util
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
@@ -19,12 +20,9 @@ import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.user.UserBalance
-import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.FryingUtil.printError
-import com.black.base.util.SharePreferencesUtil.getTextValue
-import com.black.base.util.SharePreferencesUtil.setTextValue
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -91,8 +89,6 @@ object SocketDataContainer {
     private val orderObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
 
     /***fiex***/
-    private val orderDepthDataList = ArrayList<QuotationOrderNew?>()
-    private val currentPairDeal = PairDeal()
     //交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
     //交易对行情
@@ -106,9 +102,7 @@ object SocketDataContainer {
     const val DEAL_MAX_SIZE = 20
     private val dealList = ArrayList<QuotationDealNew?>()
     private val dealObservers = ArrayList<Observer<Pair<String?, ArrayList<TradeOrder?>?>>>()
-    //K线数据
-//    private static final Map<String, ArrayList<KLineItem>> kLineDataSet = new HashMap<>();
-//    private static final Map<String, String> kLineDataSet = new HashMap<>();
+
     private val kLineObservers = ArrayList<Observer<KLineItemListPair?>>()
     private val kLineAddObservers = ArrayList<Observer<KLineItemPair?>>()
     private val kLineAddMoreObservers = ArrayList<Observer<KLineItemListPair?>>()
@@ -857,7 +851,7 @@ object SocketDataContainer {
             dearPairMap.remove(pair)
         }
         val pairsJson = Gson().toJson(dearPairMap)
-        setTextValue(Commend.DEAR_PAIR_SP, pairsJson)
+        SharedPreferenceUtils.putData(ConstData.DEAR_PAIR_SP, pairsJson)
     }
 
     private fun updateDearPairMap() {
@@ -870,7 +864,7 @@ object SocketDataContainer {
 
     val cachePair: Map<String, Boolean>?
         get() {
-            val hasCachePairs = getTextValue(Commend.DEAR_PAIR_SP)
+            val hasCachePairs = SharedPreferenceUtils.getData(ConstData.DEAR_PAIR_SP,"") as String
             val hashMap: Map<String, Boolean> = HashMap()
             return Gson().fromJson(hasCachePairs, hashMap.javaClass)
         }
@@ -988,46 +982,81 @@ object SocketDataContainer {
             return Observable.just(gson.fromJson(gson.toJson(result), object : TypeToken<ArrayList<PairStatus?>?>() {}.type))
     }
 
-    fun getPairStatus(context: Context?, pair: String?, callback: Callback<PairStatus?>?) {
+    fun getPairStatus(context: Context?,pairStatusType:ConstData.PairStatusType?, pair: String?, callback: Callback<PairStatus?>?) {
         if (context == null || callback == null) {
             return
         }
-        synchronized(allPairStatusMap) {
-            val pairStatus = allPairStatusMap[pair]
-            if (pairStatus == null) {
-                callback.callback(null)
-            } else {
-                callback.callback(gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java))
+        var pairStatusMap:MutableMap<String, PairStatus>? = null
+        when(pairStatusType){
+            ConstData.PairStatusType.SPOT -> {
+                pairStatusMap = allPairStatusMap
+            }
+            ConstData.PairStatusType.FUTURE_U -> {
+                pairStatusMap = allFutureUPairStatusMap
+            }
+        }
+        if (pairStatusMap != null) {
+            synchronized(pairStatusMap) {
+                val pairStatus = pairStatusMap[pair]
+                if (pairStatus == null) {
+                    callback.callback(null)
+                } else {
+                    callback.callback(gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java))
+                }
             }
         }
     }
 
-    fun getPairStatusSync(context: Context?, pair: String?): PairStatus? {
+    fun getPairStatusSync(context: Context?,pairStatusType:ConstData.PairStatusType?, pair: String?): PairStatus? {
         if (context == null) {
             return null
         }
-        synchronized(allPairStatusMap) {
-            val pairStatus = allPairStatusMap[pair]
-            return if (pairStatus == null) {
-                null
-            } else {
-                gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java)
+        var pairStatusMap:MutableMap<String, PairStatus>? = null
+        when(pairStatusType){
+            ConstData.PairStatusType.SPOT -> {
+                pairStatusMap = allPairStatusMap
+            }
+            ConstData.PairStatusType.FUTURE_U -> {
+                pairStatusMap = allFutureUPairStatusMap
             }
         }
+        if (pairStatusMap != null) {
+            synchronized(pairStatusMap) {
+                val pairStatus = pairStatusMap[pair]
+                return if (pairStatus == null) {
+                    null
+                } else {
+                    gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java)
+                }
+            }
+        }
+        return null
     }
 
-    fun getPairStatusObservable(context: Context?, pair: String?): Observable<PairStatus>? {
+    fun getPairStatusObservable(context: Context?,pairStatusType:ConstData.PairStatusType?, pair: String?): Observable<PairStatus>? {
         if (context == null) {
             return null
         }
-        synchronized(allPairStatusMap) {
-            val pairStatus = allPairStatusMap[pair]
-            return if (pairStatus == null) {
-                null
-            } else {
-                Observable.just(gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java))
+        var pairStatusMap:MutableMap<String, PairStatus>? = null
+        when(pairStatusType){
+            ConstData.PairStatusType.SPOT -> {
+                pairStatusMap = allPairStatusMap
+            }
+            ConstData.PairStatusType.FUTURE_U -> {
+                pairStatusMap = allFutureUPairStatusMap
             }
         }
+        if (pairStatusMap != null) {
+            synchronized(pairStatusMap) {
+                val pairStatus = pairStatusMap[pair]
+                return if (pairStatus == null) {
+                    null
+                } else {
+                    Observable.just(gson.fromJson(gson.toJson(pairStatus), PairStatus::class.java))
+                }
+            }
+        }
+        return Observable.empty()
     }
 
     private fun getPairCoinName(pair: String?): String? {
@@ -1237,7 +1266,7 @@ object SocketDataContainer {
                 if (tradeOrderDepth == null) {
                     emitter.onComplete()
                 } else {
-                    var tradeOrderPairList  = parseOrderDepthData(depthType,tradeOrderDepth)
+                    var tradeOrderPairList  = parseOrderDepthData(context,depthType,tradeOrderDepth)
                     var orderDepthData = tradeOrderPairList?.let { parseOrderDepthToList(it) }
                     synchronized(orderDataList) {
                         if (isRemoveAll) {
@@ -1319,7 +1348,7 @@ object SocketDataContainer {
      * 请求得到的数据转换成TradeOrderPairList
      * type 0现货 1 u本位合约 2币本位合约
      */
-    fun parseOrderDepthData(type:Int?,depth: TradeOrderDepth):TradeOrderPairList?{
+    fun parseOrderDepthData(context: Context?,type:Int?,depth: TradeOrderDepth):TradeOrderPairList?{
         var pairListData = TradeOrderPairList()
         var askOrderList = ArrayList<TradeOrder?>()
         var bidOrderList = ArrayList<TradeOrder?>()
@@ -1327,6 +1356,11 @@ object SocketDataContainer {
         var pair = result?.s
         var bidArray = result?.b
         var askArray = result?.a
+        var contractSize:String? = null
+        var currentPairObj = CookieUtil.getCurrentFutureUPairObjrInfo(context!!)
+        if(currentPairObj != null){
+            contractSize = currentPairObj.contractSize
+        }
         if (bidArray != null) {
             for(bidItem in bidArray){
                 var tradeOrder = TradeOrder()
@@ -1342,8 +1376,8 @@ object SocketDataContainer {
                 }
                 if(type == ConstData.DEPTH_CONTRACT_U_TYPE){
                     //计算出每个订单的USDT数量
-//                    var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
-//                    tradeOrder.exchangeAmount = quantity?.toDouble()
+                    var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
+                    tradeOrder.exchangeAmount = quantity?.toDouble()!!
                 }
                 tradeOrder.direction = "BID"
                 tradeOrder.pair = pair
@@ -1354,10 +1388,21 @@ object SocketDataContainer {
         if (askArray != null) {
             for(askItem in askArray){
                 var tradeOrder = TradeOrder()
-                tradeOrder.price = askItem?.get(0)?.toDouble()
+                //价格
+                var price = askItem?.get(0)?.toDouble()
+                //张数/数量
+                var count = askItem?.get(1)?.toDouble()
+                tradeOrder.price = price
                 tradeOrder.priceString = askItem?.get(0)
                 tradeOrder.orderType = "ASK"
-                tradeOrder.exchangeAmount = askItem?.get(1)?.toDouble()!!
+                if(type == ConstData.DEPTH_SPOT_TYPE){
+                    tradeOrder.exchangeAmount = count!!
+                }
+                if(type == ConstData.DEPTH_CONTRACT_U_TYPE){
+                    //计算出每个订单的USDT数量
+                    var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
+                    tradeOrder.exchangeAmount = quantity?.toDouble()!!
+                }
                 tradeOrder.direction = "ASK"
                 tradeOrder.pair = pair
                 askOrderList.add(tradeOrder)
@@ -1519,7 +1564,7 @@ object SocketDataContainer {
         }
     }
 
-    //主动拉去挂单数据，直接回调
+    //主动拉取挂单数据，直接回调
     fun getOrderListFiex(context: Context?, depthDataList:ArrayList<QuotationOrderNew?>?, callback: Callback<TradeOrderPairList?>?) {
         if (context == null || callback == null) {
             return
@@ -1923,7 +1968,7 @@ object SocketDataContainer {
                         val set = getPairSetName(leverDetail.pair)
                         if (set != null && coinType != null) {
                             if (set.equals("USDT", ignoreCase = true)) {
-                                val pairStatus = getPairStatusSync(context, leverDetail.pair)
+                                val pairStatus = getPairStatusSync(context,ConstData.PairStatusType.SPOT, leverDetail.pair)
                                 if (pairStatus != null) {
                                     val totalCoinCNY = computeTotalMoneyCNY(leverDetail.estimatedTotalAmount, c2CPrice)
                                     val totalSetCNY = computeTotalMoneyCNY(leverDetail.afterEstimatedTotalAmount, c2CPrice)
@@ -1946,14 +1991,14 @@ object SocketDataContainer {
                                 var totalSetBorrowCNY: Double? = null
                                 var totalCoinInterestCNY: Double? = null
                                 var totalSetInterestCNY: Double? = null
-                                val coinPairStatus = getPairStatusSync(context, leverDetail.pair)
+                                val coinPairStatus = getPairStatusSync(context,ConstData.PairStatusType.SPOT, leverDetail.pair)
                                 if (coinPairStatus != null) {
                                     val pairCny = computeCoinPriceCNY(coinPairStatus, c2CPrice)
                                     //                                        totalCoinCNY = leverDetail.totalAmount == null || pairCny == null ? null : leverDetail.totalAmount * pairCny;
                                     totalCoinBorrowCNY = if (leverDetail.coinBorrow == null || pairCny == null) null else leverDetail.coinBorrow!!.multiply(BigDecimal(pairCny)).toDouble()
                                     totalCoinInterestCNY = if (leverDetail.coinInterest == null || pairCny == null) null else leverDetail.coinInterest!!.multiply(BigDecimal(pairCny)).toDouble()
                                 }
-                                val setPairStatus = getPairStatusSync(context, set + "_USDT")
+                                val setPairStatus = getPairStatusSync(context,ConstData.PairStatusType.SPOT, set + "_USDT")
                                 if (setPairStatus != null) { //                                        totalSetCNY = leverDetail.afterTotalAmount == null ? null : SocketDataContainer.computeTotalMoneyCNY(leverDetail.afterTotalAmount * setPairStatus.currentPrice, c2CPrice);
                                     totalSetBorrowCNY = if (leverDetail.afterCoinBorrow == null) null else computeTotalMoneyCNY(leverDetail.afterCoinBorrow!!.multiply(BigDecimal(setPairStatus.currentPrice)), c2CPrice)
                                     totalSetInterestCNY = if (leverDetail.afterCoinInterest == null) null else computeTotalMoneyCNY(leverDetail.afterCoinInterest!!.multiply(BigDecimal(setPairStatus.currentPrice)), c2CPrice)

@@ -289,7 +289,7 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     //获取当前交易对深度
     fun getTradePairInfo() {
-        SocketDataContainer.getPairStatus(context, currentPairStatus.pair, object : Callback<PairStatus?>() {
+        SocketDataContainer.getPairStatus(context, ConstData.PairStatusType.SPOT,currentPairStatus.pair, object : Callback<PairStatus?>() {
             override fun error(type: Int, error: Any) {
                 FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
             }
@@ -324,7 +324,7 @@ class KLineFullViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     //根据当前交易对状态，刷新所有数据
     private fun getPairStatus() {
-        SocketDataContainer.getPairStatusObservable(context, currentPairStatus.pair)?.run {
+        SocketDataContainer.getPairStatusObservable(context,ConstData.PairStatusType.SPOT, currentPairStatus.pair)?.run {
             subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .observeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .subscribe {
