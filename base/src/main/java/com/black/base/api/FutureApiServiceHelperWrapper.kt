@@ -120,7 +120,7 @@ object FutureApiServiceHelperWrapper {
                     currentPair = CommonUtil.getItemFromList(allPair, 0)
                     if (currentPair != null) {
                         CookieUtil.setCurrentFutureUPair(context, currentPair)
-                        SocketUtil.notifyFutureUPairChanged(context)
+//                        SocketUtil.notifyFutureUPairChanged(context)
                     }
                 }
                 Observable.just(pairStatuses)
