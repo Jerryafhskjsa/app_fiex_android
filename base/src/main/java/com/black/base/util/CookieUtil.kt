@@ -235,7 +235,7 @@ object CookieUtil {
     }
 
     /**
-     * 保存当前用户信息
+     * 保存当前u本位交易对信息
      *
      * @param context
      * @param userInfo
@@ -246,7 +246,7 @@ object CookieUtil {
     }
 
     /**
-     * 获取保存的用户信息
+     * 获取保存当前u本位交易对信息
      *
      * @param context
      * @return

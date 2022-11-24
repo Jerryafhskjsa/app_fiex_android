@@ -73,7 +73,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     private var singleOrderDepthList :ArrayList<QuotationOrderNew?>? = null
 
     init {
-        currentPairStatus.pair == (CookieUtil.getCurrentPair(context))
+        currentPairStatus.pair == (CookieUtil.getCurrentFutureUPair(context))
         initPairCoinSet()
     }
 
@@ -319,7 +319,8 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
     }
 
-    fun getAllOrderFiex() {
+    fun getAllDepthOrderFiex() {
+        Log.d("uuuuuu","singleOrderDepthList.size = "+singleOrderDepthList?.size)
         CommonUtil.postHandleTask(socketHandler) {
             SocketDataContainer.getOrderListFiex(context,singleOrderDepthList,object : Callback<TradeOrderPairList?>() {
                 override fun error(type: Int, error: Any) {}
@@ -426,32 +427,21 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         currentPairStatus.supportingPrecisionList = null
         currentPairStatus.precision = ConstData.DEFAULT_PRECISION
         if (currentPairStatus.pair == null) {
-            SocketDataContainer.initAllPairStatusData(context)
+            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
         } else {
             onResumeTodo.run()
         }
     }
 
     private fun getLastPair(): String? {
-        if (tabType == ConstData.TAB_LEVER) {
-            var pair = CookieUtil.getCurrentPairLever(context)
+            var pair = CookieUtil.getCurrentFutureUPair(context)
             if (pair == null) {
-                val allPair = SocketDataContainer.getAllLeverPair(context);
+                val allPair = SocketDataContainer.getAllPair(context,ConstData.PairStatusType.FUTURE_U)
                 if (allPair != null) {
                     pair = CommonUtil.getItemFromList(allPair, 0)
                 }
             }
             return pair
-        } else {
-            var pair = CookieUtil.getCurrentPair(context)
-            if (pair == null) {
-                val allPair = SocketDataContainer.getAllPair(context)
-                if (allPair != null) {
-                    pair = CommonUtil.getItemFromList(allPair, 0)
-                }
-            }
-            return pair
-        }
     }
 
     fun setTabType(tabType: Int) {
@@ -491,7 +481,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
                         depth.u = fDepth.u
                         tradeOrderDepthPair = depth?.let { SocketDataContainer.parseOrderDepthData(context,ConstData.DEPTH_CONTRACT_U_TYPE,it) }
                         singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
-                        getAllOrderFiex()
+                        getAllDepthOrderFiex()
                     }
 
                 }

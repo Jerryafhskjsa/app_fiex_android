@@ -395,6 +395,9 @@
         <item name="android:gravity">right</item>
         <item name="android:textColor">@color/T5</item>
     </style>
+    <style name="ContractDeepItemTextLeft1" parent="ContractDeepItemTextLeft">
+        <item name="android:textColor">@color/T7</item>
+    </style>
     <style name="ContractDeepItemTextRight" parent="ContractDeepItemTextBase">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textColor">@color/T2</item>

@@ -99,8 +99,7 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
                 currentStyle = (currentStyle + 1) % 3
                 showCurrentStyle()
                 showStyleLayout()
-//                viewModel.getAllOrder()
-                viewModel.getAllOrderFiex()
+                viewModel.getAllDepthOrderFiex()
             }
             R.id.handicap_sale_layout_01, R.id.handicap_sale_layout_02, R.id.handicap_sale_layout_03, R.id.handicap_sale_layout_04, R.id.handicap_sale_layout_05, R.id.handicap_sale_layout_06, R.id.handicap_sale_layout_07, R.id.handicap_sale_layout_08, R.id.handicap_sale_layout_09, R.id.handicap_sale_layout_10, R.id.handicap_buy_layout_01, R.id.handicap_buy_layout_02, R.id.handicap_buy_layout_03, R.id.handicap_buy_layout_04, R.id.handicap_buy_layout_05, R.id.handicap_buy_layout_06, R.id.handicap_buy_layout_07, R.id.handicap_buy_layout_08, R.id.handicap_buy_layout_09, R.id.handicap_buy_layout_10 -> {
                 val tag = v.tag

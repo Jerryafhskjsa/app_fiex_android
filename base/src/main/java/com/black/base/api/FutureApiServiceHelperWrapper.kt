@@ -2,6 +2,7 @@ package com.black.base.api
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import android.util.SparseArray
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
@@ -18,7 +19,7 @@ import com.black.util.CommonUtil
 import io.reactivex.Observable
 
 object FutureApiServiceHelperWrapper {
-    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
+    private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //20分钟
     private const val FUTURE_SYMBOL_U_LIST = 0
     //u本位交易对列表
     var futureSymbolPairList: ArrayList<PairStatus>? = null
@@ -84,11 +85,9 @@ object FutureApiServiceHelperWrapper {
         return futureApiService?.getSymbolList()
             ?.flatMap { pairInfoData: HttpRequestResultBean<ArrayList<SymbolBean>?>? ->
                 val pairStatuses = ArrayList<PairStatus>()
-                val allPair = ArrayList<String?>()
                 var resultDataList = pairInfoData!!.result
-                if (resultDataList != null && pairInfoData.code == HttpRequestResult.SUCCESS) {
+                if (resultDataList != null && pairInfoData.returnCode == HttpRequestResult.SUCCESS) {
                     setLastGetTime(FUTURE_SYMBOL_U_LIST, System.currentTimeMillis())
-                    var pairStatusList: ArrayList<PairStatus>? = ArrayList()
                     for (i in resultDataList!!.indices) {
                         val symbol = resultDataList[i]
                         var pairStatus: PairStatus? = PairStatus()
@@ -108,23 +107,17 @@ object FutureApiServiceHelperWrapper {
                                 maxPrecision.toString(),
                                 symbol?.depthPrecisionMerge
                             )
-                        pairStatusList?.add(pairStatus!!)
-                        allPair.add(pairStatus?.pair)
-                        futureSymbolPairList = pairStatusList
+                        pairStatuses?.add(pairStatus!!)
+                        futureSymbolPairList = pairStatuses
                     }
                 }
                 var currentPair = CookieUtil.getCurrentFutureUPair(context)
-                if (allPair.isNotEmpty()
-                    && (TextUtils.isEmpty(currentPair)
-                            || !allPair.contains(currentPair))
-                ) {
-                    currentPair = CommonUtil.getItemFromList(allPair, 0)
-                    if (currentPair != null) {
-                        CookieUtil.setCurrentFutureUPair(context, currentPair)
-                        CookieUtil.setCurrentFutureUPairObjrInfo(context,CommonUtil.getItemFromList(
-                            futureSymbolPairList, 0))
-//                        SocketUtil.notifyFutureUPairChanged(context)
-                    }
+                var currentPairStatus = CookieUtil.getCurrentFutureUPairObjrInfo(context)
+                if(currentPair == null){
+                    CookieUtil.setCurrentFutureUPair(context, currentPair)
+                }
+                if(currentPairStatus == null){
+                    CookieUtil.setCurrentFutureUPairObjrInfo(context,CommonUtil.getItemFromList(futureSymbolPairList, 0))
                 }
                 Observable.just(pairStatuses)
             }

@@ -459,7 +459,7 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         } else {
             var pair = CookieUtil.getCurrentPair(context)
             if (pair == null) {
-                val allPair = SocketDataContainer.getAllPair(context)
+                val allPair = SocketDataContainer.getAllPair(context,ConstData.PairStatusType.SPOT)
                 if (allPair != null) {
                     pair = CommonUtil.getItemFromList(allPair, 0)
                 }

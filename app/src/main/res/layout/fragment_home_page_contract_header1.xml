@@ -885,7 +885,8 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_01"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1"
+                        />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_01"
@@ -898,7 +899,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_02"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_02"
@@ -911,7 +912,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_03"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_03"
@@ -924,7 +925,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_04"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_04"
@@ -937,7 +938,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_05"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_05"
@@ -950,7 +951,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_06"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_06"
@@ -963,7 +964,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_07"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_07"
@@ -976,7 +977,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_08"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_08"
@@ -989,7 +990,7 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_09"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_09"
@@ -1002,7 +1003,8 @@
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_10"
-                        style="@style/ContractDeepItemTextLeft" />
+                        style="@style/ContractDeepItemTextLeft1"
+                        />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_10"

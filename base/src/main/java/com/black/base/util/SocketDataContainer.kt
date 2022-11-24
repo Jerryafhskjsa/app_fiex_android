@@ -1081,17 +1081,29 @@ object SocketDataContainer {
         return setName
     }
 
-    fun getAllPair(context: Context?): ArrayList<String>? {
+    fun getAllPair(context: Context?,pairStatusType:ConstData.PairStatusType?): ArrayList<String>? {
         if (context == null) {
             return null
         }
-        synchronized(allPairStatusMap) {
-            return if (allPairStatusMap == null || allPairStatusMap.isEmpty()) {
-                null
-            } else {
-                ArrayList(allPairStatusMap.keys)
+        var pairStatusMap:MutableMap<String, PairStatus>? = null
+        when(pairStatusType){
+            ConstData.PairStatusType.SPOT -> {
+                pairStatusMap = allPairStatusMap
+            }
+            ConstData.PairStatusType.FUTURE_U -> {
+                pairStatusMap = allFutureUPairStatusMap
             }
         }
+        if (pairStatusMap != null) {
+            synchronized(pairStatusMap) {
+                return if (pairStatusMap == null || pairStatusMap.isEmpty()) {
+                    null
+                } else {
+                    ArrayList(pairStatusMap.keys)
+                }
+            }
+        }
+        return null
     }
 
     fun getAllLeverPair(context: Context?): ArrayList<String?>? {
@@ -1357,7 +1369,7 @@ object SocketDataContainer {
         var bidArray = result?.b
         var askArray = result?.a
         var contractSize:String? = null
-        var currentPairObj = CookieUtil.getCurrentFutureUPairObjrInfo(context!!)
+        var currentPairObj =  CookieUtil.getCurrentFutureUPairObjrInfo(context!!)
         if(currentPairObj != null){
             contractSize = currentPairObj.contractSize
         }
