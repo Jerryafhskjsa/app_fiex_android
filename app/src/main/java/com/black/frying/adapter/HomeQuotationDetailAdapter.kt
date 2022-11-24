@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.model.socket.PairStatus
+import com.black.base.util.StyleChangeUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemHomeQuotationDetailBinding
 import skin.support.content.res.SkinCompatResources
@@ -34,7 +35,8 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         pairStatus?.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
 
         val viewHolder = holder?.dataBing
-        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1) bgWin!! else bgLose!!
         if (pairStatus?.isHighRisk != null && true == pairStatus.isHighRisk) {
             viewHolder?.stView?.visibility = View.VISIBLE
         } else {

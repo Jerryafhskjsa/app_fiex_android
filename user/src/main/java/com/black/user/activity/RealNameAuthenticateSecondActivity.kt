@@ -395,6 +395,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .go(mContext)
+                    //返回起始页，更新信息
                 } else {
                     FryingUtil.showToast(mContext, returnData?.msg)
                 }

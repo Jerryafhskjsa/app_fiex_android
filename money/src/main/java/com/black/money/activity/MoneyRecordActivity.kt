@@ -128,8 +128,8 @@ class MoneyRecordActivity : BaseActionBarActivity(), View.OnClickListener, OnMen
         } else if (id == R.id.filter_layout) {
             if (currentTab == ConstData.TAB_DEMAND) {
                 MenuChoosePopup(this, demandMenuEntityList, null)
-                        .setOnMenuChooseListener(this)
-                        .show(v)
+                    .setOnMenuChooseListener(this)
+                    .show(v)
             } else if (currentTab == ConstData.TAB_REGULAR) {
                 openRegularFilterWindow()
             }
@@ -212,21 +212,21 @@ class MoneyRecordActivity : BaseActionBarActivity(), View.OnClickListener, OnMen
             data.add(CoinFilter.getDefaultFilterEntity(demandCoins, demandCoinFilter))
             data.add(DemandRecordStatus.getDefaultFilterEntity(demandRecordStatus))
             FilterWindow(mContext as Activity, data)
-                    .show(object : FilterWindow.OnFilterSelectListener {
-                        override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
-                            for (filterResult in selectResult) {
-                                if (CoinFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    demandCoinFilter = filterResult.data as CoinFilter
-                                } else if (DemandRecordStatus.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    demandRecordStatus = filterResult.data as DemandRecordStatus
-                                }
-                            }
-                            if (demandRecordFragment != null) {
-                                demandRecordFragment!!.setFilters(demandCoinFilter, demandRecordStatus)
+                .show(object : FilterWindow.OnFilterSelectListener {
+                    override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
+                        for (filterResult in selectResult) {
+                            if (CoinFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                demandCoinFilter = filterResult.data as CoinFilter
+                            } else if (DemandRecordStatus.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                demandRecordStatus = filterResult.data as DemandRecordStatus
                             }
                         }
+                        if (demandRecordFragment != null) {
+                            demandRecordFragment!!.setFilters(demandCoinFilter, demandRecordStatus)
+                        }
+                    }
 
-                    })
+                })
         }
         showWindow.run()
     }
@@ -237,21 +237,21 @@ class MoneyRecordActivity : BaseActionBarActivity(), View.OnClickListener, OnMen
             data.add(CoinFilter.getDefaultFilterEntity(regularCoins, regularCoinFilter))
             data.add(RegularRecordStatus.getDefaultFilterEntity(regularRecordStatus))
             FilterWindow(mContext as Activity, data)
-                    .show(object : FilterWindow.OnFilterSelectListener {
-                        override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
-                            for (filterResult in selectResult) {
-                                if (CoinFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    regularCoinFilter = filterResult.data as CoinFilter?
-                                } else if (RegularRecordStatus.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    regularRecordStatus = filterResult.data as RegularRecordStatus?
-                                }
-                            }
-                            if (regularRecordFragment != null) {
-                                regularRecordFragment!!.setFilters(regularCoinFilter, regularRecordStatus)
+                .show(object : FilterWindow.OnFilterSelectListener {
+                    override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
+                        for (filterResult in selectResult) {
+                            if (CoinFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                regularCoinFilter = filterResult.data as CoinFilter?
+                            } else if (RegularRecordStatus.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                regularRecordStatus = filterResult.data as RegularRecordStatus?
                             }
                         }
+                        if (regularRecordFragment != null) {
+                            regularRecordFragment!!.setFilters(regularCoinFilter, regularRecordStatus)
+                        }
+                    }
 
-                    })
+                })
         }
         showWindow.run()
     }

@@ -1,6 +1,7 @@
 package com.black.user.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
@@ -32,7 +33,6 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         val style = StyleChangeUtil.getStyleChangeSetting(applicationContext)
         if (style == null) {
             binding.redDown.setText(R.string.red_down)
-
         } else {
             binding.redDown.setText(style.styleText)
         }
@@ -92,7 +92,6 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             alertDialog.dismiss()
             v.tag = application!!.getStyleChange(FryingStyleChange.redUp)
             change(v.tag as FryingStyleChange)
-            finish()
         }
         alertDialog.show()
 }
@@ -100,6 +99,10 @@ private fun change(styleChange: FryingStyleChange){
     if(styleChange != StyleChangeUtil.getStyleChangeSetting(this)){
         StyleChangeUtil.setStyleChangeSetting(this,styleChange)
         FryingUtil.showToast(mContext, getString(com.black.base.R.string.change_successful))
+        BlackRouter.getInstance().build(RouterConstData.START_PAGE)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .go(this)
     }
 }
 

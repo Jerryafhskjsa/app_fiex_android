@@ -19,10 +19,7 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
-import com.black.base.util.ConstData
-import com.black.base.util.CookieUtil
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
+import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.base.widget.AnalyticChart.AnalyticChartHelper
 import com.black.base.widget.AnalyticChart.Companion.BOLL
@@ -485,10 +482,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.price?.setText(pairStatus.currentPriceFormat)
         binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
         binding?.percentage?.setText(pairStatus.priceChangeSinceTodayDisplay)
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
         if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
             binding?.price?.setTextColor(colorT3)
             binding?.percentage?.background = bgT3
-        } else if (pairStatus.isDown) {
+        } else if (pairStatus.isDown && styleChange == 1) {
             binding?.price?.setTextColor(colorT5)
             binding?.percentage?.background = bgT5
         } else {

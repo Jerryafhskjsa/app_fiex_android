@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:paddingTop="20dp"
-        android:text="现货账户"
+        android:text="@string/spot_account"
         android:textColor="@color/T14"
         android:textSize="@dimen/text_size_14" />
 

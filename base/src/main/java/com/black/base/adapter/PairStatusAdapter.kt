@@ -11,6 +11,7 @@ import com.black.base.R
 import com.black.base.model.PairStatusShowPopup
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.CookieUtil
+import com.black.base.util.StyleChangeUtil
 import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 
@@ -66,7 +67,8 @@ class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?
             viewHolder.priceView?.setTextColor(color)
         }
         if(viewHolder.sinceView != null){
-            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
+            var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 0) colorWin else colorLost
             viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
             viewHolder.sinceView?.setTextColor(color)
         }

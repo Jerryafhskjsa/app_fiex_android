@@ -79,6 +79,15 @@
         <item name="android:textCursorDrawable">@drawable/my_cursor</item>
     </style>
 
+    <style name="red_up_green_down">
+        <item name="android:windowEnterAnimation">@anim/pairs_status_popup_window_in</item>
+        <item name="android:windowExitAnimation">@anim/pairs_status_popup_window_out</item>
+    </style>
+
+    <style name="green_up_red_down">
+        <item name="android:windowEnterAnimation">@anim/pairs_status_popup_window_in</item>
+        <item name="android:windowExitAnimation">@anim/pairs_status_popup_window_out</item>
+    </style>
     <style name="anim_pairs_status_popup_window">
         <item name="android:windowEnterAnimation">@anim/pairs_status_popup_window_in</item>
         <item name="android:windowExitAnimation">@anim/pairs_status_popup_window_out</item>
@@ -265,7 +274,6 @@
     <style name="HomeFeturesItem">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">left</item>
     </style>
     <style name="HomeFeturesItemImage">
         <item name="android:layout_width">40dp</item>

@@ -227,7 +227,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="张"
+                        android:text="@string/sheet"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 

@@ -18,6 +18,7 @@ import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
+import com.black.user.R.string.copy_text_failed
 import com.black.user.databinding.ActivityGoogleGetKeyBinding
 import com.black.util.CommonUtil
 import com.google.zxing.WriterException
@@ -35,6 +36,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
         binding?.btnNext?.setOnClickListener(this)
         binding?.btnNext?.isEnabled = false
         googleKey
+        checkClickable()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -66,7 +68,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
             if (CommonUtil.copyText(mContext, binding?.qrcodeText?.text.toString().trim { it <= ' ' })) {
                 FryingUtil.showToast(mContext, getString(R.string.copy_text_success))
             } else {
-                FryingUtil.showToast(mContext, getString(R.string.copy_text_failed))
+                FryingUtil.showToast(mContext, getString(copy_text_failed))
             }
         } else if (i == R.id.btn_next) {
             BlackRouter.getInstance().build(RouterConstData.GOOGLE_BIND).go(this) { routeResult, _ ->

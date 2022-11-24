@@ -591,8 +591,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
-            val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+            var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1) colorWin!! else colorLost!!
+            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1 ) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
             pairStatus?.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
             binding?.gridIndicator?.setBackgroundColor(color)
             binding?.raiseDownBg?.background = bgWinLose
