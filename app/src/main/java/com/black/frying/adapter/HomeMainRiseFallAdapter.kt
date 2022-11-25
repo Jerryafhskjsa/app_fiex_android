@@ -36,10 +36,16 @@ class HomeMainRiseFallAdapter(context: Context,type:Int?, data: ArrayList<PairSt
         pairStatus?.priceChangeSinceToday = pairStatus?.priceChangeSinceToday
         val viewHolder = holder?.dataBing
         var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
-        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1) bgWin!! else bgLose!!
+        if (styleChange == 1){
+        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
+        if (styleChange == 0){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
         val bg = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
         viewHolder?.pairName?.setText(pairStatus?.pair)
-        viewHolder?.since?.setTextColor(color)
         if(type == ConstData.HOME_TAB_HOT){
             var hotIconShow: Int? = if(pairStatus?.isHot == true){
                 View.VISIBLE

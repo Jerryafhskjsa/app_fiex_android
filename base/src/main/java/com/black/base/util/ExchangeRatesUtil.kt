@@ -11,10 +11,8 @@ object ExchangeRatesUtil {
     fun setExchangeRatesSetting(context: Context, fryingExchangeRates: FryingExchangeRates) {
         val preferences = CookieUtil.getSharedPreferences(context)
         val editor = preferences.edit()
-        val rateCode = fryingExchangeRates.rateCode
-        val rateText = fryingExchangeRates.rateText
-        editor.putInt(EXCHANGE_RATE_CODE, rateCode)
-        editor.putString(EXCHANGE_RATE_TEXT, rateText)
+        editor.putInt(EXCHANGE_RATE_CODE, fryingExchangeRates.rateCode)
+        editor.putString(EXCHANGE_RATE_TEXT, fryingExchangeRates.rateText)
         editor.commit()
     }
 
@@ -24,10 +22,8 @@ object ExchangeRatesUtil {
         val exchangeRateText = preferences.getString(EXCHANGE_RATE_TEXT, null)
         return if (exchangeRateCode == -1 || TextUtils.isEmpty(exchangeRateText)) {
             null
-        } else {
-            FryingExchangeRates(exchangeRateCode,exchangeRateText)
+        } else { FryingExchangeRates(exchangeRateCode,exchangeRateText!!)
         }
-
     }
 
 }

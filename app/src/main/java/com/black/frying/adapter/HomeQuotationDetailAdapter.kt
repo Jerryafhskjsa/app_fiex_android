@@ -36,7 +36,14 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
 
         val viewHolder = holder?.dataBing
         var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
-        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1) bgWin!! else bgLose!!
+        if (styleChange == 1){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
+        if (styleChange == 0){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
         if (pairStatus?.isHighRisk != null && true == pairStatus.isHighRisk) {
             viewHolder?.stView?.visibility = View.VISIBLE
         } else {
@@ -49,7 +56,6 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
         viewHolder?.priceCny?.setText(String.format("≈ %s", pairStatus?.currentPriceCNYFormat))
         viewHolder?.since?.setText(pairStatus?.priceChangeSinceTodayFormat)
-        viewHolder?.since?.setTextColor(color)
     }
 
 }

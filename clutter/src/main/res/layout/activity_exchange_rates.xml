@@ -55,6 +55,7 @@
                         android:text="@string/cny"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/exchange_usd"
                         style="@style/MenuListItem"

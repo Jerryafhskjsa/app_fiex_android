@@ -259,7 +259,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun getViewModel(): BaseViewModel<*>? {
-        return viewModel!!
+        return viewModel
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {

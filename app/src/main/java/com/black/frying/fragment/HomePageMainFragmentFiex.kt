@@ -592,8 +592,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
             var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
-            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1) colorWin!! else colorLost!!
-            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 1 ) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+            if (styleChange == 1){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) colorWin!! else colorLost!!
+            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
             pairStatus?.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
             binding?.gridIndicator?.setBackgroundColor(color)
             binding?.raiseDownBg?.background = bgWinLose
@@ -608,6 +609,26 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 brokenLine = binding?.lineCart
                 var brokenLineData = getKineYdata(pairStatus?.kLineData)
                 initBrokenline(brokenLine,brokenLineData,color)
+            }
+            }
+            if (styleChange == 0){
+                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) colorWin!! else colorLost!!
+                val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! < 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+                pairStatus?.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
+                binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.raiseDownBg?.background = bgWinLose
+                binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
+                binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                binding?.pairPrice?.setTextColor(color)
+                binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
+                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+                binding?.pairPriceCny?.text = String.format("≈ %sCNY", pairStatus.currentPriceCNYFormat)
+                var kLineData = pairStatus?.kLineData
+                if(kLineData != null){
+                    brokenLine = binding?.lineCart
+                    var brokenLineData = getKineYdata(pairStatus?.kLineData)
+                    initBrokenline(brokenLine,brokenLineData,color)
+                }
             }
         }
     }

@@ -30,11 +30,11 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         binding.styleSetting.setOnClickListener(this)
         binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,"1.0.0")))
         application = getApplication() as BaseApplication
-        val style = StyleChangeUtil.getStyleChangeSetting(applicationContext)
-        if (style == null) {
+        val style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+        if (style == null || style == 0) {
             binding.redDown.setText(R.string.red_down)
         } else {
-            binding.redDown.setText(style.styleText)
+            binding.redDown.setText(getString(R.string.red_up))
         }
     }
 

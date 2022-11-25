@@ -349,6 +349,7 @@
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/activity_k_line_full.xml" value="0.25263157894736843" />
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/activity_mine.xml" value="0.1" />
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/activity_quotation_detail.xml" value="0.17916666666666667" />
+        <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/fragment_empty.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.15729166666666666" />
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract_header.xml" value="0.17916666666666667" />
@@ -371,10 +372,12 @@
         <entry key="..\:/Local/app_fiex_android/base/src/main/res/layout/list_item_wallet_choose.xml" value="0.12604166666666666" />
         <entry key="..\:/Local/app_fiex_android/base/src/main/res/layout/list_view_empty_long.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/base/src/main/res/layout/view_tab_normal.xml" value="0.15729166666666666" />
+        <entry key="..\:/Local/app_fiex_android/clutter/src/main/res/layout/activity_exchange_rates.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/clutter/src/main/res/layout/activity_language_setting.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/money/src/main/res/layout/activity_cloud_power_project.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/money/src/main/res/layout/activity_demand_detail.xml" value="0.17916666666666667" />
         <entry key="..\:/Local/app_fiex_android/money/src/main/res/layout/activity_money_record.xml" value="0.14666666666666667" />
+        <entry key="..\:/Local/app_fiex_android/res/src/main/res/drawable/bg_asset_coin_corner.xml" value="0.1325" />
         <entry key="..\:/Local/app_fiex_android/res/src/main/res/drawable/btn_collect.xml" value="0.1335" />
         <entry key="..\:/Local/app_fiex_android/res/src/main/res/drawable/my_cursor.xml" value="0.1325" />
         <entry key="..\:/Local/app_fiex_android/user/src/main/res/layout/activity_google_bind.xml" value="0.17916666666666667" />
