@@ -121,7 +121,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/type_name"
                                     android:paddingTop="15dp"
-                                    android:text="@string/first"
+                                    android:text="Discover, buy, sell and even create NFTs in just a few cilcks"
                                     android:textColor="#99000000"
                                     android:textSize="13sp" />
 

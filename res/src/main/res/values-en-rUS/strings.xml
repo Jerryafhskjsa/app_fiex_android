@@ -9,6 +9,7 @@
     <string name="switching">Automatic switching</string>
     <string name="register_agreement_label">I have read and agreed to</string>
     <string name="home_tab_main">HomePage</string>
+    <string name="home_tab_transaction">Transaction</string>
     <string name="home_tab_future">Contract</string>
     <string name="home_tab_asset">Assets</string>
     <string name="home_tab_c2c">French currency</string>
@@ -71,8 +72,6 @@
     <string name="loading">Loading</string>
     <string name="error_data">Data Errors</string>
     <string name="trade_deal">Closed</string>
-    <string name="first">Discover, buy, sell and even create NFTs in just a few clicks</string>
-    <string name="second">Contracts Follow-Up</string>
     <string name="trade_canceled_all">Cancelled</string>
     <string name="trade_failed">Failure</string>
     <string name="alert_choose_country">Please select the country code</string>
@@ -810,7 +809,10 @@
     <string name="contract_do_down">Empty</string>
     <string name="contract_do_raise">Multi opening</string>
     <string name="contract_multiple">Multiples</string>
-    <string name="home_tab_transaction">Transaction</string>
+    <string name="contract_tag_price">Tag price</string>
+    <string name="contract_index_price">Index price</string>
+    <string name="contract_raise">Raise</string>
+    <string name="contract_down">Down</string>
 
 
 </resources>
