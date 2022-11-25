@@ -1843,11 +1843,12 @@ class HomePageContractFragment : BaseFragment(),
         var since = since?.toDouble()
         var background: Drawable?
         var color: Int?
-        if (since != null) {
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext!!)?.styleCode
+        if (since != null && styleChange == 1) {
             if (since > 0) {//涨
                 background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
-            } else if (since < 0) {
+            } else if (since < 0 ) {
                 background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             } else {
@@ -1861,6 +1862,25 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
+            if (since != null && styleChange == 0) {
+                if (since < 0) {//跌
+                    background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                    color = mContext?.getColor(R.color.T10)
+                } else if (since > 0 ) {
+                    background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                    color = mContext?.getColor(R.color.T9)
+                } else {
+                    background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                    color = mContext?.getColor(R.color.B3)
+                }
+
+            Log.d(tag, "priceSince0 = $since")
+            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            Log.d(tag, "priceSince1 = $result")
+            binding!!.actionBarLayout.currentPriceSince.setText(result)
+            binding!!.actionBarLayout.currentPriceSince.background = background
+            binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
+            }
     }
 
     private fun intoChatRoom(chatRoomId: String?) {

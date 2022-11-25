@@ -483,15 +483,29 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
         binding?.percentage?.setText(pairStatus.priceChangeSinceTodayDisplay)
         var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
-        if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
-            binding?.price?.setTextColor(colorT3)
-            binding?.percentage?.background = bgT3
-        } else if (pairStatus.isDown && styleChange == 1) {
-            binding?.price?.setTextColor(colorT5)
-            binding?.percentage?.background = bgT5
-        } else {
-            binding?.price?.setTextColor(colorT7)
-            binding?.percentage?.background = bgT7
+        if(styleChange == 0) {
+            if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
+                binding?.price?.setTextColor(colorT3)
+                binding?.percentage?.background = bgT3
+            } else if (pairStatus.isDown) {
+                binding?.price?.setTextColor(colorT5)
+                binding?.percentage?.background = bgT5
+            } else {
+                binding?.price?.setTextColor(colorT7)
+                binding?.percentage?.background = bgT7
+            }
+        }
+        if(styleChange == 1) {
+            if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
+                binding?.price?.setTextColor(colorT3)
+                binding?.percentage?.background = bgT3
+            } else if (pairStatus.isDown) {
+                binding?.price?.setTextColor(colorT7)
+                binding?.percentage?.background = bgT7
+            } else {
+                binding?.price?.setTextColor(colorT5)
+                binding?.percentage?.background = bgT5
+            }
         }
         binding?.high?.setText(pairStatus.maxPriceFormat)
         binding?.low?.setText(pairStatus.minPriceFormat)

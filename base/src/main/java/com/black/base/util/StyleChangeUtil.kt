@@ -25,7 +25,7 @@ object StyleChangeUtil {
         return if (changeStyleCode == -1 || TextUtils.isEmpty(changeStyleText)) {
             null
         } else {
-            FryingStyleChange(changeStyleCode,changeStyleText)
+            FryingStyleChange(changeStyleCode,changeStyleText!!)
         }
     }
 

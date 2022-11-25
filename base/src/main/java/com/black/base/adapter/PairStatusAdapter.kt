@@ -68,10 +68,16 @@ class PairStatusAdapter(context: Context, data: MutableList<PairStatusShowPopup?
         }
         if(viewHolder.sinceView != null){
             var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
-            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0 && styleChange == 0) colorWin else colorLost
+            if (styleChange == 1){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! < 0 ) colorWin else colorLost
             viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
             viewHolder.sinceView?.setTextColor(color)
         }
+            if (styleChange == 0){
+                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0 ) colorWin else colorLost
+                viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
+                viewHolder.sinceView?.setTextColor(color)
+            }}
         if(viewHolder.hotView != null){
             var visiable: Int? = if(pairStatus?.isHot == true){
                 View.VISIBLE

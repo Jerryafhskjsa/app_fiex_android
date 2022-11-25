@@ -30,7 +30,7 @@
     <string name="useable">Available</string>sell/Stop profit
     <string name="confirm">OK</string>
     <string name="status_closed">Unbound</string>
-    <string name="perpetual_warehouse_by_warehouse">Perpetual_warehouse_by_warehouse</string>
+    <string name="perpetual_warehouse_by_warehouse">Perpetual_warehouse_by_warehouse 50X</string>
     <string name="warehouse_by_warehouse">Warehouse by warehouse 50XMore</string>
     <string name="full_warehouse">Full warehouse 50XEmpty</string>
     <string name="bind_google_title">Bind Google Identity Authenticator</string>
@@ -674,9 +674,9 @@
     <string name="super_rebate">Super Discount</string>
     <string name="language_cny">RMB</string>
     <string name="exchange_rates_usd">USD</string>
-    <string name="exchange_rates_jpy">Japanese Yen</string>
-    <string name="exchange_rates_krw">Korean won</string>
-    <string name="exchange_rates_vnd">Vietnamese dong</string>
+    <string name="exchange_rates_jpy">JPS</string>
+    <string name="exchange_rates_krw">KRW</string>
+    <string name="exchange_rates_vnd">VND</string>
 
 
     <string name="system_setup">System Settings</string>

@@ -27,10 +27,10 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         application = getApplication() as BaseApplication
         initExchangeRates()
-        onExchangeRatesChanged()
+        //onExchangeRatesChanged()
     }
 
-    private fun initExchangeRates(){
+    private fun initExchangeRates() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exchange_rates)
         binding?.exchangeCny?.setOnClickListener(this)
         binding?.exchangeCny?.tag = application!!.getExhcangeRates(FryingExchangeRates.cny)
@@ -53,8 +53,10 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        when(v.id){
-            R.id.exchange_cny,R.id.exchange_krw,R.id.exchange_jpy,R.id.exchange_usd,R.id.exchange_vnd -> changeExchangeRates(v.tag as FryingExchangeRates)
+        when (v.id) {
+            R.id.exchange_cny, R.id.exchange_usd, R.id.exchange_jpy, R.id.exchange_krw, R.id.exchange_vnd -> changeExchangeRates(
+                v.tag as FryingExchangeRates
+            )
         }
     }
 
@@ -73,7 +75,8 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun onExchangeRatesChanged() {
+
+     private fun onExchangeRatesChanged() {
         var exchangeRates = ExchangeRatesUtil.getExchangeRatesSetting(this)
         refreshExchangeRatesChecked(exchangeRates, binding?.exchangeCny)
         refreshExchangeRatesChecked(exchangeRates, binding?.exchangeUsd)
