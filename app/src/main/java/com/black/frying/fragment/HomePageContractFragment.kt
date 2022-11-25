@@ -241,6 +241,8 @@ class HomePageContractFragment : BaseFragment(),
         getTradeOrderCurrent()
         updateDear(isDear)
         FutureService.getOrderPosition(mContext);
+        FutureService.getLeverageBracketList(mContext);
+
     }
 
     private fun updateDear(dear: Boolean?) {

@@ -80,10 +80,22 @@ interface FutureApiService {
     fun getPositionList(): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
 
     /**
-     * 获取用户持仓
+     * 获取行情
      */
     @GET(UrlConfig.Future.URL_TICKERS)
     fun getTickers(): Observable<HttpRequestResultBean<List<TickerBean?>?>?>?
 
+
+    /**
+     * 获取adl信息
+     */
+    @GET(UrlConfig.Future.URL_POSITION_ADL)
+    fun getPositionAdl(): Observable<HttpRequestResultBean<List<ADLBean?>?>?>?
+
+    /**
+     * 获取杠杆分层信息
+     */
+    @GET(UrlConfig.Future.URL_leverage_bracket_LIST)
+    fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?>?
 
 }

@@ -536,7 +536,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(TAG, "tickerStatus->onMessage = $message")
+//            Log.d(TAG, "tickerStatus->onMessage = $message")
             if(message.equals("succeed")){
                 return
             }
@@ -661,7 +661,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
             if (message.equals("succeed")) {
                 return
             }
-            Log.d(TAG, "SubStatus->onMessage = $message")
+//            Log.d(TAG, "SubStatus->onMessage = $message")
             CommonUtil.postHandleTask(mHandler) {
                 var data: JSONObject? = null
                 try {
@@ -751,7 +751,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(TAG, "SymbolListener->onMessage = $message")
+//            Log.d(TAG, "SymbolListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }

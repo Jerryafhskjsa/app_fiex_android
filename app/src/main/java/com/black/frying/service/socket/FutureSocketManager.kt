@@ -226,7 +226,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "SymbolListener->onMessage = $message")
+//            Log.d(tag, "SymbolListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }

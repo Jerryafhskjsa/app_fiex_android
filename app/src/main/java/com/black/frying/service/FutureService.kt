@@ -191,7 +191,7 @@ object FutureService {
      *开仓均价：entryPrice;
      *浮动盈亏/收益率：根据标记价格实时计算；
      *已实现盈亏:realizedProfit
-     *自动减仓：调用接口/futures/fapi/user/v1/position/adl
+     *自动减仓：调用接口/futures/fapi/user/v1/position/adl  开多 longQuantile 一共5个格
      */
     fun getOrderPosition(context: Context?) {
         FutureApiServiceHelper.getPositionList(context, false,
@@ -211,6 +211,26 @@ object FutureService {
                     }
                 }
 
+            })
+    }
+
+    /**
+     * 获取杠杆分层
+     */
+    fun getLeverageBracketList(context: Context?) {
+        FutureApiServiceHelper.getLeverageBracketList(context, false,
+            object : Callback<HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->LeverageBracketList", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?) {
+                    if (returnData != null) {
+                        var list = returnData.result
+                        Log.d("ttttttt-->LeverageBracketList", list.toString());
+
+                    }
+                }
             })
     }
 
