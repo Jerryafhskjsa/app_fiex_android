@@ -197,5 +197,23 @@ object FutureApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
+    /**
+     * 获取行情列表
+     */
+    fun getTickers(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<List<TickerBean?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getTickers()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
 
 }
