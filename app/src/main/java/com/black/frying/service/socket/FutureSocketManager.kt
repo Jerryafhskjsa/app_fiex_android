@@ -3,15 +3,21 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.model.clutter.Kline
+import com.black.base.model.future.*
 import com.black.base.util.*
 import com.black.net.websocket.*
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+/**
+ * 合约相关的Socket
+ */
 class FutureSocketManager(context: Context, handler: Handler) {
     private var tag: String = FutureSocketManager::class.java.simpleName
     private var gson: Gson = Gson()
@@ -88,12 +94,6 @@ class FutureSocketManager(context: Context, handler: Handler) {
     fun startConnectAll() {
         var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
         addListenerAll()
-//        socketMap.forEach {
-//            Log.d(tag, "start all socketMap,key = " + it.key)
-//            Log.d(tag, "start all socketMap,state = " + it.value.socketState)
-//            Log.d(tag, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
-//            it.value.start()
-//        }
         socketManager.start()
         startPingTimer()
     }
@@ -183,11 +183,11 @@ class FutureSocketManager(context: Context, handler: Handler) {
 //            }
 //            it.value.addListener(listener)
 //        }
-            listener = if (symbolListener != null) {
-                symbolListener
-            } else {
-                SymbolListener()
-            }
+        listener = if (symbolListener != null) {
+            symbolListener
+        } else {
+            SymbolListener()
+        }
         socketManager.addListener(listener)
     }
 
@@ -247,31 +247,52 @@ class FutureSocketManager(context: Context, handler: Handler) {
                 if (data.has("channel")) {
                     var channel = data.get("channel");
                     var data = data.get("data");
-//                    Log.d(tag, "SymbolListener message = $channel")
+                    Log.d(tag, "SymbolListener message = $channel")
                     when (channel) {
                         "push.ticker" -> { //行情
-
+                            val tickerBean = gson.fromJson<TickerBean>(
+                                data.toString(),
+                                object : TypeToken<TickerBean?>() {}.type
+                            )
                         }
                         "push.index.price" -> { //指数价格
-
+                            val indexPriceBean = gson.fromJson<IndexPriceBean>(
+                                data.toString(),
+                                object : TypeToken<IndexPriceBean?>() {}.type
+                            )
                         }
                         "push.mark.price" -> { //标记价格
-
+                            val markPriceBean = gson.fromJson<MarkPriceBean>(
+                                data.toString(),
+                                object : TypeToken<MarkPriceBean?>() {}.type
+                            )
                         }
                         "push.agg.ticker" -> { //聚合行情
 
                         }
                         "push.deal" -> { //实时成交
-
+                            val dealBean = gson.fromJson<DealBean>(
+                                data.toString(),
+                                object : TypeToken<DealBean?>() {}.type
+                            )
                         }
                         "push.deep" -> { //深度
-
+                            val deepBean = gson.fromJson<DeepBean>(
+                                data.toString(),
+                                object : TypeToken<DeepBean?>() {}.type
+                            )
                         }
                         "push.deep.full" -> { //全部深度
-
+                            val deepFullBean = gson.fromJson<DeepFullBean>(
+                                data.toString(),
+                                object : TypeToken<DeepFullBean?>() {}.type
+                            )
                         }
                         "push.fund.rate" -> {//资金费率
-
+                            val fundRateBean = gson.fromJson<FundRateBean>(
+                                data.toString(),
+                                object : TypeToken<FundRateBean?>() {}.type
+                            )
                         }
                     }
                 }

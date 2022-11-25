@@ -38,8 +38,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
     private var mCcontext: Context? = null
     private var mHandler: Handler? = null
     private var pingTimer: Timer? = null
-    private var timerStart:Boolean = false
-    private var pingTimerTask:TimerTask? = null
+    private var timerStart: Boolean = false
+    private var pingTimerTask: TimerTask? = null
     var currentPair: String? = null
 
     var kLineTimeStep: String? = null
@@ -48,7 +48,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
 
     private lateinit var socketSetting: WebSocketSetting
-    private lateinit var futureSocketSetting:WebSocketSetting
+    private lateinit var futureSocketSetting: WebSocketSetting
 
     //用户数据相关
     private var userDataListener: SocketListener? = UserDataListener()
@@ -63,7 +63,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
     private var pairKlineSocketListener: SocketListener? = PairKlineListener()
 
     /*****future*****/
-    private var futureSymbolListener:SocketListener? = FutureSymbolListener()
+    private var futureSymbolListener: SocketListener? = FutureSymbolListener()
+
     /*****future*****/
 
 
@@ -80,21 +81,21 @@ class FiexSocketManager(context: Context, handler: Handler) {
         if (pingTimer == null) {
             pingTimer = Timer()
         }
-        if(pingTimerTask == null){
-            pingTimerTask = object :TimerTask(){
+        if (pingTimerTask == null) {
+            pingTimerTask = object : TimerTask() {
                 override fun run() {
                     sendPing()
                 }
             }
         }
-        if(!timerStart){
+        if (!timerStart) {
             pingTimer?.schedule(pingTimerTask, Date(), 5000)
             timerStart = true
         }
     }
 
-    private fun endPingTimer(){
-        if(pingTimer != null){
+    private fun endPingTimer() {
+        if (pingTimer != null) {
             pingTimer?.cancel()
             pingTimer = null
             pingTimerTask?.cancel()
@@ -118,7 +119,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_SUBSTATUS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
-        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL,futureSocketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, futureSocketSetting)
     }
 
 
@@ -130,9 +131,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
         var socketMap = WebSocketHandler.getAllWebSocket()
         addListenerAll()
         socketMap.forEach {
-            Log.d(TAG,"start all socketMap,key = "+it.key)
-            Log.d(TAG,"start all socketMap,state = "+it.value.socketState)
-            Log.d(TAG,"start all socketMap,isListenerEmpty = "+it.value.isListenerEmpty)
+            Log.d(TAG, "start all socketMap,key = " + it.key)
+            Log.d(TAG, "start all socketMap,state = " + it.value.socketState)
+            Log.d(TAG, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
             it.value.start()
         }
         startPingTimer()
@@ -146,11 +147,11 @@ class FiexSocketManager(context: Context, handler: Handler) {
         removeListenerAll()
         var socketMap = WebSocketHandler.getAllWebSocket()
         socketMap.forEach {
-            Log.d(TAG,"stop all socketMap,key = "+it.key)
-            Log.d(TAG,"stop all socketMap,state = "+it.value.socketState)
+            Log.d(TAG, "stop all socketMap,key = " + it.key)
+            Log.d(TAG, "stop all socketMap,state = " + it.value.socketState)
             it.value.disConnect()
         }
-       endPingTimer()
+        endPingTimer()
     }
 
     fun destorySocketAll() {
@@ -321,24 +322,39 @@ class FiexSocketManager(context: Context, handler: Handler) {
             var ticketSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)
             var pairKlineSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)
             var futureSymbolSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
-            Log.d(TAG, "userSocket state =,"+userSocket.socketState+"listener is empty= "+userSocket.isListenerEmpty)
-            Log.d(TAG, "subStatusSocket state =,"+subStatusSocket.socketState+"listener is empty= "+subStatusSocket.isListenerEmpty)
-            Log.d(TAG, "ticketSocket state =,"+ticketSocket.socketState+"listener is empty= "+ticketSocket.isListenerEmpty)
-            Log.d(TAG, "pairKlineSocket state =,"+pairKlineSocket.socketState+"listener is empty= "+pairKlineSocket.isListenerEmpty)
-            Log.d(TAG, "futureSymbolSocket state =,"+futureSymbolSocket.socketState+"listener is empty= "+futureSymbolSocket.isListenerEmpty)
-            if(userSocket.isConnect){
+            Log.d(
+                TAG,
+                "userSocket state =," + userSocket.socketState + "listener is empty= " + userSocket.isListenerEmpty
+            )
+            Log.d(
+                TAG,
+                "subStatusSocket state =," + subStatusSocket.socketState + "listener is empty= " + subStatusSocket.isListenerEmpty
+            )
+            Log.d(
+                TAG,
+                "ticketSocket state =," + ticketSocket.socketState + "listener is empty= " + ticketSocket.isListenerEmpty
+            )
+            Log.d(
+                TAG,
+                "pairKlineSocket state =," + pairKlineSocket.socketState + "listener is empty= " + pairKlineSocket.isListenerEmpty
+            )
+            Log.d(
+                TAG,
+                "futureSymbolSocket state =," + futureSymbolSocket.socketState + "listener is empty= " + futureSymbolSocket.isListenerEmpty
+            )
+            if (userSocket.isConnect) {
                 userSocket?.send(jsonObject.toString())
             }
-            if(subStatusSocket.isConnect){
+            if (subStatusSocket.isConnect) {
                 subStatusSocket?.send(jsonObject.toString())
             }
-            if(ticketSocket.isConnect){
+            if (ticketSocket.isConnect) {
                 ticketSocket?.send(jsonObject.toString())
             }
-            if(pairKlineSocket.isConnect){
+            if (pairKlineSocket.isConnect) {
                 pairKlineSocket?.send(jsonObject.toString())
             }
-            if(futureSymbolSocket.isConnect){
+            if (futureSymbolSocket.isConnect) {
                 futureSymbolSocket?.send(jsonObject.toString())
             }
         } catch (e: Exception) {
@@ -419,6 +435,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onDisconnect() {
             Log.d(TAG, "UserDataListener onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "UserDataListener onConnected")
             startListenUser()
@@ -426,7 +443,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(TAG, "UserDataListener message = $message")
-            if(message.equals("succeed")){
+            if (message.equals("succeed")) {
                 return
             }
             if (message.equals("invalid_ws_token")) {
@@ -511,6 +528,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onDisconnect() {
             Log.d(TAG, "tickerStatus onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "tickerStatus onConnected")
             startListenTickers()
@@ -518,7 +536,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(TAG, "tickerStatus->onMessage = $message")
-            if(message.equals("succeed")){
+            if (message.equals("succeed")) {
                 return
             }
             var data: JSONObject? = null
@@ -527,7 +545,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
             } catch (e: JSONException) {
                 FryingUtil.printError(e)
             }
-            if (data != null) {
+            if (data != null && data.has("resType")) {
                 var resType = data.getString("resType")
 //                Log.d(TAG, "tickerStatus->resType = $resType")
 //                Log.d(TAG, "tickerStatus->data = " + data.getString("data"))
@@ -566,6 +584,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onDisconnect() {
             Log.d(TAG, "PairKline onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "PairKline onConnected")
             startListenKLine()
@@ -573,7 +592,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             Log.d(TAG, "PairKline->onMessage = $message")
-            if(message.equals("succeed")){
+            if (message.equals("succeed")) {
                 return
             }
             CommonUtil.postHandleTask(mHandler) {
@@ -591,30 +610,35 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         object : TypeToken<Kline?>() {}.type
                     )
                     var klineItem = KLineItem()
-                    if(kline != null){
-                        if(kline?.a != null){
+                    if (kline != null) {
+                        if (kline?.a != null) {
                             klineItem.a = kline?.a?.toDouble()!!
                         }
-                        if(kline?.c != null){
+                        if (kline?.c != null) {
                             klineItem.c = kline?.c?.toDouble()!!
                         }
-                        if(kline?.h != null){
+                        if (kline?.h != null) {
                             klineItem.h = kline?.h?.toDouble()!!
                         }
-                        if(kline?.l != null){
+                        if (kline?.l != null) {
                             klineItem.l = kline?.l?.toDouble()!!
                         }
-                        if(kline?.o != null){
+                        if (kline?.o != null) {
                             klineItem.o = kline?.o?.toDouble()!!
                         }
-                        if(kline?.t != null){
+                        if (kline?.t != null) {
                             klineItem.t = kline?.t?.div(1000)
                         }
-                        if(kline?.v != null){
+                        if (kline?.v != null) {
                             klineItem.v = kline?.v?.toDouble()!!
                         }
                         if (kline?.s.equals(currentPair)) {
-                            SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, klineItem)
+                            SocketDataContainer.addKLineData(
+                                currentPair,
+                                mHandler,
+                                kLineId,
+                                klineItem
+                            )
                         }
                     }
                 }
@@ -629,6 +653,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onDisconnect() {
             Log.d(TAG, "SubStatusDataListener onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "SubStatusDataListener onConnected")
             currentPair = SocketUtil.getCurrentPair(mCcontext!!)
@@ -636,7 +661,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            if(message.equals("succeed")){
+            if (message.equals("succeed")) {
                 return
             }
             Log.d(TAG, "SubStatus->onMessage = $message")
@@ -656,7 +681,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 jsonObject.toString(),
                                 object : TypeToken<TradeOrderDepth?>() {}.type
                             )
-                            if(allDepth != null){
+                            if (allDepth != null) {
                                 SocketDataContainer.updateQuotationOrderNewDataFiex(
                                     mCcontext,
                                     ConstData.DEPTH_SPOT_TYPE,
@@ -672,10 +697,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 jsonObject.toString(),
                                 object : TypeToken<TradeOrderOneDepth??>() {}.type
                             )
-                            if(oneDepth != null){
+                            if (oneDepth != null) {
                                 var allDepthData = TradeOrderDepth()
                                 var direction = oneDepth?.m
-                                var desArray:Array<String?>? = arrayOf(oneDepth?.p, oneDepth?.q)
+                                var desArray: Array<String?>? = arrayOf(oneDepth?.p, oneDepth?.q)
                                 if (direction.equals("1")) {//BID
                                     var bidArray = arrayOf(desArray)
                                     allDepthData?.b = bidArray
