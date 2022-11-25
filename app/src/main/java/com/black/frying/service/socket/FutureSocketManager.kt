@@ -86,14 +86,15 @@ class FutureSocketManager(context: Context, handler: Handler) {
     }
 
     fun startConnectAll() {
-        var socketMap = WebSocketHandler.getAllWebSocket()
+        var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
         addListenerAll()
-        socketMap.forEach {
-            Log.d(tag, "start all socketMap,key = " + it.key)
-            Log.d(tag, "start all socketMap,state = " + it.value.socketState)
-            Log.d(tag, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
-            it.value.start()
-        }
+//        socketMap.forEach {
+//            Log.d(tag, "start all socketMap,key = " + it.key)
+//            Log.d(tag, "start all socketMap,state = " + it.value.socketState)
+//            Log.d(tag, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
+//            it.value.start()
+//        }
+        socketManager.start()
         startPingTimer()
     }
 
@@ -168,20 +169,26 @@ class FutureSocketManager(context: Context, handler: Handler) {
     }
 
     fun addListenerAll() {
-        var socketMgrList = WebSocketHandler.getAllWebSocket()
+        var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
         var listener: SocketListener? = null
-        socketMgrList.forEach {
-            when (it.key) {
-                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
-                    listener = if (symbolListener != null) {
-                        symbolListener
-                    } else {
-                        SymbolListener()
-                    }
-                }
+//        socketMgrList.forEach {
+//            when (it.key) {
+//                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
+//                    listener = if (symbolListener != null) {
+//                        symbolListener
+//                    } else {
+//                        SymbolListener()
+//                    }
+//                }
+//            }
+//            it.value.addListener(listener)
+//        }
+            listener = if (symbolListener != null) {
+                symbolListener
+            } else {
+                SymbolListener()
             }
-            it.value.addListener(listener)
-        }
+        socketManager.addListener(listener)
     }
 
     fun sendPing() {
@@ -230,7 +237,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "SymbolListener message = $message")
+            Log.d(tag, "SymbolListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }
