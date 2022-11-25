@@ -171,18 +171,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
     fun addListenerAll() {
         var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
         var listener: SocketListener? = null
-//        socketMgrList.forEach {
-//            when (it.key) {
-//                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
-//                    listener = if (symbolListener != null) {
-//                        symbolListener
-//                    } else {
-//                        SymbolListener()
-//                    }
-//                }
-//            }
-//            it.value.addListener(listener)
-//        }
+
         listener = if (symbolListener != null) {
             symbolListener
         } else {

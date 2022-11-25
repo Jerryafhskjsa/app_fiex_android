@@ -79,4 +79,11 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_POSITION_LIST)
     fun getPositionList(): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
 
+    /**
+     * 获取用户持仓
+     */
+    @GET(UrlConfig.Future.URL_TICKERS)
+    fun getTickers(): Observable<HttpRequestResultBean<List<TickerBean?>?>?>?
+
+
 }

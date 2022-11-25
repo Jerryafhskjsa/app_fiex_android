@@ -541,6 +541,8 @@ object UrlConfig {
 
         const val URL_OPEN_ACCOUNT = "user/v1/account/open";
 
+        const val URL_TICKERS = "market/v1/public/q/tickers";
+
     }
 
 
