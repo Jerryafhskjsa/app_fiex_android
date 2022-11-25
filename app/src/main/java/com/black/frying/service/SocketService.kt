@@ -164,7 +164,7 @@ class SocketService : Service() {
             }
             if (fiexSocketManager == null) {
                 fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
-                futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
+//                futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
 //                fiexSocketManager?.startConnect()
             }
             if (qSocket == null) {

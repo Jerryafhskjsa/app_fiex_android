@@ -48,6 +48,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
 
     private lateinit var socketSetting: WebSocketSetting
+    private lateinit var futureSocketSetting:WebSocketSetting
 
     //用户数据相关
     private var userDataListener: SocketListener? = UserDataListener()
@@ -60,6 +61,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     //交易对k线相关
     private var pairKlineSocketListener: SocketListener? = PairKlineListener()
+
+    /*****future*****/
+    private var futureSymbolListener:SocketListener? = FutureSymbolListener()
+    /*****future*****/
 
 
     init {
@@ -104,10 +109,16 @@ class FiexSocketManager(context: Context, handler: Handler) {
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
+        var futurSocketUrl = UrlConfig.getFutureMarketSocketUrl()
+        futureSocketSetting = WebSocketSetting()
+        futureSocketSetting.connectUrl = futurSocketUrl
+        futureSocketSetting.connectionLostTimeout = 60//心跳间隔时间
+        futureSocketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_USER, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_SUBSTATUS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL,futureSocketSetting)
     }
 
 
@@ -188,6 +199,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         PairKlineListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
+                    listener = if (futureSymbolListener != null) {
+                        futureSymbolListener
+                    } else {
+                        FutureSymbolListener()
+                    }
+                }
             }
             socketMar.addListener(listener)
         }
@@ -211,6 +229,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 WebSocketHandler.getWebSocket(socketKey)?.removeListener(pairKlineSocketListener)
                 pairKlineSocketListener = null
             }
+            SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(futureSymbolListener)
+                futureSymbolListener = null
+            }
         }
     }
 
@@ -231,6 +253,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 SocketUtil.WS_PAIR_KLINE -> {
                     listener = pairKlineSocketListener
                 }
+                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
+                    listener = futureSymbolListener
+                }
             }
             it.value.removeListener(listener)
         }
@@ -238,6 +263,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         subStatusSocketListener = null
         tickerDataListener = null
         pairKlineSocketListener = null
+        futureSymbolListener = null
     }
 
     fun addListenerAll() {
@@ -273,6 +299,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         PairKlineListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
+                    listener = if (futureSymbolListener != null) {
+                        futureSymbolListener
+                    } else {
+                        FutureSymbolListener()
+                    }
+                }
             }
             it.value.addListener(listener)
         }
@@ -287,10 +320,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
             var subStatusSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)
             var ticketSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)
             var pairKlineSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)
+            var futureSymbolSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
             Log.d(TAG, "userSocket state =,"+userSocket.socketState+"listener is empty= "+userSocket.isListenerEmpty)
             Log.d(TAG, "subStatusSocket state =,"+subStatusSocket.socketState+"listener is empty= "+subStatusSocket.isListenerEmpty)
             Log.d(TAG, "ticketSocket state =,"+ticketSocket.socketState+"listener is empty= "+ticketSocket.isListenerEmpty)
             Log.d(TAG, "pairKlineSocket state =,"+pairKlineSocket.socketState+"listener is empty= "+pairKlineSocket.isListenerEmpty)
+            Log.d(TAG, "futureSymbolSocket state =,"+futureSymbolSocket.socketState+"listener is empty= "+futureSymbolSocket.isListenerEmpty)
             if(userSocket.isConnect){
                 userSocket?.send(jsonObject.toString())
             }
@@ -302,6 +337,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
             }
             if(pairKlineSocket.isConnect){
                 pairKlineSocket?.send(jsonObject.toString())
+            }
+            if(futureSymbolSocket.isConnect){
+                futureSymbolSocket?.send(jsonObject.toString())
             }
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -352,6 +390,23 @@ class FiexSocketManager(context: Context, handler: Handler) {
             val jsonObject = JSONObject()
             jsonObject.put("sub", "subStats")
             WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS).send(jsonObject.toString())
+        } catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    /**
+     * "req":"sub_symbol",
+    "  symbol":"btc_usdt"
+     */
+    fun startListenFutureSymbol() {
+        Log.d(TAG, "startListenFutureSymbol---")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("req", "sub_symbol")
+            jsonObject.put("symbol", "btc_usdt")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+                ?.send(jsonObject.toString())
         } catch (e: Exception) {
             FryingUtil.printError(e)
         }
@@ -659,6 +714,61 @@ class FiexSocketManager(context: Context, handler: Handler) {
             } catch (e: JSONException) {
                 FryingUtil.printError(e)
             }
+        }
+    }
+
+    /**
+     * 交易对相关
+     */
+    inner class FutureSymbolListener() : SimpleListener() {
+        override fun onConnected() {
+            Log.d(TAG, "SymbolListener---->ßonConnected")
+            startListenFutureSymbol()
+        }
+
+        override fun <T : Any?> onMessage(message: String?, data: T) {
+            Log.d(TAG, "SymbolListener->onMessage = $message")
+            if (message.equals("succeed") || message.equals("pong")) {
+                return
+            }
+            var data: JSONObject? = null
+            try {
+                data = JSONObject(message)
+                if (data.has("channel")) {
+                    var channel = data.get("channel");
+                    var data = data.get("data");
+//                    Log.d(tag, "SymbolListener message = $channel")
+                    when (channel) {
+                        "push.ticker" -> { //行情
+
+                        }
+                        "push.index.price" -> { //指数价格
+
+                        }
+                        "push.mark.price" -> { //标记价格
+
+                        }
+                        "push.agg.ticker" -> { //聚合行情
+
+                        }
+                        "push.deal" -> { //实时成交
+
+                        }
+                        "push.deep" -> { //深度
+
+                        }
+                        "push.deep.full" -> { //全部深度
+
+                        }
+                        "push.fund.rate" -> {//资金费率
+
+                        }
+                    }
+                }
+            } catch (e: JSONException) {
+                FryingUtil.printError(e)
+            }
+
         }
     }
 }
