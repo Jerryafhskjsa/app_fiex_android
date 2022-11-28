@@ -240,8 +240,10 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.onResume()
         getTradeOrderCurrent()
         updateDear(isDear)
-        FutureService.getOrderPosition(mContext);
-        FutureService.getLeverageBracketList(mContext);
+
+        FutureService.getContractSize("btc_usdt")
+        FutureService.getLeverageBracketList(mContext)
+        FutureService.getOrderPosition(mContext)
 
     }
 

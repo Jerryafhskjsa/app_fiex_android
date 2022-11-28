@@ -13,6 +13,8 @@ import java.math.BigDecimal
 
 object FutureService {
 
+    val symbol="btc_usdt"
+
     var symbolList: ArrayList<SymbolBean>? = null
     var buyList: ArrayList<OrderItem>? = null
     var sellList: ArrayList<OrderItem>? = null
@@ -20,22 +22,32 @@ object FutureService {
     var markPriceBeanList: ArrayList<MarkPriceBean>? = null
     var markPrice: MarkPriceBean? = null
 
+    var positionValue: Double? = null // 仓位价值
+
+    var contractSize: Double? = null //合约面值
+
+    var leverageBracket:LeverageBracketResp?=null
+
+    /**
+     * 初始化合约交易对
+     */
     fun getSymbolList(context: Context?) {
         FutureApiServiceHelper.getSymbolList(context, false,
             object : Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>() {
                 override fun error(type: Int, error: Any?) {
-
+                    Log.d("ttttttt-->initSymbol",error.toString())
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<SymbolBean>?>?) {
                     if (returnData != null) {
                         symbolList = returnData.result
+                        Log.d("ttttttt-->initSymbol","--"+symbolList?.size)
                     }
                 }
             })
     }
 
-    fun initSymbol(context: Context?) {
+    fun initFutureSymbol(context: Context?) {
         if (symbolList == null) {
             getSymbolList(context);
         }
@@ -68,8 +80,7 @@ object FutureService {
     /**
      * 获取交易对的合约面值
      */
-    fun getSymbolValue(symbol: String): Double? {
-        var contractSize: Double? = null
+    fun getContractSize(symbol: String): Double? {
         for (symbolItem in symbolList!!) {
             if (symbolItem.symbol.equals(symbol)) {
                 contractSize = symbolItem.contractSize.toDouble()
@@ -79,6 +90,9 @@ object FutureService {
         return contractSize
     }
 
+    /**
+     * 获取资金费率
+     */
     fun getFundingRate(context: Context?, symbol: String) {
         FutureApiServiceHelper.getFundingRate(
             symbol,
@@ -98,7 +112,6 @@ object FutureService {
 
 
     fun getDepthOrder(context: Context?, symbol: String) {
-        var contractSize = getSymbolValue(symbol)
         getMarkPrice(symbol);
         Log.d("ttttttt-->contractSize", contractSize.toString());
 //        Observable.zip()
@@ -192,6 +205,17 @@ object FutureService {
      *浮动盈亏/收益率：根据标记价格实时计算；
      *已实现盈亏:realizedProfit
      *自动减仓：调用接口/futures/fapi/user/v1/position/adl  开多 longQuantile 一共5个格
+     *
+     * 全仓时:
+    多仓强平价格 = 数量 * 面值 * 开仓均价 / (数量 * 面值 + 开仓均价 * dex)
+    空仓强平价格 = 数量 * 面值 * 开仓均价 / (数量 * 面值 - 开仓均价 * dex)
+
+    dex（共享保证金） = 钱包余额 - ∑逐仓仓位保证金 - ∑全仓维持保证金 - ∑委托保证金 + ∑除本仓位其他全仓仓位未实现盈亏
+
+    逐仓时:
+    多仓强平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (仓位保证金 - 维持保证金))
+    空仓平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (维持保证金 - 仓位保证金))
+     *
      */
     fun getOrderPosition(context: Context?) {
         FutureApiServiceHelper.getPositionList(context, false,
@@ -205,7 +229,30 @@ object FutureService {
                         var positionList = returnData.result
                         if (positionList != null) {
                             for (positionBean in positionList) {
-                                Log.d("ttttttt-->account", positionBean.toString());
+                                //仓位价值=开仓均价 * 数量 * 面值
+                                positionValue=BigDecimal(positionBean?.positionSize).multiply(BigDecimal(positionBean?.entryPrice)).multiply(
+                                    BigDecimal(contractSize.toString())).toDouble()
+                                var maintMarginRate=""; //维持保证金率
+                                for(item in leverageBracket?.leverageBrackets!!){
+                                    //仓位价值和档位比较 ==-1 仓位价值小
+                                    if(BigDecimal(positionValue.toString()).compareTo(BigDecimal(item?.maxNominalValue))==-1){
+                                        maintMarginRate=item?.maintMarginRate
+                                        break
+                                    }
+                                }
+                                //维持保证金 = 开仓均价 * 数量 * 面值 * 维持保证金率
+                                var maintMargin=BigDecimal(positionValue.toString()).multiply(BigDecimal(maintMarginRate))
+                                //强平价格=（维持保证金-仓位保证金+开仓均价*数量*面值）/数量*面值
+                                if(positionBean?.positionSide.equals("LONG")){ //做多
+
+                                }else{ //做空
+
+                                }
+                                Log.d("ttttttt-->maintMarginRate", maintMarginRate)
+                                Log.d("ttttttt-->maintMargin", maintMargin.toString());
+                                //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
+                                Log.d("ttttttt-->positionValue", positionValue.toString())
+                                Log.d("ttttttt-->positionValue", positionBean.toString());
                             }
                         }
                     }
@@ -216,6 +263,7 @@ object FutureService {
 
     /**
      * 获取杠杆分层
+     *
      */
     fun getLeverageBracketList(context: Context?) {
         FutureApiServiceHelper.getLeverageBracketList(context, false,
@@ -227,7 +275,14 @@ object FutureService {
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?) {
                     if (returnData != null) {
                         var list = returnData.result
-                        Log.d("ttttttt-->LeverageBracketList", list.toString());
+                        if (list != null) {
+                            for(item in list){
+                                if(item?.symbol.equals(symbol)){
+                                    leverageBracket=item
+                                    break
+                                }
+                            }
+                        }
 
                     }
                 }

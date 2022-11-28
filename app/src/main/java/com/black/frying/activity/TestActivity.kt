@@ -24,10 +24,9 @@ class TestActivity() : BaseActivity(), QRefreshLayout.OnRefreshListener,
         button = findViewById<Button>(R.id.btn_test);
         button?.setOnClickListener(View.OnClickListener {
 //            FutureService.getDepthOrder(this,"btc_usdt");
-            FutureService.getFundingRate(this, "btc_usdt");
+//            FutureService.getFundingRate(this, "btc_usdt");
         })
-        FutureService.initSymbol(this);
-        FutureService.initMarkPrice(this);
+//
     }
 
     var button: Button? = null

@@ -11,6 +11,7 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.manager.ApiManager
 import com.black.base.util.*
+import com.black.frying.service.FutureService
 import com.black.lib.permission.Permission
 import com.black.lib.permission.ZbPermission
 import com.black.lib.permission.ZbPermission.ZbPermissionCallback
@@ -126,7 +127,7 @@ class StartPageActivity : BaseActivity() {
                 }
             }
         }
-
+        FutureService.initFutureSymbol(this);
         normalNext();
     }
 
@@ -140,6 +141,8 @@ class StartPageActivity : BaseActivity() {
 
     private fun gotoWorkPage() {
         gotoMainWorkActivity()
+        //项目启动的时候初始化合约交易对
+
         //        if (isNewApp()) {
 //            SharedPreferences.Editor editor = prefs.edit();
 //            editor.putBoolean(ConstData.IS_NEW_APP, false);
