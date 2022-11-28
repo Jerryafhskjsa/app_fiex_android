@@ -78,9 +78,9 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
                 val set = tabSets!![i]
                 try {
                     when(i){
-                        0 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
-                        1 -> fragmentList?.add(EmptyFragment())
-                        2,3 ->fragmentList?.add(EmptyFragment())
+                        0 -> fragmentList?.add(EmptyFragment())
+                        1,2 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        3 ->fragmentList?.add(EmptyFragment())
                     }
 
                 } catch (throwable: Throwable) {

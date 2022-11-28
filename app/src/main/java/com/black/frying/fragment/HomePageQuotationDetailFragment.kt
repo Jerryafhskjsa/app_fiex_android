@@ -37,7 +37,8 @@ import kotlin.collections.ArrayList
  */
 class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickListener,
     View.OnClickListener {
-    private var set: String? = null
+    private var set: String? = null//现货(自选，eth，usdt) 合约(自选 u本位 币本位)
+    private var tabTag:String? = null//现货，合约
     private var collect: String? = null
 
     private var binding: FragmentHomePageQuotationDetailBinding? = null
@@ -312,50 +313,92 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     private val thisSetPairStatusData: Unit
         get() {
             postHandleTask(socketHandler, Runnable {
-                SocketDataContainer.getPairsWithSet(
-                    activity,
-                    set,
-                    object : Callback<ArrayList<PairStatus?>?>() {
-                        override fun error(type: Int, error: Any) {
-                            gettingPairsData = false
-                        }
-                        override fun callback(returnData: ArrayList<PairStatus?>?) {
-                            if (returnData == null) {
+                if(tabTag.equals(getString(R.string.spot))){
+                    SocketDataContainer.getPairsWithSet(
+                        activity,
+                        set,
+                        object : Callback<ArrayList<PairStatus?>?>() {
+                            override fun error(type: Int, error: Any) {
                                 gettingPairsData = false
-                                return
                             }
-                            synchronized(dataMap) {
-                                synchronized(dataList) {
-                                    dataMap.clear()
-                                    dataList.clear()
-                                    dataList.addAll(returnData)
-                                    for (pairStatus in returnData) {
-                                        pairStatus?.pair?.let {
-                                            dataMap[it] = pairStatus
+                            override fun callback(returnData: ArrayList<PairStatus?>?) {
+                                if (returnData == null) {
+                                    gettingPairsData = false
+                                    return
+                                }
+                                synchronized(dataMap) {
+                                    synchronized(dataList) {
+                                        dataMap.clear()
+                                        dataList.clear()
+                                        dataList.addAll(returnData)
+                                        for (pairStatus in returnData) {
+                                            pairStatus?.pair?.let {
+                                                dataMap[it] = pairStatus
+                                            }
+                                        }
+                                        mContext?.runOnUiThread {
+                                            adapter?.data = dataList
+                                            adapter?.sortData(comparator)
+                                            adapter?.notifyDataSetChanged()
+                                            gettingPairsData = false
                                         }
                                     }
-                                    mContext?.runOnUiThread {
-                                        adapter?.data = dataList
-                                        adapter?.sortData(comparator)
-                                        adapter?.notifyDataSetChanged()
-                                        gettingPairsData = false
+                                }
+                                gettingPairsData = false
+                            }
+                        })
+                }
+                if(tabTag.equals(getString(R.string.futures))){
+                    SocketDataContainer.getFuturesPairsWithSet(
+                        activity,
+                        set,
+                        object : Callback<ArrayList<PairStatus?>?>() {
+                            override fun error(type: Int, error: Any) {
+                                gettingPairsData = false
+                            }
+                            override fun callback(returnData: ArrayList<PairStatus?>?) {
+                                if (returnData == null) {
+                                    gettingPairsData = false
+                                    return
+                                }
+                                synchronized(dataMap) {
+                                    synchronized(dataList) {
+                                        dataMap.clear()
+                                        dataList.clear()
+                                        dataList.addAll(returnData)
+                                        for (pairStatus in returnData) {
+                                            pairStatus?.pair?.let {
+                                                dataMap[it] = pairStatus
+                                            }
+                                        }
+                                        mContext?.runOnUiThread {
+                                            adapter?.data = dataList
+                                            adapter?.sortData(comparator)
+                                            adapter?.notifyDataSetChanged()
+                                            gettingPairsData = false
+                                        }
                                     }
                                 }
+                                gettingPairsData = false
                             }
-                            gettingPairsData = false
-                        }
-                    })
+                        })
+                }
             })
         }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         activity?.let {
             val pairStatus = adapter?.getItem(position)
-            CookieUtil.setCurrentPair(it, pairStatus?.pair)
-            sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-            val bundle = Bundle()
-            bundle.putString(ConstData.PAIR, pairStatus?.pair)
-            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(it)
+            if(tabTag == getString(R.string.spot)){
+                CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                val bundle = Bundle()
+                bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(it)
+            }
+            if(tabTag == getString(R.string.futures)){
+
+            }
         }
     }
 
@@ -377,11 +420,12 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     }
 
     companion object {
-        fun newInstance(tab: QuotationSet?): HomePageQuotationDetailFragment {
+        fun newInstance(tab: QuotationSet?,tabTag:String?): HomePageQuotationDetailFragment {
             val args = Bundle()
             val fragment = HomePageQuotationDetailFragment()
             fragment.arguments = args
             fragment.set = tab?.coinType
+            fragment.tabTag = tabTag
             return fragment
         }
     }

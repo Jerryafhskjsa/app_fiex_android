@@ -114,6 +114,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         SocketDataContainer.initAllPairStatusData(this)
         //获取所有u本位交易对数据并缓存
         SocketDataContainer.initAllFutureUsdtPairStatusData(this)
+        //获取所有币本位交易对数据并缓存
+        SocketDataContainer.initAllFutureCoinPairStatusData(this)
         checkUpdate(true)
     }
 

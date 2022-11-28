@@ -43,11 +43,13 @@ import skin.support.content.res.SkinCompatResources
 import java.util.*
 
 //弹出交易对状态列表
-open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, oldSets: List<QuotationSet?>?) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
+final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, oldSets: List<QuotationSet?>?) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     companion object {
         const val TYPE_TRANSACTION = 0 //交易
         const val TYPE_ENTRUST = 1 //委托
         const val TYPE_K_LINE_FULL = 2 //全屏K线
+        const val TYPE_FUTURE_U = 3//u本位合约
+        const val TYPE_FUTURE_COIN = 4//币本位合约
         private var pairStatusPopupWindow: PairStatusPopupWindow? = null
         fun getInstance(activity: Activity, type: Int, sets: List<QuotationSet?>?): PairStatusPopupWindow {
             return PairStatusPopupWindow(activity, type, sets)
@@ -117,6 +119,11 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
             }
             TYPE_ENTRUST -> {
                 titleView.setText(R.string.bill_manager)
+                btnTotal.visibility = View.VISIBLE
+                btnTotal.setOnClickListener(this)
+            }
+            TYPE_FUTURE_U, TYPE_FUTURE_COIN -> {
+                titleView.setText(R.string.futures)
                 btnTotal.visibility = View.VISIBLE
                 btnTotal.setOnClickListener(this)
             }
@@ -411,11 +418,11 @@ open class PairStatusPopupWindow(private val mActivity: Activity, type: Int, old
                     }
                 }
             }
-            val dataType = type and 0xff00
-            if (dataType == PairStatus.NORMAL_DATA) {
-                SocketDataContainer.getAllPairStatus(mActivity, callback)
-            } else {
-                SocketDataContainer.getAllLeverPairStatus(mActivity, callback)
+            val dataType = type
+            when (dataType){
+                TYPE_FUTURE_U ->  SocketDataContainer.getAllFuturePairStatus(mActivity,mActivity.getString(R.string.usdt_base),callback)
+                TYPE_FUTURE_COIN -> SocketDataContainer.getAllFuturePairStatus(mActivity,mActivity.getString(R.string.coin_base),callback)
+                PairStatus.NORMAL_DATA -> SocketDataContainer.getAllPairStatus(mActivity, callback)
             }
         }
     }

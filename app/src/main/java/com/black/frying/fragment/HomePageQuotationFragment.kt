@@ -43,6 +43,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
+    private var tabTag:String? = null
     private var parent: HomePageActivity? = null
 
     private var binding: FragmentHomePageQuotationBinding? = null
@@ -167,27 +168,51 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun refreshSets() {
-            PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
-                override fun error(type: Int, error: Any) {
-                }
-                override fun callback(returnData: ArrayList<QuotationSet?>?) {
-                    if (returnData != null) {
-                        var setData = ArrayList<QuotationSet?>()
-                        setData.addAll(returnData)
-                        var optionalSet = QuotationSet()
-                        optionalSet.coinType = getString(R.string.pair_collect)
-                        optionalSet.name = getString(R.string.pair_collect)
-                        setData?.add(0,  optionalSet)
-                        if (setData != null && setData?.isNotEmpty()) {
-                            sets = setData
-                            initQuotationGroup()
+            if(tabTag.equals(getString(R.string.spot))){
+                PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
+                    override fun error(type: Int, error: Any) {
+                    }
+                    override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                        if (returnData != null) {
+                            var setData = ArrayList<QuotationSet?>()
+                            setData.addAll(returnData)
+                            var optionalSet = QuotationSet()
+                            optionalSet.coinType = getString(R.string.pair_collect)
+                            optionalSet.name = getString(R.string.pair_collect)
+                            setData?.add(0,  optionalSet)
+                            if (setData != null && setData?.isNotEmpty()) {
+                                sets = setData
+                                initQuotationGroup()
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
+            if(tabTag.equals(getString(R.string.futures))){
+                initFutureQuotationGroup()
+            }
     }
 
-    //初始化行情分组
+    //初始化合约行情分组
+    private fun initFutureQuotationGroup(){
+        var setData = ArrayList<QuotationSet?>(3)
+        var optionalFaverSet = QuotationSet()
+        optionalFaverSet.coinType = getString(R.string.pair_collect)
+        optionalFaverSet.name = getString(R.string.pair_collect)
+        setData?.add(0,  optionalFaverSet)
+        var optionalUbaseSet = QuotationSet()
+        optionalUbaseSet.coinType = getString(R.string.usdt_base)
+        optionalUbaseSet.name = getString(R.string.usdt_base)
+        setData?.add(1,  optionalUbaseSet)
+        var optionalCoinBaseSet = QuotationSet()
+        optionalCoinBaseSet.coinType = getString(R.string.coin_base)
+        optionalCoinBaseSet.name = getString(R.string.coin_base)
+        setData?.add(2,  optionalCoinBaseSet)
+        sets = setData
+        initQuotationGroup()
+    }
+
+    //初始化现货行情分组
     private fun initQuotationGroup() {
         if (sets != null && sets!!.isNotEmpty()) {
             val setSize = sets!!.size
@@ -198,7 +223,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             for (i in 0 until setSize) {
                 val set = sets!![i]
                 try {
-                    fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set))
+                    fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set,tabTag))
                 } catch (throwable: Throwable) {
                     FryingUtil.printError(throwable)
                 }
@@ -268,7 +293,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             val args = Bundle()
             val fragment = HomePageQuotationFragment()
             fragment.arguments = args
-//            fragment.set = tab
+            fragment.tabTag = tab
             return fragment
         }
     }

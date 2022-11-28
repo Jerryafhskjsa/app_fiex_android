@@ -669,40 +669,37 @@ class HomePageContractFragment : BaseFragment(),
                     }
                 }))
             R.id.btn_transaction_memu -> mContext?.let {
-                PairApiServiceHelper.getTradeSetsLocal(
+                var setData = ArrayList<QuotationSet?>(3)
+                var optionalUbaseSet = QuotationSet()
+                optionalUbaseSet.coinType = getString(R.string.usdt_base)
+                optionalUbaseSet.name = getString(R.string.usdt_base)
+                setData?.add(optionalUbaseSet)
+                var optionalCoinBaseSet = QuotationSet()
+                optionalCoinBaseSet.coinType = getString(R.string.coin_base)
+                optionalCoinBaseSet.name = getString(R.string.coin_base)
+                setData?.add(optionalCoinBaseSet)
+                PairStatusPopupWindow.getInstance(
                     it,
-                    true,
-                    object : Callback<ArrayList<QuotationSet?>?>() {
-                        override fun callback(returnData: ArrayList<QuotationSet?>?) {
-                            if (returnData != null) {
-                                val dataType =
-                                    if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
-                                PairStatusPopupWindow.getInstance(
-                                    it,
-                                    PairStatusPopupWindow.TYPE_TRANSACTION or dataType,
-                                    returnData
+                    PairStatusPopupWindow.TYPE_FUTURE_U,
+                    setData
+                )
+                    .show(object : OnPairStatusSelectListener {
+                        override fun onPairStatusSelected(pairStatus: PairStatus?) {
+                            if (pairStatus == null) {
+                                return
+                            }
+                            //交易对切换
+                            if (!TextUtils.equals(
+                                    viewModel?.getCurrentPair(),
+                                    pairStatus.pair
                                 )
-                                    .show(object : OnPairStatusSelectListener {
-                                        override fun onPairStatusSelected(pairStatus: PairStatus?) {
-                                            if (pairStatus == null) {
-                                                return
-                                            }
-                                            //交易对切换
-                                            if (!TextUtils.equals(
-                                                    viewModel?.getCurrentPair(),
-                                                    pairStatus.pair
-                                                )
-                                            ) { //清空价格，数量
-                                                onPairStatusChanged(pairStatus)
-                                            }
-                                        }
-                                    })
+                            ) { //清空价格，数量
+                                onPairStatusChanged(pairStatus)
                             }
                         }
-
-                        override fun error(type: Int, error: Any?) {
-                        }
                     })
+
+
             }
             R.id.price_sub -> {
                 var currentInputPrice = CommonUtil.parseDouble(
