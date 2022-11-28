@@ -232,4 +232,24 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    /**
+     * 获取用户单币种资金
+     */
+    fun getBalanceDetail(
+        context: Context?,
+        coin: String,
+        underlyingType:String,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<BalanceDetailBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getBalanceDetail(coin,underlyingType)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 }

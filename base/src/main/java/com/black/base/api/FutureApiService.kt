@@ -98,4 +98,12 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_leverage_bracket_LIST)
     fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?>?
 
+    /**
+     * 获取用户单币种资金
+     */
+    @GET(UrlConfig.Future.ULR_BALANCE_DETAIL)
+    fun getBalanceDetail(@Query("coin") coin: String?,
+                         @Query("underlyingType") underlyingType: String?)
+                        :Observable<HttpRequestResultBean<BalanceDetailBean?>?>?
+
 }

@@ -127,7 +127,7 @@ class StartPageActivity : BaseActivity() {
                 }
             }
         }
-        FutureService.initFutureSymbol(this);
+        FutureService.initFutureData(this);
         normalNext();
     }
 

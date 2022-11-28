@@ -537,15 +537,18 @@ object UrlConfig {
 
         const val URL_LOGIN = "user/v1/user/login"
 
-        const val URL_POSITION_ADL = "user/v1/position/adl";
+        const val URL_POSITION_ADL = "user/v1/position/adl"
 
-        const val URL_POSITION_LIST = "user/v1/position/list";
+        const val URL_POSITION_LIST = "user/v1/position/list"
 
-        const val URL_leverage_bracket_LIST = "user/v1/leverage/bracket/list";
+        const val URL_leverage_bracket_LIST = "user/v1/leverage/bracket/list"
 
-        const val URL_OPEN_ACCOUNT = "user/v1/account/open";
+        const val URL_OPEN_ACCOUNT = "user/v1/account/open"
 
-        const val URL_TICKERS = "market/v1/public/q/tickers";
+        const val URL_TICKERS = "market/v1/public/q/tickers"
+
+
+        const val ULR_BALANCE_DETAIL="user/v1/balance/detail"
 
 
     }
