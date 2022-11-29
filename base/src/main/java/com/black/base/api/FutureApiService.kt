@@ -90,7 +90,7 @@ interface FutureApiService {
      * 获取adl信息
      */
     @GET(UrlConfig.Future.URL_POSITION_ADL)
-    fun getPositionAdl(): Observable<HttpRequestResultBean<List<ADLBean?>?>?>?
+    fun getPositionAdl(): Observable<HttpRequestResultBean<ArrayList<ADLBean?>?>?>?
 
     /**
      * 获取杠杆分层信息

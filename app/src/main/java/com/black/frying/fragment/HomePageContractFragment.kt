@@ -243,6 +243,7 @@ class HomePageContractFragment : BaseFragment(),
 
         FutureService.getContractSize("btc_usdt")
         FutureService.initMarkPrice(mContext)
+        FutureService.getPositionAdl(mContext)
         FutureService.getBalanceByCoin(mContext)
         FutureService.getLeverageBracketList(mContext)
         FutureService.getOrderPosition(mContext)

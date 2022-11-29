@@ -252,4 +252,21 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    /**
+     * 获取adl信息
+     */
+    fun getPositionAdl( context: Context?,isShowLoading: Boolean,
+                    callback: Callback<HttpRequestResultBean<ArrayList<ADLBean?>?>?>?){
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getPositionAdl()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+
 }
