@@ -18,6 +18,7 @@ import cn.jpush.android.api.TagAliasCallback
 import cn.jpush.android.ups.JPushUPSManager
 import com.black.base.BaseApplication
 import com.black.base.model.FryingExchangeRates
+import com.black.base.model.FryingStyleChange
 import com.black.base.util.*
 import com.black.im.config.CustomFaceConfig
 import com.black.im.config.GeneralConfig
@@ -105,9 +106,11 @@ class FryingApplication : BaseApplication() {
         initX5()
         //清理webview的缓存
         WebView(applicationContext).destroy()
-        //初始化腾讯im
+        //初始化腾讯i
         initTencentIM()
         initLanguageItems(applicationContext)
+        StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
+        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0,"CNY"))
         initFilters()
         BlackRouter.getInstance().init(this)
         BlackRouter.getInstance().setWebViewPath(RouterConstData.WEB_VIEW)
@@ -118,9 +121,9 @@ class FryingApplication : BaseApplication() {
                     checkTokenError = false
                 }
                 if (!LanguageUtil.isSameWithSetting(activity)) {
-                    LanguageUtil.changeAppLanguage(activity, LanguageUtil.getLanguageSetting(activity), false)
+                    LanguageUtil.changeAppLanguage(activity, LanguageUtil.getLanguageSetting(activity), true)
                 }
-                ExchangeRatesUtil.setExchangeRatesSetting(activity, FryingExchangeRates(0,"CNY"))
+                //ExchangeRatesUtil.setExChangeRatesSetting(activity, FryingExchangeRates(0,"CNY"))
             }
 
             override fun onActivityStarted(activity: Activity) {

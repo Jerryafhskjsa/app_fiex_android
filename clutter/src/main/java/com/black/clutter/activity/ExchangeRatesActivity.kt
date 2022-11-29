@@ -27,7 +27,7 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         application = getApplication() as BaseApplication
         initExchangeRates()
-        //onExchangeRatesChanged()
+        onExchangeRatesChanged()
     }
 
     private fun initExchangeRates() {
@@ -61,12 +61,12 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun changeExchangeRates(exchangeRates: FryingExchangeRates) {
-        if (exchangeRates.rateCode != 0 && exchangeRates.rateCode != 2) {
+        if (exchangeRates.rateCode != 0 && exchangeRates.rateCode != 1) {
             FryingUtil.showToast(this, getString(R.string.please_waiting))
             return
         }
         if (exchangeRates != ExchangeRatesUtil.getExchangeRatesSetting(this)) {
-            ExchangeRatesUtil.setExchangeRatesSetting(this, exchangeRates)
+            ExchangeRatesUtil.setExChangeRatesSetting(this, exchangeRates)
             onExchangeRatesChanged()
             BlackRouter.getInstance().build(RouterConstData.START_PAGE)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

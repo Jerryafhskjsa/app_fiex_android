@@ -672,7 +672,7 @@
     <string name="language">语言</string>
     <string name="exchange_rates">汇率</string>
     <string name="super_rebate">超级折扣</string>
-    <string name="language_cny">人民币</string>
+    <string name="language_cny">人民币</string>CNY
     <string name="exchange_rates_usd">美元</string>
     <string name="exchange_rates_jpy">日元</string>
     <string name="exchange_rates_krw">韩元</string>
@@ -680,7 +680,7 @@
 
 
     <string name="system_setup">系统设置</string>
-    <string name="system_version">系统风格</string>
+    <string name="system_version">系统版本</string>
     <string name="server_setting">线路选择</string>
     <string name="link_line_exception">线路异常</string>
     <string name="link_line_normal">线路正常</string>

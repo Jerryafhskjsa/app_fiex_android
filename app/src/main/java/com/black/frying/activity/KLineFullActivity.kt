@@ -11,10 +11,7 @@ import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.QuotationSet
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairStatus
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
-import com.black.base.util.StyleChangeUtil
+import com.black.base.util.*
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AnalyticChart
@@ -321,8 +318,16 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
             return
         }
         //刷新交易对信息
-        binding!!.price.setText(pairStatus.currentPriceFormat)
-        binding!!.priceCny.setText(pairStatus.currentPriceCNYFormat)
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding!!.price.setText(pairStatus.currentPriceFormat)
+            binding!!.priceCny.setText(pairStatus.currentPriceCNYFormat + "CNY")
+        }
+        else{
+            binding!!.price.setText(pairStatus.currentPriceFormat)
+            binding!!.priceCny.setText(pairStatus.currentPriceFormat + "USD")
+        }
         binding!!.percentage.setText(pairStatus.priceChangeSinceTodayDisplay)
         var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
         if(styleChange == 0){

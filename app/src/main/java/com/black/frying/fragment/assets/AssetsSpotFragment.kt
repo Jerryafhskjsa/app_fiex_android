@@ -23,6 +23,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.Money
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.RouterConstData
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
@@ -153,15 +154,29 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
-                var cny = String.format("≈%S CNY", nullAmount)
-                if (total != null) {
+                var usd = String.format("≈ %s USD", nullAmount)
+                var cny = String.format("≈ %S CNY", nullAmount)
+                val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+                if (total != null && exChange == 0) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
-                    cny = String.format("≈%S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2))
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2))
                 }
-                val holeAmountString = usdt + cny
-                val holdSpan = SpannableStringBuilder(holeAmountString)
-                holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                binding?.moneyTotal?.setText(holdSpan)
+                if (total != null && exChange == 1) {
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2))
+                }
+                if (exChange == 0){
+                    val holeAmountString = usdt + cny
+                    val holdSpan = SpannableStringBuilder(holeAmountString)
+                    holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    binding?.moneyTotal?.setText(holdSpan)
+                }
+                if (exChange == 1){
+                    val holeAmountString = usdt + usd
+                    val holdSpan = SpannableStringBuilder(holeAmountString)
+                    holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    binding?.moneyTotal?.setText(holdSpan)
+                }
             }
         }
     }

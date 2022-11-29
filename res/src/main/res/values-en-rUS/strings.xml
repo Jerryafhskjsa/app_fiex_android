@@ -672,7 +672,7 @@
     <string name="language">Language</string>
     <string name="exchange_rates">exchange Rate</string>
     <string name="super_rebate">Super Discount</string>
-    <string name="language_cny">RMB</string>
+    <string name="language_cny">CNY</string>
     <string name="exchange_rates_usd">USD</string>
     <string name="exchange_rates_jpy">JPS</string>
     <string name="exchange_rates_krw">KRW</string>

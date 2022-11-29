@@ -479,8 +479,16 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             return
         }
         //刷新交易对信息
-        binding?.price?.setText(pairStatus.currentPriceFormat)
-        binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding?.price?.setText(pairStatus.currentPriceFormat)
+            binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
+        }
+        else{
+            binding?.price?.setText(pairStatus.currentPriceFormat)
+            binding?.priceCny?.setText(String.format("≈%s USD", pairStatus.currentPriceFormat))
+        }
         binding?.percentage?.setText(pairStatus.priceChangeSinceTodayDisplay)
         var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
         if(styleChange == 0) {

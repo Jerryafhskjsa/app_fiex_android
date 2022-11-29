@@ -683,13 +683,32 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
-            val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-            binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
-            binding?.pairPrice?.text = pairStatus.currentPriceFormat
-            binding?.pairPrice?.setTextColor(color)
-            binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-            binding?.pairSince?.setTextColor(color)
-            binding?.pairPriceCny?.text = String.format("¥ %s", pairStatus.currentPriceCNYFormat)
+            var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+            if (styleChange == 1){
+                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! < 0 ) colorWin else colorLost
+                binding?.pairPrice?.setTextColor(color)
+                binding?.pairSince?.text = pairStatus?.priceChangeSinceTodayFormat
+                binding?.pairSince?.setTextColor(color)
+            }
+            if (styleChange == 0){
+                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0 ) colorWin else colorLost
+                binding?.pairPrice?.setTextColor(color)
+                binding?.pairSince?.text = pairStatus?.priceChangeSinceTodayFormat
+                binding?.pairSince?.setTextColor(color)
+            }
+            val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+            if (exChangeRates == 0)
+            {
+                binding?.pairPrice?.text = pairStatus?.currentPriceFormat
+                binding?.pairPriceCny?.text = String.format("%s CNY", pairStatus?.currentPriceCNYFormat)
+            }
+            else{
+                binding?.pairPrice?.text = pairStatus?.currentPriceFormat
+                binding?.pairPriceCny?.text = String.format("%s USD", pairStatus?.currentPriceFormat)
+            }
+            binding?.pairName?.text = if (pairStatus?.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
+
+
         }
     }
 }

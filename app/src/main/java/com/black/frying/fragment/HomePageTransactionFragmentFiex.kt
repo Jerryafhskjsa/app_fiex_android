@@ -1308,32 +1308,71 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private fun updateCurrentPair(pairStatus: PairStatus) {
         val color = if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s CNY", pairStatus.currentPriceCNYFormat))
+        }
+        else{
+            binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s USD", pairStatus.currentPriceFormat))
+        }
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
-        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
         computePriceCNY()
     }
 
     private fun updateCurrentPairPrice(price:String?){
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+        if (exChangeRates == 1){
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
 //        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
         if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4))
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup( viewModel!!.getCurrentPrice(), 4, 4) + "$")
         } else {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4) + "$")
+        }
+        }
+        else{
+        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
+//        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+        if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4) + "CNY")
+        } else {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4) + "CNY")
+        }
         }
     }
 
     //更新涨跌幅
     private fun updatePriceSince(since:String?){
-        var since = since?.toDouble()
+        val since = since?.toDouble()
         var background: Drawable?
         var color: Int?
-        if (since != null) {
+        val styleChange = StyleChangeUtil.getStyleChangeSetting(mContext!!)?.styleCode
+        if (since != null && styleChange == 1) {
             if(since > 0){//涨
                 background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
             }else if(since < 0){
+                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                color = mContext?.getColor(R.color.T9)
+            }else{
+                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                color = mContext?.getColor(R.color.B3)
+            }
+            Log.d(tag,"priceSince0 = $since")
+            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            Log.d(tag,"priceSince1 = $result")
+            binding!!.actionBarLayout.currentPriceSince.setText(result)
+            binding!!.actionBarLayout.currentPriceSince.background = background
+            binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
+        }
+        if (since != null && styleChange == 0) {
+            if(since < 0){
+                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                color = mContext?.getColor(R.color.T10)
+            }else if(since > 0){
                 background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             }else{

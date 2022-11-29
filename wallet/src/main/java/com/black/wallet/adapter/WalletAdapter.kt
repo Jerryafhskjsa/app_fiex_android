@@ -6,6 +6,7 @@ import android.util.Log
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.wallet.Wallet
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.ImageLoader
 import com.black.base.util.UrlConfig
 import com.black.util.NumberUtil
@@ -30,6 +31,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
+        val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
         viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
         viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
         if (isVisibility) {
@@ -38,7 +40,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
             viewHolder?.usable?.setText("****")
         }
         if (isVisibility) {
-            viewHolder?.totalCny?.setText(if (wallet?.estimatedAvailableAmountCny == null) getString(R.string.number_default) else "≈ ￥ "+NumberUtil.formatNumberDynamicScaleNoGroup(wallet.estimatedAvailableAmountCny, 10, 2, 2))
+            viewHolder?.totalCny?.setText(if (wallet?.estimatedAvailableAmountCny == null) getString(R.string.number_default) else if(exChange == 0)"≈ ￥ "+NumberUtil.formatNumberDynamicScaleNoGroup(wallet.estimatedAvailableAmountCny, 10, 2, 2)else "≈ $ "+NumberUtil.formatNumberDynamicScaleNoGroup(wallet.estimatedAvailableAmount, 10, 2, 2))
         } else {
             viewHolder?.totalCny?.setText("****")
         }
