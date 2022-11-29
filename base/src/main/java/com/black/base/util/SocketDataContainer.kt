@@ -955,6 +955,13 @@ object SocketDataContainer {
         }
         var futureList:ArrayList<PairStatus?>? = null
         when(type){
+            context.getString(R.string.all_future_coin) -> {
+                if(futureList == null){
+                    futureList = ArrayList()
+                }
+                futureList?.addAll(pairFutureUDataList)
+                futureList?.addAll(pairFutureCoinDataList)
+            }
             context.getString(R.string.usdt_base) -> futureList = pairFutureUDataList
             context.getString(R.string.coin_base) -> futureList = pairFutureCoinDataList
         }
@@ -976,8 +983,20 @@ object SocketDataContainer {
         if (context == null) {
             return null
         }
-        synchronized(pairFutureUDataList) {
-            val pairListString = gson.toJson(pairFutureUDataList)
+        var futureList:ArrayList<PairStatus?>? = null
+        when(type){
+            context.getString(R.string.all_future_coin) -> {
+                if(futureList == null){
+                    futureList = ArrayList()
+                }
+                futureList?.addAll(pairFutureUDataList)
+                futureList?.addAll(pairFutureCoinDataList)
+            }
+            context.getString(R.string.usdt_base) -> futureList = pairFutureUDataList
+            context.getString(R.string.coin_base) -> futureList = pairFutureCoinDataList
+        }
+        synchronized(futureList!!) {
+            val pairListString = gson.toJson(futureList)
             return Observable.just(
                 gson.fromJson(
                     pairListString,
@@ -1385,7 +1404,7 @@ object SocketDataContainer {
 
     /**
      * 获取合约的行情数据
-     * setName(自选，u本位，币本位)
+     * setName(自选，u本位，币本位,全部)
      */
     fun getFuturesPairsWithSet(
         context: Context?,

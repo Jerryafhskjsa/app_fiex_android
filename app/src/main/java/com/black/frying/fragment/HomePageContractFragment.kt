@@ -416,7 +416,6 @@ class HomePageContractFragment : BaseFragment(),
         tabData?.add(tab1)
         tabData?.add(tab2)
         tabData?.add(tab3)
-        Log.d("iiiiii", "tabData->size = " + tabData?.size)
         if (tabData != null && tabData!!.isNotEmpty()) {
             val tabSize = tabData!!.size
             if (recordFragmentList != null) {
@@ -673,16 +672,16 @@ class HomePageContractFragment : BaseFragment(),
             R.id.btn_transaction_memu -> mContext?.let {
                 var setData = ArrayList<QuotationSet?>(3)
                 var optionalUbaseSet = QuotationSet()
-                optionalUbaseSet.coinType = getString(R.string.usdt_base)
+                optionalUbaseSet.coinType = getString(R.string.usdt)
                 optionalUbaseSet.name = getString(R.string.usdt_base)
                 setData?.add(optionalUbaseSet)
                 var optionalCoinBaseSet = QuotationSet()
-                optionalCoinBaseSet.coinType = getString(R.string.coin_base)
+                optionalCoinBaseSet.coinType = getString(R.string.usd)
                 optionalCoinBaseSet.name = getString(R.string.coin_base)
                 setData?.add(optionalCoinBaseSet)
                 PairStatusPopupWindow.getInstance(
                     it,
-                    PairStatusPopupWindow.TYPE_FUTURE_U,
+                    PairStatusPopupWindow.TYPE_FUTURE_ALL,
                     setData
                 )
                     .show(object : OnPairStatusSelectListener {

@@ -320,7 +320,6 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     }
 
     fun getAllDepthOrderFiex() {
-        Log.d("uuuuuu","singleOrderDepthList.size = "+singleOrderDepthList?.size)
         CommonUtil.postHandleTask(socketHandler) {
             SocketDataContainer.getOrderListFiex(context,singleOrderDepthList,object : Callback<TradeOrderPairList?>() {
                 override fun error(type: Int, error: Any) {}

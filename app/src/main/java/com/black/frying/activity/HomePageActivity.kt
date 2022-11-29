@@ -24,6 +24,7 @@ import com.black.base.model.NormalCallback
 import com.black.base.model.Update
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.GlobalAd
+import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
 import com.black.base.service.DownloadServiceHelper
 import com.black.base.util.*
@@ -42,6 +43,7 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import skin.support.content.res.SkinCompatResources
+import java.util.ArrayList
 
 @Route(value = [RouterConstData.HOME_PAGE])
 class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, FragmentRouteHelper {
@@ -116,6 +118,28 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         SocketDataContainer.initAllFutureUsdtPairStatusData(this)
         //获取所有币本位交易对数据并缓存
         SocketDataContainer.initAllFutureCoinPairStatusData(this)
+        //获取u本位交易对行情数据
+        val coinBaseCallback: Callback<ArrayList<PairStatus?>?> =
+            object : Callback<ArrayList<PairStatus?>?>() {
+                override fun error(type: Int, error: Any) {
+
+                }
+                override fun callback(returnData: ArrayList<PairStatus?>?) {
+
+                }
+            }
+        val uBaseCallback: Callback<ArrayList<PairStatus?>?> =
+            object : Callback<ArrayList<PairStatus?>?>() {
+                override fun error(type: Int, error: Any) {
+
+                }
+                override fun callback(returnData: ArrayList<PairStatus?>?) {
+                    //获取币本位交易对行情数据
+                    SocketDataContainer.getFuturesPairsWithSet(mContext,getString(com.black.base.R.string.coin_base),coinBaseCallback)
+                }
+            }
+        SocketDataContainer.getFuturesPairsWithSet(this,getString(com.black.base.R.string.usdt_base),uBaseCallback)
+
         checkUpdate(true)
     }
 

@@ -772,6 +772,7 @@
     <string name="total_price">Cumulative Amount</string>
     <string name="usdt_base">U standard</string>
     <string name="coin_base">Currency Standard</string>
+    <string name="all_future_coin">All Future Coin</string>
     <string name="simulation_base">Analog Disk</string>
     <string name="contract_buy">Opening</string>
     <string name="contract_sell">Closing positions</string>
@@ -813,6 +814,7 @@
     <string name="contract_index_price">Index price</string>
     <string name="contract_raise">Raise</string>
     <string name="contract_down">Down</string>
+    <string name="usd">usd</string>
 
 
 </resources>

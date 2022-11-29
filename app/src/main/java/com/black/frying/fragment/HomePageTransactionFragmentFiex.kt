@@ -394,8 +394,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 PairApiServiceHelper.getTradeSetsLocal(it, true, object : Callback<ArrayList<QuotationSet?>?>() {
                     override fun callback(returnData: ArrayList<QuotationSet?>?) {
                         if (returnData != null) {
-                            val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
-                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData)
+                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION, returnData)
                                     .show(object : OnPairStatusSelectListener {
                                         override fun onPairStatusSelected(pairStatus: PairStatus?) {
                                             if (pairStatus == null) {

@@ -33,10 +33,12 @@ object FutureApiServiceHelperWrapper {
 
     //u本位交易对行情数据
     private var futureUbaseTickersPairStatus: ArrayList<PairStatus?>? = ArrayList()
+
     //币本位交易对行情数据
     private var futureCoinTickersPairStatus: ArrayList<PairStatus?>? = ArrayList()
-    var markPriceBeanList: ArrayList<MarkPriceBean>? = null
-    var markPrice: MarkPriceBean? = null
+
+    //所有合约交易对行情数据
+    private var futureAllPairTickersStatus: ArrayList<PairStatus?>? = ArrayList()
 
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
@@ -55,7 +57,7 @@ object FutureApiServiceHelperWrapper {
      */
     fun getFuturesSymbolListLocal(
         context: Context?,
-        type:String,
+        type: String,
         isShowLoading: Boolean,
         callback: Callback<ArrayList<PairStatus>?>?
     ) {
@@ -66,7 +68,7 @@ object FutureApiServiceHelperWrapper {
         ) {
             callback?.callback(futureSymbolPairList)
         } else {
-            getFutureSymbolPairListCallBack(context, type,isShowLoading, callback)
+            getFutureSymbolPairListCallBack(context, type, isShowLoading, callback)
         }
     }
 
@@ -75,14 +77,14 @@ object FutureApiServiceHelperWrapper {
      */
     fun getFutureSymbolPairListCallBack(
         context: Context?,
-        type:String?,
+        type: String?,
         isShowLoading: Boolean,
         callback: Callback<ArrayList<PairStatus>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
-        val observable = getFutureSymbolPairListObservable(context,type)
+        val observable = getFutureSymbolPairListObservable(context, type)
         observable?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -90,14 +92,19 @@ object FutureApiServiceHelperWrapper {
     /**
      * 获取u本位合约币种列表
      */
-    fun getFutureSymbolPairListObservable(context: Context?,type: String?): Observable<ArrayList<PairStatus>?>? {
+    fun getFutureSymbolPairListObservable(
+        context: Context?,
+        type: String?
+    ): Observable<ArrayList<PairStatus>?>? {
         if (context == null) {
             return null
         }
-        var apiManager:ApiManager? = null
-        when(type){
-            context.getString(R.string.usdt_base) -> apiManager = ApiManager.build(context, UrlConfig.ApiType.URL_FUT_F)
-            context.getString(R.string.coin_base) -> apiManager = ApiManager.build(context, UrlConfig.ApiType.URL_FUT_D)
+        var apiManager: ApiManager? = null
+        when (type) {
+            context.getString(R.string.usdt_base) -> apiManager =
+                ApiManager.build(context, UrlConfig.ApiType.URL_FUT_F)
+            context.getString(R.string.coin_base) -> apiManager =
+                ApiManager.build(context, UrlConfig.ApiType.URL_FUT_D)
         }
         val futureApiService = apiManager?.getService(FutureApiService::class.java)
         return futureApiService?.getSymbolList()
@@ -147,34 +154,46 @@ object FutureApiServiceHelperWrapper {
     /**
      * 本地获取u本位交易对的行情信息
      */
-    fun getFutureTickersLocal(context: Context?,type:String): Observable<ArrayList<PairStatus?>?>? {
+    fun getFutureTickersLocal(
+        context: Context?,
+        type: String
+    ): Observable<ArrayList<PairStatus?>?>? {
         if (context == null) {
             return Observable.empty()
         }
-        var futureList:ArrayList<PairStatus?>? = null
-        when(type){
+        var futureList: ArrayList<PairStatus?>? = null
+        when (type) {
             context.getString(R.string.usdt_base) -> {
                 futureList = futureUbaseTickersPairStatus
             }
             context.getString(R.string.coin_base) -> {
                 futureList = futureCoinTickersPairStatus
             }
+            context.getString(R.string.all_future_coin) -> {
+                futureList = futureAllPairTickersStatus
+            }
         }
-        return if (futureList != null
+        if (futureList != null
             && futureList!!.isNotEmpty()
-            && System.currentTimeMillis() - (getLastGetTime(
-                FUTURE_TICKERS_LIST
-            )
-                ?: 0) < DATA_CACHE_OVER_TIME
         ) {
-            Observable.just(futureList)
+            return if (type == context.getString(R.string.all_future_coin)) {
+                Observable.just(futureList)
+            } else {
+                if (System.currentTimeMillis() - (getLastGetTime(FUTURE_TICKERS_LIST)
+                        ?: 0) < DATA_CACHE_OVER_TIME
+                ) {
+                    Observable.just(futureList)
+                } else {
+                    getFutureTickers(context, type)
+                }
+            }
         } else {
-            getFutureTickers(context,type)
+            return getFutureTickers(context, type)
         }
     }
 
 
-    fun getFutureSymboleListPairData(context: Context?,type:String?): ArrayList<PairStatus?>? {
+    fun getFutureSymboleListPairData(context: Context?, type: String?): ArrayList<PairStatus?>? {
         var symbolListPairData: ArrayList<PairStatus?>? = ArrayList()
         val callback: Callback<ArrayList<PairStatus?>?> =
             object : Callback<ArrayList<PairStatus?>?>() {
@@ -187,7 +206,7 @@ object FutureApiServiceHelperWrapper {
                 override fun error(type: Int, error: Any?) {
                 }
             }
-        SocketDataContainer.getAllFuturePairStatus(context,type, callback)
+        SocketDataContainer.getAllFuturePairStatus(context, type, callback)
         return symbolListPairData
     }
 
@@ -195,14 +214,16 @@ object FutureApiServiceHelperWrapper {
     /**
      * 获取合约交易对的行情信息
      */
-    fun getFutureTickers(context: Context?,type:String): Observable<ArrayList<PairStatus?>?>? {
+    fun getFutureTickers(context: Context?, type: String): Observable<ArrayList<PairStatus?>?>? {
         if (context == null) {
             return Observable.empty()
         }
-        var apiManager:ApiManager? = null
-        when(type){
-            context.getString(R.string.usdt_base) -> apiManager = ApiManager.build(context, false, UrlConfig.ApiType.URL_FUT_F)
-            context.getString(R.string.coin_base) -> apiManager = ApiManager.build(context, false, UrlConfig.ApiType.URL_FUT_D)
+        var apiManager: ApiManager? = null
+        when (type) {
+            context.getString(R.string.usdt_base) -> apiManager =
+                ApiManager.build(context, false, UrlConfig.ApiType.URL_FUT_F)
+            context.getString(R.string.coin_base) -> apiManager =
+                ApiManager.build(context, false, UrlConfig.ApiType.URL_FUT_D)
         }
         return apiManager?.getService(FutureApiService::class.java)
             ?.getTickers()
@@ -221,7 +242,7 @@ object FutureApiServiceHelperWrapper {
                         }
 
                     })
-                    var pairListData = getFutureSymboleListPairData(context,type)
+                    var pairListData = getFutureSymboleListPairData(context, type)
                     var newData = ArrayList<PairStatus?>()
                     var pairStatusMap: MutableMap<String?, PairStatus?> = HashMap()
                     for (j in pairListData!!.indices) {
@@ -249,20 +270,32 @@ object FutureApiServiceHelperWrapper {
                             pairStatusMap[temp?.pair] = temp
                         }
                     }
-                    if(type == context.getString(R.string.usdt_base)){
+                    for ((key, value) in pairStatusMap) {
+                        newData.add(value)
+                    }
+                    if (type == context.getString(R.string.usdt_base)) {
                         if (futureUbaseTickersPairStatus?.isNotEmpty() == true) {
                             futureUbaseTickersPairStatus?.clear()
                         }
                         futureUbaseTickersPairStatus?.addAll(newData)
+                        if (futureAllPairTickersStatus?.size!! < futureUbaseTickersPairStatus?.size?.plus(
+                                futureCoinTickersPairStatus?.size!!
+                            )!!
+                        ) {
+                            futureAllPairTickersStatus?.addAll(futureUbaseTickersPairStatus!!)
+                        }
                     }
-                    if(type == context.getString(R.string.coin_base)){
+                    if (type == context.getString(R.string.coin_base)) {
                         if (futureCoinTickersPairStatus?.isNotEmpty() == true) {
                             futureCoinTickersPairStatus?.clear()
                         }
                         futureCoinTickersPairStatus?.addAll(newData)
-                    }
-                    for ((key, value) in pairStatusMap) {
-                        newData.add(value)
+                        if (futureAllPairTickersStatus?.size!! < futureUbaseTickersPairStatus?.size?.plus(
+                                futureCoinTickersPairStatus?.size!!
+                            )!!
+                        ) {
+                            futureAllPairTickersStatus?.addAll(futureCoinTickersPairStatus!!)
+                        }
                     }
                     Observable.just(newData)
                 } else {

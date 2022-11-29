@@ -1,25 +1,17 @@
 package com.black.wallet.viewmodel
 
-import android.app.Activity
 import android.content.Context
-import android.text.TextUtils
-import android.util.Log
-import android.util.Pair
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.PairApiServiceHelper
-import com.black.base.api.UserApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CPrice
-import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.socket.PairStatus
-import com.black.base.model.socket.TradeOrder
 import com.black.base.model.user.UserBalance
 import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
-import com.black.base.view.PairStatusPopupWindow
 import com.black.base.viewmodel.BaseViewModel
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
@@ -31,7 +23,6 @@ import io.reactivex.functions.Function
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     companion object {

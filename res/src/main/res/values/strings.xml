@@ -772,6 +772,7 @@
     <string name="total_price">累计金额</string>
     <string name="usdt_base">U本位</string>
     <string name="coin_base">币本位</string>
+    <string name="all_future_coin">全部合约币种</string>
     <string name="simulation_base">模拟盘</string>
     <string name="contract_buy">开仓</string>
     <string name="contract_sell">平仓</string>
@@ -813,6 +814,7 @@
     <string name="contract_index_price">指数价格</string>
     <string name="contract_raise">升</string>
     <string name="contract_down">降</string>
+    <string name="usd">usd</string>
 
 
 </resources>

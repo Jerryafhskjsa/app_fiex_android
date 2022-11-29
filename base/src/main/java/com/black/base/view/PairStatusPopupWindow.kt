@@ -11,6 +11,7 @@ import android.os.Process
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -43,15 +44,24 @@ import skin.support.content.res.SkinCompatResources
 import java.util.*
 
 //弹出交易对状态列表
-final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, oldSets: List<QuotationSet?>?) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
+final class PairStatusPopupWindow(
+    private val mActivity: Activity,
+    type: Int,
+    oldSets: List<QuotationSet?>?
+) : View.OnClickListener, AdapterView.OnItemClickListener, PopupWindow.OnDismissListener {
     companion object {
-        const val TYPE_TRANSACTION = 0 //交易
+        const val TYPE_TRANSACTION = 0 //现货交易
         const val TYPE_ENTRUST = 1 //委托
         const val TYPE_K_LINE_FULL = 2 //全屏K线
         const val TYPE_FUTURE_U = 3//u本位合约
         const val TYPE_FUTURE_COIN = 4//币本位合约
+        const val TYPE_FUTURE_ALL = 5//全部合约币种
         private var pairStatusPopupWindow: PairStatusPopupWindow? = null
-        fun getInstance(activity: Activity, type: Int, sets: List<QuotationSet?>?): PairStatusPopupWindow {
+        fun getInstance(
+            activity: Activity,
+            type: Int,
+            sets: List<QuotationSet?>?
+        ): PairStatusPopupWindow {
             return PairStatusPopupWindow(activity, type, sets)
         }
 
@@ -76,11 +86,13 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
     private val adapterMap: MutableMap<String, PairStatusAdapter> = HashMap()
     private val listViewDataMap: MutableMap<String, MutableList<PairStatusShowPopup?>> = HashMap()
     private val allPairStatusShowMap: MutableMap<String, PairStatusShowPopup> = HashMap()
+
     //    private final List<PairStatusShowPopup> allPairStatusShowList = new ArrayList<>();
     private val dearPairs = ArrayList<String?>()
     private val dearPairsShowMap: MutableMap<String, PairStatusShowPopup> = HashMap()
     private var defaultIndex = 0
     private var pairInitialled = false
+
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
@@ -91,16 +103,19 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
     init {
         var myPairSetQuot = QuotationSet()
         myPairSetQuot.name = myPairSet
+        myPairSetQuot.coinType = myPairSet
         sets.add(0, myPairSetQuot)
         this.type = type
         imm = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         nullAmount = mActivity.getString(R.string.number_default)
         val dm = mActivity.resources.displayMetrics
-        val width = if (type == TYPE_K_LINE_FULL) (400 * dm.density).toInt() else (dm.widthPixels * 0.7333).toInt()
+        val width =
+            if (type == TYPE_K_LINE_FULL) (400 * dm.density).toInt() else (dm.widthPixels * 0.7333).toInt()
         val inflater = LayoutInflater.from(mActivity)
         val contentView = inflater.inflate(R.layout.view_pair_status_popup_window, null)
         if (type != TYPE_K_LINE_FULL) {
-            contentView.findViewById<View>(R.id.header_layout).setPadding(0, getStatusBarHeight(mActivity), 0, 0)
+            contentView.findViewById<View>(R.id.header_layout)
+                .setPadding(0, getStatusBarHeight(mActivity), 0, 0)
         }
         popupWindow = PopupWindow(contentView, width, WindowManager.LayoutParams.MATCH_PARENT)
         popupWindow.isFocusable = true
@@ -111,8 +126,8 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
         fitPopupWindowOverStatusBar(popupWindow, true)
         val titleView = contentView.findViewById<TextView>(R.id.title)
         val btnTotal = contentView.findViewById<TextView>(R.id.total)
-        val dataType = type and 0xff00
-        when (type and 0xff) {
+        val dataType = type
+        when (type) {
             TYPE_K_LINE_FULL -> {
                 titleView.setText(R.string.k_line)
                 btnTotal.visibility = View.GONE
@@ -122,7 +137,7 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                 btnTotal.visibility = View.VISIBLE
                 btnTotal.setOnClickListener(this)
             }
-            TYPE_FUTURE_U, TYPE_FUTURE_COIN -> {
+            TYPE_FUTURE_U, TYPE_FUTURE_COIN, TYPE_FUTURE_ALL -> {
                 titleView.setText(R.string.futures)
                 btnTotal.visibility = View.VISIBLE
                 btnTotal.setOnClickListener(this)
@@ -137,7 +152,10 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
             }
         }
         setTab = contentView.findViewById(R.id.set_tab)
-        setTab.setTabTextColors(SkinCompatResources.getColor(mActivity, R.color.C5), SkinCompatResources.getColor(mActivity, R.color.C1))
+        setTab.setTabTextColors(
+            SkinCompatResources.getColor(mActivity, R.color.C5),
+            SkinCompatResources.getColor(mActivity, R.color.C1)
+        )
         setTab.setSelectedTabIndicatorHeight(0)
         setTab.tabMode = TabLayout.MODE_SCROLLABLE
         inputEdit = contentView.findViewById(R.id.input)
@@ -168,7 +186,10 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                 val listView = view.findViewById<ListView>(R.id.list_view)
                 val adapter = PairStatusAdapter(mActivity, null, dataType)
                 listView.adapter = adapter
-                val layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                val layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+                )
                 layoutParams.gravity = Gravity.TOP
                 if (set?.name.equals(myPairSet, ignoreCase = true)) {
                     val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
@@ -188,7 +209,14 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                 listView.divider = drawable
                 listView.dividerHeight = 1
                 listView.onItemClickListener = this
-                var setName = set?.name as String
+                var setName:String? = null
+                setName = if(type == TYPE_TRANSACTION){
+                    set?.name as String
+                } else if(type == TYPE_FUTURE_ALL || type == TYPE_FUTURE_U || type == TYPE_FUTURE_COIN){
+                    set?.coinType?.lowercase() as String
+                }else{
+                    set?.name as String
+                }
                 adapterMap[setName] = adapter
                 listViewMap[setName] = listView
                 listViewDataMap[setName] = ArrayList()
@@ -206,7 +234,8 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                 if (tab != null) {
                     tab.setCustomView(R.layout.view_pair_status_choose_tab)
                     if (tab.customView != null) {
-                        val textView = tab.customView?.findViewById<View>(android.R.id.text1) as TextView
+                        val textView =
+                            tab.customView?.findViewById<View>(android.R.id.text1) as TextView
                         textView.text = set?.name
                     }
                 }
@@ -215,11 +244,15 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
             }
         }
         setTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            var textSize15 = mActivity.resources.getDimensionPixelSize(R.dimen.text_size_15).toFloat()
-            var textSize14 = mActivity.resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+            var textSize15 =
+                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_15).toFloat()
+            var textSize14 =
+                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val view = tab.customView
-                val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                val textView =
+                    if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
                 if (textView != null) {
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize15)
                     textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD), Typeface.BOLD)
@@ -229,10 +262,14 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 val view = tab.customView
-                val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                val textView =
+                    if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
                 if (textView != null) {
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
-                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL)
+                    textView.setTypeface(
+                        Typeface.defaultFromStyle(Typeface.NORMAL),
+                        Typeface.NORMAL
+                    )
                     textView.postInvalidate()
                 }
             }
@@ -263,7 +300,8 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
     override fun onClick(v: View) {
         val i = v.id
         if (i == R.id.btn_action) {
-            BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mActivity) { routeResult, error -> popupWindow.dismiss() }
+            BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
+                .go(mActivity) { routeResult, error -> popupWindow.dismiss() }
         } else if (i == R.id.total) {
             popupWindow.dismiss()
             if (onPairStatusSelectListener != null) {
@@ -349,80 +387,84 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
         }
     }
 
-    private fun isLeverType(): Boolean {
-        return type and 0xff00 == PairStatus.LEVER_DATA
-    }
-
     private fun initAllPairStatus() {
         CommonUtil.postHandleTask(socketHandler) {
-            val callback: Callback<ArrayList<PairStatus?>?> = object : Callback<ArrayList<PairStatus?>?>() {
-                override fun error(type: Int, error: Any) {
-                    if (popupWindow.isShowing) {
-                        initAllPairStatus()
+            val callback: Callback<ArrayList<PairStatus?>?> =
+                object : Callback<ArrayList<PairStatus?>?>() {
+                    override fun error(type: Int, error: Any) {
+                        if (popupWindow.isShowing) {
+                            initAllPairStatus()
+                        }
                     }
-                }
 
-                override fun callback(returnData: ArrayList<PairStatus?>?) {
-                    if (returnData == null) {
-                        return
-                    }
-                    synchronized(allPairStatusShowMap) {
-                        synchronized(listViewDataMap) {
-                            for (setName in listViewDataMap.keys) {
-                                val tempList = listViewDataMap[setName]
-                                tempList?.clear()
-                            }
-                            allPairStatusShowMap.clear()
-                            for (i in returnData.indices) {
-                                val pairStatusShow = PairStatusShowPopup(mActivity, returnData[i]!!)
-                                pairStatusShow.pair?.let {
-                                    allPairStatusShowMap[it] = pairStatusShow
-                                    val setName = pairStatusShow.setName
-                                    if (!TextUtils.isEmpty(setName)) {
-                                        var tempList = listViewDataMap[setName!!]
-                                        if (tempList == null) {
-                                            tempList = ArrayList()
-                                            listViewDataMap[setName] = tempList
+                    override fun callback(returnData: ArrayList<PairStatus?>?) {
+                        if (returnData == null) {
+                            return
+                        }
+                        synchronized(allPairStatusShowMap) {
+                            synchronized(listViewDataMap) {
+                                for (setName in listViewDataMap.keys) {
+                                    val tempList = listViewDataMap[setName]
+                                    tempList?.clear()
+                                }
+                                allPairStatusShowMap.clear()
+                                for (i in returnData.indices) {
+                                    val pairStatusShow =
+                                        PairStatusShowPopup(mActivity, returnData[i]!!)
+                                    pairStatusShow.pair?.let {
+                                        allPairStatusShowMap[it] = pairStatusShow
+                                        val setName = pairStatusShow.setName
+                                        if (!TextUtils.isEmpty(setName)) {
+                                            var tempList = listViewDataMap[setName!!]
+                                            if (tempList == null) {
+                                                tempList = ArrayList()
+                                                listViewDataMap[setName] = tempList
+                                            }
+                                            tempList.add(pairStatusShow)
                                         }
-                                        tempList.add(pairStatusShow)
                                     }
                                 }
                             }
-                        }
-                        for (setName in listViewDataMap.keys) {
-                            val tempList: List<PairStatusShowPopup?>? = listViewDataMap[setName]
-                            if (tempList != null) {
-                                Collections.sort(tempList, PairStatusShowPopup.COMPARATOR)
-                            }
-                        }
-                        //所有显示的
-                        mActivity.runOnUiThread {
-                            //将分组对应到响应的listView
                             for (setName in listViewDataMap.keys) {
-                                if (setName.equals(myPairSet, ignoreCase = true)) {
-                                    if (dearPairs.isNotEmpty()) {
-                                        initDearPairsShow()
-                                    }
-                                } else {
-                                    val adapter = adapterMap[setName]
-                                    if (adapter != null) {
-                                        adapter.data = listViewDataMap[setName]
-                                        adapter.sortData(PairStatusShowPopup.COMPARATOR)
-                                        adapter.notifyDataSetChanged()
-                                    }
+                                val tempList: List<PairStatusShowPopup?>? = listViewDataMap[setName]
+                                if (tempList != null) {
+                                    Collections.sort(tempList, PairStatusShowPopup.COMPARATOR)
                                 }
                             }
-                            //获取所有交易对数据信息，填充并显示
-                            pairInitialled = true
+                            //所有显示的
+                            mActivity.runOnUiThread {
+                                //将分组对应到响应的listView
+                                for (setName in listViewDataMap.keys) {
+                                    if (setName.equals(myPairSet, ignoreCase = true)) {
+                                        if (dearPairs.isNotEmpty()) {
+                                            initDearPairsShow()
+                                        }
+                                    } else {
+                                        val adapter = adapterMap[setName]
+                                        if (adapter != null) {
+                                            adapter.data = listViewDataMap[setName]
+                                            adapter.sortData(PairStatusShowPopup.COMPARATOR)
+                                            adapter.notifyDataSetChanged()
+                                        }
+                                    }
+                                }
+                                //获取所有交易对数据信息，填充并显示
+                                pairInitialled = true
+                            }
                         }
                     }
                 }
-            }
-            val dataType = type
-            when (dataType){
-                TYPE_FUTURE_U ->  SocketDataContainer.getAllFuturePairStatus(mActivity,mActivity.getString(R.string.usdt_base),callback)
-                TYPE_FUTURE_COIN -> SocketDataContainer.getAllFuturePairStatus(mActivity,mActivity.getString(R.string.coin_base),callback)
-                PairStatus.NORMAL_DATA -> SocketDataContainer.getAllPairStatus(mActivity, callback)
+            when (type) {
+                TYPE_FUTURE_U -> {
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.usdt_base),callback)
+                }
+                TYPE_FUTURE_COIN -> {
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.coin_base),callback)
+                }
+                TYPE_FUTURE_ALL ->{
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.all_future_coin),callback)
+                }
+                TYPE_TRANSACTION -> SocketDataContainer.getAllPairStatus(mActivity, callback)
             }
         }
     }
@@ -443,7 +485,9 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                             if (data != null) {
                                 for (j in data.indices) {
                                     val pair = data[j]
-                                    if (pair?.pair != null && pair.pair!!.toUpperCase(Locale.getDefault()).contains(searchKey.toUpperCase(Locale.getDefault()))) {
+                                    if (pair?.pair != null && pair.pair!!.toUpperCase(Locale.getDefault())
+                                            .contains(searchKey.toUpperCase(Locale.getDefault()))
+                                    ) {
                                         showData.add(pair)
                                     }
                                 }
@@ -479,29 +523,24 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
                     pairStatus.pair?.let {
                         var pairStatusShowPopup = allPairStatusShowMap[it]
                         if (pairStatusShowPopup == null) {
-                            //判断如果是杠杆交易对选择，判断是否是杠杆交易对
-                            if (isLeverType() && !pairStatus.isLever) {
-
-                            } else {
-                                //有新交易对上线，需要更新所有数据
-                                pairStatusShowPopup = PairStatusShowPopup(mActivity, pairStatus)
-                                allPairStatusShowMap[it] = pairStatusShowPopup
-                                val setName = pairStatusShowPopup.setName
-                                if (setName != null) {
-                                    var tempList = listViewDataMap[setName]
-                                    if (tempList == null) {
-                                        tempList = ArrayList()
-                                        listViewDataMap[setName] = tempList
-                                    }
-                                    tempList.add(pairStatusShowPopup)
+                            //有新交易对上线，需要更新所有数据
+                            pairStatusShowPopup = PairStatusShowPopup(mActivity, pairStatus)
+                            allPairStatusShowMap[it] = pairStatusShowPopup
+                            val setName = pairStatusShowPopup.setName
+                            if (setName != null) {
+                                var tempList = listViewDataMap[setName]
+                                if (tempList == null) {
+                                    tempList = ArrayList()
+                                    listViewDataMap[setName] = tempList
                                 }
-                                if (pairStatusShowPopup.is_dear) {
-                                    val dearPairShow = PairStatusShowPopup(mActivity, pairStatus)
-                                    myPairs.add(dearPairShow)
-                                    dearPairsShowMap[it] = dearPairShow
-                                }
-                                hasNewPair = true
+                                tempList.add(pairStatusShowPopup)
                             }
+                            if (pairStatusShowPopup.is_dear) {
+                                val dearPairShow = PairStatusShowPopup(mActivity, pairStatus)
+                                myPairs.add(dearPairShow)
+                                dearPairsShowMap[it] = dearPairShow
+                            }
+                            hasNewPair = true
                         } else {
                             //已有交易对，直接更新界面
                             pairStatusShowPopup.updateData(pairStatus)
@@ -523,7 +562,8 @@ final class PairStatusPopupWindow(private val mActivity: Activity, type: Int, ol
         }
     }
 
-    private inner class ViewPagerAdapter internal constructor(var views: List<View>) : PagerAdapter() {
+    private inner class ViewPagerAdapter internal constructor(var views: List<View>) :
+        PagerAdapter() {
         override fun getCount(): Int {
             return views.size
         }
