@@ -38,7 +38,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     private val onUserInfoNewListener = Emitter.Listener { args ->
         //通知当前委托订单更新
         //Log.e(TAG, "onUserInfoNewListener ==============================================\n obj：")
-        SocketDataContainer.onUserInfoChanged()
+//        SocketDataContainer.onUserInfoChanged()
         //            sendDataChangedBroadcast(ConstData.USER_INFO_CHANGED);
         for (`object` in args) {
             //Log.e(TAG, "onUserInfoNewListener ==============================================\n obj：" + `object`);
@@ -48,7 +48,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     private val onUserLeverBalanceListener = Emitter.Listener { args ->
         //Log.e(TAG, "onUserLeverBalanceListener ==============================================\n obj：")
         //通知当前委托订单更新
-        SocketDataContainer.onUserLeverChanged()
+//        SocketDataContainer.onUserLeverChanged()
         //强行更新当前监听交易对对应杠杆详情
         if (leverPair != null) {
             //SocketDataContainer.updateWalletLeverDetail(context, handler, leverPair);
@@ -61,7 +61,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     private val onUserOrderListener = Emitter.Listener { args ->
         //Log.e(TAG, "onUserOrderListener ==============================================\n obj：")
         //通知当前委托订单更新
-        SocketDataContainer.onUserOrderChanged()
+//        SocketDataContainer.onUserOrderChanged()
         //            sendDataChangedBroadcast(ConstData.USER_INFO_CHANGED);
         for (`object` in args) {
             //Log.e(TAG, "onUserOrderListener ==============================================\n obj：" + `object`);
@@ -82,7 +82,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
                 data = `object`
             }
             if (data != null) {
-                SocketDataContainer.onWalletLeverDetailUpdate(data, handler)
+//                SocketDataContainer.onWalletLeverDetailUpdate(data, handler)
             }
         }
     }

@@ -18,6 +18,12 @@ object ConstData {
         FUTURE_COIN
     }
 
+    //合约请求类型enum
+    enum class FutureRequestType{
+        U_BASE,
+        COIN_BASE
+    }
+
     const val DEPTH_SPOT_TYPE = 0
     const val DEPTH_CONTRACT_U_TYPE = 1
     const val DEPTH_CONTRACT_COIN_TYPE = 2

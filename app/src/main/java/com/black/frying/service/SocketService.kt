@@ -94,7 +94,6 @@ class SocketService : Service() {
                 //                    if (qSocket.kLineId != null) {
 //                        SocketDataContainer.removeKLineData(qSocket.kLineId);
 //                    }
-                SocketDataContainer.clearKLineData()
                 qSocket?.kLineId = null
                 qSocket?.finishListenKLine()
             }

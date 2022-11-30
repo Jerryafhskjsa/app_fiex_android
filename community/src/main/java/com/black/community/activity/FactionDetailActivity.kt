@@ -245,7 +245,7 @@ class FactionDetailActivity : BaseActionBarActivity(), View.OnClickListener {
                     json.accumulate("id", "" + factionId)
                 } catch (e: JSONException) {
                 }
-                SocketDataContainer.onFactionUpdate(json)
+//                SocketDataContainer.onFactionUpdate(json)
                 //已加入才显示弹出窗口
                 val item = ArrayList<String?>()
                 if (factionItem != null) {

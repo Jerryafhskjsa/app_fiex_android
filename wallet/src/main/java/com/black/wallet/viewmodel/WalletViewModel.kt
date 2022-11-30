@@ -82,20 +82,12 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             userBalanceObserver = createUserBalanceObserver()
         }
         SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
-
-        if (userLeverObserver == null) {
-            userLeverObserver = createUserLeverObserver()
-        }
-        SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
     }
 
     override fun onStop() {
         super.onStop()
         if (userBalanceObserver != null) {
             SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
-        }
-        if (userLeverObserver != null) {
-            SocketDataContainer.removeUserLeverObservable(userLeverObserver)
         }
     }
 

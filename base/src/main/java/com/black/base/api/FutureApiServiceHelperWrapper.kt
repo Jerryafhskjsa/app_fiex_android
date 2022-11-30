@@ -1,17 +1,11 @@
 package com.black.base.api
 
 import android.content.Context
-import android.text.TextUtils
-import android.util.Log
 import android.util.SparseArray
 import com.black.base.R
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.c2c.C2CPrice
-import com.black.base.model.clutter.HomeSymbolList
-import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.net.HttpCallbackSimple
@@ -53,11 +47,11 @@ object FutureApiServiceHelperWrapper {
     }
 
     /**
-     * 从本地缓存获取u本位交易对
+     * 从本地缓存获取合约交易对列表
      */
     fun getFuturesSymbolListLocal(
         context: Context?,
-        type: String,
+        type: ConstData.FutureRequestType,
         isShowLoading: Boolean,
         callback: Callback<ArrayList<PairStatus>?>?
     ) {
@@ -73,11 +67,11 @@ object FutureApiServiceHelperWrapper {
     }
 
     /**
-     * 获取u本位合约币种列表
+     * 获取合约交易对列表
      */
     fun getFutureSymbolPairListCallBack(
         context: Context?,
-        type: String?,
+        type: ConstData.FutureRequestType?,
         isShowLoading: Boolean,
         callback: Callback<ArrayList<PairStatus>?>?
     ) {
@@ -90,20 +84,20 @@ object FutureApiServiceHelperWrapper {
     }
 
     /**
-     * 获取u本位合约币种列表
+     * 获取合约交易对列表
      */
     fun getFutureSymbolPairListObservable(
         context: Context?,
-        type: String?
+        type: ConstData.FutureRequestType?
     ): Observable<ArrayList<PairStatus>?>? {
         if (context == null) {
             return null
         }
         var apiManager: ApiManager? = null
         when (type) {
-            context.getString(R.string.usdt_base) -> apiManager =
+            ConstData.FutureRequestType.U_BASE -> apiManager =
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_F)
-            context.getString(R.string.coin_base) -> apiManager =
+            ConstData.FutureRequestType.COIN_BASE -> apiManager =
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_D)
         }
         val futureApiService = apiManager?.getService(FutureApiService::class.java)
@@ -152,7 +146,7 @@ object FutureApiServiceHelperWrapper {
     }
 
     /**
-     * 本地获取u本位交易对的行情信息
+     * 本地获取合约交易对的行情信息
      */
     fun getFutureTickersLocal(
         context: Context?,
@@ -304,6 +298,4 @@ object FutureApiServiceHelperWrapper {
             }
             ?.compose(RxJavaHelper.observeOnMainThread())
     }
-
-
 }

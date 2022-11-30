@@ -24,7 +24,7 @@ interface FutureApiService {
     ): Observable<HttpRequestResultBean<DepthBean?>?>?
 
     /**
-     * 获取深度
+     * 获取交易对
      */
     @GET(UrlConfig.Future.URL_SYMBOL_LIST)
     fun getSymbolList(): Observable<HttpRequestResultBean<ArrayList<SymbolBean>?>?>?

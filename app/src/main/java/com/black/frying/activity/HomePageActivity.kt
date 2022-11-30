@@ -112,6 +112,9 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         UdeskUtil.initUdesk(applicationContext)
         //获取所有配置币种并且缓存
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
+        /**
+         * 先获取所有交易对，然后获取行情数据，并且组合到交易对数据中去
+         */
         //获取所有交易对数据并缓存
         SocketDataContainer.initAllPairStatusData(this)
         //获取所有u本位交易对数据并缓存

@@ -1,6 +1,5 @@
 package com.black.base.util
 
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
@@ -9,12 +8,10 @@ import android.os.Process
 import android.text.TextUtils
 import android.util.Log
 import android.util.Pair
-import android.util.SparseArray
 import com.black.base.R
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.socket.*
@@ -35,7 +32,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONArray
-import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -50,45 +46,46 @@ object SocketDataContainer {
             }
             return field
         }
-    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000.toLong() //20分钟
-    private const val C2C_PRICE = 1
-    private const val TRADE_SET = 2
-    private const val TRADE_PAIR = 3
 
-    //上次拉取数据时间，根据类型分类
-    private val lastGetTimeMap = SparseArray<Long>()
-    private val c2CPrice: C2CPrice? = null
 
-    //所有u本位交易对
+    //合约所有u本位交易对
     private val pairFutureUDataList: ArrayList<PairStatus?> = ArrayList()
-    //所有u本位交易对Map缓存
+
+    //合约所有u本位交易对Map缓存
     private val allFutureUPairStatusMap: MutableMap<String, PairStatus> = HashMap()
-    //所有币本位交易对
+
+    //合约所有币本位交易对
     private val pairFutureCoinDataList: ArrayList<PairStatus?> = ArrayList()
-    //所有币本位交易对Map缓存
+
+    //合约所有币本位交易对Map缓存
     private val allFutureCoinPairStatusMap: MutableMap<String, PairStatus> = HashMap()
+
+    //合约所有交易对
+    private val allFuturePairStatusList: ArrayList<PairStatus?> = ArrayList()
+
+    //合约所有交易对Map缓存
+    private val allFuturePairStatusMap: MutableMap<String, PairStatus> = HashMap()
+
+    //合约所有行情交易对socket更新数据缓存
+    private val pairFutureUDataSource: MutableMap<String, PairStatusNew> = HashMap()
 
     //所有现货交易对
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
+
     //所有现货交易对Map缓存
     private val allPairStatusMap: MutableMap<String, PairStatus> = HashMap()
 
-    //所有杠杆交易对
-    private val allLeverPairMap: MutableMap<String, PairStatus> = HashMap()
-
+    //所有现货交易对分组Map
     private val allPairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
 
-    //行情币本位交易对socket更新数据缓存
-    private val pairFutureCoinDataSource: MutableMap<String, PairStatusNew> = HashMap()
-    //行情U本位交易对socket更新数据缓存
-    private val pairFutureUDataSource: MutableMap<String, PairStatusNew> = HashMap()
-    //行情交易对socket更新数据缓存
+    //所有现货行情交易对socket更新数据缓存
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
+
 
     //自选交易对缓存数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
 
-    //所有交易对信息观察者
+    //所有现货行情交易对信息观察者
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
 
     //所有U本位交易对信息观察者
@@ -99,16 +96,16 @@ object SocketDataContainer {
     private val orderObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
 
     /***fiex***/
-    //交易对成交
+    //现货交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
 
-    //交易对行情
+    //现货交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
 
-    //用户余额变更
+    //现货用户余额变更
     private val userBalanceObservers = ArrayList<Observer<UserBalance?>>()
 
-    //用户挂单变更
+    //现货用户挂单变更
     private val userOrderObservers = ArrayList<Observer<TradeOrderFiex?>>()
 
     /***fiex***/
@@ -124,15 +121,6 @@ object SocketDataContainer {
     //用户信息有修改
     private val userInfoObservers = ArrayList<Observer<String?>>()
 
-    //用户杠杆余额有修改
-    private val userLeverObservers = ArrayList<Observer<String?>>()
-
-    //用户杠杆详情有修改
-    private val userLeverDetailObservers = ArrayList<Observer<WalletLeverDetail?>>()
-
-    //热门币种变更
-    private val hotPairObservers = ArrayList<Observer<ArrayList<String?>?>>()
-
     private var handlerThread: HandlerThread? = null
     private var pairHandler: Handler? = null
 
@@ -143,14 +131,6 @@ object SocketDataContainer {
         pairHandler = Handler(handlerThread?.looper)
     }
 
-    fun getLastGetTime(type: Int): Long {
-        val lastGetTime = lastGetTimeMap[type]
-        return lastGetTime ?: 0
-    }
-
-    fun setLastGetTime(type: Int, time: Long) {
-        lastGetTimeMap.put(type, time)
-    }
 
     //添加用户余额观察者
     fun subscribeUserBalanceObservable(observer: Observer<UserBalance?>?) {
@@ -252,26 +232,6 @@ object SocketDataContainer {
         synchronized(pairObservers) { pairObservers.remove(observer) }
     }
 
-    //添加u本位交易对观察者
-    fun subscribeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(pairFutureUObservers) {
-            if (!pairFutureUObservers.contains(observer)) {
-                pairFutureUObservers.add(observer)
-            }
-        }
-    }
-
-    //移除u本位交易对观察者
-    fun removeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(pairFutureUObservers) { pairFutureUObservers.remove(observer) }
-    }
-
     //添加委托观察者
     fun subscribeOrderObservable(observer: Observer<Pair<String?, TradeOrderPairList?>>?) {
         if (observer == null) {
@@ -332,7 +292,7 @@ object SocketDataContainer {
         synchronized(kLineObservers) { kLineObservers.remove(observer) }
     }
 
-    //添加K线观察者
+    //添加K线新增观察者
     fun subscribeKLineAddObservable(observer: Observer<KLineItemPair?>?) {
         if (observer == null) {
             return
@@ -344,7 +304,7 @@ object SocketDataContainer {
         }
     }
 
-    //移除K线观察者
+    //移除K线新增观察者
     fun removeKLineAddObservable(observer: Observer<KLineItemPair?>?) {
         if (observer == null) {
             return
@@ -352,7 +312,7 @@ object SocketDataContainer {
         synchronized(kLineAddObservers) { kLineAddObservers.remove(observer) }
     }
 
-    //添加K线观察者
+    //添加K线加载更多观察者
     fun subscribeKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
         if (observer == null) {
             return
@@ -364,7 +324,7 @@ object SocketDataContainer {
         }
     }
 
-    //移除K线观察者
+    //移除K线加载更多观察者
     fun removeKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
         if (observer == null) {
             return
@@ -392,65 +352,27 @@ object SocketDataContainer {
         synchronized(userInfoObservers) { userInfoObservers.remove(observer) }
     }
 
-    //添加用户杠杆余额观察者
-    fun subscribeUserLeverObservable(observer: Observer<String?>?) {
+
+    //添加u本位交易对观察者
+    fun subscribeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
         if (observer == null) {
             return
         }
-        synchronized(userLeverObservers) {
-            if (!userLeverObservers.contains(observer)) {
-                userLeverObservers.add(observer)
+        synchronized(pairFutureUObservers) {
+            if (!pairFutureUObservers.contains(observer)) {
+                pairFutureUObservers.add(observer)
             }
         }
     }
 
-    //移除用户杠杆余额观察者
-    fun removeUserLeverObservable(observer: Observer<String?>?) {
+    //移除u本位交易对观察者
+    fun removeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
         if (observer == null) {
             return
         }
-        synchronized(userLeverObservers) { userLeverObservers.remove(observer) }
+        synchronized(pairFutureUObservers) { pairFutureUObservers.remove(observer) }
     }
 
-    //添加用户杠杆余额观察者
-    fun subscribeUserLeverDetailObservable(observer: Observer<WalletLeverDetail?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(userLeverDetailObservers) {
-            if (!userLeverDetailObservers.contains(observer)) {
-                userLeverDetailObservers.add(observer)
-            }
-        }
-    }
-
-    //移除用户杠杆余额观察者
-    fun removeUserLeverDetailObservable(observer: Observer<WalletLeverDetail?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(userLeverDetailObservers) { userLeverDetailObservers.remove(observer) }
-    }
-
-    //添加热门币种变更观察者
-    fun subscribeHotPairObservable(observer: Observer<ArrayList<String?>?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(hotPairObservers) {
-            if (!hotPairObservers.contains(observer)) {
-                hotPairObservers.add(observer)
-            }
-        }
-    }
-
-    //移除热门币种变更观察者
-    fun removeHotPairObservable(observer: Observer<ArrayList<String?>?>?) {
-        if (observer == null) {
-            return
-        }
-        synchronized(hotPairObservers) { hotPairObservers.remove(observer) }
-    }
 
     /**
      * 计算币价格CNY
@@ -521,19 +443,7 @@ object SocketDataContainer {
         return if (price?.sell == null || usdtPrice == null) null else usdtPrice * price.sell!!
     }
 
-    /**
-     * 折算USDT CNY 价格
-     *
-     * @param usdtPrice
-     * @return
-     */
-    fun computeUSDTPriceCNY(usdtPrice: Double): Double? {
-        return if (c2CPrice?.sell == null) {
-            null
-        } else usdtPrice * c2CPrice.sell!!
-    }
-
-    //缓存所有交易对数据
+    //缓存所有现货交易对数据
     private fun refreshAllPairStatus(allPairStatus: ArrayList<PairStatus?>?) {
         synchronized(allPairStatusParentMap) {
             synchronized(allPairStatusMap!!) {
@@ -651,6 +561,55 @@ object SocketDataContainer {
     }
 
     /**
+     * 计算合约coinType对应的cny价格,并赋值到交易对数据bean
+     *
+     * @param context
+     */
+    private fun computeFuturePairStatusCNY(context: Context?) {
+        if (context == null) {
+            return
+        }
+        C2CApiServiceHelper.getC2CPrice(context, object : Callback<C2CPrice?>() {
+            override fun error(type: Int, error: Any) {
+                onGetC2CPriceComplete(null)
+            }
+
+            override fun callback(returnData: C2CPrice?) {
+//                Log.d(TAG,"computePairStatusCNY->C2CPrice"+returnData?.buy)
+                onGetC2CPriceComplete(returnData)
+            }
+
+            private fun onGetC2CPriceComplete(price: C2CPrice?) {
+                Observable.create<String> { e ->
+                    e.onNext(reallyUpdateFutureUPairStatusData(price))
+                    e.onComplete()
+                }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(object : SuccessObserver<String?>() {
+                        override fun onSuccess(value: String?) {
+                            synchronized(pairFutureUObservers) {
+                                for (observer in pairFutureUObservers) {
+                                    var updateData: ArrayList<PairStatus?> = gson.fromJson(
+                                        value,
+                                        object : TypeToken<ArrayList<PairStatus?>?>() {}.type
+                                    )
+                                    if (updateData.isNotEmpty()) {
+                                        Log.d(
+                                            TAG,
+                                            "send future update dataSize = " + updateData.size
+                                        )
+                                        observer.onNext(updateData)
+                                    }
+                                }
+                            }
+                        }
+                    })
+            }
+        })
+    }
+
+    /**
      * 更新合约u本位行情
      */
     private fun reallyUpdateFutureUPairStatusData(price: C2CPrice?): String {
@@ -676,7 +635,7 @@ object SocketDataContainer {
                         }
                         val newPairCompareKey = pairStatus.compareString
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
-                            Log.d(TAG, "updatePairStatusData1,addChange")
+                            Log.d(TAG, "updateFuturePairStatusData1,addChange")
                             result.add(pairStatus)
                         }
                     }
@@ -729,7 +688,10 @@ object SocketDataContainer {
         if (context == null) {
             return
         }
-        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(context,context.getString(R.string.coin_base))
+        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
+            context,
+            ConstData.FutureRequestType.COIN_BASE
+        )
         observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
             synchronized(pairFutureCoinDataList!!) {
                 pairFutureCoinDataList.clear()
@@ -760,7 +722,10 @@ object SocketDataContainer {
         if (context == null) {
             return
         }
-        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(context,context.getString(R.string.usdt_base))
+        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
+            context,
+            ConstData.FutureRequestType.U_BASE
+        )
         observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
             synchronized(pairFutureUDataList!!) {
                 pairFutureUDataList.clear()
@@ -798,16 +763,10 @@ object SocketDataContainer {
                 pairDataList.addAll(pairStatuses)
                 Collections.sort(pairDataList, PairStatus.COMPARATOR)
                 synchronized(allPairStatusMap!!) {
-                    synchronized(allLeverPairMap!!) {
-                        allPairStatusMap.clear()
-                        allLeverPairMap.clear()
-                        for (pairStatus in pairStatuses) {
-                            pairStatus.pair?.let {
-                                allPairStatusMap[it] = pairStatus
-                                if (pairStatus.isLever) {
-                                    allLeverPairMap!![it] = pairStatus
-                                }
-                            }
+                    allPairStatusMap.clear()
+                    for (pairStatus in pairStatuses) {
+                        pairStatus.pair?.let {
+                            allPairStatusMap[it] = pairStatus
                         }
                     }
                 }
@@ -859,6 +818,48 @@ object SocketDataContainer {
                 .subscribe(object : SuccessObserver<String?>() {
                     override fun onSuccess(s: String?) {
                         computePairStatusCNY(context)
+                    }
+                })
+        }
+    }
+
+    //更新现有交易对信息
+    fun updateFuturePairStatusData(
+        context: Context?,
+        handler: Handler?,
+        dataSource: PairStatusNew?,
+        isRemoveAll: Boolean
+    ) {
+        if (context == null) {
+            return
+        }
+        CommonUtil.postHandleTask(handler) {
+            Observable.create { emitter: ObservableEmitter<String?> ->
+                if (dataSource == null) {
+                    emitter.onComplete()
+                } else {
+                    val data: PairStatusNew? = dataSource
+                    synchronized(pairFutureUDataSource) {
+                        if (isRemoveAll) {
+                            pairFutureUDataSource.clear()
+                        }
+                        val pair = data?.s
+                        pair?.let {
+                            val oldItem = pairFutureUDataSource[pair]
+                            if (oldItem == null) {
+                                pairFutureUDataSource[pair] = data
+                            } else {
+                                PairStatusNew.copyValues(oldItem, data)
+                            }
+                        }
+                    }
+                    emitter.onNext("")
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<String?>() {
+                    override fun onSuccess(s: String?) {
+                        computeFuturePairStatusCNY(context)
                     }
                 })
         }
@@ -949,14 +950,18 @@ object SocketDataContainer {
 
 
     //主动拉取所有u本位交易对信息，直接返回，不适用观察者模式
-    fun getAllFuturePairStatus(context: Context?, type:String?,callback: Callback<ArrayList<PairStatus?>?>?) {
+    fun getAllFuturePairStatus(
+        context: Context?,
+        type: String?,
+        callback: Callback<ArrayList<PairStatus?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
-        var futureList:ArrayList<PairStatus?>? = null
-        when(type){
+        var futureList: ArrayList<PairStatus?>? = null
+        when (type) {
             context.getString(R.string.all_future_coin) -> {
-                if(futureList == null){
+                if (futureList == null) {
                     futureList = ArrayList()
                 }
                 futureList?.addAll(pairFutureUDataList)
@@ -965,7 +970,7 @@ object SocketDataContainer {
             context.getString(R.string.usdt_base) -> futureList = pairFutureUDataList
             context.getString(R.string.coin_base) -> futureList = pairFutureCoinDataList
         }
-        if(futureList != null){
+        if (futureList != null) {
             synchronized(futureList!!) {
                 val pairListString = gson.toJson(futureList)
                 callback.callback(
@@ -979,14 +984,17 @@ object SocketDataContainer {
     }
 
     //主动拉取所有合约交易对信息，直接返回
-    fun getAllFuturePairStatus(context: Context?,type:String?): Observable<ArrayList<PairStatus?>>? {
+    fun getAllFuturePairStatus(
+        context: Context?,
+        type: String?
+    ): Observable<ArrayList<PairStatus?>>? {
         if (context == null) {
             return null
         }
-        var futureList:ArrayList<PairStatus?>? = null
-        when(type){
+        var futureList: ArrayList<PairStatus?>? = null
+        when (type) {
             context.getString(R.string.all_future_coin) -> {
-                if(futureList == null){
+                if (futureList == null) {
                     futureList = ArrayList()
                 }
                 futureList?.addAll(pairFutureUDataList)
@@ -1111,63 +1119,10 @@ object SocketDataContainer {
         }
     }
 
-
-    fun getHomeTickerTypePairs(
-        context: Context?,
-        type: Int,
-        initPairStatus: ArrayList<PairStatus?>?
-    ): Observable<ArrayList<PairStatus?>?>? {
-        if (context == null) {
-            return null
-        }
-        val result: MutableList<PairStatus?> = ArrayList()
-        when (type) {
-            ConstData.HOME_TAB_HOT -> {
-                for (i in initPairStatus?.indices!!) {
-                    val pairStatus = initPairStatus[i]
-//                        Log.d(TAG,"hot = "+pairStatus?.hot)
-                    if (pairStatus?.hot != null && pairStatus.hot!!) {
-                        result.add(pairStatus)
-                    }
-                }
-            }
-
-            ConstData.HOME_TAB_RAISE_BAND -> {
-                Collections.sort(initPairStatus, PairStatus.COMPARATOR_SINCE_UP)
-                if (initPairStatus != null) {
-                    result.addAll(initPairStatus)
-                }
-            }
-            ConstData.HOME_TAB_FAIL_BAND -> {
-                Collections.sort(initPairStatus, PairStatus.COMPARATOR_SINCE_DOWN)
-                if (initPairStatus != null) {
-                    result.addAll(initPairStatus)
-                }
-            }
-            ConstData.HOME_TAB_VOLUME_BAND -> {
-                Collections.sort(initPairStatus, PairStatus.COMPARATOR_VOLUME_24)
-                if (initPairStatus != null) {
-                    result.addAll(initPairStatus)
-                }
-            }
-        }
-        if (result.size > 10) {
-            var limitResult = result.subList(0, 9)
-            return Observable.just(
-                gson.fromJson(
-                    gson.toJson(limitResult),
-                    object : TypeToken<ArrayList<PairStatus?>?>() {}.type
-                )
-            )
-        }
-        return Observable.just(
-            gson.fromJson(
-                gson.toJson(result),
-                object : TypeToken<ArrayList<PairStatus?>?>() {}.type
-            )
-        )
-    }
-
+    /**
+     * 根据交易对名字获取交易对的数据
+     * 采用回调的方式
+     */
     fun getPairStatus(
         context: Context?,
         pairStatusType: ConstData.PairStatusType?,
@@ -1203,6 +1158,10 @@ object SocketDataContainer {
         }
     }
 
+    /**
+     * 根据交易对名字获取交易对的数据
+     * 异步直接返回
+     */
     fun getPairStatusSync(
         context: Context?,
         pairStatusType: ConstData.PairStatusType?,
@@ -1233,6 +1192,10 @@ object SocketDataContainer {
         return null
     }
 
+    /**
+     * 根据交易对名字获取交易对的数据
+     * Observable方式
+     */
     fun getPairStatusObservable(
         context: Context?,
         pairStatusType: ConstData.PairStatusType?,
@@ -1285,6 +1248,9 @@ object SocketDataContainer {
         return setName
     }
 
+    /**
+     * 获取所有交易对名列表
+     */
     fun getAllPair(
         context: Context?,
         pairStatusType: ConstData.PairStatusType?
@@ -1311,38 +1277,6 @@ object SocketDataContainer {
             }
         }
         return null
-    }
-
-    fun getAllLeverPair(context: Context?): ArrayList<String?>? {
-        if (context == null) {
-            return null
-        }
-        synchronized(allLeverPairMap) {
-            return if (allLeverPairMap == null || allLeverPairMap.isEmpty()) {
-                null
-            } else {
-                ArrayList(allLeverPairMap.keys)
-            }
-        }
-    }
-
-    fun getAllLeverPairStatus(context: Context?, callback: Callback<ArrayList<PairStatus?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        synchronized(allLeverPairMap) {
-            if (allLeverPairMap == null || allLeverPairMap.isEmpty()) {
-                callback.callback(null)
-            } else {
-                val result = ArrayList(allLeverPairMap.values)
-                callback.callback(
-                    gson.fromJson<ArrayList<PairStatus?>>(
-                        gson.toJson(result),
-                        object : TypeToken<ArrayList<PairStatus?>?>() {}.type
-                    )
-                )
-            }
-        }
     }
 
     /**
@@ -2103,50 +2037,6 @@ object SocketDataContainer {
         }
     }
 
-    fun saveKLineDataAll(currentPair: String?, handler: Handler?, data: JSONObject) {
-        CommonUtil.postHandleTask(handler) {
-            Observable.create<Pair<String?, String?>> { emitter ->
-                //Log.e("KLineDataAll", "data get start");
-                val kLineId = data.optString("no")
-                //                        ArrayList<KLineItem> list = listData == null ? new ArrayList<KLineItem>() :
-                //                                (ArrayList<KLineItem>) gson.fromJson(listData.toString(),
-                //                                        new TypeToken<ArrayList<KLineItem>>() {
-                //                                        }.getType());
-                //                        if (kLineId != null && list != null) {
-                //                            kLineDataSet.put(kLineId, list);
-                //                        }
-                if (kLineId != null) {
-                    var listData = data.optJSONArray("list")
-                    listData = listData ?: JSONArray()
-                    emitter.onNext(Pair(kLineId, listData.toString()))
-                    //Log.e("KLineDataAll", "data get end");
-                } else {
-                    emitter.onComplete()
-                }
-            }.subscribeOn(Schedulers.trampoline())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(object : SuccessObserver<Pair<String?, String?>>() {
-                    override fun onSuccess(pair: Pair<String?, String?>) {
-                        synchronized(kLineObservers) {
-                            for (observer in kLineObservers) {
-                                //Log.e("KLineDataAll", "data parse start");
-                                observer.onNext(
-                                    KLineItemListPair(
-                                        currentPair,
-                                        pair.first,
-                                        gson.fromJson(
-                                            pair.second,
-                                            object : TypeToken<ArrayList<KLineItem?>?>() {}.type
-                                        )
-                                    )
-                                )
-                                //Log.e("KLineDataAll", "data parse get");
-                            }
-                        }
-                    }
-                })
-        }
-    }
 
     fun addKLineData(
         currentPair: String?,
@@ -2179,49 +2069,6 @@ object SocketDataContainer {
         }
     }
 
-    fun addKLineDataList(currentPair: String?, handler: Handler?, data: JSONObject) {
-        CommonUtil.postHandleTask(handler) {
-            Observable.create<Pair<String?, String?>> { emitter ->
-                val kLineId = data.optString("no")
-                if (kLineId != null) {
-                    var listData = data.optJSONArray("list")
-                    listData = listData ?: JSONArray()
-                    emitter.onNext(Pair(kLineId, listData.toString()))
-                } else {
-                    emitter.onComplete()
-                }
-            }.subscribeOn(Schedulers.trampoline())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(object : SuccessObserver<Pair<String?, String?>>() {
-                    override fun onSuccess(pair: Pair<String?, String?>) {
-                        synchronized(kLineAddMoreObservers) {
-                            for (observer in kLineAddMoreObservers) {
-                                observer.onNext(
-                                    KLineItemListPair(
-                                        currentPair,
-                                        pair.first,
-                                        gson.fromJson(
-                                            pair.second,
-                                            object : TypeToken<ArrayList<KLineItem?>?>() {}.type
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    }
-                })
-        }
-    }
-
-    fun removeKLineData(kLineId: String?) { //        synchronized (kLineDataSet) {
-//            kLineDataSet.remove(kLineId);
-//        }
-    }
-
-    fun clearKLineData() { //        synchronized (kLineDataSet) {
-//            kLineDataSet.clear();
-//        }
-    }
 
     fun onUserBalanceChangedFiex(balance: UserBalance?) {
         synchronized(userBalanceObservers) {
@@ -2243,103 +2090,8 @@ object SocketDataContainer {
         }
     }
 
-
-    fun onUserInfoChanged() {
-        synchronized(userInfoObservers) {
-            for (observer in userInfoObservers) {
-                observer.onNext("")
-            }
-        }
-    }
-
-    fun onUserLeverChanged() {
-        synchronized(userLeverObservers) {
-            for (observer in userLeverObservers) {
-                observer.onNext("")
-            }
-        }
-    }
-
-    fun onUserOrderChanged() {
-        synchronized(userInfoObservers) {
-            for (observer in userInfoObservers) {
-                observer.onNext("")
-            }
-        }
-    }
-
-    //笑傲江湖门派成员变更
-    fun onFactionMemberUpdate(factionId: Long) {
-    }
-
-    //笑傲江湖门派变更
-    fun onFactionUpdate(factionId: JSONObject) {
-    }
-
-    //笑傲江湖门派成员变更
-    fun onFactionOwnerUpdate(factionId: Long) {
-    }
-
     private val leverDetailCache: MutableMap<String, WalletLeverDetail?> = HashMap()
 
-    //杠杆资产详情变化
-    fun onWalletLeverDetailUpdate(json: JSONObject?, handler: Handler?) {
-        CommonUtil.postHandleTask(handler) {
-            Observable.create { emitter: ObservableEmitter<WalletLeverDetail?> ->
-                if (json == null) {
-                    emitter.onComplete()
-                } else {
-                    synchronized(leverDetailCache) {
-                        var leverDetail: WalletLeverDetail? = null
-                        try {
-                            leverDetail = gson.fromJson<WalletLeverDetail>(
-                                json.toString(),
-                                object : TypeToken<WalletLeverDetail?>() {}.type
-                            )
-                        } catch (e: Exception) {
-                        }
-                        if (leverDetail != null && !TextUtils.isEmpty(leverDetail.pair)) {
-                            leverDetailCache[leverDetail.pair!!] = leverDetail
-                            emitter.onNext(leverDetail)
-                        } else {
-                            emitter.onComplete()
-                        }
-                    }
-                }
-            }.subscribeOn(Schedulers.trampoline())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(object : SuccessObserver<WalletLeverDetail?>() {
-                    override fun onSuccess(detail: WalletLeverDetail?) {
-                        if (detail == null) {
-                            return
-                        }
-                        synchronized(userLeverDetailObservers) {
-                            for (observer in userLeverDetailObservers) {
-                                observer.onNext(detail)
-                            }
-                        }
-                    }
-                })
-        }
-    }
-
-    fun updateWalletLeverDetail(context: Context?, handler: Handler?, pair: String?) {
-        CommonUtil.postHandleTask(handler) {
-            getWalletLeverDetail(context, pair, true)
-                ?.subscribeOn(Schedulers.trampoline())
-                ?.observeOn(Schedulers.trampoline())
-                ?.subscribe(object : SuccessObserver<WalletLeverDetail?>() {
-                    override fun onSuccess(detail: WalletLeverDetail?) {
-                        detail ?: return
-                        synchronized(userLeverDetailObservers) {
-                            for (observer in userLeverDetailObservers) {
-                                observer.onNext(detail)
-                            }
-                        }
-                    }
-                })
-        }
-    }
 
     fun getWalletLeverDetail(
         context: Context?,
@@ -2521,45 +2273,10 @@ object SocketDataContainer {
         synchronized(allPairStatusMap) { allPairStatusMap.clear() }
         synchronized(pairDataSource) { pairDataSource.clear() }
         synchronized(dearPairMap) { dearPairMap.clear() }
-        synchronized(allLeverPairMap) { allLeverPairMap.clear() }
         synchronized(orderDataList) { orderDataList.clear() }
         synchronized(dealList) { dealList.clear() }
-        //        synchronized (kLineDataSet) {
-//            kLineDataSet.clear();
-//        }
         synchronized(leverDetailCache) { leverDetailCache.clear() }
     }
 
-    fun onCoinInfoUpdate(context: Context?) {
-        WalletApiServiceHelper.getCoinInfoConfigAndCache(context, null)
-    }
 
-    fun onCoinPriceUpdate(context: Context?) {
-        C2CApiServiceHelper.getC2CPrice(context, true, object : Callback<C2CPrice?>() {
-            override fun error(type: Int, error: Any) {}
-            override fun callback(returnData: C2CPrice?) {}
-        })
-    }
-
-    fun onPairUpdate(context: Context?) {
-        initAllPairStatusData(context)
-    }
-
-    fun onC2cCoinTypeUpdate(context: Context?) {}
-    fun onHotPairUpdate(context: Context?) {
-        PairApiServiceHelper.getHotPairAndCache(
-            context,
-            object : Callback<HttpRequestResultDataList<String?>?>() {
-                override fun error(type: Int, error: Any) {}
-                override fun callback(returnData: HttpRequestResultDataList<String?>?) {
-                    if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                        synchronized(hotPairObservers) {
-                            for (observer in hotPairObservers) {
-                                observer.onNext(returnData.data!!)
-                            }
-                        }
-                    }
-                }
-            })
-    }
 }

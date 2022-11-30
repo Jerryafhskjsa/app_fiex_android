@@ -235,7 +235,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
                         it.onLeverPairConfigCheck(returnData != null && returnData.isNotEmpty())
                     }
                 }
-                SocketDataContainer.getAllLeverPairStatus(context, callback)
+//                SocketDataContainer.getAllLeverPairStatus(context, callback)
             }
         }
     }

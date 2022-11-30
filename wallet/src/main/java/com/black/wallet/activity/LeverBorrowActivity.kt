@@ -162,20 +162,10 @@ class LeverBorrowActivity : BaseActionBarActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         getWalletLeverDetail(false)
-        if (leverDetailObserver == null) {
-            leverDetailObserver = createLeverDetailObserver()
-        }
-        SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
-        val bundle = Bundle()
-        bundle.putString(ConstData.PAIR, pair)
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
     }
 
     override fun onStop() {
         super.onStop()
-        if (leverDetailObserver != null) {
-            SocketDataContainer.removeUserLeverDetailObservable(leverDetailObserver)
-        }
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_FINISH)
     }
 

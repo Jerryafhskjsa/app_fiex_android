@@ -187,14 +187,6 @@ class WalletTransferActivity : BaseActionBarActivity(), View.OnClickListener {
         if (userLeverObserver == null) {
             userLeverObserver = createUserLeverObserver()
         }
-        SocketDataContainer.subscribeUserLeverObservable(userLeverObserver)
-        if (leverDetailObserver == null) {
-            leverDetailObserver = createLeverDetailObserver()
-        }
-        SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
-        val bundle = Bundle()
-        bundle.putString(ConstData.PAIR, pair)
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
     }
 
     override fun onStop() {
@@ -202,13 +194,6 @@ class WalletTransferActivity : BaseActionBarActivity(), View.OnClickListener {
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
-        if (userLeverObserver != null) {
-            SocketDataContainer.removeUserLeverObservable(userLeverObserver)
-        }
-        if (leverDetailObserver != null) {
-            SocketDataContainer.removeUserLeverDetailObservable(leverDetailObserver)
-        }
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_FINISH)
     }
 
     private fun createLeverDetailObserver(): Observer<WalletLeverDetail?>? {

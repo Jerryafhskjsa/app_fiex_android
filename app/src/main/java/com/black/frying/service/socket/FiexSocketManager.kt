@@ -7,6 +7,7 @@ import com.airbnb.lottie.model.layer.NullLayer
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.clutter.Kline
+import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderOneDepth
@@ -64,6 +65,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     /*****future*****/
     private var futureSymbolListener: SocketListener? = FutureSymbolListener()
+    private var futureTickersListener:SocketListener? = FutureTickersListener()
 
     /*****future*****/
 
@@ -120,6 +122,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, futureSocketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER,futureSocketSetting)
     }
 
 
@@ -129,7 +132,6 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     fun startConnectAll() {
         var socketMap = WebSocketHandler.getAllWebSocket()
-        addListenerAll()
         socketMap.forEach {
             Log.d(TAG, "start all socketMap,key = " + it.key)
             Log.d(TAG, "start all socketMap,state = " + it.value.socketState)
@@ -207,6 +209,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         FutureSymbolListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_TICKER -> {
+                    listener = if (futureTickersListener != null) {
+                        futureTickersListener
+                    } else {
+                        FutureTickersListener()
+                    }
+                }
             }
             socketMar.addListener(listener)
         }
@@ -237,7 +246,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         }
     }
 
-    fun removeListenerAll() {
+    private fun removeListenerAll() {
         var socketMgrList = WebSocketHandler.getAllWebSocket()
         var listener: SocketListener? = null
         socketMgrList.forEach {
@@ -257,6 +266,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
                     listener = futureSymbolListener
                 }
+                SocketUtil.WS_FUTURE_SUB_TICKER -> {
+                    listener = futureTickersListener
+                }
             }
             it.value.removeListener(listener)
         }
@@ -265,9 +277,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
         tickerDataListener = null
         pairKlineSocketListener = null
         futureSymbolListener = null
+        futureTickersListener = null
     }
 
-    fun addListenerAll() {
+    private fun addListenerAll() {
         var socketMgrList = WebSocketHandler.getAllWebSocket()
         var listener: SocketListener? = null
         socketMgrList.forEach {
@@ -307,6 +320,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         FutureSymbolListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_TICKER -> {
+                    listener = if (futureTickersListener != null) {
+                        futureTickersListener
+                    } else {
+                        FutureTickersListener()
+                    }
+                }
             }
             it.value.addListener(listener)
         }
@@ -317,45 +337,14 @@ class FiexSocketManager(context: Context, handler: Handler) {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("ping", "ping")
-            var userSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_USER)
-            var subStatusSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_SUBSTATUS)
-            var ticketSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_TICKETS)
-            var pairKlineSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE)
-            var futureSymbolSocket = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
-            Log.d(
-                TAG,
-                "userSocket state =," + userSocket.socketState + "listener is empty= " + userSocket.isListenerEmpty
-            )
-            Log.d(
-                TAG,
-                "subStatusSocket state =," + subStatusSocket.socketState + "listener is empty= " + subStatusSocket.isListenerEmpty
-            )
-            Log.d(
-                TAG,
-                "ticketSocket state =," + ticketSocket.socketState + "listener is empty= " + ticketSocket.isListenerEmpty
-            )
-            Log.d(
-                TAG,
-                "pairKlineSocket state =," + pairKlineSocket.socketState + "listener is empty= " + pairKlineSocket.isListenerEmpty
-            )
-            Log.d(
-                TAG,
-                "futureSymbolSocket state =," + futureSymbolSocket.socketState + "listener is empty= " + futureSymbolSocket.isListenerEmpty
-            )
-            if (userSocket.isConnect) {
-                userSocket?.send(jsonObject.toString())
-            }
-            if (subStatusSocket.isConnect) {
-                subStatusSocket?.send(jsonObject.toString())
-            }
-            if (ticketSocket.isConnect) {
-                ticketSocket?.send(jsonObject.toString())
-            }
-            if (pairKlineSocket.isConnect) {
-                pairKlineSocket?.send(jsonObject.toString())
-            }
-            if (futureSymbolSocket.isConnect) {
-                futureSymbolSocket?.send(jsonObject.toString())
+            var allSocket:Map<String, WebSocketManager>? = WebSocketHandler.getAllWebSocket()
+            if (allSocket != null) {
+                for ((key,value ) in allSocket){
+                    Log.d(TAG,"socket state =," + value.socketState + "listener is empty= " + value.isListenerEmpty)
+                    if (value.isConnect) {
+                        value?.send(jsonObject.toString())
+                    }
+                }
             }
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -412,16 +401,34 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     /**
+     * 合约监听交易对行情
      * "req":"sub_symbol",
     "  symbol":"btc_usdt"
      */
-    fun startListenFutureSymbol() {
+    fun startListenFutureSymbol(symbol:String) {
         Log.d(TAG, "startListenFutureSymbol---")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_symbol")
-            jsonObject.put("symbol", "btc_usdt")
+            jsonObject.put("symbol", symbol)
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+                ?.send(jsonObject.toString())
+        } catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    /**
+     * 合约监听所有交易对24小时行情
+     * "req":"sub_ticker",
+    "  symbol":"btc_usdt" 不传为订阅所有
+     */
+    fun startListenFutureTickers() {
+        Log.d(TAG, "startListenFutureTickers---")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("req", "sub_ticker")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER)
                 ?.send(jsonObject.toString())
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -524,12 +531,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     /**
-     * 所有交易对行情相关
+     * 所有现货交易对行情相关
      */
     inner class TickerStatusListener() : SimpleListener() {
         override fun onDisconnect() {
             Log.d(TAG, "tickerStatus onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "tickerStatus onConnected")
             startListenTickers()
@@ -537,7 +545,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
 //            Log.d(TAG, "tickerStatus->onMessage = $message")
-            if(message.equals("succeed")){
+            if (message.equals("succeed")) {
                 return
             }
             CommonUtil.postHandleTask(mHandler) {
@@ -553,7 +561,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 var result = data.getString("data")
                                 var pairQuo: PairStatusNew? = null
                                 try {
-                                    val jsonObject: JsonObject = JsonParser().parse(result) as JsonObject
+                                    val jsonObject: JsonObject =
+                                        JsonParser().parse(result) as JsonObject
 //                            Log.d(TAG, "tickerStatus->jsonObject = $jsonObject")
                                     pairQuo = gson.fromJson<PairStatusNew?>(
                                         jsonObject.toString(),
@@ -581,12 +590,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     /**
-     * k线相关
+     * 现货k线相关
      */
     inner class PairKlineListener() : SimpleListener() {
         override fun onDisconnect() {
             Log.d(TAG, "PairKline onDisconnect")
         }
+
         override fun onConnected() {
             Log.d(TAG, "PairKline onConnected")
             startListenKLine()
@@ -609,30 +619,35 @@ class FiexSocketManager(context: Context, handler: Handler) {
                             object : TypeToken<Kline?>() {}.type
                         )
                         var klineItem = KLineItem()
-                        if(kline != null){
-                            if(kline?.a != null){
+                        if (kline != null) {
+                            if (kline?.a != null) {
                                 klineItem.a = kline?.a?.toDouble()!!
                             }
-                            if(kline?.c != null){
+                            if (kline?.c != null) {
                                 klineItem.c = kline?.c?.toDouble()!!
                             }
-                            if(kline?.h != null){
+                            if (kline?.h != null) {
                                 klineItem.h = kline?.h?.toDouble()!!
                             }
-                            if(kline?.l != null){
+                            if (kline?.l != null) {
                                 klineItem.l = kline?.l?.toDouble()!!
                             }
-                            if(kline?.o != null){
+                            if (kline?.o != null) {
                                 klineItem.o = kline?.o?.toDouble()!!
                             }
-                            if(kline?.t != null){
+                            if (kline?.t != null) {
                                 klineItem.t = kline?.t?.div(1000)
                             }
-                            if(kline?.v != null){
+                            if (kline?.v != null) {
                                 klineItem.v = kline?.v?.toDouble()!!
                             }
                             if (kline?.s.equals(currentPair)) {
-                                SocketDataContainer.addKLineData(currentPair, mHandler, kLineId, klineItem)
+                                SocketDataContainer.addKLineData(
+                                    currentPair,
+                                    mHandler,
+                                    kLineId,
+                                    klineItem
+                                )
                             }
                         }
                     }
@@ -644,7 +659,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     /**
-     * 交易对相关
+     * 现货交易对相关
      */
     inner class SubStatusDataListener() : SimpleListener() {
         override fun onDisconnect() {
@@ -679,7 +694,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     jsonObject.toString(),
                                     object : TypeToken<TradeOrderDepth?>() {}.type
                                 )
-                                if(allDepth != null){
+                                if (allDepth != null) {
                                     SocketDataContainer.updateQuotationOrderNewDataFiex(
                                         mCcontext,
                                         ConstData.DEPTH_SPOT_TYPE,
@@ -691,14 +706,16 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 }
                             }
                             "qDepth" -> {
-                                val oneDepth: TradeOrderOneDepth? = gson.fromJson<TradeOrderOneDepth?>(
-                                    jsonObject.toString(),
-                                    object : TypeToken<TradeOrderOneDepth??>() {}.type
-                                )
-                                if(oneDepth != null){
+                                val oneDepth: TradeOrderOneDepth? =
+                                    gson.fromJson<TradeOrderOneDepth?>(
+                                        jsonObject.toString(),
+                                        object : TypeToken<TradeOrderOneDepth??>() {}.type
+                                    )
+                                if (oneDepth != null) {
                                     var allDepthData = TradeOrderDepth()
                                     var direction = oneDepth?.m
-                                    var desArray:Array<String?>? = arrayOf(oneDepth?.p, oneDepth?.q)
+                                    var desArray: Array<String?>? =
+                                        arrayOf(oneDepth?.p, oneDepth?.q)
                                     if (direction.equals("1")) {//BID
                                         var bidArray = arrayOf(desArray)
                                         allDepthData?.b = bidArray
@@ -742,12 +759,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     /**
-     * 交易对相关
+     * 合约交易对相关
      */
     inner class FutureSymbolListener() : SimpleListener() {
         override fun onConnected() {
             Log.d(TAG, "SymbolListener---->ßonConnected")
-            startListenFutureSymbol()
+            startListenFutureSymbol("btc_usdt")
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
@@ -762,31 +779,98 @@ class FiexSocketManager(context: Context, handler: Handler) {
                     if (data.has("channel")) {
                         var channel = data.get("channel");
                         var data = data.get("data");
-//                    Log.d(tag, "SymbolListener message = $channel")
+                        Log.d(TAG, "SymbolListener message = $channel")
                         when (channel) {
                             "push.ticker" -> { //行情
-
+                                val tickerBean = gson.fromJson<TickerBean>(
+                                    data.toString(),
+                                    object : TypeToken<TickerBean?>() {}.type
+                                )
                             }
                             "push.index.price" -> { //指数价格
-
+                                val indexPriceBean = gson.fromJson<IndexPriceBean>(
+                                    data.toString(),
+                                    object : TypeToken<IndexPriceBean?>() {}.type
+                                )
                             }
                             "push.mark.price" -> { //标记价格
-
+                                val markPriceBean = gson.fromJson<MarkPriceBean>(
+                                    data.toString(),
+                                    object : TypeToken<MarkPriceBean?>() {}.type
+                                )
                             }
                             "push.agg.ticker" -> { //聚合行情
 
                             }
                             "push.deal" -> { //实时成交
-
+                                val dealBean = gson.fromJson<DealBean>(
+                                    data.toString(),
+                                    object : TypeToken<DealBean?>() {}.type
+                                )
                             }
                             "push.deep" -> { //深度
-
+                                val deepBean = gson.fromJson<DeepBean>(
+                                    data.toString(),
+                                    object : TypeToken<DeepBean?>() {}.type
+                                )
                             }
                             "push.deep.full" -> { //全部深度
-
+                                val deepFullBean = gson.fromJson<DeepFullBean>(
+                                    data.toString(),
+                                    object : TypeToken<DeepFullBean?>() {}.type
+                                )
                             }
                             "push.fund.rate" -> {//资金费率
+                                val fundRateBean = gson.fromJson<FundRateBean>(
+                                    data.toString(),
+                                    object : TypeToken<FundRateBean?>() {}.type
+                                )
+                            }
+                        }
+                    }
+                } catch (e: JSONException) {
+                    FryingUtil.printError(e)
+                }
+            }
+        }
+    }
 
+    /**
+     * 合约24小时所有交易对行情
+     */
+    inner class FutureTickersListener() : SimpleListener() {
+        override fun onConnected() {
+            Log.d(TAG, "FutureTickersListener---->ßonConnected")
+            startListenFutureTickers()
+        }
+
+        override fun <T : Any?> onMessage(message: String?, data: T) {
+            Log.d(TAG, "FutureTickersListener->onMessage = $message")
+            if (message.equals("succeed") || message.equals("pong")) {
+                return
+            }
+            CommonUtil.postHandleTask(mHandler) {
+                var data: JSONObject? = null
+                try {
+                    data = JSONObject(message)
+                    if (data.has("channel")) {
+                        var channel = data.get("channel");
+                        var data = data.get("data");
+                        Log.d(TAG, "FutureTickersListener message = $channel")
+                        when (channel) {
+                            "push.ticker" -> { //行情
+                                val tickerBean = gson.fromJson<PairStatusNew>(
+                                    data.toString(),
+                                    object : TypeToken<PairStatusNew?>() {}.type
+                                )
+                                if (tickerBean != null) {
+                                    SocketDataContainer.updateFuturePairStatusData(
+                                        mCcontext,
+                                        mHandler,
+                                        tickerBean,
+                                        false
+                                    )
+                                }
                             }
                         }
                     }

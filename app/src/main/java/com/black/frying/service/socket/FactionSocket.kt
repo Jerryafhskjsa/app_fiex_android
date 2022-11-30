@@ -28,7 +28,7 @@ class FactionSocket(context: Context, handler: Handler) : FryingSocket(context, 
             ////Log.e(TAG, "onFactionOwnerChangeListener ==============================================\n obj：" + object);
             val factionId = CommonUtil.parseLong(`object`)
             if (factionId != null) {
-                SocketDataContainer.onFactionOwnerUpdate(factionId)
+//                SocketDataContainer.onFactionOwnerUpdate(factionId)
             }
         }
     }
@@ -48,7 +48,7 @@ class FactionSocket(context: Context, handler: Handler) : FryingSocket(context, 
                 data = `object`
             }
             if (data != null) {
-                SocketDataContainer.onFactionUpdate(data)
+//                SocketDataContainer.onFactionUpdate(data)
             }
         }
     }
@@ -58,7 +58,7 @@ class FactionSocket(context: Context, handler: Handler) : FryingSocket(context, 
         for (`object` in args) {
             val factionId = CommonUtil.parseLong(`object`)
             if (factionId != null) {
-                SocketDataContainer.onFactionMemberUpdate(factionId)
+//                SocketDataContainer.onFactionMemberUpdate(factionId)
             }
         }
     }

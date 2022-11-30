@@ -1129,11 +1129,7 @@ class HomePageContractFragment : BaseFragment(),
         deepViewBinding!!.clearASKTradeOrders()
         deepViewBinding!!.clearBIDTradeOrders()
         mContext?.let {
-            if (tabType == ConstData.TAB_LEVER) {
-                CookieUtil.setCurrentPairLever(it, pairStatus.pair)
-            } else {
-                CookieUtil.setCurrentPair(it, pairStatus.pair)
-            }
+                CookieUtil.setCurrentFutureUPair(it, pairStatus.pair)
         }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()

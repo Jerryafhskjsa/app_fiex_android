@@ -30,27 +30,26 @@ class PushSocket(context: Context, handler: Handler) : FryingSocket(context, han
     //币种配置
     private val onCoinConfigListener = Emitter.Listener {
         //Log.e(TAG, "===onCoinConfigListener===");
-        SocketDataContainer.onCoinInfoUpdate(context)
+//        SocketDataContainer.onCoinInfoUpdate(context)
     }
     //币种价格
     private val onCoinPriceListener = Emitter.Listener {
         //Log.e(TAG, "===onCoinPriceListener===");
-        SocketDataContainer.onCoinPriceUpdate(context)
+//        SocketDataContainer.onCoinPriceUpdate(context)
     }
     //交易对配置
     private val onPairConfigListener = Emitter.Listener {
         //Log.e(TAG, "===onPairConfigListener===");
-        SocketDataContainer.onPairUpdate(context)
+//        SocketDataContainer.onPairUpdate(context)
     }
     //热门币种
     private val onHotPairListener = Emitter.Listener {
         //Log.e(TAG, "===onHotPairListener===");
-        SocketDataContainer.onHotPairUpdate(context)
+//        SocketDataContainer.onHotPairUpdate(context)
     }
     //C2C交易币种
     private val onC2cCoinTypeListener = Emitter.Listener {
         //Log.e(TAG, "===onC2cCoinTypeListener===");
-        SocketDataContainer.onC2cCoinTypeUpdate(context)
     }
 
     init {
