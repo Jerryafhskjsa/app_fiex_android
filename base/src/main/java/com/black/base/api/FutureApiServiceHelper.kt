@@ -9,6 +9,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
 import com.black.util.Callback
+import retrofit2.http.Query
 
 object FutureApiServiceHelper {
 
@@ -268,5 +269,31 @@ object FutureApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-
+    /**
+     * 下单接口
+     * 买卖方向：BUY;SELL
+     * 订单类型：LIMIT；MARKET
+     * 数量（张）
+     * 有效方式：GTC;IOC;FOK;GTX
+     * 仓位方向：LONG;SHORT
+     */
+    fun createOrder(context: Context?,
+                    orderSide:String,
+                    orderType:String,
+                    symbol: String?,
+                    positionSide: String?,
+                    price: Double?,
+                    timeInForce: String?,
+                    origQty:Int,
+                    isShowLoading: Boolean,
+                    callback: Callback<HttpRequestResultBean<String>?>?){
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.orderCreate(orderSide,symbol,price,timeInForce,orderType,positionSide,origQty)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 }

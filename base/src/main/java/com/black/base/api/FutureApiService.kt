@@ -7,9 +7,7 @@ import com.black.base.model.future.*
 
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface FutureApiService {
@@ -105,5 +103,18 @@ interface FutureApiService {
     fun getBalanceDetail(@Query("coin") coin: String?,
                          @Query("underlyingType") underlyingType: String?)
                         :Observable<HttpRequestResultBean<BalanceDetailBean?>?>?
+
+    /**
+     * 下单接口
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE)
+    fun orderCreate(@Field("orderSide") orderSide: String?,
+                    @Field("symbol") symbol: String?,
+                    @Field("price") price: Double?,
+                    @Field("timeInForce") timeInForce: String?,
+                    @Field("orderType") orderType: String?,
+                    @Field("positionSide") positionSide: String?,
+                    @Field("origQty") origQty: Int?):Observable<HttpRequestResultBean<String>?>?
 
 }

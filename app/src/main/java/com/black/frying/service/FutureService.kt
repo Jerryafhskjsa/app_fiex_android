@@ -11,38 +11,38 @@ import java.math.BigDecimal
 
 object FutureService {
 
-    val symbol="btc_usdt"
+    val symbol = "btc_usdt"
 
-    val underlyingType="U_BASED"
+    val underlyingType = "U_BASED"
 
     var symbolList: ArrayList<SymbolBean>? = null
 
-    var adlList:ArrayList<ADLBean?>?=null
+    var adlList: ArrayList<ADLBean?>? = null
 
-    var symbolBean:SymbolBean?=null
+    var symbolBean: SymbolBean? = null
 
     var buyList: ArrayList<OrderItem>? = null
     var sellList: ArrayList<OrderItem>? = null
 
     var markPriceList: ArrayList<MarkPriceBean>? = null
-    
+
     var markPrice: MarkPriceBean? = null
 
     var positionValue: BigDecimal? = null // 仓位价值
 
     var contractSize: BigDecimal? = null //合约面值
 
-    var leverageBracket:LeverageBracketResp?=null
+    var leverageBracket: LeverageBracketResp? = null
 
-    var balanceDetail:BalanceDetailBean?=null
+    var balanceDetail: BalanceDetailBean? = null
 
-    var positionList:ArrayList<PositionBean?>?=null
+    var positionList: ArrayList<PositionBean?>? = null
 
     fun initFutureData(context: Context?) {
         if (symbolList == null) {
             initSymbolList(context)
         }
-        if(markPriceList==null){
+        if (markPriceList == null) {
             initMarkPrice(context)
         }
     }
@@ -54,13 +54,13 @@ object FutureService {
         FutureApiServiceHelper.getSymbolList(context, false,
             object : Callback<HttpRequestResultBean<ArrayList<SymbolBean>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("ttttttt-->initSymbol--error",error.toString())
+                    Log.d("ttttttt-->initSymbol--error", error.toString())
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<SymbolBean>?>?) {
                     if (returnData != null) {
                         symbolList = returnData.result
-                        Log.d("ttttttt-->initSymbol","--"+symbolList?.size)
+                        Log.d("ttttttt-->initSymbol", "--" + symbolList?.size)
                     }
                 }
             })
@@ -74,7 +74,7 @@ object FutureService {
         FutureApiServiceHelper.getMarkPrice(context, false,
             object : Callback<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("ttttttt-->getMarkPrice--error",error.toString())
+                    Log.d("ttttttt-->getMarkPrice--error", error.toString())
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<MarkPriceBean>?>?) {
@@ -86,7 +86,7 @@ object FutureService {
     }
 
     fun getMarkPrice(symbol: String): MarkPriceBean? {
-        var markPrice:MarkPriceBean?=null
+        var markPrice: MarkPriceBean? = null
         for (markPriceBean in markPriceList!!) {
             if (markPriceBean.s.equals(symbol)) {
                 markPrice = markPriceBean
@@ -96,7 +96,7 @@ object FutureService {
         return markPrice
     }
 
-    fun getBalanceDetail(context: Context?, symbol: String){
+    fun getBalanceDetail(context: Context?, symbol: String) {
         FutureApiServiceHelper.getFundingRate(
             symbol,
             context,
@@ -260,84 +260,113 @@ object FutureService {
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
-                         positionList = returnData.result
+                        positionList = returnData.result
                         if (positionList != null) {
                             for (positionBean in positionList!!) {
-                                if(positionBean?.positionSize.equals("0")){
+                                if (positionBean?.positionSize.equals("0")) {
                                     return
                                 }
                                 Log.d("ttttttt-->positionValue", positionBean.toString())
                                 //仓位价值=开仓均价 * 数量 * 面值
-                                positionValue=BigDecimal(positionBean?.positionSize)
+                                positionValue = BigDecimal(positionBean?.positionSize)
                                     .multiply(BigDecimal(positionBean?.entryPrice))
                                     .multiply(BigDecimal(contractSize.toString()))
 
-                                var maintMarginRate="" //维持保证金率
-                                for(item in leverageBracket?.leverageBrackets!!){
-                                    Log.d("ttttttt-->仓位价值",positionValue.toString())
-                                    Log.d("ttttttt-->该层最大名义价值",item?.maxNominalValue)
+                                var maintMarginRate = "" //维持保证金率
+                                for (item in leverageBracket?.leverageBrackets!!) {
+                                    Log.d("ttttttt-->仓位价值", positionValue.toString())
+                                    Log.d("ttttttt-->该层最大名义价值", item?.maxNominalValue)
                                     //仓位价值和档位比较 ==-1 仓位价值小
-                                    if(BigDecimal(positionValue.toString()).compareTo(BigDecimal(item?.maxNominalValue))==-1){
-                                        maintMarginRate=item?.maintMarginRate
+                                    if (BigDecimal(positionValue.toString()).compareTo(
+                                            BigDecimal(
+                                                item?.maxNominalValue
+                                            )
+                                        ) == -1
+                                    ) {
+                                        maintMarginRate = item?.maintMarginRate
                                         break
                                     }
                                 }
                                 //维持保证金 = 开仓均价 * 数量 * 面值 * 维持保证金率
-                                var maintMargin=BigDecimal(positionBean?.positionSize)
+                                var maintMargin = BigDecimal(positionBean?.positionSize)
                                     .multiply(BigDecimal(contractSize.toString()))
                                     .multiply(BigDecimal(positionBean?.entryPrice.toString()))
                                     .multiply(BigDecimal(maintMarginRate))
                                 Log.d("ttttttt--->maintMargin", maintMargin.toString());
 
-                                var adlBean= getAdlBean(positionBean?.symbol!!)
+                                var adlBean = getAdlBean(positionBean?.symbol!!)
                                 Log.d("ttttttt--->adlBean", adlBean.toString());
 
-                                if(positionBean?.positionType.equals("CROSSED")){ //全仓
-                                    var positionSide=positionBean?.positionSide
+                                if (positionBean?.positionType.equals("CROSSED")) { //全仓
+                                    var positionSide = positionBean?.positionSide
                                     //多仓强平价格 = (开仓均价 * 数量 * 面值 - dex) / (数量 * 面值)
                                     //空仓强平价格 = (开仓均价 * 数量 * 面值 + dex) / (数量 * 面值)
                                     //dex（共享保证金） = 钱包余额 - ∑逐仓仓位保证金 - ∑全仓维持保证金 - ∑委托保证金 + ∑除本仓位其他全仓仓位未实现盈亏
-                                    if(positionBean?.positionSide.equals("LONG")){ //做多
-                                        var liquidationPrice=BigDecimal(positionValue.toString())
-                                            .subtract(getDex(positionBean!!,positionSide!!))
-                                            .divide(BigDecimal(positionBean?.positionSize)
-                                            .multiply(BigDecimal(contractSize.toString())),4,BigDecimal.ROUND_HALF_UP)
+                                    if (positionBean?.positionSide.equals("LONG")) { //做多
+                                        var liquidationPrice = BigDecimal(positionValue.toString())
+                                            .subtract(getDex(positionBean!!, positionSide!!))
+                                            .divide(
+                                                BigDecimal(positionBean?.positionSize)
+                                                    .multiply(BigDecimal(contractSize.toString())),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                         Log.d("ttttttt-->全仓做多--强平价格", liquidationPrice.toString())
                                         var floatProfit = getFloatProfit(positionBean!!)
                                         Log.d("ttttttt-->全仓做多--浮动盈亏", floatProfit.toString())
-                                        var floatProfitRate=floatProfit
-                                            .divide(BigDecimal(positionBean?.isolatedMargin),4,BigDecimal.ROUND_HALF_UP)
+                                        var floatProfitRate = floatProfit
+                                            .divide(
+                                                BigDecimal(positionBean?.isolatedMargin),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                             .multiply(BigDecimal("100"))
                                         Log.d("ttttttt-->全仓做多--浮动盈亏收益率", floatProfitRate.toString())
-                                    }else if(positionBean?.positionSide.equals("SHORT")){ //做空
-                                        var liquidationPrice=BigDecimal(positionValue.toString())
-                                            .add(getDex(positionBean!!,positionSide!!))
-                                            .divide(BigDecimal(positionBean?.positionSize)
-                                                .multiply(BigDecimal(contractSize.toString())),4,BigDecimal.ROUND_HALF_UP)
+                                    } else if (positionBean?.positionSide.equals("SHORT")) { //做空
+                                        var liquidationPrice = BigDecimal(positionValue.toString())
+                                            .add(getDex(positionBean!!, positionSide!!))
+                                            .divide(
+                                                BigDecimal(positionBean?.positionSize)
+                                                    .multiply(BigDecimal(contractSize.toString())),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                         Log.d("ttttttt-->全仓做空--强平价格", liquidationPrice.toString())
                                         var floatProfit = getFloatProfit(positionBean!!)
                                         Log.d("ttttttt-->全仓做空--浮动盈亏", floatProfit.toString())
-                                        var floatProfitRate=floatProfit
-                                            .divide(BigDecimal(positionBean?.isolatedMargin),4,BigDecimal.ROUND_HALF_UP)
+                                        var floatProfitRate = floatProfit
+                                            .divide(
+                                                BigDecimal(positionBean?.isolatedMargin),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                             .multiply(BigDecimal("100"))
                                         Log.d("ttttttt-->全仓做空--浮动盈亏收益率", floatProfitRate.toString())
                                     }
-                                }else if(positionBean?.positionType.equals("ISOLATED")){ //逐仓订单
+                                } else if (positionBean?.positionType.equals("ISOLATED")) { //逐仓订单
                                     //多仓强平价格 = (开仓均价 * 数量 * 面值 + 维持保证金 - 仓位保证金) / (数量 * 面值)
-                                    if(positionBean?.positionSide.equals("LONG")) { //做多
-                                        var liquidationPrice=BigDecimal(positionBean?.entryPrice)
+                                    if (positionBean?.positionSide.equals("LONG")) { //做多
+                                        var liquidationPrice = BigDecimal(positionBean?.entryPrice)
                                             .multiply(BigDecimal(positionBean?.positionSize))
                                             .multiply(BigDecimal(contractSize.toString()))
                                             .add(maintMargin)
                                             .subtract(BigDecimal(positionBean?.isolatedMargin))
-                                            .divide(BigDecimal(positionBean?.positionSize)
-                                                .multiply(BigDecimal(contractSize.toString())),4,BigDecimal.ROUND_HALF_UP)
+                                            .divide(
+                                                BigDecimal(positionBean?.positionSize)
+                                                    .multiply(BigDecimal(contractSize.toString())),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                         Log.d("ttttttt-->逐仓做多--强平价格", liquidationPrice.toString())
                                         var floatProfit = getFloatProfit(positionBean!!)
                                         Log.d("ttttttt-->逐仓做多--浮动盈亏", floatProfit.toString())
                                         //收益率=收益/isolatedMargin*100
-                                        var floatProfitRate=floatProfit
-                                            .divide(BigDecimal(positionBean?.isolatedMargin),4,BigDecimal.ROUND_HALF_UP)
+                                        var floatProfitRate = floatProfit
+                                            .divide(
+                                                BigDecimal(positionBean?.isolatedMargin),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                             .multiply(BigDecimal("100"))
                                         Log.d("ttttttt-->逐仓做多--浮动盈亏收益率", floatProfitRate.toString())
 //                                        var a=BigDecimal(positionBean?.positionSize).multiply(BigDecimal(contractSize.toString()))
@@ -352,21 +381,29 @@ object FutureService {
 //                                           .multiply(BigDecimal(contractSize.toString())).add(BigDecimal(positionBean?.entryPrice)
 //                                               .multiply(BigDecimal(positionBean?.isolatedMargin).subtract(maintMargin))),4,BigDecimal.ROUND_HALF_UP)
 //                                        Log.d("ttttttt-->做多强平价格", price.toString())
-                                    }else if(positionBean?.positionSide.equals("SHORT")){  //做空
-                                         //空仓[强平价格 = (开仓均价 * 数量 * 面值 - 维持保证金 + 仓位保证金) / (数量 * 面值)
-                                        var liquidationPrice=BigDecimal(positionBean?.entryPrice)
+                                    } else if (positionBean?.positionSide.equals("SHORT")) {  //做空
+                                        //空仓[强平价格 = (开仓均价 * 数量 * 面值 - 维持保证金 + 仓位保证金) / (数量 * 面值)
+                                        var liquidationPrice = BigDecimal(positionBean?.entryPrice)
                                             .multiply(BigDecimal(positionBean?.positionSize))
                                             .multiply(BigDecimal(contractSize.toString()))
                                             .add(BigDecimal(positionBean?.isolatedMargin))
                                             .subtract(maintMargin)
-                                            .divide(BigDecimal(positionBean?.positionSize)
-                                                .multiply(BigDecimal(contractSize.toString())),4,BigDecimal.ROUND_HALF_UP)
+                                            .divide(
+                                                BigDecimal(positionBean?.positionSize)
+                                                    .multiply(BigDecimal(contractSize.toString())),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                         Log.d("ttttttt-->逐仓做空--强平价格", liquidationPrice.toString())
                                         var floatProfit = getFloatProfit(positionBean!!)
                                         Log.d("ttttttt-->逐仓做空--浮动盈亏", floatProfit.toString())
                                         //收益率=收益/isolatedMargin*100
-                                        var floatProfitRate=floatProfit
-                                            .divide(BigDecimal(positionBean?.isolatedMargin),4,BigDecimal.ROUND_HALF_UP)
+                                        var floatProfitRate = floatProfit
+                                            .divide(
+                                                BigDecimal(positionBean?.isolatedMargin),
+                                                4,
+                                                BigDecimal.ROUND_HALF_UP
+                                            )
                                             .multiply(BigDecimal("100"))
                                         Log.d("ttttttt-->逐仓做多--浮动盈亏收益率", floatProfitRate.toString())
 //                                        var a=BigDecimal(positionBean?.positionSize).multiply(BigDecimal(contractSize.toString()))
@@ -399,25 +436,26 @@ object FutureService {
     /**
      * 获取维持保证金率
      */
-    fun getMaintMarginRate(positionValue:String):String {
-        var maintMarginRate="" //维持保证金率
-        for(item in leverageBracket?.leverageBrackets!!){
-            Log.d("ttttttt-->仓位价值",positionValue)
-            Log.d("ttttttt-->该层最大名义价值",item?.maxNominalValue)
+    fun getMaintMarginRate(positionValue: String): String {
+        var maintMarginRate = "" //维持保证金率
+        for (item in leverageBracket?.leverageBrackets!!) {
+            Log.d("ttttttt-->仓位价值", positionValue)
+            Log.d("ttttttt-->该层最大名义价值", item?.maxNominalValue)
             //仓位价值和档位比较 ==-1 仓位价值小
-            if(BigDecimal(positionValue).compareTo(BigDecimal(item?.maxNominalValue))==-1){
-                maintMarginRate=item?.maintMarginRate
+            if (BigDecimal(positionValue).compareTo(BigDecimal(item?.maxNominalValue)) == -1) {
+                maintMarginRate = item?.maintMarginRate
                 break
             }
         }
         return maintMarginRate
     }
+
     /**
      * 获取资产
      */
-    fun getBalanceByCoin(context: Context?){
-        var coin= symbol.split("_")[1]
-        FutureApiServiceHelper.getBalanceDetail(context, coin,underlyingType,false,
+    fun getBalanceByCoin(context: Context?) {
+        var coin = symbol.split("_")[1]
+        FutureApiServiceHelper.getBalanceDetail(context, coin, underlyingType, false,
             object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->getBalanceDetail", error.toString())
@@ -425,9 +463,9 @@ object FutureService {
 
                 override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
-                        if(returnData!=null){
-                             balanceDetail= returnData?.result!!
-                        }
+                    if (returnData != null) {
+                        balanceDetail = returnData?.result!!
+                    }
                 }
             })
     }
@@ -435,29 +473,41 @@ object FutureService {
     /**
      * 获取dex值
      */
-    fun getDex(positionBean: PositionBean,positionSide: String):BigDecimal{
+    fun getDex(positionBean: PositionBean, positionSide: String): BigDecimal {
 
         var crossMaintMargin: BigDecimal = BigDecimal(0)
         var crossedFloatProfit: BigDecimal = BigDecimal(0)
-        var entryPrice =positionBean.entryPrice
-        var positionSize=positionBean.positionSize
-        var maintMarginRate=getMaintMarginRate(getValue(entryPrice, positionSize, contractSize.toString()))
-        if(positionBean?.positionType?.equals(Constants.ISOLATED)&&!positionBean.positionSide.equals("0")){
+        var entryPrice = positionBean.entryPrice
+        var positionSize = positionBean.positionSize
+        var maintMarginRate =
+            getMaintMarginRate(getValue(entryPrice, positionSize, contractSize.toString()))
+        if (positionBean?.positionType?.equals(Constants.ISOLATED) && !positionBean.positionSide.equals(
+                "0"
+            )
+        ) {
             if (underlyingType.equals("U_BASED")) {
-                if(positionBean?.positionSide.equals(positionSide)){
+                if (positionBean?.positionSide.equals(positionSide)) {
                     var fp = getFloatProfit(positionBean);
                     crossedFloatProfit = crossedFloatProfit.plus(fp);
                 }
                 crossMaintMargin = crossMaintMargin.plus(
-                    BigDecimal(getValue(entryPrice, positionSize, contractSize.toString())).times(BigDecimal(maintMarginRate)),
+                    BigDecimal(getValue(entryPrice, positionSize, contractSize.toString())).times(
+                        BigDecimal(maintMarginRate)
+                    ),
                 )
-            }else if(underlyingType.equals("COIN_BASED")){
-                if(!positionBean?.positionSide.equals(positionSide)){
+            } else if (underlyingType.equals("COIN_BASED")) {
+                if (!positionBean?.positionSide.equals(positionSide)) {
                     var fp = getFloatProfit(positionBean);
                     crossedFloatProfit = crossedFloatProfit.plus(fp);
                 }
                 crossMaintMargin = crossMaintMargin.plus(
-                    BigDecimal(getCoinValue(entryPrice, positionSize, contractSize.toString())).times(BigDecimal(maintMarginRate)),
+                    BigDecimal(
+                        getCoinValue(
+                            entryPrice,
+                            positionSize,
+                            contractSize.toString()
+                        )
+                    ).times(BigDecimal(maintMarginRate)),
                 );
             }
         }
@@ -471,28 +521,40 @@ object FutureService {
     /**
      * 获取浮动盈亏
      */
-    fun getFloatProfit(positionBean: PositionBean):BigDecimal{
-        var markPriceBean=getMarkPrice(symbol)
+    fun getFloatProfit(positionBean: PositionBean): BigDecimal {
+        var markPriceBean = getMarkPrice(symbol)
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base=BigDecimal(positionBean?.positionSize).multiply(contractSize)
+        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
-                floatProfit=BigDecimal(markPriceBean?.p).subtract(BigDecimal(positionBean.entryPrice)).multiply(base)
-            } else if (positionBean.positionSide.equals("SHORT")) {
-                floatProfit=BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPriceBean?.p)).multiply(base)
-            }
-        }else if(underlyingType.equals("COIN_BASED")){ //币本位
-            if (positionBean.positionSide.equals("LONG")) {
-                floatProfit=BigDecimal("1")
-                        .divide(BigDecimal(positionBean.entryPrice),4,BigDecimal.ROUND_HALF_UP)
-                        .subtract(BigDecimal("1")
-                        .divide(BigDecimal(markPriceBean?.p),4,BigDecimal.ROUND_HALF_UP))
+                floatProfit =
+                    BigDecimal(markPriceBean?.p).subtract(BigDecimal(positionBean.entryPrice))
                         .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
-                floatProfit=BigDecimal("1")
-                    .divide(BigDecimal(markPriceBean?.p),4,BigDecimal.ROUND_HALF_UP)
-                    .subtract(BigDecimal("1")
-                        .divide(BigDecimal(positionBean.entryPrice),4,BigDecimal.ROUND_HALF_UP))
+                floatProfit =
+                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPriceBean?.p))
+                        .multiply(base)
+            }
+        } else if (underlyingType.equals("COIN_BASED")) { //币本位
+            if (positionBean.positionSide.equals("LONG")) {
+                floatProfit = BigDecimal("1")
+                    .divide(BigDecimal(positionBean.entryPrice), 4, BigDecimal.ROUND_HALF_UP)
+                    .subtract(
+                        BigDecimal("1")
+                            .divide(BigDecimal(markPriceBean?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    )
+                    .multiply(base)
+            } else if (positionBean.positionSide.equals("SHORT")) {
+                floatProfit = BigDecimal("1")
+                    .divide(BigDecimal(markPriceBean?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    .subtract(
+                        BigDecimal("1")
+                            .divide(
+                                BigDecimal(positionBean.entryPrice),
+                                4,
+                                BigDecimal.ROUND_HALF_UP
+                            )
+                    )
                     .multiply(base)
             }
         }
@@ -514,9 +576,9 @@ object FutureService {
                     if (returnData != null) {
                         var list = returnData.result
                         if (list != null) {
-                            for(item in list){
-                                if(item?.symbol.equals(symbol)){
-                                    leverageBracket=item
+                            for (item in list) {
+                                if (item?.symbol.equals(symbol)) {
+                                    leverageBracket = item
                                     break
                                 }
                             }
@@ -530,7 +592,7 @@ object FutureService {
     /**
      * 获得ADL
      */
-    fun getPositionAdl(context: Context?){
+    fun getPositionAdl(context: Context?) {
         FutureApiServiceHelper.getPositionAdl(context, false,
             object : Callback<HttpRequestResultBean<ArrayList<ADLBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
@@ -548,11 +610,11 @@ object FutureService {
     /**
      * 获取adl信息
      */
-    fun getAdlBean(symbol:String): ADLBean? {
-        var adlBean:ADLBean?=null
-        for(item in adlList!!){
-            if(item?.symbol.equals(symbol)){
-                adlBean=item!!
+    fun getAdlBean(symbol: String): ADLBean? {
+        var adlBean: ADLBean? = null
+        for (item in adlList!!) {
+            if (item?.symbol.equals(symbol)) {
+                adlBean = item!!
                 break
             }
         }
@@ -560,15 +622,52 @@ object FutureService {
     }
 
     /**
+     * 下单
+     */
+    fun createOrder(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        price: Double?,
+        timeInForce: String?,
+        origQty: Int
+    ) {
+        FutureApiServiceHelper.createOrder(context,
+            orderSide,
+            orderType,
+            symbol,
+            positionSide,
+            price,
+            timeInForce,
+            origQty,
+            false,
+            object : Callback<HttpRequestResultBean<String>?>() {
+                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->createOrder", returnData.result.toString())
+                    }
+                }
+
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->createOrder--error", error.toString())
+                }
+
+            })
+    }
+
+
+    /**
      * 获取价值
      */
-    fun getValue (price: String ,amount: String,contractSize: String ): String {
-        var result =  BigDecimal(price).times(BigDecimal(amount)).times(BigDecimal(contractSize))
+    fun getValue(price: String, amount: String, contractSize: String): String {
+        var result = BigDecimal(price).times(BigDecimal(amount)).times(BigDecimal(contractSize))
         return result.toString()
     }
 
-    fun getCoinValue(price: String ,amount: String,contractSize: String):String{
-        var result =  BigDecimal(amount).times(BigDecimal(contractSize)).div(BigDecimal(price))
+    fun getCoinValue(price: String, amount: String, contractSize: String): String {
+        var result = BigDecimal(amount).times(BigDecimal(contractSize)).div(BigDecimal(price))
         return result.toString()
     }
 }

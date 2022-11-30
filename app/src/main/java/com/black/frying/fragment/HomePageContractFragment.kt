@@ -247,7 +247,7 @@ class HomePageContractFragment : BaseFragment(),
         FutureService.getBalanceByCoin(mContext)
         FutureService.getLeverageBracketList(mContext)
         FutureService.getOrderPosition(mContext)
-
+//        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
     }
 
     private fun updateDear(dear: Boolean?) {
