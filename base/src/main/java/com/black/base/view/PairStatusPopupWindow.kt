@@ -42,6 +42,7 @@ import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 
 //弹出交易对状态列表
 final class PairStatusPopupWindow(
@@ -98,6 +99,7 @@ final class PairStatusPopupWindow(
     private var socketHandler: Handler? = null
     private var onPairStatusSelectListener: OnPairStatusSelectListener? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
+    private var futureTickerObserver:Observer<ArrayList<PairStatus?>?>? = createFutureTickerObserver()
 
 
     init {
@@ -296,6 +298,14 @@ final class PairStatusPopupWindow(
             }
         }
     }
+    private fun createFutureTickerObserver(): Observer<ArrayList<PairStatus?>?> {
+        return object : SuccessObserver<ArrayList<PairStatus?>?>() {
+            override fun onSuccess(value: ArrayList<PairStatus?>?) {
+                value?.let { refreshPairsStatus(it) }
+            }
+        }
+    }
+
 
     override fun onClick(v: View) {
         val i = v.id
@@ -342,10 +352,18 @@ final class PairStatusPopupWindow(
                 }
             }
         })
-        if (pairObserver == null) {
-            pairObserver = createPairObserver()
+        if(type == TYPE_TRANSACTION){
+            if (pairObserver == null) {
+                pairObserver = createPairObserver()
+            }
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
+        if(type == TYPE_FUTURE_ALL){
+            if(futureTickerObserver == null){
+                futureTickerObserver = createFutureTickerObserver()
+            }
+            SocketDataContainer.subscribeFuturePairObservable(futureTickerObserver)
+        }
     }
 
     private fun initDearPairsShow() {
@@ -382,8 +400,16 @@ final class PairStatusPopupWindow(
             handlerThread?.quit()
             handlerThread = null
         }
-        if (pairObserver != null) {
-            SocketDataContainer.removePairObservable(pairObserver)
+        if(type == TYPE_TRANSACTION){
+            if (pairObserver != null) {
+                SocketDataContainer.removePairObservable(pairObserver)
+            }
+        }
+
+        if(type == TYPE_FUTURE_ALL){
+            if(futureTickerObserver != null){
+                SocketDataContainer.removeFuturePairObservable(futureTickerObserver)
+            }
         }
     }
 
@@ -456,13 +482,13 @@ final class PairStatusPopupWindow(
                 }
             when (type) {
                 TYPE_FUTURE_U -> {
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.usdt_base),callback)
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_U,callback)
                 }
                 TYPE_FUTURE_COIN -> {
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.coin_base),callback)
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_COIN,callback)
                 }
                 TYPE_FUTURE_ALL ->{
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,mActivity.getString(R.string.all_future_coin),callback)
+                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_ALL,callback)
                 }
                 TYPE_TRANSACTION -> SocketDataContainer.getAllPairStatus(mActivity, callback)
             }
@@ -504,6 +530,7 @@ final class PairStatusPopupWindow(
 
     //刷新所有交易对状态
     fun refreshPairsStatus(data: List<PairStatus?>?) {
+        Log.d("iiiii","refreshPairsStatus,data.size = "+data?.size)
         if (data == null || data.isEmpty()) {
             return
         }

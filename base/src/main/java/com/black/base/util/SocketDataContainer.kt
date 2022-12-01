@@ -66,8 +66,17 @@ object SocketDataContainer {
     //合约所有交易对Map缓存
     private val allFuturePairStatusMap: MutableMap<String, PairStatus> = HashMap()
 
+    //合约所有交易对分组Map
+    private val allFuturePairStatusParentMap: MutableMap<String, List<PairStatus?>> = HashMap()
+
     //合约所有行情交易对socket更新数据缓存
-    private val pairFutureUDataSource: MutableMap<String, PairStatusNew> = HashMap()
+    private val pairFutureDataSource: MutableMap<String, PairStatusNew> = HashMap()
+
+    //合约自选交易对缓存数据
+    private val dearFuturePairMap: MutableMap<String, Boolean?> = HashMap()
+
+    //所有合约交易对信息观察者
+    private val pairFutureObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
 
     //所有现货交易对
     private val pairDataList: ArrayList<PairStatus?> = ArrayList()
@@ -82,14 +91,12 @@ object SocketDataContainer {
     private val pairDataSource: MutableMap<String, PairStatusNew> = HashMap()
 
 
-    //自选交易对缓存数据
+    //现货自选交易对缓存数据
     private val dearPairMap: MutableMap<String, Boolean?> = HashMap()
 
     //所有现货行情交易对信息观察者
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
 
-    //所有U本位交易对信息观察者
-    private val pairFutureUObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
 
     //委托
     private val orderDataList = ArrayList<QuotationOrderNew?>()
@@ -353,24 +360,24 @@ object SocketDataContainer {
     }
 
 
-    //添加u本位交易对观察者
-    fun subscribeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
+    //添加合约交易对行情观察者
+    fun subscribeFuturePairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
         if (observer == null) {
             return
         }
-        synchronized(pairFutureUObservers) {
-            if (!pairFutureUObservers.contains(observer)) {
-                pairFutureUObservers.add(observer)
+        synchronized(pairFutureObservers) {
+            if (!pairFutureObservers.contains(observer)) {
+                pairFutureObservers.add(observer)
             }
         }
     }
 
-    //移除u本位交易对观察者
-    fun removeFutureUPairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
+    //移除合约交易对行情观察者
+    fun removeFuturePairObservable(observer: Observer<ArrayList<PairStatus?>?>?) {
         if (observer == null) {
             return
         }
-        synchronized(pairFutureUObservers) { pairFutureUObservers.remove(observer) }
+        synchronized(pairFutureObservers) { pairFutureObservers.remove(observer) }
     }
 
 
@@ -468,51 +475,34 @@ object SocketDataContainer {
         }
     }
 
-    /**
-     * 计算coinType对应的cny价格,并赋值到交易对数据bean
-     *
-     * @param context
-     */
-    private fun computeFutureUPairStatusCNY(context: Context?) {
-        if (context == null) {
-            return
-        }
-        C2CApiServiceHelper.getC2CPrice(context, object : Callback<C2CPrice?>() {
-            override fun error(type: Int, error: Any) {
-                onGetC2CPriceComplete(null)
+    //缓存所有合约交易对数据
+    private fun refreshAllFuturePairStatus(allPairStatus: ArrayList<PairStatus?>?) {
+        Log.d("iiiiii", "refreshAllFuturePairStatus")
+        synchronized(allFuturePairStatusParentMap!!) {
+            if (allPairStatus == null || allPairStatus.isEmpty()) {
+                allFuturePairStatusParentMap.clear()
+                return
             }
-
-            override fun callback(returnData: C2CPrice?) {
-                Log.d(TAG, "computePairStatusCNY->C2CPrice" + returnData?.buy)
-                onGetC2CPriceComplete(returnData)
-            }
-
-            private fun onGetC2CPriceComplete(price: C2CPrice?) {
-                Observable.create<String> { e ->
-                    e.onNext(reallyUpdateFutureUPairStatusData(price))
-                    e.onComplete()
+            //计算交易对币分组
+            for (pairStatus in allPairStatus) {
+                val setName = pairStatus?.setName
+                val parents: MutableList<PairStatus?> = ArrayList()
+                for (parent in allPairStatus) {
+                    if (TextUtils.equals(parent?.name, setName)) {
+                        parents.add(parent)
+                    }
                 }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe(object : SuccessObserver<String?>() {
-                        override fun onSuccess(value: String?) {
-                            synchronized(pairFutureUObservers) {
-                                for (observer in pairFutureUObservers) {
-                                    var updateData: ArrayList<PairStatus?> = gson.fromJson(
-                                        value,
-                                        object : TypeToken<ArrayList<PairStatus?>?>() {}.type
-                                    )
-                                    if (updateData.isNotEmpty()) {
-                                        Log.d(TAG, "send update dataSize = " + updateData.size)
-                                        observer.onNext(updateData)
-                                    }
-                                }
-                            }
-                        }
-                    })
+                pairStatus?.pair?.let {
+                    allFuturePairStatusParentMap[it] = parents
+                }
             }
-        })
+            Log.d(
+                "iiiiii",
+                "allFuturePairStatusParentMap.size = " + allFuturePairStatusParentMap.size
+            )
+        }
     }
+
 
     /**
      * 计算coinType对应的cny价格,并赋值到交易对数据bean
@@ -581,15 +571,19 @@ object SocketDataContainer {
 
             private fun onGetC2CPriceComplete(price: C2CPrice?) {
                 Observable.create<String> { e ->
-                    e.onNext(reallyUpdateFutureUPairStatusData(price))
+                    e.onNext(reallyUpdateFuturePairStatusData(price))
                     e.onComplete()
                 }
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe(object : SuccessObserver<String?>() {
                         override fun onSuccess(value: String?) {
-                            synchronized(pairFutureUObservers) {
-                                for (observer in pairFutureUObservers) {
+                            Log.d(
+                                TAG,
+                                "onSuccess = pairFutureObservers.size = "+pairFutureObservers.size
+                            )
+                            synchronized(pairFutureObservers) {
+                                for (observer in pairFutureObservers) {
                                     var updateData: ArrayList<PairStatus?> = gson.fromJson(
                                         value,
                                         object : TypeToken<ArrayList<PairStatus?>?>() {}.type
@@ -610,30 +604,37 @@ object SocketDataContainer {
     }
 
     /**
-     * 更新合约u本位行情
+     * 更新合约行情
      */
-    private fun reallyUpdateFutureUPairStatusData(price: C2CPrice?): String {
+    private fun reallyUpdateFuturePairStatusData(price: C2CPrice?): String {
+        Log.d("iiiiii", "reallyUpdateFuturePairStatusData")
         val result = ArrayList<PairStatus>()
-        synchronized(pairFutureUDataSource) {
-            synchronized(dearPairMap) {
-                synchronized(pairFutureUDataList!!) {
-                    if (pairFutureUDataList.isEmpty()) {
+        synchronized(pairFutureDataSource) {
+            synchronized(dearFuturePairMap) {
+                synchronized(allFuturePairStatusList!!) {
+                    Log.d(
+                        "iiiiiii",
+                        "allFuturePairStatusList.size = " + allFuturePairStatusList.size
+                    )
+                    if (allFuturePairStatusList.isEmpty()) {
                         return gson.toJson(result)
                     }
-                    refreshAllPairStatus(pairFutureUDataList)
-                    for (pairStatus in pairFutureUDataList) {
+                    refreshAllFuturePairStatus(allFuturePairStatusList)
+                    for (pairStatus in allFuturePairStatusList) {
                         if (pairStatus == null) {
                             continue
                         }
                         val oldPairCompareKey = pairStatus.compareString
-                        val dataSource = pairFutureUDataSource[pairStatus.pair]
+                        val dataSource = pairFutureDataSource[pairStatus.pair]
                         dataSource?.copyValues(pairStatus)
-                        val isDear = dearPairMap[pairStatus.pair]
+                        val isDear = dearFuturePairMap[pairStatus.pair]
                         pairStatus.is_dear = isDear ?: false
                         if (price != null) { //计算折合CNY
                             pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
                         }
                         val newPairCompareKey = pairStatus.compareString
+                        Log.d("iiiiii", "oldPairCompareKey = "+oldPairCompareKey)
+                        Log.d("iiiiii", "newPairCompareKey = "+oldPairCompareKey)
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
                             Log.d(TAG, "updateFuturePairStatusData1,addChange")
                             result.add(pairStatus)
@@ -690,27 +691,28 @@ object SocketDataContainer {
         }
         val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
             context,
-            ConstData.FutureRequestType.COIN_BASE
+            ConstData.PairStatusType.FUTURE_COIN
         )
         observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
             synchronized(pairFutureCoinDataList!!) {
-                pairFutureCoinDataList.clear()
-                pairFutureCoinDataList.addAll(pairStatuses)
-                Collections.sort(pairFutureCoinDataList, PairStatus.COMPARATOR)
-                synchronized(allFutureCoinPairStatusMap!!) {
-                    allFutureCoinPairStatusMap.clear()
-                    for (pairStatus in pairStatuses) {
-                        pairStatus.pair?.let {
-                            allFutureCoinPairStatusMap[it] = pairStatus
-                        }
+                    pairFutureCoinDataList.clear()
+                    pairFutureCoinDataList.addAll(pairStatuses)
+                    Collections.sort(pairFutureCoinDataList, PairStatus.COMPARATOR)
+                    synchronized(allFutureCoinPairStatusMap!!) {
+                        allFutureCoinPairStatusMap.clear()
+                            for (pairStatus in pairStatuses) {
+                                pairStatus.pair?.let {
+                                    allFutureCoinPairStatusMap[it] = pairStatus
+                                }
+                            }
                     }
-                }
+
             }
             ""
         }?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : SuccessObserver<String?>() {
                 override fun onSuccess(s: String?) {
-                    computeFutureUPairStatusCNY(context)
+                    computeFuturePairStatusCNY(context)
                 }
             })
     }
@@ -718,35 +720,63 @@ object SocketDataContainer {
     /**
      * 初始化合约u本位交易对列表
      */
-    fun initAllFutureUsdtPairStatusData(context: Context?) {
+    fun initAllFutureSymbolList(context: Context?, callback: Callback<ArrayList<PairStatus>?>?) {
         if (context == null) {
             return
         }
-        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
-            context,
-            ConstData.FutureRequestType.U_BASE
-        )
-        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
-            synchronized(pairFutureUDataList!!) {
-                pairFutureUDataList.clear()
-                pairFutureUDataList.addAll(pairStatuses)
-                Collections.sort(pairFutureUDataList, PairStatus.COMPARATOR)
-                synchronized(allFutureUPairStatusMap!!) {
-                    allFutureUPairStatusMap.clear()
-                    for (pairStatus in pairStatuses) {
-                        pairStatus.pair?.let {
-                            allFutureUPairStatusMap[it] = pairStatus
-                        }
-                    }
+        val allFutureSymbolListCallback: Callback<ArrayList<PairStatus>?>? =
+            object : Callback<ArrayList<PairStatus>?>() {
+                override fun error(type: Int, error: Any) {
+
+                }
+                override fun callback(returnData:ArrayList<PairStatus>?) {
+                    Log.d("iiiiii","initAllFutureSymbolList,allSymbolSize = "+returnData?.size)
+                    callback?.callback(returnData)
                 }
             }
-            ""
-        }?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : SuccessObserver<String?>() {
-                override fun onSuccess(s: String?) {
-                    computeFutureUPairStatusCNY(context)
+        val uSymbolListCallback: Callback<ArrayList<PairStatus>?> =
+            object : Callback<ArrayList<PairStatus>?>() {
+                override fun error(type: Int, error: Any) {
+                   }
+                override fun callback(returnData: ArrayList<PairStatus>?) {
+                    Log.d("iiiiii","initAllFutureSymbolList,usdtSymbolSize = "+returnData?.size)
+                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_ALL,false,allFutureSymbolListCallback)
                 }
-            })
+            }
+        val coinSymbolListCallback: Callback<ArrayList<PairStatus>?>? =
+            object : Callback<ArrayList<PairStatus>?>() {
+                override fun error(type: Int, error: Any) {
+                    }
+                override fun callback(returnData: java.util.ArrayList<PairStatus>?) {
+                    Log.d("iiiiii","initAllFutureSymbolList,coinSymbolSize = "+returnData?.size)
+                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_U,false,uSymbolListCallback)
+                }
+            }
+        FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_COIN,false,coinSymbolListCallback)
+//
+//        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
+//            context,
+//            ConstData.PairStatusType.FUTURE_U
+//        )
+//        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
+//            synchronized(pairFutureUDataList!!) {
+//                    pairFutureUDataList.clear()
+//                    pairFutureUDataList.addAll(pairStatuses)
+//                    Collections.sort(pairFutureUDataList, PairStatus.COMPARATOR)
+//                        allFutureUPairStatusMap.clear()
+//                            for (pairStatus in pairStatuses) {
+//                                pairStatus.pair?.let {
+//                                    allFutureUPairStatusMap[it] = pairStatus//保存U本位
+//                                }
+//                            }
+//            }
+//            ""
+//        }?.observeOn(AndroidSchedulers.mainThread())
+//            ?.subscribe(object : SuccessObserver<String?>() {
+//                override fun onSuccess(s: String?) {
+//                    computeFuturePairStatusCNY(context)
+//                }
+//            })
     }
 
     /**
@@ -767,6 +797,42 @@ object SocketDataContainer {
                     for (pairStatus in pairStatuses) {
                         pairStatus.pair?.let {
                             allPairStatusMap[it] = pairStatus
+                        }
+                    }
+                }
+            }
+            ""
+        }?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : SuccessObserver<String?>() {
+                override fun onSuccess(s: String?) {
+                    computePairStatusCNY(context)
+                }
+            })
+    }
+
+    /**
+     * 初始化合约交易对列表
+     * 缓存socketDataContainer里边合约交易对相关的数据
+     */
+    fun cacheFuturePairStatusData(context: Context?) {
+        if (context == null) {
+            return
+        }
+        val observable = FutureApiServiceHelperWrapper.getFutureTickersLocal(
+            context,
+            ConstData.PairStatusType.FUTURE_ALL
+        )
+        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
+            Log.d("iiiii","initAllFuturePairStatusData,pairStatuses = "+pairStatuses.size)
+            synchronized(allFuturePairStatusList!!) {
+                allFuturePairStatusList.clear()
+                allFuturePairStatusList.addAll(pairStatuses)
+                Collections.sort(allFuturePairStatusList, PairStatus.COMPARATOR)
+                synchronized(allFuturePairStatusMap!!) {
+                    allFuturePairStatusMap.clear()
+                    for (pairStatus in pairStatuses) {
+                        pairStatus?.pair?.let {
+                            allFuturePairStatusMap[it] = pairStatus
                         }
                     }
                 }
@@ -839,20 +905,21 @@ object SocketDataContainer {
                     emitter.onComplete()
                 } else {
                     val data: PairStatusNew? = dataSource
-                    synchronized(pairFutureUDataSource) {
+                    synchronized(pairFutureDataSource) {
                         if (isRemoveAll) {
-                            pairFutureUDataSource.clear()
+                            pairFutureDataSource.clear()
                         }
                         val pair = data?.s
                         pair?.let {
-                            val oldItem = pairFutureUDataSource[pair]
+                            val oldItem = pairFutureDataSource[pair]
                             if (oldItem == null) {
-                                pairFutureUDataSource[pair] = data
+                                pairFutureDataSource[pair] = data//socket返回的数据保存到map中
                             } else {
-                                PairStatusNew.copyValues(oldItem, data)
+                                PairStatusNew.copyValues(oldItem, data)//已有该交易对，则更新数据
                             }
                         }
                     }
+                    Log.d("iiiiiii", "pairFutureDataSource.size = " + pairFutureDataSource.size)
                     emitter.onNext("")
                 }
             }.subscribeOn(Schedulers.trampoline())
@@ -952,7 +1019,7 @@ object SocketDataContainer {
     //主动拉取所有u本位交易对信息，直接返回，不适用观察者模式
     fun getAllFuturePairStatus(
         context: Context?,
-        type: String?,
+        type: ConstData.PairStatusType?,
         callback: Callback<ArrayList<PairStatus?>?>?
     ) {
         if (context == null || callback == null) {
@@ -960,15 +1027,15 @@ object SocketDataContainer {
         }
         var futureList: ArrayList<PairStatus?>? = null
         when (type) {
-            context.getString(R.string.all_future_coin) -> {
+            ConstData.PairStatusType.FUTURE_ALL -> {
                 if (futureList == null) {
                     futureList = ArrayList()
                 }
                 futureList?.addAll(pairFutureUDataList)
                 futureList?.addAll(pairFutureCoinDataList)
             }
-            context.getString(R.string.usdt_base) -> futureList = pairFutureUDataList
-            context.getString(R.string.coin_base) -> futureList = pairFutureCoinDataList
+            ConstData.PairStatusType.FUTURE_U -> futureList = pairFutureUDataList
+            ConstData.PairStatusType.FUTURE_COIN -> futureList = pairFutureCoinDataList
         }
         if (futureList != null) {
             synchronized(futureList!!) {
@@ -1338,21 +1405,21 @@ object SocketDataContainer {
 
     /**
      * 获取合约的行情数据
-     * setName(自选，u本位，币本位,全部)
+     * pairType(自选，u本位，币本位,全部)
      */
     fun getFuturesPairsWithSet(
         context: Context?,
-        setName: String?,
+        pairType: ConstData.PairStatusType?,
         callback: Callback<ArrayList<PairStatus?>?>?
     ) {
-        if (context == null || callback == null || setName == null) {
+        if (context == null || callback == null || pairType == null) {
             return
         }
         //自选数据等后边补充逻辑
-        if (context.getString(R.string.pair_collect) == setName) {
+        if (ConstData.PairStatusType.FUTURE_DEAR == pairType) {
 
         }
-        FutureApiServiceHelperWrapper.getFutureTickersLocal(context, setName)
+        FutureApiServiceHelperWrapper.getFutureTickersLocal(context, pairType)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(
                 HttpCallbackSimple(

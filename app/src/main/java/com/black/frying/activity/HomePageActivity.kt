@@ -33,6 +33,7 @@ import com.black.frying.FryingApplication
 import com.black.frying.fragment.*
 import com.black.frying.model.HomeTab
 import com.black.frying.service.SocketService
+import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.util.UdeskUtil
 import com.black.im.util.IMHelper
 import com.black.net.HttpRequestResult
@@ -43,7 +44,6 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import skin.support.content.res.SkinCompatResources
-import java.util.ArrayList
 
 @Route(value = [RouterConstData.HOME_PAGE])
 class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, FragmentRouteHelper {
@@ -112,23 +112,20 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         UdeskUtil.initUdesk(applicationContext)
         //获取所有配置币种并且缓存
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
+        //获取所有现货交易对数据并缓存
+        SocketDataContainer.initAllPairStatusData(this)
         /**
          * 先获取所有交易对，然后获取行情数据，并且组合到交易对数据中去
          */
-        //获取所有交易对数据并缓存
-        SocketDataContainer.initAllPairStatusData(this)
-        //获取所有u本位交易对数据并缓存
-        SocketDataContainer.initAllFutureUsdtPairStatusData(this)
-        //获取所有币本位交易对数据并缓存
-        SocketDataContainer.initAllFutureCoinPairStatusData(this)
-        //获取u本位交易对行情数据
         val coinBaseCallback: Callback<ArrayList<PairStatus?>?> =
             object : Callback<ArrayList<PairStatus?>?>() {
                 override fun error(type: Int, error: Any) {
 
                 }
                 override fun callback(returnData: ArrayList<PairStatus?>?) {
-
+                    SocketDataContainer.cacheFuturePairStatusData(mContext)
+                    Log.d("iiiiii","coinTickerSize = "+returnData?.size)
+                    SocketUtil.sendSocketCommandBroadcast(mContext,SocketUtil.COMMAND_FUTURE_TICKERS_START)
                 }
             }
         val uBaseCallback: Callback<ArrayList<PairStatus?>?> =
@@ -137,12 +134,22 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 
                 }
                 override fun callback(returnData: ArrayList<PairStatus?>?) {
-                    //获取币本位交易对行情数据
-                    SocketDataContainer.getFuturesPairsWithSet(mContext,getString(com.black.base.R.string.coin_base),coinBaseCallback)
+                    Log.d("iiiiii","usdtTickerSize = "+returnData?.size)
+                    //获取合约币本位交易对行情数据
+                    SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_COIN,coinBaseCallback)
                 }
             }
-        SocketDataContainer.getFuturesPairsWithSet(this,getString(com.black.base.R.string.usdt_base),uBaseCallback)
+        //获取合约所有交易对数据并缓存
+        SocketDataContainer.initAllFutureSymbolList(this,object :Callback<ArrayList<PairStatus>?>(){
+            override fun callback(returnData: ArrayList<PairStatus>?) {
+                //获取合约U本位交易对行情数据
+                SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_U,uBaseCallback)
+            }
 
+            override fun error(type: Int, error: Any?) {
+
+            }
+        })
         checkUpdate(true)
     }
 

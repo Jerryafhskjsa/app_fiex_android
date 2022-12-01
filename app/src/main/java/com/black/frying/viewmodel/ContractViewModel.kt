@@ -402,7 +402,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
             currentPairStatus = pairStatus
             initPairCoinSet()
         } else {
-            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
+//            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
         }
         onContractModelListener?.onPairStatusInit(pairStatus)
         resetPairStatus(pairStatus)
@@ -426,7 +426,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         currentPairStatus.supportingPrecisionList = null
         currentPairStatus.precision = ConstData.DEFAULT_PRECISION
         if (currentPairStatus.pair == null) {
-            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
+//            SocketDataContainer.initAllFutureUsdtPairStatusData(context)
         } else {
             onResumeTodo.run()
         }

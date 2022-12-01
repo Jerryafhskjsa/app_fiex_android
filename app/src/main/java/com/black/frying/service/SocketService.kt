@@ -26,7 +26,6 @@ class SocketService : Service() {
         private const val TAG = "SocketService"
     }
 
-    private val gson = Gson()
     private var fiexSocketManager: FiexSocketManager? = null
     private var futureSocketManager: FutureSocketManager? = null
 
@@ -38,6 +37,8 @@ class SocketService : Service() {
     private val receiver = SocketCommandBroadcastReceiver()
     private val mHandler = Handler(Handler.Callback { msg ->
         when (msg.what) {
+            //开始监听合约24小时行情
+            SocketUtil.COMMAND_FUTURE_TICKERS_START -> fiexSocketManager?.startListenFutureTickers()
             //移除socket监听
             SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER -> {
                 var socketType: String? = null
@@ -162,8 +163,8 @@ class SocketService : Service() {
                 socketFutureServerHandler = Handler(handlerFutureThread?.looper)
             }
             if (fiexSocketManager == null) {
-//                fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
-                futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
+                fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
+//                futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
 //                fiexSocketManager?.startConnect()
             }
             if (qSocket == null) {

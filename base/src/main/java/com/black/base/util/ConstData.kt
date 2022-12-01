@@ -11,17 +11,14 @@ object ConstData {
         CONTRACT
     }
 
-    //当前pairStatus类型
+    //pairStatus类型
     enum class PairStatusType{
-        SPOT,
-        FUTURE_U,
-        FUTURE_COIN
-    }
-
-    //合约请求类型enum
-    enum class FutureRequestType{
-        U_BASE,
-        COIN_BASE
+        SPOT,//现货
+        SPOT_DEAR,//现货自选
+        FUTURE_U,//U本位
+        FUTURE_COIN,//币本位
+        FUTURE_ALL,//合约所有
+        FUTURE_DEAR//合约自选
     }
 
     const val DEPTH_SPOT_TYPE = 0

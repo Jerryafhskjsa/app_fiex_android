@@ -81,6 +81,7 @@ object SocketUtil {
     const val COMMAND_REMOVE_SOCKET_LISTENER = 100//结束socket监听
     const val COMMAND_ADD_SOCKET_LISTENER = 101//开始socket监听
     const val COMMAND_REFRESH_TOKEN = 102//refresh token
+    const val COMMAND_FUTURE_TICKERS_START = 103//开始监听合约24小时行情
 
     /***fiex***/
     //上次保存数据时间记录
