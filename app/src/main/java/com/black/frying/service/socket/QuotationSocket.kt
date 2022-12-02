@@ -101,7 +101,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, true)
+//                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, true)
                 }
             }
         }
@@ -123,7 +123,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, false)
+//                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, false)
                 }
             }
         }

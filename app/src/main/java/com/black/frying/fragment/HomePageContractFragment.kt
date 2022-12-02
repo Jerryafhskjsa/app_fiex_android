@@ -2,7 +2,6 @@ package com.black.frying.fragment
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -64,7 +63,6 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
-import com.black.wallet.viewmodel.WalletViewModel
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import com.google.android.material.tabs.TabLayout

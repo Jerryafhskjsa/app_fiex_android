@@ -41,8 +41,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
     private var pingTimer: Timer? = null
     private var timerStart: Boolean = false
     private var pingTimerTask: TimerTask? = null
-    var currentPair: String? = null
 
+    var currentPair: String? = null
+    var currentUFuturePair:String? = null
     var kLineTimeStep: String? = null
     var kLineTimeStepSecond: Long = 0
     var kLineId: String? = ""
@@ -74,6 +75,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         mCcontext = context
         mHandler = handler
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
+        currentUFuturePair = CookieUtil.getCurrentFutureUPair(mCcontext!!)
         initSocketManager(mCcontext)
         addListenerAll()
         startConnectAll()
@@ -764,6 +766,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     inner class FutureSymbolListener() : SimpleListener() {
         override fun onConnected() {
             Log.d(TAG, "SymbolListener---->ßonConnected")
+            currentUFuturePair = CookieUtil.getCurrentFutureUPair(mCcontext!!)
             startListenFutureSymbol("btc_usdt")
         }
 
@@ -779,7 +782,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                     if (data.has("channel")) {
                         var channel = data.get("channel");
                         var data = data.get("data");
+//                        val jsonObject: JsonObject = JsonParser().parse(data) as JsonObject
                         Log.d(TAG, "SymbolListener message = $channel")
+                        Log.d(TAG, "SymbolListener->onMessage = $message")
                         when (channel) {
                             "push.ticker" -> { //行情
                                 val tickerBean = gson.fromJson<TickerBean>(
@@ -815,10 +820,21 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 )
                             }
                             "push.deep.full" -> { //全部深度
-                                val deepFullBean = gson.fromJson<DeepFullBean>(
+                                val allDepth: TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(
                                     data.toString(),
-                                    object : TypeToken<DeepFullBean?>() {}.type
+                                    object : TypeToken<TradeOrderDepth?>() {}.type
                                 )
+                                Log.d(TAG, "SymbolListener futureCurrentPair = $currentUFuturePair")
+                                if (allDepth != null) {
+                                    SocketDataContainer.updateQuotationOrderNewDataFiex(
+                                        mCcontext,
+                                        ConstData.DEPTH_FUTURE_TYPE,
+                                        mHandler,
+                                        currentUFuturePair,
+                                        allDepth,
+                                        true
+                                    )
+                                }
                             }
                             "push.fund.rate" -> {//资金费率
                                 val fundRateBean = gson.fromJson<FundRateBean>(

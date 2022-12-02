@@ -31,7 +31,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
-import org.json.JSONArray
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -51,14 +50,8 @@ object SocketDataContainer {
     //合约所有u本位交易对
     private val pairFutureUDataList: ArrayList<PairStatus?> = ArrayList()
 
-    //合约所有u本位交易对Map缓存
-    private val allFutureUPairStatusMap: MutableMap<String, PairStatus> = HashMap()
-
     //合约所有币本位交易对
     private val pairFutureCoinDataList: ArrayList<PairStatus?> = ArrayList()
-
-    //合约所有币本位交易对Map缓存
-    private val allFutureCoinPairStatusMap: MutableMap<String, PairStatus> = HashMap()
 
     //合约所有交易对
     private val allFuturePairStatusList: ArrayList<PairStatus?> = ArrayList()
@@ -98,11 +91,14 @@ object SocketDataContainer {
     private val pairObservers = ArrayList<Observer<ArrayList<PairStatus?>?>>()
 
 
-    //委托
-    private val orderDataList = ArrayList<QuotationOrderNew?>()
-    private val orderObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
+    //现货委托深度挂单列表
+    private val depthDataList = ArrayList<QuotationOrderNew?>()
+    private val spotDepthObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
 
     /***fiex***/
+    //合约委托深度挂单列表
+    private val futureDepthDataList = ArrayList<QuotationOrderNew?>()
+    private val futureDepthObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
     //现货交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
 
@@ -239,24 +235,44 @@ object SocketDataContainer {
         synchronized(pairObservers) { pairObservers.remove(observer) }
     }
 
-    //添加委托观察者
+    //添加现货深度委托观察者
     fun subscribeOrderObservable(observer: Observer<Pair<String?, TradeOrderPairList?>>?) {
         if (observer == null) {
             return
         }
-        synchronized(orderObservers) {
-            if (!orderObservers.contains(observer)) {
-                orderObservers.add(observer)
+        synchronized(spotDepthObservers) {
+            if (!spotDepthObservers.contains(observer)) {
+                spotDepthObservers.add(observer)
             }
         }
     }
 
-    //移除委托观察者
+    //移除现货深度委托观察者
     fun removeOrderObservable(observer: Observer<Pair<String?, TradeOrderPairList?>>?) {
         if (observer == null) {
             return
         }
-        synchronized(orderObservers) { orderObservers.remove(observer) }
+        synchronized(spotDepthObservers) { spotDepthObservers.remove(observer) }
+    }
+
+    //添加合约深度委托观察者
+    fun subscribeFutureDepthObservable(observer: Observer<Pair<String?, TradeOrderPairList?>>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futureDepthObservers) {
+            if (!futureDepthObservers.contains(observer)) {
+                futureDepthObservers.add(observer)
+            }
+        }
+    }
+
+    //移除合约深度委托观察者
+    fun removeFutureDepthObservable(observer: Observer<Pair<String?, TradeOrderPairList?>>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futureDepthObservers) { futureDepthObservers.remove(observer) }
     }
 
     //添加成交观察者
@@ -682,40 +698,6 @@ object SocketDataContainer {
         return gson.toJson(result)
     }
 
-    /**
-     * 初始化合约币本位交易对列表
-     */
-    fun initAllFutureCoinPairStatusData(context: Context?) {
-        if (context == null) {
-            return
-        }
-        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
-            context,
-            ConstData.PairStatusType.FUTURE_COIN
-        )
-        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
-            synchronized(pairFutureCoinDataList!!) {
-                    pairFutureCoinDataList.clear()
-                    pairFutureCoinDataList.addAll(pairStatuses)
-                    Collections.sort(pairFutureCoinDataList, PairStatus.COMPARATOR)
-                    synchronized(allFutureCoinPairStatusMap!!) {
-                        allFutureCoinPairStatusMap.clear()
-                            for (pairStatus in pairStatuses) {
-                                pairStatus.pair?.let {
-                                    allFutureCoinPairStatusMap[it] = pairStatus
-                                }
-                            }
-                    }
-
-            }
-            ""
-        }?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : SuccessObserver<String?>() {
-                override fun onSuccess(s: String?) {
-                    computeFuturePairStatusCNY(context)
-                }
-            })
-    }
 
     /**
      * 初始化合约u本位交易对列表
@@ -753,30 +735,6 @@ object SocketDataContainer {
                 }
             }
         FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_COIN,false,coinSymbolListCallback)
-//
-//        val observable = FutureApiServiceHelperWrapper.getFutureSymbolPairListObservable(
-//            context,
-//            ConstData.PairStatusType.FUTURE_U
-//        )
-//        observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
-//            synchronized(pairFutureUDataList!!) {
-//                    pairFutureUDataList.clear()
-//                    pairFutureUDataList.addAll(pairStatuses)
-//                    Collections.sort(pairFutureUDataList, PairStatus.COMPARATOR)
-//                        allFutureUPairStatusMap.clear()
-//                            for (pairStatus in pairStatuses) {
-//                                pairStatus.pair?.let {
-//                                    allFutureUPairStatusMap[it] = pairStatus//保存U本位
-//                                }
-//                            }
-//            }
-//            ""
-//        }?.observeOn(AndroidSchedulers.mainThread())
-//            ?.subscribe(object : SuccessObserver<String?>() {
-//                override fun onSuccess(s: String?) {
-//                    computeFuturePairStatusCNY(context)
-//                }
-//            })
     }
 
     /**
@@ -1205,7 +1163,7 @@ object SocketDataContainer {
                 pairStatusMap = allPairStatusMap
             }
             ConstData.PairStatusType.FUTURE_U -> {
-                pairStatusMap = allFutureUPairStatusMap
+                pairStatusMap = allFuturePairStatusMap
             }
         }
         if (pairStatusMap != null) {
@@ -1243,7 +1201,7 @@ object SocketDataContainer {
                 pairStatusMap = allPairStatusMap
             }
             ConstData.PairStatusType.FUTURE_U -> {
-                pairStatusMap = allFutureUPairStatusMap
+                pairStatusMap = allFuturePairStatusMap
             }
         }
         if (pairStatusMap != null) {
@@ -1277,7 +1235,7 @@ object SocketDataContainer {
                 pairStatusMap = allPairStatusMap
             }
             ConstData.PairStatusType.FUTURE_U -> {
-                pairStatusMap = allFutureUPairStatusMap
+                pairStatusMap = allFuturePairStatusMap
             }
         }
         if (pairStatusMap != null) {
@@ -1331,7 +1289,7 @@ object SocketDataContainer {
                 pairStatusMap = allPairStatusMap
             }
             ConstData.PairStatusType.FUTURE_U -> {
-                pairStatusMap = allFutureUPairStatusMap
+                pairStatusMap = allFuturePairStatusMap
             }
         }
         if (pairStatusMap != null) {
@@ -1482,115 +1440,9 @@ object SocketDataContainer {
         }
     }
 
-    fun updateQuotationOrderNewData(
-        context: Context?,
-        handler: Handler?,
-        currentPair: String?,
-        dataSource: JSONArray?,
-        isRemoveAll: Boolean
-    ) {
-        CommonUtil.postHandleTask(handler) {
-            Observable.create<String>(ObservableOnSubscribe { emitter ->
-                if (dataSource == null) {
-                    emitter.onComplete()
-                } else {
-                    val data: ArrayList<QuotationOrderNew?> =
-                        gson.fromJson<ArrayList<QuotationOrderNew?>>(
-                            dataSource.toString(),
-                            object : TypeToken<ArrayList<QuotationOrderNew?>?>() {}.type
-                        )
-                    synchronized(orderDataList) {
-                        if (isRemoveAll) {
-                            orderDataList.clear()
-                        }
-                    }
-                    //                            ArrayList<QuotationOrderNew>[] mergeData = mergeQuotationOrder(data);
-                    val count = data.size
-                    for (i in 0 until count) {
-                        val quotationOrderNew = data[i]
-                        if (quotationOrderNew != null && (quotationOrderNew.a < 0 || quotationOrderNew.v < 0)) { //存在错误数据，重新订阅
-                            sendSocketCommandBroadcast(context, SocketUtil.COMMAND_PAIR_CHANGED)
-                            emitter.onComplete()
-                            return@ObservableOnSubscribe
-                        }
-                        if (quotationOrderNew != null && quotationOrderNew.v > 0) { //添加反向节点
-                            val quotationOrderNewReverse = QuotationOrderNew()
-                            quotationOrderNewReverse.a = 0.0
-                            quotationOrderNewReverse.v = 0.0
-                            quotationOrderNewReverse.pair = quotationOrderNew.pair
-                            quotationOrderNewReverse.p = quotationOrderNew.p
-                            quotationOrderNewReverse.d = if ("BID".equals(
-                                    quotationOrderNew.d,
-                                    ignoreCase = true
-                                )
-                            ) "ASK" else "BID"
-                            data.add(quotationOrderNewReverse)
-                        }
-                    }
-                    var mergeData: Array<java.util.ArrayList<QuotationOrderNew?>?>?
-                    synchronized(orderDataList) {
-                        mergeData = mergeQuotationOrder2(orderDataList, data)
-                    }
-                    val askOrderNews: ArrayList<QuotationOrderNew?> =
-                        if (mergeData == null || mergeData!![0] == null) ArrayList() else mergeData!![0]!!
-                    val bidOrderNews: ArrayList<QuotationOrderNew?> =
-                        if (mergeData == null || mergeData!![1] == null) ArrayList() else mergeData!![1]!!
-                    synchronized(orderDataList) {
-                        orderDataList.clear()
-                        orderDataList.addAll(askOrderNews)
-                        orderDataList.addAll(bidOrderNews)
-                    }
-                    //组装返回数据
-                    val askOrders = ArrayList<TradeOrder?>(askOrderNews.size)
-                    val bidOrders = ArrayList<TradeOrder?>(bidOrderNews.size)
-                    for (i in askOrderNews.indices) {
-                        askOrderNews[i]?.toTradeOrder()?.let {
-                            askOrders.add(it)
-                        }
-                    }
-                    for (i in bidOrderNews.indices) {
-                        bidOrderNews[i]?.toTradeOrder()?.let {
-                            bidOrders.add(it)
-                        }
-                    }
-                    //排序
-                    //                    Collections.sort(bidOrders, TradeOrder.COMPARATOR_DOWN);
-                    //                    Collections.sort(askOrders, TradeOrder.COMPARATOR_UP);
-                    val result = TradeOrderPairList()
-                    result.bidOrderList = bidOrders
-                    result.askOrderList = askOrders
-                    //                    int size = Math.max(bidOrders.size(), askOrders.size());
-                    //                    for (int i = 0; i < size; i++) {
-                    //                        TradeOrderPair tradeOrderPair = new TradeOrderPair();
-                    //                        tradeOrderPair.order = i;
-                    //                        tradeOrderPair.bidOrder = CommonUtil.getItemFromList(bidOrders, i);
-                    //                        tradeOrderPair.askOrder = CommonUtil.getItemFromList(askOrders, i);
-                    //                        result.add(tradeOrderPair);
-                    //                    }
-                    emitter.onNext(gson.toJson(result))
-                }
-            }).subscribeOn(Schedulers.trampoline())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(object : SuccessObserver<String?>() {
-                    override fun onSuccess(s: String?) {
-                        synchronized(orderObservers) {
-                            for (observer in orderObservers) {
-                                observer.onNext(
-                                    Pair(
-                                        currentPair,
-                                        gson.fromJson(
-                                            s,
-                                            object : TypeToken<TradeOrderPairList?>() {}.type
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    }
-                })
-        }
-    }
-
+    /**
+     * 更新现货买卖单深度数据
+     */
     fun updateQuotationOrderNewDataFiex(
         context: Context?,
         depthType: Int?,
@@ -1599,17 +1451,29 @@ object SocketDataContainer {
         tradeOrderDepth: TradeOrderDepth?,
         isRemoveAll: Boolean
     ) {
+        var observer: ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>? = null
+        var dataList : ArrayList<QuotationOrderNew?>? = null
         CommonUtil.postHandleTask(handler) {
             Observable.create<String>(ObservableOnSubscribe { emitter ->
                 if (tradeOrderDepth == null) {
                     emitter.onComplete()
                 } else {
+                    when(depthType){
+                        ConstData.DEPTH_SPOT_TYPE -> {
+                            observer = spotDepthObservers
+                            dataList = depthDataList
+                        }
+                        ConstData.DEPTH_FUTURE_TYPE ->{
+                            observer = futureDepthObservers
+                            dataList = futureDepthDataList
+                        }
+                    }
                     var tradeOrderPairList =
                         parseOrderDepthData(context, depthType, tradeOrderDepth)
                     var orderDepthData = tradeOrderPairList?.let { parseOrderDepthToList(it) }
-                    synchronized(orderDataList) {
+                    synchronized(dataList!!) {
                         if (isRemoveAll) {
-                            orderDataList.clear()
+                            dataList!!.clear()
                         }
                     }
                     val count = orderDepthData?.size
@@ -1635,17 +1499,17 @@ object SocketDataContainer {
                         }
                     }
                     var mergeData: Array<java.util.ArrayList<QuotationOrderNew?>?>?
-                    synchronized(orderDataList) {
-                        mergeData = mergeQuotationOrder2(orderDataList, orderDepthData)
+                    synchronized(dataList!!) {
+                        mergeData = mergeQuotationOrder2(dataList!!, orderDepthData)
                     }
                     val askOrderNews: ArrayList<QuotationOrderNew?> =
                         if (mergeData == null || mergeData!![0] == null) ArrayList() else mergeData!![0]!!
                     val bidOrderNews: ArrayList<QuotationOrderNew?> =
                         if (mergeData == null || mergeData!![1] == null) ArrayList() else mergeData!![1]!!
-                    synchronized(orderDataList) {
-                        orderDataList.clear()
-                        orderDataList.addAll(askOrderNews)
-                        orderDataList.addAll(bidOrderNews)
+                    synchronized(dataList!!) {
+                        dataList!!.clear()
+                        dataList!!.addAll(askOrderNews)
+                        dataList!!.addAll(bidOrderNews)
                     }
                     //组装返回数据
                     val askOrders = ArrayList<TradeOrder?>(askOrderNews.size)
@@ -1660,28 +1524,17 @@ object SocketDataContainer {
                             bidOrders.add(it)
                         }
                     }
-                    //排序
-                    //                    Collections.sort(bidOrders, TradeOrder.COMPARATOR_DOWN);
-                    //                    Collections.sort(askOrders, TradeOrder.COMPARATOR_UP);
                     val result = TradeOrderPairList()
                     result.bidOrderList = bidOrders
                     result.askOrderList = askOrders
-                    //                    int size = Math.max(bidOrders.size(), askOrders.size());
-                    //                    for (int i = 0; i < size; i++) {
-                    //                        TradeOrderPair tradeOrderPair = new TradeOrderPair();
-                    //                        tradeOrderPair.order = i;
-                    //                        tradeOrderPair.bidOrder = CommonUtil.getItemFromList(bidOrders, i);
-                    //                        tradeOrderPair.askOrder = CommonUtil.getItemFromList(askOrders, i);
-                    //                        result.add(tradeOrderPair);
-                    //                    }
                     emitter.onNext(gson.toJson(result))
                 }
             }).subscribeOn(Schedulers.trampoline())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(object : SuccessObserver<String?>() {
                     override fun onSuccess(s: String?) {
-                        synchronized(orderObservers) {
-                            for (observer in orderObservers) {
+                        synchronized(observer!!) {
+                            for (observer in observer!!) {
                                 observer.onNext(
                                     Pair(
                                         currentPair,
@@ -1733,7 +1586,7 @@ object SocketDataContainer {
                 if (type == ConstData.DEPTH_SPOT_TYPE) {
                     tradeOrder.exchangeAmount = count!!
                 }
-                if (type == ConstData.DEPTH_CONTRACT_U_TYPE) {
+                if (type == ConstData.DEPTH_FUTURE_TYPE) {
                     //计算出每个订单的USDT数量
                     var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
                     tradeOrder.exchangeAmount = quantity?.toDouble()!!
@@ -1757,7 +1610,7 @@ object SocketDataContainer {
                 if (type == ConstData.DEPTH_SPOT_TYPE) {
                     tradeOrder.exchangeAmount = count!!
                 }
-                if (type == ConstData.DEPTH_CONTRACT_U_TYPE) {
+                if (type == ConstData.DEPTH_FUTURE_TYPE) {
                     //计算出每个订单的USDT数量
                     var quantity = BigDecimal(count!!).multiply(BigDecimal(contractSize.toString()))
                     tradeOrder.exchangeAmount = quantity?.toDouble()!!
@@ -1902,9 +1755,9 @@ object SocketDataContainer {
         if (context == null || callback == null) {
             return
         }
-        synchronized(orderDataList) {
+        synchronized(depthDataList) {
             try {
-                val mergeData = mergeQuotationOrder(orderDataList)
+                val mergeData = mergeQuotationOrder(depthDataList)
                 val askOrderNews =
                     if (mergeData == null || mergeData[0] == null) ArrayList() else mergeData[0]!!
                 val bidOrderNews =
@@ -2340,7 +2193,7 @@ object SocketDataContainer {
         synchronized(allPairStatusMap) { allPairStatusMap.clear() }
         synchronized(pairDataSource) { pairDataSource.clear() }
         synchronized(dearPairMap) { dearPairMap.clear() }
-        synchronized(orderDataList) { orderDataList.clear() }
+        synchronized(depthDataList) { depthDataList.clear() }
         synchronized(dealList) { dealList.clear() }
         synchronized(leverDetailCache) { leverDetailCache.clear() }
     }

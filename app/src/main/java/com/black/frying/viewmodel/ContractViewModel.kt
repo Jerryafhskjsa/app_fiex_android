@@ -60,7 +60,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     //交易对相关
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     //深度变化
-    private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
+    private var depthObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createDepthObserver()
     //行情涨跌幅以及价格变化
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
     //当前交易对所有用户成交数据
@@ -98,10 +98,10 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
         SocketDataContainer.subscribePairDealObservable(pairDealObserver)
 
-//        if (orderObserver == null) {
-//            orderObserver = createOrderObserver()
-//        }
-//        SocketDataContainer.subscribeOrderObservable(orderObserver)
+        if (depthObserver == null) {
+            depthObserver = createDepthObserver()
+        }
+        SocketDataContainer.subscribeFutureDepthObservable(depthObserver)
 
 //        if (pairObserver == null) {
 //            pairObserver = createPairObserver()
@@ -150,9 +150,9 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
             SocketDataContainer.removeUserOrderObservable(userTradeOrderObserver)
         }
 
-//        if (orderObserver != null) {
-//            SocketDataContainer.removeOrderObservable(orderObserver)
-//        }
+        if (depthObserver != null) {
+            SocketDataContainer.removeFutureDepthObservable(depthObserver)
+        }
 //        if (pairObserver != null) {
 //            SocketDataContainer.removePairObservable(pairObserver)
 //        }
@@ -273,9 +273,12 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
     }
 
-    private fun createOrderObserver(): Observer<Pair<String?, TradeOrderPairList?>> {
+    private fun createDepthObserver(): Observer<Pair<String?, TradeOrderPairList?>> {
         return object : SuccessObserver<Pair<String?, TradeOrderPairList?>>() {
             override fun onSuccess(value: Pair<String?, TradeOrderPairList?>) {
+                Log.d("iiiiii","createDepthObserver,pair = "+value.first)
+                Log.d("iiiiii","createDepthObserver,askOrderList->size = "+value.second?.askOrderList?.size)
+                Log.d("iiiiii","createDepthObserver,bidOrderList->size = "+value.second?.bidOrderList?.size)
                 if (TextUtils.equals(currentPairStatus.pair, value.first) && value.second != null && onContractModelListener != null) {
                     sortTradeOrder(value.first, value.second)
                 }
@@ -478,7 +481,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
                         depth.b = fDepth.b
                         depth.t = fDepth.t
                         depth.u = fDepth.u
-                        tradeOrderDepthPair = depth?.let { SocketDataContainer.parseOrderDepthData(context,ConstData.DEPTH_CONTRACT_U_TYPE,it) }
+                        tradeOrderDepthPair = depth?.let { SocketDataContainer.parseOrderDepthData(context,ConstData.DEPTH_FUTURE_TYPE,it) }
                         singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
                         getAllDepthOrderFiex()
                     }

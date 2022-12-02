@@ -500,7 +500,23 @@ final class PairStatusPopupWindow(
         synchronized(adapterMap) {
             synchronized(listViewDataMap) {
                 for (i in sets.indices) {
-                    val setName = sets[i]?.name
+                    var setName:String? = null
+                    when(type){
+                        TYPE_FUTURE_ALL ->{
+                            when(sets[i]?.name){
+                                mActivity.getString(R.string.usdt_base) -> {
+                                    setName = mActivity.getString(R.string.usdt).lowercase()
+                                }
+                                mActivity.getString(R.string.coin_base) -> {
+                                    setName = mActivity.getString(R.string.usd)
+                                }
+                            }
+                        }
+                        TYPE_TRANSACTION -> {
+                            setName = sets[i]?.name
+                        }
+                    }
+//                    val setName = sets[i]?.name
                     val adapter = adapterMap[setName]
                     if (adapter != null) {
                         val data: MutableList<PairStatusShowPopup?>? = listViewDataMap[setName]

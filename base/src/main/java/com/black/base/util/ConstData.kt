@@ -22,8 +22,7 @@ object ConstData {
     }
 
     const val DEPTH_SPOT_TYPE = 0
-    const val DEPTH_CONTRACT_U_TYPE = 1
-    const val DEPTH_CONTRACT_COIN_TYPE = 2
+    const val DEPTH_FUTURE_TYPE = 1
 
     const val CONTRACT_REC_HOLD_AMOUNT = 0
     const val CONTRACT_REC_WITH_LIMIE = 1
