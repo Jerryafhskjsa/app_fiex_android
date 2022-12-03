@@ -216,13 +216,15 @@ class HomePageContractFragment : BaseFragment(),
         buyMultiChooseBean?.defaultMultiple = 10
         buyMultiChooseBean?.orientation = "BUY"
         buyMultiChooseBean?.type = 0
-        binding?.fragmentHomePageContractHeader?.buyMultiple?.text = getMultipleDes(buyMultiChooseBean)
+        binding?.fragmentHomePageContractHeader?.buyMultiple?.text =
+            getMultipleDes(buyMultiChooseBean)
         sellMultiChooseBean = ContractMultiChooseBean()
         sellMultiChooseBean?.maxMultiple = 100
         sellMultiChooseBean?.defaultMultiple = 10
         sellMultiChooseBean?.orientation = "SELL"
         sellMultiChooseBean?.type = 0
-        binding?.fragmentHomePageContractHeader?.sellMultiple?.text = getMultipleDes(sellMultiChooseBean)
+        binding?.fragmentHomePageContractHeader?.sellMultiple?.text =
+            getMultipleDes(sellMultiChooseBean)
     }
 
     override fun getViewModel(): ContractViewModel? {
@@ -240,11 +242,13 @@ class HomePageContractFragment : BaseFragment(),
         updateDear(isDear)
 
         FutureService.getContractSize("btc_usdt")
-        FutureService.initMarkPrice(mContext)
-        FutureService.getPositionAdl(mContext)
-        FutureService.getBalanceByCoin(mContext)
-        FutureService.getLeverageBracketList(mContext)
-        FutureService.getOrderPosition(mContext)
+//        FutureService.initMarkPrice(mContext)
+//        FutureService.getPositionAdl(mContext)
+//        FutureService.getBalanceByCoin(mContext)
+//          FutureService.initOrderList(mContext)
+//        FutureService.getUserStepRate(mContext)
+//        FutureService.getOrderPosition(mContext)
+        FutureService.getAvailableOpenData(BigDecimal("19076"), 5)
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
     }
 
@@ -559,10 +563,12 @@ class HomePageContractFragment : BaseFragment(),
                 ) {
                     if (item?.orientation.equals("BUY")) {
                         buyMultiChooseBean = item
-                        binding?.fragmentHomePageContractHeader?.buyMultiple?.text = getMultipleDes(buyMultiChooseBean)
+                        binding?.fragmentHomePageContractHeader?.buyMultiple?.text =
+                            getMultipleDes(buyMultiChooseBean)
                     } else {
                         sellMultiChooseBean = item
-                        binding?.fragmentHomePageContractHeader?.sellMultiple?.text = getMultipleDes(sellMultiChooseBean)
+                        binding?.fragmentHomePageContractHeader?.sellMultiple?.text =
+                            getMultipleDes(sellMultiChooseBean)
                     }
                 }
             }).show()
@@ -1127,7 +1133,7 @@ class HomePageContractFragment : BaseFragment(),
         deepViewBinding!!.clearASKTradeOrders()
         deepViewBinding!!.clearBIDTradeOrders()
         mContext?.let {
-                CookieUtil.setCurrentFutureUPair(it, pairStatus.pair)
+            CookieUtil.setCurrentFutureUPair(it, pairStatus.pair)
         }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
@@ -1843,7 +1849,7 @@ class HomePageContractFragment : BaseFragment(),
             if (since > 0) {//涨
                 background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
-            } else if (since < 0 ) {
+            } else if (since < 0) {
                 background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             } else {
@@ -1857,17 +1863,17 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
-            if (since != null && styleChange == 0) {
-                if (since < 0) {//跌
-                    background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
-                    color = mContext?.getColor(R.color.T10)
-                } else if (since > 0 ) {
-                    background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
-                    color = mContext?.getColor(R.color.T9)
-                } else {
-                    background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
-                    color = mContext?.getColor(R.color.B3)
-                }
+        if (since != null && styleChange == 0) {
+            if (since < 0) {//跌
+                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                color = mContext?.getColor(R.color.T10)
+            } else if (since > 0) {
+                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                color = mContext?.getColor(R.color.T9)
+            } else {
+                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                color = mContext?.getColor(R.color.B3)
+            }
 
             Log.d(tag, "priceSince0 = $since")
             var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
@@ -1875,7 +1881,7 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.actionBarLayout.currentPriceSince.setText(result)
             binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
-            }
+        }
     }
 
     private fun intoChatRoom(chatRoomId: String?) {

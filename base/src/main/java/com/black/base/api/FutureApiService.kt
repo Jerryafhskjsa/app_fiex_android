@@ -2,7 +2,6 @@ package com.black.base.api
 
 
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.HttpRequestResultData
 import com.black.base.model.future.*
 
 import com.black.base.util.UrlConfig
@@ -94,27 +93,47 @@ interface FutureApiService {
      * 获取杠杆分层信息
      */
     @GET(UrlConfig.Future.URL_leverage_bracket_LIST)
-    fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?>?
+    fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketBean?>?>?>?
 
     /**
      * 获取用户单币种资金
      */
     @GET(UrlConfig.Future.ULR_BALANCE_DETAIL)
-    fun getBalanceDetail(@Query("coin") coin: String?,
-                         @Query("underlyingType") underlyingType: String?)
-                        :Observable<HttpRequestResultBean<BalanceDetailBean?>?>?
+    fun getBalanceDetail(
+        @Query("coin") coin: String?,
+        @Query("underlyingType") underlyingType: String?
+    )
+            : Observable<HttpRequestResultBean<BalanceDetailBean?>?>?
+
+    /**
+     * 获取用户资金费率
+     */
+    @GET(UrlConfig.Future.ULR_USER_STEP_RATE)
+    fun getUserStepRate(): Observable<HttpRequestResultBean<UserStepRate>>
+
+
+    /**
+     * 获取用户资金费率
+     */
+    @GET(UrlConfig.Future.ULR_ORDER_LIST)
+    fun getOrderList(
+        @Query("page") page: Int?,
+        @Query("size") size: Int?, @Query("state") state: String?,
+    ): Observable<HttpRequestResultBean<OrderBean>>
 
     /**
      * 下单接口
      */
     @FormUrlEncoded
     @POST(UrlConfig.Future.ULR_ORDER_CREATE)
-    fun orderCreate(@Field("orderSide") orderSide: String?,
-                    @Field("symbol") symbol: String?,
-                    @Field("price") price: Double?,
-                    @Field("timeInForce") timeInForce: String?,
-                    @Field("orderType") orderType: String?,
-                    @Field("positionSide") positionSide: String?,
-                    @Field("origQty") origQty: Int?):Observable<HttpRequestResultBean<String>?>?
+    fun orderCreate(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("price") price: Double?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?
+    ): Observable<HttpRequestResultBean<String>?>?
 
 }

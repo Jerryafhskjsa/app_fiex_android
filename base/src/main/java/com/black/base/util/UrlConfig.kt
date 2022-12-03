@@ -547,10 +547,13 @@ object UrlConfig {
 
         const val URL_TICKERS = "market/v1/public/q/tickers"
 
-        const val ULR_BALANCE_DETAIL="user/v1/balance/detail"
+        const val ULR_BALANCE_DETAIL = "user/v1/balance/detail"
 
-        const val ULR_ORDER_CREATE="trade/v1/order/create"
+        const val ULR_ORDER_CREATE = "trade/v1/order/create"
 
+        const val ULR_USER_STEP_RATE = "user/v1/user/step-rate/getUserStepRate"
+
+        const val ULR_ORDER_LIST = "trade/v1/order/list"
 
 
     }

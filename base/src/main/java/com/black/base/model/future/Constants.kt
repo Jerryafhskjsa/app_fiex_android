@@ -5,4 +5,5 @@ object Constants {
     const val SHORT="SHORT"
     const val ISOLATED="ISOLATED"
     const val CROSSED="CROSSED"
+    const val UNFINISHED="UNFINISHED"
 }

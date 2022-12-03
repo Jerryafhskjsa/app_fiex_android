@@ -1,6 +1,6 @@
 package com.black.base.model.future
 
-data class LeverageBracketResp(
+data class LeverageBracketBean(
     val leverageBrackets: List<LeverageBracket>,
     val symbol: String
 )

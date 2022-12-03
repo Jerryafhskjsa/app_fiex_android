@@ -3,13 +3,11 @@ package com.black.base.api
 import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.HttpRequestResultData
 import com.black.base.model.future.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
 import com.black.util.Callback
-import retrofit2.http.Query
 
 object FutureApiServiceHelper {
 
@@ -87,6 +85,28 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    /**
+     * 获取订单列表
+     */
+    fun getOrderList(
+        page: Int,
+        size: Int,
+        state:String,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getOrderList(page,size,state)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
 
     /**
      * 获取实时成交
@@ -222,7 +242,7 @@ object FutureApiServiceHelper {
     fun getLeverageBracketList(
         context: Context?,
         isShowLoading: Boolean,
-        callback: Callback<HttpRequestResultBean<ArrayList<LeverageBracketResp?>?>?>?
+        callback: Callback<HttpRequestResultBean<ArrayList<LeverageBracketBean?>?>?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -240,7 +260,7 @@ object FutureApiServiceHelper {
     fun getBalanceDetail(
         context: Context?,
         coin: String,
-        underlyingType:String,
+        underlyingType: String,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<BalanceDetailBean?>?>?
     ) {
@@ -249,7 +269,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getBalanceDetail(coin,underlyingType)
+            ?.getBalanceDetail(coin, underlyingType)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -257,8 +277,10 @@ object FutureApiServiceHelper {
     /**
      * 获取adl信息
      */
-    fun getPositionAdl( context: Context?,isShowLoading: Boolean,
-                    callback: Callback<HttpRequestResultBean<ArrayList<ADLBean?>?>?>?){
+    fun getPositionAdl(
+        context: Context?, isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<ADLBean?>?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
@@ -270,6 +292,24 @@ object FutureApiServiceHelper {
     }
 
     /**
+     * 获取用户阶梯费率
+     */
+    fun getUserStepRate(
+        context: Context?, isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<UserStepRate>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getUserStepRate()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+
+    /**
      * 下单接口
      * 买卖方向：BUY;SELL
      * 订单类型：LIMIT；MARKET
@@ -277,22 +317,24 @@ object FutureApiServiceHelper {
      * 有效方式：GTC;IOC;FOK;GTX
      * 仓位方向：LONG;SHORT
      */
-    fun createOrder(context: Context?,
-                    orderSide:String,
-                    orderType:String,
-                    symbol: String?,
-                    positionSide: String?,
-                    price: Double?,
-                    timeInForce: String?,
-                    origQty:Int,
-                    isShowLoading: Boolean,
-                    callback: Callback<HttpRequestResultBean<String>?>?){
+    fun createOrder(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        price: Double?,
+        timeInForce: String?,
+        origQty: Int,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.orderCreate(orderSide,symbol,price,timeInForce,orderType,positionSide,origQty)
+            ?.orderCreate(orderSide, symbol, price, timeInForce, orderType, positionSide, origQty)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
