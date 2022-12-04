@@ -92,7 +92,7 @@ object FutureApiServiceHelper {
     fun getOrderList(
         page: Int,
         size: Int,
-        state:String,
+        state: String,
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<OrderBean>>?
@@ -102,7 +102,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getOrderList(page,size,state)
+            ?.getOrderList(page, size, state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -304,6 +304,24 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.getUserStepRate()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+
+    /**
+     * 获取用户阶梯费率
+     */
+    fun getBalanceList(
+        context: Context?, isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<ArrayList<BalanceDetailBean>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getBalanceList()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

@@ -25,6 +25,8 @@ object FutureService {
 
     var adlList: ArrayList<ADLBean?>? = null
 
+    var balanceList: ArrayList<BalanceDetailBean>? = null  //资产列表
+
     var symbolBean: SymbolBean? = null
 
     var buyList: ArrayList<OrderItem>? = null
@@ -67,12 +69,16 @@ object FutureService {
         initLeverageBracketList(context)
 //        }
 //        if (balanceDetail == null) {
+        initBalanceList(context)
         initBalanceByCoin(context)
 //        }
 //        if (orderList == null) {
         initOrderList(context);
 //        }
         initUserStepRate(context)
+
+        initPositionAdl(context)
+
     }
 
     fun initPositionList(context: Context?) {
@@ -518,6 +524,26 @@ object FutureService {
         return maxNominalValue
     }
 
+    /**
+     * 获取资产列表
+     */
+    fun initBalanceList(context: Context?) {
+        FutureApiServiceHelper.getBalanceList(context, false,
+            object : Callback<HttpRequestResultBean<ArrayList<BalanceDetailBean>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->initBalanceList", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<BalanceDetailBean>?>?) {
+                    if (returnData != null) {
+                        balanceList = returnData?.result
+                        Log.d("ttttttt-->initBalanceList", balanceList.toString())
+                    }
+
+                }
+
+            })
+    }
 
     /**
      * 获取资产
@@ -538,6 +564,7 @@ object FutureService {
                 }
             })
     }
+
 
     /**
      * 获取dex值
@@ -662,7 +689,7 @@ object FutureService {
     /**
      * 获得ADL
      */
-    fun getPositionAdl(context: Context?) {
+    fun initPositionAdl(context: Context?) {
         FutureApiServiceHelper.getPositionAdl(context, false,
             object : Callback<HttpRequestResultBean<ArrayList<ADLBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
@@ -821,20 +848,62 @@ object FutureService {
      * 余额多仓最大可开 = 可用余额 / (最新成交价【输入框中的价格】* 面值 * (起始保证金率 + 2 * Taker费率))
      */
     fun getBalanceLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
-        if (balanceDetail?.availableBalance != null) {
-            //余额多仓最大可开
-            var result = BigDecimal(balanceDetail?.availableBalance).divide(
-                inputPrice.multiply(contractSize).multiply(
-                    BigDecimal("1").divide(BigDecimal(leverage), 4, RoundingMode.DOWN)
-                        .add(BigDecimal(userStepRate?.takerFee).multiply(BigDecimal("2")))
-                ),
-                4, RoundingMode.DOWN
-            )
-            return result
-        } else {
-            return BigDecimal(0)
-        }
+
+        //可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
+        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
+        Log.d("ttt--->availableBalanceDisplay", availableBalanceDisplay.toString())
+        //余额多仓最大可开
+        var result = availableBalanceDisplay.divide(
+            inputPrice.multiply(contractSize).multiply(
+                BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
+                    .add(BigDecimal(userStepRate?.takerFee).multiply(BigDecimal("2")))
+            ),
+            8, RoundingMode.DOWN
+        )
+        return result
+
     }
+
+    /**
+     * 该结算货币下的全仓未实现盈亏
+     */
+    fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean): BigDecimal {
+
+        var coin = balanceDetail?.coin
+        var availableBalance = balanceDetail.availableBalance
+
+        var floatProfit: BigDecimal? = BigDecimal(0)
+        var crossedFloatProfit: BigDecimal? = BigDecimal(0)
+
+        if (coin.equals("usdt")) {
+            for (p in positionList!!) {
+                if (p?.symbol!!.split("_")[1].equals("usdt")) {
+                    var fp = getFloatProfit(p!!)
+                    floatProfit = floatProfit!!.plus(fp)
+                    Log.d("ttt--->floatProfit", floatProfit.toString())
+                    if (p.positionType.equals(Constants.CROSSED)) {
+                        crossedFloatProfit = crossedFloatProfit!!.plus(fp)
+                    }
+                }
+            }
+        } else {
+            for (p in positionList!!) {
+                if (p?.symbol!!.split("_")[0].equals(coin)) {
+                    var fp = getFloatProfit(p!!)
+                    floatProfit = floatProfit!!.plus(fp)
+                    if (p.positionType.equals(Constants.CROSSED)) {
+                        crossedFloatProfit = crossedFloatProfit!!.plus(fp)
+                    }
+                }
+            }
+        }
+        Log.d("ttt--->availableBalanceDisplay", availableBalance)
+        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
+        var a = BigDecimal(availableBalance).plus(crossedFloatProfit!!)
+        // 可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
+        return BigDecimal(0).max(a)
+    }
+
 
     /**
      *  当前交易对订单名义价值

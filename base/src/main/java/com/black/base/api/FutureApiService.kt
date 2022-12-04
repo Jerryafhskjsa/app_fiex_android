@@ -106,6 +106,13 @@ interface FutureApiService {
             : Observable<HttpRequestResultBean<BalanceDetailBean?>?>?
 
     /**
+     * 获取资产列表
+     */
+    @GET(UrlConfig.Future.ULR_BALANCE_LIST)
+    fun getBalanceList(): Observable<HttpRequestResultBean<ArrayList<BalanceDetailBean>?>?>?
+
+
+    /**
      * 获取用户资金费率
      */
     @GET(UrlConfig.Future.ULR_USER_STEP_RATE)

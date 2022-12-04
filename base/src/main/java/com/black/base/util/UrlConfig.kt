@@ -549,6 +549,8 @@ object UrlConfig {
 
         const val ULR_BALANCE_DETAIL = "user/v1/balance/detail"
 
+        const val ULR_BALANCE_LIST = "user/v1/balance/list"
+
         const val ULR_ORDER_CREATE = "trade/v1/order/create"
 
         const val ULR_USER_STEP_RATE = "user/v1/user/step-rate/getUserStepRate"
