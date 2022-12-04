@@ -191,9 +191,9 @@ object FutureService {
                         orderLongList = ArrayList()
                         orderShortList = ArrayList()
                         for (item in orderList!!) {
-                            if (item.orderSide.equals(Constants.LONG)) {
+                            if (item.positionSide.equals(Constants.LONG)) {
                                 orderLongList!!.add(item)
-                            } else if (item.orderSide.equals(Constants.SHORT)) {
+                            } else if (item.positionSide.equals(Constants.SHORT)) {
                                 orderShortList!!.add(item)
                             }
                         }
@@ -510,10 +510,9 @@ object FutureService {
         }
         for (item in leverageBracket?.leverageBrackets!!) {
 //            Log.d("ttttttt-->该层最大名义价值", item?.maxNominalValue)
-            //仓位价值和档位比较 ==-1 仓位价值小
-            if (BigDecimal(leverage).compareTo(BigDecimal(item?.bracket)) == 0) {
+            //根据当前的杠杆备注 找到所处的位置最大价值
+            if (BigDecimal(leverage).compareTo(BigDecimal(item?.maxLeverage)) == -1) {
                 maxNominalValue = item?.maxNominalValue
-                break
             }
         }
         return maxNominalValue
@@ -781,15 +780,20 @@ object FutureService {
     fun getBracketLongMaxAmount(inputPrice: BigDecimal, leverage: Int): BigDecimal {
         //最大名义价值
         var maxNominalValue = getMaxNominalValue(leverage)
+        Log.d("ttt--->1", maxNominalValue.toString())
+        //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
+        Log.d("ttt--->2", orderValue.toString())
         var positionBean = currentSymbolPositionValue(Constants.LONG)
+//        Log.d("ttt--->3", positionBean.toString())
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
             .multiply(BigDecimal(contractSize.toString()))
+        Log.d("ttt--->4", positionValue.toString())
         var result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
             .minus(orderValue!!)
-            .divide(inputPrice.times(contractSize!!), 2, RoundingMode.DOWN)
+            .divide(inputPrice.times(contractSize!!), 8, RoundingMode.DOWN)
         return result
     }
 
@@ -857,18 +861,17 @@ object FutureService {
         if (underlyingType.equals("U_BASED")) {
             for (item in orderLongList!!) {
                 var value = BigDecimal(item.marginFrozen).divide(
-                    BigDecimal(1).divide(BigDecimal(longLeverage), 4, RoundingMode.DOWN).plus(
+                    BigDecimal(1).divide(BigDecimal(longLeverage), 8, RoundingMode.DOWN).plus(
                         BigDecimal(userStepRate?.takerFee).times(
                             BigDecimal(
                                 2
                             )
                         )
                     ),
-                    4, RoundingMode.DOWN
+                    8, RoundingMode.DOWN
                 )
                 longResult = longResult.add(value)
             }
-
             for (item in orderShortList!!) {
                 var value = BigDecimal(item.marginFrozen).divide(
                     BigDecimal(1)
