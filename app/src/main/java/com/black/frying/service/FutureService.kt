@@ -5,6 +5,7 @@ import android.util.Log
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.*
+import com.black.base.util.FutureSocketData
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
 import java.math.BigDecimal
@@ -618,7 +619,12 @@ object FutureService {
      * 获取浮动盈亏
      */
     fun getFloatProfit(positionBean: PositionBean): BigDecimal {
-        var markPriceBean = getMarkPrice(symbol)
+
+        var markPriceBean = FutureSocketData.markPrice
+        if (markPriceBean == null) {
+            markPriceBean = getMarkPrice(symbol)
+        }
+        Log.d("ttt---->markPriceBean",markPriceBean.toString())
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
@@ -779,7 +785,7 @@ object FutureService {
     余额多仓最大可开 = 可用余额 / (最新成交价【输入框中的价格】* 面值 * (起始保证金率 + 2 * Taker费率))；
     风险档位多仓最大可开 = (最大名义价值 - 持仓价值 - 订单名义价值) / (最新成交价【输入框中的价格】* 面值)
     可开多:Min(余额多仓最大可开,风险档位多仓最大可开)
-    //最大名义价值 = 当前杠杆所处的最大档位中的最大名义价值
+    其中最大名义价值 = 当前杠杆所处的最大档位中的最大名义价值
 
     余额空仓最大可开 = 可用余额 / ((最新成交价【max(最新成交价，输入框中的价格）】* 面值 * ((起始保证金率+Taker费率) * (1 + Taker费率) + Taker费率 * (1 - 维持保证金率))))
     风险档位空仓最大可开 =  (最大名义价值 - 持仓价值 - 订单名义价值) / ((最新成交价【max(最新成交价, 输入框中的价格)】* 面值)
@@ -789,15 +795,95 @@ object FutureService {
      */
     fun getAvailableOpenData(inputPrice: BigDecimal, leverage: Int) {
         var longMaxOpen = getUserLongMaxOpen(inputPrice, leverage)
-        Log.d("ttttttt-->longMaxOpen", longMaxOpen.toString())
+        var shortMaxOpen = getUserShortMaxOpen(inputPrice, leverage)
+
+        Log.d(
+            "ttttttt-->longMaxOpen",
+            sheet2CurrentUnit(longMaxOpen.toString(), inputPrice.toString()).toString()
+        )
+        Log.d(
+            "ttttttt-->shortMaxOpen",
+            sheet2CurrentUnit(shortMaxOpen.toString(), inputPrice.toString()).toString()
+        )
     }
 
+    /**
+     * 可开空
+     * 最新成交价【max(最新成交价，输入框中的价格）】
+     */
+    fun getUserShortMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
+        //获取最新成交价
+        var tickerBean = FutureSocketData.tickerList.get(symbol);
+        //max(最新成交价，输入框中的价格）
+        var price = BigDecimal(tickerBean?.c).max(inputPrice)
+        var b = getBalanceShortMaxOpen(price, leverage)
+        var a = getBracketShortMaxAmount(price, leverage)
+        Log.d("ttttttt-->shortMaxOpen--a", a.toString())
+        Log.d("ttttttt-->shortMaxOpen--b", b.toString())
+        return a.min(b)
+    }
+
+
+    /**
+     * 可开多
+     */
     fun getUserLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
         var a = getBracketLongMaxAmount(inputPrice, leverage)
         var b = getBalanceLongMaxOpen(inputPrice, leverage)
-        Log.d("ttttttt-->a", a.toString())
-        Log.d("ttttttt-->b", b.toString())
+        Log.d("ttttttt-->longMaxOpen--a", a.toString())
+        Log.d("ttttttt-->longMaxOpen--b", b.toString())
         return a.min(b)
+    }
+
+    /**
+     * U本位时
+     * 风险档位空仓最大可开 =  (最大名义价值 - 持仓价值 - 订单名义价值) / ((最新成交价【max(最新成交价, 输入框中的价格)】* 面值)
+     *
+     */
+    fun getBracketShortMaxAmount(price: BigDecimal, leverage: Int): BigDecimal {
+        //最大名义价值
+        var maxNominalValue = getMaxNominalValue(leverage)
+
+        //订单名义价值
+        var orderValue = currentSymbolOrderValue(Constants.SHORT)
+
+        var positionBean = currentSymbolPositionValue(Constants.SHORT)
+        //持仓价值
+        var positionValue = BigDecimal(positionBean?.positionSize)
+            .multiply(BigDecimal(positionBean?.entryPrice))
+            .multiply(BigDecimal(contractSize.toString()))
+        var result = BigDecimal(maxNominalValue)
+            .minus(BigDecimal(positionValue.toString()))
+            .minus(orderValue!!)
+            .divide(price.times(contractSize!!), 8, RoundingMode.DOWN)
+        return result
+    }
+
+    /**
+     * U本位时
+     * 余额空仓最大可开 = 可用余额 / ((最新成交价【max(最新成交价，输入框中的价格）】* 面值 * ((起始保证金率+Taker费率) * (1 + Taker费率) + Taker费率 * (1 - 维持保证金率))))
+     * 1. 起始保证金率 = 1 / 杠杆倍数
+     * 2. 维持保证金率 = 杠杆所处的最大档位的维持保证金率
+     */
+    fun getBalanceShortMaxOpen(price: BigDecimal, leverage: Int): BigDecimal {
+        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
+        var b = price.multiply(contractSize)
+            .multiply(
+                BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
+                    .add(BigDecimal(userStepRate?.takerFee))
+            )
+            .multiply(BigDecimal(1).add(BigDecimal(userStepRate?.takerFee)))
+            .add(
+                BigDecimal(userStepRate?.takerFee).multiply(
+                    BigDecimal(1).subtract(
+                        BigDecimal(
+                            getLeverageMaxBracket(leverage)?.maintMarginRate
+                        )
+                    )
+                )
+            )
+        var result = availableBalanceDisplay.divide(b, 8, RoundingMode.DOWN)
+        return result
     }
 
     /**
@@ -807,16 +893,15 @@ object FutureService {
     fun getBracketLongMaxAmount(inputPrice: BigDecimal, leverage: Int): BigDecimal {
         //最大名义价值
         var maxNominalValue = getMaxNominalValue(leverage)
-        Log.d("ttt--->1", maxNominalValue.toString())
+
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
-        Log.d("ttt--->2", orderValue.toString())
+
         var positionBean = currentSymbolPositionValue(Constants.LONG)
-//        Log.d("ttt--->3", positionBean.toString())
+        //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
             .multiply(BigDecimal(contractSize.toString()))
-        Log.d("ttt--->4", positionValue.toString())
         var result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
             .minus(orderValue!!)
@@ -851,7 +936,6 @@ object FutureService {
 
         //可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
-        Log.d("ttt--->availableBalanceDisplay", availableBalanceDisplay.toString())
         //余额多仓最大可开
         var result = availableBalanceDisplay.divide(
             inputPrice.multiply(contractSize).multiply(
@@ -880,7 +964,6 @@ object FutureService {
                 if (p?.symbol!!.split("_")[1].equals("usdt")) {
                     var fp = getFloatProfit(p!!)
                     floatProfit = floatProfit!!.plus(fp)
-                    Log.d("ttt--->floatProfit", floatProfit.toString())
                     if (p.positionType.equals(Constants.CROSSED)) {
                         crossedFloatProfit = crossedFloatProfit!!.plus(fp)
                     }
@@ -897,8 +980,8 @@ object FutureService {
                 }
             }
         }
-        Log.d("ttt--->availableBalanceDisplay", availableBalance)
-        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
+//        Log.d("ttt--->availableBalanceDisplay", availableBalance)
+//        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
         var a = BigDecimal(availableBalance).plus(crossedFloatProfit!!)
         // 可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
         return BigDecimal(0).max(a)
@@ -1014,5 +1097,12 @@ object FutureService {
     fun getCoinValue(price: String, amount: String, contractSize: String): String {
         var result = BigDecimal(amount).times(BigDecimal(contractSize)).div(BigDecimal(price))
         return result.toString()
+    }
+
+
+    fun sheet2CurrentUnit(positionSize: String, price: String): BigDecimal {
+        var resultBN =
+            BigDecimal(positionSize).times(contractSize!!).times(BigDecimal(price))
+        return resultBN
     }
 }

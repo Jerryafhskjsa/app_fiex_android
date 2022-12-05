@@ -211,6 +211,12 @@ class FutureSocketManager(context: Context, handler: Handler) {
             jsonObject.put("symbol", "btc_usdt")
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
                 ?.send(jsonObject.toString())
+
+            var jsonObject1 = JSONObject();
+            jsonObject1.put("req", "sub_mark_price")
+            jsonObject1.put("symbol", "btc_usdt")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+                ?.send(jsonObject1.toString())
         } catch (e: Exception) {
             FryingUtil.printError(e)
         }
@@ -236,13 +242,15 @@ class FutureSocketManager(context: Context, handler: Handler) {
                 if (data.has("channel")) {
                     var channel = data.get("channel");
                     var data = data.get("data");
-                    Log.d(tag, "SymbolListener message = $channel")
+                    Log.d(tag, "SymbolListener channel = $channel")
                     when (channel) {
                         "push.ticker" -> { //行情
                             val tickerBean = gson.fromJson<TickerBean>(
                                 data.toString(),
                                 object : TypeToken<TickerBean?>() {}.type
                             )
+                            FutureSocketData.onTicketChange(tickerBean)
+//                            Log.d(tag, "SymbolListener->onMessage = ${tickerBean.toString()}")
                         }
                         "push.index.price" -> { //指数价格
                             val indexPriceBean = gson.fromJson<IndexPriceBean>(
@@ -255,6 +263,8 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 data.toString(),
                                 object : TypeToken<MarkPriceBean?>() {}.type
                             )
+//
+                            FutureSocketData.onMarkPriceChange(markPriceBean)
                         }
                         "push.agg.ticker" -> { //聚合行情
 
