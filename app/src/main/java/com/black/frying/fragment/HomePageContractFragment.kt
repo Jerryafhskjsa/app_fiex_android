@@ -246,10 +246,10 @@ class HomePageContractFragment : BaseFragment(),
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
 //        FutureService.getBalanceByCoin(mContext)
-          FutureService.getCurrentPosition(mContext)
+//          FutureService.getCurrentPosition(mContext)
 //        FutureService.getUserStepRate(mContext)
 //        FutureService.getOrderPosition(mContext)
-//        FutureService.getAvailableOpenData(BigDecimal("10000"), 5)
+        FutureService.getAvailableOpenData(BigDecimal("20000"), 5)
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
     }
 

@@ -37,16 +37,18 @@ class WalletBill() : BaseAdapterItem() , Parcelable {
         businessTime = parcel.readValue(Long::class.java.classLoader) as? Long
     }
 
-    fun getBusinessType(context: Context): String {
-        return if (businessType == null) {
+    fun getType(context: Context): String {
+        return if (type == null) {
             ""
-        } else when (businessType) {
+        } else when (type) {
             "DEPOSIT" -> context.getString(R.string.wallet_bill_deposit)
             "WITHDRAW" -> context.getString(R.string.wallet_bill_withdraw)
+            "exchange" ->context.getString(R.string.exchange)
+            "TRADE_DEAL" -> context.getString(R.string.trade_deal)
             "CANCEL_WITHDRAW" -> context.getString(R.string.wallet_bill_cancel_withdraw)
             "CREATE_TRADE" -> context.getString(R.string.wallet_bill_create_trade)
             "CANCEL_TRADE" -> context.getString(R.string.wallet_bill_cancel_trade)
-            "TRADE_DEAL" -> context.getString(R.string.wallet_bill_trade_deal)
+            "DEAL_FEE_TO_ACCUMULATED" -> context.getString(R.string.fee)
             "C2C_PLACE_ORDER" -> context.getString(R.string.wallet_bill_c2c_place_order)
             "C2C_PROCESS_ORDER" -> context.getString(R.string.wallet_bill_c2c_process_order)
             "FOUNDATION_FINANCING" -> "抢购"

@@ -56,10 +56,10 @@ class FinancialRecordAdapter(context: Context, variableId: Int, data: ArrayList<
         ////0已完成 1待审核 2已取消 3确认中 4审核通过 5转账中 -1 失败
         viewHolder?.status?.setText(record?.getStatusText(context))
         viewHolder?.status?.setTextColor(color)
-        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", record.createdTime))
+        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else record.createdTime)
 //        holder.timeView.setTextColor(normalColor);
         //        holder.timeView.setTextColor(normalColor);
-        viewHolder?.confirmAmount?.setText(if (record?.confirmations == null) nullAmount else record.confirmations)
+        viewHolder?.confirmAmount?.setText(if (record?.txFee == null) nullAmount else NumberUtil.formatNumberNoGroup(record.txFee))
         viewHolder?.areaInfo?.setText(if (record?.txCoin == null) nullAmount else record.txCoin)
     }
 

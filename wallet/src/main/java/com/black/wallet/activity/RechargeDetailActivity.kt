@@ -41,7 +41,7 @@ class RechargeDetailActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.memo?.setText(record!!.memo)
         }
         binding?.txid?.setText(if (record!!.txNetworkId == null) "" else record!!.txNetworkId)
-        binding?.time?.setText(CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", record!!.createdTime))
+        binding?.time?.setText(record!!.createdTime)
     }
 
     override fun isStatusBarDark(): Boolean {

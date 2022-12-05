@@ -96,6 +96,7 @@
     <string name="financial_ensuming">确认中</string>
     <string name="financial_doing">转账中</string>
     <string name="financial_failed">失败</string>
+    <string name="rall_back">退回</string>
     <string name="level_safe">您当前的安全级别为高，你已完成所有验证，比较安全</string>
     <string name="level_normal">您当前的安全级别为中，面临比较大的安全风险，请尽快完成所有验证</string>
     <string name="level_low_phone">您当前的安全级别为低，面临极大的安全风险，请尽快完成手机验证和Google验证</string>
@@ -435,7 +436,7 @@
     <string name="recommended_share_title">我在全球领先的区块链金融衍生品服务平台 “Fiex”等你，你也快来注册吧!</string>
     <string name="recommended_share_text">“Fiex”全球领先的区块链金融衍生品服务平台</string>
     <string name="recharge_amount">充币数量</string>
-    <string name="recharge_confirm">确认数</string>
+    <string name="recharge_confirm">手续费</string>
     <string name="safe_bind">安全认证</string>
     <string name="unsafe_bind">未认证</string>
     <string name="safe_unused">安全不可用</string>
@@ -458,6 +459,7 @@
     <string name="extract_time">提币时间</string>
     <string name="extract_total">提取全部</string>
     <string name="extract_poundage">网络手续费</string>
+    <string name="txid">交易凭证</string>
     <string name="extract_note_01">请认真确认提币地址及数量，地址错误无法找回</string>
     <string name="extract_arrive_count">到账数量</string>
     <string name="extract_submit">提 交</string>
@@ -671,6 +673,7 @@
     <string name="safe_center">安全中心</string>
     <string name="language">语言</string>
     <string name="exchange_rates">汇率</string>
+    <string name="exchange">划转</string>
     <string name="super_rebate">超级折扣</string>
     <string name="language_cny">人民币</string>CNY
     <string name="exchange_rates_usd">美元</string>

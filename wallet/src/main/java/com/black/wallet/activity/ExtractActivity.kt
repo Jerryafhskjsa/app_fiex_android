@@ -147,7 +147,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when(view.id){
-            R.id.btn_record ->{
+            R.id.img_action_bar_right ->{
                 //点击账户详情
                 val extras = Bundle()
                 extras.putParcelable(ConstData.WALLET, wallet)

@@ -104,7 +104,7 @@ class FinancialRechargeRecordFragment : BaseFragment(), OnItemClickListener, QRe
 
     //获取冲币记录
     private fun getFinancialRecordRechargeData(isShowLoading: Boolean) {
-        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, 0, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>(mContext!!) {
+        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, total,  0, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showData(null)
@@ -112,8 +112,8 @@ class FinancialRechargeRecordFragment : BaseFragment(), OnItemClickListener, QRe
 
             override fun callback(returnData: HttpRequestResultData<PagingData<FinancialRecord?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    total = returnData.data?.totalCount!!
-                    val dataList = returnData.data?.list
+                    total = returnData.data?.total!!
+                    val dataList = returnData.data?.items
                     if (dataList != null) {
                         for (record in dataList) {
                             record?.actionType = getString(R.string.wallet_bill_deposit)
@@ -136,7 +136,6 @@ class FinancialRechargeRecordFragment : BaseFragment(), OnItemClickListener, QRe
         } else {
             adapter?.addAll(dataList)
         }
-        adapter?.sortData(FinancialRecord.COMPARATOR_CREATE_DATE)
         adapter?.notifyDataSetChanged()
     }
 

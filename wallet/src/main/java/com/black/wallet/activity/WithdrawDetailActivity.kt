@@ -30,9 +30,10 @@ class WithdrawDetailActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_withdraw_detail)
         binding?.txid?.setOnClickListener(this)
+        binding?.txid?.setText(if (record!!.txNetworkId == null) "" else record!!.txNetworkId)
         binding?.coinType?.setText(if (record!!.txCoin == null) "" else record!!.txCoin)
         binding?.amount?.setText(("-") + NumberUtil.formatNumberNoGroup(record!!.txAmount))
-        binding?.confirmAmount?.setText(if (record!!.confirmations == null) nullAmount else record!!.confirmations)
+        binding?.confirmAmount?.setText(if (record?.txFee == null) nullAmount else NumberUtil.formatNumberNoGroup(record?.txFee))
         binding?.status?.setText(record!!.getStatusText(this))
         if (TextUtils.equals("0", record!!.txStatus)) {
             binding?.status?.setTextColor(SkinCompatResources.getColor(mContext, R.color.C1))
@@ -47,7 +48,7 @@ class WithdrawDetailActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.memo?.setText(record!!.memo)
         }
         binding?.txid?.setText(if (record!!.txNetworkId == null) "" else record!!.txNetworkId)
-        binding?.time?.setText(CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", record!!.createdTime))
+        binding?.time?.setText(record!!.createdTime)
     }
 
     override fun isStatusBarDark(): Boolean {

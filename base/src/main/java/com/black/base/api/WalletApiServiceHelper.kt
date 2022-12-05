@@ -536,12 +536,12 @@ object WalletApiServiceHelper {
 
 
     //现货资产提币、冲币记录 type 0 充币 1 提币
-    fun getWalletRecord(context: Context?, isShowLoading: Boolean, page: Int, pageSize: Int, type: Int, coinType: String?, callback: Callback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?) {
+    fun getWalletRecord(context: Context?, isShowLoading: Boolean, page: Int, pageSize: Int,total: Int, type: Int, coinType: String?, callback: Callback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWalletRecord(page, pageSize, type, coinType)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+                ?.getWalletRecord(page, pageSize, total, type, coinType)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

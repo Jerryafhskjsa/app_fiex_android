@@ -15,14 +15,15 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
     var txFromWallet: String? = null
     var txToWallet: String? = null
     var txCoin: String? = null
-    var txStatus //0已完成 1待审核 2已取消 3确认中 4审核通过 5转账中 -1 失败
+    var txStatus //0已完成 1待审核 2已取消 3确认中 4审核通过 5转账中 -1 失败 7退回
             : String? = null
-    var createdTime: Long = 0
+    var createdTime: String? = null
     var txAmount = 0.0
-    var txNetworkTime: Long = 0
+    var txNetworkTime: String? = null
     var confirmations: String? = null
     var explorerLink: String? = null
     var memo: String? = null
+    var txFee = 0.0
     var txType //1充币 -1 提笔
             : Int? = null
 
@@ -35,9 +36,10 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
         txToWallet = `in`.readString()
         txCoin = `in`.readString()
         txStatus = `in`.readString()
-        createdTime = `in`.readLong()
+        createdTime = `in`.readString()
         txAmount = `in`.readDouble()
-        txNetworkTime = `in`.readLong()
+        txFee = `in`.readDouble()
+        txNetworkTime = `in`.readString()
         confirmations = `in`.readString()
         explorerLink = `in`.readString()
         memo = `in`.readString()
@@ -58,7 +60,7 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
         //未完成
         //已完成
         //
-        //提币记录：
+        //提币详情记录：
         //待确认
         //待审核
         //已取消
@@ -87,6 +89,9 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
             TextUtils.equals("-1", txStatus) -> {
                 statusText = context.getString(R.string.financial_failed)
             }
+            TextUtils.equals("7", txStatus) -> {
+                statusText = context.getString(R.string.rall_back)
+            }
         }
         return statusText
     }
@@ -107,9 +112,9 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
         dest.writeString(txToWallet)
         dest.writeString(txCoin)
         dest.writeString(txStatus)
-        dest.writeLong(createdTime)
+        dest.writeString(createdTime)
         dest.writeDouble(txAmount)
-        dest.writeLong(txNetworkTime)
+        dest.writeString(txNetworkTime)
         dest.writeString(confirmations)
         dest.writeString(explorerLink)
         dest.writeString(memo)
@@ -121,9 +126,7 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
         }
     }
 
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<FinancialRecord?> = object : Parcelable.Creator<FinancialRecord?> {
+    companion object CREATOR : Parcelable.Creator<FinancialRecord?> {
             override fun createFromParcel(`in`: Parcel): FinancialRecord? {
                 return FinancialRecord(`in`)
             }
@@ -132,10 +135,5 @@ class FinancialRecord : BaseAdapterItem, Parcelable {
                 return arrayOfNulls(size)
             }
         }
-        val COMPARATOR_CREATE_DATE: Comparator<FinancialRecord?> = Comparator { o1, o2 ->
-            if (o1 == null || o2 == null) {
-                0
-            } else -o1.createdTime.compareTo(o2.createdTime)
-        }
+
     }
-}
