@@ -30,14 +30,37 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(walletBill?.type)
+        viewHolder?.action?.setText(walletBill?.getType(context))
         viewHolder?.date?.setText(if (walletBill?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createdTime!!))
-        viewHolder?.amount?.setText(if (walletBill?.availableChange == null) nullAmount else NumberUtil.formatNumberNoGroup(walletBill.availableChange?.toDouble(), 2, 8))
-        if (walletBill?.availableChange == null || walletBill?.availableChange?.toDouble()!! < 0) {
-            viewHolder?.action?.setTextColor(t5)
-        } else {
-            viewHolder?.action?.setTextColor(c1)
+        if (walletBill == null || walletBill?.availableChange?.toDouble() != 0.0) {
+            viewHolder?.amount?.setText(
+                NumberUtil.formatNumberNoGroup(
+                    walletBill?.availableChange?.toDouble(),
+                    2,
+                    8
+                ) + walletBill?.coin
+            )
+            if (walletBill?.availableChange == null || walletBill.availableChange?.toDouble()!! < 0) {
+                viewHolder?.action?.setTextColor(t5)
+            } else {
+                viewHolder?.action?.setTextColor(c1)
+            }
         }
+        if (walletBill == null || walletBill?.frozeChange?.toDouble() != 0.0) {
+            viewHolder?.amount?.setText(
+                NumberUtil.formatNumberNoGroup(
+                    walletBill?.frozeChange?.toDouble(),
+                    2,
+                    8
+                ) + walletBill?.coin
+            )
+            if (walletBill?.frozeChange == null || walletBill.frozeChange?.toDouble()!! < 0) {
+                viewHolder?.action?.setTextColor(t5)
+            } else {
+                viewHolder?.action?.setTextColor(c1)
+            }
+        }
+
     }
 
     fun setWalletBillTypeMap(walletBillTypeMap: Map<String?, String?>?) {

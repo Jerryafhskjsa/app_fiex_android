@@ -98,7 +98,7 @@ interface WalletApiService {
     fun deleteWalletAddress(@Field("id") id: String?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_RECORD)
-    fun getWalletRecord(@Query("page") page: Int, @Query("size") pageSize: Int, @Query("type") type: Int, @Query("coinType") coinType: String?): Observable<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?
+    fun getWalletRecord(@Query("page") page: Int, @Query("size") pageSize: Int,@Query("total") total: Int, @Query("type") type: Int, @Query("coinType") coinType: String?): Observable<HttpRequestResultData<PagingData<FinancialRecord?>?>?>?
 
     //type 1 币币到杠杆 2 杠杆到币币
     @FormUrlEncoded

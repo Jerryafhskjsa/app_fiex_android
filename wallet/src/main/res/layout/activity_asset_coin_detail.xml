@@ -69,7 +69,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="2022/09/66 22:22:22"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_12" />
                     </RelativeLayout>
@@ -90,7 +89,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="现货交易"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_12" />
                     </RelativeLayout>
@@ -110,7 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="0.01usdt"
+                            android:text="0.0"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_12" />
                     </RelativeLayout>
@@ -130,7 +128,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="XT3S/USDT"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_12" />
                     </RelativeLayout>

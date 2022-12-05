@@ -71,7 +71,7 @@
     <string name="pull_down_refresh">Drop down Refresh</string>
     <string name="loading">Loading</string>
     <string name="error_data">Data Errors</string>
-    <string name="trade_deal">Closed</string>
+    <string name="trade_deal">TRADE_DEAL</string>
     <string name="trade_canceled_all">Cancelled</string>
     <string name="trade_failed">Failure</string>
     <string name="alert_choose_country">Please select the country code</string>
@@ -96,6 +96,7 @@
     <string name="financial_ensuming">Confirming</string>
     <string name="financial_doing">Transferring</string>
     <string name="financial_failed">Failure</string>
+    <string name="rall_back">rallBack</string>
     <string name="level_safe">Your current security level is high. You have completed all verifications and are relatively safe</string>
     <string name="level_normal">Your current security level is medium, and you are facing relatively large security risks. Please complete all verifications as soon as possible</string>
     <string name="level_low_phone">Your current security level is low and you are facing great security risks. Please complete mobile phone verification and Google verification as soon as possible</string>
@@ -435,7 +436,7 @@
     <string name="recommended_share_title">I am waiting for you on the world is leading blockchain financial derivatives service platform "Fiex", so come and register</string>
     <string name="recommended_share_text">"Fiex" the world is leading blockchain financial derivatives service platform</string>
     <string name="recharge_amount">Number of coins recharged</string>
-    <string name="recharge_confirm">Confirmed Qty</string>
+    <string name="recharge_confirm">Fee</string>
     <string name="safe_bind">Security authentication</string>
     <string name="unsafe_bind">Not certified</string>
     <string name="safe_unused">Security Unavailable</string>
@@ -458,6 +459,7 @@
     <string name="extract_time">Withdrawal time</string>
     <string name="extract_total">Extract All</string>
     <string name="extract_poundage">Network service charge</string>
+    <string name="txid">Txid</string>
     <string name="extract_note_01">Please carefully confirm the withdrawal address and quantity. The address is incorrect and cannot be retrieved</string>
     <string name="extract_arrive_count">Quantity Received</string>
     <string name="extract_submit">Submit</string>
@@ -648,7 +650,7 @@
     <string name="etf">ETF</string>
     <string name="index">Index</string>
     <string name="vol">24H Vol</string>
-    <string name="spot">Place</string>
+    <string name="spot">Spot</string>
     <string name="zone">Region</string>
     <string name="coin_volume">Transaction volume</string>
     <string name="limit_order">Limit Order</string>
@@ -671,6 +673,7 @@
     <string name="safe_center">Security Center</string>
     <string name="language">Language</string>
     <string name="exchange_rates">exchange Rate</string>
+    <string name="exchange">EXCHANGE</string>
     <string name="super_rebate">Super Discount</string>
     <string name="language_cny">CNY</string>
     <string name="exchange_rates_usd">USD</string>
@@ -710,11 +713,11 @@
     <string name="asset_transfer">asset transfer</string>
     <string name="from">From</string>
     <string name="to">to</string>
-    <string name="spot_account">Spot Account</string>
-    <string name="contract_account">Contract Account</string>
+    <string name="spot_account">Spot </string>
+    <string name="contract_account">Contract</string>
     <string name="otc_account">OTC Account</string>
-    <string name="finance_account">Financial Account</string>
-    <string name="wallet_account">Wallet Account</string>
+    <string name="finance_account">Financial </string>
+    <string name="wallet_account">Wallet</string>
     <string name="confirm_transfer">Confirm Transfer</string>
     <string name="select_wallet">select wallet</string>
     <string name="select_coin">Select Currency</string>
