@@ -522,7 +522,7 @@ object UrlConfig {
     object Future {
 
         const val URL_DEPTH = "market/v1/public/q/depth";
-
+        //交易对配置列表
         const val URL_SYMBOL_LIST = "market/v1/public/symbol/list"
 
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
@@ -556,6 +556,8 @@ object UrlConfig {
         const val ULR_USER_STEP_RATE = "user/v1/user/step-rate/getUserStepRate"
 
         const val ULR_ORDER_LIST = "trade/v1/order/list"
+
+        const val URL_AUTO_MARGIN = "user/v1/position/auto-margin"
 
 
     }

@@ -20,6 +20,13 @@ object ConstData {
         FUTURE_ALL,//合约所有
         FUTURE_DEAR//合约自选
     }
+    //合约交易操作类型(开仓，平仓)
+    enum class FutureOperateType{
+        OPEN,
+        CLOSE
+    }
+    const val FUTURE_OPERATE_OPEN = 1//合约开仓类型
+    const val FUTURE_OPERATE_CLOSE = 2//合约平仓类型
 
     const val DEPTH_SPOT_TYPE = 0
     const val DEPTH_FUTURE_TYPE = 1

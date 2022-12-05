@@ -213,6 +213,7 @@
                     android:layout_height="match_parent" />
 
                 <LinearLayout
+                    android:id="@+id/lin_unit_type"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
@@ -227,7 +228,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="@string/sheet"
+                        android:text="USDT"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 
@@ -342,6 +343,7 @@
                     android:gravity="right">
 
                     <LinearLayout
+                        android:id="@+id/lin_limit_type"
                         android:layout_width="70dp"
                         android:layout_height="26dp"
                         android:background="@drawable/bg_transaction_input"
@@ -512,7 +514,7 @@
 
 
                 <com.black.base.widget.SpanTextView
-                    android:id="@+id/btn_sell_fall"
+                    android:id="@+id/btn_handle_1"
                     style="@style/ContractBuyBtnStyle"
                     android:background="@drawable/btn_t5"
                     android:checked="true"

@@ -65,7 +65,7 @@
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.black.base.widget.AutoHeightListView
@@ -77,6 +77,6 @@
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:scrollbars="none" />
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </layout>

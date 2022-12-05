@@ -109,8 +109,9 @@ object FutureApiServiceHelperWrapper {
 
     /**
      * 获取合约交易对列表
+     * 并且把数据组装到PairStatus
      */
-    fun getFutureSymbolPairListObservable(
+    private fun getFutureSymbolPairListObservable(
         context: Context?,
         type: ConstData.PairStatusType?
     ): Observable<ArrayList<PairStatus>?>? {
@@ -148,8 +149,12 @@ object FutureApiServiceHelperWrapper {
                         var pair = symbol?.symbol//交易对名
                         pairStatus?.pair = pair
 //                            pairStatus?.hot = symbol?.hot
-                        pairStatus?.contractSize = symbol?.contractSize
+                        pairStatus?.contractSize = symbol?.contractSize//合约乘数（面值）
+                        pairStatus?.underlyingType = symbol?.underlyingType//标的类型，币本位(C_BASED)，u本位(U_BASED)
+                        pairStatus?.initLeverage = symbol?.initLeverage//初始杠杆倍数
                         pairStatus?.supportOrderType = symbol?.supportOrderType//支持的下单类型
+                        pairStatus?.supportEntrustType = symbol?.supportEntrustType//支持计划委托类型
+                        pairStatus?.supportTimeInForce = symbol?.supportTimeInForce//支持有效方式
                         pairStatus?.order_no = i
                         var maxPrecision = symbol?.pricePrecision
                         maxPrecision =
@@ -159,7 +164,7 @@ object FutureApiServiceHelperWrapper {
                         pairStatus?.supportingPrecisionList =
                             pairStatus?.setMaxSupportPrecisionList(
                                 maxPrecision.toString(),
-                                symbol?.depthPrecisionMerge
+                                symbol?.depthPrecisionMerge//盘口精度合并
                             )
                         pairStatuses?.add(pairStatus!!)
                         when(type){

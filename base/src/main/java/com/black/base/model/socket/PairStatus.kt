@@ -1,14 +1,10 @@
 package com.black.base.model.socket
 
-import android.util.Log
 import com.black.base.model.BaseAdapterItem
 import com.black.base.model.clutter.HomeTickersKline
 import com.black.util.CommonUtil
 import com.black.util.Findable
 import com.black.util.NumberUtil
-import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
@@ -19,7 +15,23 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var TAG = PairStatus::class.java.simpleName
 
     /******futures******/
-    var contractSize:String? = null
+    var underlyingType:String? = null//标的类型，币本位(C_BASED)，u本位(U_BASED)
+    var initLeverage:Int? = null//初始杠杆倍数
+    var contractSize:String? = null//合约乘数（面值）
+    var supportEntrustType:String? = null//支持计划委托类型("TAKE_PROFIT,STOP,TAKE_PROFIT_MARKET,STOP_MARKET,TRAILING_STOP_MARKET")
+    var supportTimeInForce:String? = null//支持有效方式("GTC,FOK,IOC,GTX")
+    fun getSupportTimeInForceTypeList():ArrayList<String?>?{
+        var timeInForceTypeList:ArrayList<String?>? = ArrayList()
+        if (supportTimeInForce != null) {
+            var typeArray = supportTimeInForce!!.split(",").toTypedArray()
+            var temp = typeArray.toList()
+            for (i in temp.indices){
+                timeInForceTypeList?.add(temp[i])
+            }
+        }
+        return timeInForceTypeList
+    }
+
     /******futures******/
     //k线数据
     var kLineData:HomeTickersKline? = null

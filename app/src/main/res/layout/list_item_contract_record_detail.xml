@@ -25,6 +25,7 @@
                 android:orientation="horizontal">
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionSide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/T16"
@@ -37,6 +38,7 @@
                     android:textColor="@color/T8" />
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionDes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
@@ -109,6 +111,7 @@
                 android:layout_height="wrap_content">
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/profits"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -119,6 +122,7 @@
                     android:textStyle="bold" />
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/profits_percent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,6 +152,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/position_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -172,6 +177,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/entry_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -196,6 +202,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/flag_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -225,6 +232,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/available_close_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -249,6 +257,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/force_close_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -273,6 +282,7 @@
                         android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/bond_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -297,7 +307,7 @@
                 android:gravity="center_vertical">
 
                 <com.black.base.widget.SpanTextView
-
+                    android:id="@+id/already_close_profit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-11.11"
@@ -319,6 +329,7 @@
                         android:textSize="@dimen/text_size_13" />
 
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/auto_add_bond"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -344,6 +355,7 @@
                     android:layout_weight="9">
 
                     <TextView
+                        android:id="@+id/btn_bond"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -361,6 +373,7 @@
                         android:layout_height="match_parent" />
 
                     <TextView
+                        android:id="@+id/btn_with_limit"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -378,6 +391,7 @@
                         android:layout_height="match_parent" />
 
                     <TextView
+                        android:id="@+id/btn_close_position"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

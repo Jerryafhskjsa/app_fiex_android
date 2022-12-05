@@ -576,8 +576,8 @@ object FutureService {
         var entryPrice = positionBean.entryPrice
         var positionSize = positionBean.positionSize
         var maintMarginRate =
-            getMaintMarginRate(getValue(entryPrice, positionSize, contractSize.toString()))
-        if (positionBean?.positionType?.equals(Constants.ISOLATED) && !positionBean.positionSide.equals(
+            getMaintMarginRate(getValue(entryPrice!!, positionSize!!, contractSize.toString()))
+        if (positionBean?.positionType?.equals(Constants.ISOLATED) == true && !positionBean.positionSide.equals(
                 "0"
             )
         ) {
@@ -921,10 +921,10 @@ object FutureService {
         var longLeverage = 20
         var shortLeverage = 20
         for (item in longPositionList!!) {
-            longLeverage = item.leverage
+            longLeverage = item.leverage!!
         }
         for (item in shortPositionList!!) {
-            shortLeverage = item.leverage
+            shortLeverage = item.leverage!!
         }
         //U本位
         if (underlyingType.equals("U_BASED")) {

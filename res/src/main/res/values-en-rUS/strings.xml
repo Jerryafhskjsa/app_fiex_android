@@ -779,6 +779,8 @@
     <string name="contract_with_limit">Stop profit and stop loss</string>
     <string name="contract_buy_raise">Buy/sell long</string>
     <string name="contract_sell_fall">Sell/Short</string>
+    <string name="contract_buy_fall">Buy/sell short</string>
+    <string name="contract_sell_raise">Sell/sell long</string>
     <string name="contract_bond">Deposit</string>
     <string name="contract_can_buy_raise">Multiple opening is allowed</string>
     <string name="contract_can_buy_fall">Can be left blank</string>

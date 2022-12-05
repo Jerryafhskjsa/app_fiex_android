@@ -1200,7 +1200,7 @@ object SocketDataContainer {
             ConstData.PairStatusType.SPOT -> {
                 pairStatusMap = allPairStatusMap
             }
-            ConstData.PairStatusType.FUTURE_U -> {
+            ConstData.PairStatusType.FUTURE_ALL -> {
                 pairStatusMap = allFuturePairStatusMap
             }
         }

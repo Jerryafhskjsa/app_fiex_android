@@ -129,7 +129,7 @@ object FutureApiServiceHelper {
     }
 
     /**
-     * 获取币种列表
+     * 获取合约币种列表
      */
     fun getCoinList(
         context: Context?,
@@ -310,7 +310,7 @@ object FutureApiServiceHelper {
 
 
     /**
-     * 获取用户阶梯费率
+     * 获取用户资产列表
      */
     fun getBalanceList(
         context: Context?, isShowLoading: Boolean,
@@ -353,6 +353,31 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.orderCreate(orderSide, symbol, price, timeInForce, orderType, positionSide, origQty)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 修改自动追加保证金
+     * 买卖方向：BUY;SELL
+     * 订单类型：LIMIT；MARKET
+     * 有效方式：GTC;IOC;FOK;GTX
+     * 仓位方向：LONG;SHORT
+     */
+    fun autoMargin(
+        context: Context?,
+        symbol: String?,
+        positionSide: String?,
+        autoMargin:Boolean?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.autoMargin(symbol,positionSide,autoMargin)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

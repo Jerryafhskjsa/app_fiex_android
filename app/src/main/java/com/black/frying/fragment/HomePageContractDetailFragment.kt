@@ -2,17 +2,23 @@ package com.black.frying.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.*
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
+import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.future.Constants
+import com.black.base.model.future.PositionBean
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.HomeContractDetailAdapter
+import com.black.frying.service.FutureService
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.fbsex.exchange.R
@@ -28,13 +34,12 @@ import kotlin.collections.ArrayList
 class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickListener,
     View.OnClickListener {
     private var type: ContractRecordTabBean? = null
-    private var collect: String? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
     private var adapter: HomeContractDetailAdapter? = null
-    private val dataList = ArrayList<PairStatus?>()
+    private var dataList:ArrayList<PositionBean?>? = ArrayList()
     private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
 
     //异步获取数据
@@ -59,7 +64,6 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         if (binding != null) {
             return binding?.root
         }
-        collect = getString(R.string.pair_collect)
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_home_page_contract_detail,
@@ -69,17 +73,14 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
-        for(i in 0 until  5){
-            var pairStatus = PairStatus()
-            dataList.add(pairStatus)
-        }
+        val emptyView = inflater.inflate(R.layout.list_view_empty, null)
+        val group = binding?.listView?.parent as ViewGroup
+        group.addView(emptyView)
+        binding?.listView?.emptyView = emptyView
+
         adapter = HomeContractDetailAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
-
-
-
-
         if (arguments != null) {
             val position = arguments!!.getInt(AutoHeightViewPager.POSITION)
             binding?.root?.let { mViewPager?.setViewPosition(it, position) }
@@ -93,7 +94,7 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-//        thisSetPairStatusData
+        getPositionData()
     }
 
     override fun onStop() {
@@ -120,57 +121,8 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
 //        adapter?.notifyDataSetChanged()
     }
 
-
-    /**
-     * 根据tab获取对应list数据
-     */
-    private val thisSetPairStatusData: Unit
-        get() {
-            postHandleTask(socketHandler, Runnable {
-                SocketDataContainer.getPairsWithSet(
-                    activity,
-                    "USDT",
-                    object : Callback<ArrayList<PairStatus?>?>() {
-                        override fun error(type: Int, error: Any) {
-                            gettingPairsData = false
-                        }
-
-                        override fun callback(returnData: ArrayList<PairStatus?>?) {
-                            if (returnData == null) {
-                                gettingPairsData = false
-                                return
-                            }
-                            synchronized(dataMap) {
-                                synchronized(dataList) {
-                                    dataMap.clear()
-                                    dataList.clear()
-                                    dataList.addAll(returnData)
-                                    for (pairStatus in returnData) {
-                                        pairStatus?.pair?.let {
-                                            dataMap[it] = pairStatus
-                                        }
-                                    }
-                                    mContext?.runOnUiThread {
-                                        adapter?.data = dataList
-                                        adapter?.notifyDataSetChanged()
-                                        gettingPairsData = false
-                                    }
-                                }
-                            }
-                            gettingPairsData = false
-                        }
-                    })
-            })
-        }
-
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         activity?.let {
-            val pairStatus = adapter?.getItem(position)
-            CookieUtil.setCurrentPair(it, pairStatus?.pair)
-            sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-            val bundle = Bundle()
-            bundle.putString(ConstData.PAIR, pairStatus?.pair)
-            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(it)
         }
     }
 
@@ -180,6 +132,27 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
             R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
                 .go(mContext) { _, _ -> }
         }
+    }
+
+    /**
+     * 获取当前持仓数据
+     */
+    private fun getPositionData(){
+        FutureApiServiceHelper.getPositionList(context, false,
+            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("iiiiii-->positionData--error", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
+                    if (returnData != null) {
+                        dataList = returnData.result
+                        Log.d("iiiiii-->positionData = ", dataList!!.size.toString())
+                        adapter?.data = dataList
+                        adapter?.notifyDataSetChanged()
+                    }
+                }
+            })
     }
 
     companion object {

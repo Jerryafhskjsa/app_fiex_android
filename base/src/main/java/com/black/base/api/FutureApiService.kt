@@ -143,4 +143,14 @@ interface FutureApiService {
         @Field("origQty") origQty: Int?
     ): Observable<HttpRequestResultBean<String>?>?
 
+    /**
+     * 修改自动追加保证金
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_AUTO_MARGIN)
+    fun autoMargin(
+        @Field("symbol") symbol: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("autoMargin") autoMargin: Boolean?,
+    ): Observable<HttpRequestResultBean<String>?>?
 }

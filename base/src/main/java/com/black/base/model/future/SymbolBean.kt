@@ -10,7 +10,7 @@ data class SymbolBean(
     val depthPrecisionMerge: Int, //盘口精度合并
     val enName: String,
     val initLeverage: Int,//初始杠杆倍数
-    val initPositionType: String,
+    val initPositionType: String,//初始杠杆类型，逐仓，全仓
     val labels: List<String>,//标签
     val liquidationFee: String, //强平手续费
     val makerFee: String,//maker手续费
@@ -38,5 +38,5 @@ data class SymbolBean(
     val symbol: String,
     val takerFee: String,//taker手续费
     val tradeSwitch: Boolean,//交易对开关
-    val underlyingType: String//标的类型，币本位，u本位
+    val underlyingType: String//标的类型，币本位(C_BASED)，u本位(U_BASED)
 )

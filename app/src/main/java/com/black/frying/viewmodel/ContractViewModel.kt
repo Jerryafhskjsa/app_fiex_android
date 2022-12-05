@@ -46,6 +46,8 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     private var tabType = ConstData.TAB_COIN
     private var currentPairStatus = PairStatus()
     private var currentOrderType:String? = null
+    private var currentUnitType:String? = null
+    private var currentTimeInForceType:String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
     var askMax = 5
@@ -392,15 +394,33 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         return currentPairStatus.getSupportOrderTypeList()
     }
 
+    fun getCurrentUnitTypeList():ArrayList<String?>?{
+        var unitList:ArrayList<String?>? = ArrayList()
+        unitList?.add(currentPairStatus.name!!.uppercase())
+        unitList?.add("USDT")
+        return unitList
+    }
+    fun getCurrentTimeInForceTypeList():ArrayList<String?>?{
+        return currentPairStatus.getSupportTimeInForceTypeList()
+    }
+
 
     fun setCurrentPairorderType(type:String?){
         currentOrderType = type
     }
 
+    fun setCurrentUnitType(type:String?){
+        currentUnitType = type
+    }
+
+    fun setCurrentTimeInForceType(type:String?){
+        currentTimeInForceType = type
+    }
+
     fun getCurrentPairStatus(pair: String?) {
         currentPairStatus.pair = (pair)
         initPairCoinSet()
-        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U, pair)
+        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_ALL, pair)
         if (pairStatus != null) {
             currentPairStatus = pairStatus
             initPairCoinSet()
