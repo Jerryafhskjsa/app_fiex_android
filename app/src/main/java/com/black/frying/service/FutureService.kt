@@ -624,7 +624,8 @@ object FutureService {
         if (markPriceBean == null) {
             markPriceBean = getMarkPrice(symbol)
         }
-        Log.d("ttt---->markPriceBean",markPriceBean.toString())
+        Log.d("ttt---->markPrice--", markPriceBean?.p)
+
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
@@ -794,16 +795,19 @@ object FutureService {
     维持保证金率根据杠杆倍数在杠杆分层接口里匹配
      */
     fun getAvailableOpenData(inputPrice: BigDecimal, leverage: Int) {
-        var longMaxOpen = getUserLongMaxOpen(inputPrice, leverage)
-        var shortMaxOpen = getUserShortMaxOpen(inputPrice, leverage)
+        var longMaxOpen = getUserLongMaxOpen(inputPrice, leverage).setScale(0,BigDecimal.ROUND_DOWN)
+        var shortMaxOpen = getUserShortMaxOpen(inputPrice, leverage).setScale(0,BigDecimal.ROUND_DOWN)
 
         Log.d(
-            "ttttttt-->longMaxOpen",
+            "ttttttt-->longMaxOpen--11",
             sheet2CurrentUnit(longMaxOpen.toString(), inputPrice.toString()).toString()
         )
+        //获取最新成交价
+        var tickerBean = FutureSocketData.tickerList.get(symbol);
+        var sellPrice = inputPrice.max(BigDecimal(tickerBean?.c))
         Log.d(
-            "ttttttt-->shortMaxOpen",
-            sheet2CurrentUnit(shortMaxOpen.toString(), inputPrice.toString()).toString()
+            "ttttttt-->shortMaxOpen-22",
+            sheet2CurrentUnit(shortMaxOpen.toString(), sellPrice.toString()).toString()
         )
     }
 
@@ -818,8 +822,8 @@ object FutureService {
         var price = BigDecimal(tickerBean?.c).max(inputPrice)
         var b = getBalanceShortMaxOpen(price, leverage)
         var a = getBracketShortMaxAmount(price, leverage)
-        Log.d("ttttttt-->shortMaxOpen--a", a.toString())
-        Log.d("ttttttt-->shortMaxOpen--b", b.toString())
+//        Log.d("ttttttt-->shortMaxOpen--a", a.toString())
+//        Log.d("ttttttt-->shortMaxOpen--b", b.toString())
         return a.min(b)
     }
 
@@ -830,8 +834,8 @@ object FutureService {
     fun getUserLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
         var a = getBracketLongMaxAmount(inputPrice, leverage)
         var b = getBalanceLongMaxOpen(inputPrice, leverage)
-        Log.d("ttttttt-->longMaxOpen--a", a.toString())
-        Log.d("ttttttt-->longMaxOpen--b", b.toString())
+//        Log.d("ttttttt-->longMaxOpen--a", a.toString())
+//        Log.d("ttttttt-->longMaxOpen--b", b.toString())
         return a.min(b)
     }
 
@@ -867,20 +871,21 @@ object FutureService {
      */
     fun getBalanceShortMaxOpen(price: BigDecimal, leverage: Int): BigDecimal {
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
+
         var b = price.multiply(contractSize)
             .multiply(
                 BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
                     .add(BigDecimal(userStepRate?.takerFee))
-            )
-            .multiply(BigDecimal(1).add(BigDecimal(userStepRate?.takerFee)))
-            .add(
-                BigDecimal(userStepRate?.takerFee).multiply(
-                    BigDecimal(1).subtract(
-                        BigDecimal(
-                            getLeverageMaxBracket(leverage)?.maintMarginRate
+                    .multiply(BigDecimal(1).add(BigDecimal(userStepRate?.takerFee)))
+                    .add(
+                        BigDecimal(userStepRate?.takerFee).multiply(
+                            BigDecimal(1).subtract(
+                                BigDecimal(
+                                    getLeverageMaxBracket(leverage)?.maintMarginRate
+                                )
+                            )
                         )
                     )
-                )
             )
         var result = availableBalanceDisplay.divide(b, 8, RoundingMode.DOWN)
         return result
