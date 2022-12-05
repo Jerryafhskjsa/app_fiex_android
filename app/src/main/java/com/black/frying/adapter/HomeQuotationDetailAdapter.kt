@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import cn.jiguang.dy.Protocol.mContext
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.model.socket.PairStatus
+import com.black.base.util.ExchangeRatesUtil
+import com.black.base.util.StyleChangeUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemHomeQuotationDetailBinding
 import skin.support.content.res.SkinCompatResources
@@ -34,20 +37,35 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         pairStatus?.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
 
         val viewHolder = holder?.dataBing
-        val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+        if (styleChange == 1){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
+        if (styleChange == 0){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) bgWin!! else bgLose!!
+            viewHolder?.since?.setTextColor(color)
+        }
         if (pairStatus?.isHighRisk != null && true == pairStatus.isHighRisk) {
             viewHolder?.stView?.visibility = View.VISIBLE
         } else {
             viewHolder?.stView?.visibility = View.GONE
         }
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+        if (exChangeRates == 0)
+        {
+            viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
+            viewHolder?.priceCny?.setText(String.format("≈ %sCNY", pairStatus?.currentPriceCNYFormat))
+        }
+        else{
+            viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
+            viewHolder?.priceCny?.setText(String.format("≈ %sUSD", pairStatus?.currentPriceFormat))
+        }
         viewHolder?.pairName?.setText(pairStatus?.name)
         viewHolder?.setName?.setText(pairStatus?.setName)
         viewHolder?.volume24?.setText(context.getString(R.string.volumn_24, pairStatus?.tradeAmountFormat
                 ?: "0.00"))
-        viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
-        viewHolder?.priceCny?.setText(String.format("≈ %s", pairStatus?.currentPriceCNYFormat))
         viewHolder?.since?.setText(pairStatus?.priceChangeSinceTodayFormat)
-        viewHolder?.since?.setTextColor(color)
     }
 
 }

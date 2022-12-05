@@ -58,18 +58,27 @@
                         android:paddingLeft="@dimen/double_padding"
                         android:paddingRight="@dimen/double_padding">
 
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/phone_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_phone_code"></com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
                         <com.black.lib.view.InputLinearLayout
                             android:id="@+id/phone_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_input_box"
+                            android:background="@drawable/bg_edittext_default"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="14dp"
-                            android:paddingBottom="14dp">
+                            android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
                                 android:id="@+id/phone_code"
+                                style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -79,28 +88,50 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="21dp"
+                                android:background="@color/T11_ALPHA5"></View>
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/get_phone_code"
+                                style="@style/EditTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="15dp"
                                 android:text="@string/send_code"
-                                android:textColor="@color/C1"
+                                android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_16" />
                         </com.black.lib.view.InputLinearLayout>
+
+
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/mail_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_mail_code"></com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:id="@+id/mail_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
 
                         <com.black.lib.view.InputLinearLayout
                             android:id="@+id/mail_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/middle_padding"
-                            android:background="@drawable/bg_input_box"
+                            android:background="@drawable/bg_edittext_default"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="14dp"
-                            android:paddingBottom="14dp">
+                            android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
                                 android:id="@+id/mail_code"
+                                style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -110,34 +141,128 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="21dp"
+                                android:background="@color/T11_ALPHA5"></View>
+
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/get_mail_code"
+                                style="@style/EditTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="15dp"
                                 android:text="@string/send_code"
-                                android:textColor="@color/C1"
+                                android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_16" />
                         </com.black.lib.view.InputLinearLayout>
 
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/middle_padding"
-                            android:hint="@string/long_password"
-                            android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:textSize="@dimen/text_size_16"
-                            app:useDelete="true" />
 
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/google_code"
+                        <View
+                            android:id="@+id/mail_bar_b"
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/password_window"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_password">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/middle_padding"
-                            android:hint="@string/google_code_input_hint"
-                            android:inputType="number"
-                            android:maxLines="1" />
+                            android:background="@drawable/bg_edittext_default"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/password"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/password"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+
+                        </com.black.lib.view.InputLinearLayout>
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/google_window"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/google_code_input_hint"></com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
+                            android:id="@+id/google_code_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_edittext_default"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/google_code"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/google_code_1"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="21dp"
+                                android:background="@color/T11_ALPHA5"></View>
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/google_code_copy"
+                                style="@style/EditTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="15dp"
+                                android:text="@string/paste"
+                                android:textColor="@color/T13"
+                                android:textSize="@dimen/text_size_16" />
+                        </com.black.lib.view.InputLinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/icon_tips_change_psw"></ImageView>
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:text="@string/change_password_warning"
+                                android:textColor="@color/T15"
+                                android:textSize="@dimen/text_size_12" />
+                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>

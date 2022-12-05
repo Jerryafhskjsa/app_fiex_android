@@ -101,7 +101,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, true)
+//                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, true)
                 }
             }
         }
@@ -123,7 +123,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                     data = `object`
                 }
                 if (data != null) {
-                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, false)
+//                    SocketDataContainer.updateQuotationOrderNewData(context, handler, currentPair, data, false)
                 }
             }
         }
@@ -167,10 +167,10 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                 if (data != null) {
                     if (kLinePage == 1) {
                         //保存KLineData
-                        SocketDataContainer.saveKLineDataAll(currentPair, handler, data)
-                        startListenSocket(NEW_K_LINE)
+//                        SocketDataContainer.saveKLineDataAll(currentPair, handler, data)
+//                        startListenSocket(NEW_K_LINE)
                     } else {
-                        SocketDataContainer.addKLineDataList(currentPair, handler, data)
+//                        SocketDataContainer.addKLineDataList(currentPair, handler, data)
                     }
                 }
             }

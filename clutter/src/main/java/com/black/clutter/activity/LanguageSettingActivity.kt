@@ -88,7 +88,7 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
         }
         var tag = textView.tag
         if(tag is FryingLanguage){
-            if (language.languageCode == tag.languageCode) {
+            if (language.languageCode == tag.languageCode ) {
                 CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
             } else {
                 CommonUtil.setTextViewCompoundDrawable(textView, null, 2)

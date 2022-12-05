@@ -9,6 +9,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.LoanRecord
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
@@ -103,7 +104,7 @@ class LoanBackActivity : BaseActionBarActivity(), View.OnClickListener {
                                 if (loanRecord == null || loanRecord!!.borrowCoinType == null) nullAmount else loanRecord!!.borrowCoinType),
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                MoneyApiServiceHelper.backLoan(mContext, loanRecord!!.id, object : NormalCallback<HttpRequestResultString?>() {
+                                MoneyApiServiceHelper.backLoan(mContext, loanRecord!!.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun error(type: Int, error: Any?) {
                                         super.error(type, error)
                                         if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {

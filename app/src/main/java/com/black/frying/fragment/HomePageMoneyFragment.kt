@@ -17,6 +17,7 @@ import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.*
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
@@ -373,8 +374,8 @@ class HomePageMoneyFragment : BaseFragment(), View.OnClickListener, ObserveScrol
     }
 
     private fun getDemandConfig(callback: Runnable?) {
-        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 refreshDemandConfig(null, callback)
             }
 
@@ -394,8 +395,8 @@ class HomePageMoneyFragment : BaseFragment(), View.OnClickListener, ObserveScrol
     }
 
     private fun getRegularConfig(callback: Runnable?) {
-        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 refreshRegularConfig(null, callback)
             }
 
@@ -415,8 +416,8 @@ class HomePageMoneyFragment : BaseFragment(), View.OnClickListener, ObserveScrol
     }
 
     private fun getLoanConfig(callback: Runnable?) {
-        MoneyApiServiceHelper.getLoanConfig(mContext, object : NormalCallback<HttpRequestResultDataList<LoanConfig?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getLoanConfig(mContext, object : NormalCallback<HttpRequestResultDataList<LoanConfig?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 refreshLoanConfig(null, callback)
             }
 
@@ -437,7 +438,7 @@ class HomePageMoneyFragment : BaseFragment(), View.OnClickListener, ObserveScrol
 
     private val moneyHomeConfig: Unit
         get() {
-            MoneyApiServiceHelper.getMoneyHomeConfig(mContext, object : NormalCallback<HttpRequestResultData<MoneyHomeConfig?>?>() {
+            MoneyApiServiceHelper.getMoneyHomeConfig(mContext, object : NormalCallback<HttpRequestResultData<MoneyHomeConfig?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<MoneyHomeConfig?>?) {
                     if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                         showMoneyHomeConfig(returnData.data)

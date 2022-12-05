@@ -19,10 +19,7 @@ import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.WalletAddress
@@ -120,7 +117,7 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
 
     private fun doDelete(address: WalletWithdrawAddress) {
         var id = address.id.toString()
-        WalletApiServiceHelper.deleteWithdrawAddress(mContext, id,true, object : NormalCallback<HttpRequestResultString?>() {
+        WalletApiServiceHelper.deleteWithdrawAddress(mContext, id,true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     adapter?.removeItem(address)
@@ -150,7 +147,7 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
             WalletApiServiceHelper.getWalletAddressList(
                 this,
                 coinType,
-                object : NormalCallback<HttpRequestResultDataList<WalletWithdrawAddress?>?>() {
+                object : NormalCallback<HttpRequestResultDataList<WalletWithdrawAddress?>?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultDataList<WalletWithdrawAddress?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             adapter?.data = returnData.data

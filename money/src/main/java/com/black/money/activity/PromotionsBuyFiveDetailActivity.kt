@@ -21,6 +21,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.money.PromotionsBuyFive
 import com.black.base.model.money.PromotionsBuyFiveDetail
@@ -153,7 +154,7 @@ class PromotionsBuyFiveDetailActivity : BaseActivity(), View.OnClickListener, QR
     }
 
     private fun getPromotionsBuyDetail(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsBuyFiveDetail(this, NumberUtil.formatNumberNoGroup(promotionsBuyFive?.id), isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsBuyFiveDetail?>?>() {
+        MoneyApiServiceHelper.getPromotionsBuyFiveDetail(this, NumberUtil.formatNumberNoGroup(promotionsBuyFive?.id), isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsBuyFiveDetail?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -462,7 +463,7 @@ class PromotionsBuyFiveDetailActivity : BaseActivity(), View.OnClickListener, QR
                 return@OnClickListener
             }
             val coinType = adapter.getItem(adapter.getCheckedIndex())?.coin
-            MoneyApiServiceHelper.promotionsBuyFiveCreate(mContext, amountText, coinType, promotions?.purchaseId.toString(), object : NormalCallback<HttpRequestResultString?>() {
+            MoneyApiServiceHelper.promotionsBuyFiveCreate(mContext, amountText, coinType, promotions?.purchaseId.toString(), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.promotions_buy_success))

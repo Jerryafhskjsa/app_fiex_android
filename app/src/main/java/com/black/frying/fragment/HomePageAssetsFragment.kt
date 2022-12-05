@@ -259,7 +259,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun getViewModel(): BaseViewModel<*>? {
-        return viewModel!!
+        return viewModel
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -375,7 +375,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean) {
-        Log.d("iiiiii","onWallet")
         mContext?.runOnUiThread {
             normalFragment?.run {
                 observable?.subscribe {

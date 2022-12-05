@@ -48,6 +48,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        app:tabRippleColor="@color/transparent"
         app:tabMaxWidth="200dp"
         app:tabMinWidth="20dp"
         app:tabPaddingBottom="0dp"

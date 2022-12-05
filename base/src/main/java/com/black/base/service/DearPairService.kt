@@ -182,7 +182,6 @@ object DearPairService {
         PairApiServiceHelper.getCollectPairs(context, object : NormalCallback<HttpRequestResultDataList<String?>?>(context) {
             override fun error(type: Int, error: Any?) {
                 callback?.callback(null)
-                //                super.error(type, error);
             }
 
             override fun callback(returnData: HttpRequestResultDataList<String?>?) {

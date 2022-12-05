@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="listItemHomeQuotationDetailModel"
+            type="Object" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/T16"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/contract_see_down"
+                    android:textAlignment="center"
+                    android:textColor="@color/T8" />
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="@string/perpetual_warehouse_by_warehouse"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/icon_risk_level">
+
+                </ImageView>
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/icon_contract_risk_tips">
+
+                </ImageView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/icon_share" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/contract_profits"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/contract_profits_per"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_padding" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="+24600"
+                    android:textColor="@color/T13"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="+120.44%"
+                    android:textColor="@color/T13"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_hold_amount"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="1"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_hold_avg_price"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="19888"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_hold_tag_price"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="20000"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_can_finish_amount"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="1"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_force_finish_pirce"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="19888"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_bond"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="20000"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:text="@string/contract_already_profits"
+                android:textColor="@color/T11_ALPHA60"
+                android:textSize="@dimen/text_size_12" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical">
+
+                <com.black.base.widget.SpanTextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-11.11"
+                    android:textColor="@color/T10"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract_auto_add_bond"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_13" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:thumb="@drawable/icon_switch_thumb"
+                        android:track="@drawable/bg_switch_track"
+                        app:track="@drawable/bg_switch_track" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_contract_record_item_btn"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/contract_bond"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_13"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_contract_record_item_btn"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/contract_disturb"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_13"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_contract_record_item_btn"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/contract_fast_done"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_13"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/icon_contract_disturb"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

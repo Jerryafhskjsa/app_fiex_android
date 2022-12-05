@@ -1,0 +1,39 @@
+{
+  "buildFiles": [
+    "/Users/shenyiya/app_fiex_android/base/CMakeLists.txt",
+    "/Users/shenyiya/app_fiex_android/base/src/main/cpp/sec/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/shenyiya/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+      "-C",
+      "/Users/shenyiya/app_fiex_android/base/.cxx/Debug/4k1t1w69/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/shenyiya/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+    "-C",
+    "/Users/shenyiya/app_fiex_android/base/.cxx/Debug/4k1t1w69/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "fryingSecret::@09e5848878c25dc89533": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "fryingSecret",
+      "output": "/Users/shenyiya/app_fiex_android/base/src/main/jniLibs/x86/libfryingSecret.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/shenyiya/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+      "cppCompilerExecutable": "/Users/shenyiya/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

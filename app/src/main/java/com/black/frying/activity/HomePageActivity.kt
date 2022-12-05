@@ -20,9 +20,11 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.Update
 import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.GlobalAd
+import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
 import com.black.base.service.DownloadServiceHelper
 import com.black.base.util.*
@@ -31,6 +33,7 @@ import com.black.frying.FryingApplication
 import com.black.frying.fragment.*
 import com.black.frying.model.HomeTab
 import com.black.frying.service.SocketService
+import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.util.UdeskUtil
 import com.black.im.util.IMHelper
 import com.black.net.HttpRequestResult
@@ -69,7 +72,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         tabs[ConstData.TAB_QUOTATION] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
 //        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
         tabs[ConstData.TAB_TRANSATION] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
-        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, EmptyFragment::class.java)
+        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageContractFragmentMain::class.java)
         tabs[ConstData.TAB_ASSET] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
@@ -109,8 +112,44 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         UdeskUtil.initUdesk(applicationContext)
         //获取所有配置币种并且缓存
         WalletApiServiceHelper.getCoinInfoConfigAndCache(this, null)
-        //获取所有交易对数据并缓存
+        //获取所有现货交易对数据并缓存
         SocketDataContainer.initAllPairStatusData(this)
+        /**
+         * 先获取所有交易对，然后获取行情数据，并且组合到交易对数据中去
+         */
+        val coinBaseCallback: Callback<ArrayList<PairStatus?>?> =
+            object : Callback<ArrayList<PairStatus?>?>() {
+                override fun error(type: Int, error: Any) {
+
+                }
+                override fun callback(returnData: ArrayList<PairStatus?>?) {
+                    SocketDataContainer.cacheFuturePairStatusData(mContext)
+                    Log.d("iiiiii","coinTickerSize = "+returnData?.size)
+                    SocketUtil.sendSocketCommandBroadcast(mContext,SocketUtil.COMMAND_FUTURE_TICKERS_START)
+                }
+            }
+        val uBaseCallback: Callback<ArrayList<PairStatus?>?> =
+            object : Callback<ArrayList<PairStatus?>?>() {
+                override fun error(type: Int, error: Any) {
+
+                }
+                override fun callback(returnData: ArrayList<PairStatus?>?) {
+                    Log.d("iiiiii","usdtTickerSize = "+returnData?.size)
+                    //获取合约币本位交易对行情数据
+                    SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_COIN,coinBaseCallback)
+                }
+            }
+        //获取合约所有交易对数据并缓存
+        SocketDataContainer.initAllFutureSymbolList(this,object :Callback<ArrayList<PairStatus>?>(){
+            override fun callback(returnData: ArrayList<PairStatus>?) {
+                //获取合约U本位交易对行情数据
+                SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_U,uBaseCallback)
+            }
+
+            override fun error(type: Int, error: Any?) {
+
+            }
+        })
         checkUpdate(true)
     }
 
@@ -230,7 +269,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     private fun getDialogAd() {
         val language = LanguageUtil.getLanguageSetting(this)
         val lang = if (language != null && language.languageCode == 4) "4" else "1"
-        CommonApiServiceHelper.getGlobalAd(this, lang, "top", object : NormalCallback<HttpRequestResultData<GlobalAd?>?>() {
+        CommonApiServiceHelper.getGlobalAd(this, lang, "top", object : NormalCallback<HttpRequestResultData<GlobalAd?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {}
             override fun callback(returnData: HttpRequestResultData<GlobalAd?>?) {
                 if (returnData != null && returnData.code == 0 && returnData.data != null) {
@@ -239,7 +278,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                         currentDemandAdId = globalAd!!.id
                         val displayMetrics = resources.displayMetrics
                         //來去图片并显示
-                        DownloadServiceHelper.downloadImage(mContext, globalAd.content, (311 * displayMetrics.density).toInt(), (445 * displayMetrics.density).toInt(), false, object : NormalCallback<Bitmap?>() {
+                        DownloadServiceHelper.downloadImage(mContext, globalAd.content, (311 * displayMetrics.density).toInt(), (445 * displayMetrics.density).toInt(), false, object : NormalCallback<Bitmap?>(mContext!!) {
                             override fun error(type: Int, error: Any?) {}
                             override fun callback(returnData: Bitmap?) {
                                 returnData?.let { showDialogAd(it, globalAd) }

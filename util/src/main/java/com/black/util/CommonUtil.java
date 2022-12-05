@@ -274,6 +274,34 @@ public class CommonUtil {
     }
 
     /**
+     * 网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetWorkEnable(Context context) {
+        try {
+            ConnectivityManager connectivity = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity == null) {
+                return false;
+            }
+
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                // 判断当前网络是否已经连接
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    return true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * 解析返回的内容为字符串
      *
      * @param object

@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.LoanRecord
 import com.black.base.model.money.LoanRecordDetail
 import com.black.base.util.ConstData
@@ -47,7 +48,7 @@ class LoanRecordDetailActivity : BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {}
     private val detail: Unit
         get() {
-            MoneyApiServiceHelper.getLoanRecordDetail(this, record!!.id, object : NormalCallback<HttpRequestResultData<LoanRecordDetail?>?>() {
+            MoneyApiServiceHelper.getLoanRecordDetail(this, record!!.id, object : NormalCallback<HttpRequestResultData<LoanRecordDetail?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<LoanRecordDetail?>?) {
                     if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                         showLoanRecordDetail(returnData.data)

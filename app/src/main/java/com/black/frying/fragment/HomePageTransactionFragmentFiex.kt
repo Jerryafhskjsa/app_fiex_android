@@ -27,6 +27,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
@@ -49,6 +50,7 @@ import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.TransactionViewModel
 import com.black.frying.viewmodel.TransactionViewModel.OnTransactionModelListener
 import com.black.im.util.IMHelper
+import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -69,7 +71,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-//交易
+//首页交易
 @Route(value = [RouterConstData.TRANSACTION], fragmentParentPath = RouterConstData.HOME_PAGE, fragmentIndex = 2)
 class HomePageTransactionFragmentFiex : BaseFragment(),
     View.OnClickListener,
@@ -145,6 +147,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         layout = binding?.root
         StatusBarUtil.addStatusBarPadding(layout)
         viewModel = TransactionViewModel(mContext!!, this)
+        binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
+        binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
+            }
+
+        })
         deepViewBinding = TransactionDeepViewBinding(mContext!!, viewModel!!, binding!!.fragmentHomePageTransactionHeader1)
         deepViewBinding?.setOnTransactionDeepListener(this)
 
@@ -315,12 +324,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             }
             R.id.img_collect ->{
                 viewModel!!.toggleDearPair(isDear!!)
-                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(result: HttpRequestResultString?) {
                             if (result != null && result.code == HttpRequestResult.SUCCESS) {
                                 isDear = !isDear!!
                                 updateDear(isDear)
-                                val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                                val showMsg = if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
                                 FryingUtil.showToast(mContext, showMsg)
                             } else {
                                 FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
@@ -385,8 +394,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 PairApiServiceHelper.getTradeSetsLocal(it, true, object : Callback<ArrayList<QuotationSet?>?>() {
                     override fun callback(returnData: ArrayList<QuotationSet?>?) {
                         if (returnData != null) {
-                            val dataType = if (tabType == ConstData.TAB_COIN) PairStatus.NORMAL_DATA else PairStatus.LEVER_DATA
-                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION or dataType, returnData)
+                            PairStatusPopupWindow.getInstance(it, PairStatusPopupWindow.TYPE_TRANSACTION, returnData)
                                     .show(object : OnPairStatusSelectListener {
                                         override fun onPairStatusSelected(pairStatus: PairStatus?) {
                                             if (pairStatus == null) {
@@ -908,8 +916,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
 //            mContext?.runOnUiThread { }
 //            val orderState = 1
-            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), null, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>() {
-                override fun error(type: Int, error: Any) {
+            TradeApiServiceHelper.getTradeOrderRecordFiex(activity, viewModel!!.getCurrentPair(), null, null, null, false, object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>(mContext!!) {
+                override fun error(type: Int, error: Any?) {
                     Log.d(TAG,"getTradeOrderCurrent error")
                     showCurrentOrderList(null)
                 }
@@ -981,7 +989,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             price = null
         }
         val createRunnable = Runnable {
-            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>() {
+            TradeApiServiceHelper.createTradeOrder(mContext, viewModel!!.getCurrentPair(), direction, totalAmount, price, tradeType, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding!!.fragmentHomePageTransactionHeader1.price.setText("")
@@ -996,7 +1004,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     }
                 }
 
-                override fun error(type: Int, error: Any) {
+                override fun error(type: Int, error: Any?) {
                     FryingUtil.showToast(mContext, error.toString())
                 }
             })
@@ -1020,7 +1028,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //撤销新单
     private fun cancelTradeOrder(tradeOrder: TradeOrderFiex) {
-        TradeApiServiceHelper.cancelTradeOrderFiex(mContext, tradeOrder.orderId, object : NormalCallback<HttpRequestResultString?>() {
+        TradeApiServiceHelper.cancelTradeOrderFiex(mContext, tradeOrder.orderId, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     adapter?.removeItem(tradeOrder)
@@ -1102,7 +1110,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     override fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?) {
-        observable?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<Pair<Wallet?, Wallet?>?>() {
+        observable?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<Pair<Wallet?, Wallet?>?>(mContext!!) {
             override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
                 if (returnData != null) {
                     currentWallet = returnData.first
@@ -1111,7 +1119,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 refreshUsable()
             }
 
-            override fun error(type: Int, error: Any) {
+            override fun error(type: Int, error: Any?) {
                 refreshUsable()
             }
         }))
@@ -1218,12 +1226,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     override fun onCollectClick(transactionMorePopup: TransactionMorePopup, btnCollect: CheckedTextView) {
         viewModel!!.toggleDearPair(btnCollect.isChecked)
-                ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
                             isDear = !isDear!!
                             updateDear(isDear)
-                            val showMsg = if (isDear!!) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+                            val showMsg = if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
                             FryingUtil.showToast(mContext, showMsg)
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
@@ -1236,7 +1244,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         fryingHelper.checkUserAndDoing(Runnable {
             transactionMorePopup.dismiss()
             viewModel!!.checkIntoChatRoom()
-                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>() {
+                    ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) =
                                 if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                                     intoChatRoom(chatRoomId)
@@ -1299,32 +1307,71 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private fun updateCurrentPair(pairStatus: PairStatus) {
         val color = if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s CNY", pairStatus.currentPriceCNYFormat))
+        }
+        else{
+            binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s USD", pairStatus.currentPriceFormat))
+        }
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
-        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", pairStatus.currentPriceCNYFormat))
         computePriceCNY()
     }
 
     private fun updateCurrentPairPrice(price:String?){
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+        if (exChangeRates == 1){
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
 //        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
         if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4))
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup( viewModel!!.getCurrentPrice(), 4, 4) + "$")
         } else {
-            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4))
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4) + "$")
+        }
+        }
+        else{
+        binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
+//        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+        if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(), 4, 4) + "CNY")
+        } else {
+            binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText("≈" + NumberUtil.formatNumberNoGroup(0.0f, 4, 4) + "CNY")
+        }
         }
     }
 
     //更新涨跌幅
     private fun updatePriceSince(since:String?){
-        var since = since?.toDouble()
+        val since = since?.toDouble()
         var background: Drawable?
         var color: Int?
-        if (since != null) {
+        val styleChange = StyleChangeUtil.getStyleChangeSetting(mContext!!)?.styleCode
+        if (since != null && styleChange == 1) {
             if(since > 0){//涨
                 background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
             }else if(since < 0){
+                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                color = mContext?.getColor(R.color.T9)
+            }else{
+                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                color = mContext?.getColor(R.color.B3)
+            }
+            Log.d(tag,"priceSince0 = $since")
+            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            Log.d(tag,"priceSince1 = $result")
+            binding!!.actionBarLayout.currentPriceSince.setText(result)
+            binding!!.actionBarLayout.currentPriceSince.background = background
+            binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
+        }
+        if (since != null && styleChange == 0) {
+            if(since < 0){
+                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                color = mContext?.getColor(R.color.T10)
+            }else if(since > 0){
                 background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             }else{

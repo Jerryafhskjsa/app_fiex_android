@@ -16,6 +16,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.listener.OnHandlerListener
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.community.FactionConfig
 import com.black.base.model.community.FactionItem
 import com.black.base.model.community.FactionMember
@@ -109,7 +110,7 @@ class FactionMemberFragment : BaseFragment(), View.OnClickListener, QRefreshLayo
             val hint = "输入竞选金额,最小" + NumberUtil.formatNumberNoGroup(factionItem!!.ownerPrice, 0, 2)
             requestToAddCoin("竞选掌门", "竞选金额", hint, object : FactionAddCoinCommand() {
                 override fun run() {
-                    CommunityApiServiceHelper.postFactionBecome(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>() {
+                    CommunityApiServiceHelper.postFactionBecome(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 if (factionAddCoinWidget != null) {
@@ -129,7 +130,7 @@ class FactionMemberFragment : BaseFragment(), View.OnClickListener, QRefreshLayo
         } else if (id == R.id.btn_keep) { //判断当前锁仓是否足够继任，如果不足，需要继续加入足够金额,否则直接继任
             val factionAddCoinCommand: FactionAddCoinCommand = object : FactionAddCoinCommand() {
                 override fun run() {
-                    CommunityApiServiceHelper.postFactionKeep(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>() {
+                    CommunityApiServiceHelper.postFactionKeep(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 if (confirmDialog != null) {
@@ -169,7 +170,7 @@ class FactionMemberFragment : BaseFragment(), View.OnClickListener, QRefreshLayo
             val hint = "输入竞选金额,最小" + NumberUtil.formatNumberNoGroup(factionConfig!!.minAmount, 0, 2)
             requestToAddCoin("加入门派", "加入门派金额", hint, object : FactionAddCoinCommand() {
                 override fun run() {
-                    CommunityApiServiceHelper.postFactionLock(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>() {
+                    CommunityApiServiceHelper.postFactionLock(mContext, if (factionItem == null) null else NumberUtil.formatNumberNoGroup(factionItem!!.id), amount, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 if (factionAddCoinWidget != null) {
@@ -192,7 +193,7 @@ class FactionMemberFragment : BaseFragment(), View.OnClickListener, QRefreshLayo
     private fun requestToAddCoin(title: String, amountTitle: String, hint: String, nextAction: FactionAddCoinCommand) {
         when {
             fbsWallet == null -> {
-                WalletApiServiceHelper.getWalletList(mContext, true, object : NormalCallback<ArrayList<Wallet?>?>() {
+                WalletApiServiceHelper.getWalletList(mContext, true, object : NormalCallback<ArrayList<Wallet?>?>(mContext!!) {
                     override fun callback(returnData: ArrayList<Wallet?>?) {
                         if (returnData == null || returnData.isEmpty()) {
                             return
@@ -210,7 +211,7 @@ class FactionMemberFragment : BaseFragment(), View.OnClickListener, QRefreshLayo
                 })
             }
             factionConfig == null -> {
-                CommunityApiServiceHelper.getFactionConfig(mContext, object : NormalCallback<HttpRequestResultData<FactionConfig?>?>() {
+                CommunityApiServiceHelper.getFactionConfig(mContext, object : NormalCallback<HttpRequestResultData<FactionConfig?>?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultData<FactionConfig?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             factionConfig = returnData.data

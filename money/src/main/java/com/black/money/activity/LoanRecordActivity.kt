@@ -14,6 +14,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.LoanRecord
 import com.black.base.util.ConstData
@@ -179,7 +180,7 @@ class LoanRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnRefreshList
 
     private fun getLoanRecord(isShowLoading: Boolean) {
         isDataLoading = true
-        MoneyApiServiceHelper.getLoanRecord(this, isShowLoading, currentPage, 30, object : NormalCallback<HttpRequestResultData<PagingData<LoanRecord?>?>?>() {
+        MoneyApiServiceHelper.getLoanRecord(this, isShowLoading, currentPage, 30, object : NormalCallback<HttpRequestResultData<PagingData<LoanRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 isDataLoading = false

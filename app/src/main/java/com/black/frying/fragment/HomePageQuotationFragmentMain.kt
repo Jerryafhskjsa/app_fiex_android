@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.black.base.fragment.BaseFragment
@@ -69,7 +70,7 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
 
     //初始化行情分组
     private fun initQuotationGroup() {
-        tabSets = listOf("Favorites", "Spot", "Futures","Zone")
+        tabSets = listOf(getString(R.string.favorites), getString(R.string.spot), getString(R.string.futures),getString(R.string.zone))
         if (tabSets != null && tabSets!!.isNotEmpty()) {
             val setSize = tabSets!!.size
             fragmentList = ArrayList(setSize)
@@ -77,8 +78,9 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
                 val set = tabSets!![i]
                 try {
                     when(i){
-                        0 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
-                        1,2,3 ->fragmentList?.add(EmptyFragment())
+                        0 -> fragmentList?.add(EmptyFragment())
+                        1,2 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        3 ->fragmentList?.add(EmptyFragment())
                     }
 
                 } catch (throwable: Throwable) {

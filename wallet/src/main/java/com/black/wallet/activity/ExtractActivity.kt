@@ -20,6 +20,7 @@ import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.wallet.*
 import com.black.base.net.NormalObserver
 import com.black.base.util.*
@@ -107,6 +108,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 object : ChooseWalletControllerWindow.OnReturnListener<String?> {
                     override fun onReturn(window: ChooseWalletControllerWindow<String?>, item: String?) {
                         binding?.currentChain?.setText(item)
+                        coinChain = item
                     }
                 })
             chooseWalletDialog.setTipsText(getString(R.string.chain_tips))
@@ -601,7 +603,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
     private fun getUserWithdrawQuota(){
         coinType?.let {
-            WalletApiServiceHelper.getUserWithdrawQuota(this, it, object : NormalCallback<HttpRequestResultString?>() {
+            WalletApiServiceHelper.getUserWithdrawQuota(this, it, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding?.withdrawQuota?.setText(getString(R.string.withdraw_amount_limit,returnData.data))

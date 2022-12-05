@@ -48,6 +48,8 @@ object RouterConstData {
     const val SAFE_CENTER = "fiex://safeCenter"
     const val GOOGLE_GET_KEY = "fiex://googleGetKey"
     const val GOOGLE_BIND = "fiex://googleBind"
+    const val SAFE_BIND = "fiex://safeBind"
+    const val SAFE_UNUSED = "fiex://safeUnuse"
     const val GOOGLE_SECURITY_STATUS = "fiex://googleSecurityStatus"
     const val PHONE_BIND = "fiex://phoneBind"
     const val PHONE_SECURITY_STATUS = "fiex://phoneSecurityStatus"
@@ -131,6 +133,7 @@ object RouterConstData {
     const val C2C_ORDER_DETAIL_TALK_NEW = "fiex://c2cOrderDetailTalkNew"
 
     const val TRANSACTION = "fiex://transaction"
+    const val HOME_CONTRACT = "fiex://contract"
     const val HOME_ASSET = "fiex://homeAsset"
     const val C2C_HOME = "fiex://c2cHome"
 

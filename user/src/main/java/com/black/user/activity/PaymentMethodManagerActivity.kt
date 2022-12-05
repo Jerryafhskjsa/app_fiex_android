@@ -11,6 +11,7 @@ import com.black.base.lib.FryingSingleToast
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.PaymentMethod
 import com.black.base.util.*
 import com.black.base.view.ConfirmDialog
@@ -64,7 +65,7 @@ class PaymentMethodManagerActivity : BaseActionBarActivity(), View.OnClickListen
             override fun onStatusUpdate(paymentMethod: PaymentMethod?) {
                 paymentMethod?.let {
                     val newStatus = if (paymentMethod.isAvailable != null && paymentMethod.isAvailable == PaymentMethod.IS_ACTIVE) PaymentMethod.IS_NOT_ACTIVE else PaymentMethod.IS_ACTIVE
-                    C2CApiServiceHelper.updatePaymentMethod(mContext, paymentMethod.id, newStatus, object : NormalCallback<HttpRequestResultString?>() {
+                    C2CApiServiceHelper.updatePaymentMethod(mContext, paymentMethod.id, newStatus, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultString?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                 paymentMethod.isAvailable = newStatus
@@ -146,7 +147,7 @@ class PaymentMethodManagerActivity : BaseActionBarActivity(), View.OnClickListen
 
     private val paymentMethodList: Unit
         get() {
-            C2CApiServiceHelper.getPaymentMethodAll(this, object : NormalCallback<HttpRequestResultDataList<PaymentMethod?>?>() {
+            C2CApiServiceHelper.getPaymentMethodAll(this, object : NormalCallback<HttpRequestResultDataList<PaymentMethod?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
                     binding?.refreshLayout?.setRefreshing(false)
@@ -185,7 +186,7 @@ class PaymentMethodManagerActivity : BaseActionBarActivity(), View.OnClickListen
 
     fun deletePaymentMethod(paymentMethod: PaymentMethod) {
         checkMoneyPassword(Runnable {
-            C2CApiServiceHelper.deletePaymentMethod(mContext, paymentMethod.id, object : NormalCallback<HttpRequestResultString?>() {
+            C2CApiServiceHelper.deletePaymentMethod(mContext, paymentMethod.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         adapter?.removeItem(paymentMethod)

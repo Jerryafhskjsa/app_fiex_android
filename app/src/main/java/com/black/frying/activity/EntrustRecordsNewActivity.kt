@@ -18,10 +18,7 @@ import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.TradeApiServiceHelper
 import com.black.base.lib.FryingSingleToast
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
-import com.black.base.model.QuotationSet
+import com.black.base.model.*
 import com.black.base.model.filter.DateFilter
 import com.black.base.model.filter.EntrustStatus
 import com.black.base.model.filter.EntrustType
@@ -180,7 +177,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                     entrustFilter.show()
                 }
             }
-            R.id.pair_choose_menu -> PairApiServiceHelper.getTradeSetsLocal(mContext, true, object : NormalCallback<ArrayList<QuotationSet?>?>() {
+            R.id.pair_choose_menu -> PairApiServiceHelper.getTradeSetsLocal(mContext, true, object : NormalCallback<ArrayList<QuotationSet?>?>(mContext!!) {
                 override fun callback(returnData: ArrayList<QuotationSet?>?) {
                     val type = PairStatusPopupWindow.TYPE_ENTRUST or (if (TransactionViewModel.LEVER_TYPE_LEVER == levelType) PairStatus.LEVER_DATA else PairStatus.NORMAL_DATA)
                     PairStatusPopupWindow.getInstance(mContext as Activity, type, returnData)
@@ -235,7 +232,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                         useCinType = useCinType?.toUpperCase(Locale.getDefault()) ?: ""
                         useSet = useSet?.toUpperCase(Locale.getDefault()) ?: ""
                         val pair = useCinType + "_" + useSet
-                        SocketDataContainer.getPairStatus(mContext, pair, object : Callback<PairStatus?>() {
+                        SocketDataContainer.getPairStatus(mContext,ConstData.PairStatusType.SPOT, pair, object : Callback<PairStatus?>() {
                             override fun error(type: Int, error: Any) {
                                 FryingUtil.showToast(mContext, resources.getString(R.string.pair_error), FryingSingleToast.ERROR)
                             }
@@ -296,7 +293,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         if(currentType == TYPE_HIS){
             pair = null
         }
-        TradeApiServiceHelper.getTradeOrderHistoryRecord(mContext, pair,  isShowLoading, object : NormalCallback<HttpRequestResultData<TradeOrderHistoryResult?>?>() {
+        TradeApiServiceHelper.getTradeOrderHistoryRecord(mContext, pair,  isShowLoading, object : NormalCallback<HttpRequestResultData<TradeOrderHistoryResult?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

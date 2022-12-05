@@ -13,6 +13,7 @@ import com.black.base.api.WalletApiService
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.wallet.SupportAccount
 import com.black.base.model.wallet.WalletTransferRecord
@@ -202,7 +203,7 @@ class WalletTransferRecordActivity : BaseActionBarActivity(), QRefreshLayout.OnR
                 ?.getWalletTransferRecord(null,currentPage, pageSize,
                     if(all == true)fromAccount?.type else null,if(all == true) toAccount?.type else null)
                 ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>() {
+                ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>(mContext!!) {
                     override fun error(type: Int, error: Any?) {
                         super.error(type, error)
                         showData(null)

@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -90,12 +91,20 @@ class GoogleBindActivity : BaseActivity(), View.OnClickListener {
         binding?.password?.addTextChangedListener(watcher)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.phoneLayout?.visibility = View.GONE
+        binding?.phoneAccount?.visibility = View.GONE
+        binding?.mailAccount?.visibility = View.GONE
         binding?.mailLayout?.visibility = View.GONE
+        binding?.mailBar?.visibility = View.GONE
+        binding?.mailBarB?.visibility = View.GONE
         if (TextUtils.equals("1", userInfo!!.phoneSecurityStatus)) {
             binding?.phoneLayout?.visibility = View.VISIBLE
+            binding?.phoneAccount?.visibility = View.VISIBLE
         }
         if (TextUtils.equals("1", userInfo!!.emailSecurityStatus)) {
             binding?.mailLayout?.visibility = View.VISIBLE
+            binding?.mailBar?.visibility = View.VISIBLE
+            binding?.mailAccount?.visibility = View.VISIBLE
+            binding?.mailBarB?.visibility = View.VISIBLE
         }
     }
 
@@ -147,7 +156,7 @@ class GoogleBindActivity : BaseActivity(), View.OnClickListener {
             if (getPhoneCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -170,7 +179,7 @@ class GoogleBindActivity : BaseActivity(), View.OnClickListener {
             if (getMailCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -216,7 +225,7 @@ class GoogleBindActivity : BaseActivity(), View.OnClickListener {
             return
         }
         password = RSAUtil.encryptDataByPublicKey(password)
-        UserApiServiceHelper.bindGoogle(mContext, phoneCode, mailCode, googleCode, password, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindGoogle(mContext, phoneCode, mailCode, googleCode, password, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))

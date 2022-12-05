@@ -14,10 +14,7 @@ import com.black.base.lib.filter.FilterEntity
 import com.black.base.lib.filter.FilterResult
 import com.black.base.lib.filter.FilterWindow
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.filter.DateFilter
 import com.black.base.model.filter.RecommendPeopleFilter
 import com.black.base.model.user.RecommendInfo
@@ -102,7 +99,7 @@ class RecommendNewActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
     }
 
     private fun getRecommendCount() {
-        UserApiServiceHelper.getRecommendCount(this, object : NormalCallback<HttpRequestResultData<Int?>?>() {
+        UserApiServiceHelper.getRecommendCount(this, object : NormalCallback<HttpRequestResultData<Int?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultData<Int?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     var count = returnData.data
@@ -126,7 +123,7 @@ class RecommendNewActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
 //            }
 //        });
     private fun getRecommendInfo() {
-        CommonApiServiceHelper.getInviteUrl(mContext, object : NormalCallback<HttpRequestResultString?>() {
+        CommonApiServiceHelper.getInviteUrl(mContext, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(urlData: HttpRequestResultString?) {
                 if (urlData != null && urlData.code == HttpRequestResult.SUCCESS && urlData.data != null && urlData.data!!.isNotEmpty()) {
                     val recommendInfo = RecommendInfo()
@@ -183,14 +180,14 @@ class RecommendNewActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
         //                }
         //            }
         //        });
-        CommonApiServiceHelper.getMyPosterList(this, object : NormalCallback<HttpRequestResultDataList<String?>?>() {
+        CommonApiServiceHelper.getMyPosterList(this, object : NormalCallback<HttpRequestResultDataList<String?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 FryingUtil.showToast(mContext, getString(R.string.alert_server_error))
             }
 
             override fun callback(returnData: HttpRequestResultDataList<String?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null && returnData.data!!.isNotEmpty()) {
-                    CommonApiServiceHelper.getInviteUrl(mContext, object : NormalCallback<HttpRequestResultString?>() {
+                    CommonApiServiceHelper.getInviteUrl(mContext, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(urlData: HttpRequestResultString?) {
                             if (urlData != null && urlData.code == HttpRequestResult.SUCCESS && urlData.data != null && urlData.data!!.isNotEmpty()) {
                                 userInfo?.let {
@@ -214,7 +211,7 @@ class RecommendNewActivity : BaseActivity(), View.OnClickListener, QRefreshLayou
     }
 
     private fun getRecommendPeopleDetail(isShowLoading: Boolean) {
-        UserApiServiceHelper.getRecommendPeopleDetail(mContext, isShowLoading, currentPage, 10, peopleFilter.code, dateFilter.startTime, dateFilter.endTime, object : NormalCallback<HttpRequestResultData<PagingData<RecommendPeopleDetail?>?>?>() {
+        UserApiServiceHelper.getRecommendPeopleDetail(mContext, isShowLoading, currentPage, 10, peopleFilter.code, dateFilter.startTime, dateFilter.endTime, object : NormalCallback<HttpRequestResultData<PagingData<RecommendPeopleDetail?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 super.error(type, error)

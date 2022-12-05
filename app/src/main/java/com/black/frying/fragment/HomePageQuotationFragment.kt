@@ -43,6 +43,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
+    private var tabTag:String? = null
     private var parent: HomePageActivity? = null
 
     private var binding: FragmentHomePageQuotationBinding? = null
@@ -81,13 +82,11 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        Log.d("iiiiii","HomePageQuotationFragment onResume")
         refreshSets()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("iiiiii","onStop currentTabPosition= "+binding?.setTab?.selectedTabPosition!!)
         currentTabPosition = binding?.setTab?.selectedTabPosition!!
     }
 
@@ -169,29 +168,51 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun refreshSets() {
-            PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
-                override fun error(type: Int, error: Any) {
-                }
-                override fun callback(returnData: ArrayList<QuotationSet?>?) {
-                    if (returnData != null) {
-                        Log.d("iiiiii","returnDataSize = "+returnData.size)
-                        var setData = ArrayList<QuotationSet?>()
-                        setData.addAll(returnData)
-                        var optionalSet = QuotationSet()
-                        optionalSet.coinType = getString(R.string.pair_collect)
-                        optionalSet.name = getString(R.string.pair_collect)
-                        setData?.add(0,  optionalSet)
-                        if (setData != null && setData?.isNotEmpty()) {
-                            sets = setData
-                            Log.d("iiiiii","setsSize = "+sets?.size)
-                            initQuotationGroup()
+            if(tabTag.equals(getString(R.string.spot))){
+                PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
+                    override fun error(type: Int, error: Any) {
+                    }
+                    override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                        if (returnData != null) {
+                            var setData = ArrayList<QuotationSet?>()
+                            setData.addAll(returnData)
+                            var optionalSet = QuotationSet()
+                            optionalSet.coinType = getString(R.string.pair_collect)
+                            optionalSet.name = getString(R.string.pair_collect)
+                            setData?.add(0,  optionalSet)
+                            if (setData != null && setData?.isNotEmpty()) {
+                                sets = setData
+                                initQuotationGroup()
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
+            if(tabTag.equals(getString(R.string.futures))){
+                initFutureQuotationGroup()
+            }
     }
 
-    //初始化行情分组
+    //初始化合约行情分组
+    private fun initFutureQuotationGroup(){
+        var setData = ArrayList<QuotationSet?>(3)
+        var optionalFaverSet = QuotationSet()
+        optionalFaverSet.coinType = getString(R.string.pair_collect)
+        optionalFaverSet.name = getString(R.string.pair_collect)
+        setData?.add(0,  optionalFaverSet)
+        var optionalUbaseSet = QuotationSet()
+        optionalUbaseSet.coinType = getString(R.string.usdt_base)
+        optionalUbaseSet.name = getString(R.string.usdt_base)
+        setData?.add(1,  optionalUbaseSet)
+        var optionalCoinBaseSet = QuotationSet()
+        optionalCoinBaseSet.coinType = getString(R.string.coin_base)
+        optionalCoinBaseSet.name = getString(R.string.coin_base)
+        setData?.add(2,  optionalCoinBaseSet)
+        sets = setData
+        initQuotationGroup()
+    }
+
+    //初始化现货行情分组
     private fun initQuotationGroup() {
         if (sets != null && sets!!.isNotEmpty()) {
             val setSize = sets!!.size
@@ -202,7 +223,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             for (i in 0 until setSize) {
                 val set = sets!![i]
                 try {
-                    fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set))
+                    fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set,tabTag))
                 } catch (throwable: Throwable) {
                     FryingUtil.printError(throwable)
                 }
@@ -237,24 +258,20 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 }
             }
             binding?.quotationViewPager?.currentItem = currentTabPosition
-            Log.d("iiiiii", "currentTabPosition = $currentTabPosition")
             binding?.setTab?.getTabAt(currentTabPosition)?.select()//默认选中自选
             val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
             if (currentFragment != null && currentFragment.isVisible) {
 //                currentFragment.onResume()
             }
             binding?.setTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                var textSize20 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
-                var textSize16 = resources.getDimensionPixelSize(R.dimen.text_size_16).toFloat()
+                var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+                var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    Log.d("iiiiii","onTabSelected  "+tab.position)
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize20)
-                    Log.d("iiiiii","onTabSelected  currentTabPosition="+tab.position)
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
                     binding?.quotationViewPager?.currentItem = tab.position
                     val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
-                    Log.d("iiiiii","onTabSelected  isVisible="+currentFragment.isVisible)
                     if (currentFragment != null && currentFragment.isVisible) {
 //                        currentFragment.onResume()
                     }
@@ -263,7 +280,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 override fun onTabUnselected(tab: TabLayout.Tab) {
                     val view = tab.customView
                     val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize16)
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -276,7 +293,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             val args = Bundle()
             val fragment = HomePageQuotationFragment()
             fragment.arguments = args
-//            fragment.set = tab
+            fragment.tabTag = tab
             return fragment
         }
     }

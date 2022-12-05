@@ -167,19 +167,6 @@ class EntrustFilter(private val activity: Activity, private val parentView: View
 
     private fun initSetData() {
         if (TransactionViewModel.LEVER_TYPE_LEVER == leverType) {
-            val leverPairs = SocketDataContainer.getAllLeverPair(activity)
-            var sets: ArrayList<String?>? = null
-            if (leverPairs != null && leverPairs.isNotEmpty()) {
-                sets = ArrayList()
-                for (i in leverPairs.indices) {
-                    val pair = leverPairs[i]
-                    val set = getPairSetName(pair)
-                    if (set != null && !sets.contains(set)) {
-                        sets.add(set)
-                    }
-                }
-            }
-            showSetData(sets)
         } else {
             PairApiServiceHelper.getTradeSets(activity, false, object : Callback<HttpRequestResultDataList<QuotationSet?>?>() {
                 override fun error(type: Int, error: Any) {

@@ -17,6 +17,10 @@ import kotlin.math.pow
 //交易对状态
 open class PairStatus : BaseAdapterItem(), Findable {
     var TAG = PairStatus::class.java.simpleName
+
+    /******futures******/
+    var contractSize:String? = null
+    /******futures******/
     //k线数据
     var kLineData:HomeTickersKline? = null
     var supportingPrecisionList //支持深度

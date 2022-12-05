@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
@@ -66,13 +67,14 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                 val userIdHeader = IMHelper.getUserIdHeader(mContext)
                 IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
                     override fun callback(returnData: Boolean?) {
-                        if (returnData != null && returnData) {
-                            UserApiServiceHelper.modifyUserInfo(mContext, null, nickName, object : NormalCallback<HttpRequestResultString?>() {
+                        if (returnData != null) {
+                            UserApiServiceHelper.modifyUserInfo(mContext, null, nickName, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                 override fun callback(modifyResult: HttpRequestResultString?) {
                                     if (modifyResult != null && modifyResult.code == HttpRequestResult.SUCCESS) {
-                                        getUserInfo(object : NormalCallback<UserInfo?>() {
+                                        getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
                                             override fun error(type: Int, error: Any?) {}
                                             override fun callback(returnData: UserInfo?) {
+                                                FryingUtil.showToast(mContext, getString(R.string.name_success))
                                                 finish()
                                             }
                                         })
@@ -81,16 +83,17 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
                                     }
                                 }
                             })
-                            IMHelper.updateNickName(nickName, object : Callback<Boolean?>() {
-                                override fun error(type: Int, error: Any) {
-                                    FryingUtil.showToast(mContext, "昵称同步失败")
-                                }
+//                            IMHelper.updateNickName(nickName, object : Callback<Boolean?>() {
+//                                override fun error(type: Int, error: Any) {
+//                                    FryingUtil.showToast(mContext, "昵称同步失败")
+//                                }
+//
+//                                override fun callback(returnData: Boolean?) {
+//                                    FryingUtil.showToast(mContext, "昵称同步成功")
+//                                }
+//                            })
 
-                                override fun callback(returnData: Boolean?) {
-                                    FryingUtil.showToast(mContext, "昵称同步成功")
-                                }
-                            })
-                        } else {
+                        } else{
                             FryingUtil.showToast(mContext, "初始化失败，稍后重试！")
                         }
                     }

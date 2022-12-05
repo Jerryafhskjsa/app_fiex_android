@@ -15,6 +15,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.filter.CoinFilter
 import com.black.base.model.filter.RegularRecordStatus
@@ -118,8 +119,8 @@ class RegularRecordFragment : BaseFragment(), OnRegularChangeOutListener, QRefre
                             if (regularLock.defaultRate == null) nullAmount else NumberUtil.formatNumberNoGroupHardScale(regularLock.defaultRate!! * 100, 2)),
                     object : OnConfirmCallback {
                         override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                            MoneyApiServiceHelper.postRegularChangeOut(mContext, regularLock.id, object : NormalCallback<HttpRequestResultString?>() {
-                                override fun error(type: Int, error: Any) {
+                            MoneyApiServiceHelper.postRegularChangeOut(mContext, regularLock.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                                override fun error(type: Int, error: Any?) {
                                     super.error(type, error)
                                     if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {
                                         confirmDialog.dismiss()
@@ -181,7 +182,7 @@ class RegularRecordFragment : BaseFragment(), OnRegularChangeOutListener, QRefre
         if (regularCoinFilter == null) {
             return
         }
-        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>() {
+        MoneyApiServiceHelper.getRegularConfig(mContext, object : NormalCallback<HttpRequestResultData<RegularConfig?>?>(mContext!!) {
 
             override fun callback(returnData: HttpRequestResultData<RegularConfig?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
@@ -229,8 +230,8 @@ class RegularRecordFragment : BaseFragment(), OnRegularChangeOutListener, QRefre
         if (regularCoinFilter == null || regularRecordStatus == null) {
             return
         }
-        MoneyApiServiceHelper.getRegularLockRecord(mContext, regularId, regularCoinFilter?.code, regularRecordStatus?.code, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<RegularLock?>?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getRegularLockRecord(mContext, regularId, regularCoinFilter?.code, regularRecordStatus?.code, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<RegularLock?>?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showData(null)
             }

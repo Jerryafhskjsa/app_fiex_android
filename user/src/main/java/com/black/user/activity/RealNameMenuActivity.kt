@@ -11,6 +11,7 @@ import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.CountryCode
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.RealNameAIEntity
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -221,7 +222,7 @@ class RealNameMenuActivity : BaseActivity(), View.OnClickListener {
             //先上传图片，根据返回的路径，进行验证
             val fileParams: MutableMap<String, File> = HashMap()
             fileParams["file"] = File(path)
-            UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         //上传成功

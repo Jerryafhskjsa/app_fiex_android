@@ -15,6 +15,7 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2COrder
 import com.black.base.model.c2c.C2CSeller
@@ -144,7 +145,7 @@ class C2COneKeySaleItemFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun createOrder(finalAmountText: String) {
-        C2CApiServiceHelper.createC2COrderSell(mContext, if (c2CSeller == null) null else c2CSeller?.coinType, C2COrder.ORDER_SELL, finalAmountText, if (c2CSeller == null) null else c2CSeller?.id, "1", object : NormalCallback<HttpRequestResultString?>() {
+        C2CApiServiceHelper.createC2COrderSell(mContext, if (c2CSeller == null) null else c2CSeller?.coinType, C2COrder.ORDER_SELL, finalAmountText, if (c2CSeller == null) null else c2CSeller?.id, "1", object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val bundle = Bundle()
@@ -222,8 +223,8 @@ class C2COneKeySaleItemFragment : BaseFragment(), View.OnClickListener {
         if (supportCoin == null) {
             return
         }
-        C2CApiServiceHelper.getC2CSellerFastList(activity, isShowLoading, if (supportCoin == null) null else supportCoin?.coinType, C2COrder.ORDER_SELL, 1, 10, object : NormalCallback<HttpRequestResultDataList<C2CSeller?>?>() {
-            override fun error(type: Int, error: Any) {
+        C2CApiServiceHelper.getC2CSellerFastList(activity, isShowLoading, if (supportCoin == null) null else supportCoin?.coinType, C2COrder.ORDER_SELL, 1, 10, object : NormalCallback<HttpRequestResultDataList<C2CSeller?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 c2CSeller = null
                 refreshSeller()

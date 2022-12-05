@@ -1,0 +1,39 @@
+{
+  "buildFiles": [
+    "D:\\app_fiex_android\\base\\CMakeLists.txt",
+    "D:\\app_fiex_android\\base\\src\\main\\cpp\\sec\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "D:\\Program Files\\Android\\cmake\\3.18.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\app_fiex_android\\base\\.cxx\\Debug\\1p4y1k1m\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "D:\\Program Files\\Android\\cmake\\3.18.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\app_fiex_android\\base\\.cxx\\Debug\\1p4y1k1m\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "fryingSecret::@09e5848878c25dc89533": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "fryingSecret",
+      "output": "D:\\app_fiex_android\\base\\src\\main\\jniLibs\\x86\\libfryingSecret.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "D:\\Program Files\\Android\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "D:\\Program Files\\Android\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

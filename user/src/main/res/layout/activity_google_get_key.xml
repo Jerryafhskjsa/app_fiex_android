@@ -75,7 +75,7 @@
                             android:gravity="center"
                             android:text="RTRWCFGS"
                             android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_15" />
+                            android:textSize="@dimen/text_size_12" />
                         <ImageView
                             android:id="@+id/btn_copy"
                             android:layout_width="20dp"
@@ -84,32 +84,44 @@
                             android:src="@drawable/icon_copy">
                         </ImageView>
                     </LinearLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+
+                <com.black.lib.view.InputLinearLayout
+                    android:id="@+id/google_code_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext_default"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanMaterialEditText
+                        android:id="@+id/new_password_again"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/bg_edittext_default">
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="@string/google_code_1"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="0dp" />
 
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/new_password_again"
-                            style="@style/EditTextStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:hint="@string/google_code_1"
-                            android:inputType="textPassword" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="21dp"
+                        android:background="@color/T11_ALPHA5">
 
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:gravity="center"
-                            android:text="@string/paste"
-                            android:textColor="@color/T13"
-                            android:layout_marginRight="30dp"
-                            android:textSize="@dimen/text_size_15" />
-                    </RelativeLayout>
+                    </View>
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/google_code_copy"
+                        style="@style/EditTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:text="@string/paste"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_16" />
+                </com.black.lib.view.InputLinearLayout>
                     <LinearLayout
                         android:id="@+id/bottom_layout"
                         android:layout_width="match_parent"

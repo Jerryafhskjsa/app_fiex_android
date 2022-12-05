@@ -13,6 +13,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.LoanRecord
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
@@ -99,7 +100,7 @@ class LoanAddDepositActivity : BaseActionBarActivity(), View.OnClickListener {
                                 if (loanRecord == null || loanRecord!!.mortgageCoinType == null) nullAmount else loanRecord!!.mortgageCoinType),
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                MoneyApiServiceHelper.addLoanDeposit(mContext, loanRecord!!.id, mortgageAmountText, object : NormalCallback<HttpRequestResultString?>() {
+                                MoneyApiServiceHelper.addLoanDeposit(mContext, loanRecord!!.id, mortgageAmountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun error(type: Int, error: Any?) {
                                         super.error(type, error)
                                         if (type == ConstData.ERROR_MISS_MONEY_PASSWORD) {

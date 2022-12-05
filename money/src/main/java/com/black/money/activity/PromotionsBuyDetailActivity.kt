@@ -21,6 +21,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.money.PromotionsBuy
 import com.black.base.model.money.PromotionsBuyDetail
@@ -148,7 +149,7 @@ class PromotionsBuyDetailActivity : BaseActivity(), View.OnClickListener, QRefre
     }
 
     private fun getPromotionsBuyDetail(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsBuyDetail(this, NumberUtil.formatNumberNoGroup(promotionsBuy?.id), isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsBuyDetail?>?>() {
+        MoneyApiServiceHelper.getPromotionsBuyDetail(this, NumberUtil.formatNumberNoGroup(promotionsBuy?.id), isShowLoading, object : NormalCallback<HttpRequestResultData<PromotionsBuyDetail?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -466,7 +467,7 @@ class PromotionsBuyDetailActivity : BaseActivity(), View.OnClickListener, QRefre
                 return@OnClickListener
             }
             val coinType = adapter.getItem(adapter.getCheckedIndex())?.coin
-            MoneyApiServiceHelper.promotionsBuyCreate(mContext, amountText, coinType, promotions?.purchaseId.toString(), object : NormalCallback<HttpRequestResultString?>() {
+            MoneyApiServiceHelper.promotionsBuyCreate(mContext, amountText, coinType, promotions?.purchaseId.toString(), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.promotions_buy_success))

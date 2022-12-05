@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.CloudPowerPersonHold
 import com.black.base.util.RouterConstData
 import com.black.money.R
@@ -135,7 +136,7 @@ class CloudPowerRecordActivity : BaseActionBarActivity() {
 
     private val cloudPowerBtcIncome: Unit
         get() {
-            MoneyApiServiceHelper.getCloudPowerBtcIncome(this, object : NormalCallback<HttpRequestResultData<Double?>?>() {
+            MoneyApiServiceHelper.getCloudPowerBtcIncome(this, object : NormalCallback<HttpRequestResultData<Double?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     showBtcIncome(null)
                 }
@@ -152,7 +153,7 @@ class CloudPowerRecordActivity : BaseActionBarActivity() {
 
     private val cloudPowerPersonHold: Unit
         get() {
-            MoneyApiServiceHelper.getCloudPowerPersonHold(this, object : NormalCallback<HttpRequestResultData<CloudPowerPersonHold?>?>() {
+            MoneyApiServiceHelper.getCloudPowerPersonHold(this, object : NormalCallback<HttpRequestResultData<CloudPowerPersonHold?>?>(mContext!!) {
                 override fun error(type: Int, error: Any?) {
                     showPersonHold(null)
                 }

@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -15,12 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
-import com.black.base.util.ConstData
-import com.black.base.util.CookieUtil
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
+import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.base.widget.AnalyticChart.AnalyticChartHelper
 import com.black.base.widget.AnalyticChart.Companion.BOLL
@@ -420,7 +419,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     private fun refreshDescription(description: PairDescription?) {
         binding?.quotationDetailDescriptionLayout?.coinName?.setText(String.format("%s(%s)", checkedString(description?.coinName), checkedString(description?.coin)))
-        binding?.quotationDetailDescriptionLayout?.date?.setText(if (description?.issueDate == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd", description.issueDate!!))
+        binding?.quotationDetailDescriptionLayout?.date?.setText(if (description?.issueDate == null) nullAmount else description.issueDate!!)
         binding?.quotationDetailDescriptionLayout?.total?.setText(if (description?.totalAmount == null) nullAmount else NumberUtil.formatNumberNoGroup(description.totalAmount))
         binding?.quotationDetailDescriptionLayout?.useTotal?.setText(if (description?.flowAmount == null) nullAmount else NumberUtil.formatNumberNoGroup(description.flowAmount))
         binding?.quotationDetailDescriptionLayout?.joinPrice?.setText(checkedString(description?.issuePrice))
@@ -480,18 +479,41 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             return
         }
         //刷新交易对信息
-        binding?.price?.setText(pairStatus.currentPriceFormat)
-        binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding?.price?.setText(pairStatus.currentPriceFormat)
+            binding?.priceCny?.setText(String.format("≈%s CNY", pairStatus.currentPriceCNYFormat))
+        }
+        else{
+            binding?.price?.setText(pairStatus.currentPriceFormat)
+            binding?.priceCny?.setText(String.format("≈%s USD", pairStatus.currentPriceFormat))
+        }
         binding?.percentage?.setText(pairStatus.priceChangeSinceTodayDisplay)
-        if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
-            binding?.price?.setTextColor(colorT3)
-            binding?.percentage?.background = bgT3
-        } else if (pairStatus.isDown) {
-            binding?.price?.setTextColor(colorT5)
-            binding?.percentage?.background = bgT5
-        } else {
-            binding?.price?.setTextColor(colorT7)
-            binding?.percentage?.background = bgT7
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+        if(styleChange == 0) {
+            if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
+                binding?.price?.setTextColor(colorT3)
+                binding?.percentage?.background = bgT3
+            } else if (pairStatus.isDown) {
+                binding?.price?.setTextColor(colorT5)
+                binding?.percentage?.background = bgT5
+            } else {
+                binding?.price?.setTextColor(colorT7)
+                binding?.percentage?.background = bgT7
+            }
+        }
+        if(styleChange == 1) {
+            if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
+                binding?.price?.setTextColor(colorT3)
+                binding?.percentage?.background = bgT3
+            } else if (pairStatus.isDown) {
+                binding?.price?.setTextColor(colorT7)
+                binding?.percentage?.background = bgT7
+            } else {
+                binding?.price?.setTextColor(colorT5)
+                binding?.percentage?.background = bgT5
+            }
         }
         binding?.high?.setText(pairStatus.maxPriceFormat)
         binding?.low?.setText(pairStatus.minPriceFormat)
@@ -520,8 +542,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun onPairDescription(observable: Observable<HttpRequestResultData<PairDescription?>?>?) {
         observable!!.subscribe(HttpCallbackSimple(this, false,
                 object : Callback<HttpRequestResultData<PairDescription?>?>() {
-                    override fun error(type: Int, error: Any) {}
+                    override fun error(type: Int, error: Any) {
+                        Log.d("777777","error")
+                    }
                     override fun callback(returnData: HttpRequestResultData<PairDescription?>?) {
+                        Log.d("777777","callback")
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
                             refreshDescription(returnData.data)
                         }
@@ -536,7 +561,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onCheckIntoChatRoom(observable: Observable<HttpRequestResultString>?) {
-        observable!!.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>() {
+        observable!!.subscribe(HttpCallbackSimple(this, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) =
                     if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                         intoChatRoom(chatRoomId!!)
@@ -559,7 +584,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun onToggleDearPair(isSuccess: Boolean?,isDearPair: Boolean?) {
         if (isSuccess!!) {
-            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_cancel_ok) else getString(R.string.pair_collect_add_ok)
+            val showMsg = if (isDearPair == true) getString(R.string.pair_collect_add_ok) else getString(R.string.pair_collect_cancel_ok)
             FryingUtil.showToast(mContext, showMsg)
             onCheckDearPair(isDearPair)
         }

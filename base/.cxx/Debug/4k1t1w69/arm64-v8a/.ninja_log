@@ -1,0 +1,9 @@
+# ninja log v5
+0	1547	1668657517	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
+1548	1627	1668657517	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6
+0	18	0	clean	5b24d00d516707e
+4	2566	1669190880	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
+2566	2705	1669190880	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6
+1	17	0	clean	5b24d00d516707e
+4	1569	1669345652	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
+1569	1679	1669345652	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6

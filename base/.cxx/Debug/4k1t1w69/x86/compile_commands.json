@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/shenyiya/app_fiex_android/base/.cxx/Debug/4k1t1w69/x86",
+  "command": "/Users/shenyiya/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=i686-none-linux-android23 --gcc-toolchain=/Users/shenyiya/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/shenyiya/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DfryingSecret_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++11 -std=c++11 -O0 -fno-limit-debug-info  -fPIC -o src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o -c /Users/shenyiya/app_fiex_android/base/src/main/cpp/sec/fryingSecret.cpp",
+  "file": "/Users/shenyiya/app_fiex_android/base/src/main/cpp/sec/fryingSecret.cpp"
+}
+]

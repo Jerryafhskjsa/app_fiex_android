@@ -36,7 +36,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionViewModel(context: Context, private val onTransactionModelListener: OnTransactionModelListener?) : BaseViewModel<Any?>(context) {
+class TransactionViewModel(
+    context: Context,
+    private val onTransactionModelListener: OnTransactionModelListener?
+) : BaseViewModel<Any?>(context) {
     companion object {
         var tag = TransactionViewModel::class.java.simpleName
         const val LEVER_TYPE_COIN = "PHYSICAL" // 现货
@@ -46,11 +49,12 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     private var tabType = ConstData.TAB_COIN
     private var currentPairStatus = PairStatus()
-    private var currentOrderType:String? = null
+    private var currentOrderType: String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
     var askMax = 5
     var bidMax = 5
+
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
@@ -58,20 +62,25 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     //用户相关
     private var userBalanceObserver: Observer<UserBalance?>? = createUserBalanceObserver()
     private var userTradeOrderObserver: Observer<TradeOrderFiex?>? = createUserOrderObserver()
+
     //交易对相关
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
+
     //深度变化
     private var orderObserver: Observer<Pair<String?, TradeOrderPairList?>>? = createOrderObserver()
+
     //行情涨跌幅以及价格变化
     private var pairQuotationObserver: Observer<PairQuotation?>? = createPairQuotationObserver()
+
     //当前交易对所有用户成交数据
-    private var pairDealObserver:Observer<PairDeal?>? = createPairDealObserver()
+    private var pairDealObserver: Observer<PairDeal?>? = createPairDealObserver()
+
     //用户相关
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
 
 
-    private var tradeOrderDepthPair:TradeOrderPairList? = null
-    private var singleOrderDepthList :ArrayList<QuotationOrderNew?>? = null
+    private var tradeOrderDepthPair: TradeOrderPairList? = null
+    private var singleOrderDepthList: ArrayList<QuotationOrderNew?>? = null
 
     init {
         currentPairStatus.pair == (CookieUtil.getCurrentPair(context))
@@ -84,17 +93,17 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         handlerThread!!.start()
         socketHandler = Handler(handlerThread!!.looper)
 
-        if(userBalanceObserver == null){
+        if (userBalanceObserver == null) {
             userBalanceObserver = createUserBalanceObserver()
         }
         SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
 
-        if(userTradeOrderObserver == null){
+        if (userTradeOrderObserver == null) {
             userTradeOrderObserver = createUserOrderObserver()
         }
         SocketDataContainer.subscribeUserOrderObservable(userTradeOrderObserver)
 
-        if(pairDealObserver == null){
+        if (pairDealObserver == null) {
             pairDealObserver = createPairDealObserver()
         }
         SocketDataContainer.subscribePairDealObservable(pairDealObserver)
@@ -114,20 +123,32 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
 
-        if(pairQuotationObserver != null){
-           pairQuotationObserver = createPairQuotationObserver()
+        if (pairQuotationObserver != null) {
+            pairQuotationObserver = createPairQuotationObserver()
         }
         SocketDataContainer.subscribePairQuotationObservable(pairQuotationObserver)
 
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle)
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_ADD_SOCKET_LISTENER,
+            bundle
+        )
         val bundle1 = Bundle()
         bundle1.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle1)
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_ADD_SOCKET_LISTENER,
+            bundle1
+        )
         val bundle2 = Bundle()
         bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ADD_SOCKET_LISTENER,bundle2)
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_ADD_SOCKET_LISTENER,
+            bundle2
+        )
         initPairStatus()
         changePairSocket()
     }
@@ -136,18 +157,30 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         super.onStop()
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle)
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,
+            bundle
+        )
         val bundle1 = Bundle()
         bundle1.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle1)
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,
+            bundle1
+        )
         val bundle2 = Bundle()
         bundle2.putString(SocketUtil.WS_TYPE, SocketUtil.WS_SUBSTATUS)
-        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,bundle2)
-        if(userBalanceObserver != null){
+        SocketUtil.sendSocketCommandBroadcast(
+            context,
+            SocketUtil.COMMAND_REMOVE_SOCKET_LISTENER,
+            bundle2
+        )
+        if (userBalanceObserver != null) {
             SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
         }
 
-        if(userTradeOrderObserver != null){
+        if (userTradeOrderObserver != null) {
             SocketDataContainer.removeUserOrderObservable(userTradeOrderObserver)
         }
 
@@ -161,10 +194,10 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
 
-        if(pairQuotationObserver != null){
+        if (pairQuotationObserver != null) {
             SocketDataContainer.removePairQuotationObservable(pairQuotationObserver)
         }
-        if(pairDealObserver != null){
+        if (pairDealObserver != null) {
             SocketDataContainer.removePairDealObservable(pairDealObserver)
         }
 
@@ -222,25 +255,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         }
     }
 
-    //检查存在的杠杆交易对
-    fun checkLeverPairConfig() {
-        onTransactionModelListener?.let {
-            CommonUtil.postHandleTask(socketHandler) {
-                val callback: Callback<java.util.ArrayList<PairStatus?>?> = object : Callback<java.util.ArrayList<PairStatus?>?>() {
-                    override fun error(type: Int, error: Any) {
-
-                    }
-
-                    override fun callback(returnData: java.util.ArrayList<PairStatus?>?) {
-                        //Log.e("checkLeverPairConfig", "returnData:" + returnData)
-                        it.onLeverPairConfigCheck(returnData != null && returnData.isNotEmpty())
-                    }
-                }
-                SocketDataContainer.getAllLeverPairStatus(context, callback)
-            }
-        }
-    }
-
     private fun createUserLeverObserver(): Observer<String?> {
         return object : SuccessObserver<String?>() {
             override fun onSuccess(value: String?) {
@@ -276,7 +290,6 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
                         resetPairStatus(CommonUtil.findItemFromList(value, currentPairStatus.pair))
                     }
                 }
-                checkLeverPairConfig()
             }
         }
     }
@@ -284,7 +297,11 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     private fun createOrderObserver(): Observer<Pair<String?, TradeOrderPairList?>> {
         return object : SuccessObserver<Pair<String?, TradeOrderPairList?>>() {
             override fun onSuccess(value: Pair<String?, TradeOrderPairList?>) {
-                if (TextUtils.equals(currentPairStatus.pair, value.first) && value.second != null && onTransactionModelListener != null) {
+                if (TextUtils.equals(
+                        currentPairStatus.pair,
+                        value.first
+                    ) && value.second != null && onTransactionModelListener != null
+                ) {
                     sortTradeOrder(value.first, value.second)
                 }
             }
@@ -329,89 +346,126 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     fun getAllOrderFiex() {
         CommonUtil.postHandleTask(socketHandler) {
-            SocketDataContainer.getOrderListFiex(context,singleOrderDepthList,object : Callback<TradeOrderPairList?>() {
-                override fun error(type: Int, error: Any) {}
-                override fun callback(returnData: TradeOrderPairList?) {
-                    sortTradeOrder(currentPairStatus.pair, returnData)
-                }
-            })
+            SocketDataContainer.getOrderListFiex(
+                context,
+                singleOrderDepthList,
+                object : Callback<TradeOrderPairList?>() {
+                    override fun error(type: Int, error: Any) {}
+                    override fun callback(returnData: TradeOrderPairList?) {
+                        sortTradeOrder(currentPairStatus.pair, returnData)
+                    }
+                })
         }
     }
 
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {
         Observable.just(orderPairList)
-                .flatMap(object : Function<TradeOrderPairList?, ObservableSource<Void>> {
-                    @Throws(Exception::class)
-                    override fun apply(orders: TradeOrderPairList): ObservableSource<Void> {
-                        var tradeOrders = orders
+            .flatMap(object : Function<TradeOrderPairList?, ObservableSource<Void>> {
+                @Throws(Exception::class)
+                override fun apply(orders: TradeOrderPairList): ObservableSource<Void> {
+                    var tradeOrders = orders
 //                        tradeOrders = tradeOrders ?: TradeOrderPairList()
-                        tradeOrders.bidOrderList = if (tradeOrders.bidOrderList == null) ArrayList() else tradeOrders.bidOrderList
-                        tradeOrders.askOrderList = if (tradeOrders.askOrderList == null) ArrayList() else tradeOrders.askOrderList
-                        var bidTradeOrderList: List<TradeOrder?>? = tradeOrders.bidOrderList
-                        if (bidTradeOrderList != null && bidTradeOrderList.isNotEmpty()) {
-                            val bidTradeOrderListAfterFilter = ArrayList<TradeOrder>()
-                            for (tradeOrder in bidTradeOrderList) {
-                                //过滤出委托量>0的数据
-                                if (tradeOrder != null && tradeOrder.exchangeAmount > 0 && TextUtils.equals(currentPairStatus.pair, tradeOrder.pair)) {
-                                    bidTradeOrderListAfterFilter.add(tradeOrder)
-                                }
+                    tradeOrders.bidOrderList =
+                        if (tradeOrders.bidOrderList == null) ArrayList() else tradeOrders.bidOrderList
+                    tradeOrders.askOrderList =
+                        if (tradeOrders.askOrderList == null) ArrayList() else tradeOrders.askOrderList
+                    var bidTradeOrderList: List<TradeOrder?>? = tradeOrders.bidOrderList
+                    if (bidTradeOrderList != null && bidTradeOrderList.isNotEmpty()) {
+                        val bidTradeOrderListAfterFilter = ArrayList<TradeOrder>()
+                        for (tradeOrder in bidTradeOrderList) {
+                            //过滤出委托量>0的数据
+                            if (tradeOrder != null && tradeOrder.exchangeAmount > 0 && TextUtils.equals(
+                                    currentPairStatus.pair,
+                                    tradeOrder.pair
+                                )
+                            ) {
+                                bidTradeOrderListAfterFilter.add(tradeOrder)
                             }
-                            //按照价格，精度和最大数量进行合并,
-                            bidTradeOrderList = SocketUtil.mergeQuotationOrder(bidTradeOrderListAfterFilter, currentPairStatus.pair, "BID", currentPairStatus.precision, bidMax)
-                            bidTradeOrderList = bidTradeOrderList ?: ArrayList()
-                            Collections.sort(bidTradeOrderList, TradeOrder.COMPARATOR_DOWN)
                         }
-                        var askTradeOrderList: List<TradeOrder?>? = tradeOrders.askOrderList
-                        if (askTradeOrderList != null && askTradeOrderList.isNotEmpty()) {
-                            val askTradeOrderListAfterFilter = ArrayList<TradeOrder>()
-                            for (tradeOrder in askTradeOrderList) {
-                                if (tradeOrder != null && tradeOrder.exchangeAmount > 0 && TextUtils.equals(currentPairStatus.pair, tradeOrder.pair)) {
-                                    askTradeOrderListAfterFilter.add(tradeOrder)
-                                }
+                        //按照价格，精度和最大数量进行合并,
+                        bidTradeOrderList = SocketUtil.mergeQuotationOrder(
+                            bidTradeOrderListAfterFilter,
+                            currentPairStatus.pair,
+                            "BID",
+                            currentPairStatus.precision,
+                            bidMax
+                        )
+                        bidTradeOrderList = bidTradeOrderList ?: ArrayList()
+                        Collections.sort(bidTradeOrderList, TradeOrder.COMPARATOR_DOWN)
+                    }
+                    var askTradeOrderList: List<TradeOrder?>? = tradeOrders.askOrderList
+                    if (askTradeOrderList != null && askTradeOrderList.isNotEmpty()) {
+                        val askTradeOrderListAfterFilter = ArrayList<TradeOrder>()
+                        for (tradeOrder in askTradeOrderList) {
+                            if (tradeOrder != null && tradeOrder.exchangeAmount > 0 && TextUtils.equals(
+                                    currentPairStatus.pair,
+                                    tradeOrder.pair
+                                )
+                            ) {
+                                askTradeOrderListAfterFilter.add(tradeOrder)
                             }
-                            askTradeOrderList = SocketUtil.mergeQuotationOrder(askTradeOrderListAfterFilter, currentPairStatus.pair, "ASK", currentPairStatus.precision, askMax)
-                            askTradeOrderList = askTradeOrderList ?: ArrayList()
-                            Collections.sort(askTradeOrderList, TradeOrder.COMPARATOR_UP)
                         }
-                        val firstBidTrad = CommonUtil.getItemFromList(bidTradeOrderList, 0)
-                        val firstBidTradPrice = if (firstBidTrad == null) null else CommonUtil.parseBigDecimal(firstBidTrad.priceString)
-                        val firstAskTrad = CommonUtil.getItemFromList(askTradeOrderList, 0)
-                        val firstAskTradPrice = if (firstAskTrad == null) null else CommonUtil.parseBigDecimal(firstAskTrad.priceString)
-                        //如果买单价格大于等于卖单价格，说明数据异常，重新订阅socket挂单
-                        val isError = firstBidTradPrice != null && firstAskTradPrice != null && firstBidTradPrice >= firstAskTradPrice
-                        if (isError) {
-                            SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ORDER_RELOAD)
-                            return Observable.empty()
-                        }
-                        onTransactionModelListener?.onTradeOrder(pair, bidTradeOrderList, askTradeOrderList)
+                        askTradeOrderList = SocketUtil.mergeQuotationOrder(
+                            askTradeOrderListAfterFilter,
+                            currentPairStatus.pair,
+                            "ASK",
+                            currentPairStatus.precision,
+                            askMax
+                        )
+                        askTradeOrderList = askTradeOrderList ?: ArrayList()
+                        Collections.sort(askTradeOrderList, TradeOrder.COMPARATOR_UP)
+                    }
+                    val firstBidTrad = CommonUtil.getItemFromList(bidTradeOrderList, 0)
+                    val firstBidTradPrice =
+                        if (firstBidTrad == null) null else CommonUtil.parseBigDecimal(firstBidTrad.priceString)
+                    val firstAskTrad = CommonUtil.getItemFromList(askTradeOrderList, 0)
+                    val firstAskTradPrice =
+                        if (firstAskTrad == null) null else CommonUtil.parseBigDecimal(firstAskTrad.priceString)
+                    //如果买单价格大于等于卖单价格，说明数据异常，重新订阅socket挂单
+                    val isError =
+                        firstBidTradPrice != null && firstAskTradPrice != null && firstBidTradPrice >= firstAskTradPrice
+                    if (isError) {
+                        SocketUtil.sendSocketCommandBroadcast(
+                            context,
+                            SocketUtil.COMMAND_ORDER_RELOAD
+                        )
                         return Observable.empty()
                     }
+                    onTransactionModelListener?.onTradeOrder(
+                        pair,
+                        bidTradeOrderList,
+                        askTradeOrderList
+                    )
+                    return Observable.empty()
+                }
 
-                })
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            })
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
-    fun getCurrentPairOrderTypeList():ArrayList<String?>?{
+    fun getCurrentPairOrderTypeList(): ArrayList<String?>? {
         return currentPairStatus.getSupportOrderTypeList()
     }
 
-    fun getCurrentPairOrderType():String?{
-        if(currentPairStatus == null){
+    fun getCurrentPairOrderType(): String? {
+        if (currentPairStatus == null) {
             return currentPairStatus.getSupportOrderTypeList()?.get(0)
-        }else{
+        } else {
             return currentOrderType
         }
     }
-    fun setCurrentPairorderType(type:String?){
+
+    fun setCurrentPairorderType(type: String?) {
         currentOrderType = type
     }
 
     fun getCurrentPairStatus(pair: String?) {
         currentPairStatus.pair = (pair)
         initPairCoinSet()
-        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, pair)
+        val pairStatus: PairStatus? =
+            SocketDataContainer.getPairStatusSync(context, ConstData.PairStatusType.SPOT, pair)
         if (pairStatus != null) {
             currentPairStatus = pairStatus
             initPairCoinSet()
@@ -447,25 +501,14 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     }
 
     private fun getLastPair(): String? {
-        if (tabType == ConstData.TAB_LEVER) {
-            var pair = CookieUtil.getCurrentPairLever(context)
-            if (pair == null) {
-                val allPair = SocketDataContainer.getAllLeverPair(context);
-                if (allPair != null) {
-                    pair = CommonUtil.getItemFromList(allPair, 0)
-                }
+        var pair = CookieUtil.getCurrentPair(context)
+        if (pair == null) {
+            val allPair = SocketDataContainer.getAllPair(context, ConstData.PairStatusType.SPOT)
+            if (allPair != null) {
+                pair = CommonUtil.getItemFromList(allPair, 0)
             }
-            return pair
-        } else {
-            var pair = CookieUtil.getCurrentPair(context)
-            if (pair == null) {
-                val allPair = SocketDataContainer.getAllPair(context)
-                if (allPair != null) {
-                    pair = CommonUtil.getItemFromList(allPair, 0)
-                }
-            }
-            return pair
         }
+        return pair
     }
 
     fun setTabType(tabType: Int) {
@@ -478,7 +521,10 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
             return
         }
         currentPairStatus.currentPrice = (pairStatus.currentPrice)
-        currentPairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, context.getString(R.string.number_default))
+        currentPairStatus.setCurrentPriceCNY(
+            pairStatus.currentPriceCNY,
+            context.getString(R.string.number_default)
+        )
         currentPairStatus.maxPrice = (pairStatus.maxPrice)
         currentPairStatus.minPrice = (pairStatus.minPrice)
         currentPairStatus.priceChangeSinceToday = (pairStatus.priceChangeSinceToday)
@@ -491,39 +537,58 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
     /**
      * 获取当前交易对深度
      */
-    fun getCurrentPairDepth(level:Int){
-        TradeApiServiceHelper.getTradeOrderDepth(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultData<TradeOrderDepth?>?>() {
-            override fun callback(returnData: HttpRequestResultData<TradeOrderDepth?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    tradeOrderDepthPair = returnData.data?.let { SocketDataContainer.parseOrderDepthData(it) }
-                    singleOrderDepthList = tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
-                    getAllOrderFiex()
+    fun getCurrentPairDepth(level: Int) {
+        TradeApiServiceHelper.getTradeOrderDepth(
+            context,
+            level,
+            currentPairStatus.pair,
+            false,
+            object : Callback<HttpRequestResultData<TradeOrderDepth?>?>() {
+                override fun callback(returnData: HttpRequestResultData<TradeOrderDepth?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        tradeOrderDepthPair = returnData.data?.let {
+                            SocketDataContainer.parseOrderDepthData(
+                                context,
+                                ConstData.DEPTH_SPOT_TYPE,
+                                it
+                            )
+                        }
+                        singleOrderDepthList =
+                            tradeOrderDepthPair?.let { SocketDataContainer.parseOrderDepthToList(it) }!!
+                        getAllOrderFiex()
+                    }
                 }
-            }
-            override fun error(type: Int, error: Any?) {
-            }
-        })
+
+                override fun error(type: Int, error: Any?) {
+                }
+            })
     }
 
     /**
      * 获取当前交易对成交列表
      */
-    fun getCurrentPairDeal(level:Int){
-        TradeApiServiceHelper.getTradeOrderDeal(context,level,currentPairStatus.pair,false,object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
-            override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    var dealList = returnData.data
-                    var recentDeal = CommonUtil.getItemFromList(dealList, 0)
-                    onTransactionModelListener?.run {
-                        if (recentDeal != null && currentPairStatus.pair != null) {
-                            onTransactionModelListener?.onPairDeal(recentDeal)
+    fun getCurrentPairDeal(level: Int) {
+        TradeApiServiceHelper.getTradeOrderDeal(
+            context,
+            level,
+            currentPairStatus.pair,
+            false,
+            object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
+                override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        var dealList = returnData.data
+                        var recentDeal = CommonUtil.getItemFromList(dealList, 0)
+                        onTransactionModelListener?.run {
+                            if (recentDeal != null && currentPairStatus.pair != null) {
+                                onTransactionModelListener?.onPairDeal(recentDeal)
+                            }
                         }
                     }
                 }
-            }
-            override fun error(type: Int, error: Any?) {
-            }
-        })
+
+                override fun error(type: Int, error: Any?) {
+                }
+            })
     }
 
 
@@ -531,115 +596,127 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
      * 获取用户资产
      *
      */
-    fun getCurrentUserBalance(balanceType:ConstData.BalanceType?){
-        onTransactionModelListener?.getUserBalanceCallback()?.let{
-            WalletApiServiceHelper.getUserBalanceReal(context, false, object : Callback<UserBalanceWarpper?>() {
-                override fun callback(balances: UserBalanceWarpper?) {
-                    var buyBalance: UserBalance? = null
-                    var sellBalance: UserBalance? = null
-                    if (balances != null) {
-                        var balanceList:ArrayList<UserBalance?>? = null
-                        when(balanceType){
-                            ConstData.BalanceType.SPOT ->{
-                                balanceList = balances?.spotBalance
+    fun getCurrentUserBalance(balanceType: ConstData.BalanceType?) {
+        onTransactionModelListener?.getUserBalanceCallback()?.let {
+            WalletApiServiceHelper.getUserBalanceReal(
+                context,
+                false,
+                object : Callback<UserBalanceWarpper?>() {
+                    override fun callback(balances: UserBalanceWarpper?) {
+                        var buyBalance: UserBalance? = null
+                        var sellBalance: UserBalance? = null
+                        if (balances != null) {
+                            var balanceList: ArrayList<UserBalance?>? = null
+                            when (balanceType) {
+                                ConstData.BalanceType.SPOT -> {
+                                    balanceList = balances?.spotBalance
+                                }
+                                ConstData.BalanceType.CONTRACT -> {
+                                    balanceList = balances?.tigerBalance
+                                }
                             }
-                            ConstData.BalanceType.CONTRACT ->{
-                                balanceList = balances?.tigerBalance
+                            if (balanceList != null) {
+                                for (balance in balanceList) {
+                                    val pairCoinType = currentPairStatus.name
+                                    val pairEstimatedCoinType = currentPairStatus.setName
+                                    if (TextUtils.equals(pairCoinType, balance?.coin)) {
+                                        buyBalance = balance
+                                    }
+                                    if (TextUtils.equals(pairEstimatedCoinType, balance?.coin)) {
+                                        sellBalance = balance
+                                    }
+                                    if (buyBalance != null && sellBalance != null) {
+                                        break
+                                    }
+                                }
                             }
                         }
-                        if (balanceList != null) {
-                            for (balance in balanceList) {
-                                val pairCoinType = currentPairStatus.name
-                                val pairEstimatedCoinType = currentPairStatus.setName
-                                if (TextUtils.equals(pairCoinType, balance?.coin)) {
-                                    buyBalance = balance
-                                }
-                                if (TextUtils.equals(pairEstimatedCoinType, balance?.coin)) {
-                                    sellBalance = balance
-                                }
-                                if (buyBalance != null && sellBalance != null) {
-                                    break
-                                }
-                            }
-                        }
+                        it.callback(Pair(buyBalance, sellBalance))
                     }
-                    it.callback(Pair(buyBalance, sellBalance))
-                }
-                override fun error(type: Int, error: Any?) {
 
-                }
-            },object :Callback<Any?>(){
-                override fun error(type: Int, error: Any?) {
-                    it.error(type, error)
-                }
-                override fun callback(returnData: Any?) {
-                }
-            })
+                    override fun error(type: Int, error: Any?) {
+
+                    }
+                },
+                object : Callback<Any?>() {
+                    override fun error(type: Int, error: Any?) {
+                        it.error(type, error)
+                    }
+
+                    override fun callback(returnData: Any?) {
+                    }
+                })
         }
     }
 
     fun getCurrentWallet(tabType: Int) {
         onTransactionModelListener?.getWalletCallback()?.let {
             if (tabType == ConstData.TAB_LEVER) {
-                WalletApiServiceHelper.getWalletLeverList(context, false, object : Callback<ArrayList<WalletLever?>?>() {
-                    override fun callback(wallets: ArrayList<WalletLever?>?) {
-                        var coinWallet: Wallet? = null
-                        var setWallet: Wallet? = null
-                        if (wallets != null) {
-                            val pair = currentPairStatus.pair
-                            for (wallet in wallets) {
-                                if (TextUtils.equals(pair, wallet?.pair)) {
-                                    coinWallet = wallet?.createCoinWallet()
-                                    setWallet = wallet?.createSetWallet()
-                                }
-                                if (coinWallet != null && setWallet != null) {
-                                    break
+                WalletApiServiceHelper.getWalletLeverList(
+                    context,
+                    false,
+                    object : Callback<ArrayList<WalletLever?>?>() {
+                        override fun callback(wallets: ArrayList<WalletLever?>?) {
+                            var coinWallet: Wallet? = null
+                            var setWallet: Wallet? = null
+                            if (wallets != null) {
+                                val pair = currentPairStatus.pair
+                                for (wallet in wallets) {
+                                    if (TextUtils.equals(pair, wallet?.pair)) {
+                                        coinWallet = wallet?.createCoinWallet()
+                                        setWallet = wallet?.createSetWallet()
+                                    }
+                                    if (coinWallet != null && setWallet != null) {
+                                        break
+                                    }
                                 }
                             }
+                            it.callback(Pair(coinWallet, setWallet))
                         }
-                        it.callback(Pair(coinWallet, setWallet))
-                    }
 
-                    override fun error(type: Int, error: Any?) {
-                        it.error(type, error)
-                    }
+                        override fun error(type: Int, error: Any?) {
+                            it.error(type, error)
+                        }
 
-                })
+                    })
             } else {
-                WalletApiServiceHelper.getWalletList(context, false, object : Callback<ArrayList<Wallet?>?>() {
-                    override fun callback(wallets: ArrayList<Wallet?>?) {
-                        var coinWallet: Wallet? = null
-                        var setWallet: Wallet? = null
-                        if (wallets != null) {
-                            val pairCoinType = currentPairStatus.name
-                            val pairEstimatedCoinType = currentPairStatus.setName
-                            for (wallet in wallets) {
-                                if (TextUtils.equals(pairCoinType, wallet?.coinType)) {
-                                    coinWallet = wallet
-                                }
-                                if (TextUtils.equals(pairEstimatedCoinType, wallet?.coinType)) {
-                                    setWallet = wallet
-                                }
-                                if (coinWallet != null && setWallet != null) {
-                                    break
+                WalletApiServiceHelper.getWalletList(
+                    context,
+                    false,
+                    object : Callback<ArrayList<Wallet?>?>() {
+                        override fun callback(wallets: ArrayList<Wallet?>?) {
+                            var coinWallet: Wallet? = null
+                            var setWallet: Wallet? = null
+                            if (wallets != null) {
+                                val pairCoinType = currentPairStatus.name
+                                val pairEstimatedCoinType = currentPairStatus.setName
+                                for (wallet in wallets) {
+                                    if (TextUtils.equals(pairCoinType, wallet?.coinType)) {
+                                        coinWallet = wallet
+                                    }
+                                    if (TextUtils.equals(pairEstimatedCoinType, wallet?.coinType)) {
+                                        setWallet = wallet
+                                    }
+                                    if (coinWallet != null && setWallet != null) {
+                                        break
+                                    }
                                 }
                             }
+                            it.callback(Pair(coinWallet, setWallet))
                         }
-                        it.callback(Pair(coinWallet, setWallet))
-                    }
 
-                    override fun error(type: Int, error: Any?) {
-                        it.error(type, error)
-                    }
+                        override fun error(type: Int, error: Any?) {
+                            it.error(type, error)
+                        }
 
-                })
+                    })
             }
         }
     }
 
     fun checkDearPair(): Observable<Boolean>? {
         return DearPairService.isDearPair(context, socketHandler, currentPairStatus.pair)
-                ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.compose(RxJavaHelper.observeOnMainThread())
     }
 
     fun toggleDearPair(isDearPair: Boolean): Observable<HttpRequestResultString?>? {
@@ -654,8 +731,8 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
 
     fun checkIntoChatRoom(): Observable<HttpRequestResultString?>? {
         return ApiManager.build(context).getService(UserApiService::class.java)
-                ?.checkChatEnable(currentPairStatus.name)
-                ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.checkChatEnable(currentPairStatus.name)
+            ?.compose(RxJavaHelper.observeOnMainThread())
     }
 
     fun getAmountLength(): Int {
@@ -686,11 +763,11 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         return currentPairStatus.precision
     }
 
-    fun getPrecisionDeep(precision:Int?):Deep?{
+    fun getPrecisionDeep(precision: Int?): Deep? {
         var deepList = currentPairStatus.supportingPrecisionList
         if (deepList != null) {
-            for(deep in deepList){
-                if(precision == deep.precision){
+            for (deep in deepList) {
+                if (precision == deep.precision) {
                     return deep
                 }
             }
@@ -718,18 +795,22 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
          * 用户挂单数据变化
          */
         fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?)
+
         /**
          * 用户余额变化
          */
         fun onUserBalanceChanged(userBalance: UserBalance?)
+
         /**
          * 交易对24小时行情变更
          */
-        fun onPairQuotation(pairQuo:PairQuotation)
+        fun onPairQuotation(pairQuo: PairQuotation)
+
         /**
          * 交易对初始化
          */
         fun onPairStatusInit(pairStatus: PairStatus?)
+
         /**
          * 用户信息数据变更
          */
@@ -738,12 +819,16 @@ class TransactionViewModel(context: Context, private val onTransactionModelListe
         /**
          * 挂单数据回调
          */
-        fun onTradeOrder(pair: String?, bidOrderList: List<TradeOrder?>?, askOrderList: List<TradeOrder?>?)
+        fun onTradeOrder(
+            pair: String?,
+            bidOrderList: List<TradeOrder?>?,
+            askOrderList: List<TradeOrder?>?
+        )
 
         /**
          * 当前交易对成交
          */
-        fun onPairDeal(value:PairDeal)
+        fun onPairDeal(value: PairDeal)
 
         fun onTradePairInfo(pairStatus: PairStatus?)
 

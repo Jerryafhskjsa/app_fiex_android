@@ -12,6 +12,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.c2c.C2COrder
 import com.black.base.util.ConstData
@@ -127,7 +128,7 @@ class C2COrderActivity : BaseActivity(), View.OnClickListener, QRefreshLayout.On
     }
 
     private fun getC2COrderList(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2COrderList(this, isShowLoading, null, null, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<C2COrder?>?>?>() {
+        C2CApiServiceHelper.getC2COrderList(this, isShowLoading, null, null, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<C2COrder?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 binding?.refreshLayout?.setRefreshing(false)
                 binding?.refreshLayout?.setLoading(false)

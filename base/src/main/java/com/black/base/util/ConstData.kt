@@ -11,6 +11,23 @@ object ConstData {
         CONTRACT
     }
 
+    //pairStatus类型
+    enum class PairStatusType{
+        SPOT,//现货
+        SPOT_DEAR,//现货自选
+        FUTURE_U,//U本位
+        FUTURE_COIN,//币本位
+        FUTURE_ALL,//合约所有
+        FUTURE_DEAR//合约自选
+    }
+
+    const val DEPTH_SPOT_TYPE = 0
+    const val DEPTH_FUTURE_TYPE = 1
+
+    const val CONTRACT_REC_HOLD_AMOUNT = 0
+    const val CONTRACT_REC_WITH_LIMIE = 1
+    const val CONTRACT_REC_CURRENT = 2
+
     const val USER_VERIFY_NO = "0"
     const val USER_VERIFY_ED = "1"
     const val USER_VERIFY_ING = "2"
@@ -68,11 +85,6 @@ object ConstData {
     const val AUTHENTICATE_CODE_GOOGLE = -10023
     const val AUTHENTICATE_CODE_GOOGLE_OR_PHONE = -10024
 
-    //认证类型code
-    const val AUTHENTICATE_CODE_MAIL = -10021
-    const val AUTHENTICATE_CODE_PHONE = -10022
-    const val AUTHENTICATE_CODE_GOOGLE = -10023
-    const val AUTHENTICATE_CODE_GOOGLE_OR_PHONE = -10024
 
     //认证类型
     const val AUTHENTICATE_TYPE_NONE = 0
@@ -124,6 +136,8 @@ object ConstData {
     const val GESTURE_PASSWORD = "gesture_password"
     const val GESTURE_PASSWORD_FAILED_COUNT = "gesture_password_failed_count"
     const val CURRENT_PAIR = "current_pair"
+    const val CURRENT_FUTURE_U_PAIR = "current_future_u_pair"
+    const val CURRENT_FUTURE_U_PAIR_OBJ = "current_future_u_pair_obj"
     const val CURRENT_PAIR_LEVER = "current_pair_lever"
     const val REQUEST_CAMERA = "request_camera"
     const val REQUEST_STORAGE = "request_storage"
@@ -140,6 +154,7 @@ object ConstData {
     const val PAIR_SEARCH_HISTORY = "pair_search_history"
     const val COIN_SEARCH_HISTORY = "coin_search_history"
     const val LEVEL_TYPE = "level_type"
+    const val DEAR_PAIR_SP = "spot_dear_pair_sp"
     /*----------Pref KEys-------*/
 
     /*----------intent KEys-------*/
@@ -190,6 +205,7 @@ object ConstData {
     const val NEWS = "news"
     const val ADD_USER = "add_user"
     const val IDENTITY_NO = "identity_no"
+    const val BIRTH = "birth"
     const val TRADE_ORDER = "trade_order"
     const val AMOUNT_PRECISION = "amount_precision"
     const val COIN_INFO = "coin_info"

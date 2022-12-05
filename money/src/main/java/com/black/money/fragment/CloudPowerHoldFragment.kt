@@ -12,6 +12,7 @@ import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.money.CloudPowerHoldRecord
 import com.black.base.util.FryingUtil
 import com.black.lib.refresh.QRefreshLayout
@@ -79,8 +80,8 @@ class CloudPowerHoldFragment : BaseFragment(), QRefreshLayout.OnRefreshListener,
     }
 
     private fun getCloudPowerHoldRecord(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getCloudPowerHoldRecord(mContext, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultDataList<CloudPowerHoldRecord?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getCloudPowerHoldRecord(mContext, isShowLoading, currentPage, 10, object : NormalCallback<HttpRequestResultDataList<CloudPowerHoldRecord?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showDataList(null)
             }

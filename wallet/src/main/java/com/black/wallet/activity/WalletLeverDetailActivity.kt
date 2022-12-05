@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.wallet.WalletLeverDetail
@@ -130,20 +131,10 @@ class WalletLeverDetailActivity : BaseActionBarActivity(), View.OnClickListener 
     override fun onResume() {
         super.onResume()
         getWalletLeverDetail(true)
-        if (leverDetailObserver == null) {
-            leverDetailObserver = createLeverDetailObserver()
-        }
-        SocketDataContainer.subscribeUserLeverDetailObservable(leverDetailObserver)
-        val bundle = Bundle()
-        bundle.putString(ConstData.PAIR, pair)
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_START, bundle)
     }
 
     override fun onStop() {
         super.onStop()
-        if (leverDetailObserver != null) {
-            SocketDataContainer.removeUserLeverDetailObservable(leverDetailObserver)
-        }
         SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_LEVER_DETAIL_FINISH)
     }
 
@@ -153,7 +144,7 @@ class WalletLeverDetailActivity : BaseActionBarActivity(), View.OnClickListener 
                 if (value != null) {
                     SocketDataContainer.computeWalletLeverDetailTotal(mContext, value)
                             ?.compose(RxJavaHelper.observeOnMainThread())
-                            ?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<WalletLeverDetail>() {
+                            ?.subscribe(HttpCallbackSimple(mContext, false, object : NormalCallback<WalletLeverDetail>(mContext!!) {
 
                                 override fun error(type: Int, error: Any?) {
                                 }
@@ -174,7 +165,7 @@ class WalletLeverDetailActivity : BaseActionBarActivity(), View.OnClickListener 
     private fun getWalletLeverDetail(force: Boolean) {
         SocketDataContainer.getWalletLeverDetailTotal(this, pair, force)
                 ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(this, false, object : NormalCallback<WalletLeverDetail>() {
+                ?.subscribe(HttpCallbackSimple(this, false, object : NormalCallback<WalletLeverDetail>(mContext!!) {
 
                     override fun callback(returnData: WalletLeverDetail?) {
                         if (returnData != null && TextUtils.equals(returnData.pair, pair)) {

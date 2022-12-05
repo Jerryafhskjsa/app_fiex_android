@@ -60,6 +60,14 @@ object UserApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context,callback))
     }
 
+    //获取futures-token
+    fun getFutureToken(context: Context,callback:Callback<HttpRequestResultString?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+            ?.getWsToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
     fun upload(context: Context?, key: String, file: File, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
@@ -83,7 +91,7 @@ object UserApiServiceHelper {
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData(key, file.name, requestFile)
         val description = RequestBody.create(MediaType.parse("multipart/form-data"), key)
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.uploadPublic(description, body)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -253,12 +261,12 @@ object UserApiServiceHelper {
     }
 
     //绑定身份证
-    fun bindIdentity(context: Context?, idType: Int, realName: String?, idNo: String?, idNoImg: String?, countryId: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun bindIdentity(context: Context?, idType: Int, realName: String?, idNo: String?, idNoImg: String?, countryId: String?, birthday: String?,callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
-                ?.bindIdentity(idType, realName, idNo, idNoImg, countryId)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+                ?.bindIdentity(idType, realName, idNo, idNoImg, countryId, birthday)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -268,7 +276,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.bindIdentityAI(idNo, score, idNoImg, realName, countyId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -365,7 +373,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getGoogleCode()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -375,7 +383,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.enableSecurity(telCountryCode, phone, phoneCode,newPhone,newPhoneCode, email, emailCode, googleCode, password, action)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -386,18 +394,26 @@ object UserApiServiceHelper {
     }
 
     fun bindPhone(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?,newPhone: String?, newPhoneCode: String?,email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, telCountryCode, phone, phoneCode, newPhone, newPhoneCode, email, emailCode, googleCode,null,"0", callback)
+        enableSecurity(context, telCountryCode, phone, phoneCode, null, null, email, emailCode, googleCode,null,"0", callback)
     }
 
-    fun bindEmail(context: Context?, phoneCode: String?, email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode,null, null, email, emailCode, googleCode, null, "4", callback)
+    fun bindEmail(context: Context?,  email: String?, emailCode: String? , callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, null,  null,null, null, email, emailCode, null, null, "4", callback)
     }
-    fun bindSafe(context: Context?, telCountryCode: String? , phoneCode: String? , emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        enableSecurity(context, null, null, phoneCode,null, null, null, emailCode, googleCode, null, "1", callback)
+    fun bindSafe(context: Context?, phone: String? , phoneCode: String? , email: String?, emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        enableSecurity(context, null, phone, phoneCode,null, null, email, emailCode, googleCode, null, "1", callback)
     }
 
 
-
+    fun phoneSecurity(context: Context?, telCountryCode: String?, phone: String?, phoneCode: String?, newPhoneCode: String?,  emailCode: String?, googleCode: String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+            ?.phoneSecurity(telCountryCode, phone, phoneCode,newPhoneCode,  emailCode, googleCode)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
     /**
      * 查询用户邀请的人数量
      */
@@ -468,7 +484,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.postUserInfoModify(avatarUrl, nickName)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -478,7 +494,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getPushSwitchList()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

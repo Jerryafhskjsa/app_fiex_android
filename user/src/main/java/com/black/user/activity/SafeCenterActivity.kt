@@ -14,6 +14,7 @@ import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindow
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -290,7 +291,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
     private fun changeSecurityStatus(action: String, target: Target) {
         var password = target.password
         password = RSAUtil.encryptDataByPublicKey(password)
-        UserApiServiceHelper.enableSecurity(mContext, target.poneCountyCode, target.phone, target.phoneCode,null,null, target.mail, target.mailCode, target.googleCode, password, action, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.enableSecurity(mContext, target.poneCountyCode, target.phone, target.phoneCode,null,null, target.mail, target.mailCode, target.googleCode, password, action, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 FryingUtil.showToast(mContext, error.toString())
                 binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
@@ -451,7 +452,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         val phoneCode = target.phoneCode
         val mailCode = target.mailCode
         val googleCode = target.googleCode
-        UserApiServiceHelper.removeMoneyPassword(mContext, moneyPassword, phoneCode, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.removeMoneyPassword(mContext, moneyPassword, phoneCode, mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 refreshMoneyPasswordViews()

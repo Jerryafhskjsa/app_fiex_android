@@ -14,6 +14,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.PaymentMethod
 import com.black.base.model.user.PaymentMethodType
 import com.black.base.util.ConstData
@@ -180,7 +181,7 @@ class PaymentMethodAddActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun doAddPaymentMethod() {
-        val callback: Callback<HttpRequestResultString?> = object : NormalCallback<HttpRequestResultString?>() {
+        val callback: Callback<HttpRequestResultString?> = object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, "添加成功")
@@ -209,7 +210,7 @@ class PaymentMethodAddActivity : BaseActionBarActivity(), View.OnClickListener {
                         null,
                         callback)
             } else {
-                UserApiServiceHelper.uploadPublic(this, "file", File(imagePath), object : NormalCallback<HttpRequestResultString?>() {
+                UserApiServiceHelper.uploadPublic(this, "file", File(imagePath), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
                             C2CApiServiceHelper.addPaymentMethod(mContext, userName, type,
@@ -234,7 +235,7 @@ class PaymentMethodAddActivity : BaseActionBarActivity(), View.OnClickListener {
                         null,
                         callback)
             } else {
-                UserApiServiceHelper.uploadPublic(this, "file", File(imagePath), object : NormalCallback<HttpRequestResultString?>() {
+                UserApiServiceHelper.uploadPublic(this, "file", File(imagePath), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
                             C2CApiServiceHelper.addPaymentMethod(mContext, userName, type,

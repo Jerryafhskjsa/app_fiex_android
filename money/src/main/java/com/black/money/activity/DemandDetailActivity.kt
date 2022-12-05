@@ -15,6 +15,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.listener.OnHandlerListener
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.filter.DemandRecordStatus
 import com.black.base.model.money.Demand
@@ -229,7 +230,7 @@ class DemandDetailActivity : BaseActionBarActivity(), View.OnClickListener, Obse
     }
 
     private fun refreshDemandData() {
-        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>() {
+        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -267,7 +268,7 @@ class DemandDetailActivity : BaseActionBarActivity(), View.OnClickListener, Obse
                     FryingUtil.showToast(mContext, getString(R.string.alert_c2c_create_amount_error, ""))
                     return
                 }
-                MoneyApiServiceHelper.postDemandChangeIn(mContext, demand.coinType, widget.amountText, object : NormalCallback<HttpRequestResultString?>() {
+                MoneyApiServiceHelper.postDemandChangeIn(mContext, demand.coinType, widget.amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             FryingUtil.showToast(mContext, "存入成功")

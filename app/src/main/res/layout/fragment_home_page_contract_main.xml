@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="homePageContractMainModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2"
+        android:orientation="vertical">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/contract_top_tab"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_tab_corner"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabIndicator="@drawable/bg_tab_indicator"
+            app:tabTextAppearance="@style/MainTabStyle"
+            app:tabIndicatorColor="#1571FF"
+            app:tabSelectedTextColor="#ffffff"
+            app:tabTextColor="#000000"
+            app:tabIndicatorHeight="32dp"
+            app:tabIndicatorGravity="center"
+            app:tabMode="fixed"
+            app:tabPaddingStart="0dp"
+            app:tabPaddingEnd="0dp">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/usdt_base" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/coin_base" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/simulation_base" />
+        </com.google.android.material.tabs.TabLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/contract_main_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:flipInterval="30"
+            android:persistentDrawingCache="animation" />
+    </LinearLayout>
+</layout>

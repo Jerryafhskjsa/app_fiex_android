@@ -3,18 +3,22 @@ package com.black.user.activity
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
+import com.black.user.R.string.copy_text_failed
 import com.black.user.databinding.ActivityGoogleGetKeyBinding
 import com.black.util.CommonUtil
 import com.google.zxing.WriterException
@@ -28,13 +32,30 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_google_get_key)
         binding?.btnCopy?.setOnClickListener(this)
+        binding?.newPasswordAgain?.addTextChangedListener(watcher)
         binding?.btnNext?.setOnClickListener(this)
         binding?.btnNext?.isEnabled = false
         googleKey
+        checkClickable()
     }
 
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
+    }
+
+    private val watcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            checkClickable()
+        }
+        override fun afterTextChanged(s: Editable?) {
+        }
+    }
+
+    private fun checkClickable() {
+        if (TextUtils.isEmpty(binding?.newPasswordAgain?.text.toString().trim { it <= ' ' })) {
+            binding?.btnNext?.isEnabled = false
+        }
     }
 
     override fun getTitleText(): String {
@@ -47,7 +68,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
             if (CommonUtil.copyText(mContext, binding?.qrcodeText?.text.toString().trim { it <= ' ' })) {
                 FryingUtil.showToast(mContext, getString(R.string.copy_text_success))
             } else {
-                FryingUtil.showToast(mContext, getString(R.string.copy_text_failed))
+                FryingUtil.showToast(mContext, getString(copy_text_failed))
             }
         } else if (i == R.id.btn_next) {
             BlackRouter.getInstance().build(RouterConstData.GOOGLE_BIND).go(this) { routeResult, _ ->
@@ -61,7 +82,7 @@ class GoogleGetKeyActivity : BaseActivity(), View.OnClickListener {
     //获取谷歌密钥
     private val googleKey: Unit
         get() {
-            UserApiServiceHelper.getGoogleKey(mContext, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getGoogleKey(mContext, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && !TextUtils.isEmpty(returnData.data)) {
                         //解析url参数，获取secret参数，即google密钥

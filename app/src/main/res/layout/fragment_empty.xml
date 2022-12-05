@@ -10,9 +10,10 @@
         android:layout_height="match_parent"
         android:background="@color/B2">
         <com.black.base.widget.SpanTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:textStyle="bold"
             android:textSize="@dimen/text_size_16"
             android:text="@string/please_waiting">

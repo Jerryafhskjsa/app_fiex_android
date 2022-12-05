@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.TradeApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.socket.TradeOrder
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -50,7 +51,7 @@ class EntrustDetailActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_cancel -> TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder!!.id, tradeOrder!!.pair, tradeOrder!!.direction, object : NormalCallback<HttpRequestResultString?>() {
+            R.id.btn_cancel -> TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder!!.id, tradeOrder!!.pair, tradeOrder!!.direction, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.trade_cancel_success))

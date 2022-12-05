@@ -36,7 +36,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         val i = view.id
-        if (i == R.id.version) {
+        if ( i == R.id.check_update){
             checkUpdate(false)
         }
     }

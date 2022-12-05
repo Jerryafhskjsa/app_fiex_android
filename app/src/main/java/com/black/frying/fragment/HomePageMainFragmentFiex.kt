@@ -22,6 +22,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.Money
+import com.black.base.model.NormalCallback
 import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
@@ -460,7 +461,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             chatFloatAdView!!.setOnClickListener(View.OnClickListener {
                 fryingHelper.checkUserAndDoing(Runnable {
                     viewModel!!.checkIntoMainChat()
-                            ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<ChatRoomEnable>() {
+                            ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<ChatRoomEnable>(mContext!!) {
                                 override fun callback(chatRoomEnable: ChatRoomEnable?) {
                                     intoPublicChat(chatRoomEnable!!)
                                 }
@@ -590,22 +591,61 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         override fun bindView(position: Int, holder: ViewHolder<ListItemPageMainStatusBinding>?) {
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
-            val color = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
+            val styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
+            if (styleChange == 1){
+            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) colorWin!! else colorLost!!
             val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
-            pairStatus?.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
+            pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
             binding?.gridIndicator?.setBackgroundColor(color)
             binding?.raiseDownBg?.background = bgWinLose
             binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
-            binding?.pairPrice?.text = pairStatus.currentPriceFormat
             binding?.pairPrice?.setTextColor(color)
             binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
             binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
-            binding?.pairPriceCny?.text = String.format("≈ %sCNY", pairStatus.currentPriceCNYFormat)
-            var kLineData = pairStatus?.kLineData
+                val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+                if (exChangeRates == 0)
+                {
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text = String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                }
+                else{
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text = String.format("%s USD", pairStatus.currentPriceFormat)
+                }
+            val kLineData = pairStatus.kLineData
             if(kLineData != null){
                 brokenLine = binding?.lineCart
-                var brokenLineData = getKineYdata(pairStatus?.kLineData)
+                val brokenLineData = getKineYdata(pairStatus.kLineData)
                 initBrokenline(brokenLine,brokenLineData,color)
+            }
+            }
+            if (styleChange == 0){
+                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) colorWin!! else colorLost!!
+                val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! < 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+                pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
+                binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.raiseDownBg?.background = bgWinLose
+                binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
+                binding?.pairPrice?.setTextColor(color)
+                binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
+                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+                binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+                if (exChangeRates == 0)
+                {
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text = String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                }
+                else{
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text = String.format("%s USD", pairStatus.currentPriceFormat)
+                }
+                val kLineData = pairStatus.kLineData
+                if(kLineData != null){
+                    brokenLine = binding?.lineCart
+                    val brokenLineData = getKineYdata(pairStatus.kLineData)
+                    initBrokenline(brokenLine,brokenLineData,color)
+                }
             }
         }
     }

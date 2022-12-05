@@ -11,7 +11,7 @@ class PairDescription {
     var whitePaperLink: String? = null
     var mechanism: String? = null
     var issuePrice: String? = null
-    var issueDate: Long? = null
+    var issueDate: String? = null
     var description: String? = null
     var teamDescription: String? = null
     var totalSupply: Double? = null

@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -190,7 +191,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userName, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(this, userName, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -235,7 +236,7 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
                 return
             }
         }*/
-        UserApiServiceHelper.bindEmail(mContext, null, userName, mailCode, null, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.bindEmail(mContext,  userName, mailCode,  object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))

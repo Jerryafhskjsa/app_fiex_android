@@ -316,90 +316,6 @@ object WalletApiServiceHelper {
                 }
     }
 
-    //get冲币地址
-    fun getExchangeAddress(context: Context?, coinType: String?,chainName:String?, callback: Callback<HttpRequestResultData<WalletAddress?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getExchangeAddress(coinType,chainName)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
-
-    //现货资产提币 资产币信息
-    fun getWithdrawInfo(context: Context?, coinType: String?, chainType: String?,
-                        callback: Callback<HttpRequestResultDataList<WalletWithdrawInfo?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWithdrawInfo(coinType, chainType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
-
-    //现货资产提币 资产币信息
-    fun getWithdrawInfo(context: Context?, coinType: String?, callback: Callback<HttpRequestResultDataList<WalletWithdrawInfo?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWithdrawInfo(coinType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
-
-    //现货资产提币申请
-    fun createWithdraw(context: Context?, coinType: String?, withdrawFee: String?, txTo: String?, amount: String?, memo: String?,
-                       password: String?, phoneCode: String?, emailCode: String?, googleCode: String?,
-                       chainType: String?, callback: Callback<HttpRequestResultString?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("coinType", coinType)
-        jsonObject.addProperty("withdrawFee", withdrawFee)
-        jsonObject.addProperty("txTo", txTo)
-        jsonObject.addProperty("amount", amount)
-        jsonObject.addProperty("memo", memo)
-        jsonObject.addProperty("password", password)
-        jsonObject.addProperty("phoneCode", phoneCode)
-        jsonObject.addProperty("emailCode", emailCode)
-        jsonObject.addProperty("googleCode", googleCode)
-        //        jsonObject.addProperty("moneyPassword", moneyPassword);
-        jsonObject.addProperty("chainType", chainType)
-        val rsaParam = jsonObject.toString() + "#" + System.currentTimeMillis()
-        val rsa = RSAUtil.encryptDataByPublicKey(rsaParam)
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.createWithdraw(rsa)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
-    }
-
-    //现货资产提币记录
-    fun getWithdrawRecord(context: Context?, coinType: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<FinancialRecord?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWithdrawRecord(coinType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
-
-    //现货资产冲币记录
-    fun getRechargeRecord(context: Context?, isShowLoading: Boolean, coinType: String?,
-                          callback: Callback<HttpRequestResultDataList<FinancialRecord?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getRechargeRecord(coinType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
-
     //现货资产提币 撤销
     fun cancelWithdraw(context: Context?, id: String?,
                        callback: Callback<HttpRequestResultString?>?) {
@@ -573,29 +489,7 @@ object WalletApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    //币下链列表
-    fun getLianListInCoin(context: Context?, isShowLoading: Boolean, coinType: String?, chainType: String?, callback: Callback<HttpRequestResultDataList<LianInCoinModel?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getChainAddress(coinType, chainType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
 
-    //综合账单列表
-    fun getFinanceList(context: Context?, isShowLoading: Boolean, page: Int,
-                       pageSize: Int, coinType: String?, txType: String?, startTime: String?, endTime: String?,
-                       callback: Callback<HttpRequestResultData<FinancialRecordModel?>?>?) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getFinanceList(page, pageSize, coinType, txType, startTime, endTime)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
 
     //提现地址列表
     fun getWalletAddressList(context: Context?,coinType: String?, callback: Callback<HttpRequestResultDataList<WalletWithdrawAddress?>?>?) {

@@ -13,6 +13,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.Wallet
@@ -103,8 +104,8 @@ class FinancialRechargeRecordFragment : BaseFragment(), OnItemClickListener, QRe
 
     //获取冲币记录
     private fun getFinancialRecordRechargeData(isShowLoading: Boolean) {
-        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, 0, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>() {
-            override fun error(type: Int, error: Any) {
+        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, 0, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showData(null)
             }
@@ -141,7 +142,7 @@ class FinancialRechargeRecordFragment : BaseFragment(), OnItemClickListener, QRe
 
     //撤销提币
     private fun cancelFinancialRecordWithdrawData(financialRecord: FinancialRecord?) {
-        WalletApiServiceHelper.cancelWithdraw(mContext, financialRecord?.id, object : NormalCallback<HttpRequestResultString?>() {
+        WalletApiServiceHelper.cancelWithdraw(mContext, financialRecord?.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.cancel_success))

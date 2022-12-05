@@ -45,7 +45,7 @@ object IMHelper {
 
                 override fun callback(userSig: String?) {
                     TUIKit.login(userId, userSig, object : IUIKitCallBack {
-                        override fun onError(module: String?, code: Int, desc: String?) {
+                        override fun onError(module: String?, errCode: Int, errMsg: String?) {
                             IS_LOGIN = false
                             callback.callback(false)
                         }

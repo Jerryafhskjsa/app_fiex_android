@@ -1,0 +1,5 @@
+D:/app_fiex_android/base/.cxx/Debug/1p4y1k1m/x86/CMakeFiles/edit_cache.dir
+D:/app_fiex_android/base/.cxx/Debug/1p4y1k1m/x86/CMakeFiles/rebuild_cache.dir
+D:/app_fiex_android/base/.cxx/Debug/1p4y1k1m/x86/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+D:/app_fiex_android/base/.cxx/Debug/1p4y1k1m/x86/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+D:/app_fiex_android/base/.cxx/Debug/1p4y1k1m/x86/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir

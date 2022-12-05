@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
@@ -175,7 +176,7 @@ class MoneyPasswordActivity : BaseActivity(), View.OnClickListener {
             if (getPhoneCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
@@ -198,7 +199,7 @@ class MoneyPasswordActivity : BaseActivity(), View.OnClickListener {
             if (getMailCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
@@ -233,7 +234,7 @@ class MoneyPasswordActivity : BaseActivity(), View.OnClickListener {
         password = RSAUtil.encryptDataByPublicKey(password)
         val phoneCode = binding?.phoneCode?.text.toString()
         val mailCode = binding?.mailCode?.text.toString()
-        val callback: Callback<HttpRequestResultString?> = object : NormalCallback<HttpRequestResultString?>() {
+        val callback: Callback<HttpRequestResultString?> = object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     onSuccess()

@@ -11,9 +11,7 @@ import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.QuotationSet
 import com.black.base.model.socket.KLineItem
 import com.black.base.model.socket.PairStatus
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
+import com.black.base.util.*
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AnalyticChart
@@ -320,19 +318,42 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
             return
         }
         //刷新交易对信息
-        binding!!.price.setText(pairStatus.currentPriceFormat)
-        binding!!.priceCny.setText(pairStatus.currentPriceCNYFormat)
+        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        if (exChangeRates == 0)
+        {
+            binding!!.price.setText(pairStatus.currentPriceFormat)
+            binding!!.priceCny.setText(pairStatus.currentPriceCNYFormat + "CNY")
+        }
+        else{
+            binding!!.price.setText(pairStatus.currentPriceFormat)
+            binding!!.priceCny.setText(pairStatus.currentPriceFormat + "USD")
+        }
         binding!!.percentage.setText(pairStatus.priceChangeSinceTodayDisplay)
+        var styleChange = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+        if(styleChange == 0){
         if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
             binding!!.price.setTextColor(colorT3)
             binding!!.priceCny.setTextColor(colorT3)
-        } else if (pairStatus.isDown) {
-            binding!!.price.setTextColor(colorT5)
-            binding!!.priceCny.setTextColor(colorT5)
-        } else {
+        } else if (pairStatus.priceChangeSinceToday!! > 0 ) {
             binding!!.price.setTextColor(colorT7)
             binding!!.priceCny.setTextColor(colorT7)
+        } else {
+            binding!!.price.setTextColor(colorT5)
+            binding!!.priceCny.setTextColor(colorT5)
         }
+        }
+        if (styleChange == 1){
+                if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
+                    binding!!.price.setTextColor(colorT3)
+                    binding!!.priceCny.setTextColor(colorT3)
+                } else if (pairStatus.priceChangeSinceToday!! < 0 ) {
+                    binding!!.price.setTextColor(colorT7)
+                    binding!!.priceCny.setTextColor(colorT7)
+                } else {
+                    binding!!.price.setTextColor(colorT5)
+                    binding!!.priceCny.setTextColor(colorT5)
+                }
+            }
         binding!!.high.setText(pairStatus.maxPriceFormat)
         binding!!.low.setText(pairStatus.minPriceFormat)
         binding!!.volumeH24.setText(pairStatus.totalAmountFromat)

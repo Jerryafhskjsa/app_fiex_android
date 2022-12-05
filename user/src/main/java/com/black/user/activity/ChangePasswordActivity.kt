@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
@@ -193,7 +194,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
             if (getPhoneCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
@@ -216,7 +217,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
             if (getMailCodeLocked) {
                 return
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>() {
+            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
@@ -284,7 +285,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
         password = RSAUtil.encryptDataByPublicKey(password)
         newPassword = RSAUtil.encryptDataByPublicKey(newPassword)
 
-        UserApiServiceHelper.changePassword(mContext, password, newPassword, phoneCode, googleCode, mailCode, object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.changePassword(mContext, password, newPassword, phoneCode, googleCode, mailCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //密码修改成功，使用新密码登录
                     onGetTokenSuccess()

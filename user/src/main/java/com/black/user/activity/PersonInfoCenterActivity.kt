@@ -2,6 +2,7 @@ package com.black.user.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ImageSelectorHelper
@@ -23,6 +25,9 @@ import com.black.user.databinding.ActivityPersonInfoCenterBinding
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.Size
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import skin.support.content.res.SkinCompatResources
 import java.io.File
 
@@ -75,14 +80,14 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
             val userIdHeader = IMHelper.getUserIdHeader(mContext)
             IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
                 override fun callback(returnData: Boolean?) {
-                    if (returnData != null && returnData) {
+                    if (returnData != null) {
                         imageSelectorHelper!!.showSelectPhoto(mContext as Activity, mContext as PermissionHelper, Size(480, 480))
                     } else {
                         FryingUtil.showToast(mContext, "初始化失败，稍后重试！")
                     }
                 }
 
-                override fun error(type: Int, error: Any) {}
+                override fun error(type: Int, error: Any) { FryingUtil.showToast(mContext, "头像同步失败")}
             })
         } else if (i == R.id.nick_name_layout) {
             BlackRouter.getInstance().build(RouterConstData.NICK_NAME_CHANGE).go(mContext)
@@ -112,18 +117,20 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
     override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
-        refreshView()
-        getUserInfo(object : NormalCallback<UserInfo?>() {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-                finish()
-            }
-
-            override fun callback(returnData: UserInfo?) {
-                userInfo = returnData
-                refreshView()
-            }
-        })
+        if(userInfo != null){
+            refreshView()
+        }else{
+            getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
+                    finish()
+                }
+                override fun callback(returnData: UserInfo?) {
+                    userInfo = returnData
+                    refreshView()
+                }
+            })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -132,18 +139,24 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
     }
 
     override fun onImageGet(path: String?) {
-        UserApiServiceHelper.uploadPublic(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>() {
+        UserApiServiceHelper.uploadPublic(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
-                    val avatarUrl = UrlConfig.getHost(mContext) + returnData.data
-                    UserApiServiceHelper.modifyUserInfo(mContext, avatarUrl, null, object : NormalCallback<HttpRequestResultString?>() {
+                    var avatarUrl:String? = returnData.data
+                    if(avatarUrl != null){
+                        if (!avatarUrl.startsWith("https")){
+                            avatarUrl = UrlConfig.getHost(mContext) + avatarUrl
+                        }
+                    }
+                    UserApiServiceHelper.modifyUserInfo(mContext, avatarUrl, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                         override fun callback(modifyResult: HttpRequestResultString?) {
                             if (modifyResult != null && modifyResult.code == HttpRequestResult.SUCCESS) {
-                                val bitmap = ImageSelectorHelper.getImageAndSave(path, currentImagePath)
-                                binding?.iconAvatar?.setImageBitmap(bitmap)
-                                getUserInfo(object : NormalCallback<UserInfo?>() {
+//                                val bitmap = ImageSelectorHelper.getImageAndSave(path, currentImagePath)
+//                                binding?.iconAvatar?.setImageBitmap(bitmap)
+                                getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
                                     override fun callback(returnData: UserInfo?) {
                                         userInfo = returnData
+                                        FryingUtil.showToast(mContext, getString(R.string.image_success))
                                         refreshView()
                                     }
                                 })
@@ -152,15 +165,15 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
                             }
                         }
                     })
-                    IMHelper.updateAvatar(avatarUrl, object : Callback<Boolean?>() {
-                        override fun error(type: Int, error: Any) {
-                            FryingUtil.showToast(mContext, "头像同步失败")
-                        }
-
-                        override fun callback(returnData: Boolean?) {
-                            FryingUtil.showToast(mContext, "头像同步成功")
-                        }
-                    })
+//                    IMHelper.updateAvatar(avatarUrl, object : Callback<Boolean?>() {
+//                        override fun error(type: Int, error: Any) {
+//                            FryingUtil.showToast(mContext, "头像同步失败")
+//                        }
+//
+//                        override fun callback(returnData: Boolean?) {
+//                            FryingUtil.showToast(mContext, "头像同步成功")
+//                        }
+//                    })
                 } else {
                     FryingUtil.showToast(mContext, returnData?.msg)
                 }
@@ -172,10 +185,17 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
         get() = CommonUtil.getCatchFilePath(this) + File.separator + ConstData.TEMP_IMG_NAME_01
 
     private fun refreshView() {
-        binding?.nickName?.text = if (userInfo == null || userInfo!!.nickname == null) "" else userInfo!!.nickname
-        imageLoader!!.loadImage(binding?.iconAvatar, if (userInfo == null) null else userInfo!!.headPortrait, R.drawable.icon_avatar, true)
         if (userInfo == null) {
             return
+        }
+        binding?.nickName?.text = if (userInfo == null || userInfo!!.nickname == null) "" else userInfo!!.nickname
+        if(userInfo?.headPortrait != null){
+            binding?.iconAvatar?.let {
+                Glide.with(mContext)
+                    .load(Uri.parse(userInfo?.headPortrait!!))
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
+            }
         }
         if (TextUtils.equals(userInfo!!.idNoStatus, "1")) {
             //已认证

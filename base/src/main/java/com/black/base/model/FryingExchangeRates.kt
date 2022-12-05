@@ -1,7 +1,6 @@
 package com.black.base.model
 
-
-class FryingExchangeRates(rateCode: Int, rateText: String) {
+class FryingExchangeRates ( rateCode: Int, rateText: String) {
     companion object {
         const val cny = 0
         const val usd = 1
@@ -9,6 +8,7 @@ class FryingExchangeRates(rateCode: Int, rateText: String) {
         const val krw = 3
         const val vnd = 4
     }
+
 
     var rateCode
             : Int
@@ -28,13 +28,13 @@ class FryingExchangeRates(rateCode: Int, rateText: String) {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || rateCode == null || !isValid) {
+        if (other == null || !isValid) {
             return false
         }
         if (other is FryingExchangeRates) {
-            return if (other.rateCode == null || !other.isValid) {
+            return if ( !other.isValid) {
                 false
-            } else rateCode == other.rateCode && rateText == other.rateText
+            } else  rateCode == other.rateCode && rateText == other.rateText
         }
         return false
     }

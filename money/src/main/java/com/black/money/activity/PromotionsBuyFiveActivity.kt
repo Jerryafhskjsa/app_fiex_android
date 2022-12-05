@@ -13,6 +13,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.MoneyApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.money.PromotionsBuyFive
 import com.black.base.util.ConstData
@@ -116,7 +117,7 @@ class PromotionsBuyFiveActivity : BaseActivity(), View.OnClickListener, QRefresh
     }
 
     private fun getPromotionsBuy(isShowLoading: Boolean) {
-        MoneyApiServiceHelper.getPromotionsBuyFiveList(this, 1, currentPage, 8, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsBuyFive?>?>?>() {
+        MoneyApiServiceHelper.getPromotionsBuyFiveList(this, 1, currentPage, 8, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<PromotionsBuyFive?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)

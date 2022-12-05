@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.CommunityApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
 import com.black.base.model.community.RedPacketDetail
 import com.black.base.model.community.RedPacketPub
 import com.black.base.util.ConstData
@@ -64,7 +65,7 @@ class RedPacketDetailActivity : BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {}
     private val redPacketDetail: Unit
         get() {
-            CommunityApiServiceHelper.getRedPacketDetail(this, redPacketPub!!.id, object : NormalCallback<HttpRequestResultData<RedPacketDetail?>?>() {
+            CommunityApiServiceHelper.getRedPacketDetail(this, redPacketPub!!.id, object : NormalCallback<HttpRequestResultData<RedPacketDetail?>?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultData<RedPacketDetail?>?) {
                     if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                         showRedPacketDetail(returnData.data)

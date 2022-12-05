@@ -13,6 +13,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -30,10 +31,7 @@ import com.black.base.BaseApplication
 import com.black.base.R
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.FryingSingleToast
-import com.black.base.model.HttpRequestResultBase
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.ProTokenResult
+import com.black.base.model.*
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.LoadingDialog
@@ -49,7 +47,10 @@ import com.black.util.CommonUtil
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.Request
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.File
 import java.util.*
 import kotlin.math.abs
@@ -383,7 +384,7 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
         if (TextUtils.isEmpty(token)) {
             return
         }
-        UserApiServiceHelper.getUserInfo(mContext, isShowLoading, object : NormalCallback<HttpRequestResultData<UserInfo?>?>() {
+        UserApiServiceHelper.getUserInfo(mContext, isShowLoading, object : NormalCallback<HttpRequestResultData<UserInfo?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error!!)
                 callBack?.error(0, error)
@@ -602,15 +603,23 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
     //token过期的处理
     open fun onTokenError(error: Any?) {
         if (BaseApplication.checkTokenError) {
-            BaseApplication.checkTokenError = false
             refreshToken(error)
+            BaseApplication.checkTokenError = false
         }
     }
 
     private fun refreshToken(error: Any?){
-        if(CookieUtil.getUserInfo(mContext) != null && error is Request){
-            var urlStr = error.url().toString()
-            if(urlStr.contains("/pro/")){
+        var path:String? = null
+        if(error is Request){
+            path = error?.url()?.url()?.path
+        }
+        if(CookieUtil.getUserInfo(mContext) != null && path != null){
+            if(path.contains("/uc/")){
+                HttpCookieUtil.deleteCookies(mContext)
+                CookieUtil.deleteUserInfo(mContext)
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }
+            if(path.contains("/pro/")){
                 UserApiServiceHelper.getProToken(mContext!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
                     override fun error(type: Int, error: Any?) {
                         if(type == ConstData.ERROR_TOKEN_INVALID){
@@ -636,6 +645,10 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
                                     if(result != null && result.code == HttpRequestResult.SUCCESS){
                                         var ticket: String? = result.data
                                         HttpCookieUtil.saveTicket(mContext,ticket)
+                                    }else{
+                                        HttpCookieUtil.deleteCookies(mContext)
+                                        CookieUtil.deleteUserInfo(mContext)
+                                        BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
                                     }
                                 }
                             })
@@ -648,6 +661,10 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
                             var proTokenExpiredTime =proTokenResult?.expireTime
                             HttpCookieUtil.saveProToken(mContext,proToken)
                             HttpCookieUtil.saveProTokenExpiredTime(mContext,proTokenExpiredTime.toString())
+                        }else{
+                            HttpCookieUtil.deleteCookies(mContext)
+                            CookieUtil.deleteUserInfo(mContext)
+                            BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
                         }
                     }
                 })
@@ -727,17 +744,17 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
         }
     }
 
-    protected abstract inner class NormalCallback<T> : Callback<T>() {
-        override fun error(type: Int, error: Any?) {
-            when (type) {
-                ConstData.ERROR_NORMAL -> FryingUtil.showToast(mContext, error.toString())
-                ConstData.ERROR_TOKEN_INVALID -> onTokenError(error)
-                ConstData.ERROR_UNKNOWN ->
-                    //根據情況處理，error 是返回的HttpRequestResultError
-                    if (error != null && error is HttpRequestResultBase) {
-                        FryingUtil.showToast(mContext, error.message)
-                    }
-            }
-        }
-    }
+//    protected abstract inner class NormalCallback<T> : Callback<T>() {
+//        override fun error(type: Int, error: Any?) {
+//            when (type) {
+//                ConstData.ERROR_NORMAL -> FryingUtil.showToast(mContext, error.toString())
+//                ConstData.ERROR_TOKEN_INVALID -> onTokenError(error)
+//                ConstData.ERROR_UNKNOWN ->
+//                    //根據情況處理，error 是返回的HttpRequestResultError
+//                    if (error != null && error is HttpRequestResultBase) {
+//                        FryingUtil.showToast(mContext, error.message)
+//                    }
+//            }
+//        }
+//    }
 }

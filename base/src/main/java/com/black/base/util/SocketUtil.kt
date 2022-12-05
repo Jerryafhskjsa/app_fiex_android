@@ -43,6 +43,13 @@ object SocketUtil {
     const val WS_PAIR_KLINE = "fiex_wsPairKline"
     const val WS_TICKETS = "fiex_wsTickets"
 
+    const val WS_FUTURE_SUB_TICKER = "sub_ticker"  //订阅24小时行情 ticker
+    const val WS_FUTURE_SUB_KLINE = "sub_kline"  //K线订阅
+    const val WS_FUTURE_SUB_AGG_TICKER = "sub_agg_ticker"  //订阅24小时聚合行情 aggTicker
+    const val WS_FUTURE_SUB_INDEX_PRICE = "sub_index_price"  //指数价格订阅
+    const val WS_FUTURE_SUB_MARK_PRICE = "sub_mark_price"  //标记价格订阅
+    const val WS_FUTURE_SUB_SYMBOL = "sub_symbol"  //订阅交易对
+
     const val ACTION_SOCKET_COMMAND = "com.bioko.exchange.socket.command"
     const val SOCKET_COMMAND = "socket_command"
     const val SOCKET_COMMAND_EXTRAS = "socket_command_extras"
@@ -69,15 +76,21 @@ object SocketUtil {
     const val COMMAND_ORDER_RELOAD = 20 //挂单重新加载
     const val COMMAND_LEVER_DETAIL_START = 21 //监听杠杆详情
     const val COMMAND_LEVER_DETAIL_FINISH = 22 //停止监听杠杆详情
+
     /***fiex***/
     const val COMMAND_REMOVE_SOCKET_LISTENER = 100//结束socket监听
     const val COMMAND_ADD_SOCKET_LISTENER = 101//开始socket监听
+    const val COMMAND_REFRESH_TOKEN = 102//refresh token
+    const val COMMAND_FUTURE_TICKERS_START = 103//开始监听合约24小时行情
+
     /***fiex***/
     //上次保存数据时间记录
     private val lastSaveTimeMap = SparseArray<Long>()
+
     //时间间隔内，只保存一次数据
     private const val SAVE_DELAY_TIME: Long = 0
     private val gson = Gson()
+
     /**
      * 获取当前交易对
      *
@@ -132,7 +145,10 @@ object SocketUtil {
                 if (pairStatus != null) {
                     val pair = pairStatus.pair
                     if (!TextUtils.isEmpty(pair)) {
-                        val cursor = helper?.rawQuery("select * from pairs_stats where pair = ?", arrayOf(pair))
+                        val cursor = helper?.rawQuery(
+                            "select * from pairs_stats where pair = ?",
+                            arrayOf(pair)
+                        )
                         val values = createPairStatusOrderContentValues(pairStatus)
                         if ((cursor?.count ?: 0) == 0) {
                             helper?.insert("pairs_stats", null, values)
@@ -172,7 +188,10 @@ object SocketUtil {
                             printError(e)
                         }
                         if (!TextUtils.isEmpty(pair)) {
-                            val cursor = helper?.rawQuery("select * from pairs_stats where pair = ?", arrayOf(pair))
+                            val cursor = helper?.rawQuery(
+                                "select * from pairs_stats where pair = ?",
+                                arrayOf(pair)
+                            )
                             val values = createPairStatusContentValues(jsonObject)
                             if ((cursor?.count ?: 0) == 0) {
                                 helper?.insert("pairs_stats", null, values)
@@ -192,7 +211,11 @@ object SocketUtil {
         return result
     }
 
-    fun savePairStatus(context: Context?, jsonArray: ArrayList<PairStatusNew?>?, deleteAll: Boolean): Boolean {
+    fun savePairStatus(
+        context: Context?,
+        jsonArray: ArrayList<PairStatusNew?>?,
+        deleteAll: Boolean
+    ): Boolean {
         var result = false
         val lastSaveTime = lastSaveTimeMap[SAVE_PAIR_STATUS]
         if (lastSaveTime == null || SystemClock.elapsedRealtime() - lastSaveTime > SAVE_DELAY_TIME) {
@@ -208,7 +231,10 @@ object SocketUtil {
                     if (pairStatusNew != null) {
                         val pair = pairStatusNew.s
                         if (!TextUtils.isEmpty(pair)) {
-                            val cursor = helper?.rawQuery("select * from pairs_stats where pair = ?", arrayOf(pair))
+                            val cursor = helper?.rawQuery(
+                                "select * from pairs_stats where pair = ?",
+                                arrayOf(pair)
+                            )
                             val values = pairStatusNew.contentValues
                             if ((cursor?.count ?: 0) == 0) {
                                 helper?.insert("pairs_stats", null, values)
@@ -236,20 +262,23 @@ object SocketUtil {
         val helper = FryingSQLiteHelper.getInstance(context!!)
         val db = helper?.readableDatabase
         db?.beginTransaction()
-        val cursor = helper?.rawQuery("select * from pairs_stats where pair like ?", arrayOf("%$key%"))
+        val cursor =
+            helper?.rawQuery("select * from pairs_stats where pair like ?", arrayOf("%$key%"))
         cursor?.let {
             while (cursor.moveToNext()) {
                 val pairStatus = PairStatus()
                 pairStatus.currentPrice = cursor.getDouble(cursor.getColumnIndex("currentPrice"))
                 //            pairStatus.currentPrice = cursor?.getDouble(cursor?.getColumnIndex("currentPrice"));
-                pairStatus.firstPriceToday = cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
+                pairStatus.firstPriceToday =
+                    cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
                 pairStatus.lastPrice = cursor.getDouble(cursor.getColumnIndex("lastPrice"))
                 pairStatus.maxPrice = cursor.getDouble(cursor.getColumnIndex("maxPrice"))
                 pairStatus.minPrice = cursor.getDouble(cursor.getColumnIndex("minPrice"))
                 //            pairStatus.pair = cursor?.getString(cursor?.getColumnIndex("pair"));
                 pairStatus.pair = cursor.getString(cursor.getColumnIndex("pair"))
                 //            pairStatus.priceChangeSinceToday = cursor?.getDouble(cursor?.getColumnIndex("priceChangeSinceToday"));
-                pairStatus.priceChangeSinceToday = cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
+                pairStatus.priceChangeSinceToday =
+                    cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
                 pairStatus.statDate = cursor.getLong(cursor.getColumnIndex("statDate"))
                 //            pairStatus.totalAmount = cursor?.getDouble(cursor?.getColumnIndex("totalAmount"));
                 pairStatus.totalAmount = cursor.getDouble(cursor.getColumnIndex("totalAmount"))
@@ -278,14 +307,16 @@ object SocketUtil {
                 cursor.moveToFirst()
                 pairStatus.currentPrice = cursor.getDouble(cursor.getColumnIndex("currentPrice"))
                 //            pairStatus.currentPrice = cursor?.getDouble(cursor?.getColumnIndex("currentPrice"));
-                pairStatus.firstPriceToday = cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
+                pairStatus.firstPriceToday =
+                    cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
                 pairStatus.lastPrice = cursor.getDouble(cursor.getColumnIndex("lastPrice"))
                 pairStatus.maxPrice = cursor.getDouble(cursor.getColumnIndex("maxPrice"))
                 pairStatus.minPrice = cursor.getDouble(cursor.getColumnIndex("minPrice"))
                 //            pairStatus.pair = cursor?.getString(cursor?.getColumnIndex("pair"));
                 pairStatus.pair = cursor.getString(cursor.getColumnIndex("pair"))
                 //            pairStatus.priceChangeSinceToday = cursor?.getDouble(cursor?.getColumnIndex("priceChangeSinceToday"));
-                pairStatus.priceChangeSinceToday = cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
+                pairStatus.priceChangeSinceToday =
+                    cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
                 pairStatus.statDate = cursor.getLong(cursor.getColumnIndex("statDate"))
                 //            pairStatus.totalAmount = cursor?.getDouble(cursor?.getColumnIndex("totalAmount"));
                 pairStatus.totalAmount = cursor.getDouble(cursor.getColumnIndex("totalAmount"))
@@ -299,7 +330,10 @@ object SocketUtil {
     }
 
     //指定刷新的交易对
-    fun getAllPairStatus(context: Context?, updatedPairs: ArrayList<String?>?): ArrayList<PairStatus> {
+    fun getAllPairStatus(
+        context: Context?,
+        updatedPairs: ArrayList<String?>?
+    ): ArrayList<PairStatus> {
         val result = ArrayList<PairStatus>()
         val helper = FryingSQLiteHelper.getInstance(context!!)
         val db = helper?.readableDatabase
@@ -323,14 +357,16 @@ object SocketUtil {
                 val pairStatus = PairStatus()
                 pairStatus.currentPrice = cursor.getDouble(cursor.getColumnIndex("currentPrice"))
                 //            pairStatus.currentPrice = cursor?.getDouble(cursor?.getColumnIndex("currentPrice"));
-                pairStatus.firstPriceToday = cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
+                pairStatus.firstPriceToday =
+                    cursor.getDouble(cursor.getColumnIndex("firstPriceToday"))
                 pairStatus.lastPrice = cursor.getDouble(cursor.getColumnIndex("lastPrice"))
                 pairStatus.maxPrice = cursor.getDouble(cursor.getColumnIndex("maxPrice"))
                 pairStatus.minPrice = cursor.getDouble(cursor.getColumnIndex("minPrice"))
                 //            pairStatus.pair = cursor?.getString(cursor?.getColumnIndex("pair"));
                 pairStatus.pair = cursor.getString(cursor.getColumnIndex("pair"))
                 //            pairStatus.priceChangeSinceToday = cursor?.getDouble(cursor?.getColumnIndex("priceChangeSinceToday"));
-                pairStatus.priceChangeSinceToday = cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
+                pairStatus.priceChangeSinceToday =
+                    cursor.getDouble(cursor.getColumnIndex("priceChangeSinceToday"))
                 pairStatus.statDate = cursor.getLong(cursor.getColumnIndex("statDate"))
                 //            pairStatus.totalAmount = cursor?.getDouble(cursor?.getColumnIndex("totalAmount"));
                 pairStatus.totalAmount = cursor.getDouble(cursor.getColumnIndex("totalAmount"))
@@ -383,7 +419,8 @@ object SocketUtil {
             }
         }
         var result = false
-        val type = if ("ASK".equals(direction, ignoreCase = true)) SAVE_ORDER_ASK else SAVE_ORDER_BID
+        val type =
+            if ("ASK".equals(direction, ignoreCase = true)) SAVE_ORDER_ASK else SAVE_ORDER_BID
         val lastSaveTime = lastSaveTimeMap[type]
         if (lastSaveTime == null || SystemClock.elapsedRealtime() - lastSaveTime > SAVE_DELAY_TIME) {
             val helper = FryingSQLiteHelper.getInstance(context!!)
@@ -509,10 +546,12 @@ object SocketUtil {
                 val tradeOrder = TradeOrder()
                 tradeOrder.createdTime = cursor.getLong(cursor.getColumnIndex("createdTime"))
                 tradeOrder.dealAmount = cursor.getDouble(cursor.getColumnIndex("dealAmount"))
-                tradeOrder.formattedPrice = cursor.getString(cursor.getColumnIndex("formattedPrice"))
+                tradeOrder.formattedPrice =
+                    cursor.getString(cursor.getColumnIndex("formattedPrice"))
                 tradeOrder.pair = cursor.getString(cursor.getColumnIndex("pair"))
                 tradeOrder.price = cursor.getDouble(cursor.getColumnIndex("price"))
-                tradeOrder.tradeDealDirection = cursor.getString(cursor.getColumnIndex("tradeDealDirection"))
+                tradeOrder.tradeDealDirection =
+                    cursor.getString(cursor.getColumnIndex("tradeDealDirection"))
                 result.add(tradeOrder)
             }
         }
@@ -710,12 +749,20 @@ object SocketUtil {
                     if (jsonObject != null) {
                         val coinType = jsonObject.optString("coinType")
                         if (!TextUtils.isEmpty(coinType)) {
-                            val cursor = helper?.rawQuery("select * from user_wallet where coinType = ?", arrayOf(coinType))
+                            val cursor = helper?.rawQuery(
+                                "select * from user_wallet where coinType = ?",
+                                arrayOf(coinType)
+                            )
                             val values = createUserWalletValues(jsonObject)
                             if ((cursor?.count ?: 0) == 0) {
                                 helper?.insert("user_wallet", null, values)
                             } else {
-                                helper?.update("user_wallet", values, "coinType = ?", arrayOf(coinType))
+                                helper?.update(
+                                    "user_wallet",
+                                    values,
+                                    "coinType = ?",
+                                    arrayOf(coinType)
+                                )
                             }
                             cursor?.close()
                         }
@@ -755,13 +802,26 @@ object SocketUtil {
     }
 
     //按照价格进行合并委托，只要前N条数据
-    fun mergeQuotationOrder(data: List<TradeOrder>?, pair: String?, direction: String?, precision: Int, maxSize: Int): List<TradeOrder>? {
+    fun mergeQuotationOrder(
+        data: List<TradeOrder>?,
+        pair: String?,
+        direction: String?,
+        precision: Int,
+        maxSize: Int
+    ): List<TradeOrder>? {
         var precision = precision
         var maxSize = maxSize
         if (data == null || data.isEmpty() || TextUtils.isEmpty(pair) || TextUtils.isEmpty(direction)) {
             return null
         }
-        Collections.sort(data, if ("ASK".equals(direction, ignoreCase = true)) TradeOrder.COMPARATOR_UP else TradeOrder.COMPARATOR_DOWN)
+        Collections.sort(
+            data,
+            if ("ASK".equals(
+                    direction,
+                    ignoreCase = true
+                )
+            ) TradeOrder.COMPARATOR_UP else TradeOrder.COMPARATOR_DOWN
+        )
         if (maxSize <= 0) {
             maxSize = 5
         }
@@ -769,10 +829,21 @@ object SocketUtil {
         var lastOrder: TradeOrder? = null
         for (i in data.indices) {
             val tradeOrder = data[i]
-            if (pair.equals(tradeOrder.pair, ignoreCase = true) && TextUtils.equals(direction, tradeOrder.orderType)) {
+            if (pair.equals(tradeOrder.pair, ignoreCase = true) && TextUtils.equals(
+                    direction,
+                    tradeOrder.orderType
+                )
+            ) {
                 val priceString = tradeOrder.priceString
                 var price = CommonUtil.parseBigDecimal(priceString)
-                price = price?.setScale(precision, if ("ASK".equals(direction, ignoreCase = true)) BigDecimal.ROUND_UP else BigDecimal.ROUND_DOWN)
+                price = price?.setScale(
+                    precision,
+                    if ("ASK".equals(
+                            direction,
+                            ignoreCase = true
+                        )
+                    ) BigDecimal.ROUND_UP else BigDecimal.ROUND_DOWN
+                )
                 //                String formattedPrice = price == null ? null : price.setScale(precision, "ASK".equalsIgnoreCase(direction) ? BigDecimal.ROUND_UP : BigDecimal.ROUND_DOWN).toString();
                 val formattedPrice = NumberUtil.formatNumberNoGroup(price, precision, precision)
                 val lastFormattedPrice = lastOrder?.formattedPrice
@@ -838,7 +909,10 @@ object SocketUtil {
         return returnData
     }
 
-    fun getQuotationOrderNewOldData(context: Context?, direction: String?): ArrayList<QuotationOrderNew> {
+    fun getQuotationOrderNewOldData(
+        context: Context?,
+        direction: String?
+    ): ArrayList<QuotationOrderNew> {
         val helper = FryingSQLiteHelper.getInstance(context!!)
         val db = helper?.readableDatabase
         var tableName: String? = null
@@ -862,7 +936,11 @@ object SocketUtil {
         return result
     }
 
-    fun updateQuotationOrderNewData(context: Context?, newData: List<QuotationOrderNew?>?, removeAll: Boolean): Boolean {
+    fun updateQuotationOrderNewData(
+        context: Context?,
+        newData: List<QuotationOrderNew?>?,
+        removeAll: Boolean
+    ): Boolean {
         if (newData == null || newData.isEmpty()) {
             return false
         }
@@ -913,7 +991,11 @@ object SocketUtil {
         return result
     }
 
-    fun updateQuotationDealNewData(context: Context?, newData: List<QuotationDealNew>?, removeAll: Boolean): Boolean {
+    fun updateQuotationDealNewData(
+        context: Context?,
+        newData: List<QuotationDealNew>?,
+        removeAll: Boolean
+    ): Boolean {
         if (newData == null || newData.isEmpty()) {
             return false
         }
@@ -929,12 +1011,17 @@ object SocketUtil {
             helper?.insert("quotation_deal", null, values)
         }
         result = true
-        val cursor = helper?.rawQuery("select * from quotation_deal order by createdTime desc", null)
+        val cursor =
+            helper?.rawQuery("select * from quotation_deal order by createdTime desc", null)
         cursor?.let {
             if (cursor.count > 100) {
                 cursor.move(99)
                 while (cursor.moveToNext()) {
-                    helper.delete("quotation_order_ask", " _id = ? ", arrayOf(cursor.getInt(cursor.getColumnIndex("_id")).toString()))
+                    helper.delete(
+                        "quotation_order_ask",
+                        " _id = ? ",
+                        arrayOf(cursor.getInt(cursor.getColumnIndex("_id")).toString())
+                    )
                 }
             }
         }
@@ -948,8 +1035,11 @@ object SocketUtil {
     fun saveKLineDataAll(data: JSONObject) {
         val kLineId = data.optString("no")
         val listData = data.optJSONArray("list")
-        val list: ArrayList<KLineItem> = if (listData == null) ArrayList() else gson.fromJson(listData.toString(),
-                object : TypeToken<ArrayList<KLineItem>?>() {}.type) as ArrayList<KLineItem>
+        val list: ArrayList<KLineItem> =
+            if (listData == null) ArrayList() else gson.fromJson(
+                listData.toString(),
+                object : TypeToken<ArrayList<KLineItem>?>() {}.type
+            ) as ArrayList<KLineItem>
         if (kLineId != null && list != null) {
             kLineDataSet[kLineId] = list
         }
@@ -963,7 +1053,12 @@ object SocketUtil {
         return kLineDataSet[kLineId]
     }
 
-    fun updateDearPairs(context: Context?, handler: Handler?, dearPairs: Map<String?, Boolean?>?, action: Int) {
+    fun updateDearPairs(
+        context: Context?,
+        handler: Handler?,
+        dearPairs: Map<String?, Boolean?>?,
+        action: Int
+    ) {
         if (context == null || handler == null || dearPairs == null) {
             return
         }
@@ -995,10 +1090,20 @@ object SocketUtil {
                 if (where.isNotEmpty()) {
                     val trueValues = ContentValues()
                     trueValues.put("is_dear", 1)
-                    helper?.update("pairs_stats", trueValues, "pair in ($where)", truePairs.toTypedArray())
+                    helper?.update(
+                        "pairs_stats",
+                        trueValues,
+                        "pair in ($where)",
+                        truePairs.toTypedArray()
+                    )
                     val falseValues = ContentValues()
                     falseValues.put("is_dear", 0)
-                    helper?.update("pairs_stats", falseValues, "pair not in ($where)", truePairs.toTypedArray())
+                    helper?.update(
+                        "pairs_stats",
+                        falseValues,
+                        "pair not in ($where)",
+                        truePairs.toTypedArray()
+                    )
                 } else {
                     val falseValues = ContentValues()
                     falseValues.put("is_dear", 0)
@@ -1036,6 +1141,7 @@ object SocketUtil {
     }
 
     private val commandObservers = ArrayList<Observer<Message?>>()
+
     //添加socket命令观察者
     fun subscribeCommandObservable(observer: Observer<Message?>?) {
         if (observer == null) {

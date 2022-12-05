@@ -114,15 +114,16 @@
                                     android:textSize="16sp"
                                     android:textColor="#000000"
                                     android:text="NFTs"/>
+
                                 <TextView
                                     android:id="@+id/type_des"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/type_name"
-                                    android:textSize="13sp"
                                     android:paddingTop="15dp"
+                                    android:text="Discover, buy, sell and even create NFTs in just a few cilcks"
                                     android:textColor="#99000000"
-                                    android:text="Discover, buy, sell and even create NFTs in just a few clicks"/>
+                                    android:textSize="13sp" />
 
                                 <ImageView
                                     android:id="@+id/type_go"
@@ -148,19 +149,21 @@
                                     android:id="@+id/icon_deposit"
                                     style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_deposit" />
+
                                 <CheckedTextView
+                                    style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_deposit"
-                                    android:text="@string/deposit"
-                                    style="@style/HomeFeturesItemText" />
+                                    android:text="@string/deposit" />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_referral"
                                 style="@style/HomeFeturesItem"
                                 android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_referral"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_deposit"/>
+                                    android:src="@drawable/fiex_icon_deposit" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_referral"
@@ -198,7 +201,8 @@
                             <RelativeLayout
                                 android:id="@+id/rel_more"
                                 style="@style/HomeFeturesItem"
-                                android:layout_weight="1">
+                                android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_more"
                                     style="@style/HomeFeturesItemImage"
@@ -515,19 +519,19 @@
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Popular" />
+                                android:text="@string/popular" />
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Gainers" />
+                                android:text="@string/gainers" />
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Losers" />
+                                android:text="@string/losers" />
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="24H Vol" />
+                                android:text="@string/vol" />
                         </com.google.android.material.tabs.TabLayout>
                         <View
                             android:layout_width="match_parent"

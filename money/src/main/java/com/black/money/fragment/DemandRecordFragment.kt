@@ -15,6 +15,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.filter.CoinFilter
 import com.black.base.model.filter.DemandRecordStatus
@@ -116,7 +117,7 @@ class DemandRecordFragment : BaseFragment(), OnDemandChangeOutListener, QRefresh
                             if (demandLock.nextRate == null) nullAmount else NumberUtil.formatNumberNoGroupHardScale(demandLock.nextRate!! * 100, 2)),
                     object : OnConfirmCallback {
                         override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                            MoneyApiServiceHelper.postDemandChangeOut(mContext, demandLock.id, object : NormalCallback<HttpRequestResultString?>() {
+                            MoneyApiServiceHelper.postDemandChangeOut(mContext, demandLock.id, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                 override fun callback(returnData: HttpRequestResultString?) {
                                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                         FryingUtil.showToast(mContext, "取出成功")
@@ -169,7 +170,7 @@ class DemandRecordFragment : BaseFragment(), OnDemandChangeOutListener, QRefresh
         if (demandCoinFilter == null) {
             return
         }
-        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>() {
+        MoneyApiServiceHelper.getDemandConfig(mContext, object : NormalCallback<HttpRequestResultData<DemandConfig?>?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultData<DemandConfig?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val demands = if (returnData.data == null) null else returnData.data?.coinTypeConf
@@ -205,8 +206,8 @@ class DemandRecordFragment : BaseFragment(), OnDemandChangeOutListener, QRefresh
         if (demandCoinFilter == null || demandRecordStatus == null) {
             return
         }
-        MoneyApiServiceHelper.getDemandLockRecord(mContext, demandCoinFilter?.code, demandRecordStatus?.code, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<DemandLock?>?>?>() {
-            override fun error(type: Int, error: Any) {
+        MoneyApiServiceHelper.getDemandLockRecord(mContext, demandCoinFilter?.code, demandRecordStatus?.code, currentPage, 10, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<DemandLock?>?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showData(null)
             }
@@ -251,7 +252,7 @@ class DemandRecordFragment : BaseFragment(), OnDemandChangeOutListener, QRefresh
                         "你是否确定要提取当前所有资产？",
                         object : OnConfirmCallback {
                             override fun onConfirmClick(confirmDialog: ConfirmDialog) {
-                                MoneyApiServiceHelper.postDemandChangeOutBatch(mContext, if (demand == null) null else demand?.coinType, true, null, object : NormalCallback<HttpRequestResultString?>() {
+                                MoneyApiServiceHelper.postDemandChangeOutBatch(mContext, if (demand == null) null else demand?.coinType, true, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                                     override fun callback(returnData: HttpRequestResultString?) {
                                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                                             FryingUtil.showToast(mContext, "取出成功")

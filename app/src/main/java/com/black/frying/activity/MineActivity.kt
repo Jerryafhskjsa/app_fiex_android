@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -27,6 +28,9 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityMineBinding
 import skin.support.SkinCompatManager
@@ -57,7 +61,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.btnLoginOut?.setOnClickListener(this)
         binding?.name?.setOnClickListener(this)
         binding?.userLayout?.setOnClickListener(this)
-        binding?.uuid?.setOnClickListener(this)
+        binding?.uid?.setOnClickListener(this)
         binding?.darkMode?.setOnClickListener(this)
         binding?.lightMode?.setOnClickListener(this)
         binding?.nightModeToggle?.setOnCheckedChangeListener { _, isChecked ->
@@ -91,11 +95,19 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.helpCenter?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
-        val currentLanguage = LanguageUtil.getLanguageSetting(applicationContext)
-        if (currentLanguage == null) {
+        binding?.version?.setText(String.format("V%s" ,CommonUtil.getVersionName(this, "1.0.0")))
+        val currentLanguage = LanguageUtil.getLanguageSetting(mContext)?.languageCode
+        val exchange = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        if (currentLanguage == null || currentLanguage == 0) {
             binding?.currentLanguage?.setText(R.string.language_chinese)
         } else {
-            binding?.currentLanguage?.setText(currentLanguage.languageText)
+            binding?.currentLanguage?.setText(R.string.language_english)
+        }
+        if (exchange == null || exchange == 0) {
+            binding?.currentExchangeRates?.setText(R.string.language_cny)
+        }
+        else {
+            binding?.currentExchangeRates?.setText(R.string.exchange_rates_usd)
         }
         if (CommonUtil.isApkInDebug(applicationContext)) {
             binding?.serverSetting?.visibility = View.VISIBLE
@@ -256,7 +268,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     BlackRouter.getInstance().build(RouterConstData.PERSON_INFO_CENTER).go(mContext)
                 }
             }
-            R.id.uuid -> if (CommonUtil.copyText(
+            R.id.uid -> if (CommonUtil.copyText(
                     mContext,
                     if (userInfo!!.id == null) "" else userInfo!!.id
                 )
@@ -434,8 +446,11 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     public override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
-        refreshUserViews()
-        reloadUserInfo()
+        if(userInfo != null){
+            refreshUserViews()
+        }else{
+            reloadUserInfo()
+        }
         fryingHelper.onResume()
     }
 
@@ -465,7 +480,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         } else {
             CommonUtil.getItemFromList(localLinesConfig, UrlConfig.getIndex(mContext))
         }
-        val serverText = currentServerConfig?.lineUrl + "(" + currentServerConfig?.speed + ")"
+        val serverText = currentServerConfig?.speed + "ms"
         binding?.currentServer?.text = serverText
     }
 
@@ -502,14 +517,16 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     //刷新用户信息
     private fun refreshUserViews() {
-        imageLoader!!.loadImage(
-            binding?.iconAvatar,
-            if (userInfo == null) null else userInfo!!.headPortrait,
-            com.black.user.R.drawable.icon_avatar,
-            true
-        )
         binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
         if (userInfo != null) {
+            if(userInfo?.headPortrait != null){
+                binding?.iconAvatar?.let {
+                    Glide.with(mContext)
+                        .load(Uri.parse(userInfo?.headPortrait!!))
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                        .into(it)
+                }
+            }
             val userName = if (userInfo!!.username == null) "" else userInfo!!.username
             binding?.name?.text = String.format("%s", userName)
 

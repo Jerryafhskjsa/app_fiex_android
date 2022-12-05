@@ -26,7 +26,7 @@ import java.math.BigDecimal
 
 object PairApiServiceHelper {
     private var TAG = PairApiServiceHelper::class.java.simpleName
-    private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //热门币种，请求缓存时间，20分钟
+    private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //热门币种，请求缓存时间，20分钟
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
     private const val TRADE_PAIR = 3

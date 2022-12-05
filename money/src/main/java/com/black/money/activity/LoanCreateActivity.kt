@@ -16,6 +16,7 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.SuccessObserver
 import com.black.base.model.money.LoanConfig
 import com.black.base.model.money.LoanConfigStage
@@ -246,7 +247,7 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                         computeScale = loanScale
                     } else {
                         //USDT 直接取出相应交易对计算价格
-                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, loanCoinType + "_" + coinType)
+                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext,ConstData.PairStatusType.SPOT, loanCoinType + "_" + coinType)
                         if (loanUsdtPairStatus != null) {
                             computeScale = if (loanScale == null || loanUsdtPairStatus.currentPrice == 0.0) null else loanScale / loanUsdtPairStatus.currentPrice
                         }
@@ -256,14 +257,14 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                         computeScale = loanScale
                     } else if (TextUtils.equals("USDT", loanCoinType)) {
                         //借入USDT 直接取出相应交易对计算价格
-                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, coinType + "_" + loanCoinType)
+                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, ConstData.PairStatusType.SPOT,coinType + "_" + loanCoinType)
                         if (mortgageUsdtPairStatus != null) {
                             computeScale = if (loanScale == null) null else loanScale * mortgageUsdtPairStatus.currentPrice
                         }
                     } else {
                         //抵押和借入都不是usdt,取出两种价格进行计算
-                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, coinType + "_USDT")
-                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, loanCoinType + "_USDT")
+                        val loanUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext,ConstData.PairStatusType.SPOT, coinType + "_USDT")
+                        val mortgageUsdtPairStatus = SocketDataContainer.getPairStatusSync(mContext, ConstData.PairStatusType.SPOT,loanCoinType + "_USDT")
                         if (loanUsdtPairStatus != null && mortgageUsdtPairStatus != null) {
                             computeScale = if (loanScale == null || loanUsdtPairStatus.currentPrice == 0.0) null else loanScale * (mortgageUsdtPairStatus.currentPrice / loanUsdtPairStatus.currentPrice)
                         }
@@ -333,7 +334,7 @@ class LoanCreateActivity : BaseActionBarActivity(), View.OnClickListener {
                 mortgageAmountText,
                 lanAmountText,
                 if (loanConfigStage?.numberDays == null) null else NumberUtil.formatNumberNoGroup(loanConfigStage.numberDays),
-                object : NormalCallback<HttpRequestResultString?>() {
+                object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
                             FryingUtil.showToast(mContext, "借入成功")
