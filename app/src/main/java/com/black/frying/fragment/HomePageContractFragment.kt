@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -33,6 +34,9 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
+import com.black.base.model.future.FundingRateBean
+import com.black.base.model.future.MarkPriceBean
+import com.black.base.model.future.TickerBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
@@ -64,9 +68,12 @@ import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
+import com.fbsex.exchange.databinding.FragmentHomePageContractHeader1Binding
+import com.fbsex.exchange.databinding.FragmentHomePageContractHeaderBinding
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
+import udesk.org.jivesoftware.smackx.time.packet.Time
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -117,6 +124,8 @@ class HomePageContractFragment : BaseFragment(),
 
     private var recordViewPager: AutoHeightViewPager? = null
     private var recordTab: TabLayout? = null
+    private var headerView: FragmentHomePageContractHeaderBinding? = null
+    private var header1View: FragmentHomePageContractHeader1Binding? = null
 
 
     //开仓倍数设置
@@ -160,6 +169,19 @@ class HomePageContractFragment : BaseFragment(),
     private var tabData: ArrayList<ContractRecordTabBean?>? = null
     private var recordFragmentList: MutableList<Fragment?>? = null
     private var currentTabPosition: Int = 0
+
+    private var fundRateTime:Long? = null
+    private val mFundRateTimerHandler = Handler()
+    private val fundRateTimer = object : Runnable {
+        override fun run() {
+            fundRateTime = fundRateTime?.minus(1)
+            if (fundRateTime!! <= 0) {
+            } else {
+                mFundRateTimerHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
+                headerView?.tvRateTime?.text = TimeUtil.formatSeconds(fundRateTime!!)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -249,7 +271,7 @@ class HomePageContractFragment : BaseFragment(),
 //          FutureService.getCurrentPosition(mContext)
 //        FutureService.getUserStepRate(mContext)
 //        FutureService.getOrderPosition(mContext)
-        FutureService.getAvailableOpenData(BigDecimal("10000"), 5)
+//        FutureService.getAvailableOpenData(BigDecimal("10000"), 5)
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
     }
 
@@ -302,13 +324,15 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun initHeader() {
-        binding?.fragmentHomePageContractHeader?.linBuyMultiple?.setOnClickListener(this)
-        binding?.fragmentHomePageContractHeader?.linSellMultiple?.setOnClickListener(this)
+        headerView = binding?.fragmentHomePageContractHeader
+        headerView?.linBuyMultiple?.setOnClickListener(this)
+        headerView?.linSellMultiple?.setOnClickListener(this)
     }
 
     //开仓平仓
     private fun initHeader1() {
-        binding!!.fragmentHomePageContractHeader1?.contractWithLimit.setOnCheckedChangeListener { _, isChecked ->
+        header1View = binding!!.fragmentHomePageContractHeader1
+        header1View?.contractWithLimit?.setOnCheckedChangeListener { _, isChecked ->
             withLimitFlag = isChecked
             binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = if (isChecked) {
                 View.VISIBLE
@@ -316,12 +340,12 @@ class HomePageContractFragment : BaseFragment(),
                 View.GONE
             }
         }
-        binding!!.fragmentHomePageContractHeader1.linOrderType.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.linUnitType.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.linLimitType.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.btnBuy.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.btnSale.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.price.addTextChangedListener(object :
+        header1View?.linOrderType?.setOnClickListener(this)
+        header1View?.linUnitType?.setOnClickListener(this)
+        header1View?.linLimitType?.setOnClickListener(this)
+        header1View?.btnBuy?.setOnClickListener(this)
+        header1View?.btnSale?.setOnClickListener(this)
+        header1View?.price?.addTextChangedListener(object :
             TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -331,12 +355,12 @@ class HomePageContractFragment : BaseFragment(),
             }
 
             override fun afterTextChanged(s: Editable) {
-                binding!!.fragmentHomePageContractHeader1.price.setSelection(s.toString().length)
+                header1View?.price?.setSelection(s.toString().length)
             }
         })
-        binding!!.fragmentHomePageContractHeader1.transactionQuota.filters =
+        header1View?.transactionQuota?.filters =
             arrayOf(NumberFilter(), PointLengthFilter(4))
-        binding!!.fragmentHomePageContractHeader1.transactionQuota.addTextChangedListener(object :
+        header1View?.transactionQuota?.addTextChangedListener(object :
             TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -344,7 +368,7 @@ class HomePageContractFragment : BaseFragment(),
                 computeTotal()
                 refreshSubmitButton()
                 val count = CommonUtil.parseDouble(
-                    binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString()
+                    header1View?.transactionQuota?.text.toString()
                         .trim { it <= ' ' })
                 if (count != null) {
                     val max: BigDecimal? = getMaxAmount()
@@ -353,7 +377,7 @@ class HomePageContractFragment : BaseFragment(),
                         var progress = (countB?.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
                             BigDecimal(100)
                         )
-                        binding!!.fragmentHomePageContractHeader1.countBar.progress =
+                        header1View?.countBar?.progress =
                             progress?.toInt()!!
                     }
                 }
@@ -361,24 +385,24 @@ class HomePageContractFragment : BaseFragment(),
 
             override fun afterTextChanged(s: Editable) {
                 inputNumber = false
-                binding!!.fragmentHomePageContractHeader1.transactionQuota.setSelection(s.toString().length)
+                header1View?.transactionQuota?.setSelection(s.toString().length)
             }
         })
         countProgressBuy =
             SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
         countProgressSale =
             SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
-        binding!!.fragmentHomePageContractHeader1.priceSub.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.priceAdd.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.amountAdd.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.amountSub.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.useable.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageContractHeader1.useableUnit.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(getString(R.string.number_default))
-        binding!!.fragmentHomePageContractHeader1.countBar.setOnSeekBarChangeListener(this)
-        binding!!.fragmentHomePageContractHeader1.btnHandle.setOnClickListener(this)
-        binding!!.fragmentHomePageContractHeader1.btnHandle1.setOnClickListener(this)
+        header1View?.priceSub?.setOnClickListener(this)
+        header1View?.priceAdd?.setOnClickListener(this)
+        header1View?.amountAdd?.setOnClickListener(this)
+        header1View?.amountSub?.setOnClickListener(this)
+        header1View?.useable?.setText(getString(R.string.number_default))
+        header1View?.useableUnit?.setText(getString(R.string.number_default))
+        header1View?.useableBuy?.setText(getString(R.string.number_default))
+        header1View?.useableBuyUnit?.setText(getString(R.string.number_default))
+        header1View?.countBar?.setOnSeekBarChangeListener(this)
+        header1View?.btnHandle?.setOnClickListener(this)
+        header1View?.btnHandle1?.setOnClickListener(this)
         viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
         deepViewBinding!!.init()
@@ -1308,6 +1332,10 @@ class HomePageContractFragment : BaseFragment(),
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(1)
+        viewModel?.getIndexPrice(viewModel?.getCurrentPair())
+        viewModel?.getMarketPrice(viewModel?.getCurrentPair())
+        viewModel?.getSymbolTicker(viewModel?.getCurrentPair())
+        viewModel?.getFundRate(viewModel?.getCurrentPair())
     }
 
     //刷新当前钱包
@@ -1489,10 +1517,11 @@ class HomePageContractFragment : BaseFragment(),
         }, Date(), 1000)
     }
 
-    //更新涨跌幅
-    override fun onPairQuotation(pairQuo: PairQuotation) {
+    //更新涨跌幅和当前价格
+    override fun onPairQuotation(tickerBean: TickerBean?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            updatePriceSince(pairQuo.r)
+            updatePriceSince(tickerBean?.r)
+            updateCurrentPairPrice(tickerBean?.c)
         }
     }
 
@@ -1756,26 +1785,6 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     override fun onChatRoomClick(transactionMorePopup: TransactionMorePopup, chatRoomId: String?) {
-        fryingHelper.checkUserAndDoing(Runnable {
-            transactionMorePopup.dismiss()
-            viewModel!!.checkIntoChatRoom()
-                ?.subscribe(
-                    HttpCallbackSimple(
-                        mContext,
-                        true,
-                        object : NormalCallback<HttpRequestResultString?>(mContext!!) {
-                            override fun callback(returnData: HttpRequestResultString?) =
-                                if (returnData?.code != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                    intoChatRoom(chatRoomId)
-                                } else {
-                                    FryingUtil.showToast(
-                                        mContext,
-                                        if (returnData?.msg == null) "null" else returnData.msg
-                                    )
-                                }
-                        })
-                )
-        }, 0)
     }
 
     override fun onTradeOrderFastClick(tradeOrder: TradeOrder) {
@@ -1834,12 +1843,32 @@ class HomePageContractFragment : BaseFragment(),
         )
     }
 
+    override fun onIndexPirce(indexPrice: MarkPriceBean?) {
+        header1View?.indexPrice?.text = indexPrice?.p
+    }
+
+    override fun onMarketPrice(marketPrice: MarkPriceBean?) {
+        header1View?.tagPrice?.text = marketPrice?.p
+    }
+
+    override fun onFundingRate(fundRate: FundingRateBean?) {
+        Log.d("iiiiii","onFundingRate")
+        headerView?.tvFundRate?.text = fundRate?.fundingRate
+        updateFundTime(fundRate?.nextCollectionTime)
+    }
+
+    private fun updateFundTime(nextCollectionTime:Long?){
+        fundRateTime = (nextCollectionTime?.minus(System.currentTimeMillis()))?.div(1000)
+        mFundRateTimerHandler.removeCallbacks(fundRateTimer)
+        mFundRateTimerHandler.post(fundRateTimer)
+    }
+
     private fun updateCurrentPair(pairStatus: PairStatus) {
         val color =
             if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-        binding!!.fragmentHomePageContractHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
-        binding!!.fragmentHomePageContractHeader1.currentPrice.setTextColor(color)
-        binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(
+        header1View?.currentPrice?.setText(pairStatus.currentPriceFormat)
+        header1View?.currentPrice?.setTextColor(color)
+        header1View?.currentPriceCny?.setText(
             String.format(
                 "≈ %s",
                 pairStatus.currentPriceCNYFormat
@@ -1849,10 +1878,9 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun updateCurrentPairPrice(price: String?) {
-        binding!!.fragmentHomePageContractHeader1.currentPrice.setText(price)
-//        binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(String.format("≈ %s", price))
+        header1View?.currentPrice?.setText(price)
         if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(
+            header1View?.currentPriceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
                     viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(),
                     4,
@@ -1860,7 +1888,7 @@ class HomePageContractFragment : BaseFragment(),
                 )
             )
         } else {
-            binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText(
+            header1View?.currentPriceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
                     0.0f,
                     4,
@@ -1915,30 +1943,5 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    private fun intoChatRoom(chatRoomId: String?) {
-        if (chatRoomId == null || mContext == null) {
-            return
-        }
-        val userInfo = CookieUtil.getUserInfo(mContext!!)
-        if (userInfo == null) {
-            FryingUtil.showToast(mContext, "请先登录系统")
-        } else {
-            val userIdHeader = IMHelper.getUserIdHeader(mContext!!)
-            val userId = userInfo.id
-            val groupName = "FBSexer"
-            val bundle = Bundle()
-            bundle.putString(ConstData.IM_GROUP_ID, chatRoomId)
-            bundle.putString(ConstData.IM_GROUP_NAME, groupName)
-            IMHelper.startWithIMGroupActivity(
-                mContext!!,
-                mContext,
-                userIdHeader + userId,
-                chatRoomId,
-                RouterConstData.PUBLIC_CHAT_GROUP,
-                bundle,
-                null,
-                null
-            )
-        }
-    }
+
 }

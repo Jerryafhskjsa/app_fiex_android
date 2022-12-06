@@ -12,6 +12,9 @@ import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.future.DepthBean
+import com.black.base.model.future.FundingRateBean
+import com.black.base.model.future.MarkPriceBean
+import com.black.base.model.future.TickerBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
@@ -24,6 +27,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.frying.service.FutureService
 import com.black.frying.service.socket.FiexSocketManager
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
@@ -73,6 +77,15 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
 
     private var tradeOrderDepthPair:TradeOrderPairList? = null
     private var singleOrderDepthList :ArrayList<QuotationOrderNew?>? = null
+
+    //标记价格
+    private var marketPrice:MarkPriceBean? = null
+    //指数价格
+    private var indexPrice:MarkPriceBean? = null
+    //行情
+    private var tickeBean:TickerBean? = null
+    //资金费率
+    private var fundRate:FundingRateBean? = null
 
     init {
         currentPairStatus.pair == (CookieUtil.getCurrentFutureUPair(context))
@@ -293,7 +306,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
             override fun onSuccess(value: PairQuotation?) {
                 if (value != null && TextUtils.equals(value.s, currentPairStatus.pair)) {
                     onContractModelListener.run {
-                        onContractModelListener?.onPairQuotation(value)
+//                        onContractModelListener?.onPairQuotation(value)
                     }
                 }
             }
@@ -660,11 +673,79 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         }
     }
 
-    fun checkIntoChatRoom(): Observable<HttpRequestResultString?>? {
-        return ApiManager.build(context).getService(UserApiService::class.java)
-                ?.checkChatEnable(currentPairStatus.name)
-                ?.compose(RxJavaHelper.observeOnMainThread())
+    /**
+     * 获取标记价格
+     */
+    fun getMarketPrice(symbol:String?){
+        FutureApiServiceHelper.getSymbolMarkPrice(context,symbol, false,
+            object : Callback<HttpRequestResultBean<MarkPriceBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<MarkPriceBean?>?) {
+                    if (returnData != null) {
+                        marketPrice = returnData.result
+                        onContractModelListener?.onMarketPrice(marketPrice)
+                    }
+                }
+            })
     }
+
+    /**
+     * 获取指数价格
+     */
+    fun getIndexPrice(symbol:String?){
+        FutureApiServiceHelper.getSymbolIndexPrice(context,symbol, false,
+            object : Callback<HttpRequestResultBean<MarkPriceBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<MarkPriceBean?>?) {
+                    if (returnData != null) {
+                        indexPrice = returnData.result
+                        onContractModelListener?.onIndexPirce(indexPrice)
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取单个交易对行情
+     */
+    fun getSymbolTicker(symbol:String?){
+        FutureApiServiceHelper.getSymbolTickers(context,symbol, false,
+            object : Callback<HttpRequestResultBean<TickerBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<TickerBean?>?) {
+                    if (returnData != null) {
+                        tickeBean = returnData.result
+                        onContractModelListener?.onPairQuotation(tickeBean)
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取资金费率
+     */
+    fun getFundRate(symbol: String?){
+        FutureApiServiceHelper.getFundingRate(symbol,context, false,
+            object : Callback<HttpRequestResultBean<FundingRateBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<FundingRateBean?>?) {
+                    if (returnData != null) {
+                        fundRate = returnData?.result
+                        onContractModelListener?.onFundingRate(fundRate)
+                    }
+                }
+            })
+    }
+
+
 
     fun getAmountLength(): Int {
         return currentPairStatus.amountPrecision ?: 4
@@ -733,7 +814,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         /**
          * 交易对24小时行情变更
          */
-        fun onPairQuotation(pairQuo:PairQuotation)
+        fun onPairQuotation(tickerBean: TickerBean?)
         /**
          * 交易对初始化
          */
@@ -754,6 +835,21 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
         fun onPairDeal(value:PairDeal)
 
         fun onTradePairInfo(pairStatus: PairStatus?)
+
+        /**
+         * 标记价格变化
+         */
+        fun onMarketPrice(marketPrice:MarkPriceBean?)
+
+        /**
+         * 指数价格变化
+         */
+        fun onIndexPirce(indexPrice:MarkPriceBean?)
+
+        /**
+         * 资金费率变化
+         */
+        fun onFundingRate(fundRate: FundingRateBean?)
 
         fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
         fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>

@@ -169,4 +169,53 @@ object TimeUtil {
         }
         return isEqual
     }
+
+    fun formatSeconds(seconds: Long): String {
+        var timeStr:String? = null
+        var hourStr:String? = null
+        var minStr:String? = null
+        var secondStr:String? = null
+        val second = seconds % 60
+        if (seconds > 60) {
+            var min = seconds / 60
+            minStr = "$min:"
+            secondStr = "$second"
+            if (min > 60) {
+                min = seconds / 60 % 60
+                var hour = seconds / 60 / 60
+                secondStr = if(second < 10){
+                    "0$second"
+                }else{
+                    "$second"
+                }
+                minStr = if(min < 10){
+                    "0$min:"
+                }else{
+                    "$min:"
+                }
+                hourStr = if(hour < 10){
+                    "0$hour:"
+                }else{
+                    "$hour:"
+                }
+            }else{
+                hourStr = "00:"
+                secondStr = if(second < 10){
+                    "0$second"
+                }else{
+                    "$second"
+                }
+            }
+        }else{
+            secondStr = if(second < 10){
+                "0$second"
+            }else{
+                "$second"
+            }
+            hourStr = "00:"
+            minStr = "00:"
+        }
+        timeStr = hourStr+minStr+secondStr
+        return timeStr
+    }
 }

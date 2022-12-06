@@ -27,10 +27,22 @@ interface FutureApiService {
     fun getSymbolList(): Observable<HttpRequestResultBean<ArrayList<SymbolBean>?>?>?
 
     /**
-     * 获取标记价格
+     * 获取所有交易对标记价格
      */
     @GET(UrlConfig.Future.URL_MARK_PRICE)
     fun getMarkPrice(): Observable<HttpRequestResultBean<ArrayList<MarkPriceBean>?>?>?
+
+    /**
+     * 获取单个交易对标记价格
+     */
+    @GET(UrlConfig.Future.URL_SYMBOL_MARK_PRICE)
+    fun getSymbolMarkPrice( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<MarkPriceBean?>?>?
+
+    /**
+     * 获取单个交易对指数价格
+     */
+    @GET(UrlConfig.Future.URL_SYMBOL_INDEX_PRICE)
+    fun getSymbolIndexPrice( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<MarkPriceBean?>?>?
 
     /**
      * 获取资金费率
@@ -82,6 +94,11 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_TICKERS)
     fun getTickers(): Observable<HttpRequestResultBean<List<TickerBean?>?>?>?
 
+    /**
+     * 获取指定交易对行情
+     */
+    @GET(UrlConfig.Future.URL_SYMBOL_TICKER)
+    fun getSymbolTickers(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<TickerBean?>?>?
 
     /**
      * 获取adl信息

@@ -111,18 +111,35 @@
                     android:text="资金费率/结算时间">
 
                 </com.black.base.widget.SpanTextView>
-                <com.black.base.widget.SpanTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="-0.01%/06:55:55">
-
-                </com.black.base.widget.SpanTextView>
-
+                    android:layout_marginTop="4dp">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/tv_fund_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="--">
+                    </com.black.base.widget.SpanTextView>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="/">
+                    </com.black.base.widget.SpanTextView>
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/tv_rate_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="--">
+                    </com.black.base.widget.SpanTextView>
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 </layout>

@@ -68,10 +68,48 @@ object FutureApiServiceHelper {
     }
 
     /**
+     * 获取单个交易对标记价格
+     */
+    fun getSymbolMarkPrice(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<MarkPriceBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getSymbolMarkPrice(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取单个交易对标记价格
+     */
+    fun getSymbolIndexPrice(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<MarkPriceBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getSymbolIndexPrice(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
      * 获取资金费率
      */
     fun getFundingRate(
-        symbol: String,
+        symbol: String?,
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<FundingRateBean?>?>?
@@ -232,6 +270,25 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.getTickers()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取单个交易对行情列表
+     */
+    fun getSymbolTickers(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<TickerBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getSymbolTickers(symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

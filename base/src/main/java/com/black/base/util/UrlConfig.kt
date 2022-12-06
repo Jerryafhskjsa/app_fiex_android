@@ -527,6 +527,10 @@ object UrlConfig {
 
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
 
+        const val URL_SYMBOL_MARK_PRICE = "market/v1/public/q/symbol-mark-price"
+
+        const val URL_SYMBOL_INDEX_PRICE = "market/v1/public/q/symbol-index-price"
+
         const val ULR_FUNDING_RATE = "market/v1/public/q/funding-rate"
 
         const val URL_COIN_LIST = "market/v1/public/symbol/coins"
@@ -546,6 +550,8 @@ object UrlConfig {
         const val URL_OPEN_ACCOUNT = "user/v1/account/open"
 
         const val URL_TICKERS = "market/v1/public/q/tickers"
+
+        const val URL_SYMBOL_TICKER = "market/v1/public/q/ticker"
 
         const val ULR_BALANCE_DETAIL = "user/v1/balance/detail"
 
