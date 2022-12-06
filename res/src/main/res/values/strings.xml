@@ -713,10 +713,12 @@
     <string name="asset_transfer">资产转移</string>
     <string name="from">来自</string>
     <string name="to">到</string>
+    <string name="total_assets">总资产折合(USDT)</string>
     <string name="spot_account">现货账户</string>
     <string name="contract_account">合约账户</string>
     <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财账户</string>
+    <string name="capital_account">资金账户</string>
     <string name="wallet_account">钱包账户</string>
     <string name="confirm_transfer">Confirm transfer</string>
     <string name="select_wallet">选择钱包</string>

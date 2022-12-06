@@ -44,6 +44,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var spotBalanceList:ArrayList<UserBalance?>?  = null
 
 
+
     private val comparator = WalletComparator(WalletComparator.NORMAL, WalletComparator.NORMAL, WalletComparator.NORMAL, WalletComparator.NORMAL)
 
     constructor(context: Context, onWalletModelListener: OnWalletModelListener) : this(context) {

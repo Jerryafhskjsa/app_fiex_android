@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.black.lib.refresh.QRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B2"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:text="@string/total_assets"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/money_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="23dp"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:text="0.0USDT"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_17"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/money_totalcny"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:text="≈ 0.0CNY"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/B1"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="@dimen/text_size_15"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/icon_coin"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/home_tab_assets"></ImageView>
+
+                            <View
+                                android:layout_width="@dimen/text_size_10"
+                                android:layout_height="match_parent" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/spot"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/spot_account"
+                                android:textColor="@color/black_real"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="@dimen/text_size_20"
+                                android:layout_height="match_parent" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/spot_usdt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.0USDT"
+                                android:textColor="@color/black_real"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:background="@color/T13"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/recharge"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/icon_recharge">
+
+                                </ImageView>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="@dimen/text_size_10"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:background="@color/T13">
+
+                                <ImageView
+                                    android:id="@+id/extract"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/icon_withdraw">
+
+                                </ImageView>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="@dimen/text_size_10"
+                                android:layout_height="match_parent" />
+
+                                <ImageView
+                                    android:id="@+id/transaction"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/icon_tab_deal_pre">
+
+                                </ImageView>
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B1"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/text_size_15"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/B1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/home_tab_futures">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="@dimen/text_size_10"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/future"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contract_account"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="@dimen/text_size_20"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/future_usdt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0USDT"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B1"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/text_size_15"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/B1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/home_tab_transaction">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="@dimen/text_size_10"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/capital"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/capital_account"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="@dimen/text_size_20"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/capital_usdt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0USDT"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B1"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/text_size_15"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/B1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/home_tab_qutation">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="@dimen/text_size_10"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/financial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/finance_account"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="@dimen/text_size_20"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/financial_usdt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0USDT"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_padding" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </com.black.lib.refresh.QRefreshLayout>
+    </LinearLayout>
+</layout>

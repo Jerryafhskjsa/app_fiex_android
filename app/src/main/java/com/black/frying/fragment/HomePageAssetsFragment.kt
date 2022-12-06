@@ -76,6 +76,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var normalFragment: AssetsSpotFragment? = null
+    private var walletFragment: AssetsWalletFragment? = null
     private var assetsContractFragment: EmptyFragment? = null
     private var assetsFinanceFragment: EmptyFragment? = null
     private var assetsWalletFragment: EmptyFragment? = null
@@ -124,6 +125,10 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         typeList!!.add(TYPE_CNY)
         typeList!!.add(TYPE_BTC)
 
+        getString(R.string.wallet_account).also {
+            TAB_WALLET = it
+            TAB_TITLES[3] = TAB_WALLET
+        }
         getString(R.string.spot_account).also {
             TAB_NORMAL = it
             TAB_TITLES[0] = TAB_NORMAL
@@ -132,14 +137,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             TAB_CONTRACT = it
             TAB_TITLES[1] = TAB_CONTRACT
         }
+
         getString(R.string.finance_account).also {
             TAB_FINANCE = it
             TAB_TITLES[2] = TAB_FINANCE
         }
-        getString(R.string.wallet_account).also {
-            TAB_WALLET = it
-            TAB_TITLES[3] = TAB_WALLET
-        }
+
 
         binding?.tabLayout?.setSelectedTabIndicatorHeight(0)
         binding?.tabLayout?.tabMode = TabLayout.MODE_FIXED
@@ -265,6 +268,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         refreshMoneyDisplay()
         normalFragment?.setVisibility(isChecked)
+        walletFragment?.setVisibility(isChecked)
         leverFragment?.setVisibility(isChecked)
     }
 
@@ -288,15 +292,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
-//            assetsContractFragment = it
-//            assetsContractFragment?.setEventListener(this)
-        })
-        fragmentList?.add(EmptyFragment().also {
-            val bundle = Bundle()
-//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
-            bundle.putString("searchKey", viewModel?.getSearchKey())
-            it.arguments = bundle
 //            assetsFinanceFragment = it
 //            assetsFinanceFragment?.setEventListener(this)
         })
@@ -308,6 +303,14 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
+        })
+        fragmentList?.add(AssetsWalletFragment().also {
+            val bundle = Bundle()
+//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
+            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            it.arguments = bundle
+            walletFragment = it
+            walletFragment?.setEventListener(this)
         })
     }
     private fun refreshMoneyDisplay() {
@@ -397,7 +400,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             assetsWalletFragment?.run {
                 observable?.subscribe {
-//                    setData(it)
+//                                setData(it)
                 }
             }
         }
@@ -420,8 +423,14 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     setTotal(it)
                 }
             }
+            walletFragment?.run {
+                observable?.subscribe {
+                    setTotal(it)
+                }
+            }
         }
     }
+
 
     override fun onWalletLeverTotal(observable: Observable<Money?>?) {
         mContext?.runOnUiThread {

@@ -713,10 +713,12 @@
     <string name="asset_transfer">asset transfer</string>
     <string name="from">From</string>
     <string name="to">to</string>
+    <string name="total_assets">Total assets(USDT)</string>
     <string name="spot_account">Spot </string>
     <string name="contract_account">Contract</string>
     <string name="otc_account">OTC Account</string>
     <string name="finance_account">Financial </string>
+    <string name="capital_account">Capital</string>
     <string name="wallet_account">Wallet</string>
     <string name="confirm_transfer">Confirm Transfer</string>
     <string name="select_wallet">select wallet</string>

@@ -66,7 +66,7 @@ class WalletDetailActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         wallet = intent.getParcelableExtra(ConstData.WALLET)
-        coinType = intent.getStringExtra(ConstData.ROUTER_COIN_TYPE)
+        coinType = wallet?.coinType
         var gson = Gson()
         if (wallet == null) { //没有传入wallet，并且也没有coinType，非法调用
             if (coinType == null) {
@@ -140,17 +140,17 @@ class WalletDetailActivity : BaseActivity(),
     private fun refreshWallet() {
 
         var usableText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
-        usableText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+        usableText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.totalAmount , RoundingMode.FLOOR, 2, 8) + "USDT")
 
         var totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
         totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8))
 
         var totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
-        totalCnyText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+        totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny, RoundingMode.FLOOR, 2, 8) + "CNY")
 
 
         var usableFrozeText =  binding?.root?.findViewById<SpanTextView>(R.id.froze)
-        usableFrozeText?.setText(if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8))
+        usableFrozeText?.setText(if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8) + "USDT")
 
     }
 
