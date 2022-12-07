@@ -170,6 +170,9 @@ object TimeUtil {
         return isEqual
     }
 
+    /**
+     * 计算费率倒计时
+     */
     fun formatSeconds(seconds: Long): String {
         var timeStr:String? = null
         var hourStr:String? = null
@@ -200,6 +203,11 @@ object TimeUtil {
                 }
             }else{
                 hourStr = "00:"
+                minStr = if(min < 10){
+                    "0$min:"
+                }else{
+                    "$min:"
+                }
                 secondStr = if(second < 10){
                     "0$second"
                 }else{

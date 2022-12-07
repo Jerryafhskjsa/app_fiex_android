@@ -386,11 +386,16 @@ object FutureApiServiceHelper {
 
     /**
      * 下单接口
-     * 买卖方向：BUY;SELL
-     * 订单类型：LIMIT；MARKET
-     * 数量（张）
-     * 有效方式：GTC;IOC;FOK;GTX
+     * 买卖方向->orderSide:BUY;SELL
+     * 订单类型->orderType:LIMIT；MARKET
+     * 数量（张）->origQty
+     * 只减仓->reduceOnly (true,false)
+     * 有效方式->timeInForce:GTC;IOC;FOK;GTX
      * 仓位方向：LONG;SHORT
+     * 止盈价->triggerProfitPrice(number)
+     * 止损价->triggerStopPrice(number)
+     * 仓位方向->positionSide:LONG,SHORT
+     *
      */
     fun createOrder(
         context: Context?,
@@ -401,6 +406,9 @@ object FutureApiServiceHelper {
         price: Double?,
         timeInForce: String?,
         origQty: Int,
+        triggerProfitPrice:Number?,
+        triggerStopPrice:Number?,
+        reduceOnly:Boolean?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
@@ -409,7 +417,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.orderCreate(orderSide, symbol, price, timeInForce, orderType, positionSide, origQty)
+            ?.orderCreate(orderSide, symbol, price, timeInForce, orderType, positionSide, origQty,triggerProfitPrice,triggerStopPrice,reduceOnly)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

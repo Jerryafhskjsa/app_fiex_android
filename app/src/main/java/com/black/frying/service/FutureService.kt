@@ -736,7 +736,8 @@ object FutureService {
         positionSide: String?,
         price: Double?,
         timeInForce: String?,
-        origQty: Int
+        origQty: Int,
+        reduceOnly:Boolean?
     ) {
         FutureApiServiceHelper.createOrder(context,
             orderSide,
@@ -746,6 +747,9 @@ object FutureService {
             price,
             timeInForce,
             origQty,
+            null,
+            null,
+            reduceOnly,
             false,
             object : Callback<HttpRequestResultBean<String>?>() {
                 override fun callback(returnData: HttpRequestResultBean<String>?) {

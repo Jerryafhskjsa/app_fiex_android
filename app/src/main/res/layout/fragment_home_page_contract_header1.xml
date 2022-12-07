@@ -434,6 +434,7 @@
 
                     <com.black.base.widget.SpanTextView
                         style="@style/ContractBondTextLeft"
+                        android:id="@+id/tv_buy_count"
                         android:text="@string/contract_can_buy_raise" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
@@ -461,8 +462,9 @@
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/action_freez"
+                        android:id="@+id/action_buy_freez"
                         style="@style/ContractBondTextLeft"
+                        android:layout_height="match_parent"
                         android:text="@string/contract_bond" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
@@ -489,7 +491,7 @@
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/action_type"
+                        android:id="@+id/action_buy_type"
                         style="@style/ContractBondTextLeft"
                         android:text="@string/contract_buy_in" />
 
@@ -530,6 +532,7 @@
 
                     <com.black.base.widget.SpanTextView
                         style="@style/ContractBondTextLeft"
+                        android:id="@+id/tv_sell_count"
                         android:text="@string/contract_can_buy_fall" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
@@ -558,6 +561,7 @@
 
                     <com.black.base.widget.SpanTextView
                         style="@style/ContractBondTextLeft"
+                        android:id="@+id/action_sell_freez"
                         android:text="@string/contract_bond" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
@@ -586,6 +590,7 @@
 
                     <com.black.base.widget.SpanTextView
                         style="@style/ContractBondTextLeft"
+                        android:id="@+id/action_sell_type"
                         android:text="@string/contract_sell_out" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">

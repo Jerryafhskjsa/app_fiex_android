@@ -17,6 +17,10 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fiex_fragment_home_page_main.xml" value="0.16666666666666666" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.3558504221954162" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_assets11.xml" value="0.2100877192982456" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract_detail.xml" value="0.171875" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract_header1.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_contract_header2.xml" value="0.171875" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_main.xml" value="0.1875" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_money.xml" value="0.2100877192982456" />
@@ -28,6 +32,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction_header1_1.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/fragment_quotation_detail_depth.xml" value="0.24947916666666667" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/home_page_tab_indicator.xml" value="0.12894736842105264" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/list_item_entrust_current_home.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/app/src/main/res/layout/list_item_home_main_rise_fall.xml" value="0.264" />
@@ -320,32 +325,15 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.20208333333333334" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_choose_coin.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_withdraw_address.xml" value="0.264" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_assets_wallet.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_empty.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.3333333333333333" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_fiex.xml" value="0.12083333333333333" />
-        <entry key="..\:/fiex/base/src/main/res/layout/spinner_drop_down_item.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/base/src/main/res/layout/spinner_item_2.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/base/src/main/res/layout/tool_bar_coin_bill.xml" value="0.3333333333333333" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/tool_bar_left_back.xml" value="0.1" />
         <entry key="..\:/fiex/base/src/main/res/layout/tool_bar_left_back_record.xml" value="0.1" />
-        <entry key="..\:/fiex/base/src/main/res/layout/view_tab_normal.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/base/src/main/res/layout/view_verify_google_layout.xml" value="0.14010416666666667" />
-        <entry key="..\:/fiex/res/src/main/res/drawable/home_tab_transaction.xml" value="0.109" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_asset_coin_detail.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/activity_asset_transfer.xml" value="0.14010416666666667" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_extract.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_financial_record.xml" value="0.1" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_wallet_address_add.xml" value="0.14666666666666667" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/activity_wallet_detail.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_withdraw_detail.xml" value="0.22" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/fragment_assets_wallet.xml" value="0.22" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/fragment_financial_extract_record.xml" value="0.12916666666666668" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/fragment_financial_recharge_record.xml" value="0.12916666666666668" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/fragment_wallet_lever.xml" value="0.16666666666666666" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/fragment_wallet_normal.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_financial_record.xml" value="0.17447916666666666" />
-        <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_wallet_bill.xml" value="0.17447916666666666" />
       </map>
     </option>

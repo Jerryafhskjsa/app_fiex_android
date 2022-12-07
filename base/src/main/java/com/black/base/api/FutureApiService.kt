@@ -157,7 +157,10 @@ interface FutureApiService {
         @Field("timeInForce") timeInForce: String?,
         @Field("orderType") orderType: String?,
         @Field("positionSide") positionSide: String?,
-        @Field("origQty") origQty: Int?
+        @Field("origQty") origQty: Int?,
+        @Field("triggerProfitPrice") triggerProfitPrice:Number?,
+        @Field("triggerStopPrice") triggerStopPrice:Number?,
+        @Field("reduceOnly") reduceOnly:Boolean?
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

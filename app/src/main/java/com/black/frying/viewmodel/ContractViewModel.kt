@@ -418,7 +418,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     }
 
 
-    fun setCurrentPairorderType(type:String?){
+    fun setCurrentPairOrderType(type:String?){
         currentOrderType = type
     }
 
@@ -761,6 +761,10 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
 
     fun getCoinType(): String? {
         return coinType
+    }
+
+    fun getContractSize():String?{
+        return currentPairStatus.contractSize
     }
 
     fun getSetName(): String? {

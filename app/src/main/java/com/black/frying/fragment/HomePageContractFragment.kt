@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.TradeApiServiceHelper
-import com.black.base.api.WalletApiServiceHelper
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
@@ -40,7 +40,6 @@ import com.black.base.model.future.TickerBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
-import com.black.base.model.wallet.CoinInfoType
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
@@ -58,7 +57,6 @@ import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
-import com.black.im.util.IMHelper
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -73,13 +71,13 @@ import com.fbsex.exchange.databinding.FragmentHomePageContractHeaderBinding
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
-import udesk.org.jivesoftware.smackx.time.packet.Time
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 //首页合约
 @Route(
@@ -117,8 +115,8 @@ class HomePageContractFragment : BaseFragment(),
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
     private var currentOrderType: String? = "LIMIT"
-    private var currentUnitType: String? = "USDT"
-    private var currentTimeInForceType: String? = "GTC"
+    private var currentUnitType:String? = "USDT"
+    private var currentTimeInForceType:String? = "GTC"
     private var inputNumber: Boolean? = false//是否手动输入数量
     private var isDear: Boolean? = null
 
@@ -170,12 +168,13 @@ class HomePageContractFragment : BaseFragment(),
     private var recordFragmentList: MutableList<Fragment?>? = null
     private var currentTabPosition: Int = 0
 
-    private var fundRateTime: Long? = null
+    private var fundRateTime:Long? = null
     private val mFundRateTimerHandler = Handler()
     private val fundRateTimer = object : Runnable {
         override fun run() {
             fundRateTime = fundRateTime?.minus(1)
             if (fundRateTime!! <= 0) {
+                viewModel?.getFundRate(viewModel?.getCurrentPair())
             } else {
                 mFundRateTimerHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
                 headerView?.tvRateTime?.text = TimeUtil.formatSeconds(fundRateTime!!)
@@ -271,7 +270,7 @@ class HomePageContractFragment : BaseFragment(),
 //          FutureService.getCurrentPosition(mContext)
 //        FutureService.getUserStepRate(mContext)
 //        FutureService.getOrderPosition(mContext)
-        FutureService.getAvailableOpenData(BigDecimal("10000"), 5, BigDecimal(1000), BigDecimal.ZERO)
+//        FutureService.getAvailableOpenData(BigDecimal("10000"), 5)
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
     }
 
@@ -403,7 +402,7 @@ class HomePageContractFragment : BaseFragment(),
         header1View?.countBar?.setOnSeekBarChangeListener(this)
         header1View?.btnHandle?.setOnClickListener(this)
         header1View?.btnHandle1?.setOnClickListener(this)
-        viewModel?.setCurrentPairorderType(currentOrderType)
+        viewModel?.setCurrentPairOrderType(currentOrderType)
         refreshOrderType(currentOrderType)
         deepViewBinding!!.init()
     }
@@ -556,6 +555,7 @@ class HomePageContractFragment : BaseFragment(),
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
             })
+//            recordTab?.getTabAt(0)?.text ="test"
         }
     }
 
@@ -676,7 +676,7 @@ class HomePageContractFragment : BaseFragment(),
                         ) {
                             refreshOrderType(item)
                             currentOrderType = item
-                            viewModel?.setCurrentPairorderType(item)
+                            viewModel?.setCurrentPairOrderType(item)
                             if (currentOrderType.equals("LIMIT")) {
 //                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                             } else if (currentOrderType.equals("MARKET")) {
@@ -685,7 +685,7 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }).show()
             }
-            R.id.lin_unit_type -> {
+            R.id.lin_unit_type ->{
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentUnitType,
@@ -704,7 +704,7 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }).show()
             }
-            R.id.lin_limit_type -> {
+            R.id.lin_limit_type ->{
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentTimeInForceType,
@@ -837,7 +837,7 @@ class HomePageContractFragment : BaseFragment(),
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
                     if (transactionType != ConstData.FUTURE_OPERATE_OPEN) {
-                        transactionType = ConstData.FUTURE_OPERATE_OPEN
+                        transactionType =  ConstData.FUTURE_OPERATE_OPEN
                         //refreshSeekBar();
                         refreshView()
                     }
@@ -847,60 +847,48 @@ class HomePageContractFragment : BaseFragment(),
                 if (CookieUtil.getUserInfo(it) == null) {
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    if (transactionType != ConstData.FUTURE_OPERATE_CLOSE) {
-                        transactionType = ConstData.FUTURE_OPERATE_CLOSE
+                    if (transactionType !=  ConstData.FUTURE_OPERATE_CLOSE) {
+                        transactionType =  ConstData.FUTURE_OPERATE_CLOSE
                         //                    refreshSeekBar();
                         refreshView()
                     }
                 }
             }
-            R.id.btn_handle_1 -> {
-
+            //卖出/开空
+            R.id.btn_handle_1 ->{
+                var positionSide:String? = null
+                var orderSide:String? = null
+                when(transactionType){
+                    ConstData.FUTURE_OPERATE_OPEN -> {
+                        orderSide = "BUY"
+                        positionSide = "SHORT"
+                    }
+                    ConstData.FUTURE_OPERATE_CLOSE -> {
+                        positionSide = "LONG"
+                        orderSide = "SELL"
+                    }
+                }
+                createOrderFuture(positionSide!!,orderSide!!)
             }
+            //买入/开多
             R.id.btn_handle -> mContext?.let {
                 if (CookieUtil.getUserInfo(it) == null) {
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    if (viewModel!!.getCoinType() != null) {
-                        WalletApiServiceHelper.getCoinInfo(
-                            mContext,
-                            viewModel!!.getCoinType(),
-                            object : Callback<CoinInfoType?>() {
-                                override fun callback(returnData: CoinInfoType?) {
-                                    if (returnData != null) {
-                                        var coinInfo = returnData.config?.get(0)?.coinConfigVO
-                                        if (coinInfo?.supportTrade != null && true == coinInfo.supportTrade) {
-                                            if (transactionType == ConstData.FUTURE_OPERATE_OPEN) { //买入
-                                                createOrder("BUY")
-                                            } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) { //卖出
-                                                createOrder("SELL")
-                                            }
-                                        } else {
-                                            FryingUtil.showToast(
-                                                mContext,
-                                                getString(
-                                                    R.string.alert_trade_not_support,
-                                                    viewModel!!.getCoinType()
-                                                )
-                                            )
-                                        }
-                                    } else {
-                                        FryingUtil.showToast(
-                                            mContext,
-                                            getString(
-                                                R.string.alert_trade_not_support,
-                                                viewModel!!.getCoinType()
-                                            )
-                                        )
-                                    }
-                                }
-
-                                override fun error(type: Int, error: Any) {
-                                    FryingUtil.showToast(mContext, error.toString())
-                                }
-                            })
+                    var positionSide:String? = null
+                    var orderSide:String? = null
+                    when(transactionType){
+                        ConstData.FUTURE_OPERATE_OPEN -> {
+                            positionSide = "LONG"
+                            orderSide = "BUY"
+                        }
+                        ConstData.FUTURE_OPERATE_CLOSE -> {
+                            positionSide = "SHORT"
+                            orderSide = "SELL"
+                        }
                     }
+                    createOrderFuture(positionSide!!,orderSide!!)
                 }
             }
         }
@@ -1037,7 +1025,7 @@ class HomePageContractFragment : BaseFragment(),
 
     //计算最大交易数量
     private fun getMaxAmount(): BigDecimal? {
-        if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
+        if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
             val usable = currentBalanceSell?.availableBalance
             val price =
                 CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString())
@@ -1046,7 +1034,7 @@ class HomePageContractFragment : BaseFragment(),
                 2,
                 BigDecimal.ROUND_HALF_DOWN
             )
-        } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
+        } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
             return currentBalanceBuy?.availableBalance?.toBigDecimal()
         }
         return null
@@ -1090,8 +1078,7 @@ class HomePageContractFragment : BaseFragment(),
 //                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                 }
             } else { //只有价格
-                if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
+                if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
                     binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                     if (price > 0 && currentBalanceSell != null) {
                         //总的钱数除以输入价格
@@ -1107,9 +1094,8 @@ class HomePageContractFragment : BaseFragment(),
                     } else {
                         binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                     }
-                } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
+                } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
                     binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                    binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
                     if (price > 0 && currentBalanceBuy != null) {
                         //总的钱数乘以输入价格
                         binding!!.fragmentHomePageContractHeader1.useableBuy.setText(
@@ -1131,14 +1117,12 @@ class HomePageContractFragment : BaseFragment(),
                 }
             }
         } else {
-            if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
+            if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                 binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
-            } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
+            } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
                 binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
-                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
             }
         }
     }
@@ -1196,7 +1180,9 @@ class HomePageContractFragment : BaseFragment(),
         refreshUsable()
         refreshData()
         currentOrderType = "LIMIT"
-        viewModel?.setCurrentPairorderType(currentOrderType)
+        currentUnitType = "USDT"
+        currentTimeInForceType = "GTC"
+        viewModel?.setCurrentPairOrderType(currentOrderType)
         refreshOrderType(currentOrderType)
     }
 
@@ -1217,11 +1203,10 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.fragmentHomePageContractHeader1?.orderType.text = typeDes
     }
 
-    private fun refreshUnitType(type: String?) {
+    private fun refreshUnitType(type:String?){
         binding!!.fragmentHomePageContractHeader1?.unitType.text = type
     }
-
-    private fun refreshTimeInForceType(type: String?) {
+    private fun refreshTimeInForceType(type:String?){
         binding!!.fragmentHomePageContractHeader1?.withLimitType.text = type
     }
 
@@ -1243,72 +1228,77 @@ class HomePageContractFragment : BaseFragment(),
     //刷新交易区控件
     private fun refreshTransactionHardViews() {
         if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-            binding!!.fragmentHomePageContractHeader1.contractWithLimit.visibility = View.VISIBLE
+            header1View?.contractWithLimit?.visibility = View.VISIBLE
             if (withLimitFlag == true) {
-                binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.VISIBLE
+                header1View?.linStopValue?.visibility = View.VISIBLE
             } else {
-                binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.GONE
+                header1View?.linStopValue?.visibility = View.GONE
             }
-
-            binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = true
-            binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = false
-            binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable =
+            header1View?.tvBuyCount?.text = getString(R.string.contract_can_buy_raise)
+            header1View?.tvSellCount?.text = getString(R.string.contract_can_buy_fall)
+            header1View?.actionBuyFreez?.text = getString(R.string.contract_bond)
+            header1View?.btnBuy?.isChecked = true
+            header1View?.btnSale?.isChecked = false
+            header1View?.countProgress?.progressDrawable =
                 countProgressBuy
-            binding!!.fragmentHomePageContractHeader1.amountZero.buttonDrawable =
+            header1View?.amountZero?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageContractHeader1.amountTwenty.buttonDrawable =
+            header1View?.amountTwenty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageContractHeader1.amountFourty.buttonDrawable =
+            header1View?.amountFourty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageContractHeader1.amountSixty.buttonDrawable =
+            header1View?.amountSixty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageContractHeader1.amountEighty.buttonDrawable =
+            header1View?.amountEighty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
-            binding!!.fragmentHomePageContractHeader1.amountAll.buttonDrawable =
+            header1View?.amountAll?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
-            binding!!.fragmentHomePageContractHeader1.contractWithLimit.visibility = View.GONE
-            binding!!.fragmentHomePageContractHeader1.linStopValue.visibility = View.GONE
-            binding!!.fragmentHomePageContractHeader1.btnBuy.isChecked = false
-            binding!!.fragmentHomePageContractHeader1.btnSale.isChecked = true
-            binding!!.fragmentHomePageContractHeader1.countProgress.progressDrawable =
+            header1View?.contractWithLimit?.visibility = View.GONE
+            header1View?.linStopValue?.visibility = View.GONE
+            header1View?.tvBuyCount?.text = getString(R.string.contract_can_sell_raise)
+            header1View?.tvSellCount?.text = getString(R.string.contract_can_sell_fail)
+            header1View?.actionBuyFreez?.text = getString(R.string.hold_amount)
+            header1View?.btnBuy?.isChecked = false
+            header1View?.btnSale?.isChecked = true
+            header1View?.countProgress?.progressDrawable =
                 countProgressSale
-            binding!!.fragmentHomePageContractHeader1.amountZero.buttonDrawable =
+            header1View?.amountZero?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageContractHeader1.amountTwenty.buttonDrawable =
+            header1View?.amountTwenty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageContractHeader1.amountFourty.buttonDrawable =
+            header1View?.amountFourty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageContractHeader1.amountSixty.buttonDrawable =
+            header1View?.amountSixty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageContractHeader1.amountEighty.buttonDrawable =
+            header1View?.amountEighty?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
-            binding!!.fragmentHomePageContractHeader1.amountAll.buttonDrawable =
+            header1View?.amountAll?.buttonDrawable =
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
             binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
             binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName())
-            binding!!.fragmentHomePageContractHeader1.deepPriceP.text =
+            header1View?.deepPriceP?.text =
                 getString(R.string.brackets, viewModel!!.getSetName())
-            binding!!.fragmentHomePageContractHeader1.deepAmountName.text =
+            header1View?.deepAmountName?.text =
                 getString(R.string.brackets, viewModel!!.getCoinType())
             if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                binding!!.fragmentHomePageContractHeader1.useableUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageContractHeader1.useableFreezUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageContractHeader1.btnHandle.setText(getString(R.string.contract_buy_raise))
-                binding!!.fragmentHomePageContractHeader1.btnHandle1.setText(getString(R.string.contract_sell_fall))
+                header1View?.useableUnit?.setText(viewModel!!.getSetName())
+                header1View?.useableBuyUnit?.setText(viewModel!!.getCoinType())
+                header1View?.useableFreezUnit?.setText(viewModel!!.getSetName())
+                header1View?.btnHandle?.setText(getString(R.string.contract_buy_raise))
+                header1View?.btnHandle1?.setText(getString(R.string.contract_sell_fall))
             } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
-                binding!!.fragmentHomePageContractHeader1.useableUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageContractHeader1.useableFreezUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageContractHeader1.btnHandle.setText(getString(R.string.contract_buy_fall))
-                binding!!.fragmentHomePageContractHeader1.btnHandle1.setText(getString(R.string.contract_sell_raise))
+                header1View?.useableUnit?.setText(viewModel!!.getCoinType())
+                header1View?.useableBuyUnit?.setText(viewModel!!.getSetName())
+                header1View?.useableFreezUnit?.setText(viewModel!!.getCoinType())
+                header1View?.btnHandle?.setText(getString(R.string.contract_buy_fall))
+                header1View?.btnHandle1?.setText(getString(R.string.contract_sell_raise))
             }
         }
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
-            binding!!.fragmentHomePageContractHeader1.btnHandle.setText(R.string.login)
+            header1View?.btnHandle?.setText(R.string.login)
         }
         refreshCurrentWallet()
     }
@@ -1370,7 +1360,6 @@ class HomePageContractFragment : BaseFragment(),
                 } else {
                     binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
                 }
-                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.buy_usable)
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
             } else if (transactionType == 2) {
                 if (currentBalanceBuy != null) {
@@ -1394,7 +1383,6 @@ class HomePageContractFragment : BaseFragment(),
                     binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
                 }
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
-                binding!!.fragmentHomePageContractHeader1.actionType.setText(R.string.sale_usable)
             }
         }
     }
@@ -1428,77 +1416,81 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    //下单
-    private fun createOrder(direction: String) {
+    /**
+     * 下单
+     * orderSide 买卖方向：BUY;SELL
+     * orderType 订单类型：LIMIT；MARKET
+     * origQty 数量（张）
+     * timeInForce：GTC;IOC;FOK;GTX
+     * positionSide：LONG;SHORT
+     * 数量 = 输入数量/(输入价格*合约面值)
+     */
+    private fun createOrderFuture(positionSide:String,orderSide:String) {
+        var orderType:String? = currentOrderType
         var price: String? =
-            binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' }
-        val priceDouble = CommonUtil.parseDouble(price)
-        if (currentOrderType.equals("LIMIT")) {
-            if (priceDouble == null || priceDouble == 0.0) {
-                FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
-                return
-            }
-            val currentPrice =
-                CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.currentPrice.text.toString())
-            if (currentPrice != null && currentPrice != 0.0) {
-                if ("SELL" != direction && java.lang.Double.compare(
-                        priceDouble,
-                        currentPrice * 0.8
-                    ) < 0
-                ) {
-                    FryingUtil.showToast(mContext, getString(R.string.trade_sale_over_price))
-                    return
-                }
-                if ("BUY" == direction && java.lang.Double.compare(
-                        priceDouble,
-                        currentPrice * 1.2
-                    ) > 0
-                ) {
-                    FryingUtil.showToast(mContext, getString(R.string.trade_buy_over_price))
-                    return
-                }
-            }
+            header1View?.price?.text.toString().trim { it <= ' ' }
+        if(price?.isEmpty() == true){
+            FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
+            return
         }
-        val totalAmount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString()
+        var priceDouble:Double? = CommonUtil.parseDouble(price)
+        var timeInForce:String? = currentTimeInForceType
+        val origQty = header1View?.transactionQuota?.text.toString()
             .trim { it <= ' ' }
-        val totalAmountDouble = CommonUtil.parseDouble(totalAmount)
-        if (totalAmountDouble == null || totalAmountDouble == 0.0) {
+        if (origQty.isEmpty() || origQty.toInt() == 0) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
-        val tradeType = currentOrderType
-        if (currentOrderType.equals("MARKET")) {
-            price = null
+        val totalAmountInt = priceDouble?.times(viewModel?.getContractSize()!!.toDouble())
+            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
+
+        if (orderType.equals("MARKET")) {
+            priceDouble = null
+        }
+        //止盈止损
+        var tigerStop:Boolean? = header1View?.contractWithLimit?.isChecked
+        var tigerProfit:String? = header1View?.stopSurplus?.text.toString().trim { it <= ' ' }
+        var tigerProfitValue:Number? = null
+        if(tigerProfit?.isNotEmpty() == true){
+            tigerProfitValue = tigerProfit.toFloat()
+        }
+
+        var tigerLose:String? = header1View?.stopLose?.text.toString().trim { it <= ' ' }
+        var tigerLoseValue:Number? = null
+        if(tigerLose?.isNotEmpty() == true){
+            tigerLoseValue = tigerLose?.toFloat()
         }
         val createRunnable = Runnable {
-            TradeApiServiceHelper.createTradeOrder(
-                mContext,
-                viewModel!!.getCurrentPair(),
-                direction,
-                totalAmount,
-                price,
-                tradeType,
-                object : NormalCallback<HttpRequestResultString?>(mContext!!) {
-                    override fun callback(returnData: HttpRequestResultString?) {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            binding!!.fragmentHomePageContractHeader1.price.setText("")
-                            binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("")
-//                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(0, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
-//                        viewModel!!.getWalletLeverDetail()
-                            viewModel!!.getCurrentUserBalance(ConstData.BalanceType.SPOT)
-                            withTimerGetCurrentTradeOrder()
-                            FryingUtil.showToast(mContext, getString(R.string.trade_success))
-                        } else {
-                            FryingUtil.showToast(
-                                mContext,
-                                if (returnData == null) "null" else returnData.msg
-                            )
+            FutureApiServiceHelper.createOrder(context,
+                orderSide!!,
+                orderType!!,
+                viewModel?.getCurrentPair(),
+                positionSide!!,
+                priceDouble,
+                timeInForce,
+                totalAmountInt!!,
+                tigerProfitValue,
+                tigerLoseValue,
+                false,
+                true,
+                object : Callback<HttpRequestResultBean<String>?>() {
+                    override fun callback(returnData: HttpRequestResultBean<String>?) {
+                        if (returnData != null) {
+                            Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
+                            header1View?.price?.setText("")
+                            header1View?.transactionQuota?.setText("")
+                            FryingUtil.showToast(context, getString(R.string.trade_success))
+                            /**
+                             * todo 刷新持仓列表
+                             */
                         }
                     }
 
                     override fun error(type: Int, error: Any?) {
-                        FryingUtil.showToast(mContext, error.toString())
+                        Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                        FryingUtil.showToast(context, error.toString())
                     }
+
                 })
         }
         createRunnable.run()
@@ -1547,7 +1539,7 @@ class HomePageContractFragment : BaseFragment(),
         currentOrderType = "LIMIT"
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
-        viewModel?.setCurrentPairorderType(currentOrderType)
+        viewModel?.setCurrentPairOrderType(currentOrderType)
         viewModel?.setCurrentUnitType(currentUnitType)
         viewModel?.setCurrentTimeInForceType(currentTimeInForceType)
     }
@@ -1853,29 +1845,21 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     override fun onFundingRate(fundRate: FundingRateBean?) {
-        Log.d("iiiiii", "onFundingRate")
-        headerView?.tvFundRate?.text = fundRate?.fundingRate
+        Log.d("iiiiii","onFundingRate")
+        var rate:String? = NumberUtil.formatNumberNoGroup(
+            fundRate?.fundingRate?.toFloat()?.times(100),
+            RoundingMode.FLOOR,
+            4,
+            4
+        )+"%"
+        headerView?.tvFundRate?.text = rate
         updateFundTime(fundRate?.nextCollectionTime)
     }
 
-    private fun updateFundTime(nextCollectionTime: Long?) {
+    private fun updateFundTime(nextCollectionTime:Long?){
         fundRateTime = (nextCollectionTime?.minus(System.currentTimeMillis()))?.div(1000)
         mFundRateTimerHandler.removeCallbacks(fundRateTimer)
         mFundRateTimerHandler.post(fundRateTimer)
-    }
-
-    private fun updateCurrentPair(pairStatus: PairStatus) {
-        val color =
-            if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
-        header1View?.currentPrice?.setText(pairStatus.currentPriceFormat)
-        header1View?.currentPrice?.setTextColor(color)
-        header1View?.currentPriceCny?.setText(
-            String.format(
-                "≈ %s",
-                pairStatus.currentPriceCNYFormat
-            )
-        )
-        computePriceCNY()
     }
 
     private fun updateCurrentPairPrice(price: String?) {
