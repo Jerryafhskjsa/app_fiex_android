@@ -350,4 +350,5 @@ object FutureApiServiceHelperWrapper {
             }
             ?.compose(RxJavaHelper.observeOnMainThread())
     }
+
 }

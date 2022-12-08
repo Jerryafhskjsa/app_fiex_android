@@ -524,6 +524,8 @@ object UrlConfig {
         const val URL_DEPTH = "market/v1/public/q/depth";
         //交易对配置列表
         const val URL_SYMBOL_LIST = "market/v1/public/symbol/list"
+        //调整合约倍数
+        const val URL_ADJUST_LEVERAGE= "user/v1/position/adjust-leverage"
 
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
 
@@ -543,9 +545,15 @@ object UrlConfig {
 
         const val URL_POSITION_ADL = "user/v1/position/adl"
 
-        const val URL_POSITION_LIST = "user/v1/position/list"
+        const val URL_POSITION_LIST = "user/v1/position/list"//查询持仓信息
 
-        const val URL_leverage_bracket_LIST = "user/v1/leverage/bracket/list"
+        const val URL_PROFIT_LIST = "trade/v1/entrust/profit-list"//查询止盈止损
+
+        const val URL_PLAN_LIST = "trade/v1/entrust/plan-list"//查询计划委托
+
+        const val URL_LEVERAGE_BRACKET_LIST = "user/v1/leverage/bracket/list"
+
+        const val URL_LEVERAGE_BRACKET_DETAIL = "user/v1/leverage/bracket/detail"
 
         const val URL_OPEN_ACCOUNT = "user/v1/account/open"
 

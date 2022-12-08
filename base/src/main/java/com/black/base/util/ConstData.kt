@@ -31,9 +31,9 @@ object ConstData {
     const val DEPTH_SPOT_TYPE = 0
     const val DEPTH_FUTURE_TYPE = 1
 
-    const val CONTRACT_REC_HOLD_AMOUNT = 0
-    const val CONTRACT_REC_WITH_LIMIE = 1
-    const val CONTRACT_REC_CURRENT = 2
+    const val CONTRACT_REC_HOLD_AMOUNT = 0//当前持仓tab
+    const val CONTRACT_REC_WITH_LIMIE = 1//止盈止损tab
+    const val CONTRACT_REC_CURRENT = 2//计划委托tab
 
     const val USER_VERIFY_NO = "0"
     const val USER_VERIFY_ED = "1"

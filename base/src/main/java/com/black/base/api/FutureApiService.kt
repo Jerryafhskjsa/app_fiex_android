@@ -2,6 +2,7 @@ package com.black.base.api
 
 
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.PagingData
 import com.black.base.model.future.*
 
 import com.black.base.util.UrlConfig
@@ -87,6 +88,16 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_POSITION_LIST)
     fun getPositionList(): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
+    /**
+     * 获取止盈止损列表
+     */
+    @GET(UrlConfig.Future.URL_PROFIT_LIST)
+    fun getProfitList(@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
+    /**
+     * 获取计划委托列表
+     */
+    @GET(UrlConfig.Future.URL_PLAN_LIST)
+    fun getPlanList(@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
 
     /**
      * 获取行情
@@ -107,10 +118,16 @@ interface FutureApiService {
     fun getPositionAdl(): Observable<HttpRequestResultBean<ArrayList<ADLBean?>?>?>?
 
     /**
-     * 获取杠杆分层信息
+     * 获取所有交易对杠杆分层信息
      */
-    @GET(UrlConfig.Future.URL_leverage_bracket_LIST)
+    @GET(UrlConfig.Future.URL_LEVERAGE_BRACKET_LIST)
     fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketBean?>?>?>?
+
+    /**
+     * 获取单个交易对杠杆分层信息
+     */
+    @GET(UrlConfig.Future.URL_LEVERAGE_BRACKET_DETAIL)
+    fun getLeverageBracketDetail( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<LeverageBracketBean?>?>?
 
     /**
      * 获取用户单币种资金
@@ -172,5 +189,16 @@ interface FutureApiService {
         @Field("symbol") symbol: String?,
         @Field("positionSide") positionSide: String?,
         @Field("autoMargin") autoMargin: Boolean?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 调整杠杆倍数
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_ADJUST_LEVERAGE)
+    fun adjustLeverage(
+        @Field("symbol") symbol: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("leverage") leverage: Int?,
     ): Observable<HttpRequestResultBean<String>?>?
 }

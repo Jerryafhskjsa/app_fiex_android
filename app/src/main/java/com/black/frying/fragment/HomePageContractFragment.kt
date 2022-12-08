@@ -35,6 +35,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.future.FundingRateBean
+import com.black.base.model.future.LeverageBracketBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.TickerBean
 import com.black.base.model.socket.*
@@ -125,6 +126,9 @@ class HomePageContractFragment : BaseFragment(),
     private var headerView: FragmentHomePageContractHeaderBinding? = null
     private var header1View: FragmentHomePageContractHeader1Binding? = null
 
+    //交易对杠杆分层
+    private var leverageBracket: LeverageBracketBean? = null
+
 
     //开仓倍数设置
     private var buyMultiChooseBean: ContractMultiChooseBean? = null
@@ -166,6 +170,10 @@ class HomePageContractFragment : BaseFragment(),
     private var userBalance: ArrayList<UserBalance?>? = null
     private var tabData: ArrayList<ContractRecordTabBean?>? = null
     private var recordFragmentList: MutableList<Fragment?>? = null
+    private var positionTabListener:ContractPositionTabFragment.OnTabModelListener? = null
+    private var profitTabListener:ContractProfitTabFragment.OnTabModelListener? = null
+    private var planTabListener:ContractPlanTabFragment.OnTabModelListener? = null
+
     private var currentTabPosition: Int = 0
 
     private var fundRateTime:Long? = null
@@ -224,7 +232,6 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1
         )
         deepViewBinding?.setOnTransactionDeepListener(this)
-        initData()
         initActionBar()
         initHeader()
         initHeader1()
@@ -232,12 +239,13 @@ class HomePageContractFragment : BaseFragment(),
         return layout
     }
 
-    private fun initData() {
+    private fun initAdjustLeverageData() {
         buyMultiChooseBean = ContractMultiChooseBean()
         buyMultiChooseBean?.maxMultiple = 100
         buyMultiChooseBean?.defaultMultiple = 10
         buyMultiChooseBean?.orientation = "BUY"
         buyMultiChooseBean?.type = 0
+        buyMultiChooseBean?.symbol = viewModel?.getCurrentPair()
         binding?.fragmentHomePageContractHeader?.buyMultiple?.text =
             getMultipleDes(buyMultiChooseBean)
         sellMultiChooseBean = ContractMultiChooseBean()
@@ -245,6 +253,7 @@ class HomePageContractFragment : BaseFragment(),
         sellMultiChooseBean?.defaultMultiple = 10
         sellMultiChooseBean?.orientation = "SELL"
         sellMultiChooseBean?.type = 0
+        sellMultiChooseBean?.symbol = viewModel?.getCurrentPair()
         binding?.fragmentHomePageContractHeader?.sellMultiple?.text =
             getMultipleDes(sellMultiChooseBean)
     }
@@ -259,10 +268,11 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(50)
+        viewModel?.getLeverageBracketDetail()
         viewModel?.onResume()
+        initAdjustLeverageData()
         getTradeOrderCurrent()
         updateDear(isDear)
-
         FutureService.getContractSize("btc_usdt")
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
@@ -432,20 +442,35 @@ class HomePageContractFragment : BaseFragment(),
             tabData = ArrayList()
         }
         var tab1 = ContractRecordTabBean()
-        tab1.name = getString(R.string.contract_record_tab1)
         tab1.amount = 0
+        tab1.name = getString(R.string.contract_record_tab1,tab1?.amount.toString())
         tab1.type = ConstData.CONTRACT_REC_HOLD_AMOUNT
         var tab2 = ContractRecordTabBean()
-        tab2.name = getString(R.string.contract_record_tab2)
         tab2.amount = 0
+        tab2.name = getString(R.string.contract_record_tab2,tab2?.amount.toString())
         tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
         var tab3 = ContractRecordTabBean()
-        tab3.name = getString(R.string.contract_record_tab3)
         tab3.amount = 0
+        tab3.name = getString(R.string.contract_record_tab3,tab3?.amount.toString())
         tab3.type = ConstData.CONTRACT_REC_CURRENT
         tabData?.add(tab1)
         tabData?.add(tab2)
         tabData?.add(tab3)
+        positionTabListener = object :ContractPositionTabFragment.OnTabModelListener{
+            override fun onCount(count: Int?) {
+                updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT,count)
+            }
+        }
+        profitTabListener = object :ContractProfitTabFragment.OnTabModelListener{
+            override fun onCount(count: Int?) {
+                updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE,count)
+            }
+        }
+        planTabListener = object :ContractPlanTabFragment.OnTabModelListener{
+            override fun onCount(count: Int?) {
+                updateTabTitles(ConstData.CONTRACT_REC_CURRENT,count)
+            }
+        }
         if (tabData != null && tabData!!.isNotEmpty()) {
             val tabSize = tabData!!.size
             if (recordFragmentList != null) {
@@ -457,17 +482,28 @@ class HomePageContractFragment : BaseFragment(),
                 var fragment: BaseFragment? = null
                 try {
                     when (tabData?.type) {
-                        ConstData.CONTRACT_REC_HOLD_AMOUNT -> fragment =
-                            HomePageContractDetailFragment.newInstance(tabData)
-                        ConstData.CONTRACT_REC_WITH_LIMIE, ConstData.CONTRACT_REC_CURRENT -> fragment =
-                            EmptyFragment.newInstance("")
+                        ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
+                            fragment = ContractPositionTabFragment.newInstance(tabData)
+                        }
+                        ConstData.CONTRACT_REC_WITH_LIMIE -> fragment = ContractProfitTabFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_CURRENT -> fragment = ContractPlanTabFragment.newInstance(tabData)
+
                     }
-                    if (fragment is HomePageContractDetailFragment) {
+                    if (fragment is ContractPositionTabFragment) {
                         fragment?.setAutoHeightViewPager(recordViewPager)
+                        fragment?.setOnTabModeListener(positionTabListener as ContractPositionTabFragment.OnTabModelListener)
                     }
-                    if (fragment is EmptyFragment) {
+                    if (fragment is ContractProfitTabFragment) {
                         fragment?.setAutoHeightViewPager(recordViewPager)
+                        fragment?.setOnTabModeListener(profitTabListener as ContractProfitTabFragment.OnTabModelListener)
                     }
+                    if (fragment is ContractPlanTabFragment) {
+                        fragment?.setAutoHeightViewPager(recordViewPager)
+                        fragment?.setOnTabModeListener(planTabListener as ContractPlanTabFragment.OnTabModelListener)
+                    }
+//                    if (fragment is EmptyFragment) {
+//                        fragment?.setAutoHeightViewPager(recordViewPager)
+//                    }
                     var bundle = Bundle()
                     bundle.putInt(AutoHeightViewPager.POSITION, i)
                     fragment?.arguments = bundle
@@ -478,12 +514,12 @@ class HomePageContractFragment : BaseFragment(),
             }
             recordViewPager?.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
                 override fun getItem(position: Int): Fragment {
-                    if (recordFragmentList!![position] is HomePageContractDetailFragment) {
-                        return recordFragmentList!![position] as HomePageContractDetailFragment
-                    } else if (recordFragmentList!![position] is EmptyFragment) {
-                        return recordFragmentList!![position] as EmptyFragment
+                    if (recordFragmentList!![position] is ContractPositionTabFragment) {
+                        return recordFragmentList!![position] as ContractPositionTabFragment
+                    } else if (recordFragmentList!![position] is ContractProfitTabFragment) {
+                        return recordFragmentList!![position] as ContractProfitTabFragment
                     } else {
-                        return recordFragmentList!![position] as EmptyFragment
+                        return recordFragmentList!![position] as ContractPlanTabFragment
                     }
                 }
 
@@ -559,6 +595,20 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    private fun updateTabTitles(tabType: Int?,amount:Int?){
+        when(tabType){
+            ConstData.CONTRACT_REC_HOLD_AMOUNT ->{
+                recordTab?.getTabAt(0)?.text = getString(R.string.contract_record_tab1,amount.toString())
+            }
+            ConstData.CONTRACT_REC_WITH_LIMIE ->{
+                recordTab?.getTabAt(1)?.text = getString(R.string.contract_record_tab2,amount.toString())
+            }
+            ConstData.CONTRACT_REC_CURRENT ->{
+                recordTab?.getTabAt(2)?.text = getString(R.string.contract_record_tab3,amount.toString())
+            }
+        }
+    }
+
     private fun getMultipleDes(bean: ContractMultiChooseBean?): String? {
         var des: String? = null
         var typeDes: String? = null
@@ -586,7 +636,6 @@ class HomePageContractFragment : BaseFragment(),
             bean,
             object : ContractMultipleSelectWindow.OnReturnListener {
                 override fun onReturn(
-                    window: ContractMultipleSelectWindow,
                     item: ContractMultiChooseBean?
                 ) {
                     if (item?.orientation.equals("BUY")) {
@@ -1854,6 +1903,10 @@ class HomePageContractFragment : BaseFragment(),
         )+"%"
         headerView?.tvFundRate?.text = rate
         updateFundTime(fundRate?.nextCollectionTime)
+    }
+
+    override fun onLeverageDetail(data: LeverageBracketBean?) {
+        leverageBracket = data
     }
 
     private fun updateFundTime(nextCollectionTime:Long?){

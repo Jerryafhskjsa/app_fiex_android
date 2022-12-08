@@ -7,4 +7,5 @@ class ContractMultiChooseBean() {
     var maxMultiple:Int? = null//最大倍数
     var defaultMultiple:Int? = null//默认倍数
     var type:Int? = null//0逐仓，1全仓
+    var symbol:String? = null
 }

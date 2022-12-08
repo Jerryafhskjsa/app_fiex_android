@@ -3,6 +3,7 @@ package com.black.base.api
 import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.PagingData
 import com.black.base.model.future.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
@@ -257,6 +258,44 @@ object FutureApiServiceHelper {
     }
 
     /**
+     * 获取止盈止损列表
+     */
+    fun getProfitList(
+        context: Context?,
+        state:String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getProfitList(state)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取计划委托列表
+     */
+    fun getPlanList(
+        context: Context?,
+        state:String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getPlanList(state)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
      * 获取行情列表
      */
     fun getTickers(
@@ -307,6 +346,25 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.getLeverageBracketList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取交易对杠杆分层
+     */
+    fun getLeverageBracketDetail(
+        context: Context?,
+        symbol:String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<LeverageBracketBean?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getLeverageBracketDetail(symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -443,6 +501,28 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.autoMargin(symbol,positionSide,autoMargin)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 调整杠杆倍数
+     * 仓位方向：LONG(全仓);SHORT(逐仓)
+     */
+    fun adjustLeverage(
+        context: Context?,
+        symbol: String?,
+        positionSide: String?,
+        leverage:Int?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.adjustLeverage(symbol,positionSide,leverage)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

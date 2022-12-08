@@ -8,16 +8,21 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import com.black.base.R
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.ContractMultiChooseBean
 import com.black.base.model.FryingLinesConfig
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.socket.Deep
+import com.black.base.util.FryingUtil
 import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.SpanMaterialEditText
 import com.black.base.widget.SpanTextView
+import com.black.util.Callback
 import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 import skin.support.widget.SkinCompatCheckBox
@@ -208,12 +213,31 @@ class ContractMultipleSelectWindow(
         }
     }
 
+    private fun adjustLeverage(bean: ContractMultiChooseBean?){
+        var positionSide:String? = null
+        when(bean?.type){
+            0 -> positionSide = "SHORT"
+            1 -> positionSide = "LONG"
+        }
+        FutureApiServiceHelper.adjustLeverage(activity,bean?.symbol,positionSide,bean?.defaultMultiple,true,object : Callback<HttpRequestResultBean<String>?>() {
+            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                if (returnData != null) {
+                    Log.d("iiiiii-->adjustLeverage", returnData.result.toString())
+                    onReturnListener?.onReturn(bean)
+                    dismiss()
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+                FryingUtil.showToast(activity,error.toString())
+            }
+        })
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_cancel -> dismiss()
             R.id.btn_commit -> {
-                onReturnListener?.onReturn(this,bean)
-                dismiss()
+                adjustLeverage(bean)
             }
             R.id.btn_fiexible -> {
                 btnFiexible.isChecked = true
@@ -269,6 +293,6 @@ class ContractMultipleSelectWindow(
     }
 
     interface OnReturnListener{
-        fun onReturn(window: ContractMultipleSelectWindow, item: ContractMultiChooseBean?)
+        fun onReturn(item: ContractMultiChooseBean?)
     }
 }

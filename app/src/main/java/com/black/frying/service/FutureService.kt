@@ -53,7 +53,7 @@ object FutureService {
 
     var shortPositionList: ArrayList<PositionBean>? = null //做空的持仓
 
-    var userStepRate: UserStepRate? = null
+    var userStepRate: UserStepRate? = null//用户费率
 
 
     fun initFutureData(context: Context?) {

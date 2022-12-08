@@ -12,13 +12,13 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.future.Constants
-import com.black.base.model.future.PositionBean
+import com.black.base.model.PagingData
+import com.black.base.model.future.ProfitsBean
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
-import com.black.frying.adapter.HomeContractDetailAdapter
-import com.black.frying.service.FutureService
+import com.black.frying.adapter.ContractPositionTabAdapter
+import com.black.frying.adapter.ContractProfitTabAdapter
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.fbsex.exchange.R
@@ -29,18 +29,19 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
- * @author 合約記錄下面的列表頁
+ * @author 合约止盈止损列表页
  */
-class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickListener,
+class ContractProfitTabFragment : BaseFragment(), AdapterView.OnItemClickListener,
     View.OnClickListener {
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
-    private var adapter: HomeContractDetailAdapter? = null
-    private var dataList:ArrayList<PositionBean?>? = ArrayList()
+    private var adapter: ContractProfitTabAdapter? = null
+    private var dataList:ArrayList<ProfitsBean?>? = ArrayList()
     private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
+    private var onTabModelListener: OnTabModelListener? = null
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
@@ -54,6 +55,10 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
      */
     fun setAutoHeightViewPager(viewPager: AutoHeightViewPager?) {
         mViewPager = viewPager
+    }
+
+    fun setOnTabModeListener(tabListener: OnTabModelListener){
+        onTabModelListener = tabListener
     }
 
     override fun onCreateView(
@@ -78,7 +83,7 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         group.addView(emptyView)
         binding?.listView?.emptyView = emptyView
 
-        adapter = HomeContractDetailAdapter(mContext!!, dataList)
+        adapter = ContractProfitTabAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
         if (arguments != null) {
@@ -94,7 +99,7 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        getPositionData()
+        getProfitData("UNFINISHED")
     }
 
     override fun onStop() {
@@ -137,28 +142,31 @@ class HomePageContractDetailFragment : BaseFragment(), AdapterView.OnItemClickLi
     /**
      * 获取当前持仓数据
      */
-    private fun getPositionData(){
-        FutureApiServiceHelper.getPositionList(context, false,
-            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
+    private fun getProfitData(state:String?){
+        FutureApiServiceHelper.getProfitList(context, state,false,
+            object : Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("iiiiii-->positionData--error", error.toString());
+                    Log.d("iiiiii-->profitData--error", error.toString())
                 }
 
-                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
+                override fun callback(returnData: HttpRequestResultBean<PagingData<ProfitsBean?>?>?) {
                     if (returnData != null) {
-                        dataList = returnData.result
-                        Log.d("iiiiii-->positionData = ", dataList!!.size.toString())
-                        adapter?.data = dataList
+                        adapter?.data = returnData.result?.items
+                        onTabModelListener?.onCount(returnData.result?.items?.size)
                         adapter?.notifyDataSetChanged()
                     }
                 }
             })
     }
 
+    interface OnTabModelListener {
+        fun onCount(count:Int?)
+    }
+
     companion object {
-        fun newInstance(type: ContractRecordTabBean?): HomePageContractDetailFragment {
+        fun newInstance(type: ContractRecordTabBean?): ContractProfitTabFragment {
             val args = Bundle()
-            val fragment = HomePageContractDetailFragment()
+            val fragment = ContractProfitTabFragment()
             fragment.arguments = args
             fragment.type = type
             return fragment

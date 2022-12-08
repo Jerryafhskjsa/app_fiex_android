@@ -11,10 +11,7 @@ import android.util.Pair
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.future.DepthBean
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.TickerBean
+import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.trade.TradeOrderResult
@@ -87,6 +84,7 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
     //资金费率
     private var fundRate:FundingRateBean? = null
 
+
     init {
         currentPairStatus.pair == (CookieUtil.getCurrentFutureUPair(context))
         initPairCoinSet()
@@ -117,11 +115,6 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
             depthObserver = createDepthObserver()
         }
         SocketDataContainer.subscribeFutureDepthObservable(depthObserver)
-
-//        if (pairObserver == null) {
-//            pairObserver = createPairObserver()
-//        }
-//        SocketDataContainer.subscribePairObservable(pairObserver)
 
         if (userInfoObserver == null) {
             userInfoObserver = createUserInfoObserver()
@@ -346,6 +339,23 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
                 }
             })
         }
+    }
+
+    /**
+     * 获取交易对杠杆分层
+     */
+    fun getLeverageBracketDetail() {
+        FutureApiServiceHelper.getLeverageBracketDetail(context,getCurrentPair(), false,
+            object : Callback<HttpRequestResultBean<LeverageBracketBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("iiiiii-->LeverageBracketDetail", error.toString())
+                }
+                override fun callback(returnData: HttpRequestResultBean<LeverageBracketBean?>?) {
+                    if (returnData != null) {
+                        onContractModelListener?.onLeverageDetail(returnData.result)
+                    }
+                }
+            })
     }
 
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {
@@ -854,6 +864,11 @@ class ContractViewModel(context: Context, private val onContractModelListener: O
          * 资金费率变化
          */
         fun onFundingRate(fundRate: FundingRateBean?)
+
+        /**
+         * 杠杆分层
+         */
+        fun onLeverageDetail(leverageBracket:LeverageBracketBean?)
 
         fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
         fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>

@@ -1,24 +1,17 @@
 package com.black.frying.adapter
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.Log
-import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
-import com.black.base.api.FutureApiService
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.PositionBean
-import com.black.base.model.socket.PairStatus
-import com.black.base.util.CookieUtil
 import com.black.util.Callback
 import com.fbsex.exchange.R
-import com.fbsex.exchange.databinding.ListItemContractRecordDetailBinding
-import com.fbsex.exchange.databinding.ListItemHomeQuotationDetailBinding
-import skin.support.SkinCompatManager
+import com.fbsex.exchange.databinding.ListItemContractTabPositionBinding
 import skin.support.content.res.SkinCompatResources
 
-class HomeContractDetailAdapter(context: Context, data: MutableList<PositionBean?>?) : BaseDataTypeBindAdapter<PositionBean?, ListItemContractRecordDetailBinding>(context, data) {
+class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>?) : BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -31,10 +24,10 @@ class HomeContractDetailAdapter(context: Context, data: MutableList<PositionBean
     }
 
     override fun getItemLayoutId(): Int {
-        return R.layout.list_item_contract_record_detail
+        return R.layout.list_item_contract_tab_position
     }
 
-    override fun bindView(position: Int, holder: ViewHolder<ListItemContractRecordDetailBinding>?) {
+    override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPositionBinding>?) {
         val positionData = getItem(position)
         var viewHolder = holder?.dataBing
         var sideDes:String? = null
