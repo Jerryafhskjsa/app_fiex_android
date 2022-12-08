@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import java.math.RoundingMode
 
-class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?) : BaseRecycleDataBindAdapter<Wallet?, ListItemSpotAccountBinding>(context, variableId, data) {
+class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWallet?>?) : BaseRecycleDataBindAdapter<TigerWallet?, ListItemSpotAccountBinding>(context, variableId, data) {
     private var isVisibility: Boolean = true
     private var imageLoader: ImageLoader? = null
     private var TAG = WalletAdapter::class.java.simpleName
@@ -36,7 +36,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
         viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
         if (isVisibility) {
-            viewHolder?.usable?.setText(NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+            viewHolder?.usable?.setText(NumberUtil.formatNumberNoGroup(wallet?.estimatedTotalAmount, RoundingMode.FLOOR, 2, 8))
         } else {
             viewHolder?.usable?.setText("****")
         }

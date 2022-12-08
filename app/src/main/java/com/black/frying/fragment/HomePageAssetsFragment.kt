@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.Money
 import com.black.base.model.user.UserBalance
+import com.black.base.model.wallet.TigerWallet
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
@@ -40,9 +40,7 @@ import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import kotlin.math.abs
 import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
-import com.black.frying.fragment.assets.AssetsSpotFragment.EventResponseListener
 import com.black.frying.fragment.assets.AssetsWalletFragment
-import com.black.router.annotation.Route
 
 class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener,
     WalletViewModel.OnWalletModelListener, AssetsSpotFragment.EventResponseListener,
@@ -77,6 +75,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var normalFragment: AssetsSpotFragment? = null
     private var walletFragment: AssetsWalletFragment? = null
+    private var contractFragment: AssetsContractFragment? = null
     private var assetsContractFragment: EmptyFragment? = null
     private var assetsFinanceFragment: EmptyFragment? = null
     private var assetsWalletFragment: EmptyFragment? = null
@@ -269,6 +268,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         refreshMoneyDisplay()
         normalFragment?.setVisibility(isChecked)
         walletFragment?.setVisibility(isChecked)
+        contractFragment?.setVisibility(isChecked)
         leverFragment?.setVisibility(isChecked)
     }
 
@@ -286,14 +286,14 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             normalFragment = it
             normalFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyFragment().also {
+        fragmentList?.add(AssetsContractFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
-//            assetsFinanceFragment = it
-//            assetsFinanceFragment?.setEventListener(this)
+            contractFragment = it
+            contractFragment?.setEventListener(this)
         })
         fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
@@ -359,6 +359,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun onUserBalanceChanged(userBalance: UserBalance?) {
             viewModel?.updateBalance(userBalance)
+           viewModel?.updateTigerBalance(userBalance)
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -406,6 +407,21 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         }
     }
 
+    override fun onContractWallet(
+        observable: Observable<ArrayList<TigerWallet?>?>?,
+        isShowLoading: Boolean
+    ) {
+        contractFragment?.run {
+            observable?.subscribe {
+                if(contractFragment!!.isSearch() == true){
+                    setData(viewModel?.filterTigerWallet())
+                }else{
+                    setData(it)
+                }
+            }
+        }
+    }
+
     override fun onWalletLever(observable: Observable<ArrayList<WalletLever?>?>?, isShowLoading: Boolean) {
         mContext?.runOnUiThread {
             leverFragment?.run {
@@ -426,6 +442,21 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             walletFragment?.run {
                 observable?.subscribe {
                     setTotal(it)
+                }
+            }
+        }
+    }
+
+    override fun onContractWalletTotal(observable: Observable<Money?>?) {
+        mContext?.runOnUiThread {
+            contractFragment?.run {
+                observable?.subscribe {
+                    setTotal(it)
+                }
+            }
+            walletFragment?.run {
+                observable?.subscribe {
+                    setTotal2(it)
                 }
             }
         }
@@ -473,6 +504,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     override fun setWalletCoinFilter(checked: Boolean) {
         viewModel!!.setWalletCoinFilter(checked)
         normalFragment?.setWalletCoinFilter(checked)
+        contractFragment?.setWalletCoinFilter(checked)
         leverFragment?.setWalletCoinFilter(checked)
     }
 

@@ -28,6 +28,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     companion object {
         const val WALLET_NORMAL = 1
         const val WALLET_LEVER = 2
+        const val WALLET_CONTRACT = 3
     }
 
     private var onWalletModelListener: OnWalletModelListener? = null
@@ -35,6 +36,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var userLeverObserver: Observer<String?>? = null
 
     private var walletList: ArrayList<Wallet?>? = ArrayList()
+    private var tigerWalletList: ArrayList<TigerWallet?>? = ArrayList()
     private var walletLeverList: ArrayList<WalletLever?>? = null
     private var searchKey: String? = null
     private var walletCoinFilter: Boolean? = false
@@ -42,6 +44,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var symbolList:ArrayList<PairStatus?>? = null
     private var coinList:ArrayList<CoinInfo?>? = ArrayList()
     private var spotBalanceList:ArrayList<UserBalance?>?  = null
+    private var tigerBalanceList:ArrayList<UserBalance?>?  = null
 
 
 
@@ -141,6 +144,9 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     fun getSpotBalanceList():ArrayList<UserBalance?>?{
         return spotBalanceList
     }
+    fun getTigerBalanceList():ArrayList<UserBalance?>?{
+        return tigerBalanceList
+    }
 
     fun getWalletLeverList(): ArrayList<WalletLever?>? {
         return walletLeverList
@@ -181,7 +187,9 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         spotBalanceList = returnData.data?.spotBalance
+                        tigerBalanceList = returnData.data?.tigerBalance
                         handleBalanceResult(walletList)
+                        handleTigerBalanceResult(tigerWalletList)
                     }
                 }
             }))
@@ -248,6 +256,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                             walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
                             walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
                             walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
+
                             break
                         }
                     }
@@ -272,6 +281,67 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         })
             .compose(RxJavaHelper.observeOnMainThread()))
     }
+    fun handleTigerBalanceResult(tigerWalletList:ArrayList<TigerWallet?>?){
+        if(tigerWalletList != null && tigerWalletList!!.size > 0){
+            tigerWalletList!!.clear()
+        }
+        if(tigerBalanceList != null){
+            if(coinList != null){
+                for(coin in coinList!!){
+                    var wallet = TigerWallet()
+                    wallet.coinType = coin?.coinType
+                    wallet.coinIconUrl = coin?.logosUrl
+                    wallet.coinTypeDes = coin?.coinFullName
+                    wallet.coinAmount = 0.0
+                    wallet.estimatedAvailableAmount = 0.0
+                    wallet.estimatedAvailableAmountCny = 0.0
+                    tigerWalletList?.add(wallet)
+                }
+            }
+            for(i in tigerWalletList!!.indices){
+                for (k in tigerBalanceList!!.indices){
+                    if(tigerBalanceList!![k]?.coin == tigerWalletList!![i]?.coinType){
+                        tigerWalletList!![i]?.coinAmount =tigerBalanceList!![k]?.availableBalance?.toDouble()!!
+                        tigerWalletList!![i]?.estimatedTotalAmount = tigerBalanceList!![k]?.estimatedTotalAmount?.toDouble()!!
+                        tigerWalletList!![i]?.estimatedAvailableAmountCny = tigerBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
+                        tigerWalletList!![i]?.profit = tigerBalanceList!![k]?.profit?.toDouble()!!
+                        tigerWalletList!![i]?.crossedMargin = tigerBalanceList!![k]?.crossedMargin?.toDouble()!!
+                        break
+                    }
+                }
+            }
+        }
+        onWalletModelListener?.onContractWallet(Observable.just(tigerWalletList)
+            .compose(RxJavaHelper.observeOnMainThread()), false)
+
+        var walletTotal = 0.0
+        var walletTotalCNY = 0.0
+        var walletBalance = 0.0
+        var totalProfit = 0.0
+        var totalCrossedMargin = 0.0
+        tigerWalletList?.run {
+            for (wallet in tigerWalletList!!) {
+                walletTotal += wallet?.estimatedTotalAmount
+                    ?: 0.toDouble()
+                walletTotalCNY += wallet?.estimatedAvailableAmountCny
+                    ?: 0.toDouble()
+                walletBalance += wallet?.coinAmount
+                    ?: 0.toDouble()
+                totalProfit += wallet?.profit
+                    ?: 0.toDouble()
+                totalCrossedMargin += wallet?.crossedMargin
+                    ?: 0.toDouble()
+            }
+        }
+        onWalletModelListener?.onContractWalletTotal(Observable.just(Money().also {
+            it.tigerUsdt = walletTotal
+            it.tigercny = walletTotalCNY
+            it.walletBalance = walletBalance
+            it.profit = totalProfit
+            it.crossedMargin = totalCrossedMargin
+        })
+            .compose(RxJavaHelper.observeOnMainThread()))
+    }
 
     fun updateBalance(balance: UserBalance?){
         var updateWalletList = ArrayList<Wallet?>()
@@ -287,6 +357,23 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             updateWalletList.add(newWallet)
         }
         handleBalanceResult(updateWalletList)
+    }
+    fun updateTigerBalance(balance: UserBalance?){
+        var updateTigerWalletList = ArrayList<TigerWallet?>()
+        for (j in tigerWalletList?.indices!!){
+            var newWallet = TigerWallet()
+            var wallet = walletList!![j]
+            if(balance?.coin.equals(wallet?.coinType)){
+                newWallet?.totalAmount = balance?.balance?.toDouble()!!
+                newWallet?.coinAmount =  balance?.availableBalance?.toDouble()!!
+                newWallet?.estimatedTotalAmount = balance?.estimatedTotalAmount?.toDouble()!!
+                newWallet?.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()!!
+                newWallet?.profit = balance?.profit?.toDouble()!!
+                newWallet?.crossedMargin =  balance?.crossedMargin?.toDouble()!!
+            }
+            updateTigerWalletList.add(newWallet)
+        }
+        handleTigerBalanceResult(updateTigerWalletList)
     }
 
     private fun getWalletFromServer2(isShowLoading: Boolean) {
@@ -397,6 +484,37 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                     showData = walletList
                 } else {
                     for (wallet in walletList!!) {
+                        if (wallet?.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                            showData?.add(wallet)
+                        }
+                    }
+                }
+            }
+        }
+        return showData
+    }
+    fun filterTigerWallet(): ArrayList<TigerWallet?>? {
+        var showData: ArrayList<TigerWallet?>? = ArrayList<TigerWallet?>()
+        if (tigerWalletList != null && tigerWalletList?.isNotEmpty()!!) {
+            if (walletCoinFilter!!) {
+                if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
+                    for (wallet in tigerWalletList!!) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10) {
+                            showData?.add(wallet)
+                        }
+                    }
+                } else {
+                    for (wallet in tigerWalletList!!) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                            showData?.add(wallet)
+                        }
+                    }
+                }
+            } else {
+                if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
+                    showData = tigerWalletList
+                } else {
+                    for (wallet in tigerWalletList!!) {
                         if (wallet?.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                             showData?.add(wallet)
                         }
@@ -537,8 +655,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         fun onUserInfoChanged()
         fun onGetWallet(observable: Observable<Int>?, isShowLoading: Boolean)
         fun onWallet(observable: Observable<ArrayList<Wallet?>?>?, isShowLoading: Boolean)
+        fun onContractWallet(observable: Observable<ArrayList<TigerWallet?>?>?, isShowLoading: Boolean)
         fun onWalletLever(observable: Observable<ArrayList<WalletLever?>?>?, isShowLoading: Boolean)
         fun onWalletTotal(observable: Observable<Money?>?)
+        fun onContractWalletTotal(observable: Observable<Money?>?)
         fun onWalletLeverTotal(observable: Observable<Money?>?)
         fun onTotalMoney(observable: Observable<Double?>)
         fun onTotalCNY(observable: Observable<Double?>)

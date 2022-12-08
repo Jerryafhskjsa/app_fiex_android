@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.Money
 import com.black.base.model.user.UserBalance
+import com.black.base.model.wallet.TigerWallet
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
@@ -381,6 +382,13 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
         }
     }
 
+    override fun onContractWallet(
+        observable: Observable<ArrayList<TigerWallet?>?>?,
+        isShowLoading: Boolean
+    ) {
+
+    }
+
     override fun onWalletLever(observable: Observable<ArrayList<WalletLever?>?>?, isShowLoading: Boolean) {
         runOnUiThread {
             leverFragment?.run {
@@ -399,6 +407,10 @@ class WalletActivity : BaseActionBarActivity(), View.OnClickListener, CompoundBu
                 }
             }
         }
+    }
+
+    override fun onContractWalletTotal(observable: Observable<Money?>?) {
+
     }
 
     override fun onWalletLeverTotal(observable: Observable<Money?>?) {

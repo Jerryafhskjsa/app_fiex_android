@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.black.lib.refresh.QRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B2"
+                    android:orientation="vertical">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="@string/usdt_base_contract"
+                        android:textColor="@color/B1"
+                        android:background="@drawable/cercle_rectangle"
+                        android:textSize="@dimen/text_size_15" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:text="@string/total_contract"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_13" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/money_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/T1"
+                            android:textStyle="bold"
+                            android:text="1000000"
+                            android:textSize="@dimen/text_size_13" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:text="@string/bond_money_total"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_10" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/bond_money_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:textColor="@color/T1"
+                            android:textStyle="bold"
+                            android:text="1000000"
+                            android:textSize="@dimen/text_size_13" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/bond_money_totalcny"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:textColor="@color/T3"
+                            android:textStyle="bold"
+                            android:text="1000000"
+                            android:textSize="@dimen/text_size_10" />
+                    </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:text="@string/wallet_money_total"
+                                android:textColor="@color/T3"
+                                android:textSize="@dimen/text_size_10" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/wallet_money_total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:layout_marginRight="@dimen/double_padding"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
+                                android:text="1000000"
+                                android:textSize="@dimen/text_size_13" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/wallet_money_totalcny"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:layout_marginRight="@dimen/double_padding"
+                                android:textColor="@color/T3"
+                                android:textStyle="bold"
+                                android:text="1000000"
+                                android:textSize="@dimen/text_size_10" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:text="@string/break_even_total"
+                                android:textColor="@color/T3"
+                                android:textSize="@dimen/text_size_10" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/break_even_total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:layout_marginRight="@dimen/double_padding"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
+                                android:text="1000000"
+                                android:textSize="@dimen/text_size_13" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/break_even_totalcny"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/double_padding"
+                                android:layout_marginRight="@dimen/double_padding"
+                                android:textColor="@color/T3"
+                                android:textStyle="bold"
+                                android:text="1000000"
+                                android:textSize="@dimen/text_size_10" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B1"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_padding" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/B2"
+                            android:orientation="vertical"
+                            android:padding="@dimen/double_padding">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <com.black.base.widget.SpanCheckBox
+                                    android:id="@+id/btn_wallet_filter"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:layout_marginLeft="8dp"
+                                    android:background="@null"
+                                    android:button="@drawable/btn_wallet_filter"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:gravity="center"
+                                    android:paddingLeft="2dp"
+                                    android:text="@string/wallet_coin_filter"
+                                    android:textColor="@color/T2"
+                                    android:textSize="@dimen/text_size_14" />
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/coin_search"
+                                    style="@style/NormalEditTextStyle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@null"
+                                    android:hint="@string/search_coin"
+                                    android:imeOptions="actionSearch"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    app:useDelete="false"
+                                    android:padding="0dp"
+                                    android:textColor="@color/T1"
+                                    android:textColorHint="@color/T3"
+                                    android:textSize="@dimen/text_size_16" />
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/icon_search_wallet" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/double_padding" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:descendantFocusability="blocksDescendants">
+
+                                <com.black.base.view.EmptyRecyclerView
+                                    android:id="@+id/recycler_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fadingEdge="none"
+                                    android:overScrollMode="never"
+                                    android:scrollbars="none" />
+
+                                <include
+                                    android:id="@+id/empty_view"
+                                    layout="@layout/list_view_empty" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </com.black.lib.refresh.QRefreshLayout>
+    </LinearLayout>
+</layout>

@@ -70,14 +70,20 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
               bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
               BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
           }
-          R.id.transaction -> {
+          /*R.id.transaction -> {
               BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(this)
           }
+
+           */
       }
     }
 
     fun setTotal(total: Money?) {
         binding?.moneyTotal?.tag = total
+        refreshMoneyDisplay()
+    }
+    fun setTotal2(total2: Money?) {
+        binding?.futureUsdt?.tag = total2
         refreshMoneyDisplay()
     }
 
@@ -92,8 +98,9 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding?.capitalUsdt?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
+                val total2: Money? = binding?.futureUsdt?.tag as Money?
                 binding?.spotUsdt?.setText(if (total?.usdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT")
-                binding?.futureUsdt?.setText(if (total?.tigerUsdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total.tigerUsdt, 8, 2, 2) + "USDT")
+                binding?.futureUsdt?.setText(if (total2?.tigerUsdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt, 8, 2, 2) + "USDT")
                 binding?.financialUsdt?.setText("0.0USDT")
                 binding?.capitalUsdt?.setText("0.0USDT")
                 binding?.moneyTotalcny?.setText(if(total?.cny == null && total?.tigercny == null) "≈ 0.0CNY" else if( total.cny == null && total.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.tigercny, 8, 2, 2)  + "CNY" else if(total.cny != null && total.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! + total.tigercny!!, 8, 2, 2) + "CNY")

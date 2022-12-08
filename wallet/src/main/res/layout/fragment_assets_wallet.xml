@@ -141,6 +141,7 @@
                                     android:id="@+id/recharge"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
+                                    android:layout_marginTop="1dp"
                                     android:src="@drawable/icon_recharge">
 
                                 </ImageView>
@@ -159,6 +160,7 @@
                                     android:id="@+id/extract"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
+                                    android:layout_marginTop="1dp"
                                     android:src="@drawable/icon_withdraw">
 
                                 </ImageView>
@@ -172,6 +174,7 @@
                                     android:id="@+id/transaction"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
+                                    android:visibility="gone"
                                     android:src="@drawable/icon_tab_deal_pre">
 
                                 </ImageView>

@@ -336,7 +336,7 @@ object UrlConfig {
         const val URL_USER_WITHDRAW_QUOTA = "withdraw/quota"
 
         //获取用户资产
-        const val URL_BALANCE_LIST = "balance/list"
+        const val URL_BALANCE_LIST = "balance/list?type=SPOT,CONTRACT,OTC,FINANCIAL"
 
         //币种列表配置
         const val URL_COINS = "config/coins"

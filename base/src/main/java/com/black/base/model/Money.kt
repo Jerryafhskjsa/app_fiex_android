@@ -6,4 +6,7 @@ class Money {
     var btc: Double? = null
     var tigerUsdt: Double? = null
     var tigercny: Double? = null
+    var walletBalance: Double? = null
+    var profit: Double? = null
+    var crossedMargin: Double? = null
 }

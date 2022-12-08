@@ -167,6 +167,10 @@
     <string name="welcome_fbsex">Welcome to Fiex</string>
     <string name="alert_server_error">Server exception</string>
     <string name="wallet_coin_filter">Hide small amount currency</string>
+    <string name="total_contract">Total contract(USDT)</string>
+    <string name="bond_money_total">Bond money total</string>
+    <string name="wallet_money_total">Wallet money total</string>
+    <string name="break_even_total">Break even total</string>
     <string name="k_pop_time">Time</string>
     <string name="k_pop_open">On</string>
     <string name="k_pop_high">High</string>
@@ -776,6 +780,7 @@
     <string name="total_entrust_amount">Cumulative Quantity</string>
     <string name="total_price">Cumulative Amount</string>
     <string name="usdt_base">U standard</string>
+    <string name="usdt_base_contract">U contract</string>
     <string name="coin_base">Currency Standard</string>
     <string name="all_future_coin">All Future Coin</string>
     <string name="simulation_base">Analog Disk</string>
