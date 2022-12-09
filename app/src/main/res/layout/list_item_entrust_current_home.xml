@@ -26,6 +26,7 @@
                 android:textColor="@color/black_real"
                 android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
+
             <com.black.base.widget.SpanTextView
                 android:id="@+id/status"
                 android:layout_width="0dp"

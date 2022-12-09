@@ -803,7 +803,7 @@ class AnalyticChart : SkinCompatView {
 
     override fun onDraw(canvas: Canvas) { //        super.onDraw(canvas);
 //Log.e(TAG, "onDraw:===========");
-        canvas.drawColor(SkinCompatResources.getColor(context, R.color.B1))
+        canvas.drawColor(SkinCompatResources.getColor(context, R.color.B2))
         canvas.save()
         drawBaseChart(canvas)
         //		canvas.scale(scaleX, scaleY);

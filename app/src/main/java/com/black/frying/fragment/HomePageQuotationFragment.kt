@@ -54,7 +54,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     //异步获取数据
     private val handlerThread: HandlerThread? = null
     private val socketHandler: Handler? = null
-    private var currentTabPosition:Int = 0
+    private var currentTabPosition:Int = 1
 
     var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL,PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
 

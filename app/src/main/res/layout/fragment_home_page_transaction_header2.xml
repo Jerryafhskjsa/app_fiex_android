@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
+
         <variable
             name="homePageTransactionHeader2"
             type="Object" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center_vertical">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -24,12 +30,12 @@
                     android:textColor="@color/black_real"
                     android:textSize="@dimen/text_size_13"
                     android:textStyle="bold" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/trans_bg_entrust_title_line">
-                </View>
+                    android:background="@drawable/trans_bg_entrust_title_line"></View>
             </LinearLayout>
 
             <com.black.base.widget.SpanTextView
@@ -41,14 +47,23 @@
                 android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_13" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center_vertical">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/show_all_checkbox"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:text="@string/show_all_symbol" />
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/entrust_type"
                     android:layout_width="wrap_content"
@@ -56,7 +71,9 @@
                     android:text="@string/entrust_all"
                     android:textColor="@color/black_real"
                     android:textSize="@dimen/text_size_13"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
                 <ImageView
                     android:id="@+id/order_type_arrow"
                     android:layout_width="wrap_content"
@@ -64,8 +81,10 @@
                     android:adjustViewBounds="true"
                     android:paddingLeft="10dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/icon_selector_down" />
+                    android:src="@drawable/icon_selector_down"
+                    android:visibility="gone" />
             </LinearLayout>
+
             <com.black.base.widget.SpanTextView
                 android:id="@+id/revoke_all_entrust"
                 android:layout_width="wrap_content"
@@ -75,10 +94,10 @@
                 android:textColor="@color/T13"
                 android:textSize="@dimen/text_size_13" />
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/L1">
-        </View>
+            android:layout_height="1px"
+            android:background="@color/L1"></View>
     </LinearLayout>
 </layout>

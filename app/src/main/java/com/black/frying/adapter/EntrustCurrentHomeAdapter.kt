@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
+import com.black.base.model.future.Constants
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.util.CommonUtil
@@ -13,7 +14,15 @@ import com.fbsex.exchange.databinding.ListItemEntrustCurrentHomeBinding
 import skin.support.content.res.SkinCompatResources
 
 //委托记录
-class EntrustCurrentHomeAdapter(context: Context, variableId: Int, data: ArrayList<TradeOrderFiex?>?) : BaseRecycleDataBindAdapter<TradeOrderFiex?, ListItemEntrustCurrentHomeBinding>(context, variableId, data) {
+class EntrustCurrentHomeAdapter(
+    context: Context,
+    variableId: Int,
+    data: ArrayList<TradeOrderFiex?>?
+) : BaseRecycleDataBindAdapter<TradeOrderFiex?, ListItemEntrustCurrentHomeBinding>(
+    context,
+    variableId,
+    data
+) {
     private var onHandleClickListener: OnHandleClickListener? = null
     private var amountPrecision: Int = 4
     private var c1 = 0
@@ -29,7 +38,10 @@ class EntrustCurrentHomeAdapter(context: Context, variableId: Int, data: ArrayLi
         return R.layout.list_item_entrust_current_home
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ListItemEntrustCurrentHomeBinding>, position: Int) {
+    override fun onBindViewHolder(
+        holder: BaseViewHolder<ListItemEntrustCurrentHomeBinding>,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
         val tradeOrder: TradeOrderFiex? = getItem(position)
         val viewHolder = holder.dataBing
@@ -53,15 +65,28 @@ class EntrustCurrentHomeAdapter(context: Context, variableId: Int, data: ArrayLi
                 onHandleClickListener?.onHandleClick(tradeOrder)
             }
         }
-        viewHolder?.date?.setText(if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm",
-            tradeOrder.createdTime!!
-        ))
+        viewHolder?.date?.setText(
+            if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp(
+                "yyyy/MM/dd HH:mm",
+                tradeOrder.createdTime!!
+            )
+        )
         viewHolder?.pairName?.setText(tradeOrder?.symbol)
-        viewHolder?.entrustAmount?.setText(if (tradeOrder?.origQty == null || tradeOrder.origQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
-            tradeOrder.origQty!!.toDoubleOrNull(), amountPrecision, amountPrecision))
-        viewHolder?.dealAmount?.setText(if (tradeOrder?.executedQty == null || tradeOrder.executedQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
-            tradeOrder.executedQty!!.toDoubleOrNull(), amountPrecision, amountPrecision))
-        viewHolder?.priceDes?.setText(if (tradeOrder?.price == null || tradeOrder.price == "0") "0" else NumberUtil.formatNumberNoGroup(tradeOrder.price!!.toDoubleOrNull()))
+        viewHolder?.entrustAmount?.setText(
+            if (tradeOrder?.origQty == null || tradeOrder.origQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.origQty!!.toDoubleOrNull(), amountPrecision, amountPrecision
+            )
+        )
+        viewHolder?.dealAmount?.setText(
+            if (tradeOrder?.executedQty == null || tradeOrder.executedQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.executedQty!!.toDoubleOrNull(), amountPrecision, amountPrecision
+            )
+        )
+        viewHolder?.priceDes?.setText(
+            if (tradeOrder?.price == null || tradeOrder.price == "0") "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.price!!.toDoubleOrNull()
+            )
+        )
 
     }
 

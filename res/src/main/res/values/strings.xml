@@ -281,8 +281,8 @@
     <string name="k_buy">买入</string>
     <string name="k_sale">卖出</string>
     <string name="volumn_24">24H量 %1$s</string>
-    <string name="entrust_type_buy">买入</string>
-    <string name="entrust_type_sale">卖出</string>
+    <string name="entrust_type_buy">限价买入</string>
+    <string name="entrust_type_sale">限价卖出</string>
     <string name="trade_value">交易额</string>
     <string name="point_count">%1$s</string>
     <string name="trade_sale_over_price">卖单价格低于当前成交价20%</string>
@@ -664,6 +664,7 @@
     <string name="purchase_redeem">购买/赎回</string>
     <string name="freez">冻结</string>
     <string name="entrust_all">全部委托</string>
+    <string name="show_all_symbol">显示全部交易对</string>
     <string name="revoke_all_entrust">撤销全部</string>
     <string name="revoke">撤销</string>
     <string name="limit_price_buy">限价买入</string>

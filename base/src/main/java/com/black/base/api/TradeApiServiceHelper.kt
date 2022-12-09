@@ -1,6 +1,7 @@
 package com.black.base.api
 
 import android.content.Context
+import android.text.TextUtils
 import com.black.base.fragment.BaseFragment
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
@@ -16,72 +17,129 @@ import com.black.base.util.UrlConfig
 import com.black.util.Callback
 
 object TradeApiServiceHelper {
-    fun createTradeOrder(context: Context?, symbol: String?, direction: String?, totalAmount: String?, price: String?, tradeType: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun createTradeOrder(
+        context: Context?,
+        symbol: String?,
+        direction: String?,
+        totalAmount: String?,
+        price: String?,
+        tradeType: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
-                ?.createTradeOrder(symbol, direction, totalAmount, price, tradeType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+        ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+            .getService(TradeApiService::class.java)
+            ?.createTradeOrder(symbol, direction, totalAmount, price, tradeType)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun cancelTradeOrder(context: Context?, orderId: String?, pair: String?, direction: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun cancelTradeOrder(
+        context: Context?,
+        orderId: String?,
+        pair: String?,
+        direction: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(TradeApiService::class.java)
-                ?.cancelTradeOrder(orderId, pair, direction)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.cancelTradeOrder(orderId, pair, direction)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun cancelTradeOrderFiex(context: Context?, orderId: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun cancelTradeOrderFiex(
+        context: Context?,
+        orderId: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
+        ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+            .getService(TradeApiService::class.java)
             ?.cancelTradeOrderFiex(orderId)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getTradeOrderHistoryRecord(context: Context?, symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderHistoryResult?>?>?) {
+    fun getTradeOrderHistoryRecord(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultData<TradeOrderHistoryResult?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
-                ?.getTradeOrderHistoryRecord(symbol)
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
+            ?.getTradeOrderHistoryRecord(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    fun getTradeOrderRecordFiex(
+        context: Context?,
+        symbol: String?,
+        state: Int?,
+        startTime: String?,
+        endTime: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultData<TradeOrderResult?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        if (TextUtils.isEmpty(symbol)) {
+            ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+                .getService(TradeApiService::class.java)
+                ?.getTradeOrderRecordFiexAll(state, startTime, endTime)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+        } else {
+            ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+                .getService(TradeApiService::class.java)
+                ?.getTradeOrderRecordFiex(symbol, state, startTime, endTime)
+                ?.compose(RxJavaHelper.observeOnMainThread())
+                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+        }
+
     }
 
-    fun getTradeOrderRecordFiex(context: Context?, symbol: String?, state:Int?, startTime: String?, endTime: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderResult?>?>?) {
+    fun getTradeOrderDepth(
+        context: Context?,
+        level: Int?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultData<TradeOrderDepth?>?>
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
-            ?.getTradeOrderRecordFiex(symbol, state, startTime, endTime)
+        ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+            .getService(TradeApiService::class.java)
+            ?.getTradeOrderDepth(level, symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun getTradeOrderDepth(context: Context?, level:Int?,symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultData<TradeOrderDepth?>?>) {
+    fun getTradeOrderDeal(
+        context: Context?,
+        level: Int?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultDataList<PairDeal?>?>
+    ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
-            ?.getTradeOrderDepth(level,symbol)
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
-    }
-
-    fun getTradeOrderDeal(context: Context?, level:Int?,symbol: String?, isShowLoading: Boolean, callback: Callback<HttpRequestResultDataList<PairDeal?>?>) {
-        if (context == null || callback == null) {
-            return
-        }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(TradeApiService::class.java)
-            ?.getTradeOrderDeal(level,symbol)
+        ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+            .getService(TradeApiService::class.java)
+            ?.getTradeOrderDeal(level, symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

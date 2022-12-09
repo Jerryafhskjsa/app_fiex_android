@@ -91,15 +91,17 @@ final class PairStatusPopupWindow(
     //    private final List<PairStatusShowPopup> allPairStatusShowList = new ArrayList<>();
     private val dearPairs = ArrayList<String?>()
     private val dearPairsShowMap: MutableMap<String, PairStatusShowPopup> = HashMap()
-    private var defaultIndex = 0
+    private var defaultIndex = 1
     private var pairInitialled = false
+
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
     private var onPairStatusSelectListener: OnPairStatusSelectListener? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
-    private var futureTickerObserver:Observer<ArrayList<PairStatus?>?>? = createFutureTickerObserver()
+    private var futureTickerObserver: Observer<ArrayList<PairStatus?>?>? =
+        createFutureTickerObserver()
 
 
     init {
@@ -211,12 +213,12 @@ final class PairStatusPopupWindow(
                 listView.divider = drawable
                 listView.dividerHeight = 1
                 listView.onItemClickListener = this
-                var setName:String? = null
-                setName = if(type == TYPE_TRANSACTION){
+                var setName: String? = null
+                setName = if (type == TYPE_TRANSACTION) {
                     set?.name as String
-                } else if(type == TYPE_FUTURE_ALL || type == TYPE_FUTURE_U || type == TYPE_FUTURE_COIN){
+                } else if (type == TYPE_FUTURE_ALL || type == TYPE_FUTURE_U || type == TYPE_FUTURE_COIN) {
                     set?.coinType?.lowercase() as String
-                }else{
+                } else {
                     set?.name as String
                 }
                 adapterMap[setName] = adapter
@@ -298,6 +300,7 @@ final class PairStatusPopupWindow(
             }
         }
     }
+
     private fun createFutureTickerObserver(): Observer<ArrayList<PairStatus?>?> {
         return object : SuccessObserver<ArrayList<PairStatus?>?>() {
             override fun onSuccess(value: ArrayList<PairStatus?>?) {
@@ -352,14 +355,14 @@ final class PairStatusPopupWindow(
                 }
             }
         })
-        if(type == TYPE_TRANSACTION){
+        if (type == TYPE_TRANSACTION) {
             if (pairObserver == null) {
                 pairObserver = createPairObserver()
             }
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
-        if(type == TYPE_FUTURE_ALL){
-            if(futureTickerObserver == null){
+        if (type == TYPE_FUTURE_ALL) {
+            if (futureTickerObserver == null) {
                 futureTickerObserver = createFutureTickerObserver()
             }
             SocketDataContainer.subscribeFuturePairObservable(futureTickerObserver)
@@ -400,14 +403,14 @@ final class PairStatusPopupWindow(
             handlerThread?.quit()
             handlerThread = null
         }
-        if(type == TYPE_TRANSACTION){
+        if (type == TYPE_TRANSACTION) {
             if (pairObserver != null) {
                 SocketDataContainer.removePairObservable(pairObserver)
             }
         }
 
-        if(type == TYPE_FUTURE_ALL){
-            if(futureTickerObserver != null){
+        if (type == TYPE_FUTURE_ALL) {
+            if (futureTickerObserver != null) {
                 SocketDataContainer.removeFuturePairObservable(futureTickerObserver)
             }
         }
@@ -482,13 +485,25 @@ final class PairStatusPopupWindow(
                 }
             when (type) {
                 TYPE_FUTURE_U -> {
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_U,callback)
+                    SocketDataContainer.getFuturesPairsWithSet(
+                        mActivity,
+                        ConstData.PairStatusType.FUTURE_U,
+                        callback
+                    )
                 }
                 TYPE_FUTURE_COIN -> {
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_COIN,callback)
+                    SocketDataContainer.getFuturesPairsWithSet(
+                        mActivity,
+                        ConstData.PairStatusType.FUTURE_COIN,
+                        callback
+                    )
                 }
-                TYPE_FUTURE_ALL ->{
-                    SocketDataContainer.getFuturesPairsWithSet(mActivity,ConstData.PairStatusType.FUTURE_ALL,callback)
+                TYPE_FUTURE_ALL -> {
+                    SocketDataContainer.getFuturesPairsWithSet(
+                        mActivity,
+                        ConstData.PairStatusType.FUTURE_ALL,
+                        callback
+                    )
                 }
                 TYPE_TRANSACTION -> SocketDataContainer.getAllPairStatus(mActivity, callback)
             }
@@ -500,10 +515,10 @@ final class PairStatusPopupWindow(
         synchronized(adapterMap) {
             synchronized(listViewDataMap) {
                 for (i in sets.indices) {
-                    var setName:String? = null
-                    when(type){
-                        TYPE_FUTURE_ALL ->{
-                            when(sets[i]?.name){
+                    var setName: String? = null
+                    when (type) {
+                        TYPE_FUTURE_ALL -> {
+                            when (sets[i]?.name) {
                                 mActivity.getString(R.string.usdt_base) -> {
                                     setName = mActivity.getString(R.string.usdt).lowercase()
                                 }
@@ -546,7 +561,7 @@ final class PairStatusPopupWindow(
 
     //刷新所有交易对状态
     fun refreshPairsStatus(data: List<PairStatus?>?) {
-        Log.d("iiiii","refreshPairsStatus,data.size = "+data?.size)
+        Log.d("iiiii", "refreshPairsStatus,data.size = " + data?.size)
         if (data == null || data.isEmpty()) {
             return
         }
