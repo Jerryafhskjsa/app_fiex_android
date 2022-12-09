@@ -87,7 +87,7 @@ interface FutureApiService {
      * 获取用户持仓
      */
     @GET(UrlConfig.Future.URL_POSITION_LIST)
-    fun getPositionList(): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
+    fun getPositionList(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
     /**
      * 获取止盈止损列表
      */

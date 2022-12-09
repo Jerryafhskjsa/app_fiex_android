@@ -141,7 +141,7 @@ class ContractPositionTabFragment : BaseFragment(), AdapterView.OnItemClickListe
      * 获取当前持仓数据
      */
     private fun getPositionData(){
-        FutureApiServiceHelper.getPositionList(context, false,
+        FutureApiServiceHelper.getPositionList(context,CookieUtil.getCurrentFutureUPair(activity!!), false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->positionData--error", error.toString());

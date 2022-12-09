@@ -1,13 +1,15 @@
 package com.black.frying.adapter
 
 import android.content.Context
+import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.model.future.ProfitsBean
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabProfitBinding
 import skin.support.content.res.SkinCompatResources
 
-class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>?) : BaseDataTypeBindAdapter<ProfitsBean?, ListItemContractTabProfitBinding>(context, data) {
+class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>?) : BaseDataTypeBindAdapter<ProfitsBean?, ListItemContractTabProfitBinding>(context, data),
+    View.OnClickListener {
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -23,13 +25,20 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
         return R.layout.list_item_contract_tab_profit
     }
 
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.tv_revoke ->{}
+            R.id.btn_with_limit ->{}
+        }
+    }
+
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabProfitBinding>?) {
-        val positionData = getItem(position)
+        val profitData = getItem(position)
         var viewHolder = holder?.dataBing
         var sideDes:String? = null
         var bondDes:String? = null
         var positionType:String? = null
-        when(positionData?.positionSide){
+        when(profitData?.positionSide){
             //做多
             "LONG" ->{
                 sideDes = getString(R.string.contract_see_up)
@@ -39,10 +48,10 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
                 sideDes = getString(R.string.contract_see_down)
             }
         }
-        when(positionData?.positionType){
+        when(profitData?.positionType){
             //逐仓
             "ISOLATED" -> {
-                bondDes = positionData?.isolatedMargin
+                bondDes = profitData?.isolatedMargin
                 positionType = getString(R.string.contract_fiexble_position)
             }
             //全仓
@@ -51,27 +60,27 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
             }
         }
         //仓位描述
-//        viewHolder?.positionDes?.text = positionData?.symbol +positionType+positionData?.leverage+"X"
+        viewHolder?.positionDes?.text = profitData?.symbol +positionType
         //方向
         viewHolder?.positionSide?.text = sideDes
-        //已实现盈亏
-//        viewHolder?.alreadyCloseProfit?.text = positionData?.realizedProfit
-        //当前盈亏
-        viewHolder?.profits?.text = "--"
-        //当前盈亏百分比
-        viewHolder?.profitsPercent?.text = "--"
-        //持仓数量
-        viewHolder?.positionAmount?.text = positionData?.positionSize
-        //可平数量
-//        viewHolder?.availableCloseAmount?.text = positionData?.availableCloseSize
+        //撤销
+        viewHolder?.tvRevoke?.setOnClickListener(this)
+        //止盈止损
+        viewHolder?.btnWithLimit?.setOnClickListener(this)
+        //创建时间
+        viewHolder?.tvCreateTime?.text = profitData?.createdTime.toString()
         //持仓均价
-        viewHolder?.entryPrice?.text = positionData?.entryPrice
-        //强平价格
-        viewHolder?.forceClosePrice?.text = "--"
-        //标记价格
-        viewHolder?.flagPrice?.text = "--"
-        //保证金
-        viewHolder?.bondAmount?.text = bondDes
+        viewHolder?.tvOpenPriceDes?.text = profitData?.entryPrice
+        //预估强平价(本地计算)
+        viewHolder?.tvBoomPriceDes?.text = "--"
+       //数量
+        viewHolder?.tvAmountDes?.text = profitData?.origQty
+        //最新价(动态取)
+        viewHolder?.tvNowPriceDes?.text = "--"
+        //止盈价格
+        viewHolder?.tvProfitPriceDes?.text = profitData?.triggerProfitPrice
+        //止损价格
+        viewHolder?.tvLosePriceDes?.text = profitData?.triggerStopPrice
     }
 
 }

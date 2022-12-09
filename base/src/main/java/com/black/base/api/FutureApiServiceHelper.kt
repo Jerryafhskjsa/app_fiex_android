@@ -241,9 +241,11 @@ object FutureApiServiceHelper {
 
     /**
      * 获取用户持仓
+     * symbol=null就是获取全部
      */
     fun getPositionList(
         context: Context?,
+        symbol: String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
     ) {
@@ -252,13 +254,14 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getPositionList()
+            ?.getPositionList(symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
     /**
      * 获取止盈止损列表
+     * state=null获取全部
      */
     fun getProfitList(
         context: Context?,
@@ -278,6 +281,7 @@ object FutureApiServiceHelper {
 
     /**
      * 获取计划委托列表
+     * state=null获取全部
      */
     fun getPlanList(
         context: Context?,

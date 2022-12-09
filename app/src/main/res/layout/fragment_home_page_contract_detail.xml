@@ -54,10 +54,11 @@
                 </ImageView>
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/all_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/default_padding"
-                    android:text="@string/contract_fast_done"
+                    android:text="@string/contract_fast_cancel"
                     android:textColor="@color/T13"
                     android:textSize="@dimen/text_size_12">
 

@@ -21,5 +21,7 @@ open class PlansBean : BaseAdapterItem(){
     val symbol:String? = null//交易对
     val timeInForce:String? = null//有效方式
     val triggerPriceType:String? = null//触发价格类型
+    val triggerProfitPrice:String? = null//止盈价格
+    val triggerStopPrice:String? = null//止损价格
 }
 

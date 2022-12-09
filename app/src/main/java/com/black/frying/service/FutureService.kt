@@ -83,7 +83,7 @@ object FutureService {
     }
 
     fun initPositionList(context: Context?) {
-        FutureApiServiceHelper.getPositionList(context, false,
+        FutureApiServiceHelper.getPositionList(context, symbol = null,false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initPositionList--error", error.toString());

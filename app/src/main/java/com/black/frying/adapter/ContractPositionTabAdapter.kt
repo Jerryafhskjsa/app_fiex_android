@@ -31,6 +31,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         val positionData = getItem(position)
         var viewHolder = holder?.dataBing
         var sideDes:String? = null
+        var sideBgColor:Int? = null
         var bondDes:String? = null
         var positionType:String? = null
         var autoMergeBond:Boolean? = positionData?.autoMargin
@@ -38,10 +39,12 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             //做多
             "LONG" ->{
                 sideDes = getString(R.string.contract_see_up)
+                sideBgColor = context.getColor(R.color.T17)
             }
             //做空
             "SHORT" ->{
                 sideDes = getString(R.string.contract_see_down)
+                sideBgColor = context.getColor(R.color.T16)
             }
         }
         when(positionData?.positionType){
@@ -60,6 +63,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         viewHolder?.positionDes?.text = positionData?.symbol +positionType+positionData?.leverage+"X"
         //方向
         viewHolder?.positionSide?.text = sideDes
+        viewHolder?.positionSide?.setBackgroundColor(sideBgColor!!)
         //已实现盈亏
         viewHolder?.alreadyCloseProfit?.text = positionData?.realizedProfit
         //当前盈亏

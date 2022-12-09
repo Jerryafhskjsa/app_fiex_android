@@ -2,6 +2,7 @@ package com.black.frying.adapter
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
@@ -11,7 +12,8 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
 import skin.support.content.res.SkinCompatResources
 
-class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) : BaseDataTypeBindAdapter<PlansBean?, ListItemContractTabPlanBinding>(context, data) {
+class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) : BaseDataTypeBindAdapter<PlansBean?, ListItemContractTabPlanBinding>(context, data) ,
+    View.OnClickListener{
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -27,13 +29,19 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         return R.layout.list_item_contract_tab_plan
     }
 
+    override fun onClick(v: View?) {
+        when(v?.id){
+
+        }
+    }
+
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPlanBinding>?) {
-        val positionData = getItem(position)
+        val planData = getItem(position)
         var viewHolder = holder?.dataBing
         var sideDes:String? = null
         var bondDes:String? = null
         var positionType:String? = null
-        when(positionData?.positionSide){
+        when(planData?.positionSide){
             //做多
             "LONG" ->{
                 sideDes = getString(R.string.contract_see_up)
@@ -44,27 +52,25 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
             }
         }
         //仓位描述
-//        viewHolder?.positionDes?.text = positionData?.symbol +positionType+positionData?.leverage+"X"
+        viewHolder?.positionDes?.text = planData?.symbol +positionType
         //方向
         viewHolder?.positionSide?.text = sideDes
-        //已实现盈亏
-//        viewHolder?.alreadyCloseProfit?.text = positionData?.realizedProfit
-        //当前盈亏
-        viewHolder?.profits?.text = "--"
-        //当前盈亏百分比
-        viewHolder?.profitsPercent?.text = "--"
-        //持仓数量
-//        viewHolder?.positionAmount?.text = positionData?.positionSize
-        //可平数量
-//        viewHolder?.availableCloseAmount?.text = positionData?.availableCloseSize
-        //持仓均价
-//        viewHolder?.entryPrice?.text = positionData?.entryPrice
-        //强平价格
-        viewHolder?.forceClosePrice?.text = "--"
-        //标记价格
-        viewHolder?.flagPrice?.text = "--"
-        //保证金
-        viewHolder?.bondAmount?.text = bondDes
+        //订单类型
+        viewHolder?.tvType?.text = planData?.state
+        //创建时间
+        viewHolder?.tvCreateTime?.text = planData?.createdTime.toString()
+        //开仓均价
+        viewHolder?.tvEntrustPriceDes?.text = planData?.price
+        //委托数量
+        viewHolder?.tvEntrustAmountDes?.text = planData?.origQty
+        //成交数量
+        viewHolder?.tvDealAmountDes?.text = "--"
+        //止盈价格
+        viewHolder?.tvProfitPriceDes?.text = planData?.triggerProfitPrice
+        //止损价格
+        viewHolder?.tvLosePriceDes?.text = planData?.triggerStopPrice
+        //占用保证金
+        viewHolder?.tvBondAmountDes?.text = "--"
     }
 
 }
