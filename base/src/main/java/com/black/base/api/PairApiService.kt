@@ -18,16 +18,22 @@ import retrofit2.http.*
 interface PairApiService {
 
     @GET(UrlConfig.Config.URL_HOME_CONFIG_LIST)
-    fun getHomeSymbolList():Observable<HttpRequestResultDataList<HomeSymbolList?>?>?
+    fun getHomeSymbolList(): Observable<HttpRequestResultDataList<HomeSymbolList?>?>?
 
     @GET(UrlConfig.Config.URL_PAIR_SYMBOL_CONFIG)
-    fun getPairSymbol():Observable<HttpRequestResultData<HomeSymbolList?>?>?
+    fun getPairSymbol(): Observable<HttpRequestResultData<HomeSymbolList?>?>?
 
     @GET(UrlConfig.Config.URL_HOME_TICKERS)
-    fun getHomeTickersList():Observable<HttpRequestResultDataList<HomeTickers?>?>?
+    fun getHomeTickersList(): Observable<HttpRequestResultDataList<HomeTickers?>?>?
+
+    /**
+     * 单个交易对行情
+     */
+    @GET(UrlConfig.Config.URL_SYMBOL_TICKER)
+    fun getSymbolTicker(@Query("symbol") symbol: String?): Observable<HttpRequestResultData<HomeTickers?>?>?
 
     @GET(UrlConfig.Config.URL_HOME_KLine)
-    fun getHomeKLine():Observable<HttpRequestResultDataList<HomeTickersKline?>?>?
+    fun getHomeKLine(): Observable<HttpRequestResultDataList<HomeTickersKline?>?>?
 
     @GET(UrlConfig.Config.URL_SET_LIST)
     fun getTradeSetsFiex(): Observable<HttpRequestResultDataList<QuotationSet?>?>?

@@ -8,6 +8,7 @@ import com.black.base.model.future.*
 import com.black.base.util.FutureSocketData
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
+import com.qiniu.android.utils.Json
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -96,10 +97,10 @@ object FutureService {
                     shortPositionList = ArrayList()
                     if (returnData != null) {
                         allPositionList = returnData.result
-                        Log.d("ttttttt-->initPositionList", allPositionList.toString());
                         for (positionBean in allPositionList!!) {
                             if (positionBean?.symbol.equals(symbol)) {
                                 positionList!!.add(positionBean)
+                                Log.d("ttttttt-->initPositionList",positionBean.toString());
                                 if (positionBean?.positionSide.equals(Constants.LONG)) {
                                     if (positionBean != null) {
                                         longPositionList!!.add(positionBean)

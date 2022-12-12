@@ -13,6 +13,7 @@ import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.clutter.HomeSymbolList
 import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.clutter.HomeTickersKline
+import com.black.base.model.future.TickerBean
 import com.black.base.model.socket.CoinOrder
 import com.black.base.model.socket.PairStatus
 import com.black.base.net.HttpCallbackSimple
@@ -40,7 +41,6 @@ object PairApiServiceHelper {
 
     //所有交易对行情数据
     private var homeTickersPairStatus: ArrayList<PairStatus?>? = ArrayList()
-
 
 
     private fun getLastGetTime(type: Int): Long? {
@@ -150,6 +150,23 @@ object PairApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
+    /**
+     * 获取单个交易对的行情
+     */
+    fun getSymbolTicker(
+        symbol: String,
+        context: Context?,
+        callback: Callback<HttpRequestResultData<HomeTickers?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(PairApiService::class.java)
+            ?.getSymbolTicker(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
 
     /**
      * 本地获取所有交易对的行情信息
@@ -184,9 +201,9 @@ object PairApiServiceHelper {
                 var data = result?.data!!
                 if (data.isNotEmpty()) {
                     setLastGetTime(HOME_TICKER_LIST, System.currentTimeMillis())
-                    var c2CPrice:C2CPrice? = null
+                    var c2CPrice: C2CPrice? = null
                     //获取c2c usdt价格
-                    C2CApiServiceHelper.getC2CPrice(context,object :Callback<C2CPrice?>(){
+                    C2CApiServiceHelper.getC2CPrice(context, object : Callback<C2CPrice?>() {
                         override fun callback(returnData: C2CPrice?) {
                             c2CPrice = returnData
                         }
@@ -212,12 +229,12 @@ object PairApiServiceHelper {
                                 temp?.totalAmount = data[i]?.a?.toDouble()!!
                                 //涨跌幅
                                 temp?.priceChangeSinceToday = data[i]?.r?.toDouble()!!
-                                if(c2CPrice != null){
+                                if (c2CPrice != null) {
                                     var price = BigDecimal(temp!!.currentPrice)
                                     var usdt = BigDecimal(c2CPrice?.buy!!)
                                     var priceCny = price.times(usdt)
-                                    var priceCnyStr =  NumberUtil.formatNumberNoGroup(priceCny, 4, 4)
-                                    temp?.setCurrentPriceCNY(priceCnyStr.toDouble(),"0.0000")
+                                    var priceCnyStr = NumberUtil.formatNumberNoGroup(priceCny, 4, 4)
+                                    temp?.setCurrentPriceCNY(priceCnyStr.toDouble(), "0.0000")
                                 }
                             }
                             pairStatusMap[temp?.pair] = temp
@@ -226,7 +243,7 @@ object PairApiServiceHelper {
                     if (homeTickersPairStatus?.isNotEmpty() == true) {
                         homeTickersPairStatus?.clear()
                     }
-                    for ((key,value) in pairStatusMap){
+                    for ((key, value) in pairStatusMap) {
                         newData.add(value)
                     }
                     homeTickersPairStatus?.addAll(newData)

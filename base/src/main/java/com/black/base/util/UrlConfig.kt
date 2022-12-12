@@ -439,6 +439,9 @@ object UrlConfig {
         //fiex 获取tickets
         const val URL_HOME_TICKERS = "public/tickers"
 
+        //fiex 交易对行情
+        const val URL_SYMBOL_TICKER = "public/ticker"
+
         //fiex 获取首首页折线图
         const val URL_HOME_KLine = "public/tickers-Kline"
 
@@ -522,10 +525,12 @@ object UrlConfig {
     object Future {
 
         const val URL_DEPTH = "market/v1/public/q/depth";
+
         //交易对配置列表
         const val URL_SYMBOL_LIST = "market/v1/public/symbol/list"
+
         //调整合约倍数
-        const val URL_ADJUST_LEVERAGE= "user/v1/position/adjust-leverage"
+        const val URL_ADJUST_LEVERAGE = "user/v1/position/adjust-leverage"
 
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
 

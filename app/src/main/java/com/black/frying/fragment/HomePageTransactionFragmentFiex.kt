@@ -30,6 +30,7 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
+import com.black.base.model.clutter.HomeTickers
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
@@ -226,6 +227,25 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.onResume()
         getTradeOrderCurrent()
         updateDear(isDear)
+        initTicker()
+    }
+
+    fun initTicker() {
+        PairApiServiceHelper.getSymbolTicker(
+            viewModel?.getCurrentPair().toString(),
+            mContext,
+            object : Callback<HttpRequestResultData<HomeTickers?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttt--->ticker---",error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultData<HomeTickers?>?) {
+                    var homeTicker = returnData?.data
+                    Log.d("ttt--->ticker---",homeTicker.toString())
+                    updatePriceSince(homeTicker!!.r)
+                }
+
+            })
     }
 
     private fun updateDear(dear: Boolean?) {
@@ -1118,6 +1138,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(1)
+        initTicker()
     }
 
     //刷新当前钱包
@@ -1182,19 +1203,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //当前委托
     private fun getTradeOrderCurrent() {
-        var symbol = ""
-        if (isShowAll) {
-            symbol = ""
-        } else {
-            symbol = viewModel!!.getCurrentPair().toString()
-        }
 
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
 //            mContext?.runOnUiThread { }
 //            val orderState = 1
             TradeApiServiceHelper.getTradeOrderRecordFiex(
                 activity,
-                symbol,
+                viewModel!!.getCurrentPair(),
                 null,
                 null,
                 null,
