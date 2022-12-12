@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/double_padding"
                         android:layout_marginTop="@dimen/double_padding"
-                        android:text="币币总资产折合 (USDT)"
+                        android:text="币币总资产折合(USDT)"
                         android:textColor="@color/T3"
                         android:textSize="@dimen/text_size_13" />
 

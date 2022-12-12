@@ -719,6 +719,9 @@
     <string name="from">来自</string>
     <string name="to">到</string>
     <string name="total_assets">总资产折合(USDT)</string>
+    <string name="investment_portfolio">投资组合</string>
+    <string name="quick_recharged">快速充值</string>
+    <string name="quick_extract">快速提现</string>
     <string name="spot_account">现货账户</string>
     <string name="contract_account">合约账户</string>
     <string name="otc_account">OTC账户</string>
@@ -733,10 +736,13 @@
     <string name="check_update">检测更新</string>
     <string name="all_value">净资产折合</string>
     <string name="fee">手续费</string>
+    <string name="recharge">充币记录</string>
+    <string name="extract2">提币记录</string>
+    <string name="market">市场</string>
     <string name="transfer_succ">划转成功</string>
     <string name="input_amount">请输入数量</string>
     <string name="select_account">请选择账户</string>
-    <string name="max_transfer">Max transfer %s</string>
+    <string name="max_transfer">最大划转 %s</string>
     <string name="no_transfer_coin">暂无可划转的币种</string>
     <string name="arrival">到</string>
     <string name="pls_selected_query">请选择查询条件</string>

@@ -52,7 +52,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var supportToAccountData:ArrayList<SupportAccount?>? = null
     private var supportCoinData:ArrayList<CanTransferCoin?>? = null
     private var showSupportCoin:Boolean? = false
-
+    private var type : Boolean? = false
     private var configCoinInfoList:ArrayList<CoinInfoType?>? = null
 
     private var fromAccount:SupportAccount? = null
@@ -61,6 +61,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private var coinCount:BigDecimal? = null
     private var userBalanceList:ArrayList<UserBalance?>? = null
+    private var tigerBalanceList:ArrayList<UserBalance?>? = null
     private var userBalance:UserBalance? = null
 
     private var chooseCoinDialog:ChooseCoinControllerWindow<CanTransferCoin?>? = null
@@ -113,6 +114,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 supportTransferCoin
             }
             R.id.img_exchange ->{
+                getType(type)
                 exchange()
             }
             R.id.tv_all ->{
@@ -130,6 +132,9 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
     }
 
+    private fun getType(type: Boolean?){
+
+    }
     private fun exchange(){
         if(supportFromAccountData != null && supportToAccountData != null){
             var tem1 = supportFromAccountData
@@ -173,7 +178,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             })
         }
 
-    private fun getUserBalance(isShowLoading: Boolean){
+    private fun getUserBalance(isShowLoading: Boolean ){
         WalletApiServiceHelper.getUserBalance(this)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(this, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
@@ -181,7 +186,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 }
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        userBalanceList = returnData.data?.spotBalance
+                        getType(type)
+                        if (type == false){
+                            userBalanceList = returnData.data?.spotBalance}
+                        else{
+                            userBalanceList = returnData.data?.tigerBalance}
                     } else {
                     }
                 }

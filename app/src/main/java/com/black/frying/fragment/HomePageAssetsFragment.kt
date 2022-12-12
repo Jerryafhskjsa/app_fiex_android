@@ -313,28 +313,27 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             walletFragment?.setEventListener(this)
         })
     }
-    private fun refreshMoneyDisplay() {
-        mContext?.runOnUiThread {
-            showNumberTextView(binding?.money!!)
-            showNumberTextView(binding?.moneyCny!!)
-        }
+    fun setMoney(total: Money?){
+        binding?.money?.tag = total
+        refreshMoneyDisplay()
+    }
+    fun setMoney2(total2: Money?){
+        binding?.moneyCny?.tag = total2
+        refreshMoneyDisplay()
     }
 
-    private fun showNumberTextView(textView: TextView) {
-        if (binding?.btnWalletEye?.isChecked != true) {
-            textView.text = "****"
-        } else {
-            when (val value = textView.tag) {
-                null -> {
-                    textView.text = nullAmount
-                }
-                is Number -> {
-                    textView.text = NumberUtil.formatNumberDynamicScaleNoGroup(value, 8, 2, 2)
-                }
-                else -> {
-                    textView.text = value.toString()
-                }
+    private fun refreshMoneyDisplay() {
+        mContext?.runOnUiThread {
+            if (binding?.btnWalletEye?.isChecked != true) {
+                binding?.money?.setText("****")
+                binding?.moneyCny?.setText("****")
             }
+            else{
+                val total = binding?.money?.tag as Money?
+                val total2 = binding?.moneyCny?.tag as Money?
+                binding?.moneyCny?.setText(if(total?.cny == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.cny == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.cny != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.cny!! + total2?.tigercny!!, 8, 2, 2) + "CNY")
+                binding?.money?.setText(if (total?.usdt == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.usdt == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.usdt != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.usdt!! + total2?.tigerUsdt!! , 8, 2, 2) )
+        }
         }
     }
 
@@ -434,6 +433,10 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun onWalletTotal(observable: Observable<Money?>?) {
         mContext?.runOnUiThread {
+            observable?.subscribe {
+                setMoney(it)
+            }
+
             normalFragment?.run {
                 observable?.subscribe {
                     setTotal(it)
@@ -449,6 +452,9 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun onContractWalletTotal(observable: Observable<Money?>?) {
         mContext?.runOnUiThread {
+            observable?.subscribe {
+                setMoney2(it)
+            }
             contractFragment?.run {
                 observable?.subscribe {
                     setTotal(it)

@@ -51,7 +51,7 @@
                             android:focusable="true"
                             android:focusableInTouchMode="false"
                             android:stateListAnimator="@animator/tab_entrust_record_text_size"
-                            android:text="充币记录"
+                            android:text="@string/recharge"
                             android:textColor="@color/tab_entrust_record_text_color"
                             android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                             android:focusable="true"
                             android:focusableInTouchMode="false"
                             android:stateListAnimator="@animator/tab_entrust_record_text_size"
-                            android:text="提币记录"
+                            android:text="@string/extract2"
                             android:textColor="@color/tab_entrust_record_text_color"
                             android:textStyle="bold" />
                     </LinearLayout>
