@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/B2"
         android:orientation="vertical">
+
         <com.black.base.widget.ObserveScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -20,11 +21,13 @@
             android:fadingEdge="none"
             android:overScrollMode="never"
             android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/B2"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -32,6 +35,7 @@
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
+
                     <LinearLayout
                         android:id="@+id/pair_layout_01"
                         android:layout_width="match_parent"
@@ -40,12 +44,14 @@
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/pair_layout_02"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/price"
                                 android:layout_width="wrap_content"
@@ -53,20 +59,22 @@
                                 android:text="@string/number_default"
                                 android:textSize="@dimen/text_size_16"
                                 android:textStyle="bold" />
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/percentage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
                                 android:background="@drawable/bg_t7_corner3"
                                 android:paddingLeft="5dp"
-                                android:paddingRight="5dp"
                                 android:paddingTop="2dp"
+                                android:paddingRight="5dp"
                                 android:paddingBottom="2dp"
-                                android:layout_marginLeft="8dp"
                                 android:text="@string/number_default"
                                 android:textColor="@color/T4"
                                 android:textSize="@dimen/text_size_10" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -74,6 +82,7 @@
                             android:layout_marginTop="8dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/price_cny"
                                 android:layout_width="wrap_content"
@@ -84,6 +93,7 @@
                                 android:textSize="@dimen/text_size_12" />
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/pair_layout_02"
                         android:layout_width="107dp"
@@ -94,18 +104,21 @@
                         android:layout_marginLeft="5dp"
                         android:gravity="right"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:orientation="horizontal">
+
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/volumn"
                                 android:textColor="@color/T2"
                                 android:textSize="@dimen/trend_default" />
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/volume_h24"
                                 android:layout_width="0dp"
@@ -125,12 +138,14 @@
                             android:layout_weight="1"
                             android:gravity="top"
                             android:orientation="horizontal">
+
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/high"
                                 android:textColor="@color/T2"
                                 android:textSize="@dimen/trend_default" />
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/high"
                                 android:layout_width="0dp"
@@ -143,18 +158,21 @@
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_12" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/low"
                                 android:textColor="@color/T2"
                                 android:textSize="@dimen/trend_default" />
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/low"
                                 android:layout_width="0dp"
@@ -169,26 +187,29 @@
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:id="@+id/time_step_layout"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <com.google.android.material.tabs.TabLayout
                                 android:id="@+id/k_time_step_tab"
                                 android:layout_width="0dp"
                                 android:layout_height="24dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_weight="1"
-                                app:tabRippleColor="@color/transparent"
                                 app:tabBackground="@color/transparent"
                                 app:tabMaxWidth="200dp"
                                 app:tabMinWidth="20dp"
@@ -196,11 +217,14 @@
                                 app:tabPaddingEnd="0dp"
                                 app:tabPaddingStart="0dp"
                                 app:tabPaddingTop="0dp"
+                                app:tabRippleColor="@color/transparent"
                                 app:tabTextAppearance="@style/DefaultTabStyle" />
+
                             <View
                                 android:layout_width="@dimen/line"
                                 android:layout_height="18dp"
                                 android:background="@color/L1_ALPHA60" />
+
                             <ImageView
                                 android:id="@+id/quota"
                                 android:layout_width="53dp"
@@ -210,15 +234,18 @@
                                 android:paddingBottom="2dp"
                                 android:src="@drawable/icon_quota" />
                         </LinearLayout>
+
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <com.black.base.widget.AnalyticChart
                                 android:id="@+id/analytic_chart"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </FrameLayout>
                     </LinearLayout>
+
                     <FrameLayout
                         android:id="@+id/loading_layout"
                         android:layout_width="match_parent"
@@ -238,41 +265,49 @@
                         <!--app:lottie_fileName="loading.json" />-->
                     </FrameLayout>
                 </FrameLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/B1"
                     android:orientation="vertical">
+
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tab"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        app:tabRippleColor="@color/transparent"
                         app:tabBackground="@color/transparent"
                         app:tabMaxWidth="200dp"
                         app:tabMinWidth="20dp"
                         app:tabPaddingBottom="0dp"
                         app:tabPaddingTop="0dp"
+                        app:tabRippleColor="@color/transparent"
                         app:tabTextAppearance="@style/DefaultTabStyle" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/line"
                         android:background="@color/L1_ALPHA60" />
+
                     <FrameLayout
+                        android:background="@color/B2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <include
                             android:id="@+id/quotation_detail_deep_layout"
                             layout="@layout/fragment_quotation_detail_depth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
+
                         <include
                             android:id="@+id/quotation_detail_deal_layout"
                             layout="@layout/fragment_quotation_detail_deal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
+
                         <include
                             android:id="@+id/quotation_detail_description_layout"
                             layout="@layout/fragment_quotation_detail_description"

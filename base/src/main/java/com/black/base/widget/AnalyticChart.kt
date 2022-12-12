@@ -283,8 +283,8 @@ class AnalyticChart : SkinCompatView {
         TimeStep.WEEK_1.text = context.getString(R.string.week_1)
         TimeStep.MONTH_1.text = context.getString(R.string.mon_1)
         TimeStep.MORE.text = context.getString(R.string.more)
-//        logoDrawable = SkinCompatResources.getDrawable(context, R.drawable.icon_k_line_logo)
-        logoDrawable = null
+        logoDrawable = SkinCompatResources.getDrawable(context, R.drawable.icon_k_line_logo)
+//        logoDrawable = null
         stepNoneLightDrawable = context.getDrawable(R.drawable.icon_analytic_chart_none_price_anim) as AnimatedVectorDrawable
         val dm = resources.displayMetrics
         density = dm.density
@@ -356,7 +356,7 @@ class AnalyticChart : SkinCompatView {
 
         basePaint.isAntiAlias = true
         basePaint.style = Paint.Style.FILL
-        basePaint.strokeWidth = 1f * density
+        basePaint.strokeWidth = 0.5f * density
 
         selectPaint.isAntiAlias = true
         selectPaint.style = Paint.Style.FILL
@@ -437,7 +437,8 @@ class AnalyticChart : SkinCompatView {
         } else {
             (paddingTop + HEIGHT * density + paddingBottom).toInt()
         }
-        setMeasuredDimension(width, height)
+        Log.d("ttt--->height",height.toString())
+        setMeasuredDimension(width, height+200)
     }
 
     var dispatchPointerId = 0
@@ -863,8 +864,8 @@ class AnalyticChart : SkinCompatView {
             canvas.save()
             val left = (mPaddingLeft + 10 * density).toInt()
             val top = (mainGraphHeight + mPaddingTop + TOP_TEXT_HEIGHT - 10 * density - 20 * density).toInt()
-            val right = (left + 116 * density).toInt()
-            val bottom = (top + 20 * density).toInt()
+            val right = (left + 85 * density).toInt()
+            val bottom = (top + 30 * density).toInt()
             logoDrawable?.setBounds(left, top, right, bottom)
             logoDrawable?.draw(canvas)
             canvas.restore()
@@ -1966,6 +1967,9 @@ class AnalyticChart : SkinCompatView {
         }
         //区间最值有变化，需要重新计算所有节点坐标，否则只用计算当前价格坐标
         if (oldMin != showingMinValue || oldMax != showingMaxValue) {
+            if(type==null||showingKLineChartItemList==null){
+                return
+            }
             computeCoordinate(showingKLineChartItemList!!, type)
         } else {
             computeCurrentPriceCoordinate()

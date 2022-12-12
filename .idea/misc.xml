@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../layout/custom_preview.xml" value="0.1766304347826087" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/UdeskSDKUI/src/main/res/drawable/udesk_bg_commodity_link.xml" value="0.16" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/UdeskSDKUI/src/main/res/layout/udesk_activity_base.xml" value="0.2100877192982456" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android/UdeskSDKUI/src/main/res/layout/udesk_articleactivity_view.xml" value="0.2100877192982456" />
@@ -347,6 +348,21 @@
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_financial_record.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_wallet_bill.xml" value="0.17447916666666666" />
+        <entry key="app/src/main/res/layout/activity_quotation_detail.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_start_page_new.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_main.xml" value="0.17083333333333334" />
+        <entry key="app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.17083333333333334" />
+        <entry key="app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_home_page_quotation_detail.xml" value="0.13697916666666668" />
+        <entry key="app/src/main/res/layout/fragment_home_page_transaction_fiex.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_transaction_header1_1.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.22447916666666667" />
+        <entry key="app/src/main/res/layout/fragment_quotation_detail_depth.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/list_item_entrust_current_home.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/view_k_line_quota_selector.xml" value="0.253125" />
+        <entry key="base/src/main/res/layout/action_bar_transaction.xml" value="0.253125" />
+        <entry key="res/src/main/res/drawable/splash.xml" value="0.1" />
       </map>
     </option>
   </component>

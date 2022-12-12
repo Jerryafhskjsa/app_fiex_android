@@ -48,7 +48,7 @@ class KLineFullActivity : BaseActivity(), View.OnClickListener, OnKLineFullListe
         binding!!.coinTypeLayout.setOnClickListener(this)
         binding!!.btnClose.setOnClickListener(this)
         binding!!.analyticChart.setShowCount(96)
-        binding!!.analyticChart.setType(AnalyticChart.BOLL or AnalyticChart.KDJ)
+//        binding!!.analyticChart.setType(AnalyticChart.BOLL or AnalyticChart.KDJ)
         binding!!.analyticChart.setAnalyticChartHelper(object : AnalyticChart.AnalyticChartHelper {
             override fun onLoadMore(page: Int) {
                 var endTime = System.currentTimeMillis() - (binding?.analyticChart?.getTimeStep()?.value?.times(1000*
