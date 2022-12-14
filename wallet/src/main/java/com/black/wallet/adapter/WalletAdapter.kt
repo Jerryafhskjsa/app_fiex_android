@@ -20,40 +20,69 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import java.math.RoundingMode
 
-class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?) : BaseRecycleDataBindAdapter<Wallet?, ListItemSpotAccountBinding>(context, variableId, data) {
+class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?) :
+    BaseRecycleDataBindAdapter<Wallet?, ListItemSpotAccountBinding>(context, variableId, data) {
     private var isVisibility: Boolean = true
     private var imageLoader: ImageLoader? = null
     private var TAG = WalletAdapter::class.java.simpleName
+
     init {
         imageLoader = ImageLoader(context)
     }
+
     override fun getResourceId(): Int {
         return R.layout.list_item_spot_account
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ListItemSpotAccountBinding>, position: Int) {
+    override fun onBindViewHolder(
+        holder: BaseViewHolder<ListItemSpotAccountBinding>,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
         val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
-        viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
+        viewHolder?.coinType?.setText(
+            if (wallet?.coinType == null) "" else wallet.coinType.toString().uppercase()
+        )
         viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
         if (isVisibility) {
-            viewHolder?.usable?.setText(NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 2, 8))
+            viewHolder?.usable?.setText(
+                NumberUtil.formatNumberNoGroup(
+                    wallet?.coinAmount,
+                    RoundingMode.FLOOR,
+                    2,
+                    8
+                )
+            )
         } else {
             viewHolder?.usable?.setText("****")
         }
         if (isVisibility) {
-            viewHolder?.totalCny?.setText(if (wallet?.estimatedAvailableAmountCny == null) getString(R.string.number_default) else if(exChange == 0)"≈ ￥ "+NumberUtil.formatNumberDynamicScaleNoGroup(wallet.estimatedAvailableAmountCny, 10, 2, 2)else "≈ $ "+NumberUtil.formatNumberDynamicScaleNoGroup(wallet.estimatedAvailableAmount, 10, 2, 2))
+            viewHolder?.totalCny?.setText(
+                if (wallet?.estimatedAvailableAmountCny == null) getString(
+                    R.string.number_default
+                ) else if (exChange == 0) "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet.estimatedAvailableAmountCny,
+                    10,
+                    2,
+                    2
+                ) else "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet.estimatedAvailableAmount,
+                    10,
+                    2,
+                    2
+                )
+            )
         } else {
             viewHolder?.totalCny?.setText("****")
         }
-        if(wallet?.coinIconUrl != null){
-            var requestOptions=RequestOptions
+        if (wallet?.coinIconUrl != null) {
+            var requestOptions = RequestOptions
                 .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
 
             Glide.with(context)
-                .load(Uri.parse(UrlConfig.getCoinIconUrl(context,wallet?.coinIconUrl)))
+                .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet?.coinIconUrl)))
                 .apply(requestOptions)
                 .into(viewHolder?.iconCoin!!)
         }

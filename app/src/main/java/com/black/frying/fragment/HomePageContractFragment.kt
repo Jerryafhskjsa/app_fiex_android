@@ -1326,8 +1326,8 @@ class HomePageContractFragment : BaseFragment(),
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
-            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
-            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName())
+            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType().toString().uppercase())
+            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName().toString().uppercase())
             header1View?.deepPriceP?.text =
                 getString(R.string.brackets, viewModel!!.getSetName())
             header1View?.deepAmountName?.text =
@@ -1577,8 +1577,8 @@ class HomePageContractFragment : BaseFragment(),
         refreshSubmitButton()
         refreshData()
         if (!TextUtils.isEmpty(pairStatus?.pair)) {
-            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType())
-            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName())
+            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType().toString().uppercase())
+            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName().toString().uppercase())
         }
         resetAmountLength()
         resetPriceLength()
