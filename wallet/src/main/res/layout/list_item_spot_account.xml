@@ -17,14 +17,15 @@
         <ImageView
             android:id="@+id/icon_coin"
             android:layout_width="30dp"
+            android:layout_marginTop="3dp"
             android:layout_height="30dp"
-            android:src="@drawable/icon_coin_default"></ImageView>
+            android:src="@drawable/icon_coin_default"/>
         <LinearLayout
             android:layout_toRightOf="@+id/icon_coin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             android:orientation="vertical">
             <com.black.base.widget.SpanTextView
                 android:id="@+id/coin_type"

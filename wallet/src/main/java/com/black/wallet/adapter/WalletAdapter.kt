@@ -13,7 +13,10 @@ import com.black.base.util.UrlConfig
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListItemSpotAccountBinding
+import com.black.wallet.util.DipPx
+import com.black.wallet.util.GlideRoundTransform
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import java.math.RoundingMode
 
@@ -46,9 +49,12 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
             viewHolder?.totalCny?.setText("****")
         }
         if(wallet?.coinIconUrl != null){
+            var requestOptions=RequestOptions
+                .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
+
             Glide.with(context)
                 .load(Uri.parse(UrlConfig.getCoinIconUrl(context,wallet?.coinIconUrl)))
-                .apply(RequestOptions().error(R.drawable.icon_coin_default))
+                .apply(requestOptions)
                 .into(viewHolder?.iconCoin!!)
         }
     }

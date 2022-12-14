@@ -363,6 +363,7 @@
         <entry key="app/src/main/res/layout/view_k_line_quota_selector.xml" value="0.253125" />
         <entry key="base/src/main/res/layout/action_bar_transaction.xml" value="0.253125" />
         <entry key="res/src/main/res/drawable/splash.xml" value="0.1" />
+        <entry key="wallet/src/main/res/layout/list_item_spot_account.xml" value="0.253125" />
       </map>
     </option>
   </component>
