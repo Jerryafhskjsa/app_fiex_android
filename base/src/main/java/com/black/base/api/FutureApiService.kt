@@ -201,4 +201,33 @@ interface FutureApiService {
         @Field("positionSide") positionSide: String?,
         @Field("leverage") leverage: Int?,
     ): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 一键全部平仓
+     */
+    @POST(UrlConfig.Future.URL_CLOSE_ALL)
+    fun closeAll(): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 撤销所有限价委托和市价委托
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CANCEL_ALL)
+    fun cancelAll(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 撤销所有止盈止损
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CANCEL_ALL_PROFIT_STOP)
+    fun cancelAllProfitStop(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 撤销所有计划委托
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CANCEL_ALL_PLAN)
+    fun cancelALlPlan(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+
+
 }

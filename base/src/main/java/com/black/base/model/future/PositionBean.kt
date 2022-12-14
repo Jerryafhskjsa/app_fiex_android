@@ -16,5 +16,13 @@ open class PositionBean : BaseAdapterItem(){
     val positionType: String? = null //仓位类型(ISOLATED[逐仓])
     val realizedProfit: String? = null //已实现盈亏
     val symbol: String? = null //交易对
+    /******/
+    //本地计算的数据
+    var unRealizedProfit:String? = null//未实现盈亏
+    var profitRate:String? = null//收益率
+    var forceStopPrice:String? = null//强平价格
+    var bondAmount:String? = null//保证金
+    var flagPrice:String? = null//标记价格
+    /******/
 }
 

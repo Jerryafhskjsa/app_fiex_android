@@ -67,9 +67,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         //已实现盈亏
         viewHolder?.alreadyCloseProfit?.text = positionData?.realizedProfit
         //当前盈亏
-        viewHolder?.profits?.text = "--"
+        viewHolder?.profits?.text = positionData?.unRealizedProfit
         //当前盈亏百分比
-        viewHolder?.profitsPercent?.text = "--"
+        viewHolder?.profitsPercent?.text = positionData?.profitRate
         //持仓数量
         viewHolder?.positionAmount?.text = positionData?.positionSize
         //可平数量
@@ -77,9 +77,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         //持仓均价
         viewHolder?.entryPrice?.text = positionData?.entryPrice
         //强平价格
-        viewHolder?.forceClosePrice?.text = "--"
+        viewHolder?.forceClosePrice?.text = positionData?.forceStopPrice
         //标记价格
-        viewHolder?.flagPrice?.text = "--"
+        viewHolder?.flagPrice?.text = positionData?.flagPrice
         //保证金
         viewHolder?.bondAmount?.text = bondDes
         //是否自动追加保证金开关

@@ -1,6 +1,7 @@
 package com.black.base.api
 
 import android.content.Context
+import android.util.Log
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
@@ -527,6 +528,78 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.adjustLeverage(symbol,positionSide,leverage)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 一键全部平仓
+     */
+    fun closeAll(
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.closeAll()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+    /**
+     * 撤销所有限价委托和市价委托
+     */
+    fun closeAll(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelAll(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+    /**
+     * 撤销所有止盈止损
+     */
+    fun cancelAllProfitStop(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelAllProfitStop(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+    /**
+     * 撤销所有计划委托
+     */
+    fun cancelALlPlan(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelALlPlan(symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

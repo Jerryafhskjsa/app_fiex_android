@@ -337,7 +337,6 @@ object FutureService {
      *
      */
     fun getCurrentPosition(context: Context?) {
-
         for (positionBean in positionList!!) {
             if (positionBean?.positionSize.equals("0")) {
                 return

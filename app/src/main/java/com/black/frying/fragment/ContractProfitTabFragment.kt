@@ -13,34 +13,34 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
-import com.black.base.model.future.ProfitsBean
+import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
-import com.black.frying.adapter.ContractPositionTabAdapter
 import com.black.frying.adapter.ContractProfitTabAdapter
-import com.black.router.BlackRouter
+import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
  * @author 合约止盈止损列表页
  */
-class ContractProfitTabFragment : BaseFragment(), AdapterView.OnItemClickListener,
-    View.OnClickListener {
+class ContractProfitTabFragment : BaseFragment(),
+    AdapterView.OnItemClickListener,
+    View.OnClickListener,
+    ContractPositionViewModel.OnContractPositionModelListener{
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
+    private var viewModel: ContractPositionViewModel? = null
 
     private var adapter: ContractProfitTabAdapter? = null
     private var dataList:ArrayList<ProfitsBean?>? = ArrayList()
-    private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
     private var onTabModelListener: OnTabModelListener? = null
 
     //异步获取数据
@@ -48,7 +48,6 @@ class ContractProfitTabFragment : BaseFragment(), AdapterView.OnItemClickListene
     private var socketHandler: Handler? = null
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
-    private var gettingPairsData: Boolean? = false
 
     /**
      * adapter height when viewpager in scrollview
@@ -75,6 +74,10 @@ class ContractProfitTabFragment : BaseFragment(), AdapterView.OnItemClickListene
             container,
             false
         )
+        viewModel = ContractPositionViewModel(mContext!!, this)
+        binding?.allDone?.setOnClickListener(this)
+        binding?.allDone?.text = getString(R.string.contract_fast_cancel)
+
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -134,9 +137,38 @@ class ContractProfitTabFragment : BaseFragment(), AdapterView.OnItemClickListene
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
-                .go(mContext) { _, _ -> }
+            R.id.all_done -> {
+                if(dataList?.size == 0){
+                    return
+                }
+                FutureApiServiceHelper.cancelAllProfitStop(activity,symbol = null,true,object : Callback<HttpRequestResultBean<String>?>() {
+                    override fun callback(returnData: HttpRequestResultBean<String>?) {
+                        if (returnData != null) {
+//                            viewModel?.getPositionData()
+                            getProfitData("UNFINISHED")
+                        }
+                    }
+                    override fun error(type: Int, error: Any?) {
+                        FryingUtil.showToast(activity,error.toString())
+                    }
+                })
+            }
         }
+    }
+
+    override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
+    }
+
+    override fun onFundingRate(fundRate: FundingRateBean?) {
+
+    }
+
+    override fun onLeverageDetail(leverageBracket: LeverageBracketBean?) {
+
+    }
+
+    override fun onMarketPrice(marketPrice: MarkPriceBean?) {
+
     }
 
     /**

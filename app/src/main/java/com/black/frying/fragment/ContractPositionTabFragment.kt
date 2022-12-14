@@ -12,11 +12,16 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.future.FundingRateBean
+import com.black.base.model.future.LeverageBracketBean
+import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.PositionBean
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
+import com.black.frying.viewmodel.ContractPositionViewModel
+import com.black.frying.viewmodel.TransactionViewModel
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.fbsex.exchange.R
@@ -29,16 +34,18 @@ import kotlin.collections.ArrayList
 /**
  * @author 合约持仓列表页
  */
-class ContractPositionTabFragment : BaseFragment(), AdapterView.OnItemClickListener,
-    View.OnClickListener {
+class ContractPositionTabFragment : BaseFragment(),
+    AdapterView.OnItemClickListener,
+    View.OnClickListener,
+    ContractPositionViewModel.OnContractPositionModelListener{
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
+    private var viewModel:ContractPositionViewModel? = null
     private var adapter: ContractPositionTabAdapter? = null
     private var dataList:ArrayList<PositionBean?>? = ArrayList()
-    private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
@@ -73,6 +80,9 @@ class ContractPositionTabFragment : BaseFragment(), AdapterView.OnItemClickListe
             container,
             false
         )
+        viewModel = ContractPositionViewModel(mContext!!, this)
+        binding?.allDone?.setOnClickListener(this)
+
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -97,7 +107,11 @@ class ContractPositionTabFragment : BaseFragment(), AdapterView.OnItemClickListe
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        getPositionData()
+        viewModel?.getMarketPrice(CookieUtil.getCurrentFutureUPair(context!!))
+        viewModel?.getFundRate(CookieUtil.getCurrentFutureUPair(context!!))
+        viewModel?.getPositionAdlList(context)
+        viewModel?.getLeverageBracketDetail()
+        viewModel?.getPositionData()
     }
 
     override fun onStop() {
@@ -132,32 +146,43 @@ class ContractPositionTabFragment : BaseFragment(), AdapterView.OnItemClickListe
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
-                .go(mContext) { _, _ -> }
+            R.id.all_done -> {
+                if(dataList?.size == 0){
+                    return
+                }
+                FutureApiServiceHelper.closeAll(activity,true,object : Callback<HttpRequestResultBean<String>?>() {
+                    override fun callback(returnData: HttpRequestResultBean<String>?) {
+                        if (returnData != null) {
+                            viewModel?.getPositionData()
+                        }
+                    }
+                    override fun error(type: Int, error: Any?) {
+                        FryingUtil.showToast(activity,error.toString())
+                    }
+                })
+            }
         }
     }
 
-    /**
-     * 获取当前持仓数据
-     */
-    private fun getPositionData(){
-        FutureApiServiceHelper.getPositionList(context,CookieUtil.getCurrentFutureUPair(activity!!), false,
-            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                    Log.d("iiiiii-->positionData--error", error.toString());
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
-                    if (returnData != null) {
-                        dataList = returnData.result
-                        Log.d("iiiiii-->positionData = ", dataList!!.size.toString())
-                        onTabModelListener?.onCount(dataList?.size)
-                        adapter?.data = dataList
-                        adapter?.notifyDataSetChanged()
-                    }
-                }
-            })
+    override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
+        onTabModelListener?.onCount(positionList?.size)
+        adapter?.data = positionList
+        adapter?.notifyDataSetChanged()
     }
+
+    override fun onFundingRate(fundRate: FundingRateBean?) {
+
+    }
+
+    override fun onLeverageDetail(leverageBracket: LeverageBracketBean?) {
+
+    }
+
+    override fun onMarketPrice(marketPrice: MarkPriceBean?) {
+
+    }
+
+
 
     interface OnTabModelListener {
         fun onCount(count:Int?)
