@@ -172,7 +172,7 @@
                             android:background="@null"
                             android:gravity="center_vertical"
                             android:hint="@string/pls_input_phone_number"
-                            android:inputType="text"
+                            android:inputType="phone"
                             android:maxLines="1"
                             android:paddingLeft="0dp"
                             android:paddingRight="0dp"

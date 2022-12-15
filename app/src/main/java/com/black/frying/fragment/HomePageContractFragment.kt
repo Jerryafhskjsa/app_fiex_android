@@ -59,6 +59,7 @@ import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -75,7 +76,6 @@ import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -116,8 +116,8 @@ class HomePageContractFragment : BaseFragment(),
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
     private var currentOrderType: String? = "LIMIT"
-    private var currentUnitType:String? = "USDT"
-    private var currentTimeInForceType:String? = "GTC"
+    private var currentUnitType: String? = "USDT"
+    private var currentTimeInForceType: String? = "GTC"
     private var inputNumber: Boolean? = false//是否手动输入数量
     private var isDear: Boolean? = null
 
@@ -170,13 +170,13 @@ class HomePageContractFragment : BaseFragment(),
     private var userBalance: ArrayList<UserBalance?>? = null
     private var tabData: ArrayList<ContractRecordTabBean?>? = null
     private var recordFragmentList: MutableList<Fragment?>? = null
-    private var positionTabListener:ContractPositionTabFragment.OnTabModelListener? = null
-    private var profitTabListener:ContractProfitTabFragment.OnTabModelListener? = null
-    private var planTabListener:ContractPlanTabFragment.OnTabModelListener? = null
+    private var positionTabListener: ContractPositionTabFragment.OnTabModelListener? = null
+    private var profitTabListener: ContractProfitTabFragment.OnTabModelListener? = null
+    private var planTabListener: ContractPlanTabFragment.OnTabModelListener? = null
 
     private var currentTabPosition: Int = 0
 
-    private var fundRateTime:Long? = null
+    private var fundRateTime: Long? = null
     private val mFundRateTimerHandler = Handler()
     private val fundRateTimer = object : Runnable {
         override fun run() {
@@ -271,9 +271,20 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.getLeverageBracketDetail()
         viewModel?.onResume()
         initAdjustLeverageData()
-        getTradeOrderCurrent()
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
+        val future_token = HttpCookieUtil.geFutureToken(mContext)
+        if (future_token == null) {
+            binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
+            binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.GONE
+            binding!!.fragmentHomePageContractHeader1.notLoginBtn.setOnClickListener(this)
+
+        } else {
+            binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.VISIBLE
+            binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.GONE
+            getTradeOrderCurrent()
+            Log.d("ttt--->", "Login")
+        }
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
 //        FutureService.getBalanceByCoin(mContext)
@@ -443,32 +454,32 @@ class HomePageContractFragment : BaseFragment(),
         }
         var tab1 = ContractRecordTabBean()
         tab1.amount = 0
-        tab1.name = getString(R.string.contract_record_tab1,tab1?.amount.toString())
+        tab1.name = getString(R.string.contract_record_tab1, tab1?.amount.toString())
         tab1.type = ConstData.CONTRACT_REC_HOLD_AMOUNT
         var tab2 = ContractRecordTabBean()
         tab2.amount = 0
-        tab2.name = getString(R.string.contract_record_tab2,tab2?.amount.toString())
+        tab2.name = getString(R.string.contract_record_tab2, tab2?.amount.toString())
         tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
         var tab3 = ContractRecordTabBean()
         tab3.amount = 0
-        tab3.name = getString(R.string.contract_record_tab3,tab3?.amount.toString())
+        tab3.name = getString(R.string.contract_record_tab3, tab3?.amount.toString())
         tab3.type = ConstData.CONTRACT_REC_CURRENT
         tabData?.add(tab1)
         tabData?.add(tab2)
         tabData?.add(tab3)
-        positionTabListener = object :ContractPositionTabFragment.OnTabModelListener{
+        positionTabListener = object : ContractPositionTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
-                updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT,count)
+                updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, count)
             }
         }
-        profitTabListener = object :ContractProfitTabFragment.OnTabModelListener{
+        profitTabListener = object : ContractProfitTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
-                updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE,count)
+                updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, count)
             }
         }
-        planTabListener = object :ContractPlanTabFragment.OnTabModelListener{
+        planTabListener = object : ContractPlanTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
-                updateTabTitles(ConstData.CONTRACT_REC_CURRENT,count)
+                updateTabTitles(ConstData.CONTRACT_REC_CURRENT, count)
             }
         }
         if (tabData != null && tabData!!.isNotEmpty()) {
@@ -485,8 +496,10 @@ class HomePageContractFragment : BaseFragment(),
                         ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
                             fragment = ContractPositionTabFragment.newInstance(tabData)
                         }
-                        ConstData.CONTRACT_REC_WITH_LIMIE -> fragment = ContractProfitTabFragment.newInstance(tabData)
-                        ConstData.CONTRACT_REC_CURRENT -> fragment = ContractPlanTabFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_WITH_LIMIE -> fragment =
+                            ContractProfitTabFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_CURRENT -> fragment =
+                            ContractPlanTabFragment.newInstance(tabData)
 
                     }
                     if (fragment is ContractPositionTabFragment) {
@@ -595,16 +608,19 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    private fun updateTabTitles(tabType: Int?,amount:Int?){
-        when(tabType){
-            ConstData.CONTRACT_REC_HOLD_AMOUNT ->{
-                recordTab?.getTabAt(0)?.text = getString(R.string.contract_record_tab1,amount.toString())
+    private fun updateTabTitles(tabType: Int?, amount: Int?) {
+        when (tabType) {
+            ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
+                recordTab?.getTabAt(0)?.text =
+                    getString(R.string.contract_record_tab1, amount.toString())
             }
-            ConstData.CONTRACT_REC_WITH_LIMIE ->{
-                recordTab?.getTabAt(1)?.text = getString(R.string.contract_record_tab2,amount.toString())
+            ConstData.CONTRACT_REC_WITH_LIMIE -> {
+                recordTab?.getTabAt(1)?.text =
+                    getString(R.string.contract_record_tab2, amount.toString())
             }
-            ConstData.CONTRACT_REC_CURRENT ->{
-                recordTab?.getTabAt(2)?.text = getString(R.string.contract_record_tab3,amount.toString())
+            ConstData.CONTRACT_REC_CURRENT -> {
+                recordTab?.getTabAt(2)?.text =
+                    getString(R.string.contract_record_tab3, amount.toString())
             }
         }
     }
@@ -654,6 +670,9 @@ class HomePageContractFragment : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.not_login_btn->{
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }
             R.id.lin_buy_multiple -> {
                 showOrientationMultipleDialog(buyMultiChooseBean)
             }
@@ -734,7 +753,7 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }).show()
             }
-            R.id.lin_unit_type ->{
+            R.id.lin_unit_type -> {
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentUnitType,
@@ -753,7 +772,7 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }).show()
             }
-            R.id.lin_limit_type ->{
+            R.id.lin_limit_type -> {
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentTimeInForceType,
@@ -886,7 +905,7 @@ class HomePageContractFragment : BaseFragment(),
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
                     if (transactionType != ConstData.FUTURE_OPERATE_OPEN) {
-                        transactionType =  ConstData.FUTURE_OPERATE_OPEN
+                        transactionType = ConstData.FUTURE_OPERATE_OPEN
                         //refreshSeekBar();
                         refreshView()
                     }
@@ -896,18 +915,18 @@ class HomePageContractFragment : BaseFragment(),
                 if (CookieUtil.getUserInfo(it) == null) {
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    if (transactionType !=  ConstData.FUTURE_OPERATE_CLOSE) {
-                        transactionType =  ConstData.FUTURE_OPERATE_CLOSE
+                    if (transactionType != ConstData.FUTURE_OPERATE_CLOSE) {
+                        transactionType = ConstData.FUTURE_OPERATE_CLOSE
                         //                    refreshSeekBar();
                         refreshView()
                     }
                 }
             }
             //卖出/开空
-            R.id.btn_handle_1 ->{
-                var positionSide:String? = null
-                var orderSide:String? = null
-                when(transactionType){
+            R.id.btn_handle_1 -> {
+                var positionSide: String? = null
+                var orderSide: String? = null
+                when (transactionType) {
                     ConstData.FUTURE_OPERATE_OPEN -> {
                         orderSide = "BUY"
                         positionSide = "SHORT"
@@ -917,7 +936,7 @@ class HomePageContractFragment : BaseFragment(),
                         orderSide = "SELL"
                     }
                 }
-                createOrderFuture(positionSide!!,orderSide!!)
+                createOrderFuture(positionSide!!, orderSide!!)
             }
             //买入/开多
             R.id.btn_handle -> mContext?.let {
@@ -925,9 +944,9 @@ class HomePageContractFragment : BaseFragment(),
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    var positionSide:String? = null
-                    var orderSide:String? = null
-                    when(transactionType){
+                    var positionSide: String? = null
+                    var orderSide: String? = null
+                    when (transactionType) {
                         ConstData.FUTURE_OPERATE_OPEN -> {
                             positionSide = "LONG"
                             orderSide = "BUY"
@@ -937,7 +956,7 @@ class HomePageContractFragment : BaseFragment(),
                             orderSide = "SELL"
                         }
                     }
-                    createOrderFuture(positionSide!!,orderSide!!)
+                    createOrderFuture(positionSide!!, orderSide!!)
                 }
             }
         }
@@ -1074,7 +1093,7 @@ class HomePageContractFragment : BaseFragment(),
 
     //计算最大交易数量
     private fun getMaxAmount(): BigDecimal? {
-        if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
+        if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
             val usable = currentBalanceSell?.availableBalance
             val price =
                 CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString())
@@ -1083,7 +1102,7 @@ class HomePageContractFragment : BaseFragment(),
                 2,
                 BigDecimal.ROUND_HALF_DOWN
             )
-        } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
+        } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
             return currentBalanceBuy?.availableBalance?.toBigDecimal()
         }
         return null
@@ -1127,7 +1146,7 @@ class HomePageContractFragment : BaseFragment(),
 //                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                 }
             } else { //只有价格
-                if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
+                if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
                     binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                     if (price > 0 && currentBalanceSell != null) {
                         //总的钱数除以输入价格
@@ -1143,7 +1162,7 @@ class HomePageContractFragment : BaseFragment(),
                     } else {
                         binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                     }
-                } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
+                } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
                     binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
                     if (price > 0 && currentBalanceBuy != null) {
                         //总的钱数乘以输入价格
@@ -1166,10 +1185,10 @@ class HomePageContractFragment : BaseFragment(),
                 }
             }
         } else {
-            if (transactionType ==  ConstData.FUTURE_OPERATE_OPEN) {
+            if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
                 binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
-            } else if (transactionType ==  ConstData.FUTURE_OPERATE_CLOSE) {
+            } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
                 binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
             }
@@ -1252,10 +1271,11 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.fragmentHomePageContractHeader1?.orderType.text = typeDes
     }
 
-    private fun refreshUnitType(type:String?){
+    private fun refreshUnitType(type: String?) {
         binding!!.fragmentHomePageContractHeader1?.unitType.text = type
     }
-    private fun refreshTimeInForceType(type:String?){
+
+    private fun refreshTimeInForceType(type: String?) {
         binding!!.fragmentHomePageContractHeader1?.withLimitType.text = type
     }
 
@@ -1326,8 +1346,12 @@ class HomePageContractFragment : BaseFragment(),
                 SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
-            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType().toString().uppercase())
-            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName().toString().uppercase())
+            binding!!.actionBarLayout.actionBarTitle.setText(
+                viewModel!!.getCoinType().toString().uppercase()
+            )
+            binding!!.actionBarLayout.pairSetName.setText(
+                "/" + viewModel!!.getSetName().toString().uppercase()
+            )
             header1View?.deepPriceP?.text =
                 getString(R.string.brackets, viewModel!!.getSetName())
             header1View?.deepAmountName?.text =
@@ -1474,16 +1498,16 @@ class HomePageContractFragment : BaseFragment(),
      * positionSide：LONG;SHORT
      * 数量 = 输入数量/(输入价格*合约面值)
      */
-    private fun createOrderFuture(positionSide:String,orderSide:String) {
-        var orderType:String? = currentOrderType
+    private fun createOrderFuture(positionSide: String, orderSide: String) {
+        var orderType: String? = currentOrderType
         var price: String? =
             header1View?.price?.text.toString().trim { it <= ' ' }
-        if(price?.isEmpty() == true){
+        if (price?.isEmpty() == true) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
             return
         }
-        var priceDouble:Double? = CommonUtil.parseDouble(price)
-        var timeInForce:String? = currentTimeInForceType
+        var priceDouble: Double? = CommonUtil.parseDouble(price)
+        var timeInForce: String? = currentTimeInForceType
         val origQty = header1View?.transactionQuota?.text.toString()
             .trim { it <= ' ' }
         if (origQty.isEmpty() || origQty.toInt() == 0) {
@@ -1497,16 +1521,16 @@ class HomePageContractFragment : BaseFragment(),
             priceDouble = null
         }
         //止盈止损
-        var tigerStop:Boolean? = header1View?.contractWithLimit?.isChecked
-        var tigerProfit:String? = header1View?.stopSurplus?.text.toString().trim { it <= ' ' }
-        var tigerProfitValue:Number? = null
-        if(tigerProfit?.isNotEmpty() == true){
+        var tigerStop: Boolean? = header1View?.contractWithLimit?.isChecked
+        var tigerProfit: String? = header1View?.stopSurplus?.text.toString().trim { it <= ' ' }
+        var tigerProfitValue: Number? = null
+        if (tigerProfit?.isNotEmpty() == true) {
             tigerProfitValue = tigerProfit.toFloat()
         }
 
-        var tigerLose:String? = header1View?.stopLose?.text.toString().trim { it <= ' ' }
-        var tigerLoseValue:Number? = null
-        if(tigerLose?.isNotEmpty() == true){
+        var tigerLose: String? = header1View?.stopLose?.text.toString().trim { it <= ' ' }
+        var tigerLoseValue: Number? = null
+        if (tigerLose?.isNotEmpty() == true) {
             tigerLoseValue = tigerLose?.toFloat()
         }
         val createRunnable = Runnable {
@@ -1577,8 +1601,12 @@ class HomePageContractFragment : BaseFragment(),
         refreshSubmitButton()
         refreshData()
         if (!TextUtils.isEmpty(pairStatus?.pair)) {
-            binding!!.actionBarLayout.actionBarTitle.setText(viewModel!!.getCoinType().toString().uppercase())
-            binding!!.actionBarLayout.pairSetName.setText("/" + viewModel!!.getSetName().toString().uppercase())
+            binding!!.actionBarLayout.actionBarTitle.setText(
+                viewModel!!.getCoinType().toString().uppercase()
+            )
+            binding!!.actionBarLayout.pairSetName.setText(
+                "/" + viewModel!!.getSetName().toString().uppercase()
+            )
         }
         resetAmountLength()
         resetPriceLength()
@@ -1894,13 +1922,13 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     override fun onFundingRate(fundRate: FundingRateBean?) {
-        Log.d("iiiiii","onFundingRate")
-        var rate:String? = NumberUtil.formatNumberNoGroup(
+        Log.d("iiiiii", "onFundingRate")
+        var rate: String? = NumberUtil.formatNumberNoGroup(
             fundRate?.fundingRate?.toFloat()?.times(100),
             RoundingMode.FLOOR,
             4,
             4
-        )+"%"
+        ) + "%"
         headerView?.tvFundRate?.text = rate
         updateFundTime(fundRate?.nextCollectionTime)
     }
@@ -1909,7 +1937,7 @@ class HomePageContractFragment : BaseFragment(),
         leverageBracket = data
     }
 
-    private fun updateFundTime(nextCollectionTime:Long?){
+    private fun updateFundTime(nextCollectionTime: Long?) {
         fundRateTime = (nextCollectionTime?.minus(System.currentTimeMillis()))?.div(1000)
         mFundRateTimerHandler.removeCallbacks(fundRateTimer)
         mFundRateTimerHandler.post(fundRateTimer)

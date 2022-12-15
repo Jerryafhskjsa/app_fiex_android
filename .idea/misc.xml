@@ -351,6 +351,7 @@
         <entry key="app/src/main/res/layout/activity_quotation_detail.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_start_page_new.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_home_page_contract.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_contract_header1.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_home_page_main.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.25" />
@@ -363,7 +364,10 @@
         <entry key="app/src/main/res/layout/list_item_entrust_current_home.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/view_k_line_quota_selector.xml" value="0.253125" />
         <entry key="base/src/main/res/layout/action_bar_transaction.xml" value="0.253125" />
+        <entry key="res/src/main/res/drawable/btn_wallet_filter.xml" value="0.2235" />
         <entry key="res/src/main/res/drawable/splash.xml" value="0.1" />
+        <entry key="user/src/main/res/layout/activity_login.xml" value="0.24923076923076923" />
+        <entry key="wallet/src/main/res/layout/fragment_wallet_normal.xml" value="0.253125" />
         <entry key="wallet/src/main/res/layout/list_item_spot_account.xml" value="0.253125" />
       </map>
     </option>

@@ -47,7 +47,7 @@
                             android:layout_marginRight="@dimen/double_padding"
                             android:textColor="@color/T1"
                             android:textStyle="bold"
-                            android:text="1000000"
+                            android:text="--"
                             android:textSize="@dimen/text_size_13" />
                     </LinearLayout>
                     <LinearLayout
@@ -77,14 +77,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="right"
-                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginLeft="3dp"
                                     android:background="@null"
                                     android:button="@drawable/btn_wallet_filter"
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
-                                    android:paddingLeft="2dp"
+                                    android:paddingLeft="10dp"
                                     android:text="@string/wallet_coin_filter"
                                     android:textColor="@color/T2"
                                     android:textSize="@dimen/text_size_14" />
