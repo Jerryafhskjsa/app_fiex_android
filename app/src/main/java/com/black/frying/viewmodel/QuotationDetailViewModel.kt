@@ -413,7 +413,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             return
         }
         CommonUtil.postHandleTask(socketHandler) {
-            SocketDataContainer.getOrderList(context, object : NormalCallback<TradeOrderPairList?>(context) {
+            SocketDataContainer.getOrderList(context,ConstData.DEPTH_SPOT_TYPE, object : NormalCallback<TradeOrderPairList?>(context) {
                 override fun callback(returnData: TradeOrderPairList?) {
                     sortTradeOrder(returnData)
                 }

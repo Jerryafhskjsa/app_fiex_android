@@ -335,7 +335,7 @@ class TransactionViewModel(
 
     fun getAllOrder() {
         CommonUtil.postHandleTask(socketHandler) {
-            SocketDataContainer.getOrderList(context, object : Callback<TradeOrderPairList?>() {
+            SocketDataContainer.getOrderList(context, ConstData.DEPTH_FUTURE_TYPE,object : Callback<TradeOrderPairList?>() {
                 override fun error(type: Int, error: Any) {}
                 override fun callback(returnData: TradeOrderPairList?) {
                     sortTradeOrder(currentPairStatus.pair, returnData)

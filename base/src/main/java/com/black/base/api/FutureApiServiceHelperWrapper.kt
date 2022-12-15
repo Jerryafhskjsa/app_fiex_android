@@ -160,7 +160,7 @@ object FutureApiServiceHelperWrapper {
                         maxPrecision =
                             if (maxPrecision == null || maxPrecision == 0) ConstData.DEFAULT_PRECISION else maxPrecision
                         pairStatus?.precision = maxPrecision//价格精度
-                        pairStatus?.amountPrecision = symbol?.quantityPrecision//数量精度
+                        pairStatus?.amountPrecision = symbol?.quoteCoinDisplayPrecision//报价币种显示精度
                         pairStatus?.supportingPrecisionList =
                             pairStatus?.setMaxSupportPrecisionList(
                                 maxPrecision.toString(),

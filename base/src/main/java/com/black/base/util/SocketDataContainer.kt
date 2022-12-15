@@ -1751,13 +1751,22 @@ object SocketDataContainer {
     }
 
     //主动拉去挂单数据，直接回调
-    fun getOrderList(context: Context?, callback: Callback<TradeOrderPairList?>?) {
+    fun getOrderList(context: Context?, depthType: Int?, callback: Callback<TradeOrderPairList?>?) {
         if (context == null || callback == null) {
             return
         }
-        synchronized(depthDataList) {
+        var dataList : ArrayList<QuotationOrderNew?>? = null
+        when(depthType){
+            ConstData.DEPTH_SPOT_TYPE -> {
+                dataList = depthDataList
+            }
+            ConstData.DEPTH_FUTURE_TYPE ->{
+                dataList = futureDepthDataList
+            }
+        }
+        synchronized(dataList!!) {
             try {
-                val mergeData = mergeQuotationOrder(depthDataList)
+                val mergeData = mergeQuotationOrder(dataList)
                 val askOrderNews =
                     if (mergeData == null || mergeData[0] == null) ArrayList() else mergeData[0]!!
                 val bidOrderNews =
