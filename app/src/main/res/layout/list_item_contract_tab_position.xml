@@ -30,12 +30,13 @@
                     android:layout_height="wrap_content"
                     android:background="@color/T16"
                     android:paddingLeft="8dp"
-                    android:paddingTop="5dp"
+                    android:paddingTop="3dp"
                     android:paddingRight="8dp"
-                    android:paddingBottom="5dp"
+                    android:paddingBottom="3dp"
                     android:text="@string/contract_see_down"
                     android:textAlignment="center"
-                    android:textColor="@color/T8" />
+                    android:textColor="@color/T8"
+                    android:textSize="12sp" />
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/positionDes"
@@ -49,10 +50,11 @@
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/item_position_adl"
                     android:layout_width="18dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/icon_risk_level">
+                    android:src="@drawable/icon_adl_0">
 
                 </ImageView>
 
@@ -414,7 +416,7 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/icon_contract_disturb"/>
+                        android:src="@drawable/icon_contract_disturb" />
                 </LinearLayout>
 
             </LinearLayout>

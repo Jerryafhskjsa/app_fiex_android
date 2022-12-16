@@ -13,19 +13,27 @@ import com.black.util.Callback
 import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
-class ContractPositionViewModel(context: Context, private val onContractPositionModelListener: OnContractPositionModelListener?) : BaseViewModel<Any?>(context) {
+class ContractPositionViewModel(
+    context: Context,
+    private val onContractPositionModelListener: OnContractPositionModelListener?
+) : BaseViewModel<Any?>(context) {
     companion object {
         var TAG = ContractPositionViewModel::class.java.simpleName
     }
-    private var currentPairStatus:PairStatus? = null
-    private var fundRate:FundingRateBean? = null//资金费率
-    private var marketPrice:MarkPriceBean? = null//标记价格
+
+    private var currentPairStatus: PairStatus? = null
+    private var fundRate: FundingRateBean? = null//资金费率
+    private var marketPrice: MarkPriceBean? = null//标记价格
     private var positionList: ArrayList<PositionBean?>? = null//持仓的订单
     private var leverageBracket: LeverageBracketBean? = null//交易对杠杆分层
     private var adlList: ArrayList<ADLBean?>? = null
 
     init {
-        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_ALL, CookieUtil.getCurrentFutureUPair(context))
+        val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(
+            context,
+            ConstData.PairStatusType.FUTURE_ALL,
+            CookieUtil.getCurrentFutureUPair(context)
+        )
         if (pairStatus != null) {
             currentPairStatus = pairStatus
         }
@@ -43,8 +51,8 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
     /**
      * 获取当前持仓数据
      */
-    fun getPositionData(){
-        FutureApiServiceHelper.getPositionList(context,currentPairStatus?.pair, false,
+    fun getPositionData() {
+        FutureApiServiceHelper.getPositionList(context, currentPairStatus?.pair, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->positionData--error", error.toString())
@@ -52,8 +60,9 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
-                        var data:ArrayList<PositionBean?>? = returnData.result
-                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
+                        var data: ArrayList<PositionBean?>? = returnData.result
+                        positionList =
+                            data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
                         updateCurrentPosition(context)
                         onContractPositionModelListener?.onGetPositionData(positionList)
                     }
@@ -103,9 +112,14 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
             Log.d("ttttttt--->maintMargin", maintMargin.toString())
             var adlBean = getAdlBean(positionBean?.symbol!!)
             Log.d("ttttttt--->adlBean", adlBean.toString())
-            var liquidationPrice:BigDecimal? = null//强平价格
-            var floatProfit:BigDecimal? = null//未实现盈亏
-            var floatProfitRate:BigDecimal? = null//未实现盈亏收益率
+            if (positionBean?.positionSide.equals(Constants.LONG)) {
+                positionBean.adl = adlBean?.longQuantile
+            } else {
+                positionBean.adl = adlBean?.shortQuantile
+            }
+            var liquidationPrice: BigDecimal? = null//强平价格
+            var floatProfit: BigDecimal? = null//未实现盈亏
+            var floatProfitRate: BigDecimal? = null//未实现盈亏收益率
             if (positionBean?.positionType.equals("CROSSED")) { //全仓
                 var positionSide = positionBean?.positionSide
                 positionBean?.bondAmount = maintMargin.toString()
@@ -211,7 +225,8 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
             Log.d("ttttttt-->维持保证金率maintMarginRate", maintMarginRate)
             positionBean?.forceStopPrice = liquidationPrice.toString()
             positionBean?.unRealizedProfit = floatProfit.toString()
-            positionBean?.profitRate = floatProfitRate.toString()+"%"
+            positionBean?.profitRate = floatProfitRate.toString() + "%"
+
             //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
             Log.d("ttttttt-->positionValue", positionValue.toString())
         }
@@ -236,16 +251,16 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
     }
 
 
-
     /**
      * 获取交易对杠杆分层
      */
     fun getLeverageBracketDetail() {
-        FutureApiServiceHelper.getLeverageBracketDetail(context,currentPairStatus?.pair, false,
+        FutureApiServiceHelper.getLeverageBracketDetail(context, currentPairStatus?.pair, false,
             object : Callback<HttpRequestResultBean<LeverageBracketBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->LeverageBracketDetail", error.toString())
                 }
+
                 override fun callback(returnData: HttpRequestResultBean<LeverageBracketBean?>?) {
                     if (returnData != null) {
                         leverageBracket = returnData.result
@@ -258,8 +273,8 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
     /**
      * 获取标记价格
      */
-    fun getMarketPrice(symbol:String?){
-        FutureApiServiceHelper.getSymbolMarkPrice(context,symbol, false,
+    fun getMarketPrice(symbol: String?) {
+        FutureApiServiceHelper.getSymbolMarkPrice(context, symbol, false,
             object : Callback<HttpRequestResultBean<MarkPriceBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
@@ -276,8 +291,8 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
     /**
      * 获取资金费率
      */
-    fun getFundRate(symbol: String?){
-        FutureApiServiceHelper.getFundingRate(symbol,context, false,
+    fun getFundRate(symbol: String?) {
+        FutureApiServiceHelper.getFundingRate(symbol, context, false,
             object : Callback<HttpRequestResultBean<FundingRateBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
@@ -324,7 +339,7 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
     }
 
 
-    fun getContractSize():String?{
+    fun getContractSize(): String? {
         return currentPairStatus?.contractSize
     }
 
@@ -350,15 +365,18 @@ class ContractPositionViewModel(context: Context, private val onContractPosition
         /**
          * 标记价格变化
          */
-        fun onMarketPrice(marketPrice:MarkPriceBean?)
+        fun onMarketPrice(marketPrice: MarkPriceBean?)
+
         /**
          * 资金费率变化
          */
         fun onFundingRate(fundRate: FundingRateBean?)
+
         /**
          * 杠杆分层
          */
-        fun onLeverageDetail(leverageBracket:LeverageBracketBean?)
+        fun onLeverageDetail(leverageBracket: LeverageBracketBean?)
+
         /**
          * 仓位数据获取
          */
