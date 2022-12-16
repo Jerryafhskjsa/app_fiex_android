@@ -286,22 +286,26 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             tigerWalletList!!.clear()
         }
         if(tigerBalanceList != null){
+
             if(coinList != null){
                 for(coin in coinList!!){
-                    var wallet = TigerWallet()
-                    wallet.coinType = coin?.coinType
-                    wallet.coinIconUrl = coin?.logosUrl
-                    wallet.coinTypeDes = coin?.coinFullName
-                    wallet.coinAmount = 0.0
-                    wallet.estimatedAvailableAmount = 0.0
-                    wallet.estimatedAvailableAmountCny = 0.0
-                    tigerWalletList?.add(wallet)
+                    if(coin?.coinType == "USDT"||coin?.coinType == "BTC"||coin?.coinType == "ETH") {
+                        var wallet = TigerWallet()
+                        wallet.coinType = coin?.coinType
+                        wallet.coinIconUrl = coin?.logosUrl
+                        wallet.coinTypeDes = coin?.coinFullName
+                        wallet.coinAmount = 0.0
+                        wallet.estimatedAvailableAmount = 0.0
+                        wallet.estimatedAvailableAmountCny = 0.0
+                        tigerWalletList?.add(wallet)
+                    }
                 }
             }
             for(i in tigerWalletList!!.indices){
                 for (k in tigerBalanceList!!.indices){
                     if(tigerBalanceList!![k]?.coin == tigerWalletList!![i]?.coinType){
                         tigerWalletList!![i]?.coinAmount =tigerBalanceList!![k]?.availableBalance?.toDouble()!!
+                        tigerWalletList!![i]?.totalAmount =tigerBalanceList!![k]?.balance?.toDouble()!!
                         tigerWalletList!![i]?.estimatedTotalAmount = tigerBalanceList!![k]?.estimatedTotalAmount?.toDouble()!!
                         tigerWalletList!![i]?.estimatedAvailableAmountCny = tigerBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
                         tigerWalletList!![i]?.profit = tigerBalanceList!![k]?.profit?.toDouble()!!
@@ -603,6 +607,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     fun search(searchKey: String?) {
         this.searchKey = searchKey
         onWalletModelListener?.onWallet(Observable.just(filterWallet()).compose(RxJavaHelper.observeOnMainThread()), false)
+        onWalletModelListener?.onContractWallet(Observable.just(filterTigerWallet()).compose(RxJavaHelper.observeOnMainThread()), false)
         onWalletModelListener?.onWalletLever(Observable.just(filterWalletLever()).compose(RxJavaHelper.observeOnMainThread()), false)
     }
 

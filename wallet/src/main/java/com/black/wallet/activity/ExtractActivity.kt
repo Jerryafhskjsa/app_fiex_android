@@ -59,6 +59,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         wallet = intent.getParcelableExtra(ConstData.WALLET)
         coinType = wallet?.coinType
 
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_extract)
         var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         actionBarRecord?.visibility = View.VISIBLE

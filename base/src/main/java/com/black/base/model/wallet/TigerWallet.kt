@@ -32,6 +32,8 @@ class TigerWallet : BaseAdapterItem, Parcelable {
     var minChainDepositAmt: String? = null
     var coinOrder = 0
     var profit = 0.0
+    var deduction = 0.0
+    var experienceGold = 0.0
     var crossedMargin = 0.0 //全仓起始保证金
     var walletBalance = 0.0 //钱包余额
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingDefaultResource">
+    <item android:state_checked="true">
+        <set>
+            <objectAnimator
+                android:duration="0"
+                android:propertyName="textSize"
+                android:valueTo="15"
+                android:valueType="floatType" />
+        </set>
+    </item>
+    <item android:state_focused="false">
+        <set>
+            <objectAnimator
+                android:duration="0"
+                android:propertyName="textSize"
+                android:valueTo="12"
+                android:valueType="floatType" />
+        </set>
+    </item>
+</selector>

@@ -727,7 +727,7 @@
     <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财账户</string>
     <string name="capital_account">资金账户</string>
-    <string name="wallet_account">钱包账户</string>
+    <string name="wallet_account">钱包总览</string>
     <string name="confirm_transfer">Confirm transfer</string>
     <string name="select_wallet">选择钱包</string>
     <string name="select_coin">选择币种</string>
@@ -787,7 +787,14 @@
     <string name="total_entrust_amount">累计数量</string>
     <string name="total_price">累计金额</string>
     <string name="usdt_base">U本位</string>
-    <string name="usdt_base_contract">U本位合约</string>
+    <string name="usdt_base_contract">U本位</string>
+    <string name="coin_base_contract">币本位</string>
+    <string name="money_total">钱包余额</string>
+    <string name="profit">未实现盈亏</string>
+    <string name="margin">保证金余额</string>
+    <string name="estimatedAvailableAmount">净资产余额</string>
+    <string name="experience_gold">体验金</string>
+    <string name="deduction">抵扣金</string>
     <string name="coin_base">币本位</string>
     <string name="all_future_coin">全部合约币种</string>
     <string name="simulation_base">模拟盘</string>

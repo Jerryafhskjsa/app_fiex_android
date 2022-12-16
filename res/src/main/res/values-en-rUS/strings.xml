@@ -664,6 +664,7 @@
     <string name="purchase_redeem">purchase/refund</string>
     <string name="freez">Freeze</string>
     <string name="entrust_all">All delegates</string>
+    <string name="show_all_symbol">Show all symbol</string>
     <string name="revoke_all_entrust">Undo All</string>
     <string name="revoke">Undo</string>
     <string name="limit_price_buy">Buy at a limited price</string>
@@ -787,6 +788,13 @@
     <string name="total_price">Cumulative Amount</string>
     <string name="usdt_base">U standard</string>
     <string name="usdt_base_contract">U contract</string>
+    <string name="coin_base_contract">Coin contract</string>
+    <string name="money_total">Wallet balance</string>
+    <string name="profit">Profit</string>
+    <string name="margin">Crossed margin</string>
+    <string name="estimatedAvailableAmount">Balance of net assets</string>
+    <string name="experience_gold">Experience_gold</string>
+    <string name="deduction">Deduction</string>
     <string name="coin_base">Currency Standard</string>
     <string name="all_future_coin">All Future Coin</string>
     <string name="simulation_base">Analog Disk</string>

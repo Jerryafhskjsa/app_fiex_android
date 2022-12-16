@@ -28,15 +28,71 @@
                     android:layout_height="wrap_content"
                     android:background="@color/B2"
                     android:orientation="vertical">
-                    <Button
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="@dimen/double_padding"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="@dimen/text_size_10"
                         android:layout_marginTop="@dimen/text_size_20"
-                        android:text="@string/usdt_base_contract"
-                        android:textColor="@color/B1"
-                        android:background="@drawable/cercle_rectangle"
-                        android:textSize="@dimen/text_size_15" />
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/u_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="false"
+                            android:stateListAnimator="@animator/tab_entrust_record_text_size"
+                            android:text="@string/usdt_base_contract"
+                            android:textColor="@color/tab_contranct_text"
+                            android:textStyle="bold" />
+                            <View
+                                android:id="@+id/bar_a"
+                                android:layout_marginTop="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="4dp"
+                                android:background="@drawable/bg_login_devide_bar_title"
+                                />
+                        </LinearLayout>
+                        <View
+
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                              />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/coin_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:focusableInTouchMode="false"
+                                android:stateListAnimator="@animator/tab_contract_size"
+                                android:textColor="@color/tab_contranct_text"
+                                android:text="@string/coin_base_contract"
+                                android:textStyle="bold"/>
+                        <View
+                            android:id="@+id/bar_b"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:visibility="gone"
+                            android:background="@drawable/bg_login_devide_bar_title"
+                            />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+
+                        android:layout_width="110dp"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:background="@color/L1_ALPHA30"
+                        />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -59,107 +115,43 @@
                             android:text="1000000"
                             android:textSize="@dimen/text_size_13" />
                     </LinearLayout>
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center_horizontal">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:orientation="vertical">
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:text="@string/bond_money_total"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_10" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/bond_money_total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:layout_marginRight="@dimen/double_padding"
-                            android:textColor="@color/T1"
-                            android:textStyle="bold"
-                            android:text="1000000"
-                            android:textSize="@dimen/text_size_13" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/bond_money_totalcny"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:layout_marginRight="@dimen/double_padding"
-                            android:textColor="@color/T3"
-                            android:textStyle="bold"
-                            android:text="1000000"
-                            android:textSize="@dimen/text_size_10" />
-                    </LinearLayout>
+                        android:orientation="horizontal">
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="60dp"
-                            android:orientation="vertical">
+                            android:id="@+id/exchange"
+                            android:layout_width="150dp"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="35dp"
+                            android:background="@drawable/cercle_rectangle">
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:text="@string/wallet_money_total"
-                                android:textColor="@color/T3"
-                                android:textSize="@dimen/text_size_10" />
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/wallet_money_total"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:layout_marginRight="@dimen/double_padding"
-                                android:textColor="@color/T1"
-                                android:textStyle="bold"
-                                android:text="1000000"
-                                android:textSize="@dimen/text_size_13" />
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/wallet_money_totalcny"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:layout_marginRight="@dimen/double_padding"
-                                android:textColor="@color/T3"
-                                android:textStyle="bold"
-                                android:text="1000000"
-                                android:textSize="@dimen/text_size_10" />
+                                android:layout_marginLeft="45dp"
+                                android:text="@string/exchange"
+                                android:textSize="@dimen/text_size_20"
+                               />
+
                         </LinearLayout>
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="60dp"
-                            android:orientation="vertical">
+                            android:id="@+id/transaction"
+                            android:layout_width="150dp"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="25dp"
+                            android:background="@drawable/cercle_gray">
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:text="@string/break_even_total"
-                                android:textColor="@color/T3"
-                                android:textSize="@dimen/text_size_10" />
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/break_even_total"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:layout_marginRight="@dimen/double_padding"
-                                android:textColor="@color/T1"
-                                android:textStyle="bold"
-                                android:text="1000000"
-                                android:textSize="@dimen/text_size_13" />
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/break_even_totalcny"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/double_padding"
-                                android:layout_marginRight="@dimen/double_padding"
-                                android:textColor="@color/T3"
-                                android:textStyle="bold"
-                                android:text="1000000"
-                                android:textSize="@dimen/text_size_10" />
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="45dp"
+                                android:text="@string/home_tab_transaction"
+                                android:textSize="@dimen/text_size_20" />
+
                         </LinearLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -189,14 +181,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="right"
-                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginLeft="3dp"
                                     android:background="@null"
                                     android:button="@drawable/btn_wallet_filter"
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:focusableInTouchMode="true"
                                     android:gravity="center"
-                                    android:paddingLeft="2dp"
+                                    android:paddingLeft="10dp"
                                     android:text="@string/wallet_coin_filter"
                                     android:textColor="@color/T2"
                                     android:textSize="@dimen/text_size_14" />

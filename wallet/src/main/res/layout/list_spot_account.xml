@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listItemSpotAccountModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <ImageView
+                android:id="@+id/icon_coin"
+                android:layout_width="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_coin_default"/>
+            <LinearLayout
+                android:layout_toRightOf="@+id/icon_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingLeft="10dp"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/coin_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="BTC"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/coin_type_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="BTC"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/money_total"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_12" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/money_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profit"
+                    android:textColor="@color/T1"
+
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/profit"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="@string/margin"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="0"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/estimatedAvailableAmount"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/balance"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="@string/experience_gold"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/experience_gold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="0"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deduction"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deduction"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/C2"/>
+
+    </LinearLayout>
+</layout>
