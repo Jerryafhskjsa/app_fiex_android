@@ -273,6 +273,7 @@ class HomePageContractFragment : BaseFragment(),
         initAdjustLeverageData()
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
+        FutureService.getAvailableCloseData("10000")
         val future_token = HttpCookieUtil.geFutureToken(mContext)
         if (future_token == null) {
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
@@ -670,7 +671,7 @@ class HomePageContractFragment : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.not_login_btn->{
+            R.id.not_login_btn -> {
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }
             R.id.lin_buy_multiple -> {

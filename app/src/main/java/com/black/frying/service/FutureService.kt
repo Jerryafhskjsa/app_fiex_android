@@ -8,7 +8,6 @@ import com.black.base.model.future.*
 import com.black.base.util.FutureSocketData
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
-import com.qiniu.android.utils.Json
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -83,8 +82,49 @@ object FutureService {
 
     }
 
+    /**
+     * 平仓
+     * 获取可以平的数量
+     */
+    fun getAvailableCloseData(price: String): CloseData {
+
+        //获取最新成交价
+        var tickerBean = FutureSocketData.tickerList.get(symbol)
+        var buyPrice = BigDecimal(price)
+        var sellPrice = BigDecimal(price).max(BigDecimal(tickerBean?.c))
+
+        var longPositionBean = currentSymbolPositionValue(Constants.LONG)
+        var shortPositionBean = currentSymbolPositionValue(Constants.SHORT)
+        var longPositionSizeBD = BigDecimal.ZERO
+        var shortPositionSizeBD = BigDecimal.ZERO
+        var longBD = BigDecimal.ZERO
+        var shortBD = BigDecimal.ZERO
+
+        if (longPositionBean != null) {
+            longPositionSizeBD = BigDecimal(longPositionBean?.positionSize)
+            longBD = BigDecimal(longPositionBean?.availableCloseSize)
+        }
+        if (shortPositionBean != null) {
+            shortPositionSizeBD = BigDecimal(shortPositionBean?.positionSize)
+            shortBD = BigDecimal(shortPositionBean?.availableCloseSize)
+        }
+        var long = longBD.times(BigDecimal(contractSize.toString())).times(sellPrice)
+        var short = shortBD.times(BigDecimal(contractSize.toString())).times(buyPrice)
+
+        var longPosition =
+            longPositionSizeBD.times(contractSize.toString().toBigDecimal()).times(sellPrice)
+
+        var shortPosition =
+            shortPositionSizeBD.times(contractSize.toString().toBigDecimal()).times(buyPrice)
+
+        var closeData = CloseData(long, short, longPosition, shortPosition)
+        Log.d("ttttttt-->closeData", closeData.toString());
+        return closeData
+    }
+
+
     fun initPositionList(context: Context?) {
-        FutureApiServiceHelper.getPositionList(context, symbol = null,false,
+        FutureApiServiceHelper.getPositionList(context, symbol = null, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initPositionList--error", error.toString());
@@ -100,7 +140,7 @@ object FutureService {
                         for (positionBean in allPositionList!!) {
                             if (positionBean?.symbol.equals(symbol)) {
                                 positionList!!.add(positionBean)
-                                Log.d("ttttttt-->initPositionList",positionBean.toString());
+                                Log.d("ttttttt-->initPositionList", positionBean.toString());
                                 if (positionBean?.positionSide.equals(Constants.LONG)) {
                                     if (positionBean != null) {
                                         longPositionList!!.add(positionBean)
@@ -737,7 +777,7 @@ object FutureService {
         price: Double?,
         timeInForce: String?,
         origQty: Int,
-        reduceOnly:Boolean?
+        reduceOnly: Boolean?
     ) {
         FutureApiServiceHelper.createOrder(context,
             orderSide,
@@ -829,7 +869,7 @@ object FutureService {
 
 
         //获取最新成交价
-        var tickerBean = FutureSocketData.tickerList.get(symbol);
+        var tickerBean = FutureSocketData.tickerList.get(symbol)
         var sellPrice = inputPrice.max(BigDecimal(tickerBean?.c))
         var shortMaxOpenSheet =
             getUserShortMaxOpen(sellPrice, leverage).setScale(0, BigDecimal.ROUND_DOWN)
