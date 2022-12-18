@@ -12,6 +12,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.Money
 import com.black.base.model.user.UserBalance
+import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
 import com.black.lib.refresh.QRefreshLayout
@@ -19,6 +20,7 @@ import com.black.router.BlackRouter
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.FragmentAssetsWalletBinding
+import kotlinx.android.synthetic.main.fragment_home_page_mine.*
 import java.math.RoundingMode
 
 class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
@@ -26,7 +28,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     private var isVisibility: Boolean = false
     private var binding: FragmentAssetsWalletBinding? = null
     private var eventListener:WalletEventResponseListener? = null
-
+    private var wallet: Wallet? = null
 
     fun setEventListener(listener: WalletEventResponseListener){
         this.eventListener = listener
@@ -45,6 +47,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         binding?.transaction?.setOnClickListener(this)
         binding?.refreshLayout?.isFocusable = false
         binding?.refreshLayout?.isNestedScrollingEnabled = false
+        binding?.refreshLayout?.setRefreshing(true)
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
         binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -62,13 +65,17 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
       when(v.id){
           R.id.recharge -> {
               val bundle = Bundle()
-              bundle.putInt("USDT", ConstData.TAB_EXCHANGE)
+              wallet?.coinType = "USDT"
+              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+              bundle.putParcelable(ConstData.WALLET, wallet)
               BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
           }
 
           R.id.extract -> {
               val bundle = Bundle()
-              bundle.putInt("USDT", ConstData.TAB_WITHDRAW)
+              wallet?.coinType = "USDT"
+              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+              bundle.putParcelable(ConstData.WALLET, wallet)
               BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
           }
           /*R.id.transaction -> {

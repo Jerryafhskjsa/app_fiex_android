@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -48,12 +49,13 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     private var isVisibility: Boolean = false
     private var searchKey: String? = null
     private var doSearch = true
+    private var clear = true
     private var type: Int = 0
     private var fragmentList: MutableList<Fragment>? = null
     private var tabSets: List<String?>? = null
     private var binding: FragmentContractNormalBinding? = null
     private var layout: View? = null
-
+    private var tigerWalletList: ArrayList<TigerWallet?>? = ArrayList()
     private var adapter: ContractAdapter? = null
     private var eventListener:ContractEventResponseListener? = null
 
@@ -94,7 +96,6 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
         binding?.recyclerView?.setHasFixedSize(true)
         //解决数据加载完成后, 没有停留在顶部的问题
         binding?.recyclerView?.isFocusable = false
-        refresh(type)
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
         binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -151,10 +152,12 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
             R.id.u_btn -> {
                 type = 0
                 refresh(type)
+                binding?.refreshLayout?.setRefreshing(true)
             }
             R.id.coin_btn -> {
                 type = 1
                 refresh(type)
+                binding?.refreshLayout?.setRefreshing(true)
             }
             R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
             R.id.transaction -> {
@@ -171,6 +174,7 @@ private fun refresh(type: Int){
         binding!!.coinBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat())
         binding!!.uBtn.isChecked = true
         binding!!.uBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_15).toFloat())
+        //binding?.recyclerView?.visibility = View.VISIBLE
     }
     else if (1 == type) {
         binding?.barB?.visibility = View.VISIBLE
@@ -179,12 +183,26 @@ private fun refresh(type: Int){
         binding!!.uBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat())
         binding!!.coinBtn.isChecked = true
         binding!!.coinBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_15).toFloat())
+        //binding?.recyclerView?.visibility = View.GONE
     }
 }
     fun setData(data: ArrayList<TigerWallet?>?) {
-        binding?.refreshLayout?.setRefreshing(false)
-        adapter?.data = data
-        adapter?.notifyDataSetChanged()
+        var showData: ArrayList<TigerWallet?>? = data
+        if (type == 0) {
+            for (wallet in data!!) {
+                data?.clear()
+                if (wallet?.coinType == "USDT")
+                    showData?.add(wallet)
+                binding?.refreshLayout?.setRefreshing(false)
+                adapter?.data = showData
+                adapter?.notifyDataSetChanged()
+            }
+        }
+        else{
+            binding?.refreshLayout?.setRefreshing(false)
+            adapter?.data = showData
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     fun setTotal(total: Money?) {
