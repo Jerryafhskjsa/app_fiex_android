@@ -43,7 +43,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     private var pingTimerTask: TimerTask? = null
 
     var currentPair: String? = null
-    var currentUFuturePair:String? = null
+    var currentUFuturePair: String? = null
     var kLineTimeStep: String? = null
     var kLineTimeStepSecond: Long = 0
     var kLineId: String? = ""
@@ -66,7 +66,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     /*****future*****/
     private var futureSymbolListener: SocketListener? = FutureSymbolListener()
-    private var futureTickersListener:SocketListener? = FutureTickersListener()
+    private var futureTickersListener: SocketListener? = FutureTickersListener()
 
     /*****future*****/
 
@@ -124,7 +124,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_PAIR_KLINE, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, futureSocketSetting)
-        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER,futureSocketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER, futureSocketSetting)
     }
 
 
@@ -339,10 +339,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("ping", "ping")
-            var allSocket:Map<String, WebSocketManager>? = WebSocketHandler.getAllWebSocket()
+            var allSocket: Map<String, WebSocketManager>? = WebSocketHandler.getAllWebSocket()
             if (allSocket != null) {
-                for ((key,value ) in allSocket){
-                    Log.d(TAG,"socket state =," + value.socketState + "listener is empty= " + value.isListenerEmpty)
+                for ((key, value) in allSocket) {
+                    Log.d(
+                        TAG,
+                        "socket state =," + value.socketState + "listener is empty= " + value.isListenerEmpty
+                    )
                     if (value.isConnect) {
                         value?.send(jsonObject.toString())
                     }
@@ -407,7 +410,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
      * "req":"sub_symbol",
     "  symbol":"btc_usdt"
      */
-    fun startListenFutureSymbol(symbol:String) {
+    fun startListenFutureSymbol(symbol: String) {
         Log.d(TAG, "startListenFutureSymbol---")
         try {
             val jsonObject = JSONObject()
@@ -803,6 +806,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     data.toString(),
                                     object : TypeToken<MarkPriceBean?>() {}.type
                                 )
+                                if (markPriceBean != null) {
+                                    SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
+                                }
                             }
                             "push.agg.ticker" -> { //聚合行情
 

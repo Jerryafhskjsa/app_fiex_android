@@ -1,143 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
+
         <variable
             name="homePageContractHeader"
             type="Object" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:id="@+id/lin_buy_multiple"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
-                android:layout_weight="1"
                 android:layout_marginRight="5dp"
-                android:gravity="center"
+                android:layout_weight="1"
                 android:background="@drawable/bg_contract_buy"
-                >
+                android:gravity="center">
+
                 <com.black.base.widget.SpanCheckedTextView
                     android:id="@+id/buy_multiple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/warehouse_by_warehouse"
                     android:textColor="@color/T9"
-                    android:maxLines="1"
-                    android:textSize="@dimen/text_size_14"
-                    />
+                    android:textSize="@dimen/text_size_14" />
+
                 <ImageView
                     android:id="@+id/buy_type_arrow"
                     style="@style/ContractSmallArrow"
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:layout_marginLeft="5dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/lin_sell_multiple"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_contract_sell"
-                android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <com.black.base.widget.SpanCheckedTextView
                     android:id="@+id/sell_multiple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/full_warehouse"
                     android:textColor="@color/T10"
-                    android:maxLines="1"
-                    android:textSize="@dimen/text_size_14"
-                    />
+                    android:textSize="@dimen/text_size_14" />
+
                 <ImageView
                     android:id="@+id/sell_type_arrow"
-                    android:layout_marginLeft="5dp"
-                    style="@style/ContractSmallArrow"/>
+                    style="@style/ContractSmallArrow"
+                    android:layout_marginLeft="5dp" />
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/dotted_line">
-        </View>
+            android:background="@drawable/dotted_line"></View>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/total_profit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="总权益(usdt)"
                     android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="总权益(usdt)">
+                    android:textSize="@dimen/text_size_12">
 
                 </com.black.base.widget.SpanTextView>
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/total_profit_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:text="--"
                     android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="0.00">
+                    android:textSize="@dimen/text_size_12">
 
                 </com.black.base.widget.SpanTextView>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="right"
                 android:orientation="vertical">
+
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="资金费率/结算时间"
                     android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="资金费率/结算时间">
+                    android:textSize="@dimen/text_size_12">
 
                 </com.black.base.widget.SpanTextView>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp">
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_fund_rate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="--"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"
-                        android:text="--">
-                    </com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
+
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="/"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"
-                        android:text="/">
-                    </com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_rate_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="--"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"
-                        android:text="--">
-                    </com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

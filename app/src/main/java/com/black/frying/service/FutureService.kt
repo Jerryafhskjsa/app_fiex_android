@@ -704,6 +704,51 @@ object FutureService {
         return floatProfit
     }
 
+
+    /**
+     * 计算获取浮动盈亏
+     */
+    fun getFloatProfit(positionBean: PositionBean, markPrice: MarkPriceBean): BigDecimal {
+
+        var floatProfit: BigDecimal = BigDecimal(0)
+        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
+        if (underlyingType.equals("U_BASED")) {
+            if (positionBean.positionSide.equals("LONG")) {
+                floatProfit =
+                    BigDecimal(markPrice?.p).subtract(BigDecimal(positionBean.entryPrice))
+                        .multiply(base)
+            } else if (positionBean.positionSide.equals("SHORT")) {
+                floatProfit =
+                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPrice?.p))
+                        .multiply(base)
+            }
+        } else if (underlyingType.equals("COIN_BASED")) { //币本位
+            if (positionBean.positionSide.equals("LONG")) {
+                floatProfit = BigDecimal("1")
+                    .divide(BigDecimal(positionBean.entryPrice), 4, BigDecimal.ROUND_HALF_UP)
+                    .subtract(
+                        BigDecimal("1")
+                            .divide(BigDecimal(markPrice?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    )
+                    .multiply(base)
+            } else if (positionBean.positionSide.equals("SHORT")) {
+                floatProfit = BigDecimal("1")
+                    .divide(BigDecimal(markPrice?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    .subtract(
+                        BigDecimal("1")
+                            .divide(
+                                BigDecimal(positionBean.entryPrice),
+                                4,
+                                BigDecimal.ROUND_HALF_UP
+                            )
+                    )
+                    .multiply(base)
+            }
+        }
+        return floatProfit
+    }
+
+
     /**
      * 获取杠杆分层
      *

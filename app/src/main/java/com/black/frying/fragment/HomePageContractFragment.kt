@@ -274,8 +274,7 @@ class HomePageContractFragment : BaseFragment(),
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
         FutureService.getAvailableCloseData("10000")
-        val future_token = HttpCookieUtil.geFutureToken(mContext)
-        if (future_token == null) {
+        if (!LoginUtil.isFutureLogin(mContext)) {
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
             binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.GONE
             binding!!.fragmentHomePageContractHeader1.notLoginBtn.setOnClickListener(this)
@@ -1703,6 +1702,13 @@ class HomePageContractFragment : BaseFragment(),
             }
 
         }
+    }
+
+    /**
+     * 更新总权益
+     */
+    override fun updateTotalProfit(totalProfit: String) {
+        binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
     }
 
     override fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>> {

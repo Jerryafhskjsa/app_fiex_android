@@ -2,8 +2,10 @@ package com.black.base.util
 
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.future.TickerBean
+import com.black.base.model.socket.PairQuotation
 import com.black.base.model.socket.PairStatusNew
 import com.google.gson.Gson
+import io.reactivex.Observer
 
 object FutureSocketData {
 
@@ -15,6 +17,7 @@ object FutureSocketData {
             }
             return field
         }
+
 
     var markPrice: MarkPriceBean? = null
 

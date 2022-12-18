@@ -14,6 +14,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
+import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.user.UserBalance
@@ -99,8 +100,12 @@ object SocketDataContainer {
     //合约委托深度挂单列表
     private val futureDepthDataList = ArrayList<QuotationOrderNew?>()
     private val futureDepthObservers = ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>()
+
     //现货交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
+
+    //合约行情
+    private val markPriceObservers = ArrayList<Observer<MarkPriceBean?>?>()
 
     //现货交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
@@ -186,6 +191,7 @@ object SocketDataContainer {
             }
         }
     }
+
 
     //移除当前交易对deal观察者
     fun removePairDealObservable(observer: Observer<PairDeal?>?) {
@@ -596,7 +602,7 @@ object SocketDataContainer {
                         override fun onSuccess(value: String?) {
                             Log.d(
                                 TAG,
-                                "onSuccess = pairFutureObservers.size = "+pairFutureObservers.size
+                                "onSuccess = pairFutureObservers.size = " + pairFutureObservers.size
                             )
                             synchronized(pairFutureObservers) {
                                 for (observer in pairFutureObservers) {
@@ -649,8 +655,8 @@ object SocketDataContainer {
                             pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
                         }
                         val newPairCompareKey = pairStatus.compareString
-                        Log.d("iiiiii", "oldPairCompareKey = "+oldPairCompareKey)
-                        Log.d("iiiiii", "newPairCompareKey = "+oldPairCompareKey)
+                        Log.d("iiiiii", "oldPairCompareKey = " + oldPairCompareKey)
+                        Log.d("iiiiii", "newPairCompareKey = " + oldPairCompareKey)
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
                             Log.d(TAG, "updateFuturePairStatusData1,addChange")
                             result.add(pairStatus)
@@ -711,30 +717,48 @@ object SocketDataContainer {
                 override fun error(type: Int, error: Any) {
 
                 }
-                override fun callback(returnData:ArrayList<PairStatus>?) {
-                    Log.d("iiiiii","initAllFutureSymbolList,allSymbolSize = "+returnData?.size)
+
+                override fun callback(returnData: ArrayList<PairStatus>?) {
+                    Log.d("iiiiii", "initAllFutureSymbolList,allSymbolSize = " + returnData?.size)
                     callback?.callback(returnData)
                 }
             }
         val uSymbolListCallback: Callback<ArrayList<PairStatus>?> =
             object : Callback<ArrayList<PairStatus>?>() {
                 override fun error(type: Int, error: Any) {
-                   }
+                }
+
                 override fun callback(returnData: ArrayList<PairStatus>?) {
-                    Log.d("iiiiii","initAllFutureSymbolList,usdtSymbolSize = "+returnData?.size)
-                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_ALL,false,allFutureSymbolListCallback)
+                    Log.d("iiiiii", "initAllFutureSymbolList,usdtSymbolSize = " + returnData?.size)
+                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(
+                        context,
+                        ConstData.PairStatusType.FUTURE_ALL,
+                        false,
+                        allFutureSymbolListCallback
+                    )
                 }
             }
         val coinSymbolListCallback: Callback<ArrayList<PairStatus>?>? =
             object : Callback<ArrayList<PairStatus>?>() {
                 override fun error(type: Int, error: Any) {
-                    }
+                }
+
                 override fun callback(returnData: java.util.ArrayList<PairStatus>?) {
-                    Log.d("iiiiii","initAllFutureSymbolList,coinSymbolSize = "+returnData?.size)
-                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_U,false,uSymbolListCallback)
+                    Log.d("iiiiii", "initAllFutureSymbolList,coinSymbolSize = " + returnData?.size)
+                    FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(
+                        context,
+                        ConstData.PairStatusType.FUTURE_U,
+                        false,
+                        uSymbolListCallback
+                    )
                 }
             }
-        FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(context,ConstData.PairStatusType.FUTURE_COIN,false,coinSymbolListCallback)
+        FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(
+            context,
+            ConstData.PairStatusType.FUTURE_COIN,
+            false,
+            coinSymbolListCallback
+        )
     }
 
     /**
@@ -781,7 +805,7 @@ object SocketDataContainer {
             ConstData.PairStatusType.FUTURE_ALL
         )
         observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
-            Log.d("iiiii","initAllFuturePairStatusData,pairStatuses = "+pairStatuses.size)
+            Log.d("iiiii", "initAllFuturePairStatusData,pairStatuses = " + pairStatuses.size)
             synchronized(allFuturePairStatusList!!) {
                 allFuturePairStatusList.clear()
                 allFuturePairStatusList.addAll(pairStatuses)
@@ -888,6 +912,31 @@ object SocketDataContainer {
                     }
                 })
         }
+    }
+
+    /**
+     *  添加合约markPrice观察者
+     */
+
+    fun subscribeMarkPriceObservable(observer: Observer<MarkPriceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(markPriceObservers) {
+            if (!markPriceObservers.contains(observer)) {
+                markPriceObservers.add(observer)
+            }
+        }
+    }
+
+    /**
+     *  移除合约markPrice观察者
+     */
+    fun removeMarkPriceObservable(observer: Observer<MarkPriceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(markPriceObservers) { markPriceObservers.remove(observer) }
     }
 
     /**
@@ -1452,18 +1501,18 @@ object SocketDataContainer {
         isRemoveAll: Boolean
     ) {
         var observer: ArrayList<Observer<Pair<String?, TradeOrderPairList?>>>? = null
-        var dataList : ArrayList<QuotationOrderNew?>? = null
+        var dataList: ArrayList<QuotationOrderNew?>? = null
         CommonUtil.postHandleTask(handler) {
             Observable.create<String>(ObservableOnSubscribe { emitter ->
                 if (tradeOrderDepth == null) {
                     emitter.onComplete()
                 } else {
-                    when(depthType){
+                    when (depthType) {
                         ConstData.DEPTH_SPOT_TYPE -> {
                             observer = spotDepthObservers
                             dataList = depthDataList
                         }
-                        ConstData.DEPTH_FUTURE_TYPE ->{
+                        ConstData.DEPTH_FUTURE_TYPE -> {
                             observer = futureDepthObservers
                             dataList = futureDepthDataList
                         }
@@ -1755,12 +1804,12 @@ object SocketDataContainer {
         if (context == null || callback == null) {
             return
         }
-        var dataList : ArrayList<QuotationOrderNew?>? = null
-        when(depthType){
+        var dataList: ArrayList<QuotationOrderNew?>? = null
+        when (depthType) {
             ConstData.DEPTH_SPOT_TYPE -> {
                 dataList = depthDataList
             }
-            ConstData.DEPTH_FUTURE_TYPE ->{
+            ConstData.DEPTH_FUTURE_TYPE -> {
                 dataList = futureDepthDataList
             }
         }
@@ -1959,6 +2008,32 @@ object SocketDataContainer {
                         synchronized(pairQuotationObservers) {
                             for (observer in pairQuotationObservers) {
                                 observer?.onNext(pairQuo)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+
+    /**
+     * 当前交易对的24小时行情
+     */
+    fun updateMarkPrice(handler: Handler?, data: MarkPriceBean?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<MarkPriceBean> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<MarkPriceBean>() {
+                    override fun onSuccess(markPrice: MarkPriceBean) {
+                        synchronized(markPriceObservers) {
+                            for (observer in markPriceObservers) {
+                                observer?.onNext(markPrice)
                             }
                         }
                     }
