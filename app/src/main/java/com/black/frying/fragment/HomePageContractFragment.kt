@@ -34,10 +34,7 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.LeverageBracketBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.TickerBean
+import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
@@ -1920,8 +1917,9 @@ class HomePageContractFragment : BaseFragment(),
         )
     }
 
-    override fun onIndexPirce(indexPrice: MarkPriceBean?) {
-        header1View?.indexPrice?.text = indexPrice?.p
+    override fun onIndexPirce(indexPrice: IndexPriceBean?) {
+        var price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
+        header1View?.indexPrice?.text = price.toString()
     }
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {

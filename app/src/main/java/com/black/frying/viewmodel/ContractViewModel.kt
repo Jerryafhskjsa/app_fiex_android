@@ -80,6 +80,11 @@ class ContractViewModel(
      */
     private var markPriceObserver: Observer<MarkPriceBean?>? = createMarkPriceObserver()
 
+    /**
+     * indexPrice更新
+     */
+    private var indexPriceObserver: Observer<IndexPriceBean?>? = createIndexPriceObserver()
+
 
     //当前交易对所有用户成交数据
     private var pairDealObserver: Observer<PairDeal?>? = createPairDealObserver()
@@ -95,7 +100,7 @@ class ContractViewModel(
     private var marketPrice: MarkPriceBean? = null
 
     //指数价格
-    private var indexPrice: MarkPriceBean? = null
+    private var indexPrice: IndexPriceBean? = null
 
     //行情
     private var tickeBean: TickerBean? = null
@@ -125,6 +130,11 @@ class ContractViewModel(
             markPriceObserver = createMarkPriceObserver()
         }
         SocketDataContainer.subscribeMarkPriceObservable(markPriceObserver)
+
+        if (indexPriceObserver == null) {
+            indexPriceObserver = createIndexPriceObserver()
+        }
+        SocketDataContainer.subscribeIndexPriceObservable(indexPriceObserver)
 
         if (userBalanceObserver == null) {
             userBalanceObserver = createUserBalanceObserver()
@@ -264,6 +274,9 @@ class ContractViewModel(
 
         if (markPriceObserver != null) {
             SocketDataContainer.removeMarkPriceObservable(markPriceObserver)
+        }
+        if (indexPriceObserver != null) {
+            SocketDataContainer.removeIndexPriceObservable(indexPriceObserver)
         }
 
         if (depthObserver != null) {
@@ -443,10 +456,18 @@ class ContractViewModel(
                 }
                 onContractModelListener?.updateTotalProfit(totalProfit.toString())
 //                Log.d("ttt------>totalProfit", totalProfit.toString())
+                onContractModelListener?.onMarketPrice(value)
             }
         }
     }
 
+    private fun createIndexPriceObserver(): Observer<IndexPriceBean?>? {
+        return object : SuccessObserver<IndexPriceBean?>() {
+            override fun onSuccess(value: IndexPriceBean?) {
+                onContractModelListener?.onIndexPirce(value)
+            }
+        }
+    }
 
     /**
      * btc/usdt-->btc,usdt
@@ -927,11 +948,11 @@ class ContractViewModel(
      */
     fun getIndexPrice(symbol: String?) {
         FutureApiServiceHelper.getSymbolIndexPrice(context, symbol, false,
-            object : Callback<HttpRequestResultBean<MarkPriceBean?>?>() {
+            object : Callback<HttpRequestResultBean<IndexPriceBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
 
-                override fun callback(returnData: HttpRequestResultBean<MarkPriceBean?>?) {
+                override fun callback(returnData: HttpRequestResultBean<IndexPriceBean?>?) {
                     if (returnData != null) {
                         indexPrice = returnData.result
                         onContractModelListener?.onIndexPirce(indexPrice)
@@ -1086,7 +1107,7 @@ class ContractViewModel(
         /**
          * 指数价格变化
          */
-        fun onIndexPirce(indexPrice: MarkPriceBean?)
+        fun onIndexPirce(indexPrice: IndexPriceBean?)
 
         /**
          * 资金费率变化

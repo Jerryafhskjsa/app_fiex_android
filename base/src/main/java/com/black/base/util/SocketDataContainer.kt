@@ -14,6 +14,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
+import com.black.base.model.future.IndexPriceBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
@@ -104,8 +105,11 @@ object SocketDataContainer {
     //现货交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
 
-    //合约行情
+    //标记价格
     private val markPriceObservers = ArrayList<Observer<MarkPriceBean?>?>()
+
+    //标记价格
+    private val indexPriceObservers = ArrayList<Observer<IndexPriceBean?>?>()
 
     //现货交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
@@ -930,6 +934,21 @@ object SocketDataContainer {
     }
 
     /**
+     *  添加合约markPrice观察者
+     */
+
+    fun subscribeIndexPriceObservable(observer: Observer<IndexPriceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(indexPriceObservers) {
+            if (!indexPriceObservers.contains(observer)) {
+                indexPriceObservers.add(observer)
+            }
+        }
+    }
+
+    /**
      *  移除合约markPrice观察者
      */
     fun removeMarkPriceObservable(observer: Observer<MarkPriceBean?>?) {
@@ -937,6 +956,16 @@ object SocketDataContainer {
             return
         }
         synchronized(markPriceObservers) { markPriceObservers.remove(observer) }
+    }
+
+    /**
+     *  移除合约indexPrice观察者
+     */
+    fun removeIndexPriceObservable(observer: Observer<IndexPriceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(indexPriceObservers) { indexPriceObservers.remove(observer) }
     }
 
     /**
@@ -2017,7 +2046,7 @@ object SocketDataContainer {
 
 
     /**
-     * 当前交易对的24小时行情
+     * 更新MarkPrice
      */
     fun updateMarkPrice(handler: Handler?, data: MarkPriceBean?) {
         CommonUtil.postHandleTask(handler) {
@@ -2034,6 +2063,31 @@ object SocketDataContainer {
                         synchronized(markPriceObservers) {
                             for (observer in markPriceObservers) {
                                 observer?.onNext(markPrice)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 更新IndexPrice
+     */
+    fun updateIndexPrice(handler: Handler?, data: IndexPriceBean?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<IndexPriceBean> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<IndexPriceBean>() {
+                    override fun onSuccess(indexPriceBean: IndexPriceBean) {
+                        synchronized(indexPriceObservers) {
+                            for (observer in indexPriceObservers) {
+                                observer?.onNext(indexPriceBean)
                             }
                         }
                     }
