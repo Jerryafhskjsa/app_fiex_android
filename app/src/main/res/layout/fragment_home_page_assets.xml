@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_assets_header">
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/B2">
@@ -213,5 +214,6 @@
                 android:persistentDrawingCache="animation"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </FrameLayout>
 </layout>

@@ -114,7 +114,6 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 supportTransferCoin
             }
             R.id.img_exchange ->{
-                getType(type)
                 exchange()
             }
             R.id.tv_all ->{
@@ -132,9 +131,6 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
     }
 
-    private fun getType(type: Boolean?){
-
-    }
     private fun exchange(){
         if(supportFromAccountData != null && supportToAccountData != null){
             var tem1 = supportFromAccountData
@@ -186,12 +182,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 }
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        getType(type)
-                        if (type == false){
-                            userBalanceList = returnData.data?.spotBalance}
-                        else{
+
+                        if (binding?.tvFromAccount?.text ==  getString(R.string.contract_account)){
                             userBalanceList = returnData.data?.tigerBalance}
-                    } else {
+                        else {
+                            userBalanceList = returnData.data?.spotBalance}
                     }
                 }
             }))

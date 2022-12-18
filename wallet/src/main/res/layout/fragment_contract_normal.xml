@@ -45,7 +45,7 @@
                             android:checked="true"
                             android:focusable="true"
                             android:focusableInTouchMode="false"
-                            android:stateListAnimator="@animator/tab_entrust_record_text_size"
+                            android:stateListAnimator="@animator/tab_contract_size"
                             android:text="@string/usdt_base_contract"
                             android:textColor="@color/tab_contranct_text"
                             android:textStyle="bold" />

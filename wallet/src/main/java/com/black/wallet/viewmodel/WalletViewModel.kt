@@ -29,12 +29,14 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         const val WALLET_NORMAL = 1
         const val WALLET_LEVER = 2
         const val WALLET_CONTRACT = 3
+        const val CONTRACT_U = 0
+        const val  CONTRACT_COIN = 1
     }
 
     private var onWalletModelListener: OnWalletModelListener? = null
     private var userBalanceObserver: Observer<UserBalance?>? = null
     private var userLeverObserver: Observer<String?>? = null
-
+    private var type = CONTRACT_U
     private var walletList: ArrayList<Wallet?>? = ArrayList()
     private var tigerWalletList: ArrayList<TigerWallet?>? = ArrayList()
     private var walletLeverList: ArrayList<WalletLever?>? = null
@@ -289,7 +291,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
             if(coinList != null){
                 for(coin in coinList!!){
-                    if(coin?.coinType == "USDT"||coin?.coinType == "BTC"||coin?.coinType == "ETH") {
+                    if(coin?.coinType == "USDT" || coin?.coinType == "BTC" ||coin?.coinType == "ETH") {
                         var wallet = TigerWallet()
                         wallet.coinType = coin?.coinType
                         wallet.coinIconUrl = coin?.logosUrl
@@ -503,7 +505,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in tigerWalletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet?.coinType == "USDT" ){
                             showData?.add(wallet)
                         }
                     }

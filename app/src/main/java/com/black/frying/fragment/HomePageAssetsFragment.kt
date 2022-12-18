@@ -96,9 +96,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         btnBackNormal = SkinCompatResources.getDrawable(mContext, R.drawable.btn_back)
         colorDefault = SkinCompatResources.getColor(mContext, R.color.white)
         colorT1 = SkinCompatResources.getColor(mContext, R.color.T1)
-
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home_page_assets,container,false)
-
         layout = binding?.root as FrameLayout
 
         StatusBarUtil.addStatusBarPadding(layout)
@@ -112,7 +110,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         })
 
         viewModel = WalletViewModel(mContext!!,this)
-
         binding?.btnWalletEye?.isChecked = true
         binding?.btnWalletEye?.setOnCheckedChangeListener(this)
         binding?.moneyCny?.setOnClickListener(this)
