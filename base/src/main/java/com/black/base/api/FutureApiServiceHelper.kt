@@ -1,7 +1,6 @@
 package com.black.base.api
 
 import android.content.Context
-import android.util.Log
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
@@ -586,6 +585,22 @@ object FutureApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
     /**
+     * 根据id撤销止盈止损
+     */
+    fun cancelProfitStopById(context:Context?,
+                             profitId:String?,
+                             isShowLoading: Boolean,
+                             callback: Callback<HttpRequestResultBean<String>?>?){
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelProfitStopById(profitId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+    /**
      * 撤销所有计划委托
      */
     fun cancelALlPlan(
@@ -602,5 +617,23 @@ object FutureApiServiceHelper {
             ?.cancelALlPlan(symbol)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 根据id撤销计划委托
+     */
+    fun cancelPlanById(context:Context?,
+                       entrustId:String?,
+                             isShowLoading: Boolean,
+                             callback: Callback<HttpRequestResultBean<String>?>?){
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelPlanById(entrustId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+
     }
 }

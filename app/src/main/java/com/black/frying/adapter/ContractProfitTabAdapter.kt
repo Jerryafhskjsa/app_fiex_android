@@ -1,15 +1,18 @@
 package com.black.frying.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
+import com.black.base.api.FutureApiServiceHelper
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.ProfitsBean
+import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabProfitBinding
 import skin.support.content.res.SkinCompatResources
 
-class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>?) : BaseDataTypeBindAdapter<ProfitsBean?, ListItemContractTabProfitBinding>(context, data),
-    View.OnClickListener {
+class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>?) : BaseDataTypeBindAdapter<ProfitsBean?, ListItemContractTabProfitBinding>(context, data){
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -23,13 +26,6 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
 
     override fun getItemLayoutId(): Int {
         return R.layout.list_item_contract_tab_profit
-    }
-
-    override fun onClick(v: View?) {
-        when(v?.id){
-            R.id.tv_revoke ->{}
-            R.id.btn_with_limit ->{}
-        }
     }
 
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabProfitBinding>?) {
@@ -63,10 +59,6 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
         viewHolder?.positionDes?.text = profitData?.symbol +positionType
         //方向
         viewHolder?.positionSide?.text = sideDes
-        //撤销
-        viewHolder?.tvRevoke?.setOnClickListener(this)
-        //止盈止损
-        viewHolder?.btnWithLimit?.setOnClickListener(this)
         //创建时间
         viewHolder?.tvCreateTime?.text = profitData?.createdTime.toString()
         //持仓均价
@@ -81,6 +73,25 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
         viewHolder?.tvProfitPriceDes?.text = profitData?.triggerProfitPrice
         //止损价格
         viewHolder?.tvLosePriceDes?.text = profitData?.triggerStopPrice
+
+        //撤销
+        viewHolder?.tvRevoke?.setOnClickListener {
+            FutureApiServiceHelper.cancelProfitStopById(
+                context,
+                profitData?.profitId,
+                true,
+                object : Callback<HttpRequestResultBean<String>?>() {
+                    override fun callback(returnData: HttpRequestResultBean<String>?) {
+                        if (returnData != null) {
+                            Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
+                        }
+                    }
+
+                    override fun error(type: Int, error: Any?) {
+                        Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
+                    }
+                })
+        }
     }
 
 }

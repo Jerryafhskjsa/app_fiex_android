@@ -12,8 +12,7 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
 import skin.support.content.res.SkinCompatResources
 
-class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) : BaseDataTypeBindAdapter<PlansBean?, ListItemContractTabPlanBinding>(context, data) ,
-    View.OnClickListener{
+class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) : BaseDataTypeBindAdapter<PlansBean?, ListItemContractTabPlanBinding>(context, data){
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -27,12 +26,6 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
 
     override fun getItemLayoutId(): Int {
         return R.layout.list_item_contract_tab_plan
-    }
-
-    override fun onClick(v: View?) {
-        when(v?.id){
-
-        }
     }
 
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPlanBinding>?) {
@@ -71,6 +64,23 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         viewHolder?.tvLosePriceDes?.text = planData?.triggerStopPrice
         //占用保证金
         viewHolder?.tvBondAmountDes?.text = "--"
+        //撤销
+        viewHolder?.tvRevoke?.setOnClickListener {
+            FutureApiServiceHelper.cancelPlanById(
+                context,
+                planData?.entrustId,
+                true,
+                object : Callback<HttpRequestResultBean<String>?>() {
+                    override fun callback(returnData: HttpRequestResultBean<String>?) {
+                        if (returnData != null) {
+                            Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
+                        }
+                    }
+                    override fun error(type: Int, error: Any?) {
+                        Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
+                    }
+                })
+        }
     }
 
 }

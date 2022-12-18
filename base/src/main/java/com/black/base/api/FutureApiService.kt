@@ -223,6 +223,12 @@ interface FutureApiService {
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_ALL_PROFIT_STOP)
     fun cancelAllProfitStop(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+    /**
+     * 根据id撤销止盈止损
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CANCEL_PROFIT_STOP_BY_ID)
+    fun cancelProfitStopById(@Field("profitId") profitId:String?):Observable<HttpRequestResultBean<String>?>?
 
     /**
      * 撤销所有计划委托
@@ -230,6 +236,12 @@ interface FutureApiService {
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_ALL_PLAN)
     fun cancelALlPlan(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+    /**
+     * 根据id撤销计划委托
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CANCEL_PLAN_BY_ID)
+    fun cancelPlanById(@Field("entrustId") profitId:String?):Observable<HttpRequestResultBean<String>?>?
 
 
 }

@@ -2,6 +2,7 @@ package com.black.frying.adapter
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
@@ -13,7 +14,7 @@ import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 
 class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>?) :
-    BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
+    BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data){
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -129,6 +130,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             5 -> {
                 viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_5)
             }
+        }
+        viewHolder?.btnClosePosition?.setOnClickListener {
+
         }
 
     }

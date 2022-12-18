@@ -537,8 +537,12 @@ object UrlConfig {
         const val URL_CANCEL_ALL = "trade/v1/order/cancel-all"
         //撤销所有止盈止损
         const val URL_CANCEL_ALL_PROFIT_STOP = "trade/v1/entrust/cancel-all-profit-stop"
+        //根据id撤销止盈止损
+        const val URL_CANCEL_PROFIT_STOP_BY_ID = "trade/v1/entrust/cancel-profit-stop"
         //撤销所有计划委托
         const val URL_CANCEL_ALL_PLAN = "trade/v1/entrust/cancel-all-plan"
+        //根据id撤销计划委托
+        const val URL_CANCEL_PLAN_BY_ID = "trade/v1/entrust/cancel-plan"
 
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
 
