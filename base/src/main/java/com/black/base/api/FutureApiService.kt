@@ -37,13 +37,13 @@ interface FutureApiService {
      * 获取单个交易对标记价格
      */
     @GET(UrlConfig.Future.URL_SYMBOL_MARK_PRICE)
-    fun getSymbolMarkPrice( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<MarkPriceBean?>?>?
+    fun getSymbolMarkPrice(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<MarkPriceBean?>?>?
 
     /**
      * 获取单个交易对指数价格
      */
     @GET(UrlConfig.Future.URL_SYMBOL_INDEX_PRICE)
-    fun getSymbolIndexPrice( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<MarkPriceBean?>?>?
+    fun getSymbolIndexPrice(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<IndexPriceBean?>?>?
 
     /**
      * 获取资金费率
@@ -88,11 +88,13 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_POSITION_LIST)
     fun getPositionList(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<ArrayList<PositionBean?>?>?>?
+
     /**
      * 获取止盈止损列表
      */
     @GET(UrlConfig.Future.URL_PROFIT_LIST)
     fun getProfitList(@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
+
     /**
      * 获取计划委托列表
      */
@@ -127,7 +129,7 @@ interface FutureApiService {
      * 获取单个交易对杠杆分层信息
      */
     @GET(UrlConfig.Future.URL_LEVERAGE_BRACKET_DETAIL)
-    fun getLeverageBracketDetail( @Query("symbol") symbol: String?): Observable<HttpRequestResultBean<LeverageBracketBean?>?>?
+    fun getLeverageBracketDetail(@Query("symbol") symbol: String?): Observable<HttpRequestResultBean<LeverageBracketBean?>?>?
 
     /**
      * 获取用户单币种资金
@@ -175,9 +177,9 @@ interface FutureApiService {
         @Field("orderType") orderType: String?,
         @Field("positionSide") positionSide: String?,
         @Field("origQty") origQty: Int?,
-        @Field("triggerProfitPrice") triggerProfitPrice:Number?,
-        @Field("triggerStopPrice") triggerStopPrice:Number?,
-        @Field("reduceOnly") reduceOnly:Boolean?
+        @Field("triggerProfitPrice") triggerProfitPrice: Number?,
+        @Field("triggerStopPrice") triggerStopPrice: Number?,
+        @Field("reduceOnly") reduceOnly: Boolean?
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

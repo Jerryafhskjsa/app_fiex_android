@@ -1978,8 +1978,9 @@ class HomePageContractFragment : BaseFragment(),
         )
     }
 
-    override fun onIndexPirce(indexPrice: MarkPriceBean?) {
-        header1View?.indexPrice?.text = indexPrice?.p
+    override fun onIndexPirce(indexPrice: IndexPriceBean?) {
+        var price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
+        header1View?.indexPrice?.text = price.toString()
     }
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {

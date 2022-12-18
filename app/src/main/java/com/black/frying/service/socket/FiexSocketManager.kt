@@ -800,6 +800,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     data.toString(),
                                     object : TypeToken<IndexPriceBean?>() {}.type
                                 )
+                                if (indexPriceBean != null) {
+                                    SocketDataContainer.updateIndexPrice(mHandler, indexPriceBean)
+                                }
                             }
                             "push.mark.price" -> { //标记价格
                                 val markPriceBean = gson.fromJson<MarkPriceBean>(

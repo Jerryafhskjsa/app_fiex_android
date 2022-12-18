@@ -94,7 +94,7 @@ object FutureApiServiceHelper {
         context: Context?,
         symbol: String?,
         isShowLoading: Boolean,
-        callback: Callback<HttpRequestResultBean<MarkPriceBean?>?>?
+        callback: Callback<HttpRequestResultBean<IndexPriceBean?>?>?
     ) {
         if (context == null || callback == null) {
             return
