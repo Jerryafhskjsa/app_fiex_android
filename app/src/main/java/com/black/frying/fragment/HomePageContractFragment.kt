@@ -270,7 +270,7 @@ class HomePageContractFragment : BaseFragment(),
         initAdjustLeverageData()
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
-        FutureService.getAvailableCloseData("10000")
+//        FutureService.getAvailableCloseData("10000")
         if (!LoginUtil.isFutureLogin(mContext)) {
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
             binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.GONE

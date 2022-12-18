@@ -449,12 +449,12 @@ class ContractViewModel(
                         var fp = FutureService.getFloatProfit(item!!, value!!)
                         floatProfit = floatProfit.add(fp)
                     }
+                    var totalProfit: BigDecimal = BigDecimal.ZERO
+                    if (balanceDetailBean != null) {
+                        totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
+                    }
+                    onContractModelListener?.updateTotalProfit(totalProfit.toString())
                 }
-                var totalProfit: BigDecimal = BigDecimal.ZERO
-                if (balanceDetailBean != null) {
-                    totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
-                }
-                onContractModelListener?.updateTotalProfit(totalProfit.toString())
 //                Log.d("ttt------>totalProfit", totalProfit.toString())
                 onContractModelListener?.onMarketPrice(value)
             }
