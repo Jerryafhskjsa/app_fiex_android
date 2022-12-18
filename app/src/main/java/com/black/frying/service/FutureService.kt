@@ -86,12 +86,9 @@ object FutureService {
      * 平仓
      * 获取可以平的数量
      */
-    fun getAvailableCloseData(price: String): CloseData {
-
-        //获取最新成交价
-        var tickerBean = FutureSocketData.tickerList.get(symbol)
-        var buyPrice = BigDecimal(price)
-        var sellPrice = BigDecimal(price).max(BigDecimal(tickerBean?.c))
+    fun getAvailableCloseData(inputPrice: String?,currentPrice:String?): CloseData {
+        var buyPrice = BigDecimal(inputPrice)
+        var sellPrice = BigDecimal(inputPrice).max(BigDecimal(currentPrice))
 
         var longPositionBean = currentSymbolPositionValue(Constants.LONG)
         var shortPositionBean = currentSymbolPositionValue(Constants.SHORT)

@@ -1,9 +1,7 @@
 package com.black.base.api
 
 import android.content.Context
-import android.util.Log
 import android.util.SparseArray
-import com.black.base.R
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.c2c.C2CPrice

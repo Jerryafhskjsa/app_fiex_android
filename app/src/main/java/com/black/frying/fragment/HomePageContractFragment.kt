@@ -34,10 +34,7 @@ import com.black.base.filter.PointLengthFilter
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.LeverageBracketBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.TickerBean
+import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
@@ -273,7 +270,9 @@ class HomePageContractFragment : BaseFragment(),
         initAdjustLeverageData()
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
-        FutureService.getAvailableCloseData("10000")
+        if (header1View?.tagPrice?.text.toString().isNotEmpty()) {
+            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
+        }
         if (!LoginUtil.isFutureLogin(mContext)) {
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
             binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.GONE
@@ -293,6 +292,7 @@ class HomePageContractFragment : BaseFragment(),
 //        FutureService.getOrderPosition(mContext)
 //        FutureService.getAvailableOpenData(BigDecimal("10000"), 5)
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
+        FutureService.initFutureData(context)
     }
 
     private fun updateDear(dear: Boolean?) {
@@ -371,11 +371,11 @@ class HomePageContractFragment : BaseFragment(),
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 computeTotal()
                 computePriceCNY()
-                refreshSubmitButton()
             }
 
             override fun afterTextChanged(s: Editable) {
                 header1View?.price?.setSelection(s.toString().length)
+                updateCanOpenAmount(s.toString())
             }
         })
         header1View?.transactionQuota?.filters =
@@ -386,7 +386,6 @@ class HomePageContractFragment : BaseFragment(),
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 inputNumber = true
                 computeTotal()
-                refreshSubmitButton()
                 val count = CommonUtil.parseDouble(
                     header1View?.transactionQuota?.text.toString()
                         .trim { it <= ' ' })
@@ -406,6 +405,7 @@ class HomePageContractFragment : BaseFragment(),
             override fun afterTextChanged(s: Editable) {
                 inputNumber = false
                 header1View?.transactionQuota?.setSelection(s.toString().length)
+                updateBondAmount(header1View?.tagPrice?.text.toString(),s.toString())
             }
         })
         countProgressBuy =
@@ -417,9 +417,7 @@ class HomePageContractFragment : BaseFragment(),
         header1View?.amountAdd?.setOnClickListener(this)
         header1View?.amountSub?.setOnClickListener(this)
         header1View?.useable?.setText(getString(R.string.number_default))
-        header1View?.useableUnit?.setText(getString(R.string.number_default))
         header1View?.useableBuy?.setText(getString(R.string.number_default))
-        header1View?.useableBuyUnit?.setText(getString(R.string.number_default))
         header1View?.countBar?.setOnSeekBarChangeListener(this)
         header1View?.btnHandle?.setOnClickListener(this)
         header1View?.btnHandle1?.setOnClickListener(this)
@@ -439,7 +437,6 @@ class HomePageContractFragment : BaseFragment(),
         clearInput()
         refreshUsable()
         refreshTransactionHardViews()
-        refreshSubmitButton()
     }
 
     //初始化记录相关的tab
@@ -1136,9 +1133,9 @@ class HomePageContractFragment : BaseFragment(),
     //计算总额
     private fun computeTotal() {
         val price = CommonUtil.parseDouble(
-            binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
+            header1View?.price?.text.toString().trim { it <= ' ' })
         val count = CommonUtil.parseDouble(
-            binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString()
+            header1View?.transactionQuota?.text.toString()
                 .trim { it <= ' ' })
         if (price != null) {
             if (count != null && (count != 0.0)) {
@@ -1147,10 +1144,9 @@ class HomePageContractFragment : BaseFragment(),
                 }
             } else { //只有价格
                 if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                     if (price > 0 && currentBalanceSell != null) {
                         //总的钱数除以输入价格
-                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(
+                        header1View?.useableBuy?.setText(
                             NumberUtil.formatNumberNoGroup(
                                 currentBalanceSell?.availableBalance!!.toDouble()
                                     .div(price.toDouble()),
@@ -1160,13 +1156,12 @@ class HomePageContractFragment : BaseFragment(),
                             )
                         )
                     } else {
-                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                        header1View?.useableBuy?.setText("0.0000")
                     }
                 } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
-                    binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
                     if (price > 0 && currentBalanceBuy != null) {
                         //总的钱数乘以输入价格
-                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText(
+                        header1View?.useableBuy?.setText(
                             NumberUtil.formatNumberNoGroup(
                                 currentBalanceBuy?.availableBalance!!.toDouble() * price.toDouble(),
                                 RoundingMode.FLOOR,
@@ -1175,7 +1170,7 @@ class HomePageContractFragment : BaseFragment(),
                             )
                         )
                     } else {
-                        binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                        header1View?.useableBuy?.setText("0.0000")
                     }
                 }
                 if (currentOrderType.equals("LIMIT")) {
@@ -1186,11 +1181,95 @@ class HomePageContractFragment : BaseFragment(),
             }
         } else {
             if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
-                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                header1View?.useableBuy?.setText("0.0000")
             } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
-                binding!!.fragmentHomePageContractHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                header1View?.useableBuy?.setText("0.0000")
+            }
+        }
+    }
+
+    /**
+     * 计算可开多/空的数量
+     */
+    private fun updateCanOpenAmount(price: String?) {
+        if (price?.isEmpty() == true) {
+            return
+        }
+        when (transactionType) {
+            ConstData.FUTURE_OPERATE_OPEN -> {
+                //可开多数量
+                var longAmount = buyMultiChooseBean?.defaultMultiple?.let {
+                    FutureService.getUserLongMaxOpen(
+                        BigDecimal(price),
+                        it
+                    ).toString()
+                }
+                header1View?.useable?.text = String.format("%.2f",longAmount?.toFloat())
+                //可开空数量
+                var usableAmount = sellMultiChooseBean?.defaultMultiple?.let {
+                    FutureService.getUserShortMaxOpen(
+                        BigDecimal(price),
+                        it
+                    ).toString()
+                }
+                header1View?.sellUseable?.text = String.format("%.2f",usableAmount?.toFloat())
+            }
+            ConstData.FUTURE_OPERATE_CLOSE -> {
+                if (price?.isNotEmpty() == true && header1View?.tagPrice?.text.toString()
+                        .isNotEmpty()
+                ) {
+                    var closeData: CloseData? = FutureService.getAvailableCloseData(
+                        price,
+                        header1View?.tagPrice?.text.toString()
+                    )
+                    if (closeData != null) {
+                        //可开多数量
+                        header1View?.useable?.text = String.format("%.2f",closeData?.long?.toFloat())
+                        //可开空数量
+                        header1View?.sellUseable?.text = String.format("%.2f",closeData?.short?.toFloat())
+                        //多仓持仓
+                        header1View?.freezAmount?.text = String.format("%.2f",closeData?.longPosition?.toFloat())
+                        //空仓持仓
+                        header1View?.sellBond?.text = String.format("%.2f",closeData?.shortPosition?.toFloat())
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 计算需要的保证金
+     */
+    private fun updateBondAmount(inputPrice: String?, amount: String?) {
+        if(inputPrice?.isEmpty() == true || amount?.isEmpty() == true){
+            return
+        }
+        when(transactionType){
+            ConstData.FUTURE_OPERATE_OPEN -> {
+                var bondAmount: String? = null
+                bondAmount = amount?.let { BigDecimal(it) }?.let {
+                    buyMultiChooseBean?.defaultMultiple?.let { it1 ->
+                        FutureService.getLongMargin(
+                            BigDecimal(inputPrice),
+                            it, it1
+                        ).toString()
+                    }
+                }
+                header1View?.freezAmount?.text = String.format("%.2f",bondAmount?.toFloat())
+                var sellBondAmount: String? = null
+                sellBondAmount = amount?.let { BigDecimal(it) }?.let {
+                    sellMultiChooseBean?.defaultMultiple?.let { it1 ->
+                        FutureService.getShortMargin(
+                            BigDecimal(inputPrice),
+                            it, it1
+                        ).toString()
+                    }
+                }
+                header1View?.sellBond?.text = String.format("%.2f",sellBondAmount?.toFloat())
+            }
+            ConstData.FUTURE_OPERATE_CLOSE ->{
+
             }
         }
     }
@@ -1198,9 +1277,9 @@ class HomePageContractFragment : BaseFragment(),
     //计算当前输入价格CNY
     private fun computePriceCNY() {
         val price = CommonUtil.parseDouble(
-            binding!!.fragmentHomePageContractHeader1.price.text.toString().trim { it <= ' ' })
+            header1View?.price?.text.toString().trim { it <= ' ' })
         if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-            binding!!.fragmentHomePageContractHeader1.priceCny.setText(
+            header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
                     viewModel!!.getCurrentPriceCNY()!! * price / viewModel!!.getCurrentPrice(),
                     4,
@@ -1208,7 +1287,7 @@ class HomePageContractFragment : BaseFragment(),
                 )
             )
         } else {
-            binding!!.fragmentHomePageContractHeader1.priceCny.setText(
+            header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
                     0.0f,
                     4,
@@ -1228,7 +1307,6 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.fragmentHomePageContractHeader1.amountSixty.isChecked = false
         binding!!.fragmentHomePageContractHeader1.amountEighty.isChecked = false
         binding!!.fragmentHomePageContractHeader1.amountAll.isChecked = false
-        refreshSubmitButton()
     }
 
     //交易对切换，刷新控件，刷新交易对信息，刷新深度，刷新数据,通知交易对改变
@@ -1279,21 +1357,6 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.fragmentHomePageContractHeader1?.withLimitType.text = type
     }
 
-    private fun refreshSubmitButton() {
-        val userInfo = if (mContext == null) null else CookieUtil.getUserInfo(mContext!!)
-        if (userInfo == null) {
-            binding!!.fragmentHomePageContractHeader1.btnHandle.isEnabled = true
-        } else {
-            val price = binding!!.fragmentHomePageContractHeader1.price.text.toString()
-            val count = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString()
-            if (currentOrderType.equals("LIMIT")) {
-
-            } else if (currentOrderType.equals("MARKET")) {
-
-            }
-        }
-    }
-
     //刷新交易区控件
     private fun refreshTransactionHardViews() {
         if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
@@ -1306,6 +1369,7 @@ class HomePageContractFragment : BaseFragment(),
             header1View?.tvBuyCount?.text = getString(R.string.contract_can_buy_raise)
             header1View?.tvSellCount?.text = getString(R.string.contract_can_buy_fall)
             header1View?.actionBuyFreez?.text = getString(R.string.contract_bond)
+            header1View?.actionSellFreez?.text = getString(R.string.contract_bond)
             header1View?.btnBuy?.isChecked = true
             header1View?.btnSale?.isChecked = false
             header1View?.countProgress?.progressDrawable =
@@ -1325,9 +1389,10 @@ class HomePageContractFragment : BaseFragment(),
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
             header1View?.contractWithLimit?.visibility = View.GONE
             header1View?.linStopValue?.visibility = View.GONE
-            header1View?.tvBuyCount?.text = getString(R.string.contract_can_sell_raise)
-            header1View?.tvSellCount?.text = getString(R.string.contract_can_sell_fail)
+            header1View?.tvBuyCount?.text = getString(R.string.contract_can_sell_fail)
+            header1View?.tvSellCount?.text = getString(R.string.contract_can_sell_raise)
             header1View?.actionBuyFreez?.text = getString(R.string.hold_amount)
+            header1View?.actionSellFreez?.text = getString(R.string.hold_amount)
             header1View?.btnBuy?.isChecked = false
             header1View?.btnSale?.isChecked = true
             header1View?.countProgress?.progressDrawable =
@@ -1357,15 +1422,9 @@ class HomePageContractFragment : BaseFragment(),
             header1View?.deepAmountName?.text =
                 getString(R.string.brackets, viewModel!!.getCoinType())
             if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-                header1View?.useableUnit?.setText(viewModel!!.getSetName())
-                header1View?.useableBuyUnit?.setText(viewModel!!.getCoinType())
-                header1View?.useableFreezUnit?.setText(viewModel!!.getSetName())
                 header1View?.btnHandle?.setText(getString(R.string.contract_buy_raise))
                 header1View?.btnHandle1?.setText(getString(R.string.contract_sell_fall))
             } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
-                header1View?.useableUnit?.setText(viewModel!!.getCoinType())
-                header1View?.useableBuyUnit?.setText(viewModel!!.getSetName())
-                header1View?.useableFreezUnit?.setText(viewModel!!.getCoinType())
                 header1View?.btnHandle?.setText(getString(R.string.contract_buy_fall))
                 header1View?.btnHandle1?.setText(getString(R.string.contract_sell_raise))
             }
@@ -1431,9 +1490,9 @@ class HomePageContractFragment : BaseFragment(),
                         )
                     )
                 } else {
-                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
                 }
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
             } else if (transactionType == 2) {
                 if (currentBalanceBuy != null) {
                     binding!!.fragmentHomePageContractHeader1.useable.setText(
@@ -1453,9 +1512,9 @@ class HomePageContractFragment : BaseFragment(),
                         )
                     )
                 } else {
-                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0")
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
                 }
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
             }
         }
     }
@@ -1593,12 +1652,11 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onPairStatusInit(pairStatus: PairStatus?) {
         clearInput()
-        binding!!.fragmentHomePageContractHeader1.price.filters = arrayOf(NumberFilter(),
+        header1View?.price?.filters = arrayOf(NumberFilter(),
             pairStatus?.precision?.let { PointLengthFilter(it) })
         resetPriceLength()
         resetAmountLength()
         refreshTransactionHardViews()
-        refreshSubmitButton()
         refreshData()
         if (!TextUtils.isEmpty(pairStatus?.pair)) {
             binding!!.actionBarLayout.actionBarTitle.setText(
@@ -1868,9 +1926,9 @@ class HomePageContractFragment : BaseFragment(),
         if (currentOrderType.equals("MARKET")) {
             return
         }
-        binding!!.fragmentHomePageContractHeader1.price.setText(tradeOrder.formattedPrice)
+        header1View?.price?.setText(tradeOrder.formattedPrice)
         val scaleAnim = AnimationUtils.loadAnimation(mContext, R.anim.transaction_price_anim)
-        binding!!.fragmentHomePageContractHeader1.price.startAnimation(scaleAnim)
+        header1View?.price?.startAnimation(scaleAnim)
 //        val amount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().toDouble()
 //        val price = CommonUtil.parseDouble(tradeOrder.formattedPrice) ?: 0.0
 //        var usableAmount = 0.0

@@ -497,7 +497,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_handle"
@@ -522,15 +522,15 @@
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/useable_unit"
-                            style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
-
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/useable"
                             style="@style/ContractBondTextRightText"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/useable_unit"
+                            style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -552,15 +552,15 @@
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/useable_freez_unit"
-                            style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
-
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/freez_amount"
                             style="@style/ContractBondTextRightText"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/useable_freez_unit"
+                            style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -580,15 +580,15 @@
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/useable_buy_unit"
-                            style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
-
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_buy"
                             style="@style/ContractBondTextRightText"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/useable_buy_unit"
+                            style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -620,15 +620,15 @@
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/sell_useable_unit"
-                            style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
-
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_useable"
                             style="@style/ContractBondTextRightText"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/sell_useable_unit"
+                            style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -649,15 +649,15 @@
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/sell_bond_unit"
-                            style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
-
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_bond"
                             style="@style/ContractBondTextRightText"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/sell_bond_unit"
+                            style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -680,13 +680,13 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_out_unit"
                             style="@style/ContractBondTextRightText"
-                            android:text="2433243" />
+                            android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_out"
                             style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
