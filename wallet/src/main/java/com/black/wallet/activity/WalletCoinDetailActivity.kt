@@ -25,26 +25,40 @@ class WalletCoinDetailActivity : BaseActivity(), View.OnClickListener {
         binding?.dateDes?.setText(if (walletBill?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill?.createdTime!!))
         binding?.typeDes?.setText(walletBill?.getType(mContext))
         binding?.remarkDes?.setText("XT3S/" + walletBill?.coin)
-        if (walletBill == null && walletBill?.availableChange?.toDouble() !=0.0) {
+        if (walletBill == null || walletBill?.availableChange?.toDouble() !=0.0) {
             binding?.chinese?.setText(
                 NumberUtil.formatNumberNoGroup(
                     walletBill?.availableChange?.toDouble(),
                     2,
-                    8
-                )
+                    4
+                ) +  walletBill?.coin
             )
-
+            binding?.accountType?.setText(getString(R.string.usable))
         }
-        if (walletBill == null && walletBill?.frozeChange?.toDouble() != 0.0) {
+        if (walletBill == null || walletBill?.frozeChange?.toDouble() != 0.0) {
             binding?.chinese?.setText(
                 NumberUtil.formatNumberNoGroup(
                     walletBill?.frozeChange?.toDouble(),
                     2,
-                    8
-                )
+                    4
+                ) +  walletBill?.coin
             )
+            binding?.accountType?.setText(getString(R.string.freez))
         }
-        binding?.chinese?.setText(if (walletBill?.availableChange == null) nullAmount else NumberUtil.formatNumberNoGroup(walletBill?.availableChange?.toDouble(), 2, 8))
+        if (walletBill?.availableChange?.toDouble() != 0.0 && walletBill?.frozeChange?.toDouble() !=  0.0){
+            binding?.chinese?.setText(
+                NumberUtil.formatNumberNoGroup(
+                    walletBill?.availableChange?.toDouble(),
+                    2,
+                    4
+                ) + "/" + NumberUtil.formatNumberNoGroup(
+                    walletBill?.frozeChange?.toDouble(),
+                    2,
+                    4
+                ) + walletBill?.coin
+            )
+            binding?.accountType?.setText(getString(R.string.usable) + "/" + getString(R.string.freez))
+        }
     }
 
     override fun isStatusBarDark(): Boolean {

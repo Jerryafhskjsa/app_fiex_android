@@ -50,7 +50,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     companion object {
         private const val TYPE_CNY = "CNY"
         private const val TYPE_BTC = "BTC"
-        private val TAB_TITLES = arrayOfNulls<String>(4) //标题
+        private val TAB_TITLES = arrayOfNulls<String>(5) //标题
         private var TAB_NORMAL: String? = null
         private var TAB_CONTRACT: String? = null
         private var TAB_FINANCE: String? = null
@@ -123,7 +123,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
         getString(R.string.wallet_account).also {
             TAB_WALLET = it
-            TAB_TITLES[3] = TAB_WALLET
+            TAB_TITLES[4] = TAB_WALLET
         }
         getString(R.string.spot_account).also {
             TAB_NORMAL = it
@@ -137,6 +137,10 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         getString(R.string.finance_account).also {
             TAB_FINANCE = it
             TAB_TITLES[2] = TAB_FINANCE
+        }
+        getString(R.string.capital_account).also {
+            TAB_FINANCE = it
+            TAB_TITLES[3] = TAB_FINANCE
         }
 
 
@@ -291,6 +295,15 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             it.arguments = bundle
             contractFragment = it
             contractFragment?.setEventListener(this)
+        })
+        fragmentList?.add(EmptyFragment().also {
+            val bundle = Bundle()
+//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
+            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putString("searchKey", viewModel?.getSearchKey())
+            it.arguments = bundle
+//            assetsWalletFragment = it
+//            assetsWalletFragment?.setEventListener(this)
         })
         fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()

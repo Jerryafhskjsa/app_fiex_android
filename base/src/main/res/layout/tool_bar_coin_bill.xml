@@ -11,44 +11,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_collapseMode="pin">
+
         <RelativeLayout
+            android:id="@+id/bar_top"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:id="@+id/bar_top">
+            android:layout_height="100dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="39dp"
+                android:layout_marginBottom="3dp">
+
                 <ImageView
                     android:id="@+id/icon_coin"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="136dp"
+                    android:layout_marginBottom="13dp"
                     android:src="@mipmap/ic_launcher_fiex">
+
                 </ImageView>
 
                 <com.black.base.widget.SpanTextView
                     android:id="@id/action_bar_title_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="17dp"
                     android:layout_toRightOf="@+id/icon_coin"
                     android:text="BTC"
                     android:textColor="@color/T1"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
-                <ImageView
-                    android:id="@+id/icon_hidden"
-                    android:layout_width="20dp"
-                    android:layout_height="14dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_asset_hidden">
-                </ImageView>
+
             </RelativeLayout>
 
         </RelativeLayout>
@@ -58,90 +59,151 @@
             android:layout_width="match_parent"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/bar_top">
+
             <RelativeLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp">
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="@string/all_value"
-                    android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_14" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_useable"
-                    android:layout_alignParentBottom="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="@string/wallet_total_amount"
-                    android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_froze"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/tv_useable"
-                    android:maxLines="1"
-                    android:text="@string/froze"
-                    android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12" />
-
-            </RelativeLayout>
-            <RelativeLayout
                 android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:paddingBottom="10dp">
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/tv_all_des"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="60dp"
+                    android:gravity="center_horizontal"
                     android:maxLines="1"
-                    android:text="1000"
+                    android:text="0"
                     android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_14" />
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/total_cny"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_all_des"
-                    android:layout_alignParentRight="true"
+                    android:gravity="center_horizontal"
                     android:maxLines="1"
-                    android:text="≈10000"
+                    android:text="≈0"
                     android:textColor="@color/T11_ALPHA60"
                     android:textSize="@dimen/text_size_12" />
 
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/froze"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/daily_earnings"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/usable"
-                    android:layout_alignParentRight="true"
-                    android:maxLines="1"
-                    android:text="0"
-                    android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12" />
+                    android:layout_below="@+id/total_cny"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/total_cny"
+                    android:gravity="center_horizontal"
+                    android:background="@color/C2"
+                    android:orientation="horizontal">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_all_des"
+                        android:gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:maxLines="1"
+                        android:text="@string/daily_earnings"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_all_des"
+                        android:gravity="center_horizontal"
+                        android:maxLines="1"
+                        android:text="≈0"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/text_size_10"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:background="@drawable/icon_left"/>
+                </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:layout_below="@+id/daily_earnings"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="195dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_all_des"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="@string/able"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_all_des"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="≈0"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="@string/unable"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="≈0"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <com.black.base.widget.SpanTextView
-                    android:id="@+id/usable"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_all"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:maxLines="1"
-                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/all_value"
                     android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12" />
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -181,20 +243,7 @@
                 android:maxLines="1"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_20" />
-            <RelativeLayout
-                android:id="@+id/filter_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical|right"
-                android:padding="@dimen/middle_padding">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/icon_bill_filter"/>
-            </RelativeLayout>
+
         </FrameLayout>
     </androidx.appcompat.widget.Toolbar>
 </com.google.android.material.appbar.CollapsingToolbarLayout>

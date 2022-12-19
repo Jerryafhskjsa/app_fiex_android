@@ -1,6 +1,7 @@
 package com.black.wallet.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -44,7 +45,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-//综合账单
+//现货币种详情
 @Route(value = [RouterConstData.WALLET_DETAIL])
 class WalletDetailActivity : BaseActivity(),
     View.OnClickListener,
@@ -77,6 +78,7 @@ class WalletDetailActivity : BaseActivity(),
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet_detail)
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
+        binding?.transaction?.setOnClickListener(this)
 
         binding?.appBarLayout?.findViewById<SpanTextView>(R.id.action_bar_title_big)?.text = wallet?.coinType
         val layoutManager = LinearLayoutManager(this)
@@ -112,11 +114,6 @@ class WalletDetailActivity : BaseActivity(),
         return if (wallet != null) if (wallet?.coinType == null) "" else wallet?.coinType else (if (coinType == null) "" else coinType)
     }
 
-    override fun initToolbarViews(toolbar: Toolbar) {
-        findViewById<View>(R.id.filter_layout).setOnClickListener(this)
-        //        findViewById(R.id.filter_layout).setVisibility(View.GONE);
-    }
-
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_exchange -> {
@@ -131,27 +128,23 @@ class WalletDetailActivity : BaseActivity(),
                 bundle.putParcelable(ConstData.WALLET, wallet)
                 BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
             }
-            R.id.filter_layout -> {
-                openFilterWindow()
+            R.id.btn_withdraw -> {
+                BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(this)
             }
         }
     }
 
     private fun refreshWallet() {
 
-        var usableText =  binding?.root?.findViewById<SpanTextView>(R.id.usable)
-        usableText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.totalAmount , RoundingMode.FLOOR, 2, 8) + "USDT")
 
         var totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
         totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8))
 
         var totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
         totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny, RoundingMode.FLOOR, 2, 8) + "CNY")
-
-
-        var usableFrozeText =  binding?.root?.findViewById<SpanTextView>(R.id.froze)
-        usableFrozeText?.setText(if (wallet?.coinFroze == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinFroze, 2, 8) + "USDT")
-
+        
     }
 
     private fun getBillData(isShowLoading: Boolean) {

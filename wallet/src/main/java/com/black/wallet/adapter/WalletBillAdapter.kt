@@ -32,12 +32,12 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
         val viewHolder = holder.dataBing
         viewHolder?.action?.setText(walletBill?.getType(context))
         viewHolder?.date?.setText(if (walletBill?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createdTime!!))
-        if (walletBill == null || walletBill?.availableChange?.toDouble() != 0.0) {
+        if (walletBill == null || walletBill?.availableChange?.toDouble() != 0.0 ) {
             viewHolder?.amount?.setText(
                 NumberUtil.formatNumberNoGroup(
                     walletBill?.availableChange?.toDouble(),
                     2,
-                    8
+                    4
                 ) + walletBill?.coin
             )
             if (walletBill?.availableChange == null || walletBill.availableChange?.toDouble()!! < 0) {
@@ -45,13 +45,14 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
             } else {
                 viewHolder?.action?.setTextColor(c1)
             }
+            viewHolder?.accountType?.setText(getString(R.string.usable))
         }
-        if (walletBill == null || walletBill?.frozeChange?.toDouble() != 0.0) {
+        if (walletBill == null || walletBill?.frozeChange?.toDouble() != 0.0 ) {
             viewHolder?.amount?.setText(
                 NumberUtil.formatNumberNoGroup(
                     walletBill?.frozeChange?.toDouble(),
                     2,
-                    8
+                    4
                 ) + walletBill?.coin
             )
             if (walletBill?.frozeChange == null || walletBill.frozeChange?.toDouble()!! < 0) {
@@ -59,8 +60,11 @@ class WalletBillAdapter(context: Context, variableId: Int, data: ArrayList<Walle
             } else {
                 viewHolder?.action?.setTextColor(c1)
             }
+            viewHolder?.accountType?.setText(getString(R.string.freez))
         }
-
+        if (walletBill?.availableChange?.toDouble() != 0.0 && walletBill?.frozeChange?.toDouble() !=  0.0){
+            viewHolder?.accountType?.setText(getString(R.string.usable) + "/" + getString(R.string.freez))
+        }
     }
 
     fun setWalletBillTypeMap(walletBillTypeMap: Map<String?, String?>?) {

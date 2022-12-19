@@ -56,6 +56,52 @@
                         android:orientation="vertical"
                         android:paddingLeft="@dimen/double_padding"
                         android:paddingRight="@dimen/double_padding">
+                        <LinearLayout
+                            android:id="@+id/transaction"
+                            style="@style/ButtonGray"
+                            android:layout_width="150dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:layout_marginBottom="@dimen/text_size_10"
+                                android:src="@drawable/home_tab_transaction">
+
+                            </ImageView>
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/spot_pair"
+                                android:layout_marginTop="22dp"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:textColor="@color/black_real"
+                                android:textSize="@dimen/text_size_12"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:text="@string/spot_pair"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/recycler_view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
 
                         <com.black.base.widget.SpanTextView
                             android:layout_width="match_parent"

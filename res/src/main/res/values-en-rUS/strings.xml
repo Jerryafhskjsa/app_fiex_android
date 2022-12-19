@@ -526,6 +526,7 @@
     <string name="trade_detail">Transaction Details</string>
     <string name="entust_cancel">Cancel Delegation</string>
     <string name="financial_record">Financial Records</string>
+    <string name="spot_pair">Spot pair</string>
     <string name="pair">Transaction pair</string>
     <string name="hint_entrust_filter_set">Select a Pricing Unit</string>
     <string name="entrust_type">Order Status</string>
@@ -735,9 +736,15 @@
     <string name="transfer_record_filter">Filtering Transfer Records</string>
     <string name="check_update">Detect updates</string>
     <string name="all_value">Net asset conversion</string>
+    <string name="daily_earnings">Daily earnings</string>
     <string name="fee">Service charge</string>
-    <string name="recharge">充币记录</string>
-    <string name="extract2">提币记录</string>
+    <string name="account_type">Account type</string>
+    <string name="usable">Usable</string>
+    <string name="able">Available</string>
+    <string name="unable">Unavailable</string>
+    <string name="frozen">Frozen</string>
+    <string name="recharge">Recharge</string>
+    <string name="extract2">Extract</string>
     <string name="market">Market</string>
     <string name="transfer_succ">Transfer succeeded</string>
     <string name="input_amount">Please enter the quantity</string>
