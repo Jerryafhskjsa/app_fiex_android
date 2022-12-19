@@ -786,8 +786,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         var channel = data.get("channel");
                         var data = data.get("data");
 //                        val jsonObject: JsonObject = JsonParser().parse(data) as JsonObject
-                        Log.d(TAG, "SymbolListener message = $channel")
-                        Log.d(TAG, "SymbolListener->onMessage = $message")
+//                        Log.d(TAG, "SymbolListener message = $channel")
+//                        Log.d(TAG, "SymbolListener->onMessage = $message")
                         when (channel) {
                             "push.ticker" -> { //行情
                                 val tickerBean = gson.fromJson<TickerBean>(

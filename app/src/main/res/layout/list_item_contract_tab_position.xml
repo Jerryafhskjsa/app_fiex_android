@@ -147,6 +147,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_hold_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_hold_amount"
@@ -172,6 +173,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_hold_avg_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_hold_avg_price"
@@ -197,6 +199,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_position_item_markprice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_hold_tag_price"
@@ -227,6 +230,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_can_finish_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_can_finish_amount"
@@ -252,6 +256,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_force_finish_pirce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_force_finish_pirce"
@@ -277,6 +282,7 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/contract_bond"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/contract_bond"
@@ -296,6 +302,7 @@
             </LinearLayout>
 
             <com.black.base.widget.SpanTextView
+                android:id="@+id/contract_already_profits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_padding"

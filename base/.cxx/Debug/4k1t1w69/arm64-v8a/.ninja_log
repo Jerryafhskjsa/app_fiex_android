@@ -10,3 +10,10 @@
 0	16	0	clean	5b24d00d516707e
 1	2226	1670833623	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
 2226	2333	1670833624	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6
+1	23	0	clean	5b24d00d516707e
+1	1872	1671179237	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
+1872	1981	1671179237	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6
+1	25	0	clean	5b24d00d516707e
+0	11	0	clean	5b24d00d516707e
+1	1190	1671430832	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	7453f8db76c27d10
+1190	1311	1671430833	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	ea140334845102b6

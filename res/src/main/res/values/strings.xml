@@ -805,7 +805,7 @@
     <string name="contract_sell_fall">卖出/开空</string>
     <string name="contract_buy_fall">买入/平空</string>
     <string name="contract_sell_raise">卖出/平多</string>
-    <string name="contract_bond">保证金</string>
+    <string name="contract_bond">保证金(%s)</string>
     <string name="contract_can_buy_raise">可开多</string>
     <string name="contract_can_sell_fail">可平空</string>
     <string name="contract_can_sell_raise">可平多</string>
@@ -834,11 +834,11 @@
     <string name="contract_entrust_amount">委托数量(%s)</string>
     <string name="contract_deal_amount">成交数量(%s)</string>
     <string name="contract_bond_amount">占用保证金(%s)</string>
-    <string name="contract_hold_avg_price">持仓均价</string>
-    <string name="contract_hold_tag_price">标记价格)</string>
+    <string name="contract_hold_avg_price">持仓均价(%s)</string>
+    <string name="contract_hold_tag_price">标记价格(%s)</string>
     <string name="contract_can_finish_amount">可平数量(%s)</string>
-    <string name="contract_force_finish_pirce">强平价格</string>
-    <string name="contract_already_profits">已实现盈亏</string>
+    <string name="contract_force_finish_pirce">强平价格(%s)</string>
+    <string name="contract_already_profits">已实现盈亏(%s)</string>
     <string name="contract_auto_add_bond">自动追加保证金</string>
     <string name="contract_adjust">杠杆调整</string>
     <string name="contract_disturb">止盈止损</string>

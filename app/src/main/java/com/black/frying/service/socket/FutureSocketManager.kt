@@ -232,7 +232,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            Log.d(tag, "SymbolListener->onMessage = $message")
+//            Log.d(tag, "SymbolListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }
@@ -242,7 +242,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
                 if (data.has("channel")) {
                     var channel = data.get("channel");
                     var data = data.get("data");
-                    Log.d(tag, "SymbolListener channel = $channel")
+//                    Log.d(tag, "SymbolListener channel = $channel")
                     when (channel) {
                         "push.ticker" -> { //行情
                             val tickerBean = gson.fromJson<TickerBean>(

@@ -14,7 +14,7 @@ import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 
 class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>?) :
-    BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data){
+    BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
@@ -32,6 +32,10 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPositionBinding>?) {
         val positionData = getItem(position)
+
+        Log.d("ttt----->item", positionData.toString())
+        var unit = positionData?.symbol.toString().split("_")[1].uppercase()
+
         var viewHolder = holder?.dataBing
         var sideDes: String? = null
         var sideBgColor: Int? = null
@@ -62,6 +66,28 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 positionType = getString(R.string.contract_all_position)
             }
         }
+
+        viewHolder?.contractHoldAmount?.text =
+            String.format(context.getString(R.string.contract_hold_amount), unit)
+
+        viewHolder?.contractHoldAvgPrice?.text =
+            String.format(context.getString(R.string.contract_hold_avg_price), unit)
+
+        viewHolder?.contractPositionItemMarkprice?.text =
+            String.format(context.getString(R.string.contract_hold_tag_price), unit)
+
+        viewHolder?.contractCanFinishAmount?.text =
+            String.format(context.getString(R.string.contract_can_finish_amount), unit)
+
+        viewHolder?.contractForceFinishPirce?.text =
+            String.format(context.getString(R.string.contract_force_finish_pirce), unit)
+
+        viewHolder?.contractBond?.text =
+            String.format(context.getString(R.string.contract_bond), unit)
+
+        viewHolder?.contractAlreadyProfits?.text =
+            String.format(context.getString(R.string.contract_already_profits), unit)
+
         //仓位描述
         viewHolder?.positionDes?.text = positionData?.symbol.toString()
             .uppercase() + " " + positionType + "." + positionData?.leverage + "X"
