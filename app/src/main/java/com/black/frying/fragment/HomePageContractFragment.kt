@@ -1766,7 +1766,9 @@ class HomePageContractFragment : BaseFragment(),
      * 更新总权益
      */
     override fun updateTotalProfit(totalProfit: String) {
-        binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+        }
     }
 
     override fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>> {
@@ -1980,23 +1982,29 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onIndexPirce(indexPrice: IndexPriceBean?) {
         var price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
-        header1View?.indexPrice?.text = price.toString()
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            header1View?.indexPrice?.text = price.toString()
+        }
     }
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {
-        header1View?.tagPrice?.text = marketPrice?.p
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            header1View?.tagPrice?.text = marketPrice?.p
+        }
     }
 
     override fun onFundingRate(fundRate: FundingRateBean?) {
         Log.d("iiiiii", "onFundingRate")
-        var rate: String? = NumberUtil.formatNumberNoGroup(
-            fundRate?.fundingRate?.toFloat()?.times(100),
-            RoundingMode.FLOOR,
-            4,
-            4
-        ) + "%"
-        headerView?.tvFundRate?.text = rate
-        updateFundTime(fundRate?.nextCollectionTime)
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            var rate: String? = NumberUtil.formatNumberNoGroup(
+                fundRate?.fundingRate?.toFloat()?.times(100),
+                RoundingMode.FLOOR,
+                4,
+                4
+            ) + "%"
+            headerView?.tvFundRate?.text = rate
+            updateFundTime(fundRate?.nextCollectionTime)
+        }
     }
 
     override fun onLeverageDetail(data: LeverageBracketBean?) {
