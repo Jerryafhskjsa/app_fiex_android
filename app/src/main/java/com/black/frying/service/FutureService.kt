@@ -86,7 +86,7 @@ object FutureService {
      * 平仓
      * 获取可以平的数量
      */
-    fun getAvailableCloseData(inputPrice: String?,currentPrice:String?): CloseData {
+    fun getAvailableCloseData(inputPrice: String?, currentPrice: String?): CloseData {
         var buyPrice = BigDecimal(inputPrice)
         var sellPrice = BigDecimal(inputPrice).max(BigDecimal(currentPrice))
 
@@ -378,7 +378,7 @@ object FutureService {
             if (positionBean?.positionSize.equals("0")) {
                 return
             }
-            Log.d("ttttttt-->positionValue", positionBean.toString())
+//            Log.d("ttttttt-->positionValue", positionBean.toString())
             //仓位价值=开仓均价 * 数量 * 面值
             positionValue = BigDecimal(positionBean?.positionSize)
                 .multiply(BigDecimal(positionBean?.entryPrice))
@@ -521,7 +521,7 @@ object FutureService {
             }
             Log.d("ttttttt-->维持保证金率maintMarginRate", maintMarginRate)
             //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
-            Log.d("ttttttt-->positionValue", positionValue.toString())
+//            Log.d("ttttttt-->positionValue", positionValue.toString())
         }
 
     }
@@ -661,7 +661,6 @@ object FutureService {
         if (markPriceBean == null) {
             markPriceBean = getMarkPrice(symbol)
         }
-        Log.d("ttt---->markPrice--", markPriceBean?.p)
 
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
@@ -882,15 +881,17 @@ object FutureService {
      */
     fun getAvailableOpenData(
         inputPrice: BigDecimal,
-        leverage: Int,
+        longLeverage: Int,
+        shortLeverage: Int,
         amount: BigDecimal,
         amountPercent: BigDecimal
-    ) {
+    ): AvailableOpenData {
+
 
         var buyPrice = inputPrice;
 
         var longMaxOpenSheet =
-            getUserLongMaxOpen(buyPrice, leverage).setScale(0, BigDecimal.ROUND_DOWN)
+            getUserLongMaxOpen(buyPrice, longLeverage).setScale(0, BigDecimal.ROUND_DOWN)
 
         var longMaxOpen =
             sheet2CurrentUnit(longMaxOpenSheet.toString(), buyPrice.toString())
@@ -906,7 +907,7 @@ object FutureService {
         }
 //        Log.d("ttttttt-->longSheetAmount--", longSheetAmount.toString())
 
-        var longMargin = getLongMargin(buyPrice, longSheetAmount, leverage)
+        var longMargin = getLongMargin(buyPrice, longSheetAmount, longLeverage)
         Log.d("ttttttt-->longMargin---", longMargin.toString())
 
 
@@ -914,7 +915,7 @@ object FutureService {
         var tickerBean = FutureSocketData.tickerList.get(symbol)
         var sellPrice = inputPrice.max(BigDecimal(tickerBean?.c))
         var shortMaxOpenSheet =
-            getUserShortMaxOpen(sellPrice, leverage).setScale(0, BigDecimal.ROUND_DOWN)
+            getUserShortMaxOpen(sellPrice, shortLeverage).setScale(0, BigDecimal.ROUND_DOWN)
         var shortMaxOpen =
             sheet2CurrentUnit(shortMaxOpenSheet.toString(), sellPrice.toString())
         var shortInputSheetAmount = currentUnit2Sheet(amount, sellPrice)
@@ -929,9 +930,10 @@ object FutureService {
         }
 //        Log.d("ttttttt-->shortSheetAmount---", shortSheetAmount.toString())
         Log.d("ttttttt-->shortMaxOpen--", shortMaxOpen.toString())
-        var shortMargin = getShortMargin(sellPrice, shortSheetAmount, leverage)
+        var shortMargin = getShortMargin(sellPrice, shortSheetAmount, shortLeverage)
         Log.d("ttttttt-->shortMargin--", shortMargin.toString())
 
+        return AvailableOpenData(longMaxOpen, longMargin, shortMaxOpen, shortMargin)
     }
 
     /**
@@ -1010,6 +1012,7 @@ object FutureService {
      * 可开多
      */
     fun getUserLongMaxOpen(buyPrice: BigDecimal, leverage: Int): BigDecimal {
+//        Log.d("ttttttt-->leverage", leverage.toString())
         var a = getBracketLongMaxAmount(buyPrice, leverage)
         var b = getBalanceLongMaxOpen(buyPrice, leverage)
 //        Log.d("ttttttt-->longMaxOpen--a", a.toString())

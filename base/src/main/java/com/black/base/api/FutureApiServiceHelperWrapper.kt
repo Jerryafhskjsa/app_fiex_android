@@ -24,8 +24,10 @@ object FutureApiServiceHelperWrapper {
 
     //合约所有交易对列表
     var futureAllSymbolPairList: ArrayList<PairStatus>? = ArrayList()
+
     //合约U本位交易对列表
     var futureUbaseSymbolPairList: ArrayList<PairStatus>? = null
+
     //合约币本位交易对列表
     var futureCoinBaseSymbolPairList: ArrayList<PairStatus>? = null
 
@@ -59,8 +61,8 @@ object FutureApiServiceHelperWrapper {
         isShowLoading: Boolean,
         callback: Callback<ArrayList<PairStatus>?>?
     ) {
-        when(type){
-            ConstData.PairStatusType.FUTURE_U ->{
+        when (type) {
+            ConstData.PairStatusType.FUTURE_U -> {
                 if (futureUbaseSymbolPairList != null && futureUbaseSymbolPairList!!.isNotEmpty() && System.currentTimeMillis() - (getLastGetTime(
                         FUTURE_SYMBOL_U_LIST
                     )
@@ -71,7 +73,7 @@ object FutureApiServiceHelperWrapper {
                     getFutureSymbolPairListCallBack(context, type, isShowLoading, callback)
                 }
             }
-            ConstData.PairStatusType.FUTURE_COIN ->{
+            ConstData.PairStatusType.FUTURE_COIN -> {
                 if (futureCoinBaseSymbolPairList != null && futureCoinBaseSymbolPairList!!.isNotEmpty() && System.currentTimeMillis() - (getLastGetTime(
                         FUTURE_SYMBOL_COIN_LIST
                     )
@@ -82,7 +84,7 @@ object FutureApiServiceHelperWrapper {
                     getFutureSymbolPairListCallBack(context, type, isShowLoading, callback)
                 }
             }
-            ConstData.PairStatusType.FUTURE_ALL ->{
+            ConstData.PairStatusType.FUTURE_ALL -> {
                 getFutureSymbolPairListCallBack(context, type, isShowLoading, callback)
             }
         }
@@ -122,7 +124,7 @@ object FutureApiServiceHelperWrapper {
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_F)
             ConstData.PairStatusType.FUTURE_COIN -> apiManager =
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_D)
-            ConstData.PairStatusType.FUTURE_ALL ->{
+            ConstData.PairStatusType.FUTURE_ALL -> {
                 futureAllSymbolPairList?.clear()
                 futureAllSymbolPairList?.addAll(futureUbaseSymbolPairList!!)
                 futureAllSymbolPairList?.addAll(futureCoinBaseSymbolPairList!!)
@@ -135,10 +137,10 @@ object FutureApiServiceHelperWrapper {
                 val pairStatuses = ArrayList<PairStatus>()
                 var resultDataList = pairInfoData!!.result
                 if (resultDataList != null && pairInfoData.returnCode == HttpRequestResult.SUCCESS) {
-                    if(type == ConstData.PairStatusType.FUTURE_U){
+                    if (type == ConstData.PairStatusType.FUTURE_U) {
                         setLastGetTime(FUTURE_SYMBOL_U_LIST, System.currentTimeMillis())
                     }
-                    if(type == ConstData.PairStatusType.FUTURE_COIN){
+                    if (type == ConstData.PairStatusType.FUTURE_COIN) {
                         setLastGetTime(FUTURE_SYMBOL_COIN_LIST, System.currentTimeMillis())
                     }
                     for (i in resultDataList!!.indices) {
@@ -148,11 +150,19 @@ object FutureApiServiceHelperWrapper {
                         pairStatus?.pair = pair
 //                            pairStatus?.hot = symbol?.hot
                         pairStatus?.contractSize = symbol?.contractSize//合约乘数（面值）
-                        pairStatus?.underlyingType = symbol?.underlyingType//标的类型，币本位(C_BASED)，u本位(U_BASED)
+                        pairStatus?.underlyingType =
+                            symbol?.underlyingType//标的类型，币本位(C_BASED)，u本位(U_BASED)
                         pairStatus?.initLeverage = symbol?.initLeverage//初始杠杆倍数
                         pairStatus?.supportOrderType = symbol?.supportOrderType//支持的下单类型
                         pairStatus?.supportEntrustType = symbol?.supportEntrustType//支持计划委托类型
                         pairStatus?.supportTimeInForce = symbol?.supportTimeInForce//支持有效方式
+                        pairStatus?.baseCoinPrecision = symbol?.baseCoinPrecision
+                        pairStatus?.baseCoinDisplayPrecision = symbol?.baseCoinDisplayPrecision
+                        pairStatus?.pricePrecision = symbol?.pricePrecision
+                        pairStatus?.quantityPrecision = symbol?.quantityPrecision
+                        pairStatus?.quoteCoinPrecision = symbol?.quoteCoinPrecision
+                        pairStatus?.quoteCoinDisplayPrecision = symbol?.quoteCoinDisplayPrecision
+
                         pairStatus?.order_no = i
                         var maxPrecision = symbol?.pricePrecision
                         maxPrecision =
@@ -165,11 +175,11 @@ object FutureApiServiceHelperWrapper {
                                 symbol?.depthPrecisionMerge//盘口精度合并
                             )
                         pairStatuses?.add(pairStatus!!)
-                        when(type){
-                            ConstData.PairStatusType.FUTURE_U ->{
+                        when (type) {
+                            ConstData.PairStatusType.FUTURE_U -> {
                                 futureUbaseSymbolPairList = pairStatuses
                             }
-                            ConstData.PairStatusType.FUTURE_COIN ->{
+                            ConstData.PairStatusType.FUTURE_COIN -> {
                                 futureCoinBaseSymbolPairList = pairStatuses
                             }
                         }
@@ -232,7 +242,10 @@ object FutureApiServiceHelperWrapper {
     }
 
 
-    fun getFutureSymboleListPairData(context: Context?, type: ConstData.PairStatusType?): ArrayList<PairStatus?>? {
+    fun getFutureSymboleListPairData(
+        context: Context?,
+        type: ConstData.PairStatusType?
+    ): ArrayList<PairStatus?>? {
         var symbolListPairData: ArrayList<PairStatus?>? = ArrayList()
         val callback: Callback<ArrayList<PairStatus?>?> =
             object : Callback<ArrayList<PairStatus?>?>() {
@@ -253,7 +266,10 @@ object FutureApiServiceHelperWrapper {
     /**
      * 获取合约交易对的行情信息
      */
-    fun getFutureTickers(context: Context?, type: ConstData.PairStatusType): Observable<ArrayList<PairStatus?>?>? {
+    fun getFutureTickers(
+        context: Context?,
+        type: ConstData.PairStatusType
+    ): Observable<ArrayList<PairStatus?>?>? {
         if (context == null) {
             return Observable.empty()
         }
@@ -281,11 +297,14 @@ object FutureApiServiceHelperWrapper {
                         }
 
                     })
-                    var pairListData:ArrayList<PairStatus>? = null
-                    when(type){
-                        ConstData.PairStatusType.FUTURE_U -> pairListData = futureUbaseSymbolPairList
-                        ConstData.PairStatusType.FUTURE_COIN -> pairListData = futureCoinBaseSymbolPairList
-                        ConstData.PairStatusType.FUTURE_ALL -> pairListData = futureAllSymbolPairList
+                    var pairListData: ArrayList<PairStatus>? = null
+                    when (type) {
+                        ConstData.PairStatusType.FUTURE_U -> pairListData =
+                            futureUbaseSymbolPairList
+                        ConstData.PairStatusType.FUTURE_COIN -> pairListData =
+                            futureCoinBaseSymbolPairList
+                        ConstData.PairStatusType.FUTURE_ALL -> pairListData =
+                            futureAllSymbolPairList
                     }
                     var newData = ArrayList<PairStatus?>()
                     var pairStatusMap: MutableMap<String?, PairStatus?> = HashMap()

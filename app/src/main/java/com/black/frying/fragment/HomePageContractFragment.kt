@@ -290,9 +290,14 @@ class HomePageContractFragment : BaseFragment(),
 //          FutureService.getCurrentPosition(mContext)
 //        FutureService.getUserStepRate(mContext)
 //        FutureService.getOrderPosition(mContext)
-        FutureService.getAvailableOpenData(BigDecimal("10000"), 5, BigDecimal.ZERO, BigDecimal.ZERO)
+//        FutureService.getAvailableOpenData(
+//            BigDecimal("16705"),
+//            10,
+//            BigDecimal.ZERO,
+//            BigDecimal.ZERO
+//        )
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
-        FutureService.initFutureData(context)
+//        FutureService.initFutureData(context)
     }
 
     private fun updateDear(dear: Boolean?) {
@@ -1195,24 +1200,19 @@ class HomePageContractFragment : BaseFragment(),
         if (price?.isEmpty() == true) {
             return
         }
+        var longLeverage = buyMultiChooseBean?.defaultMultiple
+        var shortLeverage = sellMultiChooseBean?.defaultMultiple
+        var availableOpenData = FutureService.getAvailableOpenData(
+            BigDecimal(price), longLeverage!!, shortLeverage!!, BigDecimal.ZERO,
+            BigDecimal.ZERO
+        )
         when (transactionType) {
             ConstData.FUTURE_OPERATE_OPEN -> {
                 //可开多数量
-                var longAmount = buyMultiChooseBean?.defaultMultiple?.let {
-                    FutureService.getUserLongMaxOpen(
-                        BigDecimal(price),
-                        it
-                    ).toString()
-                }
-                header1View?.useable?.text = String.format("%.2f", longAmount?.toFloat())
-                //可开空数量
-                var usableAmount = sellMultiChooseBean?.defaultMultiple?.let {
-                    FutureService.getUserShortMaxOpen(
-                        BigDecimal(price),
-                        it
-                    ).toString()
-                }
-                header1View?.sellUseable?.text = String.format("%.2f", usableAmount?.toFloat())
+                header1View?.useable?.text =
+                    String.format("%.4f", availableOpenData.longMaxOpen?.toFloat())
+                header1View?.sellUseable?.text =
+                    String.format("%.4f", availableOpenData.shortMaxOpen?.toFloat())
             }
             ConstData.FUTURE_OPERATE_CLOSE -> {
                 if (price?.isNotEmpty() == true && header1View?.tagPrice?.text.toString()

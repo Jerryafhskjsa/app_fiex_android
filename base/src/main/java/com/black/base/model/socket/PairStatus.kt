@@ -15,17 +15,18 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var TAG = PairStatus::class.java.simpleName
 
     /******futures******/
-    var underlyingType:String? = null//标的类型，币本位(C_BASED)，u本位(U_BASED)
-    var initLeverage:Int? = null//初始杠杆倍数
-    var contractSize:String? = null//合约乘数（面值）
-    var supportEntrustType:String? = null//支持计划委托类型("TAKE_PROFIT,STOP,TAKE_PROFIT_MARKET,STOP_MARKET,TRAILING_STOP_MARKET")
-    var supportTimeInForce:String? = null//支持有效方式("GTC,FOK,IOC,GTX")
-    fun getSupportTimeInForceTypeList():ArrayList<String?>?{
-        var timeInForceTypeList:ArrayList<String?>? = ArrayList()
+    var underlyingType: String? = null//标的类型，币本位(C_BASED)，u本位(U_BASED)
+    var initLeverage: Int? = null//初始杠杆倍数
+    var contractSize: String? = null//合约乘数（面值）
+    var supportEntrustType: String? =
+        null//支持计划委托类型("TAKE_PROFIT,STOP,TAKE_PROFIT_MARKET,STOP_MARKET,TRAILING_STOP_MARKET")
+    var supportTimeInForce: String? = null//支持有效方式("GTC,FOK,IOC,GTX")
+    fun getSupportTimeInForceTypeList(): ArrayList<String?>? {
+        var timeInForceTypeList: ArrayList<String?>? = ArrayList()
         if (supportTimeInForce != null) {
             var typeArray = supportTimeInForce!!.split(",").toTypedArray()
             var temp = typeArray.toList()
-            for (i in temp.indices){
+            for (i in temp.indices) {
                 timeInForceTypeList?.add(temp[i])
             }
         }
@@ -34,17 +35,18 @@ open class PairStatus : BaseAdapterItem(), Findable {
 
     /******futures******/
     //k线数据
-    var kLineData:HomeTickersKline? = null
+    var kLineData: HomeTickersKline? = null
     var supportingPrecisionList //支持深度
             : ArrayList<Deep>? = null
-    //交易量
-    var tradeVolume:Double? = null
-    set(value) {
-        field = value
-        tradeVolueFormat = NumberUtil.formatNumberNoGroup(tradeVolume , 2, 5)
 
-    }
-    var tradeVolueFormat:String? = null
+    //交易量
+    var tradeVolume: Double? = null
+        set(value) {
+            field = value
+            tradeVolueFormat = NumberUtil.formatNumberNoGroup(tradeVolume, 2, 5)
+
+        }
+    var tradeVolueFormat: String? = null
 
     //交易额(同tradeAmount，优化会删掉)
     var totalAmount = 0.0
@@ -53,25 +55,27 @@ open class PairStatus : BaseAdapterItem(), Findable {
             totalAmountFromat = NumberUtil.formatNumberNoGroup(value, 2, 5)
         }
     var totalAmountFromat: String? = null
+
     //交易额
-    var tradeAmount:Double? = null
+    var tradeAmount: Double? = null
         set(value) {
             field = value
             tradeAmountFormat = NumberUtil.formatNumberNoGroup(tradeAmount, 2, 5)
         }
-    var tradeAmountFormat:String? = null
+    var tradeAmountFormat: String? = null
 
     var priceChangeSinceToday: Double? = null //涨跌百分比
         set(value) {
             field = value
             priceChangeSinceTodayFormat = priceChangeSinceTodayDisplay
         }
+
     //支持订单下单类型
-    var supportOrderType:String? = null
+    var supportOrderType: String? = null
 
 
-    var hot:Boolean? = null
-    var setType:Int? = null
+    var hot: Boolean? = null
+    var setType: Int? = null
 
     var pair: String? = null
         set(value) {
@@ -109,10 +113,19 @@ open class PairStatus : BaseAdapterItem(), Findable {
     var is_dear = false //是否收藏
     var pairName: String? = null
     var amountPrecision: Int? = null //交易数量精度
+    var baseCoinPrecision: Int? = null //标的币种精度
+    var baseCoinDisplayPrecision: Int? = null //标的币种显示精度
+    var pricePrecision: Int? = null //价格精度
+    var quantityPrecision: Int? = null //数量精度
+    var quoteCoinPrecision: Int? = null //报价币种精度
+    var quoteCoinDisplayPrecision: Int? = null //报价币种显示精度
+
+
     var isHighRisk: Boolean? = null //是否是ST币种
     var feeRate: Double? = null
     var miningConfig: String? = null
     var leverConfEntity: PairLeverConfig? = null
+
     /*=====用于显示字段 =====*/
     var name: String? = null
         get() {
@@ -125,12 +138,12 @@ open class PairStatus : BaseAdapterItem(), Findable {
             return field
         }
 
-    fun getSupportOrderTypeList():ArrayList<String?>?{
-        var typeList:ArrayList<String?>? = ArrayList()
+    fun getSupportOrderTypeList(): ArrayList<String?>? {
+        var typeList: ArrayList<String?>? = ArrayList()
         if (supportOrderType != null) {
             var typeArray = supportOrderType!!.split(",").toTypedArray()
             var temp = typeArray.toList()
-            for (i in temp.indices){
+            for (i in temp.indices) {
                 typeList?.add(temp[i])
             }
         }
@@ -162,23 +175,27 @@ open class PairStatus : BaseAdapterItem(), Findable {
 
     fun setCurrentPriceCNY(currentPriceCNY: Double?, nullText: String?) {
         this.currentPriceCNY = currentPriceCNY
-        currentPriceCNYFormat = if (currentPriceCNY == null) nullText else CommonUtil.formatMoneyCNY(currentPriceCNY)
+        currentPriceCNYFormat =
+            if (currentPriceCNY == null) nullText else CommonUtil.formatMoneyCNY(currentPriceCNY)
     }
 
-    fun setMaxSupportPrecisionList(pricePrecision:String?,depthPrecisionMerge:Int?):ArrayList<Deep>{
+    fun setMaxSupportPrecisionList(
+        pricePrecision: String?,
+        depthPrecisionMerge: Int?
+    ): ArrayList<Deep> {
         var depth = depthPrecisionMerge
         var pricePrecision = pricePrecision
         var deepList = ArrayList<Deep>()
-        for (index in 0..(depth?.minus(1) ?: 0)){
+        for (index in 0..(depth?.minus(1) ?: 0)) {
             var deep = Deep()
             var d = pricePrecision?.toInt()?.minus(index)
             if (d != null) {
-                var p = if(d < 0){
+                var p = if (d < 0) {
                     10.0.pow(abs(d).toDouble())
-                }else if(d > 0){
+                } else if (d > 0) {
                     pricePrecision?.toInt()
-                        ?.let { NumberUtil.formatNumberNoGroup(1/ 10.0.pow(d!!.toDouble()), it) }
-                }else{
+                        ?.let { NumberUtil.formatNumberNoGroup(1 / 10.0.pow(d!!.toDouble()), it) }
+                } else {
                     1.0
                 }
                 deep.precision = d
@@ -192,7 +209,11 @@ open class PairStatus : BaseAdapterItem(), Findable {
     val priceChangeSinceTodayDisplay: String
         get() {
             val sign = if (priceChangeSinceToday != null && priceChangeSinceToday!! > 0) "+" else ""
-            return sign + NumberUtil.formatNumberDynamicScaleNoGroup(priceChangeSinceToday?.times(100), 4, 0, 2) + "%"
+            return sign + NumberUtil.formatNumberDynamicScaleNoGroup(
+                priceChangeSinceToday?.times(
+                    100
+                ), 4, 0, 2
+            ) + "%"
         }
 
     //判断是否是HOT
@@ -265,7 +286,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             } else -(o1.priceChangeSinceToday!!).compareTo(o2.priceChangeSinceToday!!)
         }
         var COMPARATOR_QUOTATION: Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 -> 0 }
-        var COMPARATOR_VOLUME_24 : Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 ->
+        var COMPARATOR_VOLUME_24: Comparator<PairStatus?> = Comparator<PairStatus?> { o1, o2 ->
             if (o1 == null || o2 == null || o1.tradeAmount == null && o2.tradeAmount == null) {
                 return@Comparator 0
             }

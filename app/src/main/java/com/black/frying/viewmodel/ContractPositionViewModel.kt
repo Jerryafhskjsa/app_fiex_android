@@ -97,7 +97,7 @@ class ContractPositionViewModel(
                 return
             }
             positionBean?.flagPrice = marketPrice?.p
-            Log.d("ttttttt-->positionValue", positionBean.toString())
+//            Log.d("ttttttt-->positionValue", positionBean.toString())
             //仓位价值=开仓均价 * 数量 * 面值
             var positionValue = BigDecimal(positionBean?.positionSize)
                 .multiply(BigDecimal(positionBean?.entryPrice))
@@ -228,7 +228,7 @@ class ContractPositionViewModel(
             positionBean?.profitRate = floatProfitRate.toString() + "%"
 
             //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
-            Log.d("ttttttt-->positionValue", positionValue.toString())
+//            Log.d("ttttttt-->positionValue", positionValue.toString())
         }
     }
 
