@@ -10,4 +10,9 @@ class PairQuotation {
     var v:String? = null//volume 成交额
     var r:String? = null//change 涨跌幅
     var t:Long? = null//时间戳
+
+    var ap:String? = null//卖一价格
+    var bp:String? = null//买一价格
+    var i:String? = null//指数价格
+    var m:String? = null//标记价格
 }

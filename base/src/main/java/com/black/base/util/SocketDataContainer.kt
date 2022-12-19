@@ -14,6 +14,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.SuccessObserver
 import com.black.base.model.c2c.C2CPrice
+import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.IndexPriceBean
 import com.black.base.model.future.MarkPriceBean
 import com.black.base.model.socket.*
@@ -105,12 +106,6 @@ object SocketDataContainer {
     //现货交易对成交
     private val currentPairDealObservers = ArrayList<Observer<PairDeal?>?>()
 
-    //标记价格
-    private val markPriceObservers = ArrayList<Observer<MarkPriceBean?>?>()
-
-    //标记价格
-    private val indexPriceObservers = ArrayList<Observer<IndexPriceBean?>?>()
-
     //现货交易对行情
     private val pairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
 
@@ -119,6 +114,21 @@ object SocketDataContainer {
 
     //现货用户挂单变更
     private val userOrderObservers = ArrayList<Observer<TradeOrderFiex?>>()
+
+    //u本位合约标记价格
+    private val markPriceObservers = ArrayList<Observer<MarkPriceBean?>?>()
+
+    //u本位合约指数价格
+    private val indexPriceObservers = ArrayList<Observer<IndexPriceBean?>?>()
+
+    //u本位合约费率
+    private val fundRateObservers = ArrayList<Observer<FundRateBean?>?>()
+
+    //u本位合约交易对成交
+    private val futurePairDealObservers = ArrayList<Observer<PairDeal?>?>()
+
+    //u本位合约交易对行情
+    private val futurePairQuotationObservers = ArrayList<Observer<PairQuotation?>?>()
 
     /***fiex***/
     //成交
@@ -949,6 +959,72 @@ object SocketDataContainer {
     }
 
     /**
+     *  添加u本位合约费率观察者
+     */
+
+    fun subscribeFundRateObservable(observer: Observer<FundRateBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fundRateObservers) {
+            if (!fundRateObservers.contains(observer)) {
+                fundRateObservers.add(observer)
+            }
+        }
+    }
+
+    /**
+     *  添加u本位当前交易对成交观察者
+     */
+
+    fun subscribeFuturePairDealObservable(observer: Observer<PairDeal?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futurePairDealObservers) {
+            if (!futurePairDealObservers.contains(observer)) {
+                futurePairDealObservers.add(observer)
+            }
+        }
+    }
+
+    /**
+     *  添加u本位当前交易对行情观察者
+     */
+    fun subscribeFuturePairQuotationObservable(observer: Observer<PairQuotation?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futurePairQuotationObservers) {
+            if (!futurePairQuotationObservers.contains(observer)) {
+                futurePairQuotationObservers.add(observer)
+            }
+        }
+    }
+
+
+    /**
+     *  移除u本位当前交易对行情观察者
+     */
+    fun removeFuturePairQuotationObservable(observer: Observer<PairQuotation?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futurePairQuotationObservers) { futurePairQuotationObservers.remove(observer) }
+    }
+
+    /**
+     *  移除u本位当前交易对成交观察者
+     */
+    fun removeFuturePairDealObservable(observer: Observer<PairDeal?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(futurePairDealObservers) { futurePairDealObservers.remove(observer) }
+    }
+
+
+    /**
      *  移除合约markPrice观察者
      */
     fun removeMarkPriceObservable(observer: Observer<MarkPriceBean?>?) {
@@ -966,6 +1042,17 @@ object SocketDataContainer {
             return
         }
         synchronized(indexPriceObservers) { indexPriceObservers.remove(observer) }
+    }
+
+
+    /**
+     *  移除合u本位合约费率观察者
+     */
+    fun removeFundRateObservable(observer: Observer<FundRateBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fundRateObservers) { fundRateObservers.remove(observer) }
     }
 
     /**
@@ -2045,8 +2132,59 @@ object SocketDataContainer {
     }
 
 
+
     /**
-     * 更新MarkPrice
+     * 合约当前交易对的成交价
+     */
+    fun updateFutureCurrentPairDeal(handler: Handler?, data: PairDeal?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<PairDeal> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<PairDeal>() {
+                    override fun onSuccess(pairDeal: PairDeal) {
+                        synchronized(futurePairDealObservers) {
+                            for (observer in futurePairDealObservers) {
+                                observer?.onNext(pairDeal)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 合约当前交易对的24小时行情
+     */
+    fun updateFutureCurrentPairQuotation(handler: Handler?, data: PairQuotation?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<PairQuotation> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<PairQuotation>() {
+                    override fun onSuccess(pairQuo: PairQuotation) {
+                        synchronized(futurePairQuotationObservers) {
+                            for (observer in futurePairQuotationObservers) {
+                                observer?.onNext(pairQuo)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 更新合约MarkPrice
      */
     fun updateMarkPrice(handler: Handler?, data: MarkPriceBean?) {
         CommonUtil.postHandleTask(handler) {
@@ -2071,7 +2209,7 @@ object SocketDataContainer {
     }
 
     /**
-     * 更新IndexPrice
+     * 更新合约IndexPrice
      */
     fun updateIndexPrice(handler: Handler?, data: IndexPriceBean?) {
         CommonUtil.postHandleTask(handler) {
@@ -2088,6 +2226,31 @@ object SocketDataContainer {
                         synchronized(indexPriceObservers) {
                             for (observer in indexPriceObservers) {
                                 observer?.onNext(indexPriceBean)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 更新合约费率
+     */
+    fun updateFundRate(handler: Handler?, data: FundRateBean?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<FundRateBean> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<FundRateBean>() {
+                    override fun onSuccess(fundRateBean: FundRateBean) {
+                        synchronized(fundRateObservers) {
+                            for (observer in fundRateObservers) {
+                                observer?.onNext(fundRateBean)
                             }
                         }
                     }

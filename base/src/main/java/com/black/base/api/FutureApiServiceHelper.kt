@@ -5,6 +5,8 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
 import com.black.base.model.future.*
+import com.black.base.model.socket.PairDeal
+import com.black.base.model.socket.PairQuotation
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
@@ -148,14 +150,33 @@ object FutureApiServiceHelper {
 
 
     /**
+     * 获取合约交易对聚合行情数据
+     */
+    fun getAggTicker(
+        context: Context?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<PairQuotation?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getAggTicker(symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
      * 获取实时成交
      */
     fun getDealList(
-        symbol: String,
-        num: Int,
         context: Context?,
+        symbol: String?,
+        num: Int,
         isShowLoading: Boolean,
-        callback: Callback<HttpRequestResultBean<ArrayList<DealBean>?>?>?
+        callback: Callback<HttpRequestResultBean<ArrayList<PairDeal>?>?>?
     ) {
         if (context == null || callback == null) {
             return

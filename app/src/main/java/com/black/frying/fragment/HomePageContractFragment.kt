@@ -56,7 +56,6 @@ import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout
-import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -264,8 +263,9 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.setTabType(tabType)
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
-        viewModel?.getCurrentPairDeal(50)
         viewModel?.getLeverageBracketDetail()
+        viewModel?.getAggTicker()
+        viewModel?.getCurrentDeal()
         viewModel?.onResume()
         initAdjustLeverageData()
         updateDear(isDear)
@@ -1458,7 +1458,6 @@ class HomePageContractFragment : BaseFragment(),
     private fun refreshData() {
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
-        viewModel?.getCurrentPairDeal(1)
         viewModel?.getIndexPrice(viewModel?.getCurrentPair())
         viewModel?.getMarketPrice(viewModel?.getCurrentPair())
         viewModel?.getSymbolTicker(viewModel?.getCurrentPair())
@@ -1647,7 +1646,7 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     //更新涨跌幅和当前价格
-    override fun onPairQuotation(tickerBean: TickerBean?) {
+    override fun onPairQuotation(tickerBean: PairQuotation?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             updatePriceSince(tickerBean?.r)
             updateCurrentPairPrice(tickerBean?.c)
@@ -1985,6 +1984,9 @@ class HomePageContractFragment : BaseFragment(),
         )
     }
 
+    /**
+     * 指数价格更新
+     */
     override fun onIndexPirce(indexPrice: IndexPriceBean?) {
         var price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
         CommonUtil.checkActivityAndRunOnUI(mContext) {
@@ -1992,12 +1994,18 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    /**
+     * 标记价格更新
+     */
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             header1View?.tagPrice?.text = marketPrice?.p
         }
     }
 
+    /**
+     * 费率更新
+     */
     override fun onFundingRate(fundRate: FundingRateBean?) {
         Log.d("iiiiii", "onFundingRate")
         CommonUtil.checkActivityAndRunOnUI(mContext) {

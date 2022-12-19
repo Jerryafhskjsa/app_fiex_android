@@ -789,11 +789,14 @@ class FiexSocketManager(context: Context, handler: Handler) {
 //                        Log.d(TAG, "SymbolListener message = $channel")
 //                        Log.d(TAG, "SymbolListener->onMessage = $message")
                         when (channel) {
-                            "push.ticker" -> { //行情
-                                val tickerBean = gson.fromJson<TickerBean>(
+                            "push.ticker" -> { //行情，更新涨跌幅
+                                val tickerBean = gson.fromJson<PairQuotation>(
                                     data.toString(),
-                                    object : TypeToken<TickerBean?>() {}.type
+                                    object : TypeToken<PairQuotation?>() {}.type
                                 )
+                                if(tickerBean != null){
+                                    SocketDataContainer.updateFutureCurrentPairQuotation(mHandler,tickerBean)
+                                }
                             }
                             "push.index.price" -> { //指数价格
                                 val indexPriceBean = gson.fromJson<IndexPriceBean>(
@@ -816,11 +819,14 @@ class FiexSocketManager(context: Context, handler: Handler) {
                             "push.agg.ticker" -> { //聚合行情
 
                             }
-                            "push.deal" -> { //实时成交
-                                val dealBean = gson.fromJson<DealBean>(
+                            "push.deal" -> { //实时成交,更新当前价格
+                                val dealBean = gson.fromJson<PairDeal>(
                                     data.toString(),
-                                    object : TypeToken<DealBean?>() {}.type
+                                    object : TypeToken<PairDeal?>() {}.type
                                 )
+                                if(dealBean != null){
+                                    SocketDataContainer.updateFutureCurrentPairDeal(mHandler,dealBean)
+                                }
                             }
                             "push.deep" -> { //深度
                                 val deepBean = gson.fromJson<DeepBean>(
@@ -850,6 +856,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     data.toString(),
                                     object : TypeToken<FundRateBean?>() {}.type
                                 )
+                                if(fundRateBean != null){
+                                    SocketDataContainer.updateFundRate(mHandler,fundRateBean)
+                                }
                             }
                         }
                     }

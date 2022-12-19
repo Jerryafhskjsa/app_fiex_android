@@ -554,7 +554,9 @@ object UrlConfig {
 
         const val URL_COIN_LIST = "market/v1/public/symbol/coins"
 
-        const val URL_DEAL_LIST = "market/v1/public/q/deal"
+        const val URL_DEAL_LIST = "market/v1/public/q/deal"//实时成交
+
+        const val URL_AGG_TICKER = "public/q/agg-ticker"//聚合行情
 
         const val URL_ACCOUNT_INFO = "user/v1/account/info"
 

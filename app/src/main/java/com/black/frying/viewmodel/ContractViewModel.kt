@@ -84,6 +84,10 @@ class ContractViewModel(
      * indexPrice更新
      */
     private var indexPriceObserver: Observer<IndexPriceBean?>? = createIndexPriceObserver()
+    /**
+     * 费率更新
+     */
+    private var fundRateObserver: Observer<FundRateBean?>? = createFundRateObserver()
 
 
     //当前交易对所有用户成交数据
@@ -103,7 +107,7 @@ class ContractViewModel(
     private var indexPrice: IndexPriceBean? = null
 
     //行情
-    private var tickeBean: TickerBean? = null
+    private var tickeBean: PairQuotation? = null
 
     //资金费率
     private var fundRate: FundingRateBean? = null
@@ -136,6 +140,11 @@ class ContractViewModel(
         }
         SocketDataContainer.subscribeIndexPriceObservable(indexPriceObserver)
 
+        if(fundRateObserver == null){
+            fundRateObserver = createFundRateObserver()
+        }
+        SocketDataContainer.subscribeFundRateObservable(fundRateObserver)
+
         if (userBalanceObserver == null) {
             userBalanceObserver = createUserBalanceObserver()
         }
@@ -149,7 +158,7 @@ class ContractViewModel(
         if (pairDealObserver == null) {
             pairDealObserver = createPairDealObserver()
         }
-        SocketDataContainer.subscribePairDealObservable(pairDealObserver)
+        SocketDataContainer.subscribeFuturePairDealObservable(pairDealObserver)
 
         if (depthObserver == null) {
             depthObserver = createDepthObserver()
@@ -164,10 +173,7 @@ class ContractViewModel(
         if (pairQuotationObserver != null) {
             pairQuotationObserver = createPairQuotationObserver()
         }
-
-
-
-        SocketDataContainer.subscribePairQuotationObservable(pairQuotationObserver)
+        SocketDataContainer.subscribeFuturePairQuotationObservable(pairQuotationObserver)
 
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
@@ -282,18 +288,19 @@ class ContractViewModel(
         if (depthObserver != null) {
             SocketDataContainer.removeFutureDepthObservable(depthObserver)
         }
-//        if (pairObserver != null) {
-//            SocketDataContainer.removePairObservable(pairObserver)
-//        }
+        if (pairObserver != null) {
+            SocketDataContainer.removeFuturePairDealObservable(pairDealObserver)
+        }
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
 
         if (pairQuotationObserver != null) {
-            SocketDataContainer.removePairQuotationObservable(pairQuotationObserver)
+            SocketDataContainer.removeFuturePairQuotationObservable(pairQuotationObserver)
         }
-        if (pairDealObserver != null) {
-            SocketDataContainer.removePairDealObservable(pairDealObserver)
+
+        if(fundRateObserver != null){
+            SocketDataContainer.removeFundRateObservable(fundRateObserver)
         }
 
         if (socketHandler != null) {
@@ -431,7 +438,7 @@ class ContractViewModel(
             override fun onSuccess(value: PairQuotation?) {
                 if (value != null && TextUtils.equals(value.s, currentPairStatus.pair)) {
                     onContractModelListener.run {
-//                        onContractModelListener?.onPairQuotation(value)
+                        onContractModelListener?.onPairQuotation(value)
                     }
                 }
             }
@@ -468,6 +475,18 @@ class ContractViewModel(
             }
         }
     }
+
+    private fun createFundRateObserver(): Observer<FundRateBean?>? {
+        return object : SuccessObserver<FundRateBean?>() {
+            override fun onSuccess(value: FundRateBean?) {
+                if (value != null){
+                    var data = FundingRateBean(value.r,value.t.toLong(),value.s)
+                    onContractModelListener?.onFundingRate(data)
+                }
+            }
+        }
+    }
+
 
     /**
      * btc/usdt-->btc,usdt
@@ -527,6 +546,54 @@ class ContractViewModel(
                 }
             })
     }
+
+    /**
+     * 获取交易当前成交
+     */
+    fun getCurrentDeal() {
+        FutureApiServiceHelper.getDealList(context, getCurrentPair(), 1,false,
+            object : Callback<HttpRequestResultBean<ArrayList<PairDeal>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("iiiiii-->getCurrentDeal", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<PairDeal>?>?) {
+                    if (returnData != null) {
+                        var dealList = returnData.result
+                        var recentDeal = CommonUtil.getItemFromList(dealList, 0)
+                        onContractModelListener?.run {
+                            if (recentDeal != null && currentPairStatus.pair != null) {
+                                onContractModelListener?.onPairDeal(recentDeal)
+                            }
+                        }
+                    }
+                }
+            })
+    }
+
+
+    /**
+     * 获取交易对当前行情
+     */
+    fun getAggTicker() {
+        FutureApiServiceHelper.getAggTicker(context, getCurrentPair(), false,
+            object : Callback<HttpRequestResultBean<PairQuotation?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("iiiiii-->getAggTicker", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<PairQuotation?>?) {
+                    if (returnData != null) {
+                        var data = returnData.result
+                        if(data != null){
+                            onContractModelListener?.onPairQuotation(data)
+                        }
+                    }
+                }
+            })
+    }
+
+
 
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {
         Observable.just(orderPairList)
@@ -760,33 +827,6 @@ class ContractViewModel(
             })
     }
 
-    /**
-     * 获取当前交易对成交列表
-     */
-    fun getCurrentPairDeal(level: Int) {
-        TradeApiServiceHelper.getTradeOrderDeal(
-            context,
-            level,
-            currentPairStatus.pair,
-            false,
-            object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
-                override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        var dealList = returnData.data
-                        var recentDeal = CommonUtil.getItemFromList(dealList, 0)
-                        onContractModelListener?.run {
-                            if (recentDeal != null && currentPairStatus.pair != null) {
-                                onContractModelListener?.onPairDeal(recentDeal)
-                            }
-                        }
-                    }
-                }
-
-                override fun error(type: Int, error: Any?) {
-                }
-            })
-    }
-
 
     /**
      * 获取用户资产
@@ -965,12 +1005,12 @@ class ContractViewModel(
      * 获取单个交易对行情
      */
     fun getSymbolTicker(symbol: String?) {
-        FutureApiServiceHelper.getSymbolTickers(context, symbol, false,
-            object : Callback<HttpRequestResultBean<TickerBean?>?>() {
+        FutureApiServiceHelper.getAggTicker(context, symbol, false,
+            object : Callback<HttpRequestResultBean<PairQuotation?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
 
-                override fun callback(returnData: HttpRequestResultBean<TickerBean?>?) {
+                override fun callback(returnData: HttpRequestResultBean<PairQuotation?>?) {
                     if (returnData != null) {
                         tickeBean = returnData.result
                         onContractModelListener?.onPairQuotation(tickeBean)
@@ -1071,7 +1111,7 @@ class ContractViewModel(
         /**
          * 交易对24小时行情变更
          */
-        fun onPairQuotation(tickerBean: TickerBean?)
+        fun onPairQuotation(tickerBean: PairQuotation?)
 
         /**
          * 交易对初始化

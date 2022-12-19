@@ -4,6 +4,8 @@ package com.black.base.api
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
 import com.black.base.model.future.*
+import com.black.base.model.socket.PairDeal
+import com.black.base.model.socket.PairQuotation
 
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -56,7 +58,14 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_DEAL_LIST)
     fun getDealList(@Query("symbol") symbol: String?, @Query("num") num: Int?):
-            Observable<HttpRequestResultBean<ArrayList<DealBean>?>?>?
+            Observable<HttpRequestResultBean<ArrayList<PairDeal>?>?>?
+
+    /**
+     * 获取行情数据
+     */
+    @GET(UrlConfig.Future.URL_DEAL_LIST)
+    fun getAggTicker(@Query("symbol") symbol: String?):
+            Observable<HttpRequestResultBean<PairQuotation?>?>?
 
     /**
      * 获取币种列表
