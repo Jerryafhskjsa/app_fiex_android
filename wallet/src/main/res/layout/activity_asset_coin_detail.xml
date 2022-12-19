@@ -96,15 +96,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center_vertical">
+
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/fee"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fee"
+                            android:text="@string/account_type"
                             android:textColor="@color/T11_ALPHA60"
                             android:textSize="@dimen/text_size_12" />
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/fee_des"
+                            android:id="@+id/account_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

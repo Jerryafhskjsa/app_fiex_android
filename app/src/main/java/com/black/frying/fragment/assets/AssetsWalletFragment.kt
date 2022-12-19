@@ -44,6 +44,9 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         layout = binding?.root
         binding?.recharge?.setOnClickListener(this)
         binding?.extract?.setOnClickListener(this)
+        binding?.spot?.setOnClickListener(this)
+        binding?.future?.setOnClickListener(this)
+        binding?.capital?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
         binding?.refreshLayout?.isFocusable = false
         binding?.refreshLayout?.isNestedScrollingEnabled = false
@@ -78,6 +81,9 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
               bundle.putParcelable(ConstData.WALLET, wallet)
               BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
           }
+          R.id.spot -> {}
+          R.id.future -> {}
+          R.id.capital -> {}
           /*R.id.transaction -> {
               BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(this)
           }

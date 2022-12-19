@@ -123,14 +123,14 @@
                         android:orientation="horizontal">
                         <LinearLayout
                             android:id="@+id/exchange"
+                            style="@style/ButtonBlue"
                             android:layout_width="150dp"
                             android:layout_height="45dp"
                             android:layout_marginLeft="35dp"
-                            android:background="@drawable/cercle_rectangle">
+                            >
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="45dp"
                                 android:text="@string/exchange"
                                 android:textSize="@dimen/text_size_20"
                                />
@@ -141,12 +141,11 @@
                             android:layout_width="150dp"
                             android:layout_height="45dp"
                             android:layout_marginLeft="25dp"
-                            android:background="@drawable/cercle_gray">
+                            style="@style/ButtonReturn">
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="45dp"
                                 android:text="@string/home_tab_transaction"
                                 android:textSize="@dimen/text_size_20" />
 

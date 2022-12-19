@@ -221,7 +221,7 @@
 
     <style name="ButtonGray">
         <item name="android:background">@drawable/btn_gray</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
         <item name="android:textColor">@color/btn_text_color</item>
         <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:textStyle">bold</item>
