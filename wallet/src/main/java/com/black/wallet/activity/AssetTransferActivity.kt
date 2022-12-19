@@ -187,9 +187,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
 
                         if (binding?.tvFromAccount?.text == getString(R.string.spot_account) && binding?.tvToAccount?.text == getString(R.string.contract_account)){
-                            userBalanceList = returnData.data?.spotBalance}
+                            userBalanceList = returnData.data?.spotBalance
+                        }
                         else if (binding?.tvFromAccount?.text == getString(R.string.contract_account) && binding?.tvToAccount?.text == getString(R.string.spot_account)){
-                            userBalanceList = returnData.data?.tigerBalance}
+                            userBalanceList = returnData.data?.tigerBalance
+                        }
                     }
                 }
             }))
