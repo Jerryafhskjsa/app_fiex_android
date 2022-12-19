@@ -105,9 +105,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         when(v?.id){
             R.id.rel_from -> {
                 showWalletChooseDialog(fromAccountType)
+                getUserBalance(false)
             }
             R.id.rel_to ->{
                 showWalletChooseDialog(toAccountType)
+                getUserBalance(false)
             }
             R.id.rel_choose ->{
                 showSupportCoin = true
@@ -115,6 +117,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             }
             R.id.img_exchange ->{
                 exchange()
+                getUserBalance(false)
             }
             R.id.tv_all ->{
                 binding?.editAmount?.setText(userBalance?.availableBalance)
@@ -183,10 +186,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
 
-                        if (binding?.tvFromAccount?.text ==  getString(R.string.contract_account)){
-                            userBalanceList = returnData.data?.tigerBalance}
-                        else {
+                        if (binding?.tvFromAccount?.text == getString(R.string.spot_account) && binding?.tvToAccount?.text == getString(R.string.contract_account)){
                             userBalanceList = returnData.data?.spotBalance}
+                        else if (binding?.tvFromAccount?.text == getString(R.string.contract_account) && binding?.tvToAccount?.text == getString(R.string.spot_account)){
+                            userBalanceList = returnData.data?.tigerBalance}
                     }
                 }
             }))

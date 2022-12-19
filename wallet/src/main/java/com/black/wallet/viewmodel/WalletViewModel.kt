@@ -505,7 +505,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in tigerWalletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet?.coinType == "USDT" ){
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10){
                             showData?.add(wallet)
                         }
                     }
