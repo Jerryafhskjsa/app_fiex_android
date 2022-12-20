@@ -93,7 +93,13 @@ class StartPageActivity : BaseActivity() {
         SocketDataContainer.clearAll()
     }
 
-    override fun routeCheck(uri: String, beforePath: String?, requestCode: Int, flags: Int, extras: Bundle?) {
+    override fun routeCheck(
+        uri: String,
+        beforePath: String?,
+        requestCode: Int,
+        flags: Int,
+        extras: Bundle?
+    ) {
         //不需要打开需要登录的目标
     }
 
@@ -105,7 +111,7 @@ class StartPageActivity : BaseActivity() {
                 if (isFinishing || !checkSign) {
                     return;
                 }
-                Log.d("StartPageActivity","hasInitJGPush = "+BaseApplication.hasInitJGPush)
+                Log.d("StartPageActivity", "hasInitJGPush = " + BaseApplication.hasInitJGPush)
                 if (!BaseApplication.hasInitJGPush) {
                     waitTime += 100
                     if (waitTime >= WAIT_MAX_TIME) {
@@ -127,7 +133,6 @@ class StartPageActivity : BaseActivity() {
                 }
             }
         }
-        FutureService.initFutureData(this);
         normalNext();
     }
 
@@ -235,15 +240,15 @@ class StartPageActivity : BaseActivity() {
         bundle.putBoolean(ConstData.CHECK_UN_BACK, true)
         bundle.putString(ConstData.NEXT_ACTION, RouterConstData.HOME_PAGE)
         BlackRouter.getInstance().build(routerPath)
-                .with(bundle)
-                .go(this) { routeResult, error ->
-                    if (error != null) {
-                        FryingUtil.printError(error)
-                    }
-                    if (routeResult) {
-                        finish()
-                    }
+            .with(bundle)
+            .go(this) { routeResult, error ->
+                if (error != null) {
+                    FryingUtil.printError(error)
                 }
+                if (routeResult) {
+                    finish()
+                }
+            }
     }
 }
 

@@ -813,6 +813,7 @@
     <string name="contract_buy_fall">买入/平空</string>
     <string name="contract_sell_raise">卖出/平多</string>
     <string name="contract_bond">保证金(%s)</string>
+    <string name="contract_bond_empty">保证金</string>
     <string name="contract_can_buy_raise">可开多</string>
     <string name="contract_can_sell_fail">可平空</string>
     <string name="contract_can_sell_raise">可平多</string>

@@ -84,6 +84,7 @@ class ContractViewModel(
      * indexPrice更新
      */
     private var indexPriceObserver: Observer<IndexPriceBean?>? = createIndexPriceObserver()
+
     /**
      * 费率更新
      */
@@ -140,7 +141,7 @@ class ContractViewModel(
         }
         SocketDataContainer.subscribeIndexPriceObservable(indexPriceObserver)
 
-        if(fundRateObserver == null){
+        if (fundRateObserver == null) {
             fundRateObserver = createFundRateObserver()
         }
         SocketDataContainer.subscribeFundRateObservable(fundRateObserver)
@@ -299,7 +300,7 @@ class ContractViewModel(
             SocketDataContainer.removeFuturePairQuotationObservable(pairQuotationObserver)
         }
 
-        if(fundRateObserver != null){
+        if (fundRateObserver != null) {
             SocketDataContainer.removeFundRateObservable(fundRateObserver)
         }
 
@@ -439,6 +440,7 @@ class ContractViewModel(
                 if (value != null && TextUtils.equals(value.s, currentPairStatus.pair)) {
                     onContractModelListener.run {
                         onContractModelListener?.onPairQuotation(value)
+                        Log.d("ttt---->行情", value.toString())
                     }
                 }
             }
@@ -456,13 +458,16 @@ class ContractViewModel(
                         var fp = FutureService.getFloatProfit(item!!, value!!)
                         floatProfit = floatProfit.add(fp)
                     }
+//                    Log.d("ttt------>floatProfit", floatProfit.toString())
+//                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                     }
                     onContractModelListener?.updateTotalProfit(totalProfit.toString())
+//                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
-//                Log.d("ttt------>totalProfit", totalProfit.toString())
+
                 onContractModelListener?.onMarketPrice(value)
             }
         }
@@ -479,8 +484,8 @@ class ContractViewModel(
     private fun createFundRateObserver(): Observer<FundRateBean?>? {
         return object : SuccessObserver<FundRateBean?>() {
             override fun onSuccess(value: FundRateBean?) {
-                if (value != null){
-                    var data = FundingRateBean(value.r,value.t.toLong(),value.s)
+                if (value != null) {
+                    var data = FundingRateBean(value.r, value.t.toLong(), value.s)
                     onContractModelListener?.onFundingRate(data)
                 }
             }
@@ -551,7 +556,7 @@ class ContractViewModel(
      * 获取交易当前成交
      */
     fun getCurrentDeal() {
-        FutureApiServiceHelper.getDealList(context, getCurrentPair(), 1,false,
+        FutureApiServiceHelper.getDealList(context, getCurrentPair(), 1, false,
             object : Callback<HttpRequestResultBean<ArrayList<PairDeal>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->getCurrentDeal", error.toString())
@@ -585,14 +590,13 @@ class ContractViewModel(
                 override fun callback(returnData: HttpRequestResultBean<PairQuotation?>?) {
                     if (returnData != null) {
                         var data = returnData.result
-                        if(data != null){
+                        if (data != null) {
                             onContractModelListener?.onPairQuotation(data)
                         }
                     }
                 }
             })
     }
-
 
 
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {

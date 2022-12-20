@@ -370,6 +370,7 @@
         <entry key="app/src/main/res/layout/activity_quotation_detail.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_start_page_new.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_home_page_contract.xml" value="0.253125" />
+        <entry key="app/src/main/res/layout/fragment_home_page_contract_header1.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_home_page_main.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.25" />

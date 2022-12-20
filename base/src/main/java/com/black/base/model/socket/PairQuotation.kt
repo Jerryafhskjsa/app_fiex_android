@@ -15,4 +15,9 @@ class PairQuotation {
     var bp:String? = null//买一价格
     var i:String? = null//指数价格
     var m:String? = null//标记价格
+    override fun toString(): String {
+        return "PairQuotation(s=$s, o=$o, c=$c, h=$h, l=$l, a=$a, v=$v, r=$r, t=$t, ap=$ap, bp=$bp, i=$i, m=$m)"
+    }
+
+
 }

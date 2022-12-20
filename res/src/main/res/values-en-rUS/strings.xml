@@ -813,6 +813,7 @@
     <string name="contract_buy_fall">Buy/sell short</string>
     <string name="contract_sell_raise">Sell/sell long</string>
     <string name="contract_bond">Deposit</string>
+    <string name="contract_bond_empty">Margin</string>
     <string name="contract_can_buy_raise">Multiple opening is allowed</string>
     <string name="contract_can_sell_fail">Can be leveled</string>
     <string name="contract_can_sell_raise">Can level multiple positions</string>

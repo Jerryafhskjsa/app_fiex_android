@@ -431,7 +431,7 @@
                         android:id="@+id/action_buy_freez_1"
                         style="@style/ContractBondTextLeft"
                         android:layout_height="match_parent"
-                        android:text="@string/contract_bond" />
+                        android:text="@string/contract_bond_empty" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
@@ -444,7 +444,7 @@
                             android:id="@+id/freez_amount_1"
                             style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -472,7 +472,7 @@
                             android:id="@+id/useable_buy_1"
                             style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
-                            android:text="usdt" />
+                            android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -547,7 +547,7 @@
                         android:id="@+id/action_buy_freez"
                         style="@style/ContractBondTextLeft"
                         android:layout_height="match_parent"
-                        android:text="@string/contract_bond" />
+                        android:text="@string/contract_bond_empty" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
@@ -644,7 +644,7 @@
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/action_sell_freez"
                         style="@style/ContractBondTextLeft"
-                        android:text="@string/contract_bond" />
+                        android:text="@string/contract_bond_empty" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
 

@@ -121,7 +121,7 @@ class HomePageContractFragment : BaseFragment(),
     private var recordTab: TabLayout? = null
     private var headerView: FragmentHomePageContractHeaderBinding? = null
     private var header1View: FragmentHomePageContractHeader1Binding? = null
-    private var priceInputFlag:Boolean? = false
+    private var priceInputFlag: Boolean? = false
 
     //交易对杠杆分层
     private var leverageBracket: LeverageBracketBean? = null
@@ -272,7 +272,7 @@ class HomePageContractFragment : BaseFragment(),
         updateDear(isDear)
         FutureService.getContractSize("btc_usdt")
         if (header1View?.tagPrice?.text.toString().isNotEmpty()) {
-            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
+//            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
         }
         if (!LoginUtil.isFutureLogin(mContext)) {
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
@@ -388,7 +388,7 @@ class HomePageContractFragment : BaseFragment(),
             override fun afterTextChanged(s: Editable) {
                 header1View?.price?.setSelection(s.toString().length)
                 updateCanOpenAmount(s.toString())
-                if(s.toString().isNotEmpty()){
+                if (s.toString().isNotEmpty()) {
                     priceInputFlag = true
                 }
             }
@@ -1259,28 +1259,21 @@ class HomePageContractFragment : BaseFragment(),
         if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true) {
             return
         }
+        var longLeverage = buyMultiChooseBean?.defaultMultiple
+        var shortLeverage = sellMultiChooseBean?.defaultMultiple
+        var availableOpenData = FutureService.getAvailableOpenData(
+            BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount),
+            BigDecimal.ZERO
+        )
+
         when (transactionType) {
             ConstData.FUTURE_OPERATE_OPEN -> {
-                var bondAmount: String? = null
-                bondAmount = amount?.let { BigDecimal(it) }?.let {
-                    buyMultiChooseBean?.defaultMultiple?.let { it1 ->
-                        FutureService.getLongMargin(
-                            BigDecimal(inputPrice),
-                            it, it1
-                        ).toString()
-                    }
-                }
-                header1View?.freezAmount?.text = String.format("%.2f", bondAmount?.toFloat())
-                var sellBondAmount: String? = null
-                sellBondAmount = amount?.let { BigDecimal(it) }?.let {
-                    sellMultiChooseBean?.defaultMultiple?.let { it1 ->
-                        FutureService.getShortMargin(
-                            BigDecimal(inputPrice),
-                            it, it1
-                        ).toString()
-                    }
-                }
-                header1View?.sellBond?.text = String.format("%.2f", sellBondAmount?.toFloat())
+
+                header1View?.freezAmount?.text =
+                    String.format("%.4f", availableOpenData?.longMargin?.toFloat())
+
+                header1View?.sellBond?.text =
+                    String.format("%.4f", availableOpenData?.shortMargin?.toFloat())
             }
             ConstData.FUTURE_OPERATE_CLOSE -> {
 
@@ -1382,8 +1375,8 @@ class HomePageContractFragment : BaseFragment(),
             }
             header1View?.tvBuyCount?.text = getString(R.string.contract_can_buy_raise)
             header1View?.tvSellCount?.text = getString(R.string.contract_can_buy_fall)
-            header1View?.actionBuyFreez?.text = getString(R.string.contract_bond)
-            header1View?.actionSellFreez?.text = getString(R.string.contract_bond)
+            header1View?.actionBuyFreez?.text = getString(R.string.contract_bond_empty)
+            header1View?.actionSellFreez?.text = getString(R.string.contract_bond_empty)
             header1View?.btnBuy?.isChecked = true
             header1View?.btnSale?.isChecked = false
             header1View?.countProgress?.progressDrawable =
@@ -1443,6 +1436,7 @@ class HomePageContractFragment : BaseFragment(),
                 header1View?.btnHandle1?.setText(getString(R.string.contract_sell_raise))
             }
         }
+        FutureService.updateCurrentSymbol(viewModel!!.getCurrentPair().toString())
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
             header1View?.btnHandle?.setText(R.string.login)
         }
@@ -1661,8 +1655,18 @@ class HomePageContractFragment : BaseFragment(),
             updatePriceSince(tickerBean?.r)
             updateCurrentPairPrice(tickerBean?.c)
             initInputPriceValue(tickerBean?.c)
+            updateOpenAvailableData()
         }
     }
+
+    /**
+     * 当行情价格发生变化的时候，需要更新可开空的数量
+     */
+    fun updateOpenAvailableData() {
+        var price = header1View?.price?.text
+        updateCanOpenAmount(price.toString())
+    }
+
 
     override fun onPairStatusInit(pairStatus: PairStatus?) {
         clearInput()
@@ -2041,8 +2045,8 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun initInputPriceValue(price: String?) {
-        if(header1View?.price?.text?.isEmpty() == true){
-            if(priceInputFlag == false){
+        if (header1View?.price?.text?.isEmpty() == true) {
+            if (priceInputFlag == false) {
                 header1View?.price?.setText(price)
             }
         }

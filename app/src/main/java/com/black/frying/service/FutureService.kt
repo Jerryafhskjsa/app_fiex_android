@@ -6,6 +6,7 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.*
 import com.black.base.util.FutureSocketData
+import com.black.base.util.LoginUtil
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
 import java.math.BigDecimal
@@ -13,7 +14,7 @@ import java.math.RoundingMode
 
 object FutureService {
 
-    val symbol = "btc_usdt"
+    var symbol = "btc_usdt"
 
     val underlyingType = "U_BASED"
 
@@ -57,29 +58,24 @@ object FutureService {
 
 
     fun initFutureData(context: Context?) {
-//        if (symbolList == null) {
         initSymbolList(context)
-//        }
-//        if (markPriceList == null) {
         initMarkPrice(context)
-//        }
-//        if (positionList == null) {
-        initPositionList(context)
-//        }
-//        if (leverageBracket == null) {
-        initLeverageBracketList(context)
-//        }
-//        if (balanceDetail == null) {
-        initBalanceList(context)
-        initBalanceByCoin(context)
-//        }
-//        if (orderList == null) {
-        initOrderList(context);
-//        }
-        initUserStepRate(context)
+        if (LoginUtil.isFutureLogin(context)) {
+            initPositionList(context)
+            initLeverageBracketList(context)
+            initBalanceList(context)
+            initBalanceByCoin(context)
+            initOrderList(context)
+            initUserStepRate(context)
+            initPositionAdl(context)
+        }
+    }
 
-        initPositionAdl(context)
-
+    /**
+     * 更新当前交易对
+     */
+    fun updateCurrentSymbol(s: String) {
+        symbol = s
     }
 
     /**
@@ -172,6 +168,21 @@ object FutureService {
                     }
                 }
             })
+    }
+
+    /**
+     * 获取交易对配置
+     */
+    fun getSymbolConfig(symbol: String): SymbolBean? {
+        if (symbolList != null) {
+            for (item in symbolList!!) {
+                if (item.symbol.equals(symbol)) {
+                    return item
+                    break
+                }
+            }
+        }
+        return null
     }
 
 
@@ -703,9 +714,16 @@ object FutureService {
 
     /**
      * 计算获取浮动盈亏
+     * @param positionBean 持仓
+     * @param markPrice 标记价格
      */
     fun getFloatProfit(positionBean: PositionBean, markPrice: MarkPriceBean): BigDecimal {
 
+        var symbolBean = getSymbolConfig(symbol)
+        var precision = symbolBean?.quoteCoinPrecision
+        if (precision == null) {
+            precision = 8
+        }
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
@@ -721,21 +739,21 @@ object FutureService {
         } else if (underlyingType.equals("COIN_BASED")) { //币本位
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit = BigDecimal("1")
-                    .divide(BigDecimal(positionBean.entryPrice), 4, BigDecimal.ROUND_HALF_UP)
+                    .divide(BigDecimal(positionBean.entryPrice), precision, BigDecimal.ROUND_DOWN)
                     .subtract(
                         BigDecimal("1")
-                            .divide(BigDecimal(markPrice?.p), 4, BigDecimal.ROUND_HALF_UP)
+                            .divide(BigDecimal(markPrice?.p), precision, BigDecimal.ROUND_DOWN)
                     )
                     .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit = BigDecimal("1")
-                    .divide(BigDecimal(markPrice?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    .divide(BigDecimal(markPrice?.p), precision, BigDecimal.ROUND_DOWN)
                     .subtract(
                         BigDecimal("1")
                             .divide(
                                 BigDecimal(positionBean.entryPrice),
-                                4,
-                                BigDecimal.ROUND_HALF_UP
+                                precision,
+                                BigDecimal.ROUND_DOWN
                             )
                     )
                     .multiply(base)
@@ -887,6 +905,15 @@ object FutureService {
         amountPercent: BigDecimal
     ): AvailableOpenData {
 
+        var symbolBean = getSymbolConfig(symbol)
+        var precision = symbolBean?.quoteCoinPrecision
+        var displayPrecision = symbolBean?.quoteCoinDisplayPrecision
+        if (precision == null) {
+            precision = 8
+        }
+        if (displayPrecision == null) {
+            displayPrecision = 4
+        }
 
         var buyPrice = inputPrice;
 
@@ -902,7 +929,13 @@ object FutureService {
         longSheetAmount = if (longInputSheetAmount.compareTo(BigDecimal(0)) == 1) {
             longInputSheetAmount.setScale(0, RoundingMode.DOWN)
         } else {
-            longMaxOpen.multiply(amountPercent.divide(BigDecimal(100), 4, RoundingMode.DOWN))
+            longMaxOpen.multiply(
+                amountPercent.divide(
+                    BigDecimal(100),
+                    precision,
+                    RoundingMode.DOWN
+                )
+            )
                 .setScale(0, RoundingMode.DOWN)
         }
 //        Log.d("ttttttt-->longSheetAmount--", longSheetAmount.toString())
@@ -925,7 +958,13 @@ object FutureService {
         shortSheetAmount = if (shortInputSheetAmount.compareTo(BigDecimal(0)) == 1) {
             shortInputSheetAmount.setScale(0, RoundingMode.DOWN)
         } else {
-            shortMaxOpen.multiply(amountPercent.divide(BigDecimal(100), 4, RoundingMode.DOWN))
+            shortMaxOpen.multiply(
+                amountPercent.divide(
+                    BigDecimal(100),
+                    precision,
+                    RoundingMode.DOWN
+                )
+            )
                 .setScale(0, RoundingMode.DOWN)
         }
 //        Log.d("ttttttt-->shortSheetAmount---", shortSheetAmount.toString())
@@ -933,7 +972,12 @@ object FutureService {
         var shortMargin = getShortMargin(sellPrice, shortSheetAmount, shortLeverage)
         Log.d("ttttttt-->shortMargin--", shortMargin.toString())
 
-        return AvailableOpenData(longMaxOpen, longMargin, shortMaxOpen, shortMargin)
+        return AvailableOpenData(
+            longMaxOpen.setScale(displayPrecision, 1),
+            longMargin.setScale(displayPrecision, 1),
+            shortMaxOpen.setScale(displayPrecision, 1),
+            shortMargin.setScale(displayPrecision, 1)
+        )
     }
 
     /**

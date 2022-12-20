@@ -39,6 +39,7 @@ import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
 import com.black.base.widget.VerticalTextView
 import com.black.frying.adapter.HomeMainRiseFallAdapter
+import com.black.frying.service.FutureService
 import com.black.frying.view.MainMorePopup
 import com.black.frying.view.MainMorePopup.OnMainMoreClickListener
 import com.black.frying.viewmodel.MainViewModel
@@ -67,7 +68,8 @@ import kotlin.collections.HashMap
 /**
  *先取symbolList,在取tickers,然后取kLine数据
  */
-class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
+class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
+    ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener, OnMainMoreClickListener {
     companion object {
         private const val STATUS_PAGE_COUNT = 2
         private var TAG = HomePageMainFragment::class.java.simpleName
@@ -86,15 +88,24 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
     private var viewModel: MainViewModel? = null
-    private var homeTabType:Int? = ConstData.HOME_TAB_HOT
+    private var homeTabType: Int? = ConstData.HOME_TAB_HOT
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (layout != null) {
             return layout
         }
         imageLoader = ImageLoader(mContext!!)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_main_fiex, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_home_page_main_fiex,
+            container,
+            false
+        )
         viewModel = MainViewModel(mContext!!, this)
         layout = binding?.root as FrameLayout
         StatusBarUtil.addStatusBarPadding(layout)
@@ -105,7 +116,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 //                viewModel!!.getHotPairs()
 //                viewModel!!.getHomeTicker()
 //                viewModel!!.getHomeKline()
-                binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
+                binding!!.refreshLayout.postDelayed(
+                    { binding!!.refreshLayout.setRefreshing(false) },
+                    300
+                )
             }
 
         })
@@ -119,14 +133,18 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.noticeTextView.setTextStillTime(3000)//设置停留时长间隔
         binding!!.noticeTextView.setAnimTime(300)//设置进入和退出的时间间隔
 
-        binding!!.mainTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        binding!!.mainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 homeTabType = tab.position
                 adapter?.setType(homeTabType)
 //                viewModel!!.getRiseFallData(type)
-                viewModel!!.getHomeSybolListData(homeTabType!!,PairApiServiceHelper.getSymboleListPairData(mContext))
+                viewModel!!.getHomeSybolListData(
+                    homeTabType!!,
+                    PairApiServiceHelper.getSymboleListPairData(mContext)
+                )
 
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
@@ -134,7 +152,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         drawable.color = SkinCompatResources.getColor(mContext, R.color.B2)
         binding!!.riseFallListView.divider = drawable
         binding!!.riseFallListView.dividerHeight = 15
-        adapter = HomeMainRiseFallAdapter(mContext!!, homeTabType,null)
+        adapter = HomeMainRiseFallAdapter(mContext!!, homeTabType, null)
         binding!!.riseFallListView.adapter = adapter
         binding!!.riseFallListView.setOnItemClickListener { _, _, position, _ ->
             onQuotationPairStatusClick(adapter?.getItem(position)!!)
@@ -146,7 +164,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
         binding!!.btnSearchMenu.setOnClickListener(this)
         binding!!.btnScanMenu.setOnClickListener(this)
         binding!!.btnMoreMenu.setOnClickListener(this)
-        layout?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        layout?.viewTreeObserver?.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 layout?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
             }
@@ -156,6 +175,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
 //        viewModel!!.getHomeTicker()
 //        viewModel!!.getHomeKline()
 //        showChatFloatAdView()
+        FutureService.initFutureData(mContext)
         return layout
     }
 
@@ -194,7 +214,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                         val bundle = Bundle()
                         bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle)
+                            .go(this)
                     }
                 }
                 CHOOSE_COIN_WITHDRAW -> {
@@ -203,7 +224,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                         val bundle = Bundle()
                         bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle)
+                            .go(this)
                     }
                 }
                 ConstData.SCANNIN_GREQUEST_CODE -> {
@@ -221,18 +243,27 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             R.id.btn_notice_more -> {
                 val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(R.string.notice))
-                bundle.putString(ConstData.URL, String.format(UrlConfig.getUrlNoticeAll(mContext), FryingUtil.getLanguageKey(mContext)))
+                bundle.putString(
+                    ConstData.URL,
+                    String.format(
+                        UrlConfig.getUrlNoticeAll(mContext),
+                        FryingUtil.getLanguageKey(mContext)
+                    )
+                )
                 BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
             }
-            R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE).go(mContext)//用户信息
-            R.id.btn_search_menu -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
-            R.id.btn_scan_menu ->  BlackRouter.getInstance().build(RouterConstData.CAPTURE)
+            R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
+                .go(mContext)//用户信息
+            R.id.btn_search_menu -> BlackRouter.getInstance()
+                .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
+            R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)
                 .withRequestCode(ConstData.SCANNIN_GREQUEST_CODE)
                 .go(mContext)
-            R.id.btn_more_menu -> mContext?.let { MainMorePopup(it).setOnMainMoreClickListener(this).show(v) }
+            R.id.btn_more_menu -> mContext?.let {
+                MainMorePopup(it).setOnMainMoreClickListener(this).show(v)
+            }
         }
     }
-
 
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
@@ -250,16 +281,20 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                         hotPair.setCurrentPriceCNY(pairStatus?.currentPriceCNY, nullAmount)
                         hotPair.priceChangeSinceToday = (pairStatus?.priceChangeSinceToday)
                         val gridView = hardGridViewMap[pairStatus?.pair]
-                        if(gridView != null && hotPair?.currentPrice!! > 0){
+                        if (gridView != null && hotPair?.currentPrice!! > 0) {
                             var gridViewAdapter = gridView?.adapter as GridViewAdapter
-                            gridViewAdapter.updateItem(pairStatus?.pair,hotPair)
+                            gridViewAdapter.updateItem(pairStatus?.pair, hotPair)
                             gridViewAdapter.notifyDataSetChanged()
                         }
                     }
                 }
                 homeTabType?.let {
                     if (updatePairData != null) {
-                        viewModel?.updateHomeSymbolListData(it,updatePairData,PairApiServiceHelper.getSymboleListPairData(mContext))
+                        viewModel?.updateHomeSymbolListData(
+                            it,
+                            updatePairData,
+                            PairApiServiceHelper.getSymboleListPairData(mContext)
+                        )
                     }
                 }
             }
@@ -274,7 +309,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onHomeTabDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
-        Log.d(TAG,"onHomeTabDataChanged")
+        Log.d(TAG, "onHomeTabDataChanged")
         observable!!.subscribe {
             CommonUtil.checkActivityAndRunOnUI(activity) {
                 adapter?.data = it
@@ -284,77 +319,97 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onNoticeList(observable: Observable<NoticeHome?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<NoticeHome?>() {
-            override fun callback(returnData: NoticeHome?) =
-                    if (returnData?.articles != null && returnData.articles!!.isNotEmpty()) {
-                        //显示公告
-                        val noticeTitles = ArrayList<String?>()
-                        val noticeList = returnData.articles
-                        for (notice in returnData.articles!!) {
-                            noticeTitles.add(notice?.title.toString())
-                        }
-                        if (noticeTitles.isNotEmpty()) {
-                            binding!!.noticeTextView.setTextList(noticeTitles)
-                            binding!!.noticeLayout.visibility = View.VISIBLE
-                            binding!!.noticeTextView.setOnItemClickListener(object : VerticalTextView.OnItemClickListener {
-                                override fun onItemClick(position: Int) {
-                                    val notice: NoticeHomeItem? = CommonUtil.getItemFromList(noticeList, position)
-                                    if (notice != null) {
-                                        val bundle = Bundle()
-                                        bundle.putString(ConstData.TITLE, notice.title)
-                                        bundle.putString(ConstData.URL, notice.html_url)
-                                        BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+        observable!!.subscribe(
+            HttpCallbackSimple(
+                mContext,
+                false,
+                object : Callback<NoticeHome?>() {
+                    override fun callback(returnData: NoticeHome?) =
+                        if (returnData?.articles != null && returnData.articles!!.isNotEmpty()) {
+                            //显示公告
+                            val noticeTitles = ArrayList<String?>()
+                            val noticeList = returnData.articles
+                            for (notice in returnData.articles!!) {
+                                noticeTitles.add(notice?.title.toString())
+                            }
+                            if (noticeTitles.isNotEmpty()) {
+                                binding!!.noticeTextView.setTextList(noticeTitles)
+                                binding!!.noticeLayout.visibility = View.VISIBLE
+                                binding!!.noticeTextView.setOnItemClickListener(object :
+                                    VerticalTextView.OnItemClickListener {
+                                    override fun onItemClick(position: Int) {
+                                        val notice: NoticeHomeItem? =
+                                            CommonUtil.getItemFromList(noticeList, position)
+                                        if (notice != null) {
+                                            val bundle = Bundle()
+                                            bundle.putString(ConstData.TITLE, notice.title)
+                                            bundle.putString(ConstData.URL, notice.html_url)
+                                            BlackRouter.getInstance()
+                                                .build(RouterConstData.WEB_VIEW).with(bundle)
+                                                .go(mContext)
+                                        }
                                     }
-                                }
 
-                            })
-                        } else {
+                                })
+                            } else {
 //                            binding!!.noticeLayout.visibility = View.GONE
-                        }
-                    } else {
+                            }
+                        } else {
 //                        binding!!.noticeLayout.visibility = View.GONE
-                    }
+                        }
 
-            override fun error(type: Int, error: Any?) {
+                    override fun error(type: Int, error: Any?) {
 //                binding!!.noticeLayout.visibility = View.GONE
-            }
-        }))
+                    }
+                })
+        )
     }
 
     override fun onHomeKLine(observable: Observable<ArrayList<PairStatus?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<ArrayList<PairStatus?>?>() {
-            override fun callback(returnData: ArrayList<PairStatus?>?) {
-                if (returnData != null) {
-                    Log.d(TAG,"onHomeKLine succ")
-                    showTickersPairs(returnData)
-                    var pairListData = PairApiServiceHelper.getSymboleListPairData(context)
-                    viewModel!!.getHomeSybolListData(homeTabType!!,pairListData)
-                } else {
-                    Log.d(TAG,"onHomeKLine data null or fail")
-                }
-            }
+        observable!!.subscribe(
+            HttpCallbackSimple(
+                mContext,
+                false,
+                object : Callback<ArrayList<PairStatus?>?>() {
+                    override fun callback(returnData: ArrayList<PairStatus?>?) {
+                        if (returnData != null) {
+                            Log.d(TAG, "onHomeKLine succ")
+                            showTickersPairs(returnData)
+                            var pairListData = PairApiServiceHelper.getSymboleListPairData(context)
+                            viewModel!!.getHomeSybolListData(homeTabType!!, pairListData)
+                        } else {
+                            Log.d(TAG, "onHomeKLine data null or fail")
+                        }
+                    }
 
-            override fun error(type: Int, error: Any?) {
-                Log.d(TAG,"onHomeKLine error")
-            }
-        }))
+                    override fun error(type: Int, error: Any?) {
+                        Log.d(TAG, "onHomeKLine error")
+                    }
+                })
+        )
     }
 
     override fun onHomeTickers(observable: Observable<ArrayList<PairStatus?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<ArrayList<PairStatus?>?>() {
-            override fun callback(tickers: ArrayList<PairStatus?>?) {
-                if (tickers != null) {
+        observable!!.subscribe(
+            HttpCallbackSimple(
+                mContext,
+                false,
+                object : Callback<ArrayList<PairStatus?>?>() {
+                    override fun callback(tickers: ArrayList<PairStatus?>?) {
+                        if (tickers != null) {
 //                    tickersData = returnData?.data as ArrayList<HomeTickers?>
-                    Log.d(TAG,"onHomeTickers succ")
-                    viewModel?.getHomeKline(tickers)
-                } else {
-                    Log.d(TAG,"onHomeTickers data null or fail")
-                }
-            }
-            override fun error(type: Int, error: Any?) {
-                Log.d(TAG,"onHomeTickers error")
-            }
-        }))
+                            Log.d(TAG, "onHomeTickers succ")
+                            viewModel?.getHomeKline(tickers)
+                        } else {
+                            Log.d(TAG, "onHomeTickers data null or fail")
+                        }
+                    }
+
+                    override fun error(type: Int, error: Any?) {
+                        Log.d(TAG, "onHomeTickers error")
+                    }
+                })
+        )
     }
 
     override fun onHeadBanner(observable: Observable<HttpRequestResultDataList<Banner?>?>?) {
@@ -364,16 +419,21 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
     }
 
     override fun onHotPairs(observable: Observable<HttpRequestResultDataList<String?>?>?) {
-        observable!!.subscribe(HttpCallbackSimple(mContext, false, object : Callback<HttpRequestResultDataList<String?>?>() {
-            override fun callback(returnData: HttpRequestResultDataList<String?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                } else {
-                }
-            }
+        observable!!.subscribe(
+            HttpCallbackSimple(
+                mContext,
+                false,
+                object : Callback<HttpRequestResultDataList<String?>?>() {
+                    override fun callback(returnData: HttpRequestResultDataList<String?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        } else {
+                        }
+                    }
 
-            override fun error(type: Int, error: Any?) {
-            }
-        }))
+                    override fun error(type: Int, error: Any?) {
+                    }
+                })
+        )
     }
 
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
@@ -389,20 +449,21 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
-                    val rest = if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
+                    val rest =
+                        if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
                     val gridView = GridView(activity)
                     for (j in 0 until rest) {
                         val pairStatus = ticketData[offset + j]
                         var pairName = pairStatus?.pair
                         var temp = hardGridViewMap[pairStatus?.pair]
-                        if(temp != null){
-                            if(pairStatus?.currentPrice!! > 0){
+                        if (temp != null) {
+                            if (pairStatus?.currentPrice!! > 0) {
                                 var gridViewAdapter = temp?.adapter as GridViewAdapter
-                                gridViewAdapter.updateItem(pairStatus?.pair,pairStatus)
+                                gridViewAdapter.updateItem(pairStatus?.pair, pairStatus)
                                 gridViewAdapter.notifyDataSetChanged()
                                 hotPairMap[pairName] = pairStatus
                             }
-                        }else{
+                        } else {
                             gridPairs.add(pairStatus)
                             hotPairMap[pairName] = pairStatus
                             val adapter = GridViewAdapter(activity!!, gridPairs)
@@ -410,17 +471,20 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
                             gridView?.adapter = adapter
                             gridView?.scrollBarSize = 0
                             gridView?.horizontalSpacing = 15
-                            gridView?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> onQuotationPairStatusClick(adapter.getItem(position)!!) }
+                            gridView?.onItemClickListener =
+                                AdapterView.OnItemClickListener { _, _, position, _ ->
+                                    onQuotationPairStatusClick(adapter.getItem(position)!!)
+                                }
                             hardGridViewMap[pairName] = gridView
                             viewList.add(gridView)
                         }
                     }
                 }
-                Log.d(TAG, "viewList.size = "+viewList.size)
-                if(viewList.size > 0){
-                    if(statusAdapter == null){
+                Log.d(TAG, "viewList.size = " + viewList.size)
+                if (viewList.size > 0) {
+                    if (statusAdapter == null) {
                         statusAdapter = BaseViewPagerAdapter(viewList)
-                    }else{
+                    } else {
                         statusAdapter?.setViewList(viewList)
                     }
                     binding!!.statusViewPager.adapter = statusAdapter
@@ -461,11 +525,16 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             chatFloatAdView!!.setOnClickListener(View.OnClickListener {
                 fryingHelper.checkUserAndDoing(Runnable {
                     viewModel!!.checkIntoMainChat()
-                            ?.subscribe(HttpCallbackSimple(mContext, true, object : NormalCallback<ChatRoomEnable>(mContext!!) {
-                                override fun callback(chatRoomEnable: ChatRoomEnable?) {
-                                    intoPublicChat(chatRoomEnable!!)
-                                }
-                            }))
+                        ?.subscribe(
+                            HttpCallbackSimple(
+                                mContext,
+                                true,
+                                object : NormalCallback<ChatRoomEnable>(mContext!!) {
+                                    override fun callback(chatRoomEnable: ChatRoomEnable?) {
+                                        intoPublicChat(chatRoomEnable!!)
+                                    }
+                                })
+                        )
                 }, 0)
             })
             val bitmap = ImageUtil.getBitmapFromRes(context, R.drawable.icon_chat)
@@ -490,25 +559,35 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             bundle.putString(ConstData.IM_GROUP_ID, groupId)
             bundle.putString(ConstData.IM_GROUP_NAME, groupName)
             bundle.putParcelable(ConstData.IM_CHAT_ROOM_ENABLE, chatRoomEnable)
-            IMHelper.startWithIMGroupActivity(mContext!!, mContext, userIdHeader + userId, groupId, RouterConstData.PUBLIC_CHAT_GROUP, bundle, null, null)
+            IMHelper.startWithIMGroupActivity(
+                mContext!!,
+                mContext,
+                userIdHeader + userId,
+                groupId,
+                RouterConstData.PUBLIC_CHAT_GROUP,
+                bundle,
+                null,
+                null
+            )
         }
     }
 
-    internal class GridViewAdapter(context: Context, data: MutableList<PairStatus?>?) : BaseDataBindAdapter<PairStatus?, ListItemPageMainStatusBinding>(context, data) {
+    internal class GridViewAdapter(context: Context, data: MutableList<PairStatus?>?) :
+        BaseDataBindAdapter<PairStatus?, ListItemPageMainStatusBinding>(context, data) {
         private var brokenLine: LineChart? = null
 
         /**
          * k线数据转为FloatArray
          */
-        fun getKineYdata(kLineData:HomeTickersKline?):ArrayList<Entry>{
-            var kDataList:ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
+        fun getKineYdata(kLineData: HomeTickersKline?): ArrayList<Entry> {
+            var kDataList: ArrayList<HomeTickersKline.Kdata>? = kLineData?.k
             var yListSize = kDataList?.size
             var kPlistArray = FloatArray(yListSize!!)
             val dataEntry = java.util.ArrayList<Entry>()
             var index = 0
-            for (value in kDataList!!){
-                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it}
-                var entry = value?.p?.toFloat()?.let { Entry(index.toFloat(), it,null) }
+            for (value in kDataList!!) {
+                value?.p?.toFloatOrNull()?.let { kPlistArray[index] = it }
+                var entry = value?.p?.toFloat()?.let { Entry(index.toFloat(), it, null) }
                 if (entry != null) {
                     dataEntry.add(entry)
                 }
@@ -516,6 +595,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             }
             return dataEntry
         }
+
         override fun resetSkinResources() {
             super.resetSkinResources()
             colorWin = SkinCompatResources.getColor(context, R.color.T10)
@@ -523,15 +603,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             colorDefault = SkinCompatResources.getColor(context, R.color.T3)
         }
 
-        fun updateItem(pairName:String?,pairStatus: PairStatus?){
-            for(i in data!!.indices){
-                if(pairName.equals(data!![i]?.pair)){
-                    updateItem(i,pairStatus)
+        fun updateItem(pairName: String?, pairStatus: PairStatus?) {
+            for (i in data!!.indices) {
+                if (pairName.equals(data!![i]?.pair)) {
+                    updateItem(i, pairStatus)
                 }
             }
         }
 
-        fun initBrokenline(brokenLine:LineChart?,values:ArrayList<Entry>,color:Int?){
+        fun initBrokenline(brokenLine: LineChart?, values: ArrayList<Entry>, color: Int?) {
             brokenLine?.setDrawBorders(false)
             brokenLine?.isAutoScaleMinMaxEnabled = true
             brokenLine?.setBackgroundColor(Color.WHITE)
@@ -543,9 +623,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             brokenLine?.isDragEnabled = false
             brokenLine?.setScaleEnabled(false)
             brokenLine?.setPinchZoom(false)
-            var xAxis =  brokenLine?.getXAxis()
-                xAxis?.setDrawGridLines(false)
-                xAxis?.isEnabled = false
+            var xAxis = brokenLine?.getXAxis()
+            xAxis?.setDrawGridLines(false)
+            xAxis?.isEnabled = false
             brokenLine?.axisRight?.isEnabled = false
             brokenLine?.axisLeft?.isEnabled = false
             // get the legend (only possible after setting data)
@@ -555,13 +635,13 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             var set1 = LineDataSet(values, " ")
             if (brokenLine?.data != null &&
                 brokenLine?.data?.dataSetCount!! > 0
-            ){
+            ) {
                 set1 = brokenLine?.data.getDataSetByIndex(0) as LineDataSet
                 set1?.values = values
                 set1.notifyDataSetChanged()
                 brokenLine?.data.notifyDataChanged()
                 brokenLine?.notifyDataSetChanged()
-            }else{
+            } else {
                 set1.setDrawIcons(false)
                 // black lines and points
                 if (color != null) {
@@ -592,59 +672,73 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener, ObserveSc
             val pairStatus = getItem(position)
             val binding = holder?.dataBing
             val styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
-            if (styleChange == 1){
-            val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) colorWin!! else colorLost!!
-            val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
-            pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-            binding?.gridIndicator?.setBackgroundColor(color)
-            binding?.raiseDownBg?.background = bgWinLose
-            binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
-            binding?.pairPrice?.setTextColor(color)
-            binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-            binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
-                val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
-                if (exChangeRates == 0)
-                {
-                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
-                    binding?.pairPriceCny?.text = String.format("%s CNY", pairStatus.currentPriceCNYFormat)
-                }
-                else{
-                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
-                    binding?.pairPriceCny?.text = String.format("%s USD", pairStatus.currentPriceFormat)
-                }
-            val kLineData = pairStatus.kLineData
-            if(kLineData != null){
-                brokenLine = binding?.lineCart
-                val brokenLineData = getKineYdata(pairStatus.kLineData)
-                initBrokenline(brokenLine,brokenLineData,color)
-            }
-            }
-            if (styleChange == 0){
-                val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) colorWin!! else colorLost!!
-                val bgWinLose = if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(R.drawable.hot_item_bg_corner_default) else if (pairStatus.priceChangeSinceToday!! < 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(R.drawable.hot_item_bg_corner_down)
+            if (styleChange == 1) {
+                val color =
+                    if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) colorWin!! else colorLost!!
+                val bgWinLose =
+                    if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(
+                        R.drawable.hot_item_bg_corner_default
+                    ) else if (pairStatus.priceChangeSinceToday!! > 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(
+                        R.drawable.hot_item_bg_corner_down
+                    )
                 pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
                 binding?.gridIndicator?.setBackgroundColor(color)
                 binding?.raiseDownBg?.background = bgWinLose
-                binding?.pairName?.text = if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
+                binding?.pairName?.text =
+                    if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
+                binding?.pairPrice?.setTextColor(color)
+                binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
+                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+                val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+                if (exChangeRates == 0) {
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text =
+                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                } else {
+                    binding?.pairPrice?.text = pairStatus.currentPriceFormat
+                    binding?.pairPriceCny?.text =
+                        String.format("%s USD", pairStatus.currentPriceFormat)
+                }
+                val kLineData = pairStatus.kLineData
+                if (kLineData != null) {
+                    brokenLine = binding?.lineCart
+                    val brokenLineData = getKineYdata(pairStatus.kLineData)
+                    initBrokenline(brokenLine, brokenLineData, color)
+                }
+            }
+            if (styleChange == 0) {
+                val color =
+                    if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault!! else if (pairStatus.priceChangeSinceToday!! < 0) colorWin!! else colorLost!!
+                val bgWinLose =
+                    if (pairStatus!!.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) context.getDrawable(
+                        R.drawable.hot_item_bg_corner_default
+                    ) else if (pairStatus.priceChangeSinceToday!! < 0) context.getDrawable(R.drawable.hot_item_bg_corner_up) else context.getDrawable(
+                        R.drawable.hot_item_bg_corner_down
+                    )
+                pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
+                binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.raiseDownBg?.background = bgWinLose
+                binding?.pairName?.text =
+                    if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
                 binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
                 binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
                 binding?.pairPrice?.text = pairStatus.currentPriceFormat
                 val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
-                if (exChangeRates == 0)
-                {
+                if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
-                    binding?.pairPriceCny?.text = String.format("%s CNY", pairStatus.currentPriceCNYFormat)
-                }
-                else{
+                    binding?.pairPriceCny?.text =
+                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                } else {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
-                    binding?.pairPriceCny?.text = String.format("%s USD", pairStatus.currentPriceFormat)
+                    binding?.pairPriceCny?.text =
+                        String.format("%s USD", pairStatus.currentPriceFormat)
                 }
                 val kLineData = pairStatus.kLineData
-                if(kLineData != null){
+                if (kLineData != null) {
                     brokenLine = binding?.lineCart
                     val brokenLineData = getKineYdata(pairStatus.kLineData)
-                    initBrokenline(brokenLine,brokenLineData,color)
+                    initBrokenline(brokenLine, brokenLineData, color)
                 }
             }
         }
