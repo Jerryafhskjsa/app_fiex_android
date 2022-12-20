@@ -185,6 +185,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         //获取c2c usdt价格
         C2CApiServiceHelper.getC2CPrice(mContext,object :Callback<C2CPrice?>(){
             override fun callback(returnData: C2CPrice?) {
+
             }
 
             override fun error(type: Int, error: Any?) {

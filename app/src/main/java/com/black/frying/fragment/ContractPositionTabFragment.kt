@@ -37,15 +37,15 @@ import kotlin.collections.ArrayList
 class ContractPositionTabFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
     View.OnClickListener,
-    ContractPositionViewModel.OnContractPositionModelListener{
+    ContractPositionViewModel.OnContractPositionModelListener {
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
-    private var viewModel:ContractPositionViewModel? = null
+    private var viewModel: ContractPositionViewModel? = null
     private var adapter: ContractPositionTabAdapter? = null
-    private var dataList:ArrayList<PositionBean?>? = ArrayList()
+    private var dataList: ArrayList<PositionBean?>? = ArrayList()
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
@@ -53,7 +53,7 @@ class ContractPositionTabFragment : BaseFragment(),
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var gettingPairsData: Boolean? = false
-    private var onTabModelListener:OnTabModelListener? = null
+    private var onTabModelListener: OnTabModelListener? = null
 
     /**
      * adapter height when viewpager in scrollview
@@ -62,7 +62,7 @@ class ContractPositionTabFragment : BaseFragment(),
         mViewPager = viewPager
     }
 
-    fun setOnTabModeListener(tabListener: OnTabModelListener){
+    fun setOnTabModeListener(tabListener: OnTabModelListener) {
         onTabModelListener = tabListener
     }
 
@@ -109,9 +109,12 @@ class ContractPositionTabFragment : BaseFragment(),
         socketHandler = Handler(handlerThread?.looper)
         viewModel?.getMarketPrice(CookieUtil.getCurrentFutureUPair(context!!))
         viewModel?.getFundRate(CookieUtil.getCurrentFutureUPair(context!!))
-        viewModel?.getPositionAdlList(context)
-        viewModel?.getLeverageBracketDetail()
-        viewModel?.getPositionData()
+        if (LoginUtil.isFutureLogin(context)) {
+            viewModel?.getPositionAdlList(context)
+            viewModel?.getLeverageBracketDetail()
+            viewModel?.getPositionData()
+        }
+
     }
 
     override fun onStop() {
@@ -147,19 +150,23 @@ class ContractPositionTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if(dataList?.size == 0){
+                if (dataList?.size == 0) {
                     return
                 }
-                FutureApiServiceHelper.closeAll(activity,true,object : Callback<HttpRequestResultBean<String>?>() {
-                    override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null) {
-                            viewModel?.getPositionData()
+                FutureApiServiceHelper.closeAll(
+                    activity,
+                    true,
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null) {
+                                viewModel?.getPositionData()
+                            }
                         }
-                    }
-                    override fun error(type: Int, error: Any?) {
-                        FryingUtil.showToast(activity,error.toString())
-                    }
-                })
+
+                        override fun error(type: Int, error: Any?) {
+                            FryingUtil.showToast(activity, error.toString())
+                        }
+                    })
             }
         }
     }
@@ -183,9 +190,8 @@ class ContractPositionTabFragment : BaseFragment(),
     }
 
 
-
     interface OnTabModelListener {
-        fun onCount(count:Int?)
+        fun onCount(count: Int?)
     }
 
     companion object {

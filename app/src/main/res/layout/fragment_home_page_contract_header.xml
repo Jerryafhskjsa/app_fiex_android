@@ -85,15 +85,23 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/total_profit"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="总权益(usdt)"
-                    android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12">
+                    android:orientation="vertical">
 
-                </com.black.base.widget.SpanTextView>
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/total_profit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="总权益(usdt)"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <com.black.base.widget.DashLineView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+                </LinearLayout>
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/total_profit_value"

@@ -31,13 +31,16 @@ object C2CApiServiceHelper {
             return field
         }
     private const val DATA_CACHE_OVER_TIME = 20 * 60 * 1000 //20分钟
-            .toLong()
+        .toLong()
     private const val C2C_PRICE = 1
     private const val TRADE_SET = 2
     private const val TRADE_PAIR = 3
+
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long?>()
     private var c2CPrice: C2CPrice? = null
+
+    var coinUsdtPrice: CoinUsdtPrice? = null
 
     private fun getLastGetTime(type: Int): Long? {
         val lastGetTime = lastGetTimeMap[type]
@@ -73,25 +76,26 @@ object C2CApiServiceHelper {
         }
         val lastGetTime = getLastGetTime(C2C_PRICE)
         return if (lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) { //通过接口获取
-            ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
-                    ?.getUsdtCnyPrice()
-                    ?.flatMap(Function<HttpRequestResultData<CoinUsdtPrice?>?, ObservableSource<C2CPrice?>> { returnData: HttpRequestResultData<CoinUsdtPrice?>? ->
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                            val coinUsdtPrice = returnData.data
-                            val price = CommonUtil.parseDouble(coinUsdtPrice!!.usdt)
-                            if (price != null) {
-                                if (c2CPrice == null) {
-                                    c2CPrice = C2CPrice()
-                                }
-                                c2CPrice!!.buy = price
-                                c2CPrice!!.sell = price
-                                CookieUtil.setC2CCellPrice(context, c2CPrice!!.sell!!.toFloat())
-                                CookieUtil.setC2CBuyPrice(context, c2CPrice!!.buy!!.toFloat())
-                                setLastGetTime(C2C_PRICE, System.currentTimeMillis())
+            ApiManager.build(context, false, UrlConfig.ApiType.URL_PRO)
+                .getService(CommonApiService::class.java)
+                ?.getUsdtCnyPrice()
+                ?.flatMap(Function<HttpRequestResultData<CoinUsdtPrice?>?, ObservableSource<C2CPrice?>> { returnData: HttpRequestResultData<CoinUsdtPrice?>? ->
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                        coinUsdtPrice = returnData.data
+                        val price = CommonUtil.parseDouble(coinUsdtPrice!!.usdt)
+                        if (price != null) {
+                            if (c2CPrice == null) {
+                                c2CPrice = C2CPrice()
                             }
+                            c2CPrice!!.buy = price
+                            c2CPrice!!.sell = price
+                            CookieUtil.setC2CCellPrice(context, c2CPrice!!.sell!!.toFloat())
+                            CookieUtil.setC2CBuyPrice(context, c2CPrice!!.buy!!.toFloat())
+                            setLastGetTime(C2C_PRICE, System.currentTimeMillis())
                         }
-                        Observable.just(c2CPrice)
-                    })
+                    }
+                    Observable.just(c2CPrice)
+                })
         } else {
             Observable.just(c2CPrice)
         }
@@ -120,29 +124,31 @@ object C2CApiServiceHelper {
         val lastGetTime = getLastGetTime(C2C_PRICE)
         if (lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) {
             //通过接口获取
-            CommonApiServiceHelper.getUsdtCnyPrice(context, object : Callback<HttpRequestResultData<CoinUsdtPrice?>?>() {
-                override fun error(type: Int, error: Any) {
-                    callback.callback(c2CPrice)
-                }
-
-                override fun callback(returnData: HttpRequestResultData<CoinUsdtPrice?>?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                        val coinUsdtPrice = returnData.data
-                        val price = CommonUtil.parseDouble(coinUsdtPrice!!.usdt)
-                        if (price != null) {
-                            if (c2CPrice == null) {
-                                c2CPrice = C2CPrice()
-                            }
-                            c2CPrice!!.buy = price
-                            c2CPrice!!.sell = price
-                            CookieUtil.setC2CCellPrice(context, c2CPrice!!.sell!!.toFloat())
-                            CookieUtil.setC2CBuyPrice(context, c2CPrice!!.buy!!.toFloat())
-                            setLastGetTime(C2C_PRICE, System.currentTimeMillis())
-                        }
+            CommonApiServiceHelper.getUsdtCnyPrice(
+                context,
+                object : Callback<HttpRequestResultData<CoinUsdtPrice?>?>() {
+                    override fun error(type: Int, error: Any) {
+                        callback.callback(c2CPrice)
                     }
-                    callback.callback(c2CPrice)
-                }
-            })
+
+                    override fun callback(returnData: HttpRequestResultData<CoinUsdtPrice?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                            coinUsdtPrice = returnData.data
+                            val price = CommonUtil.parseDouble(coinUsdtPrice!!.usdt)
+                            if (price != null) {
+                                if (c2CPrice == null) {
+                                    c2CPrice = C2CPrice()
+                                }
+                                c2CPrice!!.buy = price
+                                c2CPrice!!.sell = price
+                                CookieUtil.setC2CCellPrice(context, c2CPrice!!.sell!!.toFloat())
+                                CookieUtil.setC2CBuyPrice(context, c2CPrice!!.buy!!.toFloat())
+                                setLastGetTime(C2C_PRICE, System.currentTimeMillis())
+                            }
+                        }
+                        callback.callback(c2CPrice)
+                    }
+                })
             //            ApiManager.build(context).getService(C2CApiService.class)
 //                    .getC2CPrice("BID", 1, 10)
 //                    .subscribeOn(Schedulers.io())
@@ -190,47 +196,88 @@ object C2CApiServiceHelper {
         }
     }
 
-    fun getC2CSellerList(context: Context?, isShowLoading: Boolean, coinType: String?, type: String?, pageNum: Int, pageSize: Int, callback: Callback<HttpRequestResultData<PagingData<C2CSeller?>?>?>?) {
+    fun getC2CSellerList(
+        context: Context?,
+        isShowLoading: Boolean,
+        coinType: String?,
+        type: String?,
+        pageNum: Int,
+        pageSize: Int,
+        callback: Callback<HttpRequestResultData<PagingData<C2CSeller?>?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getC2CMerchant(coinType, type, pageNum, pageSize)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.getC2CMerchant(coinType, type, pageNum, pageSize)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun createC2COrderBuy(context: Context?, coinType: String?, type: String?, amount: String?, merchantId: String?, isOneKey: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun createC2COrderBuy(
+        context: Context?,
+        coinType: String?,
+        type: String?,
+        amount: String?,
+        merchantId: String?,
+        isOneKey: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.createOrderBuy(coinType, type, amount, merchantId, isOneKey)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.createOrderBuy(coinType, type, amount, merchantId, isOneKey)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun createC2COrderSell(context: Context?, coinType: String?, type: String?, amount: String?, merchantId: String?, isOneKey: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun createC2COrderSell(
+        context: Context?,
+        coinType: String?,
+        type: String?,
+        amount: String?,
+        merchantId: String?,
+        isOneKey: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.createOrderSell(coinType, type, amount, merchantId, isOneKey)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.createOrderSell(coinType, type, amount, merchantId, isOneKey)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getC2COrderList(context: Context?, isShowLoading: Boolean, type: String?, status: String?, pageNum: Int, pageSize: Int, callback: Callback<HttpRequestResultData<PagingData<C2COrder?>?>?>?) {
+    fun getC2COrderList(
+        context: Context?,
+        isShowLoading: Boolean,
+        type: String?,
+        status: String?,
+        pageNum: Int,
+        pageSize: Int,
+        callback: Callback<HttpRequestResultData<PagingData<C2COrder?>?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getOrderList(type, status, pageNum, pageSize)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.getOrderList(type, status, pageNum, pageSize)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun getC2COrderDetailList(context: Context?, isSilent: Boolean, orderId: String?, lastTime: Long, direction: Int, pageNum: Int, pageSize: Int, callback: Callback<HttpRequestResultDataList<C2COrderDetailItem?>?>?) {
+    fun getC2COrderDetailList(
+        context: Context?,
+        isSilent: Boolean,
+        orderId: String?,
+        lastTime: Long,
+        direction: Int,
+        pageNum: Int,
+        pageSize: Int,
+        callback: Callback<HttpRequestResultDataList<C2COrderDetailItem?>?>?
+    ) {
         /**
          * orderId
          * lastTime（时间戳long类型） 拉取历史消息传最上面那条时间戳，刷新新消息传最下面那条时间戳
@@ -242,59 +289,81 @@ object C2CApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getOrderDetailList(orderId, lastTime.toString(), direction.toString())
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, !isSilent, callback))
+            ?.getOrderDetailList(orderId, lastTime.toString(), direction.toString())
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, !isSilent, callback))
     }
 
-    fun createC2COrderDetail(context: Context?, orderId: String?, message: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun createC2COrderDetail(
+        context: Context?,
+        orderId: String?,
+        message: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.createOrderDetail(orderId, message)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.createOrderDetail(orderId, message)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getC2COrderDetail(context: Context?, orderId: String?, callback: Callback<HttpRequestResultData<C2CDetail?>?>?) {
+    fun getC2COrderDetail(
+        context: Context?,
+        orderId: String?,
+        callback: Callback<HttpRequestResultData<C2CDetail?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getOrderDetail(orderId)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, false, callback))
+            ?.getOrderDetail(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
-    fun releaseCoin(context: Context?, orderId: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun releaseCoin(
+        context: Context?,
+        orderId: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.releaseCoin(orderId)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.releaseCoin(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun confirmPaid(context: Context?, orderId: String?, payment: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun confirmPaid(
+        context: Context?,
+        orderId: String?,
+        payment: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.confirmPaid(orderId, payment)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.confirmPaid(orderId, payment)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun cancelOrder(context: Context?, orderId: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun cancelOrder(
+        context: Context?,
+        orderId: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.cancelOrder(orderId)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.cancelOrder(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     fun isAgree(context: Context?, callback: Callback<HttpRequestResultData<C2CAgreement?>?>?) {
@@ -302,9 +371,9 @@ object C2CApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.isAgree()
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, false, callback))
+            ?.isAgree()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
     fun agree(context: Context?, userId: String?, callback: Callback<HttpRequestResultString?>?) {
@@ -312,78 +381,113 @@ object C2CApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.agree()
-                ?.compose(RxJavaHelper.observeOnMainThread<HttpRequestResultString?>())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.agree()
+            ?.compose(RxJavaHelper.observeOnMainThread<HttpRequestResultString?>())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getPaymentMethodAll(context: Context?, callback: Callback<HttpRequestResultDataList<PaymentMethod?>?>?) {
+    fun getPaymentMethodAll(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<PaymentMethod?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getPaymentMethodAll(null)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.getPaymentMethodAll(null)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getPaymentMethodActive(context: Context?, callback: Callback<HttpRequestResultDataList<PaymentMethod?>?>?) {
+    fun getPaymentMethodActive(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<PaymentMethod?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getPaymentMethodAll("1")
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.getPaymentMethodAll("1")
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun deletePaymentMethod(context: Context?, id: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun deletePaymentMethod(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.deletePaymentMethod(id)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.deletePaymentMethod(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun addPaymentMethod(context: Context?, userName: String?, type: String?, account: String?, bankName: String?, branchBankName: String?, qrcodeUrl: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun addPaymentMethod(
+        context: Context?,
+        userName: String?,
+        type: String?,
+        account: String?,
+        bankName: String?,
+        branchBankName: String?,
+        qrcodeUrl: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.addPaymentMethod(userName, type, account, bankName, branchBankName, qrcodeUrl)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.addPaymentMethod(userName, type, account, bankName, branchBankName, qrcodeUrl)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun updatePaymentMethod(context: Context?, id: String?, status: Int, callback: Callback<HttpRequestResultString?>?) {
+    fun updatePaymentMethod(
+        context: Context?,
+        id: String?,
+        status: Int,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.updatePaymentMethod(id, status)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.updatePaymentMethod(id, status)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getCoinTypeList(context: Context?, callback: Callback<HttpRequestResultDataList<C2CSupportCoin?>?>?) {
+    fun getCoinTypeList(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<C2CSupportCoin?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getCoinTypeList()
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.getCoinTypeList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun getC2CSellerFastList(context: Context?, isShowLoading: Boolean, coinType: String?, type: String?, pageNum: Int, pageSize: Int, callback: Callback<HttpRequestResultDataList<C2CSeller?>?>?) {
+    fun getC2CSellerFastList(
+        context: Context?,
+        isShowLoading: Boolean,
+        coinType: String?,
+        type: String?,
+        pageNum: Int,
+        pageSize: Int,
+        callback: Callback<HttpRequestResultDataList<C2CSeller?>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
-                ?.getC2CMerchantFast(coinType, type, pageNum, pageSize)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.getC2CMerchantFast(coinType, type, pageNum, pageSize)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 }

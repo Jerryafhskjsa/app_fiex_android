@@ -1145,12 +1145,21 @@ object FutureService {
     fun currentSymbolPositionValue(positionSide: String): PositionBean {
         var longPositionBean: PositionBean? = null
         var shortPositionBean: PositionBean? = null
-        for (item in longPositionList!!) {
-            longPositionBean = item
+        if (longPositionList != null) {
+            for (item in longPositionList!!) {
+                longPositionBean = item
+            }
+        } else {
+            longPositionBean = PositionBean()
         }
-        for (item in shortPositionList!!) {
-            shortPositionBean = item
+        if (shortPositionList != null) {
+            for (item in shortPositionList!!) {
+                shortPositionBean = item
+            }
+        } else {
+            shortPositionBean = PositionBean()
         }
+
         if (positionSide.equals(Constants.LONG)) {
             return longPositionBean!!
         } else {
@@ -1232,42 +1241,59 @@ object FutureService {
      */
     fun currentSymbolOrderValue(positionSide: String): BigDecimal {
 
+        if (longPositionList == null || shortPositionList == null) {
+
+        }
+
         var longResult = BigDecimal(0)
         var shortResult = BigDecimal(0)
         var longLeverage = 20
         var shortLeverage = 20
-        for (item in longPositionList!!) {
-            longLeverage = item.leverage!!
+        if (longPositionList != null) {
+            for (item in longPositionList!!) {
+                longLeverage = item.leverage!!
+            }
         }
-        for (item in shortPositionList!!) {
-            shortLeverage = item.leverage!!
+        if (shortPositionList != null) {
+            for (item in shortPositionList!!) {
+                shortLeverage = item.leverage!!
+            }
         }
+
         //U本位
         if (underlyingType.equals("U_BASED")) {
-            for (item in orderLongList!!) {
-                var value = BigDecimal(item.marginFrozen).divide(
-                    BigDecimal(1).divide(BigDecimal(longLeverage), 8, RoundingMode.DOWN).plus(
-                        BigDecimal(userStepRate?.takerFee).times(
-                            BigDecimal(
-                                2
+            if (orderLongList != null) {
+                for (item in orderLongList!!) {
+                    var value = BigDecimal(item.marginFrozen).divide(
+                        BigDecimal(1).divide(BigDecimal(longLeverage), 8, RoundingMode.DOWN).plus(
+                            BigDecimal(userStepRate?.takerFee).times(
+                                BigDecimal(
+                                    2
+                                )
                             )
-                        )
-                    ),
-                    8, RoundingMode.DOWN
-                )
-                longResult = longResult.add(value)
+                        ),
+                        8, RoundingMode.DOWN
+                    )
+                    longResult = longResult.add(value)
+                }
+            } else {
+                longResult = BigDecimal.ZERO
             }
-            for (item in orderShortList!!) {
-                var value = BigDecimal(item.marginFrozen).divide(
-                    BigDecimal(1)
-                        .divide(BigDecimal(shortLeverage), 4, RoundingMode.DOWN)
-                        .times(BigDecimal(1).plus(BigDecimal(userStepRate?.takerFee)))
-                        .plus(
-                            BigDecimal(1).minus(BigDecimal(getLeverageMaxBracket(shortLeverage)?.maintMarginRate))
-                                .times(BigDecimal(userStepRate?.takerFee))
-                        ), 4, RoundingMode.DOWN
-                )
-                shortResult = shortResult.add(value);
+            if (orderShortList != null) {
+                for (item in orderShortList!!) {
+                    var value = BigDecimal(item.marginFrozen).divide(
+                        BigDecimal(1)
+                            .divide(BigDecimal(shortLeverage), 4, RoundingMode.DOWN)
+                            .times(BigDecimal(1).plus(BigDecimal(userStepRate?.takerFee)))
+                            .plus(
+                                BigDecimal(1).minus(BigDecimal(getLeverageMaxBracket(shortLeverage)?.maintMarginRate))
+                                    .times(BigDecimal(userStepRate?.takerFee))
+                            ), 4, RoundingMode.DOWN
+                    )
+                    shortResult = shortResult.add(value);
+                }
+            } else {
+                shortResult = BigDecimal.ZERO
             }
 
         } else if (underlyingType.equals("COIN_BASED")) { //币本位

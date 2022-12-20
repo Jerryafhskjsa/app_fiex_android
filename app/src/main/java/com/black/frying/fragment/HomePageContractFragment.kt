@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.TradeApiServiceHelper
 import com.black.base.filter.NumberFilter
@@ -1207,7 +1208,7 @@ class HomePageContractFragment : BaseFragment(),
      * 计算可开多/空的数量
      */
     private fun updateCanOpenAmount(price: String?) {
-        if (price?.isEmpty() == true) {
+        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context)) {
             return
         }
         var longLeverage = buyMultiChooseBean?.defaultMultiple
@@ -1256,7 +1257,7 @@ class HomePageContractFragment : BaseFragment(),
      * 计算需要的保证金
      */
     private fun updateBondAmount(inputPrice: String?, amount: String?) {
-        if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true) {
+        if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true || !LoginUtil.isFutureLogin(mContext)) {
             return
         }
         var longLeverage = buyMultiChooseBean?.defaultMultiple
@@ -2055,10 +2056,15 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun updateCurrentPairPrice(price: String?) {
         header1View?.currentPrice?.setText(price)
-        if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
+        if (price != null && price.toDouble() > 0) {
+//            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
+            if (C2CApiServiceHelper?.coinUsdtPrice?.usdt == null) {
+                return
+            }
+            var usdtPrice = C2CApiServiceHelper?.coinUsdtPrice?.usdt
             header1View?.currentPriceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(),
+                    usdtPrice!! * price.toDouble(),
                     4,
                     4
                 )

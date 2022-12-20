@@ -12,10 +12,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
-import com.black.base.api.CommonApiServiceHelper
-import com.black.base.api.FutureApiServiceHelper
-import com.black.base.api.UserApiService
-import com.black.base.api.UserApiServiceHelper
+import com.black.base.api.*
 import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable

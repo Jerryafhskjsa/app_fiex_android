@@ -934,12 +934,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/half_default_padding">
 
-                            <com.black.base.widget.SpanTextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/contract_tag_price"
-                                android:textColor="@color/T14"
-                                android:textSize="@dimen/text_size_10" />
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/contract_tag_price"
+                                    android:textColor="@color/T14"
+                                    android:textSize="@dimen/text_size_10" />
+
+                                <com.black.base.widget.DashLineView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp" />
+                            </LinearLayout>
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/tag_price"
@@ -955,12 +965,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/half_default_padding">
 
-                            <com.black.base.widget.SpanTextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/contract_index_price"
-                                android:textColor="@color/T14"
-                                android:textSize="@dimen/text_size_10" />
+                                android:orientation="vertical">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/contract_index_price"
+                                    android:textColor="@color/T14"
+                                    android:textSize="@dimen/text_size_10" />
+
+                                <com.black.base.widget.DashLineView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp" />
+                            </LinearLayout>
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/index_price"
