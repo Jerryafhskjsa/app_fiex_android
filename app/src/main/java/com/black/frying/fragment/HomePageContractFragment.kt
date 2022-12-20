@@ -121,6 +121,7 @@ class HomePageContractFragment : BaseFragment(),
     private var recordTab: TabLayout? = null
     private var headerView: FragmentHomePageContractHeaderBinding? = null
     private var header1View: FragmentHomePageContractHeader1Binding? = null
+    private var priceInputFlag:Boolean? = false
 
     //交易对杠杆分层
     private var leverageBracket: LeverageBracketBean? = null
@@ -284,6 +285,7 @@ class HomePageContractFragment : BaseFragment(),
             getTradeOrderCurrent()
             Log.d("ttt--->", "Login")
         }
+        priceInputFlag = false
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
 //        FutureService.getBalanceByCoin(mContext)
@@ -298,6 +300,11 @@ class HomePageContractFragment : BaseFragment(),
 //        )
 //        FutureService.createOrder(mContext,"BUY","LIMIT","btc_usdt","LONG","16880".toDouble(),"GTC",100)
 //        FutureService.initFutureData(context)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        priceInputFlag = true
     }
 
     private fun updateDear(dear: Boolean?) {
@@ -381,6 +388,9 @@ class HomePageContractFragment : BaseFragment(),
             override fun afterTextChanged(s: Editable) {
                 header1View?.price?.setSelection(s.toString().length)
                 updateCanOpenAmount(s.toString())
+                if(s.toString().isNotEmpty()){
+                    priceInputFlag = true
+                }
             }
         })
         header1View?.transactionQuota?.filters =
@@ -2031,7 +2041,11 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun initInputPriceValue(price: String?) {
-        binding!!.fragmentHomePageContractHeader1.price.setText(price)
+        if(header1View?.price?.text?.isEmpty() == true){
+            if(priceInputFlag == false){
+                header1View?.price?.setText(price)
+            }
+        }
     }
 
 
