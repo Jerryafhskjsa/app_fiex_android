@@ -5,7 +5,7 @@ import android.util.Log
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.*
-import com.black.base.util.FutureSocketData
+import com.black.base.util.*
 import com.black.base.util.LoginUtil
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
@@ -230,10 +230,15 @@ object FutureService {
     }
 
     /**
-     * 获取订单列表
+     * 获取限价委托订单列表
      */
     fun initOrderList(context: Context?) {
-        FutureApiServiceHelper.getOrderList(1, 10, Constants.UNFINISHED, context, false,
+        var pairStatus = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U,CookieUtil.getCurrentFutureUPair(context!!))
+        var symbol:String? = pairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
             object : Callback<HttpRequestResultBean<OrderBean>>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initOrderList--error", error.toString())
@@ -1335,8 +1340,11 @@ object FutureService {
     /**
      * 获取杠杆所处的的最高风险档位
      */
-    fun getLeverageMaxBracket(leverage: Int): LeverageBracket? {
+    private fun getLeverageMaxBracket(leverage: Int): LeverageBracket? {
         var leverageBracketItem: LeverageBracket? = null
+        if(leverageBracket == null){
+            return null
+        }
         for (item in leverageBracket?.leverageBrackets!!) {
             if (leverage < item?.maxLeverage.toInt()) {
                 leverageBracketItem = item

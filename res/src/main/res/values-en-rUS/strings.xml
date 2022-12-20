@@ -862,6 +862,8 @@
     <string name="contract_down">Down</string>
     <string name="usd">usd</string>
     <string name="hold_amount">Hold Amount</string>
+    <string name="limit_price_entrust">Limit price entrust</string>
+    <string name="plan_entrust">Plan entrust</string>
 
 
 </resources>

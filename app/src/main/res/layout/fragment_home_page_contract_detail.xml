@@ -13,6 +13,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_padding"
+            android:id="@+id/entrust_type">
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_limit_price"
+                style="@style/ContractBuyBtnStyle"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_t10"
+                android:gravity="center"
+                android:enabled="false"
+                android:text="@string/limit_price_entrust" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_plan"
+                style="@style/ContractBuyBtnStyle"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:enabled="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_t10"
+                android:text="@string/plan_entrust" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

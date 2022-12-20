@@ -117,6 +117,7 @@ class ContractViewModel(
     private var positionList: ArrayList<PositionBean?>? = null
 
     private var balanceDetailBean: BalanceDetailBean? = null
+    private var planUnionBean = PlanUnionBean()
 
 
     init {
@@ -201,18 +202,20 @@ class ContractViewModel(
         changePairSocket()
         if (LoginUtil.isFutureLogin(context)) {
             if (positionList == null) {
-                getPositionList()
+                getPositionData()
             }
             if (balanceDetailBean == null) {
                 initBalanceByCoin(context)
             }
+            getProfitData(Constants.UNFINISHED)
+            getPlanData(Constants.UNFINISHED)
         }
     }
 
     /**
      * 获取资产
      */
-    fun initBalanceByCoin(context: Context?) {
+    private fun initBalanceByCoin(context: Context?) {
         var coin = currentPairStatus.pair.toString().split("_")[1]
         FutureApiServiceHelper.getBalanceDetail(context, coin, FutureService.underlyingType, false,
             object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
@@ -229,11 +232,13 @@ class ContractViewModel(
             })
     }
 
-    fun getPositionList() {
+    /**
+     * 获取仓位列表
+     */
+    private fun getPositionData() {
         FutureApiServiceHelper.getPositionList(context, null, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("ttt-->positionData--error", error.toString())
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
@@ -242,11 +247,89 @@ class ContractViewModel(
                         var data: ArrayList<PositionBean?>? = returnData.result
                         positionList =
                             data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
-                        Log.d("ttt-->positionData--", positionList.toString())
+                        if (positionList?.size!! > 0) {
+                            onContractModelListener?.onPositionData(positionList)
+                        }
                     }
                 }
             })
     }
+
+    /**
+     * 获取止盈止损列表
+     */
+    /**
+     * 获取当前持仓数据
+     */
+    private fun getProfitData(state: String?) {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getProfitList(context, symbol,state, false,
+            object : Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<PagingData<ProfitsBean?>?>?) {
+                    if (returnData != null) {
+                        var data = returnData.result?.items
+                        if (data?.size!! > 0) {
+                            onContractModelListener?.onProfitData(data)
+                        }
+
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取当前计划委托列表
+     */
+    private fun getPlanData(state: String?) {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getPlanList(context,symbol, state, false,
+            object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
+                    if (returnData != null) {
+                        var data = returnData.result?.items
+                        planUnionBean?.planList = data
+                        getLimitPricePlanData()
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取当前限价委托
+     */
+    private fun getLimitPricePlanData() {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
+            object : Callback<HttpRequestResultBean<OrderBean>>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                    if (returnData != null) {
+                        var orderData = returnData?.result
+                        var orderList = orderData?.items
+                        planUnionBean?.limitPriceList = orderList
+                        onContractModelListener?.onPlanData(planUnionBean)
+                    }
+                }
+            })
+    }
+
 
     override fun onStop() {
         super.onStop()
@@ -1176,6 +1259,9 @@ class ContractViewModel(
          * 更新总权益
          */
         fun updateTotalProfit(totalProfit: String)
+        fun onPositionData(data: ArrayList<PositionBean?>?)
+        fun onProfitData(data: ArrayList<ProfitsBean?>?)
+        fun onPlanData(data: PlanUnionBean?)
 
     }
 }

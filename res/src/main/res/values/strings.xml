@@ -862,6 +862,8 @@
     <string name="contract_down">降</string>
     <string name="usd">usd</string>
     <string name="hold_amount">持仓</string>
+    <string name="limit_price_entrust">限价委托</string>
+    <string name="plan_entrust">计划委托</string>
 
 
 </resources>

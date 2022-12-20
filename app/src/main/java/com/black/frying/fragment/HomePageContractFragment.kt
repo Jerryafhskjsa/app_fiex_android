@@ -73,6 +73,7 @@ import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -384,12 +385,12 @@ class HomePageContractFragment : BaseFragment(),
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 computeTotal()
                 computePriceCNY()
+                updateCanOpenAmount(s.toString())
             }
 
             override fun afterTextChanged(s: Editable) {
                 header1View?.price?.setSelection(s.toString().length)
-                updateCanOpenAmount(s.toString())
-                if (s.toString().isNotEmpty()) {
+                if(s.toString().isNotEmpty()){
                     priceInputFlag = true
                 }
             }
@@ -991,6 +992,19 @@ class HomePageContractFragment : BaseFragment(),
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             updateCurrentPairPrice(value.p)
         }
+    }
+
+    override fun onPlanData(data: PlanUnionBean?) {
+        var count = data?.planList?.size!! + data?.limitPriceList?.size!!
+        updateTabTitles(ConstData.CONTRACT_REC_CURRENT, count)
+    }
+
+    override fun onProfitData(data: ArrayList<ProfitsBean?>?) {
+        updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, data?.size)
+    }
+
+    override fun onPositionData(data: ArrayList<PositionBean?>?) {
+        updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

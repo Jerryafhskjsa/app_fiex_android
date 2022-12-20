@@ -128,11 +128,12 @@ object FutureApiServiceHelper {
     }
 
     /**
-     * 获取订单列表
+     * 获取限价委托订单列表
      */
     fun getOrderList(
         page: Int,
         size: Int,
+        symbol: String?,
         state: String,
         context: Context?,
         isShowLoading: Boolean,
@@ -143,7 +144,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getOrderList(page, size, state)
+            ?.getOrderList(symbol,page, size, state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -286,6 +287,7 @@ object FutureApiServiceHelper {
      */
     fun getProfitList(
         context: Context?,
+        symbol: String?,
         state:String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
@@ -295,7 +297,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getProfitList(state)
+            ?.getProfitList(symbol,state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -306,6 +308,7 @@ object FutureApiServiceHelper {
      */
     fun getPlanList(
         context: Context?,
+        symbol: String?,
         state:String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
@@ -315,7 +318,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getPlanList(state)
+            ?.getPlanList(symbol,state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

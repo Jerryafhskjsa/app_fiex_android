@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
@@ -22,6 +23,7 @@ import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
+import com.tencent.imsdk.friendship.TIMPendencyType
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
 import kotlin.collections.ArrayList
@@ -32,14 +34,14 @@ import kotlin.collections.ArrayList
 class ContractPlanTabFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
     View.OnClickListener,
-    ContractPositionViewModel.OnContractPositionModelListener{
+    ContractPositionViewModel.OnContractPositionModelListener {
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
     private var adapter: ContractPlanTabAdapter? = null
-    private var dataList:ArrayList<PlansBean?>? = ArrayList()
+    private var dataList: ArrayList<PlansBean?>? = ArrayList()
     private var viewModel: ContractPositionViewModel? = null
 
     //异步获取数据
@@ -48,7 +50,8 @@ class ContractPlanTabFragment : BaseFragment(),
     private var onTabModelListener: OnTabModelListener? = null
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
-    private var gettingPairsData: Boolean? = false
+    private var planUnionBean = PlanUnionBean()
+    private var entrustType:Int?  = 0//0限价委托，1计划委托
 
     /**
      * adapter height when viewpager in scrollview
@@ -57,7 +60,7 @@ class ContractPlanTabFragment : BaseFragment(),
         mViewPager = viewPager
     }
 
-    fun setOnTabModeListener(tabListener:OnTabModelListener){
+    fun setOnTabModeListener(tabListener: OnTabModelListener) {
         onTabModelListener = tabListener
     }
 
@@ -76,8 +79,14 @@ class ContractPlanTabFragment : BaseFragment(),
             false
         )
         viewModel = ContractPositionViewModel(mContext!!, this)
+        binding?.btnLimitPrice?.setOnClickListener(this)
+        binding?.btnPlan?.setOnClickListener(this)
         binding?.allDone?.setOnClickListener(this)
         binding?.allDone?.text = getString(R.string.contract_fast_cancel)
+        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean
+        binding?.contractWithLimit?.setOnCheckedChangeListener { buttonView, isChecked ->
+            SharedPreferenceUtils.putData(Constants.PLAN_ALL_CHECKED,isChecked)
+        }
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -102,7 +111,7 @@ class ContractPlanTabFragment : BaseFragment(),
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        getPlanData("UNFINISHED")
+        getPlanData(Constants.UNFINISHED)
     }
 
     override fun onStop() {
@@ -138,20 +147,42 @@ class ContractPlanTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if(dataList?.size == 0){
+                if (dataList?.size == 0) {
                     return
                 }
-                FutureApiServiceHelper.cancelALlPlan(activity,symbol = null,true,object : Callback<HttpRequestResultBean<String>?>() {
-                    override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null) {
-//                            viewModel?.getPositionData()
-                            getPlanData("UNFINISHED")
+                FutureApiServiceHelper.cancelALlPlan(
+                    activity,
+                    symbol = null,
+                    true,
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null) {
+                                getPlanData(Constants.UNFINISHED)
+                            }
                         }
-                    }
-                    override fun error(type: Int, error: Any?) {
-                        FryingUtil.showToast(activity,error.toString())
-                    }
-                })
+
+                        override fun error(type: Int, error: Any?) {
+                            FryingUtil.showToast(activity, error.toString())
+                        }
+                    })
+            }
+            R.id.btn_limit_price,R.id.btn_plan -> entrustTypeClick(entrustType)
+        }
+    }
+
+    private fun entrustTypeClick(type:Int?){
+        when(type){
+            0 ->{
+                entrustType = 1
+                binding?.btnLimitPrice?.isEnabled = true
+                binding?.btnPlan?.isEnabled = false
+                getLimitPricePlanData()
+            }
+            1 ->{
+                entrustType = 0
+                binding?.btnLimitPrice?.isEnabled = false
+                binding?.btnPlan?.isEnabled = true
+                getPlanData(Constants.UNFINISHED)
             }
         }
     }
@@ -174,27 +205,56 @@ class ContractPlanTabFragment : BaseFragment(),
     /**
      * 获取当前委托列表数据
      */
-    private fun getPlanData(state:String?){
-        FutureApiServiceHelper.getPlanList(context,state, false,
+    private fun getPlanData(state: String?) {
+        var symbol:String? = viewModel?.getCurrentPairSymbol()
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getPlanList(context,symbol, state, false,
             object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    Log.d("iiiiii-->planData--error", error.toString());
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
                     if (returnData != null) {
-//                        dataList = returnData.result
-                        Log.d("iiiiii-->planDataSize = ", returnData.result?.items?.size.toString())
-                        adapter?.data = returnData.result?.items
-                        onTabModelListener?.onCount(returnData.result?.items?.size)
+                        planUnionBean.planList = returnData.result?.items
+                        getLimitPricePlanData()
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取当前限价委托
+     */
+    private fun getLimitPricePlanData() {
+        var symbol:String? = viewModel?.getCurrentPairSymbol()
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getOrderList(1, 10, symbol,Constants.UNFINISHED, context, false,
+            object : Callback<HttpRequestResultBean<OrderBean>>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                    if (returnData != null) {
+                        var orderData = returnData?.result
+                        var orderList = orderData?.items
+                        planUnionBean?.limitPriceList = orderList
+                        adapter?.data = planUnionBean.planList
                         adapter?.notifyDataSetChanged()
+                        var count =
+                            planUnionBean?.planList?.size!! + planUnionBean?.limitPriceList?.size!!
+                        onTabModelListener?.onCount(count)
+
                     }
                 }
             })
     }
 
     interface OnTabModelListener {
-        fun onCount(count:Int?)
+        fun onCount(count: Int?)
     }
 
     companion object {

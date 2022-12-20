@@ -77,6 +77,12 @@ class ContractProfitTabFragment : BaseFragment(),
         viewModel = ContractPositionViewModel(mContext!!, this)
         binding?.allDone?.setOnClickListener(this)
         binding?.allDone?.text = getString(R.string.contract_fast_cancel)
+        binding?.entrustType?.visibility = View.GONE
+        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean
+        binding?.contractWithLimit?.setOnCheckedChangeListener { buttonView, isChecked ->
+            SharedPreferenceUtils.putData(Constants.PROFIT_ALL_CHECKED,isChecked)
+            getProfitData(Constants.UNFINISHED)
+        }
 
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
@@ -172,10 +178,14 @@ class ContractProfitTabFragment : BaseFragment(),
     }
 
     /**
-     * 获取当前持仓数据
+     * 获取当前止盈止损数据
      */
     private fun getProfitData(state:String?){
-        FutureApiServiceHelper.getProfitList(context, state,false,
+        var symbol:String? = viewModel?.getCurrentPairSymbol()
+        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getProfitList(context, symbol,state,false,
             object : Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->profitData--error", error.toString())

@@ -51,8 +51,12 @@ class ContractPositionViewModel(
     /**
      * 获取当前持仓数据
      */
-    fun getPositionData() {
-        FutureApiServiceHelper.getPositionList(context, currentPairStatus?.pair, false,
+    fun getPositionData(all:Boolean?) {
+        var symbol:String? = currentPairStatus?.pair
+        if(all == true){
+            symbol = null
+        }
+        FutureApiServiceHelper.getPositionList(context, symbol, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->positionData--error", error.toString())
@@ -358,6 +362,10 @@ class ContractPositionViewModel(
 
     fun getCurrentPrice(): Double? {
         return currentPairStatus?.currentPrice
+    }
+
+    fun getCurrentPairSymbol():String?{
+        return currentPairStatus?.pair
     }
 
 

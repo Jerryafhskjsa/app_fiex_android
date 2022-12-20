@@ -102,13 +102,13 @@ interface FutureApiService {
      * 获取止盈止损列表
      */
     @GET(UrlConfig.Future.URL_PROFIT_LIST)
-    fun getProfitList(@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
+    fun getProfitList(@Query("symbol") symbol: String?,@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
 
     /**
      * 获取计划委托列表
      */
     @GET(UrlConfig.Future.URL_PLAN_LIST)
-    fun getPlanList(@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
+    fun getPlanList(@Query("symbol") symbol: String?,@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
 
     /**
      * 获取行情
@@ -165,12 +165,14 @@ interface FutureApiService {
 
 
     /**
-     * 获取用户资金费率
+     * 获取用户限价委托
      */
     @GET(UrlConfig.Future.ULR_ORDER_LIST)
     fun getOrderList(
+        @Query("symbol") symbol: String?,
         @Query("page") page: Int?,
-        @Query("size") size: Int?, @Query("state") state: String?,
+        @Query("size") size: Int?,
+        @Query("state") state: String?,
     ): Observable<HttpRequestResultBean<OrderBean>>
 
     /**
