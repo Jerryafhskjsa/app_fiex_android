@@ -2,7 +2,6 @@ package com.black.frying.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.*
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,23 +11,17 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.LeverageBracketBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.PositionBean
+import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
 import com.black.frying.viewmodel.ContractPositionViewModel
-import com.black.frying.viewmodel.TransactionViewModel
-import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -82,7 +75,7 @@ class ContractPositionTabFragment : BaseFragment(),
         )
         viewModel = ContractPositionViewModel(mContext!!, this)
         binding?.allDone?.setOnClickListener(this)
-
+        binding?.entrustType?.visibility = View.GONE
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
@@ -112,7 +105,8 @@ class ContractPositionTabFragment : BaseFragment(),
         if (LoginUtil.isFutureLogin(context)) {
             viewModel?.getPositionAdlList(context)
             viewModel?.getLeverageBracketDetail()
-            viewModel?.getPositionData()
+            var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,false) as Boolean
+            viewModel?.getPositionData(all)
         }
 
     }
@@ -159,7 +153,8 @@ class ContractPositionTabFragment : BaseFragment(),
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
-                                viewModel?.getPositionData()
+                                var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,false) as Boolean
+                                viewModel?.getPositionData(all)
                             }
                         }
 
