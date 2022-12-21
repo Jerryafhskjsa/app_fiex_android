@@ -167,10 +167,10 @@
     <string name="welcome_fbsex">Welcome to Fiex</string>
     <string name="alert_server_error">Server exception</string>
     <string name="wallet_coin_filter">Hide small amount currency</string>
-    <string name="total_contract">Total contract(USDT)</string>
-    <string name="bond_money_total">Bond money total</string>
-    <string name="wallet_money_total">Wallet money total</string>
-    <string name="break_even_total">Break even total</string>
+    <string name="total_contract">Total contract(USD)</string>
+    <string name="bond_money_total">Bond money</string>
+    <string name="wallet_money_total">Wallet money</string>
+    <string name="break_even_total">Break even</string>
     <string name="k_pop_time">Time</string>
     <string name="k_pop_open">On</string>
     <string name="k_pop_high">High</string>
@@ -238,6 +238,7 @@
     <string name="more">More</string>
     <string name="rechange">Recharge</string>
     <string name="extract">Withdrawal</string>
+    <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
     <string name="rise">Rising List</string>
     <string name="fall">Decline chart</string>
@@ -719,7 +720,8 @@
     <string name="asset_transfer">asset transfer</string>
     <string name="from">From</string>
     <string name="to">to</string>
-    <string name="total_assets">Total assets(USDT)</string>
+    <string name="total_assets">Spot assets(USDT)</string>
+    <string name="profit_loss">Profit loss</string>
     <string name="investment_portfolio">Investment portfolio</string>
     <string name="quick_recharged">Quick recharge</string>
     <string name="quick_extract">Quick extract</string>
@@ -796,9 +798,9 @@
     <string name="usdt_base">U standard</string>
     <string name="usdt_base_contract">U contract</string>
     <string name="coin_base_contract">Coin contract</string>
-    <string name="money_total">Wallet balance</string>
-    <string name="profit">Profit</string>
-    <string name="margin">Crossed margin</string>
+    <string name="money_total">Wallet balance(USD)</string>
+    <string name="profit">Profit and loss(USD)</string>
+    <string name="margin">Crossed margin(USD)</string>
     <string name="estimatedAvailableAmount">Balance of net assets</string>
     <string name="experience_gold">Experience_gold</string>
     <string name="deduction">Deduction</string>

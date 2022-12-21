@@ -1,6 +1,7 @@
 package com.black.frying.fragment.assets
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -61,6 +62,11 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         searchKey = arguments?.getString("searchKey")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_normal, container, false)
+        binding?.btnExchange?.setOnClickListener(this)
+        binding?.btnWithdraw?.setOnClickListener(this)
+        binding?.transaction?.setOnClickListener(this)
+        binding?.exchange?.setOnClickListener(this)
+        binding?.bill?.setOnClickListener(this)
         layout = binding?.root
 
         val layoutManager = LinearLayoutManager(mContext)
@@ -125,7 +131,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
 
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        val wallet = adapter?.getItem(position)
+        var wallet = adapter?.getItem(position)
         //点击账户详情
         val extras = Bundle()
         extras.putParcelable(ConstData.WALLET, wallet)
@@ -133,6 +139,29 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     }
 
     override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.btn_exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .go(this)
+            }
+
+            R.id.btn_withdraw -> {
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                    .go(this)
+            }
+            R.id.exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            }
+            R.id.bill -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            }
+            R.id.transaction -> {
+                BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)}
+        }
     }
 
     fun setData(data: ArrayList<Wallet?>?) {
@@ -151,6 +180,8 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         mContext?.runOnUiThread {
             if (!isVisibility) {
                 binding?.moneyTotal?.text = "****"
+                binding?.moneyTotalcny?.text = "****"
+                binding?.profitLoss?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
@@ -165,17 +196,14 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
                     usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2))
                 }
+                binding?.profitLoss?.setText(":0.0USDT")
                 if (exChange == 0){
-                    val holeAmountString = usdt + cny
-                    val holdSpan = SpannableStringBuilder(holeAmountString)
-                    holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    binding?.moneyTotal?.setText(holdSpan)
+                    binding?.moneyTotal?.setText(usdt)
+                    binding?.moneyTotalcny?.setText(cny)
                 }
                 if (exChange == 1){
-                    val holeAmountString = usdt + usd
-                    val holdSpan = SpannableStringBuilder(holeAmountString)
-                    holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    binding?.moneyTotal?.setText(holdSpan)
+                    binding?.moneyTotal?.setText(usdt)
+                    binding?.moneyTotalcny?.setText(usd)
                 }
             }
         }

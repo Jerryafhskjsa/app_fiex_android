@@ -10,11 +10,11 @@ import java.util.*
 class Wallet : BaseAdapterItem, Parcelable {
     var coinType: String? = null//币种名称
     var coinTypeDes:String? = null//币种全称
+    var estimatedAvailableAmountCny:Double? = 0.0//可使用折合成cny
     var coinIconUrl:String? = null//币种icon
     var coinAmount //数量 可使用
             : BigDecimal? = null
     var estimatedAvailableAmount:Double = 0.0//可使用折合成u
-    var estimatedAvailableAmountCny:Double? = 0.0//可使用折合成cny
 
     var coinWallet //资产地址
             : String? = null
@@ -37,10 +37,12 @@ class Wallet : BaseAdapterItem, Parcelable {
     constructor(`in`: Parcel) {
         coinType = `in`.readString()
         coinTypeDes = `in`.readString()
+        coinIconUrl = `in`.readString()
         coinAmount = CommonUtil.parseBigDecimal(`in`.readString())
         coinWallet = `in`.readString()
         memo = `in`.readString()
         coinFroze = `in`.readDouble()
+        estimatedAvailableAmountCny = `in`.readDouble()
         totalAmount = `in`.readDouble()
         totalAmountCny = if (`in`.readByte().toInt() == 0) {
             null
@@ -66,10 +68,12 @@ class Wallet : BaseAdapterItem, Parcelable {
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(coinType)
         dest.writeString(coinTypeDes)
+        dest.writeString(coinIconUrl)
         dest.writeString(if (coinAmount == null) null else coinAmount.toString())
         dest.writeString(coinWallet)
         dest.writeString(memo)
         dest.writeDouble(coinFroze)
+        dest.writeDouble(estimatedAvailableAmountCny!!)
         dest.writeDouble(totalAmount)
         if (totalAmountCny == null) {
             dest.writeByte(0.toByte())

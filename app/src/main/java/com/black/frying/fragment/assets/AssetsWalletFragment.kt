@@ -1,11 +1,13 @@
 package com.black.frying.fragment.assets
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.fragment.BaseFragment
@@ -15,6 +17,7 @@ import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
+import com.black.frying.fragment.HomePageAssetsFragment
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
 import com.black.util.NumberUtil
@@ -29,7 +32,10 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     private var binding: FragmentAssetsWalletBinding? = null
     private var eventListener:WalletEventResponseListener? = null
     private var wallet: Wallet? = null
-
+    private var fragmentList: java.util.ArrayList<Fragment>? = null
+    private var normalFragment: AssetsSpotFragment? = null
+    private var walletFragment: AssetsWalletFragment? = null
+    private var contractFragment: AssetsContractFragment? = null
     fun setEventListener(listener: WalletEventResponseListener){
         this.eventListener = listener
     }
@@ -47,6 +53,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         binding?.spot?.setOnClickListener(this)
         binding?.future?.setOnClickListener(this)
         binding?.capital?.setOnClickListener(this)
+        binding?.exchange?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
         binding?.refreshLayout?.isFocusable = false
         binding?.refreshLayout?.isNestedScrollingEnabled = false
@@ -67,27 +74,26 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     override fun onClick(v: View) {
       when(v.id){
           R.id.recharge -> {
-              val bundle = Bundle()
-              wallet?.coinType = "USDT"
-              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
-              bundle.putParcelable(ConstData.WALLET, wallet)
-              BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
+              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                  .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                  .go(this)
           }
 
           R.id.extract -> {
-              val bundle = Bundle()
-              wallet?.coinType = "USDT"
-              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
-              bundle.putParcelable(ConstData.WALLET, wallet)
-              BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
+              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                  .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                  .go(this)
           }
+          R.id.transaction -> {
+              BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                  .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                  .go(mContext)}
           R.id.spot -> {}
           R.id.future -> {}
           R.id.capital -> {}
-          /*R.id.transaction -> {
-              BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(this)
-          }
-           */
+          R.id.financial -> {}
+          R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
+
       }
     }
 
@@ -109,6 +115,10 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding?.futureUsdt?.text = "****"
                 binding?.financialUsdt?.text = "****"
                 binding?.capitalUsdt?.text = "****"
+                binding?.spotCny?.text = "****"
+                binding?.futureCny?.text = "****"
+                binding?.financialCny?.text = "****"
+                binding?.capitalCny?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 val total2: Money? = binding?.futureUsdt?.tag as Money?
@@ -116,6 +126,10 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding?.futureUsdt?.setText(if (total2?.tigerUsdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt, 8, 2, 2) + "USDT")
                 binding?.financialUsdt?.setText("0.0USDT")
                 binding?.capitalUsdt?.setText("0.0USDT")
+                binding?.spotCny?.setText(if (total?.cny == null) "≈ ￥0.0" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) )
+                binding?.futureCny?.setText(if (total2?.tigercny == null) "≈ ￥0.0" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2) )
+                binding?.financialCny?.setText("≈ ￥0.0")
+                binding?.capitalCny?.setText("≈ ￥0.0")
                 binding?.moneyTotalcny?.setText(if(total?.cny == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.cny == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.cny != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.cny!! + total2?.tigercny!!, 8, 2, 2) + "CNY")
                 binding?.moneyTotal?.setText(if (total?.usdt == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.usdt == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.usdt != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.usdt!! + total2?.tigerUsdt!! , 8, 2, 2) )        }
         }

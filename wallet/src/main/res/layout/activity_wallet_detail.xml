@@ -95,13 +95,15 @@
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
-                        <com.black.base.view.EmptyRecyclerView
-                            android:id="@+id/recycler_view2"
+                        <ListView
+                            android:id="@+id/list_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:dividerHeight="@dimen/line"
                             android:fadingEdge="none"
                             android:overScrollMode="never"
-                            android:scrollbars="none" />
+                            android:scrollbars="none">
+                        </ListView>
 
                         <com.black.base.widget.SpanTextView
                             android:layout_width="match_parent"

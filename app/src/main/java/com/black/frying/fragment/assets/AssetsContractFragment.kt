@@ -85,9 +85,11 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
         binding?.coinBtn?.setOnClickListener(this)
         binding?.exchange?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
+        binding?.bill?.setOnClickListener(this)
         binding?.recyclerView?.layoutManager = layoutManager
         adapter = ContractAdapter(mContext!!, BR.listItemSpotAccountModel, walletList)
         adapter?.setVisibility(isVisibility)
+        adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
@@ -96,6 +98,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
         binding?.recyclerView?.setHasFixedSize(true)
         //解决数据加载完成后, 没有停留在顶部的问题
         binding?.recyclerView?.isFocusable = false
+        binding?.refreshLayout?.setRefreshing(true)
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
         binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -140,12 +143,11 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        val wallet = adapter?.getItem(position)
-        //点击账户详情
-        val extras = Bundle()
-        extras.putParcelable(ConstData.WALLET, wallet)
-        BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras).go(this)
+        BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .go(mContext)
     }
+
 
     override fun onClick(v: View?) {
         when(v?.id){
@@ -161,6 +163,10 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
             }
             R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
             R.id.transaction -> {
+                BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)}
+            R.id.bill -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)}
@@ -214,6 +220,13 @@ private fun refresh(type: Int){
         mContext?.runOnUiThread {
             if (!isVisibility) {
                 binding?.moneyTotal?.text = "****"
+                binding?.moneyTotalCny?.text = "****"
+                binding?.profit?.text = "****"
+                binding?.profitCny?.text = "****"
+                binding?.margin?.text = "****"
+                binding?.marginCny?.text = "****"
+                binding?.money?.text = "****"
+                binding?.moneyCny?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
@@ -222,10 +235,14 @@ private fun refresh(type: Int){
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.tigerUsdt, 8, 2, 2) + " "
                     cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.tigercny, 8, 2, 2))
                 }
-                val holeAmountString = usdt + cny
-                val holdSpan = SpannableStringBuilder(holeAmountString)
-                holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                binding?.moneyTotal?.setText(holdSpan)
+                binding?.moneyTotal?.setText(usdt)
+                binding?.moneyTotalCny?.setText(cny)
+                binding?.profit?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.profit, 8, 2, 2))
+                binding?.profitCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(6.967*(total?.profit!!), 8, 2, 2)))
+                binding?.money?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigerUsdt?.minus(total.crossedMargin!!), 8, 2, 2))
+                binding?.moneyCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigercny!!.minus(6.967*(total.crossedMargin!!)), 8, 2, 2)))
+                binding?.margin?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.crossedMargin, 8, 2, 2))
+                binding?.marginCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(6.967*(total?.crossedMargin!!), 8, 2, 2)))
                   }
         }
     }

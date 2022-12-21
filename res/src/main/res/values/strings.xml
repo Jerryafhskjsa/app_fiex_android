@@ -167,10 +167,10 @@
     <string name="welcome_fbsex">欢迎来到Fiex</string>
     <string name="alert_server_error">服务器异常！</string>
     <string name="wallet_coin_filter">隐藏小额币种</string>
-    <string name="total_contract">合约总资产(USDT)</string>
-    <string name="bond_money_total">全部保证金金额(USDT)</string>
-    <string name="wallet_money_total">全部钱包余额(USDT)</string>
-    <string name="break_even_total">全部未实现盈亏(USDT)</string>
+    <string name="total_contract">合约总资产(USD)</string>
+    <string name="bond_money_total">保证金金额</string>
+    <string name="wallet_money_total">钱包余额</string>
+    <string name="break_even_total">未实现盈亏</string>
     <string name="k_pop_time">时间</string>
     <string name="k_pop_open">开</string>
     <string name="k_pop_high">高</string>
@@ -238,6 +238,7 @@
     <string name="more">更多</string>
     <string name="rechange">充值</string>
     <string name="extract">提现</string>
+    <string name="bill">账单</string>
     <string name="transfer">划转</string>
     <string name="rise">涨幅榜</string>
     <string name="fall">跌幅榜</string>
@@ -719,7 +720,8 @@
     <string name="asset_transfer">资产转移</string>
     <string name="from">来自</string>
     <string name="to">到</string>
-    <string name="total_assets">总资产折合(USDT)</string>
+    <string name="total_assets">现货总资产(USDT)</string>
+    <string name="profit_loss">今日盈亏</string>
     <string name="investment_portfolio">投资组合</string>
     <string name="quick_recharged">快速充值</string>
     <string name="quick_extract">快速提现</string>
@@ -796,9 +798,9 @@
     <string name="usdt_base">U本位</string>
     <string name="usdt_base_contract">U本位</string>
     <string name="coin_base_contract">币本位</string>
-    <string name="money_total">钱包余额</string>
-    <string name="profit">未实现盈亏</string>
-    <string name="margin">保证金余额</string>
+    <string name="money_total">钱包余额(USD)</string>
+    <string name="profit">全部未实现盈亏(USD)</string>
+    <string name="margin">保证金余额(USD)</string>
     <string name="estimatedAvailableAmount">净资产余额</string>
     <string name="experience_gold">体验金</string>
     <string name="deduction">抵扣金</string>

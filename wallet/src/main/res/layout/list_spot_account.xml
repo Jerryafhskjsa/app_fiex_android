@@ -64,7 +64,7 @@
                 <com.black.base.widget.SpanTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/money_total"
+                    android:text="@string/wallet_money_total"
                     android:textColor="@color/black_real"
                     android:textSize="@dimen/text_size_12" />
 
@@ -85,7 +85,7 @@
                 <com.black.base.widget.SpanTextView
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/profit"
+                    android:text="@string/break_even_total"
                     android:textColor="@color/T1"
 
                     android:textSize="@dimen/text_size_12" />
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_real"
                     android:textSize="@dimen/text_size_12"
-                    android:text="@string/margin"
+                    android:text="@string/bond_money_total"
                     />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/margin"

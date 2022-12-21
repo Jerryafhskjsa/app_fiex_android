@@ -249,6 +249,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                         wallet.coinAmount = BigDecimal(0)
                         wallet.estimatedAvailableAmount = 0.0
                         wallet.estimatedAvailableAmountCny = 0.0
+                        wallet.coinFroze = 0.0
                         walletList?.add(wallet)
                     }
                 }
@@ -258,7 +259,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                             walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
                             walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
                             walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
-
+                            walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
                             break
                         }
                     }
@@ -359,6 +360,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 newWallet?.coinAmount = BigDecimal( balance?.availableBalance?.toDouble()!!)
                 newWallet?.estimatedAvailableAmount = balance?.estimatedAvailableAmount?.toDouble()!!
                 newWallet?.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()!!
+                newWallet?.coinFroze = balance?.freeze?.toDouble()!!
             }
             updateWalletList.add(newWallet)
         }

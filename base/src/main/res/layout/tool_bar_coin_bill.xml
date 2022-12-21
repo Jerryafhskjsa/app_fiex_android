@@ -157,6 +157,7 @@
                             android:textSize="@dimen/text_size_12" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/able"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_all_des"
@@ -182,6 +183,7 @@
                             android:textSize="@dimen/text_size_12" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/unable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"

@@ -491,7 +491,7 @@
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_transfer"
-                style="@style/ButtonGray"
+                style="@style/ButtonReturn"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_weight="1"

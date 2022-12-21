@@ -29,26 +29,134 @@
                     android:background="@color/B2"
                     android:orientation="vertical">
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_width="382dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_marginTop="@dimen/text_size_5"
+                        style="@style/ButtonGray"
+                        android:orientation="vertical"
                         android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginTop="@dimen/text_size_20"
                             android:text="@string/total_assets"
-                            android:textColor="@color/T3"
+                            android:textColor="@color/T11"
                             android:textSize="@dimen/text_size_13" />
+                            <ImageView
+                                android:id="@+id/bill"
+                                android:layout_width="15dp"
+                                android:layout_height="20dp"
+                                android:layout_marginLeft="210dp"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:background="@drawable/icon_c2c_order">
+                            </ImageView>
+                        </LinearLayout>
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/money_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginLeft="@dimen/double_padding"
                             android:layout_marginRight="@dimen/double_padding"
                             android:textColor="@color/T1"
                             android:textStyle="bold"
                             android:text="--"
+                            android:textSize="@dimen/text_size_20" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/money_totalcny"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:textColor="@color/T11"
+                            android:textStyle="bold"
+                            android:text="--"
+                            android:textSize="@dimen/text_size_12" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:textColor="@color/T11"
+                            android:text="@string/profit_loss"
                             android:textSize="@dimen/text_size_13" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/profit_loss"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/T11"
+                                android:textStyle="bold"
+                                android:text=":0.0"
+                                android:textSize="@dimen/text_size_13" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_exchange"
+                                style="@style/ButtonBlue"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/middle_padding"
+                                android:text="@string/rechange" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="@dimen/line" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_withdraw"
+                                style="@style/ButtonReturn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/middle_padding"
+                                android:text="@string/extract" />
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="@dimen/line" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/exchange"
+                                style="@style/ButtonReturn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/middle_padding"
+                                android:text="@string/exchange" />
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="@dimen/line" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/transaction"
+                                style="@style/ButtonReturn"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/middle_padding"
+                                android:text="@string/home_tab_transaction" />
+
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"

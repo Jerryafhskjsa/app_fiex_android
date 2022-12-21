@@ -123,24 +123,24 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
         getString(R.string.wallet_account).also {
             TAB_WALLET = it
-            TAB_TITLES[4] = TAB_WALLET
+            TAB_TITLES[0] = TAB_WALLET
         }
         getString(R.string.spot_account).also {
             TAB_NORMAL = it
-            TAB_TITLES[0] = TAB_NORMAL
+            TAB_TITLES[1] = TAB_NORMAL
         }
         getString(R.string.contract_account).also {
             TAB_CONTRACT = it
-            TAB_TITLES[1] = TAB_CONTRACT
+            TAB_TITLES[2] = TAB_CONTRACT
         }
 
         getString(R.string.finance_account).also {
             TAB_FINANCE = it
-            TAB_TITLES[2] = TAB_FINANCE
+            TAB_TITLES[3] = TAB_FINANCE
         }
         getString(R.string.capital_account).also {
             TAB_FINANCE = it
-            TAB_TITLES[3] = TAB_FINANCE
+            TAB_TITLES[4] = TAB_FINANCE
         }
 
 
@@ -278,6 +278,14 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             fragmentList = java.util.ArrayList()
         }
         fragmentList?.clear()
+        fragmentList?.add(AssetsWalletFragment().also {
+            val bundle = Bundle()
+//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
+            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            it.arguments = bundle
+            walletFragment = it
+            walletFragment?.setEventListener(this)
+        })
         fragmentList?.add(AssetsSpotFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
@@ -314,14 +322,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(AssetsWalletFragment().also {
-            val bundle = Bundle()
-//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
-            it.arguments = bundle
-            walletFragment = it
-            walletFragment?.setEventListener(this)
-        })
+
     }
     fun setMoney(total: Money?){
         binding?.money?.tag = total

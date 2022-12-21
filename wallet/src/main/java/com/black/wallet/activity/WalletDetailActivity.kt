@@ -2,32 +2,33 @@ package com.black.wallet.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActivity
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.lib.filter.FilterEntity
 import com.black.base.lib.filter.FilterResult
 import com.black.base.lib.filter.FilterWindow
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.filter.DateFilter
+import com.black.base.model.socket.PairStatus
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletBill
 import com.black.base.model.wallet.WalletBillType
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.RouterConstData
+import com.black.base.util.*
 import com.black.base.widget.SpanTextView
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
@@ -37,8 +38,13 @@ import com.black.util.Callback
 import com.black.util.NumberUtil
 import com.black.wallet.BR
 import com.black.wallet.R
+import com.black.wallet.adapter.QuotationAdapter
 import com.black.wallet.adapter.WalletBillAdapter
 import com.black.wallet.databinding.ActivityWalletDetailBinding
+import com.black.wallet.util.DipPx
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
@@ -52,17 +58,20 @@ class WalletDetailActivity : BaseActivity(),
     QRefreshLayout.OnRefreshListener,
     QRefreshLayout.OnLoadListener,
     QRefreshLayout.OnLoadMoreCheckListener,
-    OnItemClickListener {
+    OnItemClickListener, AdapterView.OnItemClickListener {
     private var wallet: Wallet? = null
     private var coinType: String? = null
     private var binding: ActivityWalletDetailBinding? = null
-
+    private var sets: ArrayList<QuotationSet?>? = null
+    private var fragmentList: MutableList<Fragment?>? = null
     private var adapter: WalletBillAdapter? = null
     private var currentPage = 1
     private var total = 0
     private var hasMore = false
     private var walletBillType: List<WalletBillType?>? = null
     private var walletBillTypeMap: MutableMap<String?, String?>? = null
+    private var adapter2: QuotationAdapter? = null
+    private val dataList = ArrayList<PairStatus?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +107,21 @@ class WalletDetailActivity : BaseActivity(),
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
+        binding?.recyclerView?.layoutManager = layoutManager
+        val drawable2 = ColorDrawable()
+        drawable2.color = SkinCompatResources.getColor(mContext, R.color.C2)
+        drawable2.alpha = (0xff * 0.3).toInt()
+        binding?.listView?.divider = drawable2
+        binding?.listView?.dividerHeight = 1
+        adapter2 = QuotationAdapter(mContext, dataList)
+        binding?.listView?.adapter = adapter2
+        binding?.listView?.onItemClickListener = this
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(this))
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
         refreshWallet()
+        refreshSets()
         getBillData(true)
     }
 
@@ -128,7 +147,7 @@ class WalletDetailActivity : BaseActivity(),
                 bundle.putParcelable(ConstData.WALLET, wallet)
                 BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
             }
-            R.id.btn_withdraw -> {
+            R.id.transaction -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(this)
@@ -139,12 +158,36 @@ class WalletDetailActivity : BaseActivity(),
     private fun refreshWallet() {
 
 
-        var totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
+        val totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
         totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8))
 
-        var totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
-        totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny, RoundingMode.FLOOR, 2, 8) + "CNY")
-        
+        val totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
+        totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+            wallet?.estimatedAvailableAmountCny,
+            10,
+            2,
+            2
+        ) + "CNY")
+
+        val able =  binding?.root?.findViewById<SpanTextView>(R.id.able)
+        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
+
+        val unable =  binding?.root?.findViewById<SpanTextView>(R.id.unable)
+        unable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
+            wallet?.coinFroze,
+            10,
+            2,
+            2
+        ) + wallet?.coinType)
+        /*if (wallet?.coinIconUrl != null) {
+            var requestOptions = RequestOptions
+                .bitmapTransform(RoundedCorners(DipPx.dip2px(mContext, 15f)))
+
+            Glide.with(mContext)
+                .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext, wallet?.coinIconUrl)))
+                .apply(requestOptions)
+                .into(binding?.root?.findViewById(R.id.icon_coin))
+        }*/
     }
 
     private fun getBillData(isShowLoading: Boolean) {
@@ -254,5 +297,58 @@ class WalletDetailActivity : BaseActivity(),
         val extras = Bundle()
         extras.putParcelable(ConstData.WALLET_BILL, walletBill)
         BlackRouter.getInstance().build(RouterConstData.WALLET_COIN_DETAIL).with(extras).go(this)
+    }
+    private fun refreshSets() {
+
+            PairApiServiceHelper.getTradeSetsLocal(mContext, false, object : Callback<ArrayList<QuotationSet?>?>() {
+                override fun error(type: Int, error: Any) {
+                }
+                override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                    if (returnData != null) {
+                        var setData = ArrayList<QuotationSet?>()
+                        setData?.addAll(returnData)
+                        var optionalSet = QuotationSet()
+                        setData?.add(0,  optionalSet)
+                        if (setData != null && setData?.isNotEmpty()) {
+                            sets = setData
+                            initQuotationGroup()
+                        }
+                    }
+                }
+            })
+
+
+    }
+    private fun initQuotationGroup() {
+        if (sets != null && sets!!.isNotEmpty()) {
+            val setSize = sets!!.size
+            if (fragmentList != null) {
+                return
+            }
+            fragmentList = ArrayList(setSize)
+            for (i in 0 until setSize) {
+                val set = sets!![i]
+                try {
+
+                } catch (throwable: Throwable) {
+                    FryingUtil.printError(throwable)
+                }
+            }
+
+        }
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+        mContext?.let {
+            val pairStatus = adapter2?.getItem(position)
+                CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                val bundle = Bundle()
+                bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                    .go(it)
+            }
+
+
     }
 }
