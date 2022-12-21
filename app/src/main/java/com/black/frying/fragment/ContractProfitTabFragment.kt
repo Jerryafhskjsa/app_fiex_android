@@ -78,7 +78,7 @@ class ContractProfitTabFragment : BaseFragment(),
         binding?.allDone?.setOnClickListener(this)
         binding?.allDone?.text = getString(R.string.contract_fast_cancel)
         binding?.entrustType?.visibility = View.GONE
-        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean
+        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,true) as Boolean
         binding?.contractWithLimit?.setOnCheckedChangeListener { buttonView, isChecked ->
             SharedPreferenceUtils.putData(Constants.PROFIT_ALL_CHECKED,isChecked)
             getProfitData(Constants.UNFINISHED)
@@ -182,7 +182,7 @@ class ContractProfitTabFragment : BaseFragment(),
      */
     private fun getProfitData(state:String?){
         var symbol:String? = viewModel?.getCurrentPairSymbol()
-        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
+        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
         FutureApiServiceHelper.getProfitList(context, symbol,state,false,

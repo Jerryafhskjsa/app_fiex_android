@@ -83,7 +83,7 @@ class ContractPlanTabFragment : BaseFragment(),
         binding?.btnPlan?.setOnClickListener(this)
         binding?.allDone?.setOnClickListener(this)
         binding?.allDone?.text = getString(R.string.contract_fast_cancel)
-        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean
+        binding?.contractWithLimit?.isChecked = SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean
         binding?.contractWithLimit?.setOnCheckedChangeListener { buttonView, isChecked ->
             SharedPreferenceUtils.putData(Constants.PLAN_ALL_CHECKED,isChecked)
         }
@@ -207,7 +207,7 @@ class ContractPlanTabFragment : BaseFragment(),
      */
     private fun getPlanData(state: String?) {
         var symbol:String? = viewModel?.getCurrentPairSymbol()
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
         FutureApiServiceHelper.getPlanList(context,symbol, state, false,
@@ -229,7 +229,7 @@ class ContractPlanTabFragment : BaseFragment(),
      */
     private fun getLimitPricePlanData() {
         var symbol:String? = viewModel?.getCurrentPairSymbol()
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
         FutureApiServiceHelper.getOrderList(1, 10, symbol,Constants.UNFINISHED, context, false,

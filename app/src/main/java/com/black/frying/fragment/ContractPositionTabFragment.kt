@@ -2,15 +2,18 @@ package com.black.frying.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.*
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.SuccessObserver
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
@@ -18,6 +21,7 @@ import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
 import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
+import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
@@ -44,8 +48,7 @@ class ContractPositionTabFragment : BaseFragment(),
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
 
-    private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
-    private var gettingPairsData: Boolean? = false
+    private var futureMarkPriceObserver: Observer<MarkPriceBean?>? = null
     private var onTabModelListener: OnTabModelListener? = null
 
     /**
@@ -102,20 +105,26 @@ class ContractPositionTabFragment : BaseFragment(),
         socketHandler = Handler(handlerThread?.looper)
         viewModel?.getMarketPrice(CookieUtil.getCurrentFutureUPair(context!!))
         viewModel?.getFundRate(CookieUtil.getCurrentFutureUPair(context!!))
+        var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
+        if (all != null) {
+            binding?.contractWithLimit?.isChecked = all
+        }
         if (LoginUtil.isFutureLogin(context)) {
             viewModel?.getPositionAdlList(context)
             viewModel?.getLeverageBracketDetail()
-            var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,false) as Boolean
             viewModel?.getPositionData(all)
         }
-
+        if (futureMarkPriceObserver == null) {
+            futureMarkPriceObserver = createMarkPriceObserver()
+        }
+        SocketDataContainer.subscribeMarkPriceObservable(futureMarkPriceObserver)
     }
 
     override fun onStop() {
         super.onStop()
-        if (pairObserver != null) {
-            SocketDataContainer.removePairObservable(pairObserver)
-            pairObserver == null
+        if (futureMarkPriceObserver != null) {
+            SocketDataContainer.removeMarkPriceObservable(futureMarkPriceObserver)
+            futureMarkPriceObserver == null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -123,6 +132,17 @@ class ContractPositionTabFragment : BaseFragment(),
         }
         if (handlerThread != null) {
             handlerThread?.quit()
+        }
+    }
+
+    private fun createMarkPriceObserver(): Observer<MarkPriceBean?> {
+        return object : SuccessObserver<MarkPriceBean?>() {
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun onSuccess(value: MarkPriceBean?) {
+                Log.d("333333","value.p = "+value?.p)
+                Log.d("333333","value.s = "+value?.s)
+                viewModel?.doUpdate(activity,value?.p,value?.s,true)
+            }
         }
     }
 
@@ -153,7 +173,7 @@ class ContractPositionTabFragment : BaseFragment(),
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
-                                var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,false) as Boolean
+                                var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
                                 viewModel?.getPositionData(all)
                             }
                         }
@@ -167,9 +187,11 @@ class ContractPositionTabFragment : BaseFragment(),
     }
 
     override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
-        onTabModelListener?.onCount(positionList?.size)
-        adapter?.data = positionList
-        adapter?.notifyDataSetChanged()
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            onTabModelListener?.onCount(positionList?.size)
+            adapter?.data = positionList
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     override fun onFundingRate(fundRate: FundingRateBean?) {

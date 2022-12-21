@@ -669,8 +669,6 @@ object SocketDataContainer {
                             pairStatus.currentPriceCNY = computeCoinPriceCNY(pairStatus, price)
                         }
                         val newPairCompareKey = pairStatus.compareString
-                        Log.d("iiiiii", "oldPairCompareKey = " + oldPairCompareKey)
-                        Log.d("iiiiii", "newPairCompareKey = " + oldPairCompareKey)
                         if (!TextUtils.equals(oldPairCompareKey, newPairCompareKey)) {
                             Log.d(TAG, "updateFuturePairStatusData1,addChange")
                             result.add(pairStatus)
