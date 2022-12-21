@@ -122,16 +122,16 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 val total2: Money? = binding?.futureUsdt?.tag as Money?
-                binding?.spotUsdt?.setText(if (total?.usdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT")
-                binding?.futureUsdt?.setText(if (total2?.tigerUsdt == null) "0.0USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt, 8, 2, 2) + "USDT")
-                binding?.financialUsdt?.setText("0.0USDT")
-                binding?.capitalUsdt?.setText("0.0USDT")
+                binding?.spotUsdt?.setText(if (total?.usdt == null) "0.0 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT")
+                binding?.futureUsdt?.setText(if (total2?.tigerUsdt == null) "0.0 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt, 8, 2, 2) + "USDT")
+                binding?.financialUsdt?.setText("0.0 USDT")
+                binding?.capitalUsdt?.setText("0.0 USDT")
                 binding?.spotCny?.setText(if (total?.cny == null) "≈ ￥0.0" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) )
                 binding?.futureCny?.setText(if (total2?.tigercny == null) "≈ ￥0.0" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2) )
                 binding?.financialCny?.setText("≈ ￥0.0")
                 binding?.capitalCny?.setText("≈ ￥0.0")
-                binding?.moneyTotalcny?.setText(if(total?.cny == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.cny == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.cny != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.cny!! + total2?.tigercny!!, 8, 2, 2) + "CNY")
-                binding?.moneyTotal?.setText(if (total?.usdt == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.usdt == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.usdt != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.usdt!! + total2?.tigerUsdt!! , 8, 2, 2) )        }
+                binding?.moneyTotalcny?.setText(if(total?.cny == null && total2?.tigercny == null) "≈ 0.0 CNY" else if( total?.cny == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.cny != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.cny!! + total2?.tigercny!!, 8, 2, 2) + "CNY")
+                binding?.moneyTotal?.setText(if (total?.usdt == null && total2?.tigerUsdt == null) "0.0 USDT" else if(total?.usdt == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.usdt != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.usdt!! + total2?.tigerUsdt!! , 8, 2, 2) )        }
         }
     }
 
