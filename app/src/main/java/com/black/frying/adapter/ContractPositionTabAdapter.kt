@@ -107,10 +107,12 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         //持仓均价
         viewHolder?.entryPrice?.text = positionData?.entryPrice
         //强平价格>0
-        if (BigDecimal(positionData?.forceStopPrice).compareTo(BigDecimal.ZERO) == 1) {
-            viewHolder?.forceClosePrice?.text = positionData?.forceStopPrice
-        } else {
-            viewHolder?.forceClosePrice?.text = "--"
+        if(positionData?.forceStopPrice != null){
+            if (BigDecimal(positionData?.forceStopPrice).compareTo(BigDecimal.ZERO) == 1) {
+                viewHolder?.forceClosePrice?.text = positionData?.forceStopPrice
+            } else {
+                viewHolder?.forceClosePrice?.text = "--"
+            }
         }
         //标记价格
         viewHolder?.flagPrice?.text = positionData?.flagPrice

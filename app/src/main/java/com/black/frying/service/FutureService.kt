@@ -205,10 +205,10 @@ object FutureService {
             })
     }
 
-    fun getMarkPrice(symbol: String): MarkPriceBean? {
+    fun getMarkPrice(symbol: String?): MarkPriceBean? {
         var markPrice: MarkPriceBean? = null
         for (markPriceBean in markPriceList!!) {
-            if (markPriceBean.s.equals(symbol)) {
+            if (markPriceBean.s == symbol) {
                 markPrice = markPriceBean
                 break
             }
@@ -219,9 +219,9 @@ object FutureService {
     /**
      * 获取交易对的合约面值
      */
-    fun getContractSize(symbol: String): BigDecimal? {
+    fun getContractSize(symbol: String?): BigDecimal? {
         for (symbolItem in symbolList!!) {
-            if (symbolItem.symbol.equals(symbol)) {
+            if (symbolItem.symbol == symbol) {
                 contractSize = symbolItem.contractSize.toBigDecimal()
                 break
             }
@@ -233,16 +233,12 @@ object FutureService {
      * 获取限价委托订单列表
      */
     fun initOrderList(context: Context?) {
-        var pairStatus = SocketDataContainer.getPairStatusSync(
-            context,
-            ConstData.PairStatusType.FUTURE_U,
-            CookieUtil.getCurrentFutureUPair(context!!)
-        )
-        var symbol: String? = pairStatus?.pair
-        if (SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED, false) as Boolean) {
+        var pairStatus = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U,CookieUtil.getCurrentFutureUPair(context!!))
+        var symbol:String? = pairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
-        FutureApiServiceHelper.getOrderList(1, 10, symbol, Constants.UNFINISHED, context, false,
+        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
             object : Callback<HttpRequestResultBean<OrderBean>>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initOrderList--error", error.toString())

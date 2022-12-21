@@ -288,7 +288,7 @@ class ContractViewModel(
      */
     private fun getPlanData(state: String?) {
         var symbol:String? = currentPairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
         FutureApiServiceHelper.getPlanList(context,symbol, state, false,
@@ -311,7 +311,7 @@ class ContractViewModel(
      */
     private fun getLimitPricePlanData() {
         var symbol:String? = currentPairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
         FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,

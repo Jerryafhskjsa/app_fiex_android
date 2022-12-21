@@ -25,6 +25,7 @@ import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.Socket
 import java.util.*
 
 class FiexSocketManager(context: Context, handler: Handler) {
@@ -67,6 +68,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     /*****future*****/
     private var futureSymbolListener: SocketListener? = FutureSymbolListener()
     private var futureTickersListener: SocketListener? = FutureTickersListener()
+    private var futureMarkPriceListener:SocketListener? = FutureMarkPriceListener()
 
     /*****future*****/
 
@@ -125,6 +127,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, futureSocketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER, futureSocketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_MARK_PRICE,futureSocketSetting)
     }
 
 
@@ -218,6 +221,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         FutureTickersListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
+                    listener = if (futureMarkPriceListener != null) {
+                        futureMarkPriceListener
+                    } else {
+                        FutureMarkPriceListener()
+                    }
+                }
             }
             socketMar.addListener(listener)
         }
@@ -245,6 +255,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 WebSocketHandler.getWebSocket(socketKey)?.removeListener(futureSymbolListener)
                 futureSymbolListener = null
             }
+            SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(futureMarkPriceListener)
+                futureMarkPriceListener = null
+            }
         }
     }
 
@@ -271,6 +285,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 SocketUtil.WS_FUTURE_SUB_TICKER -> {
                     listener = futureTickersListener
                 }
+                SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
+                    listener = futureMarkPriceListener
+                }
             }
             it.value.removeListener(listener)
         }
@@ -280,6 +297,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         pairKlineSocketListener = null
         futureSymbolListener = null
         futureTickersListener = null
+        futureMarkPriceListener = null
     }
 
     private fun addListenerAll() {
@@ -327,6 +345,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         futureTickersListener
                     } else {
                         FutureTickersListener()
+                    }
+                }
+                SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
+                    listener = if (futureMarkPriceListener != null) {
+                        futureMarkPriceListener
+                    } else {
+                        FutureMarkPriceListener()
                     }
                 }
             }
@@ -434,6 +459,23 @@ class FiexSocketManager(context: Context, handler: Handler) {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_ticker")
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER)
+                ?.send(jsonObject.toString())
+        } catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    /**
+     * 合约监听所有交易对标记价格
+     * "req":"sub_mark_price",
+    "  symbol":"btc_usdt" 不传为订阅所有
+     */
+    fun startListenMarkPrice() {
+        Log.d(TAG, "startListenMarkPrice---")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("req", "sub_mark_price")
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_MARK_PRICE)
                 ?.send(jsonObject.toString())
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -904,6 +946,47 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                         tickerBean,
                                         false
                                     )
+                                }
+                            }
+                        }
+                    }
+                } catch (e: JSONException) {
+                    FryingUtil.printError(e)
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 合约标记价格订阅
+     */
+    inner class FutureMarkPriceListener() : SimpleListener() {
+        override fun onConnected() {
+            Log.d(TAG, "FutureMarkPriceListener---->ßonConnected")
+            startListenMarkPrice()
+        }
+
+        override fun <T : Any?> onMessage(message: String?, data: T) {
+            Log.d(TAG, "FutureMarkPriceListener->onMessage = $message")
+            if (message.equals("succeed") || message.equals("pong")) {
+                return
+            }
+            CommonUtil.postHandleTask(mHandler) {
+                var data: JSONObject? = null
+                try {
+                    data = JSONObject(message)
+                    if (data.has("channel")) {
+                        var channel = data.get("channel")
+                        var data = data.get("data")
+                        when (channel) {
+                            "push.mark.price" -> { //标记价格
+                                val markPriceBean = gson.fromJson<MarkPriceBean>(
+                                    data.toString(),
+                                    object : TypeToken<MarkPriceBean?>() {}.type
+                                )
+                                if (markPriceBean != null) {
+                                    SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
                                 }
                             }
                         }

@@ -549,7 +549,7 @@ object UrlConfig {
 
         //根据id撤销计划委托
         const val URL_CANCEL_PLAN_BY_ID = "trade/v1/entrust/cancel-plan"
-
+        //获取所有交易对的标记价格
         const val URL_MARK_PRICE = "market/v1/public/q/mark-price"
 
         const val URL_SYMBOL_MARK_PRICE = "market/v1/public/q/symbol-mark-price"

@@ -65,15 +65,17 @@ class ContractPositionViewModel(
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
                         var data: ArrayList<PositionBean?>? = returnData.result
-                        positionList =
-                            data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
-                        updateCurrentPosition(context)
-                        onContractPositionModelListener?.onGetPositionData(positionList)
+                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
+                        doUpdate(context,null,null,false)
                     }
                 }
             })
     }
 
+    fun doUpdate(context: Context?,flagPrice: String?,symbol: String?,isSocket: Boolean?){
+        updateCurrentPosition(context,flagPrice,symbol,isSocket)
+        onContractPositionModelListener?.onGetPositionData(positionList)
+    }
 
     /**
      * 持仓接口:/futures/fapi/user/v1/position/list
@@ -94,23 +96,31 @@ class ContractPositionViewModel(
     多仓强平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (仓位保证金 - 维持保证金))
     空仓平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (维持保证金 - 仓位保证金))
      *
+     * isSocket = true更新socket推的数据
+     * isSocket = false更新http请求的数据
      */
-    fun updateCurrentPosition(context: Context?) {
+    private fun updateCurrentPosition(context: Context?,flagPrice:String?,symbol: String?,isSocket:Boolean?) {
         for (positionBean in positionList!!) {
             if (positionBean?.positionSize.equals("0")) {
                 return
             }
-            positionBean?.flagPrice = marketPrice?.p
-//            Log.d("ttttttt-->positionValue", positionBean.toString())
+            if(isSocket == true){
+                if(positionBean?.symbol.equals(symbol)){
+                    positionBean?.flagPrice = flagPrice
+                }
+            }else{
+                positionBean?.flagPrice = FutureService.getMarkPrice(positionBean?.symbol)?.p
+            }
+            var contractSize =  FutureService.getContractSize(symbol)
             //仓位价值=开仓均价 * 数量 * 面值
             var positionValue = BigDecimal(positionBean?.positionSize)
                 .multiply(BigDecimal(positionBean?.entryPrice))
-                .multiply(BigDecimal(currentPairStatus?.contractSize.toString()))
+                .multiply(BigDecimal(contractSize.toString()))
             //获取维持保证金率
             var maintMarginRate = getMaintMarginRate(positionValue.toString())
             //维持保证金 = 开仓均价 * 数量 * 面值 * 维持保证金率
             var maintMargin = BigDecimal(positionBean?.positionSize)
-                .multiply(BigDecimal(currentPairStatus?.contractSize.toString()))
+                .multiply(BigDecimal(contractSize.toString()))
                 .multiply(BigDecimal(positionBean?.entryPrice.toString()))
                 .multiply(BigDecimal(maintMarginRate))
             Log.d("ttttttt--->maintMargin", maintMargin.toString())
@@ -135,7 +145,7 @@ class ContractPositionViewModel(
                         .subtract(FutureService.getDex(positionBean!!, positionSide!!))
                         .divide(
                             BigDecimal(positionBean?.positionSize)
-                                .multiply(BigDecimal(currentPairStatus?.contractSize.toString())),
+                                .multiply(BigDecimal(contractSize.toString())),
                             4,
                             BigDecimal.ROUND_HALF_UP
                         )
@@ -155,7 +165,7 @@ class ContractPositionViewModel(
                         .add(FutureService.getDex(positionBean!!, positionSide!!))
                         .divide(
                             BigDecimal(positionBean?.positionSize)
-                                .multiply(BigDecimal(FutureService.contractSize.toString())),
+                                .multiply(BigDecimal(contractSize.toString())),
                             4,
                             BigDecimal.ROUND_HALF_UP
                         )
@@ -177,12 +187,12 @@ class ContractPositionViewModel(
                 if (positionBean?.positionSide.equals("LONG")) { //做多
                     liquidationPrice = BigDecimal(positionBean?.entryPrice)
                         .multiply(BigDecimal(positionBean?.positionSize))
-                        .multiply(BigDecimal(FutureService.contractSize.toString()))
+                        .multiply(BigDecimal(contractSize.toString()))
                         .add(maintMargin)
                         .subtract(BigDecimal(positionBean?.isolatedMargin))
                         .divide(
                             BigDecimal(positionBean?.positionSize)
-                                .multiply(BigDecimal(FutureService.contractSize.toString())),
+                                .multiply(BigDecimal(contractSize.toString())),
                             4,
                             BigDecimal.ROUND_HALF_UP
                         )
@@ -202,12 +212,12 @@ class ContractPositionViewModel(
                     //空仓[强平价格 = (开仓均价 * 数量 * 面值 - 维持保证金 + 仓位保证金) / (数量 * 面值)
                     liquidationPrice = BigDecimal(positionBean?.entryPrice)
                         .multiply(BigDecimal(positionBean?.positionSize))
-                        .multiply(BigDecimal(FutureService.contractSize.toString()))
+                        .multiply(BigDecimal(contractSize.toString()))
                         .add(BigDecimal(positionBean?.isolatedMargin))
                         .subtract(maintMargin)
                         .divide(
                             BigDecimal(positionBean?.positionSize)
-                                .multiply(BigDecimal(FutureService.contractSize.toString())),
+                                .multiply(BigDecimal(contractSize.toString())),
                             4,
                             BigDecimal.ROUND_HALF_UP
                         )
