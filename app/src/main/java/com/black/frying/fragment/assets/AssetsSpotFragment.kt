@@ -231,7 +231,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
 
         fun getWalletCoinFilter(): Boolean? {
-            return false
+             return false
         }
 
         fun setWalletCoinFilter(checked: Boolean) {
