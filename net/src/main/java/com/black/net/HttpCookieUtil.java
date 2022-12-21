@@ -13,6 +13,7 @@ public class HttpCookieUtil {
     public final static String TRADE_TOKEN = "trade_token";
     public final static String PRO_TOKEN = "pro_token";
     public final static String FUTURE_TOKEN = "token";
+    public final static String LISTEN_KEY = "listen_key";
     public final static String PRO_TOKEN_EXPIRED_TIME = "pro_token_expired_time";
     public final static String WS_TOKEN = "ws_token";
 
@@ -65,6 +66,11 @@ public class HttpCookieUtil {
         editor.commit();
     }
 
+    public static void saveListenKey(Context context, String listenkey) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(LISTEN_KEY, listenkey);
+        editor.commit();
+    }
 
     public static void saveWsToken(Context context, String wsToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
@@ -90,6 +96,10 @@ public class HttpCookieUtil {
 
     public static String getUcToken(Context context) {
         return getSharedPreferences(context).getString(UC_TOKEN, null);
+    }
+
+    public static String getListenKey(Context context) {
+        return getSharedPreferences(context).getString(LISTEN_KEY, null);
     }
 
     public static String getTicket(Context context) {
@@ -120,6 +130,11 @@ public class HttpCookieUtil {
     public static void deleteFutureToken(Context context) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.remove(FUTURE_TOKEN).commit();
+    }
+
+    public static void deleteListenKey(Context context) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.remove(LISTEN_KEY).commit();
     }
 
     public static void deleteTicket(Context context) {

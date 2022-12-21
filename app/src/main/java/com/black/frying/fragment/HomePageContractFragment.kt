@@ -390,7 +390,7 @@ class HomePageContractFragment : BaseFragment(),
 
             override fun afterTextChanged(s: Editable) {
                 header1View?.price?.setSelection(s.toString().length)
-                if(s.toString().isNotEmpty()){
+                if (s.toString().isNotEmpty()) {
                     priceInputFlag = true
                 }
             }
@@ -1222,11 +1222,14 @@ class HomePageContractFragment : BaseFragment(),
      * 计算可开多/空的数量
      */
     private fun updateCanOpenAmount(price: String?) {
-        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context)) {
+        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null) {
             return
         }
         var longLeverage = buyMultiChooseBean?.defaultMultiple
         var shortLeverage = sellMultiChooseBean?.defaultMultiple
+        if (longLeverage == null || shortLeverage == null) {
+            return
+        }
         var availableOpenData = FutureService.getAvailableOpenData(
             BigDecimal(price), longLeverage!!, shortLeverage!!, BigDecimal.ZERO,
             BigDecimal.ZERO
@@ -1271,7 +1274,10 @@ class HomePageContractFragment : BaseFragment(),
      * 计算需要的保证金
      */
     private fun updateBondAmount(inputPrice: String?, amount: String?) {
-        if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true || !LoginUtil.isFutureLogin(mContext)) {
+        if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true || !LoginUtil.isFutureLogin(
+                mContext
+            )
+        ) {
             return
         }
         var longLeverage = buyMultiChooseBean?.defaultMultiple

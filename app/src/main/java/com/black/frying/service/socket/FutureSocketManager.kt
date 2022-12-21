@@ -3,10 +3,14 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import com.black.base.api.FutureApiServiceHelper
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.util.*
+import com.black.net.HttpCookieUtil
 import com.black.net.websocket.*
+import com.black.util.Callback
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -27,7 +31,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
             }
             return field
         }
-    private var mCcontext: Context? = null
+    private var mContext: Context? = null
     private var mHandler: Handler? = null
     private var pingTimer: Timer? = null
     private var timerStart: Boolean = false
@@ -36,16 +40,18 @@ class FutureSocketManager(context: Context, handler: Handler) {
 
 
     private lateinit var socketSetting: WebSocketSetting
+    private lateinit var socketUserSetting: WebSocketSetting
 
     //合约交易对相关
     private var symbolListener: SocketListener? = SymbolListener()
+    private var userListener: SocketListener? = UserListener()
 
 
     init {
-        mCcontext = context
+        mContext = context
         mHandler = handler
-        currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-        initSocketManager(mCcontext)
+        currentPair = SocketUtil.getCurrentPair(mContext!!)
+        initSocketManager(mContext)
         addListenerAll()
         startConnectAll()
     }
@@ -79,11 +85,20 @@ class FutureSocketManager(context: Context, handler: Handler) {
 
     private fun initSocketManager(context: Context?) {
         var socketUrl = UrlConfig.getFutureMarketSocketUrl()
+
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, socketSetting)
+
+        var socketUserUrl = UrlConfig.getFutureUserSocketUrl()
+        socketUserSetting = WebSocketSetting()
+        socketUserSetting.connectUrl = socketUserUrl
+        socketUserSetting.connectionLostTimeout = 60//心跳间隔时间
+        socketUserSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
+
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_USER, socketUserSetting)
     }
 
 
@@ -93,8 +108,10 @@ class FutureSocketManager(context: Context, handler: Handler) {
 
     fun startConnectAll() {
         var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+        var socketUserManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_USER)
         addListenerAll()
         socketManager.start()
+        socketUserManager.start()
         startPingTimer()
     }
 
@@ -161,23 +178,39 @@ class FutureSocketManager(context: Context, handler: Handler) {
                 SocketUtil.WS_FUTURE_SUB_SYMBOL -> {
                     listener = symbolListener
                 }
+                SocketUtil.WS_FUTURE_SUB_USER -> {
+                    listener = userListener
+                }
 
             }
             it.value.removeListener(listener)
         }
         symbolListener = null
+        userListener = null
     }
 
     fun addListenerAll() {
         var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+        var socketUserManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_USER)
+
         var listener: SocketListener? = null
+        var listener1: SocketListener? = null
 
         listener = if (symbolListener != null) {
             symbolListener
         } else {
             SymbolListener()
         }
+
+        listener1 = if (userListener != null) {
+            userListener
+        } else {
+            UserListener()
+        }
+
         socketManager.addListener(listener)
+
+        socketUserManager.addListener(listener1)
     }
 
     fun sendPing() {
@@ -186,13 +219,21 @@ class FutureSocketManager(context: Context, handler: Handler) {
             val jsonObject = JSONObject()
             jsonObject.put("ping", "ping")
             var socketManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL)
+            var sockeUserManager = WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_USER)
 
             Log.d(
                 tag,
-                "userSocket state =," + socketManager.socketState + "listener is empty= " + socketManager.isListenerEmpty
+                "Socket state =," + socketManager.socketState + "listener is empty= " + socketManager.isListenerEmpty
+            )
+            Log.d(
+                tag,
+                "UserSocket state =," + sockeUserManager.socketState + "listener is empty= " + sockeUserManager.isListenerEmpty
             )
             if (socketManager.isConnect) {
                 socketManager?.send("ping")
+            }
+            if (sockeUserManager.isConnect) {
+                sockeUserManager?.send("ping")
             }
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -222,12 +263,115 @@ class FutureSocketManager(context: Context, handler: Handler) {
         }
     }
 
+    fun startUserListener() {
+        Log.d(tag, "startUserListener---")
+        try {
+            val jsonObject = JSONObject()
+            var listenKey = HttpCookieUtil.getListenKey(mContext)
+            if (listenKey == null) {
+                getListenKey(mContext!!)
+                return
+            }
+            jsonObject.put("req", "sub_user")
+            jsonObject.put("listenKey", listenKey) //“listenKey”:”上一步获取的listenKey”
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_USER)
+                ?.send(jsonObject.toString())
+            Log.d(tag, "startUserListener---" + jsonObject.toString())
+        } catch (e: Exception) {
+            Log.d(tag, "startUserListener---" + e.toString())
+            FryingUtil.printError(e)
+        }
+    }
+
+    inner class UserListener() : SimpleListener() {
+        override fun onConnected() {
+            Log.d(tag, "UserListener---->onConnected")
+            startUserListener()
+        }
+
+        override fun <T : Any?> onMessage(message: String?, data: T) {
+            Log.d(tag, "UserListener->onMessage = $message")
+            if (message.equals("succeed") || message.equals("pong")) {
+                return
+            }
+            if (message.equals("invalid_listen_key")) {
+                getListenKey(mContext!!)
+                return
+            }
+            var data: JSONObject? = null
+            try {
+                data = JSONObject(message)
+                if (data.has("channel")) {
+                    var channel = data.get("channel")
+                    var data = data.get("data")
+                    when (channel) {
+                        "user.balance" -> {
+                            val userBalanceBean = gson.fromJson<UserBalanceBean>(
+                                data.toString(),
+                                object : TypeToken<UserBalanceBean?>() {}.type
+                            )
+                            Log.d("ttttttt-->UserListener", userBalanceBean.toString());
+                        }
+                        "user.position" -> {
+                            val userPositionBean = gson.fromJson<UserPositionBean>(
+                                data.toString(),
+                                object : TypeToken<UserPositionBean?>() {}.type
+                            )
+                            Log.d("ttttttt-->UserListener", userPositionBean.toString());
+                        }
+                        "user.trade" -> {
+                            val userTradeBean = gson.fromJson<UserTradeBean>(
+                                data.toString(),
+                                object : TypeToken<UserTradeBean?>() {}.type
+                            )
+                            Log.d("ttttttt-->UserListener", userTradeBean.toString());
+                        }
+                        "user.order" -> {
+                            val userOrderBean = gson.fromJson<UserOrderBean>(
+                                data.toString(),
+                                object : TypeToken<UserOrderBean?>() {}.type
+                            )
+                            Log.d("ttttttt-->UserListener", userOrderBean.toString());
+                        }
+                        "user.notify" -> {
+
+                        }
+                    }
+                }
+            } catch (e: JSONException) {
+
+            }
+
+        }
+    }
+
+    /**
+     * 获取listen-key
+     */
+    private fun getListenKey(context: Context) {
+        FutureApiServiceHelper.getListenKey(context!!, false,
+            object : Callback<HttpRequestResultBean<String>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->getListenKey", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->getListenKey", returnData.toString());
+                        var listenKey = returnData.result
+                        HttpCookieUtil.saveListenKey(context, listenKey)
+                    }
+                }
+
+            })
+    }
+
     /**
      * 交易对相关
      */
     inner class SymbolListener() : SimpleListener() {
         override fun onConnected() {
-            Log.d(tag, "SymbolListener---->ßonConnected")
+            Log.d(tag, "SymbolListener---->onConnected")
             startSymbolListener()
         }
 

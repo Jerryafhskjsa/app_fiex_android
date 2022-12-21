@@ -102,13 +102,19 @@ interface FutureApiService {
      * 获取止盈止损列表
      */
     @GET(UrlConfig.Future.URL_PROFIT_LIST)
-    fun getProfitList(@Query("symbol") symbol: String?,@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
+    fun getProfitList(
+        @Query("symbol") symbol: String?,
+        @Query("state") state: String?
+    ): Observable<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
 
     /**
      * 获取计划委托列表
      */
     @GET(UrlConfig.Future.URL_PLAN_LIST)
-    fun getPlanList(@Query("symbol") symbol: String?,@Query("state") state: String?): Observable<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
+    fun getPlanList(
+        @Query("symbol") symbol: String?,
+        @Query("state") state: String?
+    ): Observable<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
 
     /**
      * 获取行情
@@ -133,6 +139,13 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_LEVERAGE_BRACKET_LIST)
     fun getLeverageBracketList(): Observable<HttpRequestResultBean<ArrayList<LeverageBracketBean?>?>?>?
+
+    /**
+     * 获取listenKey、时间有效为8小时
+     */
+    @GET(UrlConfig.Future.URL_LISTEN_KEY)
+    fun getListenKey(): Observable<HttpRequestResultBean<String>?>?
+
 
     /**
      * 获取单个交易对杠杆分层信息
@@ -234,12 +247,13 @@ interface FutureApiService {
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_ALL_PROFIT_STOP)
     fun cancelAllProfitStop(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+
     /**
      * 根据id撤销止盈止损
      */
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_PROFIT_STOP_BY_ID)
-    fun cancelProfitStopById(@Field("profitId") profitId:String?):Observable<HttpRequestResultBean<String>?>?
+    fun cancelProfitStopById(@Field("profitId") profitId: String?): Observable<HttpRequestResultBean<String>?>?
 
     /**
      * 撤销所有计划委托
@@ -247,12 +261,13 @@ interface FutureApiService {
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_ALL_PLAN)
     fun cancelALlPlan(@Field("symbol") symbol: String?): Observable<HttpRequestResultBean<String>?>?
+
     /**
      * 根据id撤销计划委托
      */
     @FormUrlEncoded
     @POST(UrlConfig.Future.URL_CANCEL_PLAN_BY_ID)
-    fun cancelPlanById(@Field("entrustId") profitId:String?):Observable<HttpRequestResultBean<String>?>?
+    fun cancelPlanById(@Field("entrustId") profitId: String?): Observable<HttpRequestResultBean<String>?>?
 
 
 }

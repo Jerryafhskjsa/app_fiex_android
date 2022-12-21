@@ -79,7 +79,7 @@ object FutureApiServiceHelper {
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<MarkPriceBean?>?>?
     ) {
-        if (context == null || callback == null) {
+        if (context == null || callback == null || symbol==null) {
             return
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
@@ -144,7 +144,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getOrderList(symbol,page, size, state)
+            ?.getOrderList(symbol, page, size, state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -288,7 +288,7 @@ object FutureApiServiceHelper {
     fun getProfitList(
         context: Context?,
         symbol: String?,
-        state:String?,
+        state: String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>?
     ) {
@@ -297,7 +297,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getProfitList(symbol,state)
+            ?.getProfitList(symbol, state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -309,7 +309,7 @@ object FutureApiServiceHelper {
     fun getPlanList(
         context: Context?,
         symbol: String?,
-        state:String?,
+        state: String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
     ) {
@@ -318,7 +318,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getPlanList(symbol,state)
+            ?.getPlanList(symbol, state)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -383,7 +383,7 @@ object FutureApiServiceHelper {
      */
     fun getLeverageBracketDetail(
         context: Context?,
-        symbol:String?,
+        symbol: String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<LeverageBracketBean?>?>?
     ) {
@@ -433,6 +433,24 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    /**
+     * 订阅合约user相关接口
+     */
+    fun getListenKey(
+        context: Context?, isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getListenKey()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
 
     /**
      * 获取用户阶梯费率
@@ -492,9 +510,9 @@ object FutureApiServiceHelper {
         price: Double?,
         timeInForce: String?,
         origQty: Int,
-        triggerProfitPrice:Number?,
-        triggerStopPrice:Number?,
-        reduceOnly:Boolean?,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        reduceOnly: Boolean?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
@@ -503,7 +521,18 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.orderCreate(orderSide, symbol, price, timeInForce, orderType, positionSide, origQty,triggerProfitPrice,triggerStopPrice,reduceOnly)
+            ?.orderCreate(
+                orderSide,
+                symbol,
+                price,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                triggerProfitPrice,
+                triggerStopPrice,
+                reduceOnly
+            )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -519,7 +548,7 @@ object FutureApiServiceHelper {
         context: Context?,
         symbol: String?,
         positionSide: String?,
-        autoMargin:Boolean?,
+        autoMargin: Boolean?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
@@ -528,7 +557,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.autoMargin(symbol,positionSide,autoMargin)
+            ?.autoMargin(symbol, positionSide, autoMargin)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -541,7 +570,7 @@ object FutureApiServiceHelper {
         context: Context?,
         symbol: String?,
         positionSide: String?,
-        leverage:Int?,
+        leverage: Int?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
@@ -550,7 +579,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.adjustLeverage(symbol,positionSide,leverage)
+            ?.adjustLeverage(symbol, positionSide, leverage)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -572,6 +601,7 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
     /**
      * 撤销所有限价委托和市价委托
      */
@@ -590,6 +620,7 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
     /**
      * 撤销所有止盈止损
      */
@@ -608,13 +639,16 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
     /**
      * 根据id撤销止盈止损
      */
-    fun cancelProfitStopById(context:Context?,
-                             profitId:String?,
-                             isShowLoading: Boolean,
-                             callback: Callback<HttpRequestResultBean<String>?>?){
+    fun cancelProfitStopById(
+        context: Context?,
+        profitId: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }
@@ -624,6 +658,7 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
     /**
      * 撤销所有计划委托
      */
@@ -646,10 +681,12 @@ object FutureApiServiceHelper {
     /**
      * 根据id撤销计划委托
      */
-    fun cancelPlanById(context:Context?,
-                       entrustId:String?,
-                             isShowLoading: Boolean,
-                             callback: Callback<HttpRequestResultBean<String>?>?){
+    fun cancelPlanById(
+        context: Context?,
+        entrustId: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
         if (context == null || callback == null) {
             return
         }

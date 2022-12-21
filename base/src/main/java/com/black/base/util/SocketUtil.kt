@@ -49,6 +49,7 @@ object SocketUtil {
     const val WS_FUTURE_SUB_INDEX_PRICE = "sub_index_price"  //指数价格订阅
     const val WS_FUTURE_SUB_MARK_PRICE = "sub_mark_price"  //标记价格订阅
     const val WS_FUTURE_SUB_SYMBOL = "sub_symbol"  //订阅交易对
+    const val WS_FUTURE_SUB_USER = "sub_user"  //订阅交易对
 
     const val ACTION_SOCKET_COMMAND = "com.bioko.exchange.socket.command"
     const val SOCKET_COMMAND = "socket_command"

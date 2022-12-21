@@ -233,12 +233,16 @@ object FutureService {
      * 获取限价委托订单列表
      */
     fun initOrderList(context: Context?) {
-        var pairStatus = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U,CookieUtil.getCurrentFutureUPair(context!!))
-        var symbol:String? = pairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,false) as Boolean){
+        var pairStatus = SocketDataContainer.getPairStatusSync(
+            context,
+            ConstData.PairStatusType.FUTURE_U,
+            CookieUtil.getCurrentFutureUPair(context!!)
+        )
+        var symbol: String? = pairStatus?.pair
+        if (SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED, false) as Boolean) {
             symbol = null
         }
-        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
+        FutureApiServiceHelper.getOrderList(1, 10, symbol, Constants.UNFINISHED, context, false,
             object : Callback<HttpRequestResultBean<OrderBean>>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initOrderList--error", error.toString())
@@ -910,6 +914,13 @@ object FutureService {
         amountPercent: BigDecimal
     ): AvailableOpenData {
 
+
+        Log.d("ttt---->1", inputPrice.toString())
+        Log.d("ttt---->2", longLeverage.toString())
+        Log.d("ttt---->3", shortLeverage.toString())
+        Log.d("ttt---->4", amount.toString())
+        Log.d("ttt---->5", amountPercent.toString())
+
         var symbolBean = getSymbolConfig(symbol)
         var precision = symbolBean?.quoteCoinPrecision
         var displayPrecision = symbolBean?.quoteCoinDisplayPrecision
@@ -1082,6 +1093,9 @@ object FutureService {
         var orderValue = currentSymbolOrderValue(Constants.SHORT)
 
         var positionBean = currentSymbolPositionValue(Constants.SHORT)
+        if (positionBean == null) {
+            return BigDecimal.ZERO
+        }
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
@@ -1133,6 +1147,9 @@ object FutureService {
         var orderValue = currentSymbolOrderValue(Constants.LONG)
 
         var positionBean = currentSymbolPositionValue(Constants.LONG)
+        if (positionBean == null) {
+            return BigDecimal.ZERO
+        }
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
@@ -1154,15 +1171,11 @@ object FutureService {
             for (item in longPositionList!!) {
                 longPositionBean = item
             }
-        } else {
-            longPositionBean = PositionBean()
         }
         if (shortPositionList != null) {
             for (item in shortPositionList!!) {
                 shortPositionBean = item
             }
-        } else {
-            shortPositionBean = PositionBean()
         }
 
         if (positionSide.equals(Constants.LONG)) {
@@ -1342,7 +1355,7 @@ object FutureService {
      */
     private fun getLeverageMaxBracket(leverage: Int): LeverageBracket? {
         var leverageBracketItem: LeverageBracket? = null
-        if(leverageBracket == null){
+        if (leverageBracket == null) {
             return null
         }
         for (item in leverageBracket?.leverageBrackets!!) {

@@ -530,17 +530,23 @@ object UrlConfig {
         const val URL_SYMBOL_LIST = "market/v1/public/symbol/list"
 
         //调整合约倍数
-        const val URL_ADJUST_LEVERAGE= "user/v1/position/adjust-leverage"
+        const val URL_ADJUST_LEVERAGE = "user/v1/position/adjust-leverage"
+
         //一键全部平仓
         const val URL_CLOSE_ALL = "user/v1/position/close-all"
+
         //限价委托和市价委托撤销
         const val URL_CANCEL_ALL = "trade/v1/order/cancel-all"
+
         //撤销所有止盈止损
         const val URL_CANCEL_ALL_PROFIT_STOP = "trade/v1/entrust/cancel-all-profit-stop"
+
         //根据id撤销止盈止损
         const val URL_CANCEL_PROFIT_STOP_BY_ID = "trade/v1/entrust/cancel-profit-stop"
+
         //撤销所有计划委托
         const val URL_CANCEL_ALL_PLAN = "trade/v1/entrust/cancel-all-plan"
+
         //根据id撤销计划委托
         const val URL_CANCEL_PLAN_BY_ID = "trade/v1/entrust/cancel-plan"
 
@@ -591,6 +597,8 @@ object UrlConfig {
         const val ULR_ORDER_LIST = "trade/v1/order/list"
 
         const val URL_AUTO_MARGIN = "user/v1/position/auto-margin"
+
+        const val URL_LISTEN_KEY = "user/v1/user/listen-key"
 
 
     }

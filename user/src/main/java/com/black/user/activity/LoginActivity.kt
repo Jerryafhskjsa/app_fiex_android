@@ -403,7 +403,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     /**
-     *
+     * 合约登录
      */
     private fun getFutureToken(context: Context) {
         FutureApiServiceHelper.getFutureToken(context!!, false,
@@ -417,6 +417,28 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         Log.d("ttttttt-->getFutureToken", returnData.toString());
                         var token = returnData.result
                         HttpCookieUtil.saveFutureToken(context, token)
+                        getListenKey(context)
+                    }
+                }
+
+            })
+    }
+
+    /**
+     * 获取listen-key
+     */
+    private fun getListenKey(context: Context) {
+        FutureApiServiceHelper.getListenKey(context!!, false,
+            object : Callback<HttpRequestResultBean<String>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->getListenKey", error.toString());
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                    if (returnData != null) {
+                        Log.d("ttttttt-->getListenKey", returnData.toString());
+                        var listenKey = returnData.result
+                        HttpCookieUtil.saveListenKey(context, listenKey)
                     }
                 }
 
@@ -444,6 +466,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         )
                         getWsToken(mContext)
                         getFutureToken(mContext)
+
                     }
                 }
             })
