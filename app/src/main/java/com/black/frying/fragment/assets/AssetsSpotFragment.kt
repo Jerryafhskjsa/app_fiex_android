@@ -196,7 +196,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
                     usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2))
                 }
-                binding?.profitLoss?.setText(":0.0USDT")
+                binding?.profitLoss?.setText(": 0.0USDT")
                 if (exChange == 0){
                     binding?.moneyTotal?.setText(usdt)
                     binding?.moneyTotalcny?.setText(cny)
