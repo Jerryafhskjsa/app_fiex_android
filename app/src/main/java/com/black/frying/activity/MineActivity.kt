@@ -144,7 +144,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                             temp.add(i?.lineUrl)
                         }
                         CookieUtil.setServerHost(mContext,temp)
-                        UrlConfig.setRemoteHost(temp)
                         if(fryingLinesConfig.size > 0){
                             getLineSpeed(0, 1, showDialog, fryingLinesConfig[0])
                         }

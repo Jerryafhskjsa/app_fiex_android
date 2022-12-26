@@ -163,7 +163,7 @@ class SocketService : Service() {
                 socketFutureServerHandler = Handler(handlerFutureThread?.looper)
             }
             if (fiexSocketManager == null) {
-//                fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
+                fiexSocketManager = FiexSocketManager(mContext!!, socketServerHandler!!)
                 futureSocketManager = FutureSocketManager(mContext!!, socketFutureServerHandler!!)
 //                fiexSocketManager?.startConnect()
             }

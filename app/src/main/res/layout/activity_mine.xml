@@ -624,7 +624,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxWidth="200dp"
                                     android:gravity="right"
-                                    android:text="fiex"
+                                    android:text="SoeasyEx"
                                     android:layout_marginRight="4dp"
                                     android:textColor="@color/T2"
                                     android:textSize="@dimen/text_size_14" />

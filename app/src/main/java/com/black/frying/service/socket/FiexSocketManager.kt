@@ -111,12 +111,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     private fun initSocketManager(context: Context?) {
-        var socketUrl = UrlConfig.getSocketHostFiex(context!!)
+        var socketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
+        Log.d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
-        var futurSocketUrl = UrlConfig.getFutureMarketSocketUrl()
+        var futurSocketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
         futureSocketSetting = WebSocketSetting()
         futureSocketSetting.connectUrl = futurSocketUrl
         futureSocketSetting.connectionLostTimeout = 60//心跳间隔时间

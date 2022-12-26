@@ -1091,10 +1091,7 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.SHORT)
 
-        var positionBean = currentSymbolPositionValue(Constants.SHORT)
-        if (positionBean == null) {
-            return BigDecimal.ZERO
-        }
+        var positionBean: PositionBean? = currentSymbolPositionValue(Constants.SHORT) ?: return BigDecimal.ZERO
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
@@ -1145,10 +1142,7 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
 
-        var positionBean = currentSymbolPositionValue(Constants.LONG)
-        if (positionBean == null) {
-            return BigDecimal.ZERO
-        }
+        var positionBean: PositionBean? = currentSymbolPositionValue(Constants.LONG) ?: return BigDecimal.ZERO
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
@@ -1163,7 +1157,7 @@ object FutureService {
     /**
      * 当前交易对持仓价值
      */
-    fun currentSymbolPositionValue(positionSide: String): PositionBean {
+    fun currentSymbolPositionValue(positionSide: String): PositionBean? {
         var longPositionBean: PositionBean? = null
         var shortPositionBean: PositionBean? = null
         if (longPositionList != null) {
@@ -1177,10 +1171,10 @@ object FutureService {
             }
         }
 
-        if (positionSide.equals(Constants.LONG)) {
-            return longPositionBean!!
+        return if (positionSide == Constants.LONG) {
+            longPositionBean
         } else {
-            return shortPositionBean!!
+            shortPositionBean
         }
     }
 

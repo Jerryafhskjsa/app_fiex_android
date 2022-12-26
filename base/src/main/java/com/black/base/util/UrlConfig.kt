@@ -1,6 +1,7 @@
 package com.black.base.util
 
 import android.content.Context
+import android.util.Log
 import com.black.util.CommonUtil
 import java.net.URL
 
@@ -19,11 +20,6 @@ object UrlConfig {
         return HOSTS[getIndex(context)]
     }
 
-    fun setRemoteHost(serverHost: ArrayList<String?>?) {
-        serverHost?.clear()
-        serverHost?.addAll(serverHost)
-    }
-
     //https://fiex.io/futures/fapi/market/v1/public/q/deal?symbol=btc_usdt&num=30
     fun getFiexHost(context: Context, apiType: String?): String? {
         var apiTypeDes = "/uc/"
@@ -37,22 +33,20 @@ object UrlConfig {
         var index = getIndex(context)
         var serverHost = CookieUtil.getServerHost(context)
         if (serverHost != null && serverHost.size > 0) {
+            serverHost.reverse()
             return serverHost[index] + apiTypeDes
         }
         if (index > HOSTS.size - 1) {
-            index = 1
+            index = 0
         }
         return HOSTS[index] + apiTypeDes
     }
 
 
-    private val SOCKET_HOSTS_FIEX = arrayOf(
-        "wss://abexxx.net/socket",//测试环境
-        "wss://soeasyex.com/socket",//正式环境
-        "wss://soeasyex.com/ws/market",
-        "wss://soeasyex.com/ws/user"
+    private val SOCKET_HOSTS_SOEASTEX = arrayOf(
+        "wss://abexxx.net/ws/",//测试
+        "wss://soeasyex.com/ws/",//正式
     )
-
 
 
     fun getIndex(context: Context): Int {
@@ -62,16 +56,11 @@ object UrlConfig {
         return CookieUtil.getHostIndex(context)
     }
 
-    fun getSocketHostFiex(context: Context): String {
-        return SOCKET_HOSTS_FIEX[getIndex(context)]
-    }
-
-    fun getFutureMarketSocketUrl(): String {
-        return SOCKET_HOSTS_FIEX[2];
-    }
-
-    fun getFutureUserSocketUrl(): String {
-        return SOCKET_HOSTS_FIEX[3];
+    /**
+     * type->"user","market"
+     */
+    fun getSocketHostSoeasyEx(context: Context?,type:String?):String{
+        return SOCKET_HOSTS_SOEASTEX[getIndex(context!!)]+type
     }
 
     //币种图标
