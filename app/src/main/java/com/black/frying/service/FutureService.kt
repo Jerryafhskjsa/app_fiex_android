@@ -220,6 +220,9 @@ object FutureService {
      * 获取交易对的合约面值
      */
     fun getContractSize(symbol: String?): BigDecimal? {
+        if(symbolList == null){
+            return BigDecimal(0)
+        }
         for (symbolItem in symbolList!!) {
             if (symbolItem.symbol == symbol) {
                 contractSize = symbolItem.contractSize.toBigDecimal()

@@ -47,9 +47,9 @@ android {
             variant.outputs.all { output ->
                 def date = new Date().format("MMddHH", TimeZone.getTimeZone("GMT+08"))
                 if ("debug" == variant.buildType.name) {
-                    outputFileName = "FIEX_" + variant.buildType.name + "_V" + defaultConfig.versionName + "_" + date + ".apk"
+                    outputFileName = "SoeasyEx_" + variant.buildType.name + "_V" + defaultConfig.versionName + "_" + date + ".apk"
                 } else {
-                    outputFileName = "FIEX_" + "V" + defaultConfig.versionName + ".apk"
+                    outputFileName = "SoeasyEx_" + "V" + defaultConfig.versionName + ".apk"
                 }
             }
         }

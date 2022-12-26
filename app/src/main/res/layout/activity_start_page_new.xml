@@ -12,17 +12,16 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/icon_02"
             android:layout_marginBottom="40dp">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="142dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/double_padding"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/splash_middle" />
+                android:src="@mipmap/ic_launcher_soeasyex" />
 
         </FrameLayout>
 

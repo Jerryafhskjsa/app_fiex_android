@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Fiex</string>
+    <string name="app_name">SoeasyEx</string>
     <string name="edt_account_hint">Mobile phone number</string>
     <string name="get_check_code">Get verification code</string>
     <string name="cancel">Cancel</string>
@@ -164,7 +164,7 @@
     <string name="language_english">English (American)</string>
     <string name="language_janpanese">Japanese</string>
     <string name="language_english_uk">English (British)</string>
-    <string name="welcome_fbsex">Welcome to Fiex</string>
+    <string name="welcome_fbsex">Welcome to SoeasyEx</string>
     <string name="alert_server_error">Server exception</string>
     <string name="wallet_coin_filter">Hide small amount currency</string>
     <string name="total_contract">Total contract(USD)</string>
@@ -407,7 +407,7 @@
     <string name="reset_password">Reset Login Password</string>
     <string name="hint_password_length">Password (no less than 8 characters)</string>
     <string name="hint_input_mail_code">Enter the email verification code</string>
-    <string name="hint_google_lost">Google authenticator is missing, please contact customer servicesupport@Fiex.comGrievance</string>
+    <string name="hint_google_lost">Google authenticator is missing, please contact customer servicesupport@SoeasyEx.com Grievance</string>
     <string name="copy">Copy</string>
     <string name="hint_google_secret">Saving the QR code to your mobile phone or copying the secret key to the clipboard may pose a security risk. Please keep it properly</string>
     <string name="login_title">Login</string>
@@ -438,8 +438,8 @@
     <string name="verify_mail_02">Email authentication</string>
     <string name="invite_code">Invitation Code</string>
     <string name="recommend_person">Invite friends</string>
-    <string name="recommended_share_title">I am waiting for you on the world is leading blockchain financial derivatives service platform "Fiex", so come and register</string>
-    <string name="recommended_share_text">"Fiex" the world is leading blockchain financial derivatives service platform</string>
+    <string name="recommended_share_title">I am waiting for you on the world is leading blockchain financial derivatives service platform "SoeasyEx", so come and register</string>
+    <string name="recommended_share_text">"SoeasyEx" the world is leading blockchain financial derivatives service platform</string>
     <string name="recharge_amount">Number of coins recharged</string>
     <string name="recharge_confirm">Fee</string>
     <string name="safe_bind">Security authentication</string>
@@ -496,9 +496,9 @@
     <string name="login_phone">Mobile login</string>
     <string name="login_email">Email login</string>
     <string name="go_register">Registration</string>
-    <string name="go_register_hint">Don\t have a Fiex account yet</string>
+    <string name="go_register_hint">Don\t have a SoeasyEx account yet</string>
     <string name="go_login">Login</string>
-    <string name="go_login_hint">There is no Fiex yetCo account</string>
+    <string name="go_login_hint">There is no SoeasyEx account yet</string>
     <string name="register_type_email">Email Registration</string>
     <string name="register_type_phone">Mobile phone registration</string>
     <string name="btn_reset_password">Reset Password</string>
@@ -577,7 +577,7 @@
     <string name="promotions_done">Completed</string>
     <string name="promotions_finish">Finished</string>
     <string name="promotions_not_start">Coming soon</string>
-    <string name="company">Fiex Global Exchange</string>
+    <string name="company">SoeasyEx Global Exchange</string>
     <string name="recommend_count">Number of invited people %s</string>
     <string name="service_rule">Terms of Service</string>
     <string name="extract_useable">Available %s %s</string>

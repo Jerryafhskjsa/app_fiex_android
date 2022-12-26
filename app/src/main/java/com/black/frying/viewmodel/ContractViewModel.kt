@@ -216,6 +216,9 @@ class ContractViewModel(
      * 获取资产
      */
     private fun initBalanceByCoin(context: Context?) {
+        if(currentPairStatus.pair == null){
+            return
+        }
         var coin = currentPairStatus.pair.toString().split("_")[1]
         FutureApiServiceHelper.getBalanceDetail(context, coin, FutureService.underlyingType, false,
             object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {

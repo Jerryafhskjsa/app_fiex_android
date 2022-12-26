@@ -6,8 +6,8 @@ import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
-        "http://fiex.matchain.info",//fiex测试环境
-        "https://fiex.io",//正式环境
+        "http://abexxx.net",//fiex测试环境
+        "https://soeasyex.com",//正式环境
     )
 
     var serverHost = ArrayList<String?>()
@@ -47,11 +47,12 @@ object UrlConfig {
 
 
     private val SOCKET_HOSTS_FIEX = arrayOf(
-        "ws://fiex.matchain.info/socket",//测试环境
-        "wss://fiex.io/socket",//正式环境
-        "wss://fiex.io/ws/market",
-        "wss://fiex.io/ws/user"
+        "wss://abexxx.net/socket",//测试环境
+        "wss://soeasyex.com/socket",//正式环境
+        "wss://soeasyex.com/ws/market",
+        "wss://soeasyex.com/ws/user"
     )
+
 
 
     fun getIndex(context: Context): Int {

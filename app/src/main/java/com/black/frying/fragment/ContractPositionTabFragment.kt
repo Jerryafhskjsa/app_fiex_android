@@ -79,6 +79,10 @@ class ContractPositionTabFragment : BaseFragment(),
         viewModel = ContractPositionViewModel(mContext!!, this)
         binding?.allDone?.setOnClickListener(this)
         binding?.entrustType?.visibility = View.GONE
+        binding?.contractWithLimit?.setOnCheckedChangeListener { buttonView, isChecked ->
+            SharedPreferenceUtils.putData(Constants.PLAN_ALL_CHECKED,isChecked)
+            viewModel?.getPositionData(isChecked)
+        }
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
