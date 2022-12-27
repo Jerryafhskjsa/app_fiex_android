@@ -167,7 +167,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)}
             R.id.bill -> {
-                BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                BlackRouter.getInstance().build(RouterConstData.CONTRACT_BILL_ACTIVITY)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)}
         }

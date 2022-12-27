@@ -145,7 +145,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
 
         binding?.tabLayout?.setSelectedTabIndicatorHeight(0)
-        binding?.tabLayout?.tabMode = TabLayout.MODE_FIXED
+        binding?.tabLayout?.tabMode = TabLayout.MODE_SCROLLABLE
 
         initFragmentList()
 

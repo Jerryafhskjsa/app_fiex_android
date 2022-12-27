@@ -240,6 +240,11 @@
     <string name="extract">提现</string>
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
+    <string name="current_delegation">当前委托</string>
+    <string name="historical_entrustment">历史委托</string>
+    <string name="historical_orders">历史订单</string>
+    <string name="capital_flow">资金流水</string>
+    <string name="capital_cost">资金费用</string>
     <string name="rise">涨幅榜</string>
     <string name="fall">跌幅榜</string>
     <string name="name">名称</string>
@@ -262,6 +267,7 @@
     <string name="entruct_amount">委托量</string>
     <string name="clear_search_record">清除搜索记录</string>
     <string name="history_record">历史记录</string>
+    <string name="contract_history_record">合约历史记录</string>
     <string name="my_wallet">资产管理</string>
     <string name="bill_manager">订单管理</string>
     <string name="recommend">邀请好友</string>
@@ -681,6 +687,7 @@
     <string name="language">语言</string>
     <string name="exchange_rates">汇率</string>
     <string name="exchange">划转</string>
+    <string name="comprehensive_bill">综合账单</string>
     <string name="super_rebate">超级折扣</string>
     <string name="language_cny">人民币</string>CNY
     <string name="exchange_rates_usd">美元</string>
@@ -729,8 +736,8 @@
     <string name="contract_account">合约</string>
     <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财</string>
-    <string name="capital_account">资金</string>
-    <string name="wallet_account">总览</string>
+    <string name="capital_account">资金账户</string>
+    <string name="wallet_account">钱包总览</string>
     <string name="confirm_transfer">确认转移</string>
     <string name="select_wallet">选择钱包</string>
     <string name="select_coin">选择币种</string>
