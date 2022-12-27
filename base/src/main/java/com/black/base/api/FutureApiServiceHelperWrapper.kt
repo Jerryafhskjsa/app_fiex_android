@@ -1,6 +1,7 @@
 package com.black.base.api
 
 import android.content.Context
+import android.util.Log
 import android.util.SparseArray
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
@@ -120,14 +121,18 @@ object FutureApiServiceHelperWrapper {
         }
         var apiManager: ApiManager? = null
         when (type) {
-            ConstData.PairStatusType.FUTURE_U -> apiManager =
+            ConstData.PairStatusType.FUTURE_U,ConstData.PairStatusType.FUTURE_ALL -> apiManager =
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_F)
             ConstData.PairStatusType.FUTURE_COIN -> apiManager =
                 ApiManager.build(context, UrlConfig.ApiType.URL_FUT_D)
             ConstData.PairStatusType.FUTURE_ALL -> {
                 futureAllSymbolPairList?.clear()
-                futureAllSymbolPairList?.addAll(futureUbaseSymbolPairList!!)
-                futureAllSymbolPairList?.addAll(futureCoinBaseSymbolPairList!!)
+                if(futureUbaseSymbolPairList?.isNotEmpty() == true){
+                    futureAllSymbolPairList?.addAll(futureUbaseSymbolPairList!!)
+                }
+                if(futureCoinBaseSymbolPairList?.isNotEmpty() == true){
+                    futureAllSymbolPairList?.addAll(futureCoinBaseSymbolPairList!!)
+                }
                 return Observable.just(futureAllSymbolPairList)
             }
         }
@@ -228,7 +233,7 @@ object FutureApiServiceHelperWrapper {
             return if (type == ConstData.PairStatusType.FUTURE_ALL) {
                 Observable.just(futureList)
             } else {
-                if (System.currentTimeMillis() - (getLastGetTime(FUTURE_TICKERS_LIST)
+                return if (System.currentTimeMillis() - (getLastGetTime(FUTURE_TICKERS_LIST)
                         ?: 0) < DATA_CACHE_OVER_TIME
                 ) {
                     Observable.just(futureList)
@@ -242,7 +247,7 @@ object FutureApiServiceHelperWrapper {
     }
 
 
-    fun getFutureSymboleListPairData(
+    fun getFutureSymbolListPairData(
         context: Context?,
         type: ConstData.PairStatusType?
     ): ArrayList<PairStatus?>? {
@@ -284,6 +289,7 @@ object FutureApiServiceHelperWrapper {
             ?.getTickers()
             ?.flatMap { result: HttpRequestResultBean<List<TickerBean?>?>? ->
                 var data = result?.result!!
+                var newData = ArrayList<PairStatus?>()
                 if (data.isNotEmpty()) {
                     setLastGetTime(FUTURE_TICKERS_LIST, System.currentTimeMillis())
                     var c2CPrice: C2CPrice? = null
@@ -306,7 +312,6 @@ object FutureApiServiceHelperWrapper {
                         ConstData.PairStatusType.FUTURE_ALL -> pairListData =
                             futureAllSymbolPairList
                     }
-                    var newData = ArrayList<PairStatus?>()
                     var pairStatusMap: MutableMap<String?, PairStatus?> = HashMap()
                     for (j in pairListData!!.indices) {
                         for (i in data.indices) {
@@ -360,10 +365,8 @@ object FutureApiServiceHelperWrapper {
                             futureAllPairTickersStatus?.addAll(futureCoinTickersPairStatus!!)
                         }
                     }
-                    Observable.just(newData)
-                } else {
-                    Observable.empty()
                 }
+                Observable.just(newData)
             }
             ?.compose(RxJavaHelper.observeOnMainThread())
     }

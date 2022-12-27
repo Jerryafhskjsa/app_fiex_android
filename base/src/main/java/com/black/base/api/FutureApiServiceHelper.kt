@@ -456,7 +456,8 @@ object FutureApiServiceHelper {
      * 获取用户阶梯费率
      */
     fun getUserStepRate(
-        context: Context?, isShowLoading: Boolean,
+        context: Context?,
+        isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<UserStepRate>?>?
     ) {
         if (context == null || callback == null) {

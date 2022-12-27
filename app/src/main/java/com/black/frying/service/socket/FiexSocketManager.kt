@@ -112,7 +112,6 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     private fun initSocketManager(context: Context?) {
         var socketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
-        Log.d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间

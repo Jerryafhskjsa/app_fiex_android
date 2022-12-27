@@ -1185,20 +1185,18 @@ object FutureService {
     fun getBalanceLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
 
         //可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
-        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
-        if (availableBalanceDisplay == null) {
+        if (balanceDetail == null) {
             return BigDecimal.ZERO
         }
+        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
         //余额多仓最大可开
-        var result = availableBalanceDisplay.divide(
+        return availableBalanceDisplay.divide(
             inputPrice.multiply(contractSize).multiply(
                 BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
                     .add(BigDecimal(userStepRate?.takerFee).multiply(BigDecimal("2")))
             ),
             8, RoundingMode.DOWN
         )
-        return result
-
     }
 
     /**

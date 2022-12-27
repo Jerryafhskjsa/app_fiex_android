@@ -727,21 +727,18 @@ object SocketDataContainer {
         val allFutureSymbolListCallback: Callback<ArrayList<PairStatus>?>? =
             object : Callback<ArrayList<PairStatus>?>() {
                 override fun error(type: Int, error: Any) {
-
                 }
 
                 override fun callback(returnData: ArrayList<PairStatus>?) {
-                    Log.d("iiiiii", "initAllFutureSymbolList,allSymbolSize = " + returnData?.size)
                     callback?.callback(returnData)
                 }
             }
-        val uSymbolListCallback: Callback<ArrayList<PairStatus>?> =
+        val uSymbolListCallback: Callback<ArrayList<PairStatus>?>? =
             object : Callback<ArrayList<PairStatus>?>() {
                 override fun error(type: Int, error: Any) {
                 }
 
                 override fun callback(returnData: ArrayList<PairStatus>?) {
-                    Log.d("iiiiii", "initAllFutureSymbolList,usdtSymbolSize = " + returnData?.size)
                     FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(
                         context,
                         ConstData.PairStatusType.FUTURE_ALL,
@@ -756,7 +753,6 @@ object SocketDataContainer {
                 }
 
                 override fun callback(returnData: java.util.ArrayList<PairStatus>?) {
-                    Log.d("iiiiii", "initAllFutureSymbolList,coinSymbolSize = " + returnData?.size)
                     FutureApiServiceHelperWrapper.getFuturesSymbolListLocal(
                         context,
                         ConstData.PairStatusType.FUTURE_U,
@@ -812,12 +808,12 @@ object SocketDataContainer {
         if (context == null) {
             return
         }
+        Log.d("666666","cacheFuturePairStatusData")
         val observable = FutureApiServiceHelperWrapper.getFutureTickersLocal(
             context,
             ConstData.PairStatusType.FUTURE_ALL
         )
         observable?.subscribeOn(Schedulers.io())?.map { pairStatuses ->
-            Log.d("iiiii", "initAllFuturePairStatusData,pairStatuses = " + pairStatuses.size)
             synchronized(allFuturePairStatusList!!) {
                 allFuturePairStatusList.clear()
                 allFuturePairStatusList.addAll(pairStatuses)
@@ -829,6 +825,7 @@ object SocketDataContainer {
                             allFuturePairStatusMap[it] = pairStatus
                         }
                     }
+                    Log.d("666666","cacheFuturePairStatusData,allFuturePairStatusMap.size = "+allFuturePairStatusMap.size)
                 }
             }
             ""
@@ -1540,6 +1537,7 @@ object SocketDataContainer {
         if (ConstData.PairStatusType.FUTURE_DEAR == pairType) {
 
         }
+        Log.d("666666","getFuturesPairsWithSet,pairType = "+pairType)
         FutureApiServiceHelperWrapper.getFutureTickersLocal(context, pairType)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(
@@ -1548,10 +1546,12 @@ object SocketDataContainer {
                     false,
                     object : Callback<ArrayList<PairStatus?>?>() {
                         override fun error(type: Int, error: Any) {
+                            Log.d("666666","getFuturesPairsWithSet,error")
                             callback?.error(type, error)
                         }
 
                         override fun callback(returnData: ArrayList<PairStatus?>?) {
+                            Log.d("666666","getFuturesPairsWithSet,callback")
                             if (returnData != null) {
                                 val result = ArrayList<PairStatus?>()
                                 for (i in returnData.indices) {

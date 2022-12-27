@@ -320,6 +320,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 if (count != null) {
                     val max: BigDecimal? = getMaxAmount()
                     if (max != null) {
+                        if(max.compareTo(BigDecimal(0.00)) == 0){
+                            return
+                        }
                         var countB = count?.let { BigDecimal(it) }
                         var progress = (countB?.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
                             BigDecimal(100)

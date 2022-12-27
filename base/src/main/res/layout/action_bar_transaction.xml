@@ -136,7 +136,7 @@
                                 android:layout_gravity="center"
                                 android:clickable="true"
                                 android:includeFontPadding="false"
-                                android:text="Btc"
+                                android:text="--"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_14"
                                 android:textStyle="bold" />
@@ -150,7 +150,7 @@
                                 android:layout_toRightOf="@+id/action_bar_title"
                                 android:clickable="true"
                                 android:includeFontPadding="false"
-                                android:text="/usdt"
+                                android:text="/--"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_12" />
                         </RelativeLayout>

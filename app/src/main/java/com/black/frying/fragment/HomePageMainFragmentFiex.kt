@@ -170,11 +170,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 layout?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
             }
         })
-//        viewModel!!.getRiseFallData(1)
-//        viewModel!!.getSymbolList()
-//        viewModel!!.getHomeTicker()
-//        viewModel!!.getHomeKline()
-//        showChatFloatAdView()
         FutureService.initFutureData(mContext)
         return layout
     }

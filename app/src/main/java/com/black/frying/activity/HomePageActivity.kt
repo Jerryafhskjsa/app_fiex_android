@@ -57,10 +57,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     private val transactionExtras = Bundle()
 
     private var backPressedToExitOnce = false
-    private val currentTab = 0
     private var currentDemandAdId: Long? = null
 
-    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,21 +118,21 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         val coinBaseCallback: Callback<ArrayList<PairStatus?>?> =
             object : Callback<ArrayList<PairStatus?>?>() {
                 override fun error(type: Int, error: Any) {
-
+                    Log.d("666666","coinBaseCallback,error")
                 }
                 override fun callback(returnData: ArrayList<PairStatus?>?) {
+                    Log.d("666666","coinBaseCallback,callback")
                     SocketDataContainer.cacheFuturePairStatusData(mContext)
-                    Log.d("iiiiii","coinTickerSize = "+returnData?.size)
                     SocketUtil.sendSocketCommandBroadcast(mContext,SocketUtil.COMMAND_FUTURE_TICKERS_START)
                 }
             }
         val uBaseCallback: Callback<ArrayList<PairStatus?>?> =
             object : Callback<ArrayList<PairStatus?>?>() {
                 override fun error(type: Int, error: Any) {
-
+                    Log.d("666666","uBaseCallback,error")
                 }
                 override fun callback(returnData: ArrayList<PairStatus?>?) {
-                    Log.d("iiiiii","usdtTickerSize = "+returnData?.size)
+                    Log.d("666666","uBaseCallback,callback")
                     //获取合约币本位交易对行情数据
                     SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_COIN,coinBaseCallback)
                 }
@@ -142,12 +140,13 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         //获取合约所有交易对数据并缓存
         SocketDataContainer.initAllFutureSymbolList(this,object :Callback<ArrayList<PairStatus>?>(){
             override fun callback(returnData: ArrayList<PairStatus>?) {
+                Log.d("666666","initAllFutureSymbolList,callback")
                 //获取合约U本位交易对行情数据
                 SocketDataContainer.getFuturesPairsWithSet(mContext,ConstData.PairStatusType.FUTURE_U,uBaseCallback)
             }
 
             override fun error(type: Int, error: Any?) {
-
+                Log.d("666666","initAllFutureSymbolList,error")
             }
         })
         checkUpdate(true)

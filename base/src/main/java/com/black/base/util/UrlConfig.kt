@@ -7,7 +7,7 @@ import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
-        "http://abexxx.net",//fiex测试环境
+        "https://abexxx.net",//fiex测试环境
         "https://soeasyex.com",//正式环境
     )
 

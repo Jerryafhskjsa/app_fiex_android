@@ -2,6 +2,7 @@ package com.black.base.net
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.black.base.R
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.activity.BaseActivity

@@ -272,7 +272,7 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.onResume()
         initAdjustLeverageData()
         updateDear(isDear)
-        FutureService.getContractSize("btc_usdt")
+        FutureService.getContractSize(viewModel?.getCurrentPair())
         if (header1View?.tagPrice?.text.toString().isNotEmpty()) {
 //            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
         }
