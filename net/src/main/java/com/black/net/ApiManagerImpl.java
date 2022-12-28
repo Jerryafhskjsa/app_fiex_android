@@ -2,8 +2,11 @@ package com.black.net;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -11,11 +14,22 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -49,7 +63,7 @@ public class ApiManagerImpl {
         }
     }
 
-    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
         String key = getKey(url, deviceId, lang, ucToken);
         SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
         ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
@@ -62,11 +76,12 @@ public class ApiManagerImpl {
         return apiManager;
     }
 
-    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) {
+    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
         this.apiCookieHelper = apiCookieHelper;
         this.interceptHelper = interceptHelper;
         //OkHttpClient配置
-        builder = new OkHttpClient.Builder();
+//        builder = new OkHttpClient.Builder();
+        builder = getOkHttpBuilder();
         builder.connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);
         builder.readTimeout(DEFAULT_READ_TIME_OUT, TimeUnit.SECONDS);
         builder.writeTimeout(DEFAULT_WRITE_TIME_OUT, TimeUnit.SECONDS);
@@ -80,6 +95,47 @@ public class ApiManagerImpl {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+    }
+
+    private OkHttpClient.Builder getOkHttpBuilder() throws Throwable {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//            return new OkHttpClient.Builder();
+//        }else{
+//            return getUnsafeOkHttpClient();
+//        }
+        return getUnsafeOkHttpClient();
+    }
+
+    private final OkHttpClient.Builder getUnsafeOkHttpClient() throws Throwable {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{(TrustManager)(new X509TrustManager() {
+                public void checkClientTrusted(@Nullable X509Certificate[] chain, @Nullable String authType) throws CertificateException {
+                }
+
+                public void checkServerTrusted(@Nullable X509Certificate[] chain, @Nullable String authType) throws CertificateException {
+                }
+
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            })};
+            SSLContext var10000 = SSLContext.getInstance("SSL");
+            SSLContext sslContext = var10000;
+            sslContext.init((KeyManager[])null, trustAllCerts, new SecureRandom());
+            SSLSocketFactory var6 = sslContext.getSocketFactory();
+            SSLSocketFactory sslSocketFactory = var6;
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            TrustManager var10002 = trustAllCerts[0];
+            if (trustAllCerts[0] == null) {
+                throw new NullPointerException("null cannot be cast to non-null type javax.net.ssl.X509TrustManager");
+            } else {
+                builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)var10002);
+                builder.hostnameVerifier((hostname, session) -> true);
+                return builder;
+            }
+        } catch (Exception var5) {
+            throw (Throwable)(new RuntimeException((Throwable)var5));
+        }
     }
 
     private static String getKey(String url, String deviceId, String lang, String ucToken) {
