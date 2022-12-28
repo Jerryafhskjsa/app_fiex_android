@@ -42,6 +42,10 @@
                         android:layout_marginTop="@dimen/text_size_20"
                         android:orientation="horizontal">
                         <LinearLayout
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
@@ -92,11 +96,12 @@
                             android:background="@drawable/bg_login_devide_bar_title"
                             />
                         </LinearLayout>
+                        </LinearLayout>
                         <ImageView
                             android:id="@+id/bill"
                             android:layout_width="15dp"
                             android:layout_height="20dp"
-                            android:layout_marginLeft="240dp"
+                            android:layout_marginLeft="180dp"
                             android:background="@drawable/icon_c2c_order">
                         </ImageView>
                     </LinearLayout>
@@ -112,6 +117,10 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -120,9 +129,12 @@
                             android:text="@string/total_contract"
                             android:textColor="@color/T11"
                             android:textSize="@dimen/text_size_13" />
+
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
                             android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/money_total"

@@ -77,6 +77,8 @@ object RouterConstData {
 
     const val WALLET = "fiex://wallet"
     const val FINANCIAL_RECORD = "fiex://financialRecord"
+    const val SPOT_BILL_ACTIVITY = "fiex://spot_bill_activity"
+    const val CONTRACT_BILL_ACTIVITY = "fiex://contract_bill_activity"
     const val EXTRACT = "fiex://extract"
     const val WALLET_CHOOSE_COIN = "fiex://walletChooseCoin"
     const val WALLET_ADDRESS_MANAGE = "fiex://walletAddressManage"

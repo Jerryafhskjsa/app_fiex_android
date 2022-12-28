@@ -155,7 +155,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
             }
             R.id.bill -> {
-                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+                BlackRouter.getInstance().build(RouterConstData.SPOT_BILL_ACTIVITY).go(this)
             }
             R.id.transaction -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)

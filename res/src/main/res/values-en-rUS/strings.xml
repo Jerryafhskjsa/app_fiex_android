@@ -240,6 +240,11 @@
     <string name="extract">Withdrawal</string>
     <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
+    <string name="current_delegation">Current delegation</string>
+    <string name="historical_entrustment">Historical entrustment</string>
+    <string name="historical_orders">Historical orders</string>
+    <string name="capital_flow">Capital flow</string>
+    <string name="capital_cost">Capital cost</string>
     <string name="rise">Rising List</string>
     <string name="fall">Decline chart</string>
     <string name="name">Name</string>
@@ -262,6 +267,7 @@
     <string name="entruct_amount">Entrusted quantity</string>
     <string name="clear_search_record">Clearing search records</string>
     <string name="history_record">History</string>
+    <string name="contract_history_record">Contract history record</string>
     <string name="my_wallet">Asset Management</string>
     <string name="bill_manager">Order Management</string>
     <string name="recommend">Invite friends</string>
@@ -680,7 +686,8 @@
     <string name="safe_center">Security Center</string>
     <string name="language">Language</string>
     <string name="exchange_rates">exchange Rate</string>
-    <string name="exchange">EXCHANGE</string>
+    <string name="exchange">Exchange</string>
+    <string name="comprehensive_bill">Comprehensive bill</string>
     <string name="super_rebate">Super Discount</string>
     <string name="language_cny">CNY</string>
     <string name="exchange_rates_usd">USD</string>

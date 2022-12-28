@@ -48,14 +48,14 @@
                             android:text="@string/total_assets"
                             android:textColor="@color/T11"
                             android:textSize="@dimen/text_size_13" />
+
                             <ImageView
                                 android:id="@+id/bill"
                                 android:layout_width="15dp"
-                                android:layout_height="20dp"
-                                android:layout_marginLeft="210dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="220dp"
                                 android:layout_marginTop="@dimen/text_size_20"
-                                android:background="@drawable/icon_c2c_order">
-                            </ImageView>
+                                android:background="@drawable/icon_c2c_order"></ImageView>
                         </LinearLayout>
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/money_total"

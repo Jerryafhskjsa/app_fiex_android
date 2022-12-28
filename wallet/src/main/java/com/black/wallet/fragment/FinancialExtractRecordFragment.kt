@@ -104,7 +104,7 @@ class FinancialExtractRecordFragment : BaseFragment(), OnItemClickListener, QRef
 
     //获取提币记录
     private fun getFinancialRecordWithdrawData(isShowLoading: Boolean) {
-        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, total, 1, wallet!!.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>(mContext!!) {
+        WalletApiServiceHelper.getWalletRecord(mContext, isShowLoading, currentPage, 10, total, 1, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<FinancialRecord?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 showData(null)
