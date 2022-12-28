@@ -13,10 +13,7 @@ import com.black.base.util.RouterConstData
 import com.black.router.annotation.Route
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivitySpotBillBinding
-import com.black.wallet.fragment.BillEmptyFragment
-import com.black.wallet.fragment.FinancialExtractRecordFragment
-import com.black.wallet.fragment.FinancialRechargeRecordFragment
-import com.black.wallet.fragment.TransferBillFragment
+import com.black.wallet.fragment.*
 import com.google.android.material.tabs.TabLayout
 
 @Route(value = [RouterConstData.CONTRACT_BILL_ACTIVITY])
@@ -32,10 +29,11 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
 
     private var binding: ActivitySpotBillBinding? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
-    private var rechargeFragment: FinancialRechargeRecordFragment? = null
-    private var extractFragment: FinancialExtractRecordFragment? = null
-    private var transferFragment: TransferBillFragment? = null
-    private var totalFragment: BillEmptyFragment? = null
+    private var delegationFragment: DelegationFragment? = null
+    private var entrustmentFragment: EntrustmentFragment? = null
+    private var odersFragment: OdersFragment? = null
+    private var flowFragment: FlowFragment? = null
+    private var costFragment: CostFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +42,7 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             TAB_DELEGATION = it
             TAB_TITLES[0] = TAB_DELEGATION
         }
-        getString(R.string.historical_entrustment).also {
+        getString(R.string.map_entrustment).also {
             TAB_ENTRUSTMENT = it
             TAB_TITLES[1] = TAB_ENTRUSTMENT
         }
@@ -115,31 +113,31 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             fragmentList = java.util.ArrayList()
         }
         fragmentList?.clear()
-        fragmentList?.add(FinancialRechargeRecordFragment().also {
+        fragmentList?.add(DelegationFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            rechargeFragment = it
+            delegationFragment = it
 
         })
-        fragmentList?.add(FinancialExtractRecordFragment().also {
+        fragmentList?.add(EntrustmentFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            extractFragment = it
+            entrustmentFragment = it
         })
-        fragmentList?.add(TransferBillFragment().also {
+        fragmentList?.add(OdersFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            transferFragment = it
+            odersFragment = it
         })
-        fragmentList?.add(BillEmptyFragment().also {
+        fragmentList?.add(FlowFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            totalFragment = it
+            flowFragment = it
         })
-        fragmentList?.add(BillEmptyFragment().also {
+        fragmentList?.add(CostFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            totalFragment = it
+            costFragment = it
         })
 
     }

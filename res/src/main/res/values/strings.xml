@@ -3,6 +3,8 @@
     <string name="edt_account_hint">手机号</string>
     <string name="get_check_code">获取验证码</string>
     <string name="cancel">取消</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
     <string name="red">红涨绿跌</string>
     <string name="green">绿涨红跌</string>
     <string name="login">登录/注册</string>
@@ -231,6 +233,7 @@
     <string name="alert_close_success">关闭成功</string>
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
+    <string name="all">全部</string>
     <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
     <string name="collect_delete">删自选</string>
@@ -241,7 +244,7 @@
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
     <string name="current_delegation">当前委托</string>
-    <string name="historical_entrustment">历史委托</string>
+    <string name="map_entrustment">计划委托</string>
     <string name="historical_orders">历史订单</string>
     <string name="capital_flow">资金流水</string>
     <string name="capital_cost">资金费用</string>

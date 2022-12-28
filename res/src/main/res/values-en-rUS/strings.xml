@@ -3,6 +3,8 @@
     <string name="edt_account_hint">Mobile phone number</string>
     <string name="get_check_code">Get verification code</string>
     <string name="cancel">Cancel</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
     <string name="red">Red Up and Green Down</string>
     <string name="green">Green up and red down</string>
     <string name="login">Login/Registration</string>
@@ -231,6 +233,7 @@
     <string name="alert_close_success">Close successfully</string>
     <string name="search_coin">Search</string>
     <string name="all_coin">All Currencies</string>
+    <string name="all">All</string>
     <string name="volumn">24h quantity</string>
     <string name="collect_add">Add Optional</string>
     <string name="collect_delete">Delete self selection</string>
@@ -241,7 +244,7 @@
     <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
     <string name="current_delegation">Current delegation</string>
-    <string name="historical_entrustment">Historical entrustment</string>
+    <string name="map_entrustment">Map entrustment</string>
     <string name="historical_orders">Historical orders</string>
     <string name="capital_flow">Capital flow</string>
     <string name="capital_cost">Capital cost</string>
@@ -803,8 +806,8 @@
     <string name="total_entrust_amount">Cumulative Quantity</string>
     <string name="total_price">Cumulative Amount</string>
     <string name="usdt_base">U standard</string>
-    <string name="usdt_base_contract">U contract</string>
-    <string name="coin_base_contract">Coin contract</string>
+    <string name="usdt_base_contract">USD-M</string>
+    <string name="coin_base_contract">Coin-M</string>
     <string name="money_total">Wallet balance(USD)</string>
     <string name="profit">Profit and loss(USD)</string>
     <string name="margin">Crossed margin(USD)</string>
