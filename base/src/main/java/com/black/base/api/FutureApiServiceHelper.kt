@@ -128,13 +128,13 @@ object FutureApiServiceHelper {
     }
 
     /**
-     * 获取限价委托订单列表
+     * 获取u本位限价委托订单列表
      */
     fun getOrderList(
         page: Int,
         size: Int,
         symbol: String?,
-        state: String,
+        state: String?,
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<OrderBean>>?
@@ -148,7 +148,133 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+    /**
+     * 获取币本位限价委托订单列表
+     */
+    fun getCoinOrderList(
+        page: Int,
+        size: Int,
+        symbol: String?,
+        state: String?,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getOrderList(symbol, page, size, state)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 
+    /**
+     * 获取U本位历史订单列表
+     */
+    fun getHistoryList(
+        symbol: String?,
+        direction: String?,
+        limit: Int?,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getListHistory(symbol, direction , limit )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取币本位历史订单列表
+     */
+
+    fun getCoinHistoryList(
+        symbol: String?,
+        direction: String?,
+        limit: Int?,
+        context: Context?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getListHistory(symbol, direction , limit )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 获取u本位的资金费用
+     */
+
+    fun getFoundingRateList(
+        symbol: String?,
+        direction: String?,
+        limit: Int?,
+        context: Context?,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getFoundingRateList(symbol, direction , limit )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, callback))
+    }
+
+    /**
+     * 获取币本位的资金费用
+     */
+
+    fun getCoinFoundingRateList(
+        direction: String?,
+        limit: Int?,
+        context: Context?,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getFoundingRateList(null, direction , limit )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, callback))
+    }
+
+    /**
+     * 获取资金流水
+     */
+
+    fun getBalanceBills(
+        coin: String?,
+        direction: String?,
+        limit: Int?,
+        type: String?,
+        context: Context?,
+        callback: Callback<HttpRequestResultBean<OrderBean>>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getBalancesBills(coin, direction , limit ,type )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, callback))
+    }
 
     /**
      * 获取合约交易对聚合行情数据
@@ -303,7 +429,7 @@ object FutureApiServiceHelper {
     }
 
     /**
-     * 获取计划委托列表
+     * 获取U计划委托列表
      * state=null获取全部
      */
     fun getPlanList(
@@ -322,7 +448,26 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
-
+    /**
+     * 获取币计划委托列表
+     * state=null获取全部
+     */
+    fun getCoinPlanList(
+        context: Context?,
+        symbol: String?,
+        state: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+            .getService(FutureApiService::class.java)
+            ?.getPlanList(symbol, state)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
     /**
      * 获取行情列表
      */

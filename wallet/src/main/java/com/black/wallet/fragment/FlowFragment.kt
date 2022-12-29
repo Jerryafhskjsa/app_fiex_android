@@ -9,13 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.WalletApiService
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
+import com.black.base.model.future.OrderBean
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
@@ -23,6 +26,7 @@ import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
+import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.WalletTransferRecordAdapter
@@ -74,13 +78,13 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
 
         binding?.contractChoose?.setOnClickListener(this)
-        binding?.timeChoose?.setOnClickListener(this)
-        binding?.timeChoose?.visibility = View.VISIBLE
+        binding?.start?.setOnClickListener(this)
+        binding?.end?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
-        getRecord(true)
+        getFoundingRateList()
         return layout
     }
 
@@ -129,6 +133,7 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                         override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                             window.dismiss()
                             type = item
+                            getFoundingRateList()
                             when (item) {
                                 TYPE_ALL -> {
                                     binding?.all?.setText(R.string.all)
@@ -147,48 +152,90 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                     }).show()
             }
 
-            R.id.time_choose -> {ChooseDialog()}
-
+            R.id.start-> {chooseDialog(false)}
+            R.id.end-> {
+                val birthCode = binding?.start?.text.toString().trim { it <= ' ' }
+                if (birthCode == "开始时间") {
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_start_time))
+                    return
+                } else {
+                    chooseDialog(true)
+                }
+            }
         }
     }
 
-private fun ChooseDialog() {
-    val calendar: Calendar = Calendar.getInstance()
-    val contentView = LayoutInflater.from(mContext).inflate(R.layout.date_choose_window, null)
-    var year = calendar.get(Calendar.YEAR)
-    var month = calendar.get(Calendar.MONTH) + 1
-    var day = calendar.get(Calendar.DAY_OF_MONTH)
-    val dialog = Dialog(mContext, R.style.AlertDialog)
-    val window = dialog.window
-    if (window != null) {
-        val params = window.attributes
-        //设置背景昏暗度
-        params.dimAmount = 0.2f
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT
-        //设置dialog动画
-        window.setWindowAnimations(R.style.anim_bottom_in_out)
-        window.attributes = params
-    }
-    //设置dialog的宽高为屏幕的宽高
-    val display = resources.displayMetrics
-    val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
-    dialog.setContentView(contentView, layoutParams)
-    dialog.show()
-    val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
-    dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-        year = datePickerDialog.year
-        month = datePickerDialog.month + 1
-        day = datePickerDialog.dayOfMonth
-        dialog.dismiss()
+    private fun chooseDialog(isShowLoading: Boolean) {
+        val calendar: Calendar = Calendar.getInstance()
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.date_choose_window, null)
+        var year = calendar.get(Calendar.YEAR)
+        var month = calendar.get(Calendar.MONTH)
+        var day = calendar.get(Calendar.DAY_OF_MONTH)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.BOTTOM
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            //设置dialog动画
+            window.setWindowAnimations(R.style.anim_bottom_in_out)
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
+        val total = year * 10000 + (month + 1) * 100 + day
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            if (!isShowLoading) {
+                year = datePickerDialog.year
+                month = datePickerDialog.month + 1
+                day = datePickerDialog.dayOfMonth
+                val total1 = year * 10000 + month * 100 + day
+                if (total >= total1) {
+                    binding?.start?.setText(
+                        String.format(
+                            Locale.getDefault(),
+                            "%04d-%02d-%02d",
+                            year,
+                            month,
+                            day
+                        )
+                    ).toString()
+                }
+                else{
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
+                    dialog.dismiss()
+                }
+            }
+            else{
+                year = datePickerDialog.year
+                month = datePickerDialog.month + 1
+                day = datePickerDialog.dayOfMonth
+                val total2 = year * 10000 + month * 100 + day
+                if (total >= total2){
+                    binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
+                }
+                else{
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
+                    dialog.dismiss()
+                }
+            }
+
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {  v ->
+            dialog.dismiss()
+        }
+
     }
 
-    dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {  v ->
-        dialog.dismiss()
-    }
-
-}
 
 override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
         val financialRecord = adapter?.getItem(position)
@@ -197,13 +244,13 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
 
     override fun onRefresh() {
         currentPage = 1
-        getRecord(false)
+        getFoundingRateList()
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getRecord(false)
+            getFoundingRateList()
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -213,39 +260,33 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
         return total > adapter?.count!!
     }
 
-    //获取划转记录
-    private fun getRecord(isShowLoading: Boolean) {
-        ApiManager.build(mContext!!, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getWalletTransferRecord(null,currentPage, 10,
-                null, null)
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(mContext, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>(mContext!!) {
-                override fun error(type: Int, error: Any?) {
-                    super.error(type, error)
-                    showData(null)
-                }
-                override fun callback(returnData: HttpRequestResultData<PagingData<WalletTransferRecord?>?>?) {
-                    if (returnData?.code != null  && returnData.code == HttpRequestResult.SUCCESS) {
-                        total = returnData.data?.totalCount!!
-                        val dataList = returnData.data?.records
-                        showData(dataList)
-                    } else {
-                        FryingUtil.showToast(mContext, if (returnData?.msg == null) "null" else returnData.msg)
+    //获取资金费率
+    private fun getFoundingRateList() {
+        if (otherType == TYPE_U_CONTRACT) {
+            FutureApiServiceHelper.getFoundingRateList( if(type != TYPE_ALL) type else null, null,null, context,
+                object : Callback<HttpRequestResultBean<OrderBean>>() {
+                    override fun error(type: Int, error: Any?) {
                     }
-                }
-            }))
-    }
 
-    private fun showData(dataList: ArrayList<WalletTransferRecord?>?) {
-        binding?.refreshLayout?.setRefreshing(false)
-        binding?.refreshLayout?.setLoading(false)
-        if (currentPage == 1) {
-            adapter?.data = dataList
-        } else {
-            adapter?.addAll(dataList)
+                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        if (returnData != null) {
+                        }
+                    }
+                })
         }
-        adapter?.notifyDataSetChanged()
-    }
 
+        else{
+            FutureApiServiceHelper.getCoinFoundingRateList(null, null,  context,
+                object : Callback<HttpRequestResultBean<OrderBean>>() {
+                    override fun error(type: Int, error: Any?) {
+                    }
+
+                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        if (returnData != null) {
+                        }
+                    }
+                })
+        }
+    }
 
 }

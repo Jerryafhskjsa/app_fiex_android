@@ -13,7 +13,7 @@
         android:gravity="center"
         android:orientation="horizontal">
         <com.black.base.widget.SpanTextView
-            android:id="@+id/btn_confirm"
+            android:id="@+id/btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             android:textSize="@dimen/text_size_15" />
 
         <com.black.base.widget.SpanTextView
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_confirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -41,41 +41,7 @@
             android:textColor="@color/T13"
             android:textSize="@dimen/text_size_15" />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_size_20"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/start"
-            style="@style/ButtonGray"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="2022-12-23"
-            android:textColor="@color/T13"
-            android:textSize="@dimen/text_size_15" />
-        <com.black.base.widget.SpanTextView
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/to"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_15" />
 
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/end"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            style="@style/ButtonGray"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:text="2022-12-30"
-            android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_15" />
-    </LinearLayout>
     <DatePicker
         android:id="@+id/data_picker"
         android:layout_width="match_parent"

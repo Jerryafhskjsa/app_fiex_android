@@ -9,13 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.WalletApiService
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
+import com.black.base.model.future.OrderBean
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
@@ -23,6 +26,7 @@ import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
+import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.WalletTransferRecordAdapter
@@ -31,7 +35,7 @@ import java.util.*
 
 class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     companion object {
-        private const val TYPE_U_CONTRACT = "U本位"
+        private const val TYPE_U_CONTRACT = "USDT"
         private const val TYPE_ALL = "全部"
         private const val TYPE_FEE = "手续费"
         private const val TYPE_TRANSFER = "划转"
@@ -76,15 +80,15 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
-
+        binding?.usdM?.setText("USDT")
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
 
         binding?.contractChoose?.setOnClickListener(this)
-        binding?.timeChoose?.setOnClickListener(this)
-        binding?.timeChoose?.visibility = View.VISIBLE
+        binding?.start?.setOnClickListener(this)
+        binding?.end?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
@@ -102,46 +106,69 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         list!!.add(TYPE_RECOVER)
         list!!.add(TYPE_GRANT)
         list!!.add(TYPE_DEDUCTION)
-        getRecord(true)
+        getBalancesBills()
         return layout
     }
 
     override fun onClick(v: View) {
-        when(v.id){
+        when(v.id) {
             R.id.contract_choose -> {
-                DeepControllerWindow(mContext as Activity, null, otherType, typeList, object : DeepControllerWindow.OnReturnListener<String> {
-                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
-                        window.dismiss()
-                        otherType = item
-                        when(item){
-                            TYPE_U_CONTRACT -> {
-                                binding?.usdM?.setText(R.string.usdt_base_contract)
+                DeepControllerWindow(
+                    mContext as Activity,
+                    null,
+                    otherType,
+                    typeList,
+                    object : DeepControllerWindow.OnReturnListener<String> {
+                        override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                            window.dismiss()
+                            otherType = item
+                            getBalancesBills()
+                            when (item) {
+                                TYPE_U_CONTRACT -> {
+                                    binding?.usdM?.setText("USDT")
+                                }
                             }
                         }
-                    }
 
-                }).show()
+                    }).show()
             }
             R.id.btn_all -> {
-                DeepControllerWindow(mContext as Activity, null, type, list, object : DeepControllerWindow.OnReturnListener<String> {
-                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
-                        window.dismiss()
-                        type = item
-                       binding?.all?.setText(item)
-                    }
+                DeepControllerWindow(
+                    mContext as Activity,
+                    null,
+                    type,
+                    list,
+                    object : DeepControllerWindow.OnReturnListener<String> {
+                        override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                            window.dismiss()
+                            type = item
+                            getBalancesBills()
+                            binding?.all?.setText(item)
+                        }
 
-                }).show()
+                    }).show()
             }
-            R.id.time_choose -> {ChooseDialog()}
+            R.id.start -> {
+                chooseDialog(false)
+            }
+            R.id.end -> {
+                val birthCode = binding?.start?.text.toString().trim { it <= ' ' }
+                if (birthCode == "开始时间") {
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_start_time))
+                    return
+                } else {
+                    chooseDialog(true)
+                }
+            }
         }
     }
-    private fun ChooseDialog() {
+    private fun chooseDialog(isShowLoading: Boolean) {
         val calendar: Calendar = Calendar.getInstance()
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.date_choose_window, null)
         var year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) + 1
+        var month = calendar.get(Calendar.MONTH)
         var day = calendar.get(Calendar.DAY_OF_MONTH)
-        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -160,10 +187,43 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
+        val total = year * 10000 + (month + 1) * 100 + day
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-            year = datePickerDialog.year
-            month = datePickerDialog.month + 1
-            day = datePickerDialog.dayOfMonth
+            if (!isShowLoading) {
+                year = datePickerDialog.year
+                month = datePickerDialog.month + 1
+                day = datePickerDialog.dayOfMonth
+                val total1 = year * 10000 + month * 100 + day
+                if (total >= total1) {
+                    binding?.start?.setText(
+                        String.format(
+                            Locale.getDefault(),
+                            "%04d-%02d-%02d",
+                            year,
+                            month,
+                            day
+                        )
+                    ).toString()
+                }
+                else{
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
+                    dialog.dismiss()
+                }
+            }
+            else{
+                year = datePickerDialog.year
+                month = datePickerDialog.month + 1
+                day = datePickerDialog.dayOfMonth
+                val total2 = year * 10000 + month * 100 + day
+                if (total >= total2){
+                    binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
+                }
+                else{
+                    FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
+                    dialog.dismiss()
+                }
+            }
+
             dialog.dismiss()
         }
 
@@ -173,6 +233,7 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
 
     }
 
+
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
         val financialRecord = adapter?.getItem(position)
         val extras = Bundle()
@@ -180,13 +241,13 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
 
     override fun onRefresh() {
         currentPage = 1
-        getRecord(false)
+        getBalancesBills()
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getRecord(false)
+            getBalancesBills()
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -195,39 +256,20 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
     override fun onLoadMoreCheck(): Boolean {
         return total > adapter?.count!!
     }
-
-    //获取划转记录
-    private fun getRecord(isShowLoading: Boolean) {
-        ApiManager.build(mContext!!, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getWalletTransferRecord(null,currentPage, 10,
-                null, null)
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(mContext, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>(mContext!!) {
-                override fun error(type: Int, error: Any?) {
-                    super.error(type, error)
-                    showData(null)
-                }
-                override fun callback(returnData: HttpRequestResultData<PagingData<WalletTransferRecord?>?>?) {
-                    if (returnData?.code != null  && returnData.code == HttpRequestResult.SUCCESS) {
-                        total = returnData.data?.totalCount!!
-                        val dataList = returnData.data?.records
-                        showData(dataList)
-                    } else {
-                        FryingUtil.showToast(mContext, if (returnData?.msg == null) "null" else returnData.msg)
+ //获取资金流水
+    private fun getBalancesBills() {
+        if (otherType == TYPE_U_CONTRACT) {
+            FutureApiServiceHelper.getBalanceBills( otherType, null,null, type,  context,
+                object : Callback<HttpRequestResultBean<OrderBean>>() {
+                    override fun error(type: Int, error: Any?) {
                     }
-                }
-            }))
-    }
 
-    private fun showData(dataList: ArrayList<WalletTransferRecord?>?) {
-        binding?.refreshLayout?.setRefreshing(false)
-        binding?.refreshLayout?.setLoading(false)
-        if (currentPage == 1) {
-            adapter?.data = dataList
-        } else {
-            adapter?.addAll(dataList)
+                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        if (returnData != null) {
+                        }
+                    }
+                })
         }
-        adapter?.notifyDataSetChanged()
     }
 
 
