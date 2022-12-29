@@ -189,6 +189,38 @@ interface FutureApiService {
     ): Observable<HttpRequestResultBean<OrderBean>>
 
     /**
+     * 获取历史订单
+     */
+    @GET(UrlConfig.Future.URL_LIST_HISTORY)
+    fun getListHistory(
+        @Query("symbol") symbol: String?,
+        @Query("direction") direction: String?,
+        @Query("limit") limit: Int?,
+    ): Observable<HttpRequestResultBean<OrderBean>>
+
+    /**
+     * 获取资金费用
+     */
+    @GET(UrlConfig.Future.URL_FUNDING_RATE_LIST)
+    fun getFoundingRateList(
+        @Query("symbol") symbol: String?,
+        @Query("direction") direction: String?,
+        @Query("limit") limit: Int?,
+    ): Observable<HttpRequestResultBean<OrderBean>>
+
+    /**
+     * 获取资金流水
+     */
+    @GET(UrlConfig.Future.URL_BALANCE_BILLS)
+    fun getBalancesBills(
+        @Query("coin") coin: String?,
+        @Query("direction") direction: String?,
+        @Query("limit") limit: Int?,
+        @Query("type") type: String?,
+    ): Observable<HttpRequestResultBean<OrderBean>>
+
+
+    /**
      * 下单接口
      */
     @FormUrlEncoded

@@ -400,6 +400,8 @@
     <string name="recharge_detail">Details of coin charging</string>
     <string name="please_choose_country">Please select a country or region</string>
     <string name="please_choose_birth">Please select the date of birth</string>
+    <string name="please_choose_start_time">Please choose start time first</string>
+    <string name="please_choose_correct_time">Please choose correct time</string>
     <string name="please_upload_pic">Please upload photos</string>
     <string name="alert_input_login_password">Please fill in the current login password</string>
     <string name="password_error">Old password error</string>

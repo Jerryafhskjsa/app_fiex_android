@@ -9,15 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.api.WalletApiService
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
+import com.black.base.model.*
+import com.black.base.model.future.Constants
+import com.black.base.model.future.OrderBean
+import com.black.base.model.future.PlansBean
 import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
@@ -27,6 +28,7 @@ import com.black.base.view.DeepControllerWindow
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
+import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.FinancialRecordAdapter
@@ -80,11 +82,12 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
         binding?.contractChoose?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
+        binding?.timeChoose?.visibility = View.GONE
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
 
-        getRecord(true)
+        getPlanData()
         return layout
     }
 
@@ -95,6 +98,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
                         otherType = item
+                        getPlanData()
                         when(item){
                             TYPE_U_CONTRACT -> {
                                 binding?.usdM?.setText(R.string.usdt_base_contract)
@@ -124,6 +128,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
                         type = item
+                        getPlanData()
                         when(item){
                             TYPE_ALL -> {
                                 binding?.all?.setText(R.string.all)
@@ -150,13 +155,13 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
 
     override fun onRefresh() {
         currentPage = 1
-        getRecord(false)
+        getPlanData()
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getRecord(false)
+            getPlanData()
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -166,39 +171,33 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         return total > adapter?.count!!
     }
 
-    //获取划转记录
-    private fun getRecord(isShowLoading: Boolean) {
-        ApiManager.build(mContext!!, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getWalletTransferRecord(null,currentPage, 10,
-                null, null)
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(mContext, isShowLoading, object : NormalCallback<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>(mContext!!) {
+    //获取计划委托记录
+    private fun getPlanData() {
+        if (otherType == TYPE_U_CONTRACT) {
+            FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, null, false,
+                object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
+                    override fun error(type: Int, error: Any?) {
+                    }
+
+                    override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
+                        if (returnData != null) {
+                        }
+                    }
+                })
+        }
+
+    else{
+        FutureApiServiceHelper.getCoinPlanList(context, null, null, false,
+            object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
-                    super.error(type, error)
-                    showData(null)
                 }
-                override fun callback(returnData: HttpRequestResultData<PagingData<WalletTransferRecord?>?>?) {
-                    if (returnData?.code != null  && returnData.code == HttpRequestResult.SUCCESS) {
-                        total = returnData.data?.totalCount!!
-                        val dataList = returnData.data?.records
-                        showData(dataList)
-                    } else {
-                        FryingUtil.showToast(mContext, if (returnData?.msg == null) "null" else returnData.msg)
+
+                override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
+                    if (returnData != null) {
                     }
                 }
-            }))
+            })
     }
-
-    private fun showData(dataList: ArrayList<WalletTransferRecord?>?) {
-        binding?.refreshLayout?.setRefreshing(false)
-        binding?.refreshLayout?.setLoading(false)
-        if (currentPage == 1) {
-            adapter?.data = dataList
-        } else {
-            adapter?.addAll(dataList)
-        }
-        adapter?.notifyDataSetChanged()
-    }
-
-
 }
+    }
+

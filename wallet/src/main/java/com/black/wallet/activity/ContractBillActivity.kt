@@ -51,11 +51,11 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             TAB_TITLES[2] = TAB_ODERS
         }
 
-        getString(R.string.capital_flow).also {
+        getString(R.string.capital_cost).also {
             TAB_FLOW = it
             TAB_TITLES[3] = TAB_FLOW
         }
-        getString(R.string.capital_cost).also {
+        getString(R.string.capital_flow).also {
             TAB_COST = it
             TAB_TITLES[4] = TAB_COST
         }
