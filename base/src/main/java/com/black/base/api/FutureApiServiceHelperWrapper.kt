@@ -193,7 +193,14 @@ object FutureApiServiceHelperWrapper {
                 var currentPair = CookieUtil.getCurrentFutureUPair(context)
                 var currentPairStatus = CookieUtil.getCurrentFutureUPairObjrInfo(context)
                 if (currentPair == null) {
-                    CookieUtil.setCurrentFutureUPair(context, currentPair)
+                    var pair = CommonUtil.getItemFromList(futureUbaseSymbolPairList, 0)?.pair
+                    Log.d("666666","Wrapper->pair = "+pair)
+                    CookieUtil.setCurrentFutureUPair(context, pair)
+                    SocketUtil.sendSocketCommandBroadcast(
+                        context,
+                        SocketUtil.COMMAND_FUTURE_SYMBOL_START,
+                        null
+                    )
                 }
                 if (currentPairStatus == null) {
                     CookieUtil.setCurrentFutureUPairObjrInfo(

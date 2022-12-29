@@ -199,15 +199,10 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             sendLoginBroadcast(SocketUtil.COMMAND_USER_LOGIN)
         }
 //        getDialogAd()
-        //获取了所有交易对信息
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_QUOTA_OPEN)
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_ORDER_OPEN)
     }
 
     override fun onStop() {
         super.onStop()
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_QUOTA_CLOSE)
-        SocketUtil.sendSocketCommandBroadcast(this, SocketUtil.COMMAND_ORDER_CLOSE)
     }
 
     override fun onDestroy() {

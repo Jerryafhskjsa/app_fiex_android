@@ -1342,9 +1342,6 @@ class HomePageContractFragment : BaseFragment(),
         clearInput()
         deepViewBinding!!.clearASKTradeOrders()
         deepViewBinding!!.clearBIDTradeOrders()
-        mContext?.let {
-            CookieUtil.setCurrentFutureUPair(it, pairStatus.pair)
-        }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
         resetPriceLength()

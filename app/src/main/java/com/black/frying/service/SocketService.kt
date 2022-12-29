@@ -11,10 +11,7 @@ import android.content.IntentFilter
 import android.os.*
 import android.util.Log
 import com.black.base.model.SuccessObserver
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
-import com.black.base.util.SocketDataContainer
-import com.black.base.util.SocketUtil
+import com.black.base.util.*
 import com.black.frying.service.socket.*
 import com.black.net.websocket.WebSocketHandler
 import com.google.gson.Gson
@@ -37,6 +34,11 @@ class SocketService : Service() {
     private val receiver = SocketCommandBroadcastReceiver()
     private val mHandler = Handler(Handler.Callback { msg ->
         when (msg.what) {
+            SocketUtil.COMMAND_FUTURE_SYMBOL_START -> {
+                Log.d("666666","get command->pair = "+CookieUtil.getCurrentFutureUPair(mContext!!))
+                CookieUtil.getCurrentFutureUPair(mContext!!)
+                    ?.let { fiexSocketManager?.startListenFutureSymbol(it) }
+            }
             //开始监听合约24小时行情
             SocketUtil.COMMAND_FUTURE_TICKERS_START -> fiexSocketManager?.startListenFutureTickers()
             //移除socket监听

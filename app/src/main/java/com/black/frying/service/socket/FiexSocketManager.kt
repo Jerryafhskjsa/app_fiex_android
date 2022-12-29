@@ -111,12 +111,14 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     private fun initSocketManager(context: Context?) {
-        var socketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
+        var socketUrl = UrlConfig.getSpotSocketHostSoeasyEx(context)
+        Log.d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         var futurSocketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
+        Log.d("666666","futurSocketUrl = "+futurSocketUrl)
         futureSocketSetting = WebSocketSetting()
         futureSocketSetting.connectUrl = futurSocketUrl
         futureSocketSetting.connectionLostTimeout = 60//心跳间隔时间
@@ -437,6 +439,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     fun startListenFutureSymbol(symbol: String) {
         Log.d(TAG, "startListenFutureSymbol---")
+        Log.d("666666","startListenFutureSymbol->pair = "+symbol)
+        currentUFuturePair = symbol
         try {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_symbol")
@@ -716,6 +720,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onConnected() {
             Log.d(TAG, "SubStatusDataListener onConnected")
             currentPair = SocketUtil.getCurrentPair(mCcontext!!)
+            Log.d(TAG, "SubStatusDataListener currentPair = "+currentPair)
             startListenPair(currentPair)
         }
 
@@ -723,7 +728,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
             if (message.equals("succeed")) {
                 return
             }
-//            Log.d(TAG, "SubStatus->onMessage = $message")
+            Log.d(TAG, "SubStatusDataListener->onMessage = $message")
             CommonUtil.postHandleTask(mHandler) {
                 var data: JSONObject? = null
                 try {
@@ -812,7 +817,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         override fun onConnected() {
             Log.d(TAG, "SymbolListener---->ßonConnected")
             currentUFuturePair = CookieUtil.getCurrentFutureUPair(mCcontext!!)
-            startListenFutureSymbol("btc_usdt")
+            CookieUtil.getCurrentFutureUPair(mCcontext!!)?.let { startListenFutureSymbol(it) }
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
@@ -829,7 +834,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         var data = data.get("data");
 //                        val jsonObject: JsonObject = JsonParser().parse(data) as JsonObject
 //                        Log.d(TAG, "SymbolListener message = $channel")
-//                        Log.d(TAG, "SymbolListener->onMessage = $message")
+                        Log.d(TAG, "SymbolListener->onMessage = $message")
                         when (channel) {
                             "push.ticker" -> { //行情，更新涨跌幅
                                 val tickerBean = gson.fromJson<PairQuotation>(

@@ -139,6 +139,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                         var lines = returnData.data ?: return
                         fryingLinesConfig.clear()
                         fryingLinesConfig.addAll(lines)
+                        fryingLinesConfig.reverse()
                         var temp = ArrayList<String?>()
                         for (i in lines){
                             temp.add(i?.lineUrl)

@@ -362,7 +362,7 @@ object CookieUtil {
     }
 
     fun getHostIndex(context: Context): Int {
-        return getSharedPreferences(context).getInt(ConstData.HOST_INDEX, 0)
+        return getSharedPreferences(context).getInt(ConstData.HOST_INDEX, 1)
     }
 
     fun addPairSearchHistory(context: Context, pair: String?) {

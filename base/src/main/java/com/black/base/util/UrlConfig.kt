@@ -48,6 +48,11 @@ object UrlConfig {
         "wss://soeasyex.com/ws/",//正式
     )
 
+    private val SPOT_SOCKET_HOSTS_SOEASTEX = arrayOf(
+        "wss://abexxx.net/socket",//测试
+        "wss://soeasyex.com/socket",//正式
+    )
+
 
     fun getIndex(context: Context): Int {
         if (!CommonUtil.isApkInDebug(context)) {
@@ -61,6 +66,11 @@ object UrlConfig {
      */
     fun getSocketHostSoeasyEx(context: Context?,type:String?):String{
         return SOCKET_HOSTS_SOEASTEX[getIndex(context!!)]+type
+    }
+
+
+    fun getSpotSocketHostSoeasyEx(context: Context?):String{
+        return SPOT_SOCKET_HOSTS_SOEASTEX[getIndex(context!!)]
     }
 
     //币种图标

@@ -19,9 +19,6 @@ import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.lib.verify.VerifyWindowObservable.Companion.getVerifyWindowSingle
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.future.DepthBean
-import com.black.base.model.future.MarkPriceBean
-import com.black.base.model.future.SymbolBean
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo

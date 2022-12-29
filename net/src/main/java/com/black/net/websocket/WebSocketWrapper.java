@@ -18,7 +18,18 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 
 /**
  * 负责 WebSocket 连接的建立，数据发送，监听数据等。
@@ -81,9 +92,11 @@ public class WebSocketWrapper {
                             mSetting.getHttpHeaders(),
                             connectTimeOut);
                     LogUtil.i(TAG, "WebSocket start connect...");
+                    SSLSocketFactory factory = setTrustAllCertify();
                     if (mSetting.getProxy() != null) {
                         mWebSocket.setProxy(mSetting.getProxy());
                     }
+                    mWebSocket.setSocketFactory(factory);
                     mWebSocket.connect();
                     mWebSocket.setConnectionLostTimeout(mSetting.getConnectionLostTimeout());
                     if (needClose) {
@@ -106,6 +119,42 @@ public class WebSocketWrapper {
                 }
             }
         }
+    }
+
+    /**
+     * 信任所有https证书
+     */
+    private SSLSocketFactory setTrustAllCertify(){
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance( "TLS" );
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        try {
+            sslContext.init(null, new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                        }
+
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+                    }
+            }, new SecureRandom());
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        SSLSocketFactory factory = sslContext.getSocketFactory();
+        return factory;
     }
 
     /**

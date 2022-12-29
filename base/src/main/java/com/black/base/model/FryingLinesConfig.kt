@@ -13,10 +13,10 @@ class FryingLinesConfig() {
     var endTime:Long? = null
     set(value) {
         field = value
-        if(value!! - startTime!! > 10000){
-            speed = ">10000"
+        speed = if(value!! - startTime!! > 10000){
+            ">10000ms"
         }else{
-            speed = (value!! - startTime!!).toString()
+            (value!! - startTime!!).toString()+"ms"
         }
 
     }
