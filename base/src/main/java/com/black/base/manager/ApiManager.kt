@@ -38,7 +38,8 @@ class ApiManager {
             val language = LanguageUtil.getLanguageSetting(context1)
             val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
             val deviceId = CommonUtil.getDeviceId(context1)
-            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, url+"pro/", deviceId, lang,null, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
+            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH,
+                "$url/pro/", deviceId, lang,null, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
             return apiManager
         }
 

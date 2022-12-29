@@ -522,7 +522,7 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
 
     override fun startVerify(geeTestCallback: GeeTestCallback?) {
         if (needGeeTest && geeTestHelper != null) {
-            geeTestHelper?.startVerify(geeTestCallback)
+//            geeTestHelper?.startVerify(geeTestCallback)
         }
     }
 
