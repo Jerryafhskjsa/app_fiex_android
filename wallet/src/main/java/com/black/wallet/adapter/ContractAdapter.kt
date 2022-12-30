@@ -51,12 +51,12 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                         wallet?.profit,
                         RoundingMode.FLOOR,
                         2,
-                        8
+                        4
                     )
                 )
                 viewHolder?.margin?.setText(
                     NumberUtil.formatNumberNoGroup(
-                        wallet?.crossedMargin,
+                        wallet?.coinAmount,
                         RoundingMode.FLOOR,
                         2,
                         8
@@ -72,10 +72,10 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                 )
                 viewHolder?.balance?.setText(
                     NumberUtil.formatNumberNoGroup(
-                        wallet?.coinAmount,
+                        (wallet?.totalAmount!! + wallet.profit),
                         RoundingMode.FLOOR,
                         2,
-                        8
+                        4
                     )
                 )
                 viewHolder?.deduction?.setText(

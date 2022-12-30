@@ -129,7 +129,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding?.financialUsdt?.setText("0.00 USDT")
                 binding?.capitalUsdt?.setText("0.00 USDT")
                 binding?.spotCny?.setText(if (total?.total == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(cny, 8, 2, 2) )
-                binding?.futureCny?.setText(if (total2?.tigercny == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2) )
+                binding?.futureCny?.setText(if (total2 == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup((total2.tigerUsdt!! * total.rate!!), 8, 2, 2) )
                 binding?.financialCny?.setText("≈ ￥0.00")
                 binding?.capitalCny?.setText("≈ ￥0.00")
                 binding?.moneyTotalcny?.setText(if(total?.total == null && total2?.tigercny == null) "≈ 0.0 CNY" else if( total?.total  == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(cny + total2?.tigercny!!, 8, 2, 2) + "CNY")

@@ -811,7 +811,7 @@
     <string name="usdt_base">U本位</string>
     <string name="usdt_base_contract">U本位</string>
     <string name="coin_base_contract">币本位</string>
-    <string name="money_total">钱包余额(USD)</string>
+    <string name="money_total">账户权益(USD)</string>
     <string name="profit">全部未实现盈亏(USD)</string>
     <string name="margin">保证金余额(USD)</string>
     <string name="estimatedAvailableAmount">净资产余额</string>

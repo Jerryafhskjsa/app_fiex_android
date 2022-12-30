@@ -811,7 +811,7 @@
     <string name="usdt_base">U standard</string>
     <string name="usdt_base_contract">USD-M</string>
     <string name="coin_base_contract">Coin-M</string>
-    <string name="money_total">Wallet balance(USD)</string>
+    <string name="money_total">Account equity(USD)</string>
     <string name="profit">Profit and loss(USD)</string>
     <string name="margin">Crossed margin(USD)</string>
     <string name="estimatedAvailableAmount">Balance of net assets</string>
