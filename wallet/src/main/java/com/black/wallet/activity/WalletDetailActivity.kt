@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActivity
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.lib.filter.FilterEntity
@@ -62,6 +63,7 @@ class WalletDetailActivity : BaseActivity(),
     private var wallet: Wallet? = null
     private var coinType: String? = null
     private var binding: ActivityWalletDetailBinding? = null
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
     private var sets: ArrayList<QuotationSet?>? = null
     private var fragmentList: MutableList<Fragment?>? = null
     private var adapter: WalletBillAdapter? = null
@@ -163,7 +165,7 @@ class WalletDetailActivity : BaseActivity(),
 
         val totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
         totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
-            wallet?.estimatedAvailableAmountCny,
+            rate!! * (wallet?.totalAmount!!),
             10,
             2,
             2

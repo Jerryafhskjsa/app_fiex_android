@@ -256,6 +256,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 for(i in walletList!!.indices){
                     for (k in spotBalanceList!!.indices){
                         if(spotBalanceList!![k]?.coin == walletList!![i]?.coinType){
+                            walletList!![i]?.totalAmount = spotBalanceList!![k]?.balance?.toDouble()!!
                             walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
                             walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
                             walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
@@ -269,6 +270,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             .compose(RxJavaHelper.observeOnMainThread()), false)
 
         var walletTotal = 0.0
+        var totalAmount = 0.0
         var walletTotalCNY = 0.0
         walletList?.run {
             for (wallet in walletList!!) {
@@ -276,11 +278,16 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                     ?: 0.toDouble()
                 walletTotalCNY += wallet?.estimatedAvailableAmountCny
                     ?: 0.toDouble()
+                totalAmount += wallet?.totalAmount
+                    ?: 0.toDouble()
             }
         }
         onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
             it.usdt = walletTotal
             it.cny = walletTotalCNY
+            val price = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+            it.rate = price
+            it.total = totalAmount
         })
             .compose(RxJavaHelper.observeOnMainThread()))
     }

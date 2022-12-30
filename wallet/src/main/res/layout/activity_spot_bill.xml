@@ -109,6 +109,8 @@
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:flipInterval="30"
                 android:persistentDrawingCache="animation"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />

@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
@@ -55,6 +56,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     private var tabSets: List<String?>? = null
     private var binding: FragmentContractNormalBinding? = null
     private var layout: View? = null
+    private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var tigerWalletList: ArrayList<TigerWallet?>? = ArrayList()
     private var adapter: ContractAdapter? = null
     private var eventListener:ContractEventResponseListener? = null
@@ -238,11 +240,11 @@ private fun refresh(type: Int){
                 binding?.moneyTotal?.setText(usdt)
                 binding?.moneyTotalCny?.setText(cny)
                 binding?.profit?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.profit, 8, 2, 2))
-                binding?.profitCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(6.967*(total?.profit!!), 8, 2, 2)))
+                binding?.profitCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(rate!! * (total?.profit!!), 8, 2, 2)))
                 binding?.money?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigerUsdt?.minus(total.crossedMargin!!), 8, 2, 2))
-                binding?.moneyCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigercny!!.minus(6.967*(total.crossedMargin!!)), 8, 2, 2)))
+                binding?.moneyCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigercny!!.minus(rate!! * (total.crossedMargin!!)), 8, 2, 2)))
                 binding?.margin?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.crossedMargin, 8, 2, 2))
-                binding?.marginCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(6.967*(total?.crossedMargin!!), 8, 2, 2)))
+                binding?.marginCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(rate!! * (total?.crossedMargin!!), 8, 2, 2)))
                   }
         }
     }

@@ -322,7 +322,8 @@
     <string name="wallet_bill_deposit">Recharge</string>
     <string name="wallet_bill_withdraw">Withdrawal</string>
     <string name="wallet_bill_cancel_withdraw">cancel withdrawal</string>
-    <string name="wallet_bill_create_trade">Place an order for transaction</string>
+    <string name="wallet_bill_create_trade">Order freeze</string>
+    <string name="recharge_transfer">Recharge(Inside transfer)</string>
     <string name="wallet_bill_cancel_trade">cancel Transaction</string>
     <string name="wallet_bill_trade_deal">Transaction matching</string>
     <string name="wallet_bill_c2c_place_order">C2C transaction order</string>

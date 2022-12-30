@@ -322,7 +322,8 @@
     <string name="wallet_bill_deposit">充值</string>
     <string name="wallet_bill_withdraw">提现</string>
     <string name="wallet_bill_cancel_withdraw">取消提现</string>
-    <string name="wallet_bill_create_trade">交易下单</string>
+    <string name="wallet_bill_create_trade">下单冻结</string>
+    <string name="recharge_transfer">充值(内部转账)</string>
     <string name="wallet_bill_cancel_trade">交易取消</string>
     <string name="wallet_bill_trade_deal">交易撮合</string>
     <string name="wallet_bill_c2c_place_order">C2C交易下单</string>

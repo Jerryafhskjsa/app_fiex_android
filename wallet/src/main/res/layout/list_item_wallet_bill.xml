@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        android:layout_marginLeft="@dimen/text_size_10"
+        android:layout_marginRight="@dimen/text_size_10"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 

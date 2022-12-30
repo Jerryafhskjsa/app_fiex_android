@@ -361,6 +361,7 @@ object UrlConfig {
         //现货资产 钱包
         const val URL_WALLET = "wallet"
 
+
         ///现货资产提币 资产币信息
 //        public final static String URL_WITHDRAW = "config/withdraw";
         const val URL_WITHDRAW = "config/withdraw/v2"

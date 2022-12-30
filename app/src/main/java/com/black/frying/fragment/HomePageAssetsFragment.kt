@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.Money
 import com.black.base.model.user.UserBalance
@@ -60,6 +61,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var bgDefault: Int? = null
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
 
@@ -112,7 +114,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         viewModel = WalletViewModel(mContext!!,this)
         binding?.btnWalletEye?.isChecked = true
         binding?.btnWalletEye?.setOnCheckedChangeListener(this)
-        binding?.moneyCny?.setOnClickListener(this)
         binding?.linExchange?.setOnClickListener(this)
         binding?.linWithdraw?.setOnClickListener(this)
         binding?.linTransfer?.setOnClickListener(this)
@@ -201,7 +202,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             R.id.lin_transfer -> {
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
             }
-            R.id.money_cny -> {
+            /*R.id.money_cny -> {
                 DeepControllerWindow(mContext as Activity, getString(R.string.price_unit), otherMoneyType, typeList, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
@@ -210,7 +211,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     }
 
                 }).show()
-            }
+            }*/
            }
     }
 
@@ -342,8 +343,8 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             else{
                 val total = binding?.money?.tag as Money?
                 val total2 = binding?.moneyCny?.tag as Money?
-                binding?.moneyCny?.setText(if(total?.cny == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.cny == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.cny != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.cny!! + total2?.tigercny!!, 8, 2, 2) + "CNY")
-                binding?.money?.setText(if (total?.usdt == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.usdt == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.usdt != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.usdt!! + total2?.tigerUsdt!! , 8, 2, 2) )
+                binding?.moneyCny?.setText(if(total?.total == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.total == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.total!! * (total.rate!!) + total2?.tigercny!!, 8, 2, 2) + "CNY")
+                binding?.money?.setText(if (total?.total == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.total == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.total != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.total!! + total2?.tigerUsdt!! , 8, 2, 2) )
         }
         }
     }

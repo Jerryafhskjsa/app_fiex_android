@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.wallet.TigerWallet
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ExchangeRatesUtil
@@ -41,6 +42,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
+        val rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
         val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
         viewHolder?.coinType?.setText(
             if (wallet?.coinType == null) "" else wallet.coinType.toString().uppercase()
@@ -49,7 +51,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         if (isVisibility) {
             viewHolder?.usable?.setText(
                 NumberUtil.formatNumberNoGroup(
-                    wallet?.coinAmount,
+                    wallet?.totalAmount,
                     RoundingMode.FLOOR,
                     2,
                     8
@@ -60,15 +62,15 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         }
         if (isVisibility) {
             viewHolder?.totalCny?.setText(
-                if (wallet?.estimatedAvailableAmountCny == null) getString(
+                if (wallet?.totalAmount == null) getString(
                     R.string.number_default
                 ) else if (exChange == 0) "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.estimatedAvailableAmountCny,
+                    wallet.totalAmount * rate!!,
                     10,
                     2,
                     2
                 ) else "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.estimatedAvailableAmount,
+                    wallet.totalAmount,
                     10,
                     2,
                     2

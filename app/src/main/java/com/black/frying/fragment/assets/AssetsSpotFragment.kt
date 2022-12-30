@@ -34,6 +34,7 @@ import com.black.wallet.R
 import com.black.wallet.adapter.WalletAdapter
 import com.black.wallet.databinding.FragmentWalletNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
+import java.math.BigDecimal
 
 class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var isVisibility: Boolean = false
@@ -189,12 +190,12 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                 var cny = String.format("≈ %S CNY", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 if (total != null && exChange == 0) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2))
                 }
                 if (total != null && exChange == 1) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2))
                 }
                 binding?.profitLoss?.setText(": 0.0 USDT")
                 if (exChange == 0){

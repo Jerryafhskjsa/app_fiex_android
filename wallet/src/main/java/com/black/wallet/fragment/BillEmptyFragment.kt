@@ -81,11 +81,11 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
 
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        val walletBill = adapter?.getItem(position)
+        //val walletBill = adapter?.getItem(position)
         //点击账户详情
-        val extras = Bundle()
-        extras.putParcelable("record", walletBill)
-        BlackRouter.getInstance().build(RouterConstData.WALLET_COIN_DETAIL).with(extras).go(this)
+        //val extras = Bundle()
+        //extras.putParcelable("record", walletBill)
+        //BlackRouter.getInstance().build(RouterConstData.WALLET_COIN_DETAIL).with(extras).go(this)
 
     }
 
@@ -109,9 +109,6 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
     //获取综合账单记录
 
     private fun getBillData(isShowLoading: Boolean) {
-        if (wallet == null) {
-            return
-        }
         WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, null, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
