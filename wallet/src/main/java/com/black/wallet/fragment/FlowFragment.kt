@@ -266,9 +266,13 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
             FutureApiServiceHelper.getFoundingRateList( if(type != TYPE_ALL) type else null, null,null, context,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                         }
                     }
@@ -279,9 +283,13 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
             FutureApiServiceHelper.getCoinFoundingRateList(null, null,  context,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                         }
                     }

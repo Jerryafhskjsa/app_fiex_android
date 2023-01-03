@@ -177,9 +177,13 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
             FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, null, false,
                 object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                         }
                     }
@@ -190,10 +194,14 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         FutureApiServiceHelper.getCoinPlanList(context, null, null, false,
             object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
+                    binding?.refreshLayout?.setRefreshing(false)
+                    binding?.refreshLayout?.setLoading(false)
                 }
 
                 override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
                     if (returnData != null) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
                 }
             })

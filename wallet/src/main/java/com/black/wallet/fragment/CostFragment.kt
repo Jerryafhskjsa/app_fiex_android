@@ -262,9 +262,13 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
             FutureApiServiceHelper.getBalanceBills( otherType, null,null, type,  context,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                         }
                     }

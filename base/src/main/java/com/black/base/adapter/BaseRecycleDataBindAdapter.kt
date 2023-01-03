@@ -14,6 +14,7 @@ import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.view.AutoLoadRecyclerView
 import skin.support.content.res.SkinCompatResources
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author databind专用adapter

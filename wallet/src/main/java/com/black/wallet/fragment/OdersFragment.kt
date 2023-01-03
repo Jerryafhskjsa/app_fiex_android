@@ -21,7 +21,9 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.future.OrderBean
+import com.black.base.model.future.PlanUnionBean
 import com.black.base.model.future.PlansBean
+import com.black.base.model.wallet.Order
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
@@ -33,6 +35,7 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
+import com.black.wallet.adapter.ContractOdersAdapter
 import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
@@ -48,13 +51,14 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     private var wallet: Wallet? = null
     private var binding: FragmentDelegationBinding? = null
     private var layout: View? = null
-    private var adapter: WalletTransferRecordAdapter? = null
+    private var adapter: ContractOdersAdapter? = null
     private var currentPage = 1
     private var total = 0
     private var otherType = TYPE_U_CONTRACT
     private var typeList: MutableList<String>? = null
     private var type = TYPE_ALL
     private var list: MutableList<String>? = null
+    private var oder = Order()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
@@ -68,7 +72,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        adapter = WalletTransferRecordAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
+        adapter = ContractOdersAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
         adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -192,7 +196,8 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
-                val total1 = year * 10000 + month * 100 + day
+                var total1 = year * 10000 + month * 100 + day
+                oder.startTime = total1
                 if (total >= total1) {
                     binding?.start?.setText(
                         String.format(
@@ -214,6 +219,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total2 = year * 10000 + month * 100 + day
+                oder.endTime = total2
                 if (total >= total2){
                 binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
             }
@@ -259,25 +265,40 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     //获取历史订单
     private fun getHistoryList() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getHistoryList( if(type != TYPE_ALL) type else null, null,null, context,false,
+            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL)null else type , "NEXT",20, mContext,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
-                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
-                        if (returnData != null) {
+                    override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            FryingUtil.showToast(activity, activity?.getString(com.black.base.R.string.alert_verify_code_success))
+                            val oderList = returnData.result?.items
+                            adapter?.data = oderList
+                            adapter?.notifyDataSetChanged()
+                        }
+                        else {
+                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                         }
                     }
                 })
         }
 
         else{
-            FutureApiServiceHelper.getCoinHistoryList(null, null, null, context,false,
+            FutureApiServiceHelper.getCoinHistoryList(null, "NEXT", 20, context,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                         }
                     }

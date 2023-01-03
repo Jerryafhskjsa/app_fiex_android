@@ -172,7 +172,7 @@ object UserApiServiceHelper {
             showCaptcha(context, object : Callback<String?>() {
                 override fun callback(captcha: String?) {
                     verifyCodeCallBack.captcha = captcha
-                    ApiManager.build(context, true).getService(UserApiService::class.java)
+                    ApiManager.build(context,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                             ?.sendVerifyCode(userName, telCountryCode, captcha)
                             ?.compose(RxJavaHelper.observeOnMainThread())
                             ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))

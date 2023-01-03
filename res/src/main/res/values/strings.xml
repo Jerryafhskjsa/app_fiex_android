@@ -852,6 +852,7 @@
     <string name="contract_boom_price">预估强平价(%s)</string>
     <string name="contract_new_price">最新价(%s)</string>
     <string name="contract_profit_price">止盈价格(%s)</string>
+    <string name="close_profit">平仓盈亏(%s)</string>
     <string name="contract_loss_price">止损价格(%s)</string>
     <string name="contract_entrust_price">委托单价(%s)</string>
     <string name="contract_entrust_amount">委托数量(%s)</string>

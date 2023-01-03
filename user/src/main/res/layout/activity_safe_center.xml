@@ -95,6 +95,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
+                                android:layout_marginRight="20dp"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:thumb="@drawable/icon_switch_thumb"

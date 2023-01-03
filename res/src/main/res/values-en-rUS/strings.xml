@@ -852,6 +852,7 @@
     <string name="contract_boom_price">Force stop price(%s)</string>
     <string name="contract_new_price">Now price(%s)</string>
     <string name="contract_profit_price">Get profit price(%s)</string>
+    <string name="close_profit">Close profit(%s)</string>
     <string name="contract_loss_price">Stop lose price(%s)</string>
     <string name="contract_entrust_price">Entrust price(%s)</string>
     <string name="contract_entrust_amount">Entrust amount(%s)</string>

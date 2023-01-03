@@ -123,6 +123,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         return !super.isStatusBarDark()
     }
 
+
     private fun getNetworkLines(showDialog: Boolean?) {
         CommonApiServiceHelper.getNetworkLines(
             this,

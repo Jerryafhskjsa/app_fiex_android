@@ -133,6 +133,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
             return
         }
         mailCaptcha = null
+        FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))
         UserApiServiceHelper.getVerifyCode(activity, target.mail, null, alwaysNoToken, object : NormalCallback<HttpRequestResultString?>(activity) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {

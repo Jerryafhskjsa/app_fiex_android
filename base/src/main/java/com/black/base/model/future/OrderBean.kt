@@ -1,6 +1,6 @@
 package com.black.base.model.future
 
-data class OrderBean(
+open class OrderBean(
     val items: ArrayList<OrderBeanItem>,
 
 )

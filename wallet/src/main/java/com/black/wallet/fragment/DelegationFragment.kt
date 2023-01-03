@@ -175,9 +175,13 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
             FutureApiServiceHelper.getOrderList(1, 10, if(type != TYPE_ALL) type else null, null, context, false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                             var orderData = returnData?.result
                             var orderList = orderData?.items
@@ -192,9 +196,13 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
             FutureApiServiceHelper.getCoinOrderList(1, 10, null, null, context, false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
                             var orderData = returnData?.result
                             var orderList = orderData?.items
