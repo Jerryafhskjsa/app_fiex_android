@@ -33,7 +33,6 @@ object UrlConfig {
         var index = getIndex(context)
         var serverHost = CookieUtil.getServerHost(context)
         if (serverHost != null && serverHost.size > 0) {
-            serverHost.reverse()
             return serverHost[index] + apiTypeDes
         }
         if (index > HOSTS.size - 1) {

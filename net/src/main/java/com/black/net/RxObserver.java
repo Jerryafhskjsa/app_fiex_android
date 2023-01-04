@@ -42,6 +42,7 @@ public abstract class RxObserver<T> implements Observer<T> {
         if (e instanceof com.jakewharton.retrofit2.adapter.rxjava2.HttpException) {
             com.jakewharton.retrofit2.adapter.rxjava2.HttpException httpException = (com.jakewharton.retrofit2.adapter.rxjava2.HttpException) e;
             int code = httpException.code();
+            Log.d("777777","HttpException000->code = "+code);
             HttpUrl url = httpException.response().raw().request().url();
             if (code == ERROR_TOKEN_INVALID_CODE) {
                 error(httpException.response().raw().request(), HttpRequestResult.ERROR_TOKEN_INVALID);
@@ -56,6 +57,7 @@ public abstract class RxObserver<T> implements Observer<T> {
             /** 网络异常，http 请求失败，即 http 状态码不在 [200, 300) 之间, such as: "server internal error". */
             HttpException httpException = (HttpException) e;
             int code = httpException.code();
+            Log.d("777777","HttpException->code = "+code);
             if (code == ERROR_TOKEN_INVALID_CODE) {
                 //token失效
                 error(httpException.response().raw().request(), HttpRequestResult.ERROR_TOKEN_INVALID);
@@ -68,6 +70,7 @@ public abstract class RxObserver<T> implements Observer<T> {
                 error(httpException.response().message(), HttpRequestResult.NOTWORK_ERROR);
             }
         } else if (e instanceof BlackHttpException) {
+            Log.d("777777","BlackHttpException");
             BlackHttpException interceptException = (BlackHttpException) e;
             HttpUrl url = interceptException.response().request().url();
             String urlStr = url.url().toString();
@@ -83,17 +86,21 @@ public abstract class RxObserver<T> implements Observer<T> {
             }
         } else if (e instanceof IOException) {
             /** 没有网络 */
+            Log.d("777777","没有网络");
             error(null, HttpRequestResult.NOTWORK_ERROR);
         } else if (e instanceof JsonParseException) {
             /** 网络正常，http 请求成功，服务器返回逻辑错误 */
+            Log.d("777777","网络正常，http 请求成功，服务器返回逻辑错误");
             error(null, HttpRequestResult.JSON_ERROR);
         } else {
+            Log.d("777777","其他未知错误");
             /** 其他未知错误 */
             error(!TextUtils.isEmpty(e.getMessage()) ? e.getMessage() : "unknown error", HttpRequestResult.OTHER_ERROR);
         }
         try {
             afterRequest();
         } catch (Throwable err) {
+            Log.d("777777","throwable = "+err.getMessage());
         }
     }
 

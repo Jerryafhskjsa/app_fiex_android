@@ -352,13 +352,25 @@ object CookieUtil {
         getSharedPreferences(context).edit().putStringSet(ConstData.HOST_DATA, set).apply()
     }
 
+    /**
+     * 该方法因为采用set保存，恢复到list顺序不确定，导致切换线路bug花费很长时间
+     */
     fun getServerHost(context: Context):ArrayList<String?>?{
         var sets =  getSharedPreferences(context).getStringSet(ConstData.HOST_DATA,null)
         var data:ArrayList<String?>? = null
+        var sortData:ArrayList<String?>? = ArrayList()
         if(sets != null){
              data = sets.toList() as ArrayList<String?>?
+            for (i in data?.indices!!){
+                if (data[i].equals(UrlConfig.HOSTS[0])){
+                    sortData?.add(0, data[i])
+                }
+                if (data[i].equals(UrlConfig.HOSTS[1])){
+                    sortData?.add(1, data[i])
+                }
+            }
         }
-        return data
+        return sortData
     }
 
     fun getHostIndex(context: Context): Int {

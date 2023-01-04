@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
+import com.black.base.lib.FryingSingleToast
 import com.black.base.model.FryingLinesConfig
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
@@ -139,14 +140,15 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         var lines = returnData.data ?: return
                         fryingLinesConfig.clear()
-                        fryingLinesConfig.addAll(lines)
-                        fryingLinesConfig.reverse()
-                        var temp = ArrayList<String?>()
-                        for (i in lines){
-                            temp.add(i?.lineUrl)
+                        var lineUrls:ArrayList<String?> = ArrayList()
+                        for (i in lines.indices){
+                            var config = lines[i]
+                            config?.index = i
+                            fryingLinesConfig.add(i,config)
+                            lineUrls.add(config?.lineUrl)
                         }
-                        CookieUtil.setServerHost(mContext,temp)
                         if(fryingLinesConfig.size > 0){
+                            CookieUtil.setServerHost(mContext,lineUrls)
                             getLineSpeed(0, 1, showDialog, fryingLinesConfig[0])
                         }
                     }
@@ -164,7 +166,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         linesConfig: FryingLinesConfig?
     ) {
         linesConfig?.startTime = System.currentTimeMillis()
-        linesConfig?.index = index
         CommonApiServiceHelper.getLinesSpeed(
             this,
             linesConfig?.lineUrl,
@@ -348,10 +349,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun showServerDialog(type: Int?) {
-        var displayList: ArrayList<FryingLinesConfig?>? = ArrayList()
+        var displayList: MutableList<FryingLinesConfig?>? = null
         when (type) {
-            0 -> displayList?.addAll(localLinesConfig)
-            1 -> displayList?.addAll(fryingLinesConfig)
+            0 -> displayList = localLinesConfig
+            1 -> displayList = fryingLinesConfig
         }
         DeepControllerWindow(mContext as Activity,
             getString(R.string.server_setting),
@@ -362,9 +363,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     window: DeepControllerWindow<FryingLinesConfig?>,
                     item: FryingLinesConfig?
                 ) {
-                    if (item != currentServerConfig) {
-                        CookieUtil.setHostIndex(mContext, item?.index!!)
+                    CookieUtil.setHostIndex(mContext, item?.index!!)
+                    if (item.lineUrl != currentServerConfig?.lineUrl) {
                         displayCurrentServer()
+                        currentServerConfig = item
                         CookieUtil.deleteUserInfo(mContext)
                         HttpCookieUtil.deleteCookies(mContext)
                         CookieUtil.deleteToken(mContext)
@@ -481,7 +483,9 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         } else {
             CommonUtil.getItemFromList(localLinesConfig, UrlConfig.getIndex(mContext))
         }
-        val serverText = currentServerConfig?.speed + "ms"
+        Log.d("666666","displayCurrentServer url = "+currentServerConfig?.lineUrl)
+        Log.d("666666","displayCurrentServer index = "+currentServerConfig?.index)
+        val serverText = currentServerConfig?.speed
         binding?.currentServer?.text = serverText
     }
 

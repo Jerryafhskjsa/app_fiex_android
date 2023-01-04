@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.PaintDrawable
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import android.widget.*
 import com.black.base.R
@@ -148,14 +149,16 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
                 }
                 text = item.deep.toString()
             }
-            if(item is FryingLinesConfig){
+            if(item is FryingLinesConfig && selectObject!=  null){
                 var selected  = selectObject as FryingLinesConfig
-                if (item.lineUrl.equals(selected.lineUrl)){
+                Log.d("666666","item.lineUrl = "+item.lineUrl)
+                Log.d("666666","selected.lineUrl = "+selected.lineUrl)
+                if (item.index?.equals(selected.index) == true){
                     textView?.setTextColor(COLOR_SELECT)
                 } else {
                     textView?.setTextColor(COLOR_DEFAULT)
                 }
-                text = item?.lineUrl+"("+item?.speed+"ms)"
+                text = item?.lineUrl+"("+item?.speed+")"
             }
             textView?.text = text
             view?.setBackgroundColor(COLOR_BG)
