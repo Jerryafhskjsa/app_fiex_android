@@ -6,6 +6,8 @@ import com.black.base.model.PagingData
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
+import com.black.base.model.wallet.CostBill
+import com.black.base.model.wallet.FlowBill
 
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
@@ -194,8 +196,9 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_LIST_HISTORY)
     fun getListHistory(
         @Query("symbol") symbol: String?,
-        @Query("direction") direction: String?,
-        @Query("limit") limit: Int?,
+        @Query("forceClose") forceClose: Boolean?,
+        @Query("startTime") startTime: Long?,
+        @Query("endTime") endTime: Long?,
     ): Observable<HttpRequestResultBean<OrderBean>>
 
     /**
@@ -204,9 +207,10 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_FUNDING_RATE_LIST)
     fun getFoundingRateList(
         @Query("symbol") symbol: String?,
-        @Query("direction") direction: String?,
-        @Query("limit") limit: Int?,
-    ): Observable<HttpRequestResultBean<OrderBean>>
+        @Query("forceClose") forceClose: Boolean?,
+        @Query("startTime") startTime: Long?,
+        @Query("endTime") endTime: Long?,
+    ): Observable<HttpRequestResultBean<PagingData<FlowBill?>?>?>
 
     /**
      * 获取资金流水
@@ -214,10 +218,11 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_BALANCE_BILLS)
     fun getBalancesBills(
         @Query("coin") coin: String?,
-        @Query("direction") direction: String?,
-        @Query("limit") limit: Int?,
+        @Query("symbol") symbol: String?,
         @Query("type") type: String?,
-    ): Observable<HttpRequestResultBean<OrderBean>>
+        @Query("startTime") startTime: Long?,
+        @Query("endTime") endTime: Long?,
+    ): Observable<HttpRequestResultBean<PagingData<CostBill?>?>?>
 
 
     /**

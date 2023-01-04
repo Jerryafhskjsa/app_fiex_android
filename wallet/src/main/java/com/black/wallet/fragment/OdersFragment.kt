@@ -196,8 +196,9 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
+                val date: Date = Date(year,month,day)
+                oder.startTime = date.time
                 var total1 = year * 10000 + month * 100 + day
-                oder.startTime = total1
                 if (total >= total1) {
                     binding?.start?.setText(
                         String.format(
@@ -207,7 +208,8 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                             month,
                             day
                         )
-                    ).toString()
+                    )
+
                 }
                 else{
                     FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
@@ -218,9 +220,11 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
+                val date: Date = Date(year,month,day)
+                val time =date.time
                 val total2 = year * 10000 + month * 100 + day
-                oder.endTime = total2
-                if (total >= total2){
+                if (total >= total2 && time >= oder.startTime!!){
+                    oder.startTime = time
                 binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
             }
                 else{
@@ -265,7 +269,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     //获取历史订单
     private fun getHistoryList() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL)null else type , "NEXT",20, mContext,false,
+            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL)null else type ,null, "NEXT",20,oder.startTime , oder.endTime , mContext,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
@@ -289,7 +293,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         }
 
         else{
-            FutureApiServiceHelper.getCoinHistoryList(null, "NEXT", 20, context,false,
+            FutureApiServiceHelper.getCoinHistoryList(null, null,"NEXT", 20, oder.startTime , oder.endTime ,mContext,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

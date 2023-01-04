@@ -234,6 +234,7 @@
     <string name="search_coin">Search</string>
     <string name="all_coin">All Currencies</string>
     <string name="all">All</string>
+    <string name="many">Many</string>
     <string name="volumn">24h quantity</string>
     <string name="collect_add">Add Optional</string>
     <string name="collect_delete">Delete self selection</string>
@@ -244,10 +245,16 @@
     <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
     <string name="current_delegation">Current delegation</string>
+    <string name="limit_orders">Limit order</string>
     <string name="map_entrustment">Map entrustment</string>
     <string name="historical_orders">Historical orders</string>
     <string name="capital_flow">Capital flow</string>
     <string name="capital_cost">Capital cost</string>
+    <string name="position_reduce">Position reduction</string>
+    <string name="merge">Merge</string>
+    <string name="close_positions">Close position</string>
+    <string name="take_over">Take over</string>
+    <string name="qiang_ping">Forced liquidation</string>
     <string name="rise">Rising List</string>
     <string name="fall">Decline chart</string>
     <string name="name">Name</string>

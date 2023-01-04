@@ -19,6 +19,8 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.future.OrderBean
+import com.black.base.model.wallet.FlowBill
+import com.black.base.model.wallet.Order
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
@@ -29,6 +31,7 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
+import com.black.wallet.adapter.FlowAdapter
 import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
@@ -38,19 +41,20 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         private const val TYPE_U_CONTRACT = "U本位"
         private const val TYPE_COIN_CONTRACT = "币本位"
         private const val TYPE_ALL = "全部"
-        private const val TYPE_BTC = "BTCUSDT"
-        private const val TYPE_ETH = "ETHUSDT"
+        private const val TYPE_BTC = "BTC_USDT"
+        private const val TYPE_ETH = "ETH_USDT"
     }
     private var wallet: Wallet? = null
     private var binding: FragmentDelegationBinding? = null
     private var layout: View? = null
-    private var adapter: WalletTransferRecordAdapter? = null
+    private var adapter: FlowAdapter? = null
     private var currentPage = 1
     private var total = 0
     private var otherType = TYPE_U_CONTRACT
     private var typeList: MutableList<String>? = null
     private var type = TYPE_ALL
     private var list: MutableList<String>? = null
+    private var oder = Order()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
             return layout
@@ -63,7 +67,7 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        adapter = WalletTransferRecordAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
+        adapter = FlowAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
         adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -139,10 +143,10 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                                     binding?.all?.setText(R.string.all)
                                 }
                                 TYPE_BTC -> {
-                                    binding?.all?.setText("BTCUSDT")
+                                    binding?.all?.setText("BTC_USDT")
                                 }
                                 TYPE_ETH -> {
-                                    binding?.all?.setText("ETHUSDT")
+                                    binding?.all?.setText("ETH_USDT")
                                 }
                             }
 
@@ -197,6 +201,8 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total1 = year * 10000 + month * 100 + day
+                val date: Date = Date(year,month,day)
+                oder.startTime = date.time
                 if (total >= total1) {
                     binding?.start?.setText(
                         String.format(
@@ -218,7 +224,10 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total2 = year * 10000 + month * 100 + day
-                if (total >= total2){
+                val date: Date = Date(year,month,day)
+                val time = date.time
+                if (total >= total2 && time >= oder.startTime!!){
+                    oder.endTime = time
                     binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
                 }
                 else{
@@ -263,34 +272,48 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
     //获取资金费率
     private fun getFoundingRateList() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getFoundingRateList( if(type != TYPE_ALL) type else null, null,null, context,
-                object : Callback<HttpRequestResultBean<OrderBean>>() {
+            FutureApiServiceHelper.getFoundingRateList( if(type != TYPE_ALL) type else null, null,"NEXT",20, oder.startTime , oder.endTime , mContext,
+                object : Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
                     }
 
-                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                    override fun callback(returnData: HttpRequestResultBean<PagingData<FlowBill?>?>?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
-                        if (returnData != null) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            val oderList = returnData.result?.items
+                            adapter?.data = oderList
+                            adapter?.notifyDataSetChanged()
+                        }
+                        else {
+                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+
                         }
                     }
                 })
         }
 
         else{
-            FutureApiServiceHelper.getCoinFoundingRateList(null, null,  context,
-                object : Callback<HttpRequestResultBean<OrderBean>>() {
+            FutureApiServiceHelper.getCoinFoundingRateList(null, null,null, null , oder.startTime ,oder.endTime,  mContext,
+                object : Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
                     }
 
-                    override fun callback(returnData: HttpRequestResultBean<OrderBean>) {
+                    override fun callback(returnData: HttpRequestResultBean<PagingData<FlowBill?>?>?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
-                        if (returnData != null) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            val oderList = returnData.result?.items
+                            adapter?.data = oderList
+                            adapter?.notifyDataSetChanged()
+                        }
+                        else {
+                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+
                         }
                     }
                 })

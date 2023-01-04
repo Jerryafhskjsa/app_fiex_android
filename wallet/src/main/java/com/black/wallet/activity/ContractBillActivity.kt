@@ -38,7 +38,7 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_spot_bill)
-        getString(R.string.current_delegation).also {
+        getString(R.string.limit_orders).also {
             TAB_DELEGATION = it
             TAB_TITLES[0] = TAB_DELEGATION
         }

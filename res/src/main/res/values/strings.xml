@@ -234,6 +234,7 @@
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
     <string name="all">全部</string>
+    <string name="many">多</string>
     <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
     <string name="collect_delete">删自选</string>
@@ -244,10 +245,16 @@
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
     <string name="current_delegation">当前委托</string>
+    <string name="limit_orders">限价委托</string>
     <string name="map_entrustment">计划委托</string>
     <string name="historical_orders">历史订单</string>
     <string name="capital_flow">资金流水</string>
     <string name="capital_cost">资金费用</string>
+    <string name="position_reduce">自动减仓</string>
+    <string name="merge">仓位合并</string>
+    <string name="close_positions">平仓盈亏</string>
+    <string name="take_over">仓位接管</string>
+    <string name="qiang_ping">强平清算</string>
     <string name="rise">涨幅榜</string>
     <string name="fall">跌幅榜</string>
     <string name="name">名称</string>

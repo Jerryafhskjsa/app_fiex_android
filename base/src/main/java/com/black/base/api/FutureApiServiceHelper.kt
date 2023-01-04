@@ -7,6 +7,8 @@ import com.black.base.model.PagingData
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
+import com.black.base.model.wallet.CostBill
+import com.black.base.model.wallet.FlowBill
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
@@ -175,8 +177,11 @@ object FutureApiServiceHelper {
      */
     fun getHistoryList(
         symbol: String?,
+        forceClose: Boolean?,
         direction: String?,
         limit: Int?,
+        startTime: Long?,
+        endTime: Long?,
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<OrderBean>>?
@@ -184,9 +189,9 @@ object FutureApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getListHistory(symbol, direction , limit )
+            ?.getListHistory(symbol, forceClose  , startTime , endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -197,8 +202,11 @@ object FutureApiServiceHelper {
 
     fun getCoinHistoryList(
         symbol: String?,
+        forceClose: Boolean?,
         direction: String?,
         limit: Int?,
+        startTime: Long?,
+        endTime: Long?,
         context: Context?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<OrderBean>>?
@@ -208,7 +216,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
             .getService(FutureApiService::class.java)
-            ?.getListHistory(symbol, direction , limit )
+            ?.getListHistory(symbol, forceClose , startTime , endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -219,17 +227,20 @@ object FutureApiServiceHelper {
 
     fun getFoundingRateList(
         symbol: String?,
+        forceClose: Boolean?,
         direction: String?,
         limit: Int?,
+        startTime: Long?,
+        endTime: Long?,
         context: Context?,
-        callback: Callback<HttpRequestResultBean<OrderBean>>?
+        callback: Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>
     ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getFoundingRateList(symbol, direction , limit )
+            ?.getFoundingRateList(symbol, forceClose , startTime , endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, callback))
     }
@@ -239,17 +250,21 @@ object FutureApiServiceHelper {
      */
 
     fun getCoinFoundingRateList(
+        symbol: String?,
+        forceClose: Boolean?,
         direction: String?,
         limit: Int?,
+        startTime: Long?,
+        endTime: Long?,
         context: Context?,
-        callback: Callback<HttpRequestResultBean<OrderBean>>?
+        callback: Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
             .getService(FutureApiService::class.java)
-            ?.getFoundingRateList(null, direction , limit )
+            ?.getFoundingRateList(null, forceClose , startTime , endTime )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, callback))
     }
@@ -262,16 +277,19 @@ object FutureApiServiceHelper {
         coin: String?,
         direction: String?,
         limit: Int?,
+        symbol: String?,
         type: String?,
+        startTime: Long?,
+        endTime: Long?,
         context: Context?,
-        callback: Callback<HttpRequestResultBean<OrderBean>>?
+        callback: Callback<HttpRequestResultBean<PagingData<CostBill?>?>?>
     ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getBalancesBills(coin, direction , limit ,type )
+            ?.getBalancesBills(coin, symbol , type , startTime , endTime )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, callback))
     }
