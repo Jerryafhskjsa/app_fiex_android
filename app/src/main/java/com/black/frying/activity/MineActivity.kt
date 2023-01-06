@@ -117,6 +117,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
+        initServiceApi()
         getNetworkLines(false)
     }
 
@@ -130,7 +131,6 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             this,
             object : Callback<HttpRequestResultDataList<FryingLinesConfig?>?>() {
                 override fun error(type: Int, error: Any) {
-                    initServiceApi()
                     if (localLinesConfig.size > 0) {
                         getLineSpeed(0, 0, showDialog, localLinesConfig[0])
                     }
@@ -473,7 +473,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 0 -> fryingLinesConfig.zh = getString(R.string.link_line_one)
                 1 -> fryingLinesConfig.zh = getString(R.string.link_line_two)
             }
-            localLinesConfig.add(FryingLinesConfig())
+            localLinesConfig.add(fryingLinesConfig)
         }
     }
 

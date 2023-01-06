@@ -31,7 +31,7 @@ object CommonApiServiceHelper {
             .getService(CommonApiService::class.java)
             ?.getNetworkLines()
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
     /**

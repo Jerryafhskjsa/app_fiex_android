@@ -349,6 +349,7 @@ object CookieUtil {
 
     fun setServerHost(context: Context,data:ArrayList<String?>){
         var set = data.toSet()
+        Log.d("777777","setServerHost,size = "+set.size)
         getSharedPreferences(context).edit().putStringSet(ConstData.HOST_DATA, set).apply()
     }
 
@@ -360,14 +361,10 @@ object CookieUtil {
         var data:ArrayList<String?>? = null
         var sortData:ArrayList<String?>? = ArrayList()
         if(sets != null){
-             data = sets.toList() as ArrayList<String?>?
+            data = sets.toList() as ArrayList<String?>?
             for (i in data?.indices!!){
-                if (data[i].equals(UrlConfig.HOSTS[0])){
-                    sortData?.add(0, data[i])
-                }
-                if (data[i].equals(UrlConfig.HOSTS[1])){
-                    sortData?.add(1, data[i])
-                }
+                sortData?.add(0, UrlConfig.HOSTS[0])
+                sortData?.add(1,  UrlConfig.HOSTS[1])
             }
         }
         return sortData

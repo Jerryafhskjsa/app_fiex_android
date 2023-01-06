@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#网易盾
+-keepattributes *Annotation*
+-keep public class com.netease.nis.captcha.**{*;}
+-keep public class android.webkit.**
+-keepattributes SetJavaScriptEnabled
+-keepattributes JavascriptInterface
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+#网易盾
+

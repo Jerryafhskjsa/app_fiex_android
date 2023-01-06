@@ -109,4 +109,5 @@ dependencies {
     api 'cn.jiguang.sdk:jcore:2.3.0'  // 此处以JCore 2.2.4 版本为例。
     api 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     api 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    api 'io.github.yidun:captcha:3.4.3'//网易盾
 }

@@ -1003,10 +1003,12 @@ object FutureService {
      * @param price: 最新成交价【输入框中的价格】
      * @param amount: 张数
      */
-    fun getLongMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
+    private fun getLongMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
         var positonValue =
             getValue(price.toString(), amount.toString(), contractSize.toString()).toBigDecimal()
-
+        if(userStepRate == null){
+            return BigDecimal(0)
+        }
         var result =
             positonValue
                 .multiply(
@@ -1033,8 +1035,11 @@ object FutureService {
      * @param price: 最新成交价【max(最新成交价，输入框中的价格）】
      * @param amount: 张数
      */
-    fun getShortMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
+    private fun getShortMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
 
+        if(userStepRate == null){
+            return BigDecimal(0)
+        }
         //维持保证金率
         var maintMarginRate = getLeverageMaxBracket(leverage)?.maintMarginRate
 
@@ -1057,7 +1062,7 @@ object FutureService {
      * 可开空
      * 最新成交价【max(最新成交价，输入框中的价格）】
      */
-    fun getUserShortMaxOpen(sellPrice: BigDecimal, leverage: Int): BigDecimal {
+    private fun getUserShortMaxOpen(sellPrice: BigDecimal, leverage: Int): BigDecimal {
 
         var b = getBalanceShortMaxOpen(sellPrice, leverage)
         var a = getBracketShortMaxAmount(sellPrice, leverage)
@@ -1070,7 +1075,7 @@ object FutureService {
     /**
      * 可开多
      */
-    fun getUserLongMaxOpen(buyPrice: BigDecimal, leverage: Int): BigDecimal {
+    private fun getUserLongMaxOpen(buyPrice: BigDecimal, leverage: Int): BigDecimal {
 //        Log.d("ttttttt-->leverage", leverage.toString())
         var a = getBracketLongMaxAmount(buyPrice, leverage)
         var b = getBalanceLongMaxOpen(buyPrice, leverage)
@@ -1084,7 +1089,7 @@ object FutureService {
      * 风险档位空仓最大可开 =  (最大名义价值 - 持仓价值 - 订单名义价值) / ((最新成交价【max(最新成交价, 输入框中的价格)】* 面值)
      *
      */
-    fun getBracketShortMaxAmount(price: BigDecimal, leverage: Int): BigDecimal {
+    private fun getBracketShortMaxAmount(price: BigDecimal, leverage: Int): BigDecimal {
         //最大名义价值
         var maxNominalValue = getMaxNominalValue(leverage)
 
@@ -1109,7 +1114,10 @@ object FutureService {
      * 1. 起始保证金率 = 1 / 杠杆倍数
      * 2. 维持保证金率 = 杠杆所处的最大档位的维持保证金率
      */
-    fun getBalanceShortMaxOpen(price: BigDecimal, leverage: Int): BigDecimal {
+    private fun getBalanceShortMaxOpen(price: BigDecimal, leverage: Int): BigDecimal {
+        if(balanceDetail == null){
+            return BigDecimal(0)
+        }
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
 
         var b = price.multiply(contractSize)
@@ -1135,7 +1143,7 @@ object FutureService {
      * U本位时
      * 风险档位多仓最大可开 = (最大名义价值 - 持仓价值 - 订单名义价值) / (最新成交价【输入框中的价格】* 面值)
      */
-    fun getBracketLongMaxAmount(inputPrice: BigDecimal, leverage: Int): BigDecimal {
+    private fun getBracketLongMaxAmount(inputPrice: BigDecimal, leverage: Int): BigDecimal {
         //最大名义价值
         var maxNominalValue = getMaxNominalValue(leverage)
 
@@ -1157,7 +1165,7 @@ object FutureService {
     /**
      * 当前交易对持仓价值
      */
-    fun currentSymbolPositionValue(positionSide: String): PositionBean? {
+    private fun currentSymbolPositionValue(positionSide: String): PositionBean? {
         var longPositionBean: PositionBean? = null
         var shortPositionBean: PositionBean? = null
         if (longPositionList != null) {
@@ -1182,7 +1190,7 @@ object FutureService {
      * U本位时
      * 余额多仓最大可开 = 可用余额 / (最新成交价【输入框中的价格】* 面值 * (起始保证金率 + 2 * Taker费率))
      */
-    fun getBalanceLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
+    private fun getBalanceLongMaxOpen(inputPrice: BigDecimal, leverage: Int): BigDecimal {
 
         //可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
         if (balanceDetail == null) {
@@ -1202,7 +1210,7 @@ object FutureService {
     /**
      * 该结算货币下的全仓未实现盈亏
      */
-    fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean): BigDecimal {
+    private fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean): BigDecimal {
 
         var coin = balanceDetail?.coin
         var availableBalance = balanceDetail.availableBalance
@@ -1248,7 +1256,7 @@ object FutureService {
     // 多仓：订单名义价值 = 订单占用保证金 / (起始保证金率 * (1 + Taker费率) + Taker费率 * (1 - 维持保证金率【杠杆倍数】))
     // 空仓：订单名义价值 = 订单占用保证金 / (起始保证金率 + 2 * Taker费率)
      */
-    fun currentSymbolOrderValue(positionSide: String): BigDecimal {
+    private fun currentSymbolOrderValue(positionSide: String): BigDecimal {
 
         if (longPositionList == null || shortPositionList == null) {
 
@@ -1270,7 +1278,7 @@ object FutureService {
         }
 
         //U本位
-        if (underlyingType.equals("U_BASED")) {
+        if (underlyingType == "U_BASED") {
             if (orderLongList != null) {
                 for (item in orderLongList!!) {
                     var value = BigDecimal(item.marginFrozen).divide(
@@ -1305,7 +1313,7 @@ object FutureService {
                 shortResult = BigDecimal.ZERO
             }
 
-        } else if (underlyingType.equals("COIN_BASED")) { //币本位
+        } else if (underlyingType == "COIN_BASED") { //币本位
             for (item in orderLongList!!) {
                 var value = BigDecimal(item.marginFrozen).divide(
                     BigDecimal(1)
@@ -1333,10 +1341,10 @@ object FutureService {
                 shortResult = shortResult.add(value)
             }
         }
-        if (positionSide.equals(Constants.LONG)) {
-            return longResult
+        return if (positionSide.equals(Constants.LONG)) {
+            longResult
         } else {
-            return shortResult
+            shortResult
         }
     }
 
@@ -1365,23 +1373,23 @@ object FutureService {
         return result.toString()
     }
 
-    fun getCoinValue(price: String, amount: String, contractSize: String): String {
+    private fun getCoinValue(price: String, amount: String, contractSize: String): String {
         var result = BigDecimal(amount).times(BigDecimal(contractSize)).div(BigDecimal(price))
         return result.toString()
     }
 
 
-    fun sheet2CurrentUnit(positionSize: String, price: String): BigDecimal {
+    private fun sheet2CurrentUnit(positionSize: String, price: String): BigDecimal {
         var resultBN =
             BigDecimal(positionSize).times(contractSize!!).times(BigDecimal(price))
         return resultBN
     }
 
-    fun currentUnit2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
+    private fun currentUnit2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
         return usdt2Sheet(value, price)
     }
 
-    fun usdt2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
+    private fun usdt2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
 
         var result =
             value.divide(price, 8, RoundingMode.DOWN).divide(contractSize, 8, RoundingMode.DOWN)
