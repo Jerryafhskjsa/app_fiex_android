@@ -96,6 +96,7 @@
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:background="@drawable/btn_exchange"/>
                             <ImageView
+                                android:id="@+id/settings"
                                 android:layout_width="wrap_content"
                                 android:layout_height="15dp"
                                 android:layout_marginRight="@dimen/text_size_5"
@@ -152,7 +153,6 @@
                                 android:layout_width="80dp"
                                 android:layout_height="match_parent"
                                 android:background="@drawable/bg_c2c_tab_header"
-                                android:checked="true"
                                 android:gravity="center"
                                 android:maxLines="1"
                                 android:text="@string/my_buy"
@@ -166,6 +166,7 @@
                                 android:layout_height="match_parent"
                                 android:background="@drawable/bg_c2c_tab_header"
                                 android:gravity="center"
+                                android:checked="true"
                                 android:maxLines="1"
                                 android:text="@string/my_sale"
                                 android:textColor="@color/btn_buy_check"
@@ -174,11 +175,18 @@
 
                         </LinearLayout>
                             <ImageView
+                                android:id="@+id/person"
+                                android:layout_width="30dp"
+                                android:layout_height="35dp"
+                                android:layout_marginTop="7dp"
+                                android:layout_marginLeft="130dp"
+                                android:background="@drawable/btn_person">
+                            </ImageView>
+                            <ImageView
                                 android:id="@+id/bills"
                                 android:layout_width="30dp"
                                 android:layout_height="35dp"
                                 android:layout_marginTop="@dimen/text_size_10"
-                                android:layout_marginLeft="180dp"
                                 android:background="@drawable/btn_c2c_bills">
                             </ImageView>
                         </LinearLayout>

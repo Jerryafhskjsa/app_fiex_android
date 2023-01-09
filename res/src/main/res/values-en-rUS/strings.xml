@@ -31,6 +31,11 @@
     <string name="usdt">USDT</string>
     <string name="useable">Available</string>sell/Stop profit
     <string name="confirm">OK</string>
+    <string name="by_0_fee">buy by 0 fee</string>
+    <string name="reference_quotation">Reference quotation</string>
+    <string name="number_of_transactions">Number of transactions</string>
+    <string name="advice">For reference only, not the final transaction unit price.</string>
+    <string name="buy_quilk">Quick purchase process</string>
     <string name="message_filter">Message filter</string>
     <string name="use_last">Use last condition</string>
     <string name="exchange_method">Transaction mode</string>
@@ -252,6 +257,8 @@
     <string name="collect_delete">Delete self selection</string>
     <string name="total_amount">Total account assets (≈)</string>
     <string name="more">More</string>
+    <string name="purchase_by_amount">By amount</string>
+    <string name="purchase_by_account">By account</string>
     <string name="rechange">Recharge</string>
     <string name="extract">Withdrawal</string>
     <string name="bill">Bill</string>
@@ -563,6 +570,11 @@
     <string name="shortcut_area">Shortcut area</string>
     <string name="my_buy">My buy</string>
     <string name="my_sale">My sale</string>
+    <string name="my_bills">My bills</string>
+    <string name="payment_settings">Payment settings</string>
+    <string name="merchant_application">Merchant application</string>
+    <string name="novice_guidance">Novice guidance</string>
+    <string name="common_problem">Common problem</string>
     <string name="pair">Transaction pair</string>
     <string name="hint_entrust_filter_set">Select a Pricing Unit</string>
     <string name="entrust_type">Order Status</string>

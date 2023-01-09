@@ -31,6 +31,11 @@
     <string name="usdt">USDT</string>
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
+    <string name="by_0_fee">0手续费购买</string>
+    <string name="reference_quotation">参考报价</string>
+    <string name="number_of_transactions">成交数量</string>
+    <string name="advice">仅供参考，非最终交易单价</string>
+    <string name="buy_quilk">快速购买流程</string>
     <string name="message_filter">广告筛选</string>
     <string name="use_last">使用上次筛选条件</string>
     <string name="exchange_method">交易方式</string>
@@ -252,6 +257,8 @@
     <string name="collect_delete">删自选</string>
     <string name="total_amount">总账户资产 (≈）</string>
     <string name="more">更多</string>
+    <string name="purchase_by_amount">按金额购买</string>
+    <string name="purchase_by_account">按数量购买</string>
     <string name="rechange">充值</string>
     <string name="extract">提现</string>
     <string name="bill">账单</string>
@@ -563,6 +570,11 @@
     <string name="shortcut_area">快捷区</string>
     <string name="my_buy">我要买</string>
     <string name="my_sale">我要卖</string>
+    <string name="my_bills">我的订单</string>
+    <string name="payment_settings">支付设置</string>
+    <string name="merchant_application">商家申请</string>
+    <string name="novice_guidance">新手指导</string>
+    <string name="common_problem">常见问题</string>
     <string name="pair">交易对</string>
     <string name="hint_entrust_filter_set">选择计价单位</string>
     <string name="entrust_type">订单状态</string>
@@ -665,7 +677,7 @@
     <string name="purchase_five_got">中签数</string>
     <string name="purchase_five_got_no">签号</string>
     <string name="purchase_five_amount_hint">购买份数</string>
-    <string name="payment_method">收款方式</string>
+    <string name="payment_method">付款方式</string>
     <string name="save">保存</string>
     <string name="reset_money_password_warning">重置资金密码后，24小时内无法提币</string>
     <string name="forget_money_passwrod">忘记资金密码</string>

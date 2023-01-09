@@ -128,6 +128,7 @@ object RouterConstData {
 
     const val C2C = "fiex://c2c_old"
     const val C2C_NEW = "fiex://c2c"
+    const val C2C_QIULK = "fiex://c2c_old"
 
     const val C2C_ORDER = "fiex://c2cOrder"
     const val C2C_ORDER_DETAIL = "fiex://c2cOrderDetail"

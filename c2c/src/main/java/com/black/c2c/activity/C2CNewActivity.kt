@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.text.TextUtils
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -28,6 +29,7 @@ import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
 import com.black.frying.fragment.EmptyC2cFragment
 import com.black.net.HttpRequestResult
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -74,6 +76,7 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.rate?.setOnClickListener(this)
         binding?.filterTitle?.setOnClickListener(this)
         binding?.methodChoose?.setOnClickListener(this)
+         binding?.settings?.setOnClickListener(this)
         fManager = supportFragmentManager
         typeList = ArrayList()
         typeList!!.add(TAB_SELF)
@@ -166,6 +169,10 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
                 binding?.moneyChoose?.isChecked = true
                 moneyDialog()
         }
+        else if (id == R.id.settings){
+            settingsDialog()
+        }
+
         else if (id == R.id.area_choose){
             DeepControllerWindow(mContext as Activity, null, tab , typeList, object : DeepControllerWindow.OnReturnListener<String> {
                 override fun onReturn(window: DeepControllerWindow<String>, item: String) {
@@ -176,7 +183,7 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
                             binding?.areaChoose?.setText(R.string.self_selection_area)
                         }
                         TAB_QUCILK -> {
-                            binding?.areaChoose?.setText(R.string.shortcut_area)
+                            BlackRouter.getInstance().build(RouterConstData.C2C_QIULK).go(mContext)
                         }
                     }
                 }
@@ -209,11 +216,10 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             val params = window.attributes
             //设置背景昏暗度
             params.dimAmount = 0.2f
-            params.gravity = Gravity.BOTTOM
+            params.gravity = Gravity.TOP
             params.width = WindowManager.LayoutParams.MATCH_PARENT
             params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            //设置dialog动画
-            window.setWindowAnimations(R.style.anim_bottom_in_out)
+            params.y = 550
             window.attributes = params
         }
         //设置dialog的宽高为屏幕的宽高
@@ -244,7 +250,6 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             dialog.findViewById<TextView>(R.id.put_money).text = "200000"
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
-            dialog.dismiss()
             dialog.findViewById<TextView>(R.id.put_money).text = ""
         }
     }
@@ -256,11 +261,11 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             val params = window.attributes
             //设置背景昏暗度
             params.dimAmount = 0.2f
-            params.gravity = Gravity.BOTTOM
+            params.gravity = Gravity.TOP
             params.width = WindowManager.LayoutParams.MATCH_PARENT
             params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            params.y = 550
             //设置dialog动画
-            window.setWindowAnimations(R.style.anim_bottom_in_out)
             window.attributes = params
         }
         //设置dialog的宽高为屏幕的宽高
@@ -303,8 +308,8 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
-            //设置背景昏暗度
             params.dimAmount = 0.2f
+            //设置背景昏暗度
             params.gravity = Gravity.BOTTOM
             params.width = WindowManager.LayoutParams.MATCH_PARENT
             params.height = WindowManager.LayoutParams.WRAP_CONTENT
@@ -322,58 +327,78 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.filterTitle?.isChecked = false
         }
         dialog.findViewById<View>(R.id.reset).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.one).isClickable = true
-            dialog.findViewById<View>(R.id.two).isClickable = false
-            dialog.findViewById<View>(R.id.three).isClickable = false
-            dialog.findViewById<View>(R.id.four).isClickable = false
-            dialog.findViewById<View>(R.id.first).isClickable = true
-            dialog.findViewById<View>(R.id.second).isClickable = false
-            dialog.findViewById<View>(R.id.third).isClickable = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.first).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.second).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.third).isChecked = false
+            dialog.findViewById<SwitchCompat>(R.id.finger_print_password).isChecked = false
+            dialog.findViewById<SwitchCompat>(R.id.message).isChecked = false
             dialog.findViewById<TextView>(R.id.put_money).text = ""
         }
-        dialog.findViewById<View>(R.id.one).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.one).isClickable = true
-            dialog.findViewById<View>(R.id.two).isClickable = false
-            dialog.findViewById<View>(R.id.three).isClickable = false
-            dialog.findViewById<View>(R.id.four).isClickable = false
+        dialog.findViewById<SpanCheckedTextView>(R.id.one).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
         }
-        dialog.findViewById<View>(R.id.two).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.one).isClickable = false
-            dialog.findViewById<View>(R.id.two).isClickable = true
-            dialog.findViewById<View>(R.id.three).isClickable = false
-            dialog.findViewById<View>(R.id.four).isClickable = false
+        dialog.findViewById<SpanCheckedTextView>(R.id.two).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
         }
-        dialog.findViewById<View>(R.id.three).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.one).isClickable = false
-            dialog.findViewById<View>(R.id.two).isClickable = false
-            dialog.findViewById<View>(R.id.three).isClickable = true
-            dialog.findViewById<View>(R.id.four).isClickable = false
+        dialog.findViewById<SpanCheckedTextView>(R.id.three).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
         }
-        dialog.findViewById<View>(R.id.four).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.one).isClickable = false
-            dialog.findViewById<View>(R.id.two).isClickable = false
-            dialog.findViewById<View>(R.id.three).isClickable = false
-            dialog.findViewById<View>(R.id.four).isClickable = true
+        dialog.findViewById<SpanCheckedTextView>(R.id.four).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = true
         }
-        dialog.findViewById<View>(R.id.first).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.first).isClickable = true
-            dialog.findViewById<View>(R.id.second).isClickable = false
-            dialog.findViewById<View>(R.id.third).isClickable = false
+        dialog.findViewById<SpanCheckedTextView>(R.id.first).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.first).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.second).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.third).isChecked = false
         }
-        dialog.findViewById<View>(R.id.second).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.first).isClickable = false
-            dialog.findViewById<View>(R.id.second).isClickable = true
-            dialog.findViewById<View>(R.id.third).isClickable = false
+        dialog.findViewById<SpanCheckedTextView>(R.id.second).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.first).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.second).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.third).isChecked = false
         }
-        dialog.findViewById<View>(R.id.third).setOnClickListener { v ->
-            dialog.findViewById<View>(R.id.first).isClickable = false
-            dialog.findViewById<View>(R.id.second).isClickable = false
-            dialog.findViewById<View>(R.id.third).isClickable = true
+        dialog.findViewById<SpanCheckedTextView>(R.id.third).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.first).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.second).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.third).isChecked = true
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             dialog.dismiss()
             binding?.filterTitle?.isChecked = false
         }
+    }
+    private fun settingsDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.bills_dialog, null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            params.gravity = Gravity.TOP
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            params.y = 80
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
     }
     private fun init(){
         if (fragmentList == null) {
@@ -419,12 +444,12 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
     }
     private fun refresh(type :Int){
         if (type == 0){
-            binding?.c2cOneKey?.isChecked = true
-            binding?.c2cCustomer?.isChecked = false
-        }
-        else{
             binding?.c2cOneKey?.isChecked = false
             binding?.c2cCustomer?.isChecked = true
+        }
+        else{
+            binding?.c2cOneKey?.isChecked = true
+            binding?.c2cCustomer?.isChecked = false
         }
     }
     private fun selectTab(tabIndex: Int) {

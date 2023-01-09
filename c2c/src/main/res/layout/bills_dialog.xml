@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="@dimen/text_size_10"
+        android:layout_marginBottom="@dimen/text_size_10"
+        android:layout_gravity="right"
+        android:visibility="gone"
+        android:background="@drawable/btn_jian"
+        >
+    </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="#E2111625"
+                android:layout_marginRight="@dimen/text_size_20"
+                android:layout_gravity="right"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_three_point"
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_marginBottom="@dimen/text_size_20"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_marginBottom="@dimen/text_size_20"
+                    android:orientation="vertical">
+
+
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_bills"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/B1"
+                        android:text="@string/my_bills" />
+
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/B1"
+
+                        android:text="@string/payment_settings" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/merchant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/B1"
+
+                        android:text="@string/merchant_application" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/novice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/B1"
+                        android:text="@string/novice_guidance" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/problem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/B1"
+                        android:text="@string/common_problem" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+    </LinearLayout>
+</layout>
