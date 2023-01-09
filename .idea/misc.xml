@@ -357,6 +357,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/birth_choose.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/dialog_confirm.xml" value="0.10677083333333333" />
         <entry key="..\:/fiex/base/src/main/res/layout/dialog_logout_resume.xml" value="0.10677083333333333" />
+        <entry key="..\:/fiex/base/src/main/res/layout/list_item_deep_choose.xml" value="0.12552083333333333" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_view_empty_long.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_view_empty_pair.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/base/src/main/res/layout/spinner_drop_down_item.xml" value="0.17447916666666666" />
@@ -375,22 +376,45 @@
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single_tab.xml" value="0.1" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_window_new.xml" value="0.1" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_main.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_new.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_order.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_order_detail.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/money_choose_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/money_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_finger_print_check.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_gestrue_password_check_unback.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/community/src/main/res/layout/list_item_faction_list.xml" value="0.17447916666666666" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/bg_asset_coin_corner.xml" value="0.106" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_assets_header.xml" value="0.108" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/bg_b1_corner_2.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/bg_c2c_header.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/bg_c2c_tab_header.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/bg_switch_track.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_tab_corner.xml" value="0.106" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_tab_indicator.xml" value="0.106" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_blue.xml" value="0.105" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_blue_default.xml" value="0.105" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_blue_disable.xml" value="0.111" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_blue_pressed.xml" value="0.111" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_blue_ss.xml" value="0.1125" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_gray.xml" value="0.105" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_gray_default.xml" value="0.105" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_gray_disable.xml" value="0.105" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_gray_pressed.xml" value="0.105" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_light_gray.xml" value="0.118" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_return.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_pressed.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/c2c_drawable.xml" value="0.1295" />
         <entry key="..\:/fiex/res/src/main/res/drawable/cercle_gray.xml" value="0.106" />
         <entry key="..\:/fiex/res/src/main/res/drawable/cercle_rectangle.xml" value="0.108" />
         <entry key="..\:/fiex/res/src/main/res/drawable/divider_list_item_l1.xml" value="0.1415" />
         <entry key="..\:/fiex/res/src/main/res/drawable/home_tab_transaction.xml" value="0.109" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_off.xml" value="0.1265" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_on.xml" value="0.1265" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_thumb.xml" value="0.1265" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_fiex.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_new_pwd.xml" value="0.17916666666666667" />

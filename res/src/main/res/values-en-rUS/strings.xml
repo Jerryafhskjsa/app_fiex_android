@@ -31,6 +31,9 @@
     <string name="usdt">USDT</string>
     <string name="useable">Available</string>sell/Stop profit
     <string name="confirm">OK</string>
+    <string name="message_filter">Message filter</string>
+    <string name="use_last">Use last condition</string>
+    <string name="exchange_method">Transaction mode</string>
     <string name="status_closed">Unbound</string>
     <string name="perpetual_warehouse_by_warehouse">Perpetual_warehouse_by_warehouse 50X</string>
     <string name="warehouse_by_warehouse">Warehouse by warehouse 50XMore</string>
@@ -43,6 +46,9 @@
     <string name="input_password">Please enter the account password</string>
     <string name="submit">Submit</string>
     <string name="mail_code">Email verification code</string>
+    <string name="example">Example 100</string>
+    <string name="please_put_money">Please put total money</string>
+    <string name="put_message">Only show advertisements issued by merchants</string>
     <string name="mail_code1">Mailbox verification</string>
     <string name="phone_code1">Mobile phone verification</string>
     <string name="google_code1">Google Authentication</string>
@@ -234,6 +240,12 @@
     <string name="search_coin">Search</string>
     <string name="all_coin">All Currencies</string>
     <string name="all">All</string>
+    <string name="china">China</string>
+    <string name="america">America</string>
+    <string name="id_pay">Id pay</string>
+    <string name="cards">Cards</string>
+    <string name="wei_xin">Wei xin</string>
+    <string name="available_choose">Show only available transaction methods</string>
     <string name="many">Many</string>
     <string name="volumn">24h quantity</string>
     <string name="collect_add">Add Optional</string>
@@ -547,6 +559,10 @@
     <string name="entust_cancel">Cancel Delegation</string>
     <string name="financial_record">Financial Records</string>
     <string name="spot_pair">Spot pair</string>
+    <string name="self_selection_area">Self selection</string>
+    <string name="shortcut_area">Shortcut area</string>
+    <string name="my_buy">My buy</string>
+    <string name="my_sale">My sale</string>
     <string name="pair">Transaction pair</string>
     <string name="hint_entrust_filter_set">Select a Pricing Unit</string>
     <string name="entrust_type">Order Status</string>
@@ -610,6 +626,7 @@
     <string name="rush_amount_hint">Enter the quantity you want to snap up</string>
     <string name="rushed_amount">Rushed up quantity</string>
     <string name="real_pay">Actual Payment</string>
+    <string name="all_pay">All pay</string>
     <string name="real_got">Actual Acquisition</string>
     <string name="promotions_record">Flash sale records</string>
     <string name="rush_immediately">Buy %s now</string>

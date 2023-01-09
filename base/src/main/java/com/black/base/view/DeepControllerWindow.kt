@@ -30,8 +30,8 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
         density = dm.density
         val contentView = LayoutInflater.from(activity).inflate(R.layout.view_deep_chooser, null)
         popupWindow = PopupWindow(contentView,
-                dm.widthPixels,
-                WindowManager.LayoutParams.WRAP_CONTENT)
+            dm.widthPixels,
+            WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED

@@ -159,7 +159,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         }
 
         binding!!.btnNoticeMore.setOnClickListener(this)
-
+        binding!!.c2c.setOnClickListener(this)
         binding!!.btnUserinfo.setOnClickListener(this)
         binding!!.btnSearchMenu.setOnClickListener(this)
         binding!!.btnScanMenu.setOnClickListener(this)
@@ -249,6 +249,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
+            R.id.c2c -> BlackRouter.getInstance().build(RouterConstData.C2C_NEW)
+                .go(mContext)
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
             R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B1"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/B2"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/one"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/all" />
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="@dimen/line" />
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/two"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/cards" />
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="@dimen/line" />
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/three"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/id_pay" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/four"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/wei_xin" />
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:orientation="horizontal">
+
+
+                    <com.black.base.widget.SpanTextView
+
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/available_choose"
+                        android:textColor="@color/T11_ALPHA40"
+                        android:padding="@dimen/middle_padding"
+                         />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_confirm"
+                        style="@style/ButtonBlue"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/confirm" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+
+
+
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
+    </LinearLayout>
+</layout>

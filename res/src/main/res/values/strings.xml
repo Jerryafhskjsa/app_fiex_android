@@ -31,6 +31,9 @@
     <string name="usdt">USDT</string>
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
+    <string name="message_filter">广告筛选</string>
+    <string name="use_last">使用上次筛选条件</string>
+    <string name="exchange_method">交易方式</string>
     <string name="status_closed">未绑定</string>
     <string name="perpetual_warehouse_by_warehouse">永续逐仓 50X</string>
     <string name="warehouse_by_warehouse">逐仓50X多</string>
@@ -43,6 +46,9 @@
     <string name="input_password">请输入账号密码</string>
     <string name="submit">提交</string>
     <string name="mail_code">邮箱验证码</string>
+    <string name="example">例如100</string>
+    <string name="please_put_money">请输入总金额</string>
+    <string name="put_message">仅显示商家发布的广告</string>
     <string name="mail_code1">邮箱验证</string>
     <string name="phone_code1">手机验证</string>
     <string name="google_code1">谷歌验证</string>
@@ -234,6 +240,12 @@
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
     <string name="all">全部</string>
+    <string name="china">中国</string>
+    <string name="america">美国</string>
+    <string name="id_pay">支付宝</string>
+    <string name="cards">银行卡</string>
+    <string name="wei_xin">微信</string>
+    <string name="available_choose">仅显示可用的交易方式</string>
     <string name="many">多</string>
     <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
@@ -532,7 +544,7 @@
     <string name="skin_mode">皮肤模式</string>
     <string name="add_account">添加或注册账号</string>
     <string name="real_name_first">人工审核 (1/2)</string>
-    <string name="country_area">国家地区</string>
+    <string name="country_area">国家/地区</string>
     <string name="birth">出生年月</string>
     <string name="real_name_second">人工审核 (2/2)</string>
     <string name="memo_warning">请认真核对并填写此地址标签，若遗漏标签将导致资金丢失！</string>
@@ -547,6 +559,10 @@
     <string name="entust_cancel">取消委托</string>
     <string name="financial_record">财务记录</string>
     <string name="spot_pair">现货交易</string>
+    <string name="self_selection_area">自选区</string>
+    <string name="shortcut_area">快捷区</string>
+    <string name="my_buy">我要买</string>
+    <string name="my_sale">我要卖</string>
     <string name="pair">交易对</string>
     <string name="hint_entrust_filter_set">选择计价单位</string>
     <string name="entrust_type">订单状态</string>
@@ -610,6 +626,7 @@
     <string name="rush_amount_hint">输入你要抢购的数量</string>
     <string name="rushed_amount">已抢购数量</string>
     <string name="real_pay">实际支付</string>
+    <string name="all_pay">全部支付方式</string>
     <string name="real_got">实际获得</string>
     <string name="promotions_record">抢购记录</string>
     <string name="rush_immediately">立即抢购 %s</string>

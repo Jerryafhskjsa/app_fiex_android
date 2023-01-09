@@ -459,6 +459,7 @@
                                 app:cardMaxElevation="10dp"
                                 >
                                 <ImageView
+                                    android:id="@+id/c2c"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
                                     android:background="@drawable/main_3_bg"/>

@@ -272,7 +272,7 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
     //获取资金费率
     private fun getFoundingRateList() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getFoundingRateList( if(type != TYPE_ALL) type else null, null,"NEXT",20, oder.startTime , oder.endTime , mContext,
+            FutureApiServiceHelper.getFoundingRateList(  null, null,"NEXT",20, oder.startTime , oder.endTime , mContext,
                 object : Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

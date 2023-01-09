@@ -269,7 +269,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     //获取历史订单
     private fun getHistoryList() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL)null else type ,null, "NEXT",20,oder.startTime , oder.endTime , mContext,false,
+            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL) null else type ,null, "NEXT",20,oder.startTime , oder.endTime , mContext ,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
@@ -280,7 +280,6 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            FryingUtil.showToast(activity, activity?.getString(com.black.base.R.string.alert_verify_code_success))
                             val oderList = returnData.result?.items
                             adapter?.data = oderList
                             adapter?.notifyDataSetChanged()

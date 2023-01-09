@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+        <variable
+            name="walletDetailModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+                <FrameLayout
+                    android:id="@id/header_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_alignParentTop="true">
+
+                        <ImageButton
+                            android:id="@+id/action_bar_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:contentDescription="@null"
+                            android:onClick="onBackClick"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/btn_back_faction" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/area_choose"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/self_selection_area"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16"
+                                android:textStyle="bold"
+                                android:drawableRight="@drawable/icon_deep"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_gravity="right"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="22dp"
+                                android:layout_marginBottom="15dp"
+                                android:layout_marginRight="@dimen/text_size_5"
+                                android:layout_gravity="center_vertical"
+                                android:text="CNY"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16"
+                                android:textStyle="bold"
+                                />
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:background="@drawable/btn_exchange"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="15dp"
+                                android:layout_marginRight="@dimen/text_size_5"
+                                android:layout_marginTop="@dimen/text_size_14"
+                                android:background="@drawable/c2c">
+
+                            </ImageView>
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </FrameLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.lib.refresh.QRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.black.base.widget.ObserveScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/B2"
+                    android:fadingEdge="none"
+                    android:fillViewport="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B2"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:background="@drawable/bg_c2c_header"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/c2c_one_key"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/bg_c2c_tab_header"
+                                android:checked="true"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="@string/my_buy"
+                                android:textColor="@color/btn_buy_check"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/c2c_customer"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/bg_c2c_tab_header"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="@string/my_sale"
+                                android:textColor="@color/btn_buy_check"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                            <ImageView
+                                android:id="@+id/bills"
+                                android:layout_width="30dp"
+                                android:layout_height="35dp"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginLeft="180dp"
+                                android:background="@drawable/btn_c2c_bills">
+                            </ImageView>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_padding"
+                            android:background="@color/B1" />
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tab_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="0dp"
+                            android:background="@drawable/bg_asset_coin_corner"
+                            android:fadingEdge="none"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:tabRippleColor="#E622C177"
+                            app:tabMode="scrollable"
+                            app:tabMaxWidth="200dp"
+                            app:tabMinWidth="20dp"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"
+                            />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/money_choose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:text="@string/money"
+                            android:textColor="@color/c2c_money"
+                            android:drawableRight="@drawable/c2c_drawable"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/method_choose"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:text="@string/all_pay"
+                                android:textColor="@color/c2c_money"
+                                android:drawableRight="@drawable/c2c_drawable"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/filter_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/text_size_20"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:gravity="right"
+                                android:text="@string/filter_title"
+                                android:textColor="@color/c2c_money"
+                                android:textSize="@dimen/text_size_14"
+                                android:drawableRight="@drawable/c2c_drawable"
+
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/text_size_2"
+                            android:background="@color/C2"/>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/B2"
+                            android:descendantFocusability="blocksDescendants">
+
+                            <androidx.viewpager.widget.ViewPager
+                                android:id="@+id/view_pager"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:flipInterval="30"
+                                android:persistentDrawingCache="animation"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </com.black.base.widget.ObserveScrollView>
+            </com.black.lib.refresh.QRefreshLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>
