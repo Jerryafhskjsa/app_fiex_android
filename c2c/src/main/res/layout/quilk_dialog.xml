@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edittext_default"
+        android:padding="0dp"
+        android:maxLines="1"
+        android:orientation="vertical">
+
+
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B1"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:layout_marginRight="@dimen/text_size_20"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:layout_marginBottom="100dp"
+                android:background="@color/B2"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="320dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:textSize="@dimen/text_size_20"
+                        android:text="@string/buy_quilk"
+                        android:textColor="@color/T1"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:background="@drawable/icon_setting_arrow_down"
+                        android:gravity="right">
+
+                    </ImageView>
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:background="@drawable/btn_buy_l"
+                    android:layout_gravity="center">
+
+                </ImageView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/trade"
+                        android:textColor="@color/custom_transparent"
+                        android:textStyle="bold"/>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/payment"
+                        android:textColor="@color/custom_transparent"
+                        android:textStyle="bold"/>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/receipt"
+                        android:textColor="@color/custom_transparent"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/middle_padding"
+                    android:layout_weight="1"
+                    android:text="@string/c2c_one"
+                    android:textColor="@color/list_bottom_text_bg"
+                    android:textStyle="bold"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/middle_padding"
+                    android:layout_weight="1"
+                    android:text="@string/c2c_two"
+                    android:textColor="@color/list_bottom_text_bg"
+                    android:textStyle="bold"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/middle_padding"
+                    android:layout_weight="1"
+                    android:text="@string/c2c_three"
+                    android:textColor="@color/list_bottom_text_bg"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
+    </LinearLayout>
+</layout>
