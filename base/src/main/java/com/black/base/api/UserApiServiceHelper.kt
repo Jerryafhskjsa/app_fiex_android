@@ -25,6 +25,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.netease.nis.captcha.Captcha
+import com.netease.nis.captcha.CaptchaConfiguration
 import com.netease.nis.captcha.CaptchaListener
 import io.reactivex.Observable
 import okhttp3.MediaType
@@ -97,7 +98,7 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun showCaptcha(context: Context?, callBack: Callback<String?>?) {
+    fun showCaptcha(context: Context?,captchaId:String?, callBack: Callback<String?>?) {
         if (context !is Activity || callBack == null) {
             return
         }
@@ -113,77 +114,108 @@ object UserApiServiceHelper {
             override fun run() {
                 val loadingDialog = getLoadDialog(context, null)
                 showLoadingDialog(loadingDialog)
-                val mCaptcha = Captcha(context)
-                mCaptcha.captchaId = ConstData.CAPTCHA_ID
-                mCaptcha.isDebug = false
-                mCaptcha.timeout = 10000
-                mCaptcha.caListener = object : CaptchaListener {
-                    override fun onValidate(result: String, validate: String, message: String) {
-                        context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                        //验证结果，valiadte，可以根据返回的三个值进行用户自定义二次验证
-                        if (validate.isNotEmpty()) {
-                            callBack.callback(validate)
-                        } else {
-                            callBack.error(0, message)
+                val captchaConfiguration = CaptchaConfiguration
+                    .Builder()
+                    .captchaId(captchaId)
+                    .listener(object:CaptchaListener{
+                        override fun onReady() {
+                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
                         }
-                    }
 
-                    override fun closeWindow() {
-                        context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                    }
+                        override fun onValidate(result: String?, validate: String?, message: String?) {
+                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
+                            //验证结果，valiadte，可以根据返回的三个值进行用户自定义二次验证
+                            if (validate?.isNotEmpty() == true) {
+                                callBack.callback(validate)
+                            } else {
+                                callBack.error(0, message)
+                            }
+                        }
 
-                    override fun onError(errormsg: String) {
-                        context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                        //出错
-                        callBack.error(0, errormsg)
-                    }
+                        override fun onError(code: Int, errormsg: String?) {
+                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
+                            //出错
+                            callBack.error(0, errormsg)
+                        }
 
-                    override fun onCancel() {
-                        context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                        //callBack.error(0, "已取消");
-                        //用户取消加载或者用户取消验证，关闭异步任务，也可根据情况在其他地方添加关闭异步任务接口
-                    }
+                        override fun onClose(closeType: Captcha.CloseType?) {
+                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
+                            //callBack.error(0, "已取消");
+                            //用户取消加载或者用户取消验证，关闭异步任务，也可根据情况在其他地方添加关闭异步任务接口
+                        }
 
-                    override fun onReady(ret: Boolean) {
-                        context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                        //该为调试接口，ret为true表示加载Sdk完成
-                        //                        if (ret) {
-                        //                            FryingUtil.showToast(context, "验证码sdk加载成功");
-                        //                        }
-                    }
-                }
-                mCaptcha.Validate()
+                    })
+                    .build(context)
+                val captcha = Captcha.getInstance().init(captchaConfiguration)
+                captcha.validate()
             }
         }
         context.runOnUiThread(Runnable { doRunnable.run() })
     }
 
     fun getVerifyCode(context: Context?, userName: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {
-        getVerifyCode(context, userName, telCountryCode, false, callback)
+//        getVerifyCode(context, userName, telCountryCode, false, callback)
+        getVerifyCodeOld(context,userName,telCountryCode,false,callback)
     }
 
-    @Deprecated("")
+    /**
+     * 网易盾验证
+     */
     fun getVerifyCodeOld(context: Context?, userName: String?, telCountryCode: String?, alwaysCaptcha: Boolean, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
         val verifyCodeCallBack = VerifyCodeCallBack(callback)
         if (alwaysCaptcha || TextUtils.isEmpty(CookieUtil.getToken(context))) { //判断是否需要做极验，serverUrl 是发送验证码，并且 没有token,验证
-            showCaptcha(context, object : Callback<String?>() {
-                override fun callback(captcha: String?) {
-                    verifyCodeCallBack.captcha = captcha
-                    ApiManager.build(context,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
-                            ?.sendVerifyCode(userName, telCountryCode, captcha)
-                            ?.compose(RxJavaHelper.observeOnMainThread())
-                            ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
+            geetestInit(context, object : NormalCallback<HttpRequestResultData<JsonObject?>?>(context) {
+                override fun error(type: Int, error: Any?) {
                 }
 
-                override fun error(type: Int, error: Any) {
-                    if (context is Activity) {
-                        context.runOnUiThread { showToast(context, error.toString()) }
+                override fun callback(returnData: HttpRequestResultData<JsonObject?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        // TODO 设置返回api1数据，即使为null也要设置，SDK内部已处理
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonObject = JSONObject(returnData.data.toString())
+                        } catch (e: JSONException) {
+                        }
+                        if(jsonObject != null){
+                            var type = jsonObject.getString("type")
+                            var captchaId = jsonObject.getString("gt")
+                            var newCaptcha = jsonObject.getString("new_captcha")
+                            showCaptcha(context,captchaId, object : Callback<String?>() {
+                                override fun callback(captcha: String?) {
+                                    verifyCodeCallBack.captcha = captcha
+//                                    ApiManager.build(context,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+//                                        ?.sendVerifyCode(userName, telCountryCode, captcha)
+//                                        ?.compose(RxJavaHelper.observeOnMainThread())
+//                                        ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
+                                    var jsonObject = JsonObject()
+                                    jsonObject.addProperty("validate",captcha)
+                                    sendVerifyCodeGeeTest(context,userName,telCountryCode,jsonObject.toString(),object :
+                                        Callback<HttpRequestResultString?>() {
+                                        override fun error(type: Int, error: Any?) {
+                                        }
+
+                                        override fun callback(returnData: HttpRequestResultString?) {
+                                        }
+
+                                    })
+                                }
+
+                                override fun error(type: Int, error: Any) {
+                                    if (context is Activity) {
+                                        context.runOnUiThread { showToast(context, error.toString()) }
+                                    }
+                                }
+                            })
+                        }
+                    } else {
+                        showToast(context, if (returnData == null) "null" else returnData.msg)
                     }
                 }
             })
+
         } else {
             ApiManager.build(context).getService(UserApiService::class.java)
                     ?.sendVerifyCode02(userName, telCountryCode)
@@ -192,64 +224,68 @@ object UserApiServiceHelper {
         }
     }
 
+    /**
+     * 极验
+     */
     fun getVerifyCode(context: Context?, userName: String?, telCountryCode: String?, alwaysCaptcha: Boolean, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }
-        val verifyCodeCallBack = VerifyCodeCallBack(callback)
-        if (alwaysCaptcha || TextUtils.isEmpty(CookieUtil.getToken(context))) { //判断是否需要做极验，serverUrl 是发送验证码，并且 没有token,验证
-            if (context is GeeTestInterface) {
-                (context as GeeTestInterface).startVerify(object : GeeTestCallback {
-                    override fun onApi1(api1Callback: GeeTestApi1Callback?) {
-                        geetestInit(context, object : NormalCallback<HttpRequestResultData<JsonObject?>?>(context) {
-                            override fun error(type: Int, error: Any?) {
-                                verifyNext(null)
-                            }
-
-                            override fun callback(returnData: HttpRequestResultData<JsonObject?>?) {
-                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                    // TODO 设置返回api1数据，即使为null也要设置，SDK内部已处理
-                                    var jsonObject: JSONObject? = null
-                                    try {
-                                        jsonObject = JSONObject(returnData.data.toString())
-                                    } catch (e: JSONException) {
-                                    }
-                                    verifyNext(jsonObject)
-                                } else {
-                                    showToast(context, if (returnData == null) "null" else returnData.msg)
-                                    verifyNext(null)
-                                }
-                            }
-
-                            private fun verifyNext(jsonObject: JSONObject?) {
-                                api1Callback?.callback(jsonObject)
-                            }
-                        })
-                    }
-
-                    override fun onApi2(result: String?, api2Callback: GeeTestApi2Callback?) {
-                        api2Callback?.dismiss()
-                        val geeTestResult = Gson().fromJson(result, GeeTestResult::class.java)
-                        sendVerifyCodeGeeTest(context, userName, telCountryCode, geeTestResult.toJsonString(), object : NormalCallback<HttpRequestResultString?>(context) {
-                            override fun error(type: Int, error: Any?) {
-                                verifyCodeCallBack.error(type, error!!)
-                            }
-
-                            override fun callback(returnData: HttpRequestResultString?) {
-                                verifyCodeCallBack.callback(returnData)
-                            }
-                        })
-                    }
-                })
-            } else {
-                throw RuntimeException(context.javaClass.simpleName + "  must implements GeeTestInterface")
-            }
-        } else {
-            ApiManager.build(context).getService(UserApiService::class.java)
-                    ?.sendVerifyCode02(userName, telCountryCode)
-                    ?.compose(RxJavaHelper.observeOnMainThread())
-                    ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
-        }
+        getVerifyCodeOld(context,userName,telCountryCode,alwaysCaptcha,callback)
+//        val verifyCodeCallBack = VerifyCodeCallBack(callback)
+//        if (alwaysCaptcha || TextUtils.isEmpty(CookieUtil.getToken(context))) { //判断是否需要做极验，serverUrl 是发送验证码，并且 没有token,验证
+//            if (context is GeeTestInterface) {
+//                (context as GeeTestInterface).startVerify(object : GeeTestCallback {
+//                    override fun onApi1(api1Callback: GeeTestApi1Callback?) {
+//                        geetestInit(context, object : NormalCallback<HttpRequestResultData<JsonObject?>?>(context) {
+//                            override fun error(type: Int, error: Any?) {
+//                                verifyNext(null)
+//                            }
+//
+//                            override fun callback(returnData: HttpRequestResultData<JsonObject?>?) {
+//                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+//                                    // TODO 设置返回api1数据，即使为null也要设置，SDK内部已处理
+//                                    var jsonObject: JSONObject? = null
+//                                    try {
+//                                        jsonObject = JSONObject(returnData.data.toString())
+//                                    } catch (e: JSONException) {
+//                                    }
+//                                    verifyNext(jsonObject)
+//                                } else {
+//                                    showToast(context, if (returnData == null) "null" else returnData.msg)
+//                                    verifyNext(null)
+//                                }
+//                            }
+//
+//                            private fun verifyNext(jsonObject: JSONObject?) {
+//                                api1Callback?.callback(jsonObject)
+//                            }
+//                        })
+//                    }
+//
+//                    override fun onApi2(result: String?, api2Callback: GeeTestApi2Callback?) {
+//                        api2Callback?.dismiss()
+//                        val geeTestResult = Gson().fromJson(result, GeeTestResult::class.java)
+//                        sendVerifyCodeGeeTest(context, userName, telCountryCode, geeTestResult.toJsonString(), object : NormalCallback<HttpRequestResultString?>(context) {
+//                            override fun error(type: Int, error: Any?) {
+//                                verifyCodeCallBack.error(type, error!!)
+//                            }
+//
+//                            override fun callback(returnData: HttpRequestResultString?) {
+//                                verifyCodeCallBack.callback(returnData)
+//                            }
+//                        })
+//                    }
+//                })
+//            } else {
+//                throw RuntimeException(context.javaClass.simpleName + "  must implements GeeTestInterface")
+//            }
+//        } else {
+//            ApiManager.build(context).getService(UserApiService::class.java)
+//                    ?.sendVerifyCode02(userName, telCountryCode)
+//                    ?.compose(RxJavaHelper.observeOnMainThread())
+//                    ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
+//        }
     }
 
     fun sendVerifyCodeGeeTest(context: Context?, userName: String?, telCountryCode: String?, geetest: String?, callback: Callback<HttpRequestResultString?>?) {
