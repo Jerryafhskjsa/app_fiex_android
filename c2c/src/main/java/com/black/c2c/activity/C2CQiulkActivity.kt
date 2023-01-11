@@ -139,6 +139,9 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         else if (id == R.id.bills){
 
         }
+        else if (id == R.id.btn_confirm){
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUY).go(this)
+        }
         else if (id == R.id.id_pay_layout){
             choosePayMethodWindow()
         }
