@@ -336,19 +336,8 @@
                                 android:layout_marginTop="@dimen/text_size_20"
                                 android:layout_marginBottom="@dimen/text_size_20"
                                 android:padding="@dimen/middle_padding"
-                                android:text="@string/by_0_fee" />
+                                android:text="@string/buy_02" />
 
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/btn_confirm_sale"
-                                style="@style/ButtonRed"
-                                android:layout_width="300dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/text_size_20"
-                                android:layout_marginBottom="@dimen/text_size_20"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/sale_0_fee"
-                                android:visibility="gone" />
                         </LinearLayout>
 
                         <LinearLayout

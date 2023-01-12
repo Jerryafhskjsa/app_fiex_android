@@ -18,12 +18,14 @@
     <string name="home_tab_demand">聚宝盆</string>
     <string name="buy">买入</string>
     <string name="buy_02">购买</string>
+    <string name="sell">出售</string>
     <string name="sale">卖出</string>
     <string name="image">头像</string>
     <string name="nick_name">昵称</string>
     <string name="not_filled_in">未填写</string>
     <string name="price">价格</string>
     <string name="amount">数量</string>
+    <string name="balance">余额</string>
     <string name="entrust_current">当前委托</string>
     <string name="real_name">实名认证</string>
     <string name="time">时间</string>
@@ -32,8 +34,13 @@
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
     <string name="by_0_fee">0手续费购买</string>
+    <string name="go_add">去添加</string>
+    <string name="add_new">新增付款方式</string>
     <string name="sale_0_fee">0手续费出售</string>
     <string name="cancel_order">取消订单</string>
+    <string name="select_collection_method">选择收款方式</string>
+    <string name="setting_1">你尚未设置当前商家支持的收款方式，请前往设置</string>
+    <string name="setting_2">前往设置</string>
     <string name="one_c2c">取消订单后不会退款，如您已转账，请勿取消订单。</string>
     <string name="two_c2c">我确认还未付款给卖方</string>
     <string name="three_c2c">我再想想</string>
@@ -46,7 +53,9 @@
     <string name="advice_null">暂无报价，请尝试其他条件，绑定更多收款/付款方式，或查看所有报价</string>
     <string name="before_transaction">交易前仔细阅读下方条款</string>
     <string name="use_self">请务必使用本人的方式,向对方转账</string>
+    <string name="use_self_also">请务必使用本人的实名账户，被激活的收款方式将在交易时向买方展示，最多激活3种。</string>
     <string name="transaction_message">交易信息</string>
+    <string name="message">信息</string>
     <string name="pay_time">付款时限</string>
     <string name="sale_name">卖家昵称</string>
     <string name="created_time">创建时间</string>
@@ -54,6 +63,10 @@
     <string name="transaction_terms">交易条款</string>
     <string name="mettioned">请备注敏感信息，如数字货币.比特币.BTC.ETH.USDT等。</string>
     <string name="buy_quilk">快速购买流程</string>
+    <string name="pay_seller">商家收款人</string>
+    <string name="get_method">收款方式</string>
+    <string name="what_seller">什么是商家收款人</string>
+    <string name="seller_advice">风险提示： 作为商家的收款人，意味着您授权该商家使用您的实名账户进行收付款。如使用过程中出现法律风险，您需承担相应责任。</string>
     <string name="sale_quilk">快速出售流程</string>
     <string name="message_filter">广告筛选</string>
     <string name="use_last">使用上次筛选条件</string>
@@ -92,6 +105,7 @@
     <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
     <string name="friend">朋友圈</string>
     <string name="list_view_empty_default">暂无记录</string>
+    <string name="list_view_empty_pay">暂无收款记录</string>
     <string name="invite_code_hint">邀请码（选填）</string>
     <string name="safe_mail_check">开启邮箱认证</string>
     <string name="safe_bind_check">开启安全认证</string>
@@ -276,6 +290,9 @@
     <string name="time_between">请在%s内付款给卖家</string>
     <string name="order_number">订单号</string>
     <string name="available_choose">仅显示可用的交易方式</string>
+    <string name="available">(可用/</string>
+    <string name="my_order">我的订单数</string>
+    <string name="my_confirm">我的完成率</string>
     <string name="many">多</string>
     <string name="volumn">24h量</string>
     <string name="collect_add">加自选</string>
@@ -608,6 +625,7 @@
     <string name="my_buy">我要买</string>
     <string name="my_sale">我要卖</string>
     <string name="my_bills">我的订单</string>
+    <string name="my_bills_time">若买家未在规定时间付款，订单被系统取消。卖家不可取消订单，你的数字货币将被锁定在托管账户直到订单完成或被取消</string>
     <string name="payment_settings">支付设置</string>
     <string name="merchant_application">商家申请</string>
     <string name="novice_guidance">新手指导</string>

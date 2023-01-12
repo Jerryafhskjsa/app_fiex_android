@@ -132,6 +132,9 @@ object RouterConstData {
 
     const val C2C_ORDER = "fiex://c2cOrder"
     const val C2C_BUY = "fiex://c2cBuy"
+    const val C2C_SELL = "fiex://c2cSell"
+    const val C2C_PAY = "fiex://c2cPay"
+    const val C2C_MINE = "fiex://c2cMine"
     const val C2C_ORDERS = "fiex://c2cOrders"
     const val C2C_ORDER_DETAIL = "fiex://c2cOrderDetail"
     const val C2C_ORDER_DETAIL_TALK = "fiex://c2cOrderDetailTalk"

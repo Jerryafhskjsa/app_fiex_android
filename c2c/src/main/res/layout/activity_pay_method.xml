@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewC2CBuyModel"
+            type="Object" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B2"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                        <include
+                            android:id="@+id/empty_view"
+                            layout="@layout/list_view_empty_long" />
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/advice_null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:background="#FAF3DD"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:background="@drawable/icon_secure_tip" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginBottom="@dimen/text_size_5"
+                            android:layout_weight="1"
+                            android:text="@string/use_self_also"
+                            android:textColor="@color/C5" />
+                    </LinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_confirm"
+                        style="@style/ButtonBlue"
+                        android:layout_width="300dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/go_add" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_confirm_new"
+                        style="@style/ButtonReturnGreen"
+                        android:layout_width="300dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/add_new" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:background="@drawable/bg_green_white"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="@dimen/text_size_15"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:src="@drawable/quilk_point"/>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/text_size_15"
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:text="@string/pay_seller" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/what_seller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:padding="@dimen/text_size_15"
+                                android:textSize="@dimen/text_size_12"
+                                android:drawableRight="@drawable/arrow_right"
+                                android:textColor="#E622C177"
+                                android:text="@string/what_seller" />
+                        </LinearLayout>
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/text_size_15"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/custom_transparent"
+                            android:text="@string/seller_advice" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>

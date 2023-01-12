@@ -256,6 +256,13 @@
         <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="ButtonReturnGreen">
+        <item name="android:background">@drawable/btn_green_4</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#E622C177</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="DefaultTabStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/tab_default_text_color</item>

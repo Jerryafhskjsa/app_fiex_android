@@ -88,6 +88,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.btnConfirmSale?.setOnClickListener(this)
         binding?.quilkPointSale?.setOnClickListener(this)
         binding?.adviceNull?.setOnClickListener(this)
+        binding?.btnConfirmSale?.setOnClickListener(this)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
@@ -139,8 +140,14 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         else if (id == R.id.bills){
 
         }
+        else if (id == R.id.person){
+            BlackRouter.getInstance().build(RouterConstData.C2C_MINE).go(mContext)
+        }
         else if (id == R.id.btn_confirm){
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY).go(this)
+        }
+        else if (id == R.id.btn_confirm_sale){
+            BlackRouter.getInstance().build(RouterConstData.C2C_SELL).go(this)
         }
         else if (id == R.id.id_pay_layout){
             choosePayMethodWindow()

@@ -77,6 +77,7 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.filterTitle?.setOnClickListener(this)
         binding?.methodChoose?.setOnClickListener(this)
          binding?.settings?.setOnClickListener(this)
+        binding?.person?.setOnClickListener(this)
         fManager = supportFragmentManager
         typeList = ArrayList()
         typeList!!.add(TAB_SELF)
@@ -195,6 +196,9 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         else if (id == R.id.bills){
 
+        }
+        else if (id == R.id.person){
+            BlackRouter.getInstance().build(RouterConstData.C2C_MINE).go(mContext)
         }
         else if (id == R.id.method_choose){
 
