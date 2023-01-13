@@ -35,7 +35,8 @@
     <string name="confirm">确定</string>
     <string name="by_0_fee">0手续费购买</string>
     <string name="go_add">去添加</string>
-    <string name="add_new">新增付款方式</string>
+    <string name="pay_add">添加收款方式</string>
+    <string name="add_new">新增收款方式</string>
     <string name="sale_0_fee">0手续费出售</string>
     <string name="cancel_order">取消订单</string>
     <string name="select_collection_method">选择收款方式</string>
@@ -46,6 +47,7 @@
     <string name="three_c2c">我再想想</string>
     <string name="four_c2c">确认取消</string>
     <string name="go_payment">去付款</string>
+    <string name="confirm_put">确认收款并放币</string>
     <string name="reference_quotation">参考报价</string>
     <string name="quota">限额</string>
     <string name="number_of_transactions">成交数量</string>
@@ -58,8 +60,14 @@
     <string name="message">信息</string>
     <string name="pay_time">付款时限</string>
     <string name="sale_name">卖家昵称</string>
+    <string name="notice1">请前往以下账户，确认买家付款</string>
+    <string name="notice2">付款</string>
     <string name="created_time">创建时间</string>
+    <string name="cmy_account">银行账号/卡号</string>
+    <string name="cmy_name">银行名称</string>
     <string name="order_total">接单总数</string>
+    <string name="buyer">买家</string>
+    <string name="name_real">实名</string>
     <string name="transaction_terms">交易条款</string>
     <string name="mettioned">请备注敏感信息，如数字货币.比特币.BTC.ETH.USDT等。</string>
     <string name="buy_quilk">快速购买流程</string>
@@ -78,10 +86,12 @@
     <string name="bind_google_title">绑定谷歌身份认证器</string>
     <string name="bind_google_note">请妥善备份密钥以防遗失</string>
     <string name="next">下一步</string>
+    <string name="only_one_photo">只能上传一张图片，格式png、jpg、peg大小控制为1M</string>
     <string name="google_code_input_hint">请输入谷歌Code码</string>
     <string name="google_code_1">谷歌Code码</string>
     <string name="input_password">请输入账号密码</string>
     <string name="submit">提交</string>
+    <string name="preservation">保存</string>
     <string name="mail_code">邮箱验证码</string>
     <string name="example">100起</string>
     <string name="example_most">最大可售约 1000</string>
@@ -111,6 +121,10 @@
     <string name="safe_bind_check">开启安全认证</string>
     <string name="jump">跳过</string>
     <string name="warm_notice">温馨提示</string>
+    <string name="warm_notice_c2c">1.请务必登录收款账户确认到账明细，避免因错误点击放行造成财务损失
+        2.您所出售的数字资产，已冻结，请在确认收到对方付款后，点击“放币“支付数字货币
+        3.请不要相信任何催促放币的理由，确认收到款项后再释放数字资产，避免造成损失
+        4.在收到到账短信后，请务必登录网上银行或第三方支付账号确认是否收到该笔款项，避免因收到诈骗短信错误释放数字货币</string>
     <string name="change_style">风格切换</string>
     <string name="exit">确认退出当前账号吗？</string>
     <string name="number_default">－</string>
@@ -288,6 +302,11 @@
     <string name="wei_xin">微信</string>
     <string name="order_generated">订单已生成</string>
     <string name="time_between">请在%s内付款给卖家</string>
+    <string name="wait1">预计将在</string>
+    <string name="seller_confirm_too">对方已付款，请确认收款</string>
+    <string name="wait2">内收到对方付款</string>
+    <string name="waite">等待买家付款</string>
+    <string name="waite_confirm">请确认收款并放币</string>
     <string name="order_number">订单号</string>
     <string name="available_choose">仅显示可用的交易方式</string>
     <string name="available">(可用/</string>
@@ -319,6 +338,20 @@
     <string name="rise">涨幅榜</string>
     <string name="fall">跌幅榜</string>
     <string name="name">名称</string>
+    <string name="name2">姓名</string>
+    <string name="cards_num">银行卡号</string>
+    <string name="put_cards">请输入银行卡号</string>
+    <string name="open_cmy">开户银行</string>
+    <string name="please_cmy">请输入开户银行</string>
+    <string name="other_cmy">开户支行</string>
+    <string name="please_other">请输入开户支行</string>
+    <string name="not_use">谷歌验证码已丢失</string>
+    <string name="ti_shi">法币交易属于OTC交易，资金不经过平台，平台不会自动扣款，需要您手动自行转账给对方，对方才能收到款项。</string>
+    <string name="weixin_num">微信账号</string>
+    <string name="please_weixin">请输入微信账号</string>
+    <string name="ali_pay_num">支付宝账号</string>
+    <string name="collection_code">收款码</string>
+    <string name="please_ali_pay">请输入支付宝账号</string>
     <string name="rise_fall">涨跌幅</string>
     <string name="coin_type">币种</string>
     <string name="new_price">最新价</string>

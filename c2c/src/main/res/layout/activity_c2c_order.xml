@@ -16,6 +16,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/id"
             android:background="@color/B2">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -376,41 +377,43 @@
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_size_20"
-                            android:layout_marginTop="@dimen/text_size_10"
-                            android:layout_marginRight="@dimen/text_size_20"
-                            android:orientation="horizontal">
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/btn_confirm"
-                                style="@style/ButtonReturn"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/text_size_20"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:layout_marginBottom="@dimen/text_size_20"
-                                android:layout_weight="2"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/c2c_cancel_order" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/btn_cancel"
-                                style="@style/ButtonBlue"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/text_size_20"
-                                android:layout_marginBottom="@dimen/text_size_20"
-                                android:layout_weight="1"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/go_payment" />
-                        </LinearLayout>
                     </LinearLayout>
                 </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_confirm"
+                style="@style/ButtonReturn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_20"
+                android:layout_weight="2"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/c2c_cancel_order" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_cancel"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:layout_marginBottom="@dimen/text_size_20"
+                android:layout_weight="1"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/go_payment" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

@@ -226,6 +226,16 @@
         <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="ButtonWhiteGray">
+        <item name="android:background">@drawable/btn_white_gray</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ButtonWhiteGreen">
+        <item name="android:background">@drawable/btn_white_green</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="ButtonGrayLight">
         <item name="android:background">@drawable/btn_light_gray</item>

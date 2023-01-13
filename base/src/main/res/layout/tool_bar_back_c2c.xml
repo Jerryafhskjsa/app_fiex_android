@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CollapsingToolbarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+    app:titleEnabled="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        app:layout_collapseMode="pin">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@id/action_bar_title_big"
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:lineSpacingExtra="0dp" />
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/B2"
+        android:theme="@style/AppTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        app:theme="@style/AppTheme"
+        app:titleMargin="0dp"
+        app:titleTextAppearance="@style/ToolBarTitleStyle">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/action_bar_back"
+                android:layout_width="9dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_back" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@id/action_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/T1"
+                android:textSize="@dimen/text_size_20" />
+
+            <ImageButton
+                android:id="@+id/img_action_bar_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="320dp"
+                android:layout_marginRight="15dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/btn_c2c_phone" />
+            <ImageButton
+                android:id="@+id/img_action_bar_mail"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center_vertical"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:onClick="onBackClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/btn_c2c_mail" />
+        </FrameLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.CollapsingToolbarLayout>

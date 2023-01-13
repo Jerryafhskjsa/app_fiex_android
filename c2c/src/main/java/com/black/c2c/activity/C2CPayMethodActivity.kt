@@ -18,6 +18,7 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pay_method)
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.btnConfirmNew?.setOnClickListener(this)
     }
 
     override fun getTitleText(): String? {
@@ -26,7 +27,10 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){
-            BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            BlackRouter.getInstance().build(RouterConstData.C2C_PAY2).go(this)
+        }
+        if (id == R.id.btn_confirm_new){
+            BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).go(this)
         }
     }
 }

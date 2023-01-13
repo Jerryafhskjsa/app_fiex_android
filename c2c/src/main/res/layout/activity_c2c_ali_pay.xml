@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/name2">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                style="@style/ButtonGrayLight"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/name"
+                                    style="@style/EditTextStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Kinki"
+                                    android:background="@null"
+                                    android:inputType="text"
+                                    android:padding="@dimen/middle_padding"
+                                    android:textSize="@dimen/text_size_16"
+                                    app:useDelete="true" />
+                            </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/ali_pay_num">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_edittext_default"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/cards"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/please_ali_pay"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+
+                        </com.black.lib.view.InputLinearLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/mail_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/collection_code">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:id="@+id/photo"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:gravity="center"
+                                android:background="@drawable/bg_edittext_default">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/add_group_member"/>
+                            </LinearLayout>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:gravity="center_vertical"
+                                android:textSize="@dimen/text_size_12"
+                                android:text="@string/only_one_photo"/>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/google_window"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_14"
+                            android:text="@string/google_code_input_hint">
+
+                        </com.black.base.widget.SpanTextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <com.black.lib.view.InputLinearLayout
+                            android:id="@+id/google_code_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_edittext_default"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/google_code"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/google_code_1"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+
+                        </com.black.lib.view.InputLinearLayout>
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:text="@string/warm_notice"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:text="@string/ti_shi"
+                            android:textSize="@dimen/text_size_14" />
+                        <LinearLayout
+                            android:id="@+id/bottom_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:orientation="vertical"
+                            android:padding="@dimen/double_padding">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/btn_submit"
+                                style="@style/ButtonBlue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/middle_padding"
+                                android:text="@string/preservation" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>

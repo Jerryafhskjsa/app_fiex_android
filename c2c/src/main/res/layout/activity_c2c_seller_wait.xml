@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/id"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include
+                    layout="@layout/tool_bar_back_c2c"
+                    android:baselineAligned="false" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/wait1" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FFA030"
+                            android:text="5:00" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/wait2" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/sell"
+                            android:textColor="#FF5A4E"
+                            android:textSize="@dimen/text_size_18"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/coin_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:src="@drawable/icon_demand_usdt" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/coin_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_weight="1"
+                            android:text="USDT"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:background="@color/C2" />
+
+                    <LinearLayout
+                        android:id="@+id/pay_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/total_money" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="44242432"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_20"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/price" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="6.89"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/advice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/amount" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="12 USDT"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:background="@color/C2" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/order_number" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="21212414212124"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:id="@+id/num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/btn_bar_to" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/created_time" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="2022-3-1"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:background="@color/C2" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:gravity="center"
+                        android:text="@string/warm_notice"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:id="@+id/advice_null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:orientation="horizontal">
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/advice_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginBottom="@dimen/text_size_5"
+                            android:layout_weight="1"
+                            android:text="@string/warm_notice_c2c"
+                             />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:orientation="horizontal">
+
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_cancel"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:layout_marginBottom="@dimen/text_size_20"
+                android:layout_weight="1"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/confirm_put" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

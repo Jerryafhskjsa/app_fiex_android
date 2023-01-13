@@ -6,21 +6,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_size_20"
         android:layout_marginRight="@dimen/text_size_20"
+        style="@style/ButtonWhiteGray"
         android:orientation="vertical">
 
 
-        <com.black.base.widget.ObserveScrollView
-            android:id="@+id/scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/B1"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/ButtonWhiteGray"
                 android:background="@color/B2"
                 android:orientation="vertical">
                 <com.black.base.widget.SpanTextView
@@ -46,50 +40,44 @@
                     android:padding="@dimen/text_size_20"
                     android:textColor="@color/black"
                     android:text="@string/two_c2c" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/text_size_2"
+                    android:background="@color/C2"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/text_size_10"
-                    android:layout_marginRight="@dimen/text_size_10"
-                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_height="50dp"
                     android:orientation="horizontal">
-
 
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/btn_cancel"
-                        style="@style/ButtonGray"
+                        style="@style/ButtonWhiteGreen"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:layout_weight="1"
-                        android:padding="@dimen/middle_padding"
+                        android:textColor="@color/partTranslucent"
                         android:text="@string/four_c2c" />
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="@dimen/line" />
+                        android:layout_height="match_parent"
+                        android:background="@color/C2"/>
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/btn_confirm"
-                        style="@style/ButtonBlue"
+                        style="@style/ButtonWhiteGreen"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
+                        android:textColor="#03CA89"
                         android:layout_weight="1"
-                        android:padding="@dimen/middle_padding"
                         android:text="@string/three_c2c" />
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp" />
-
-
 
 
             </LinearLayout>
-        </com.black.base.widget.ObserveScrollView>
     </LinearLayout>
 </layout>

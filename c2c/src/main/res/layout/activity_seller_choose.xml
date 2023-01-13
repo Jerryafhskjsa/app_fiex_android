@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewC2CBuyModel"
+            type="Object" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/get_method" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/cards"
+                        android:layout_width="380dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/btn_id_pay"
+                        android:drawableLeft="@drawable/btn_cards_c2c"
+                        android:drawableRight="@drawable/arrow_right"
+                        android:padding="@dimen/text_size_20"
+                        android:text="@string/cards" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/id_pay"
+                       android:background="@drawable/btn_cards"
+                        android:layout_width="380dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_height="60dp"
+                        android:drawableLeft="@drawable/btn_id_pay_c2c"
+                        android:layout_gravity="center"
+                        android:drawableRight="@drawable/arrow_right"
+                        android:padding="20dp"
+                        android:text="@string/id_pay" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/wei_xin"
+                        android:background="@drawable/btn_wei_xin"
+                        android:layout_width="380dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_height="60dp"
+                        android:drawableRight="@drawable/arrow_right"
+                        android:drawableLeft="@drawable/btn_wei_xin_c2c"
+                        android:layout_gravity="center"
+                        android:padding="20dp"
+                        android:text="@string/wei_xin" />
+                    <LinearLayout
+                        android:id="@+id/advice_null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:background="#FAF3DD"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:background="@drawable/icon_secure_tip" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_5"
+                            android:layout_marginBottom="@dimen/text_size_5"
+                            android:layout_weight="1"
+                            android:text="@string/use_self_also"
+                            android:textColor="@color/C5" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>

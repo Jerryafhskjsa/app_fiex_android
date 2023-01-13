@@ -35,6 +35,7 @@
     <string name="confirm">OK</string>
     <string name="by_0_fee">buy by 0 fee</string>
     <string name="go_add">Go add</string>
+    <string name="pay_add">Add collection method</string>
     <string name="add_new">New payment method</string>
     <string name="sale_0_fee">sale by 0 fee</string>
     <string name="cancel_order">Cancel order</string>
@@ -46,6 +47,7 @@
     <string name="three_c2c">think about it again</string>
     <string name="four_c2c">Confirm cancellation</string>
     <string name="go_payment">Go payment</string>
+    <string name="confirm_put">Confirm receipt and deposit</string>
     <string name="reference_quotation">Reference quotation</string>
     <string name="quota">Quota</string>
     <string name="number_of_transactions">Number of transactions</string>
@@ -63,8 +65,14 @@
     <string name="message">Message</string>
     <string name="pay_time">Pay time</string>
     <string name="sale_name">Seller nickname</string>
+    <string name="notice1">Please go to the following account to confirm the buyer payment of</string>
+    <string name="notice2"> </string>
     <string name="created_time">Created time</string>
+    <string name="cmy_account">Bank account/card number</string>
+    <string name="cmy_name">Bank name</string>
     <string name="order_total">Order total</string>
+    <string name="buyer">Buyer</string>
+    <string name="name_real">Real name</string>
     <string name="transaction_terms">Transaction terms</string>
     <string name="mettioned">Please note sensitive information, such as digital currency, Bitcoin, BTC.ETH.USDT, etc.</string>
     <string name="sale_quilk">sale quilk</string>
@@ -78,10 +86,12 @@
     <string name="bind_google_title">Bind Google Identity Authenticator</string>
     <string name="bind_google_note">Please back up the key properly to prevent loss</string>
     <string name="next">Next</string>
+    <string name="only_one_photo">Only one image can be uploaded, The format of png, jpg and peg is controlled to 1M</string>
     <string name="google_code_input_hint">Please enter the Google Code</string>
     <string name="google_code_1">Google Code Code</string>
     <string name="input_password">Please enter the account password</string>
     <string name="submit">Submit</string>
+    <string name="preservation">Preservation</string>
     <string name="mail_code">Email verification code</string>
     <string name="example">Example 100</string>
     <string name="example_most">Sale most about 1000</string>
@@ -111,6 +121,10 @@
     <string name="safe_bind_check">Enable security authentication</string>
     <string name="jump">Skip</string>
     <string name="warm_notice">Tips</string>
+    <string name="warm_notice_c2c">1. Please be sure to log in to the collection account to confirm the details of receipt to avoid financial losses caused by incorrect click on release
+2. The digital assets you sell have been frozen. Please click "deposit" to pay the digital currency after confirming the receipt of payment from the other party
+3. Please do not believe any reason for urging the release of currency, and release the digital assets after confirming the receipt of funds to avoid losses
+4. After receiving the incoming SMS, please be sure to log in to the online banking or third-party payment account to confirm whether the payment is received, so as to avoid the wrong release of digital currency due to the receipt of fraudulent SMS</string>
     <string name="change_style">Style switching</string>
     <string name="exit">Are you sure to exit the current account</string>
     <string name="number_default">－</string>
@@ -288,6 +302,11 @@
     <string name="wei_xin">Wei xin</string>
     <string name="order_generated">Order generated</string>
     <string name="time_between">Please pay the seller within %s</string>
+    <string name="wait1">It is expected that</string>
+    <string name="seller_confirm_too">The other party has paid, please confirm receipt</string>
+    <string name="wait2">payment received internally</string>
+    <string name="waite">Waiting for buyer to pay</string>
+    <string name="waite_confirm">Please confirm receipt and deposit</string>
     <string name="order_number">Order number</string>
     <string name="available_choose">Show only available transaction methods</string>
     <string name="available">(Available/</string>
@@ -319,6 +338,20 @@
     <string name="rise">Rising List</string>
     <string name="fall">Decline chart</string>
     <string name="name">Name</string>
+    <string name="name2">Name</string>
+    <string name="cards_num">Bank card number</string>
+    <string name="put_cards">Please enter the bank card number</string>
+    <string name="open_cmy">Bank of deposit</string>
+    <string name="please_cmy">Please enter the deposit bank</string>
+    <string name="other_cmy">Opening branch</string>
+    <string name="please_other">Please enter the account branch</string>
+    <string name="not_use">Google verification code is not available</string>
+    <string name="ti_shi">The legal currency transaction is an OTC transaction. The fund does not pass through the platform, and the platform will not automatically deduct the money. You need to manually transfer it to the other party, and the other party can receive the money.</string>
+    <string name="weixin_num">WeChat account</string>
+    <string name="please_weixin">Please enter your WeChat account</string>
+    <string name="ali_pay_num">Alipay account</string>
+    <string name="collection_code">Collection code</string>
+    <string name="please_ali_pay">Please enter Alipay accoun</string>
     <string name="rise_fall">Rise and fall</string>
     <string name="coin_type">Currency</string>
     <string name="new_price">Latest Price</string>
