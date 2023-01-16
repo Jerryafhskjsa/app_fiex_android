@@ -382,6 +382,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/acticity_c2c_cards.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_ali_pay.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buy.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_confirm.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_main.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_mine.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_new.xml" value="0.17916666666666667" />
@@ -398,14 +399,18 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_choose.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/bills_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.14666666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/mct.xml" value="0.1333903377511757" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/mct_imt_activity.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/money_choose_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/money_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/pay_time_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/quilk_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/quilk_sale_dialog.xml" value="0.178125" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/sell_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/state_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_finger_print_check.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_gestrue_password_check_unback.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/community/src/main/res/layout/list_item_faction_list.xml" value="0.17447916666666666" />

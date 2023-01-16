@@ -33,10 +33,14 @@
     <string name="usdt">USDT</string>
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
+    <string name="confirmed">已完成</string>
+    <string name="sell_successful">您已成功出售</string>
+    <string name="see_wallet">查看资产</string>
     <string name="by_0_fee">0手续费购买</string>
     <string name="go_add">去添加</string>
     <string name="pay_add">添加收款方式</string>
     <string name="add_new">新增收款方式</string>
+    <string name="representations">申诉</string>
     <string name="sale_0_fee">0手续费出售</string>
     <string name="cancel_order">取消订单</string>
     <string name="select_collection_method">选择收款方式</string>
@@ -46,6 +50,13 @@
     <string name="two_c2c">我确认还未付款给卖方</string>
     <string name="three_c2c">我再想想</string>
     <string name="four_c2c">确认取消</string>
+    <string name="five_c2c">确认己收款并放币</string>
+    <string name="state_one_c2c">提交申诉</string>
+    <string name="state_two_c2c">恶意申诉，扰乱平台正常运营秩序的将冻结账号</string>
+    <string name="state_three_c2c">提交</string>
+    <string name="six_c2c">请务必登录网上银行或第三方支付账号确认是否收到该笔款项</string>
+    <string name="seven_c2c">我已确认收到该笔款项</string>
+    <string name="eight_c2c">确认放币</string>
     <string name="go_payment">去付款</string>
     <string name="confirm_put">确认收款并放币</string>
     <string name="reference_quotation">参考报价</string>
@@ -61,6 +72,7 @@
     <string name="pay_time">付款时限</string>
     <string name="sale_name">卖家昵称</string>
     <string name="notice1">请前往以下账户，确认买家付款</string>
+    <string name="notice3">订单完成后，有充分证据证明资金来源不合法的，可在倒计时结束前提起申诉</string>
     <string name="notice2">付款</string>
     <string name="created_time">创建时间</string>
     <string name="cmy_account">银行账号/卡号</string>
@@ -68,6 +80,7 @@
     <string name="order_total">接单总数</string>
     <string name="buyer">买家</string>
     <string name="name_real">实名</string>
+    <string name="contact_the_selle">联系卖家</string>
     <string name="transaction_terms">交易条款</string>
     <string name="mettioned">请备注敏感信息，如数字货币.比特币.BTC.ETH.USDT等。</string>
     <string name="buy_quilk">快速购买流程</string>
@@ -101,6 +114,7 @@
     <string name="put_message">仅显示商家发布的广告</string>
     <string name="mail_code1">邮箱验证</string>
     <string name="phone_code1">手机验证</string>
+    <string name="advertisement">广告</string>
     <string name="google_code1">谷歌验证</string>
     <string name="safe_verify">安全认证</string>
     <string name="alert_input_sms_code">请填写短信验证码！</string>

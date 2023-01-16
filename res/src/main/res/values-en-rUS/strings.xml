@@ -33,10 +33,14 @@
     <string name="usdt">USDT</string>
     <string name="useable">Available</string>sell/Stop profit
     <string name="confirm">OK</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="sell_successful">You have successfully sold</string>
+    <string name="see_wallet">View assets</string>
     <string name="by_0_fee">buy by 0 fee</string>
     <string name="go_add">Go add</string>
     <string name="pay_add">Add collection method</string>
     <string name="add_new">New payment method</string>
+    <string name="representations">Representations</string>
     <string name="sale_0_fee">sale by 0 fee</string>
     <string name="cancel_order">Cancel order</string>
     <string name="select_collection_method">Select collection method</string>
@@ -46,6 +50,13 @@
     <string name="two_c2c">I confirm that I have not paid the seller</string>
     <string name="three_c2c">think about it again</string>
     <string name="four_c2c">Confirm cancellation</string>
+    <string name="five_c2c">Confirm receipt and deposit</string>
+    <string name="state_one_c2c">Submission of complaints</string>
+    <string name="state_two_c2c">The account will be frozen if the malicious appeal disturbs the normal operation order of the platform</string>
+    <string name="state_three_c2c">Submit</string>
+    <string name="six_c2c">Please login online banking or third-party payment account to confirm whether you have received the payment</string>
+    <string name="seven_c2c">I have confirmed receipt of this payment</string>
+    <string name="eight_c2c">Confirm coin release</string>
     <string name="go_payment">Go payment</string>
     <string name="confirm_put">Confirm receipt and deposit</string>
     <string name="reference_quotation">Reference quotation</string>
@@ -66,6 +77,7 @@
     <string name="pay_time">Pay time</string>
     <string name="sale_name">Seller nickname</string>
     <string name="notice1">Please go to the following account to confirm the buyer payment of</string>
+    <string name="notice3">After the order is completed, if there is sufficient evidence to prove that the source of funds is illegal, an appeal can be filed before the end of the countdown</string>
     <string name="notice2"> </string>
     <string name="created_time">Created time</string>
     <string name="cmy_account">Bank account/card number</string>
@@ -73,6 +85,7 @@
     <string name="order_total">Order total</string>
     <string name="buyer">Buyer</string>
     <string name="name_real">Real name</string>
+    <string name="contact_the_selle">Contact the seller</string>
     <string name="transaction_terms">Transaction terms</string>
     <string name="mettioned">Please note sensitive information, such as digital currency, Bitcoin, BTC.ETH.USDT, etc.</string>
     <string name="sale_quilk">sale quilk</string>
@@ -101,6 +114,7 @@
     <string name="put_message">Only show advertisements issued by merchants</string>
     <string name="mail_code1">Mailbox verification</string>
     <string name="phone_code1">Mobile phone verification</string>
+    <string name="advertisement">Advertisement</string>
     <string name="google_code1">Google Authentication</string>
     <string name="safe_verify">Security authentication</string>
     <string name="alert_input_sms_code">Please fill in the SMS verification code</string>

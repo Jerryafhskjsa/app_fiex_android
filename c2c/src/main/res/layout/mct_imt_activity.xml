@@ -124,9 +124,9 @@
                                         <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/text_size_10"
+                                            android:layout_marginTop="12dp"
                                             android:paddingLeft="60dp"
-                                            android:src="@drawable/icon_red_packet_got_best" />
+                                            android:src="@drawable/c2c_star" />
 
                                         <com.black.base.widget.SpanTextView
                                             android:id="@+id/btn_exchange"
@@ -168,40 +168,78 @@
                     android:layout_height="700dp"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.black.base.widget.SpanTextView
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginTop="@dimen/text_size_5"
+                        android:layout_height="30dp"
+                        >
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:background="@drawable/bg_login_devide_bar"
+                            android:layout_gravity="bottom"/>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ellipsize="none"
-                            android:paddingLeft="30dp"
-                            android:paddingTop="@dimen/text_size_10"
-                            android:singleLine="true"
-                            android:text="@string/message"
-                            android:textColor="#E622C177"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/text_size_2"
-                        android:layout_marginTop="@dimen/text_size_5"
-                        android:background="@color/C2">
-
-                        <View
-                            style="@style/ButtonGreen"
-                            android:layout_width="50dp"
-                            android:layout_height="5dp"
-                            android:layout_marginLeft="@dimen/text_size_20"
-                            android:layout_marginRight="10dp"
-                            android:background="#E622C177" />
-                    </LinearLayout>
-
+                            android:layout_gravity="bottom"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:id="@+id/msg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#E622C177"
+                                    android:textSize="@dimen/text_size_14"
+                                    android:textStyle="bold"
+                                    android:text="@string/message">
+                                </com.black.base.widget.SpanTextView>
+                                <View
+                                    android:id="@+id/msg_bar"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="4dp"
+                                    android:background="@drawable/bg_login_devide_bar_title"
+                                    />
+                            </LinearLayout>
+                            <View
+                                android:id="@+id/view1"
+                                android:layout_width="20dp"
+                                android:layout_height="wrap_content"
+                                />
+                            <LinearLayout
+                                android:id="@+id/ad"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/T14"
+                                    android:text="@string/advertisement">
+                                </com.black.base.widget.SpanTextView>
+                                <View
+                                    android:id="@+id/phone_bar_b"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_width="match_parent"
+                                    android:visibility="gone"
+                                    android:layout_height="4dp"
+                                    android:background="@drawable/bg_login_devide_bar_title"
+                                    />
+                            </LinearLayout>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:textSize="@dimen/text_size_14"
+                                android:textColor="@color/T14"
+                                android:text="(0)"/>
+                        </LinearLayout>
+                    </FrameLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

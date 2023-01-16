@@ -1,7 +1,8 @@
 package com.black.c2c.activity
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.View
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.RouterConstData
@@ -34,7 +35,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_cancel){
-            BlackRouter.getInstance().build(RouterConstData.C2C_ALI).go(this)
+            cancelDialog()
         }
         if (id == R.id.bottom_bar){
             binding?.above?.visibility = View.VISIBLE
@@ -51,6 +52,33 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         if (id == R.id.num3){
         }
         if (id == R.id.bottom_bar){
+        }
+    }
+    private fun cancelDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.confirm_dialog, null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(this)
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
         }
     }
 }

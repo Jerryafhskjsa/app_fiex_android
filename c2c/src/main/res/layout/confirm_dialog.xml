@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_size_20"
+        android:layout_marginRight="@dimen/text_size_20"
+        style="@style/ButtonWhiteGray"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/ButtonWhiteGray"
+            android:background="@color/B2"
+            android:orientation="vertical">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/middle_padding"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="@string/five_c2c" />
+            <com.black.base.widget.SpanTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/six_c2c" />
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:drawableLeft="@drawable/icon_payment_active_che"
+                android:layout_gravity="center"
+                android:padding="@dimen/text_size_20"
+                android:textColor="@color/black"
+                android:text="@string/seven_c2c" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_2"
+                android:background="@color/C2"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_cancel"
+                    style="@style/ButtonWhiteGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="@color/partTranslucent"
+                    android:text="@string/four_c2c" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/C2"/>
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_confirm"
+                    style="@style/ButtonWhiteGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="#03CA89"
+                    android:layout_weight="1"
+                    android:text="@string/eight_c2c" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>
