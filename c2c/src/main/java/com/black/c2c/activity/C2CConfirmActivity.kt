@@ -17,7 +17,7 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_confirm)
-       // binding?.btnConfirmNew?.setOnClickListener(this)
+        binding?.btnConfirmNew?.setOnClickListener(this)
         binding?.msg?.setOnClickListener(this)
         binding?.wallet?.getPaint()?.setFlags(Paint.FAKE_BOLD_TEXT_FLAG)
     }

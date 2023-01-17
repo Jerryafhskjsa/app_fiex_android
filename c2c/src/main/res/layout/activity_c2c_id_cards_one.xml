@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:layout_marginRight="@dimen/text_size_20"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_marginRight="@dimen/text_size_5"
+                        android:text="提交申请"
+                        android:textColor="#03CA89"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/btn_vector"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="等待审核"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_marginRight="@dimen/text_size_5"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/btn_vector"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_14"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_marginRight="@dimen/text_size_5"
+                        android:text="审核结果"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="请上传手持身份照片"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_20"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="224dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:src="@drawable/btn_c2c_id_three"/>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="1.拍摄时，手持本人身份证正面，将持证的手臂和上半身整个拍进照片，脸部、身份证上所有信息清晰且不能被遮挡."
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="2.仅支持.jpg/.jpeg /.png格式，最大不超过5M"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="请上传户口本照片"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_20"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="224dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:src="@drawable/btn_c2c_id_two"/>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="1.户口本需要上传本人信息页原件，请确保上传的图片无遮挡且清晰可见、无反光"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="2.仅支持.jpg/.jpeg /.png格式，最大不超过5M"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="请上传房产证/租房台同/水电费清单（三选一）"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_20"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="224dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:src="@drawable/btn_c2c_id_two"/>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="1.房产证、租房合同、水电费清单是为了确保您的地址信息真实有效：证件中地址如与基本信息中所填常住地址不同，我们会要求您说明原因"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="2.房产证需可见房主姓名、房产地址及填发单位盖章；租房合同可见租房人姓名、租房地址、业主盖章及双方身份证号；水电费清单需最近日期并可见缴费地址，请确保上传的图片无遮挡且清晰可见、无反光"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="3.仅支持.jpg/.jpeg /.png格式，最大不超过5M"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="请上传视频证明"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_20"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="224dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:src="@drawable/btn_c2c_id_two"/>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="请手持身份证正面，朗读以下范本并进行视频录制"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="保证声音和影像清晰）"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="本人（姓名），身份证号（身份证号码），我的资金来源合法可靠，自愿交易比特币等数字资产，本人充分了解数字货币及潜在风险，本人具有抗风险的能力并愿意承担一切风险。另外，我确定此账号所有操作均为本人操作，该账号所产生的一切法律责任，由我个人承担。"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="视频最大支持100M，建议时长3分钟以下，分辨率超过360P"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="视频格式支持.MP4 /.WMV/.OGG /.MOV"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="@string/weixin_num">
+
+                </com.black.base.widget.SpanTextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <com.black.lib.view.InputLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext_default"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanMaterialEditText
+                        android:id="@+id/cards"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="@string/please_weixin"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="0dp" />
+
+                </com.black.lib.view.InputLinearLayout>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/black"
+                    android:text="@string/weixin_num">
+
+                </com.black.base.widget.SpanTextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <com.black.lib.view.InputLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext_default"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanMaterialEditText
+
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="@string/please_weixin"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="0dp" />
+
+                </com.black.lib.view.InputLinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:drawableLeft="@drawable/icon_payment_active_che"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:text="@string/two_c2c" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_submit"
+                        style="@style/ButtonBlue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:padding="@dimen/middle_padding"
+                        android:text="立即申请" />
+            </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>
