@@ -517,14 +517,14 @@
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
-                style="@style/ButtonReturnGreen"
+                style="@style/ButtonBlue"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/representations" />
+                android:text="划转到我的钱包" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

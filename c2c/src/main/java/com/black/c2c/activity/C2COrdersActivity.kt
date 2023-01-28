@@ -76,7 +76,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
             val extras = Bundle()
             extras.putString(ConstData.COIN_TYPE,cointype)
             extras.putString(ConstData.C2C_ORDER, payChain)
-            BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
 
         }
     }

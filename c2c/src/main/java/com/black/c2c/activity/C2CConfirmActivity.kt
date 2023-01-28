@@ -9,6 +9,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cConfirmBinding
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
 @Route(value = [RouterConstData.C2C_CONFRIM])
@@ -25,39 +26,8 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm_new) {
-            cancelDialog()
-        }
-        if (id == R.id.msg) {
-        }
-        if (id == R.id.action_bar_back) {
-
+            BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
         }
     }
-    private fun cancelDialog() {
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.state_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
-        val window = dialog.window
-        if (window != null) {
-            val params = window.attributes
-            //设置背景昏暗度
-            params.dimAmount = 0.2f
-            params.gravity = Gravity.CENTER
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            window.attributes = params
-        }
-        //设置dialog的宽高为屏幕的宽高
-        val display = resources.displayMetrics
-        val layoutParams =
-            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.setContentView(contentView, layoutParams)
-        dialog.show()
-        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-            dialog.dismiss()
-        }
-        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
-            dialog.dismiss()
-        }
-    }
 }

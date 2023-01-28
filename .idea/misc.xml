@@ -384,6 +384,8 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_ali_pay.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buy.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buy_confirm.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buyer_oder.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buyer_oder_activity.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_confirm.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_id_cards_one.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_id_cards_two.xml" value="0.16666666666666666" />
@@ -406,8 +408,9 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_choose.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/bills_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/btn_c2c_wait_buy.xml" value="0.1470713980333476" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.14666666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/dialog_c2c_buy_create.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/mct.xml" value="0.1333903377511757" />
@@ -418,7 +421,9 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/quilk_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/quilk_sale_dialog.xml" value="0.178125" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/sell_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/shen_shu_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/state_dialog.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/view_c2c_one_key_buy_tab.xml" value="0.1" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_first_c2c.xml" value="0.13333333333333333" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_second_c2c.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_third_c2c.xml" value="0.1470713980333476" />
