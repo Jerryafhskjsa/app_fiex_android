@@ -390,13 +390,13 @@
                                 android:layout_weight="1"
                                 android:background="@null"
                                 android:hint="@string/example"
-                                android:inputType="number"
+                                android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
                             </com.black.lib.view.InputLinearLayout>
                             <com.black.lib.view.InputLinearLayout
-                                android:id="@+id/money_account"
+                                android:id="@+id/money_account1"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_marginRight="@dimen/text_size_10"
@@ -407,13 +407,14 @@
                                 android:background="@drawable/bg_edittext_default"
                                 android:orientation="horizontal">
                                 <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/money_account"
                                     style="@style/EditTextStyle"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:background="@null"
                                     android:hint="@string/example_most"
-                                    android:inputType="number"
+                                    android:inputType="numberDecimal"
                                     android:maxLines="1"
                                     android:padding="0dp" />
                             </com.black.lib.view.InputLinearLayout>

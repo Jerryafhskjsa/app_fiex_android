@@ -7,20 +7,19 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.Money
 import com.black.base.model.user.UserInfo
 import com.black.base.util.RouterConstData
-import com.black.base.util.UrlConfig
 import com.black.c2c.R
-import com.black.c2c.databinding.ActivityC2cMineBinding
+import com.black.c2c.databinding.ActivitySellerMsgBinding
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
-@Route(value = [RouterConstData.C2C_MINE])
-class C2CMineActivity: BaseActionBarActivity(), View.OnClickListener {
-    private var binding: ActivityC2cMineBinding? = null
+@Route(value = [RouterConstData.C2C_SELLER])
+class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
+    private var binding: ActivitySellerMsgBinding? = null
     private val userInfo = UserInfo()
     private val money = Money()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_mine)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_seller_msg)
         binding?.linTransfer?.setOnClickListener(this)
         binding?.id?.setText(userInfo.id)
         binding?.c2cAvailable?.setText(money.total.toString())

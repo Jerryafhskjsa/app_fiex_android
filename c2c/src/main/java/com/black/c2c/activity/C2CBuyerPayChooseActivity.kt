@@ -1,6 +1,7 @@
 package com.black.c2c.activity
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -18,7 +19,27 @@ import com.black.router.annotation.Route
 class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActiivtyPayForSellerBinding? = null
     private var sellerName: String? = null
+    private val mHandler = Handler()
     private var payFor: String? = null
+
+    private var getPhoneCodeLocked = false
+    private var getPhoneCodeLockedTime = 0
+    private val getPhoneCodeLockTimer = object : Runnable {
+        override fun run() {
+            getPhoneCodeLockedTime--
+            if (getPhoneCodeLockedTime <= 0) {
+                getPhoneCodeLocked = false
+            } else {
+                binding?.time?.setText(
+                    getString(
+                        R.string.aler_get_code_locked,
+                        getPhoneCodeLockedTime.toString()
+                    )
+                )
+                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
+            }
+        }
+    }
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

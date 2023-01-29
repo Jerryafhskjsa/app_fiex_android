@@ -144,6 +144,7 @@ object RouterConstData {
     const val C2C_WEIXIN = "fiex://c2cWechat"
     const val C2C_CARDS = "fiex://c2cCards"
     const val C2C_MINE = "fiex://c2cMine"
+    const val C2C_SELLER = "fiex://c2cSeller"
     const val C2C_ORDERS = "fiex://c2cOrders"
     const val C2C_CONFRIM = "fiex://c2cConfirm"
     const val C2C_ORDER_DETAIL = "fiex://c2cOrderDetail"

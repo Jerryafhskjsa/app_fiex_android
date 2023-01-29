@@ -3,15 +3,19 @@ package com.black.c2c.activity
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellBinding
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.CommonUtil
+import com.black.util.NumberUtil
 
 @Route(value = [RouterConstData.C2C_SELL])
 class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -24,6 +28,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivityC2cSellBinding? = null
     private var cointype = "USDT"
     private var payChain: String? = null
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
     private var chainNames: MutableList<String?>? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
@@ -145,15 +150,88 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
 
     }
     private fun checkClickable(){
-        if ( binding?.amount?.isChecked == false){
-            var amount = binding?.putAmount?.text
-            binding?.one?.text = amount
-            binding?.two?.setText(amount)
+        binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.putAmount?.text.toString().trim { it <= ' ' })
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
+        if (cointype == "usdt"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
         }
-        if ( binding?.amount?.isChecked == true){
-            var money = binding?.putMoney?.text
-            binding?.one?.text = money
-            binding?.two?.text = money
+        if (cointype == "eth"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.eth
+        }
+        if (cointype == "btc"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.btc
+        }
+        binding?.unitPrice?.setText(rate.toString())
+        if (binding?.amount?.isChecked == false) {
+            var amount =
+                CommonUtil.parseDouble(binding?.putAmount?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount * rate!!,
+                        4,
+                        4
+                    )
+                )
+            } else {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+            }
+
+        }
+        if (binding?.amount?.isChecked == true) {
+            var amount =
+                CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount,
+                        4,
+                        4
+                    )
+                )
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount / rate!!,
+                        4,
+                        4
+                    )
+                )
+            } else {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+            }
 
         }
 

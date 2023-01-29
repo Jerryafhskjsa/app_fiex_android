@@ -9,6 +9,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
+import com.black.base.widget.SpanCheckedTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cOrderBinding
 import com.black.router.BlackRouter
@@ -20,7 +21,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
         private var TAB_CARDS: String? = null
         private var TAB_IDPAY: String? = null
         private var TAB_WEIXIN: String? = null
-        private var TAB_PAYPAID: String? = "PayPai"
+        //private var TAB_PAYPAID: String? = "PayPai"
     }
     private var chainNames: MutableList<String?>? = null
     private var binding: ActivityC2cOrderBinding? = null
@@ -33,28 +34,30 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.pay?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
-        payChain = intent.getStringExtra(ConstData.C2C_ORDER)
+        payChain = intent.getStringExtra(ConstData.C2C_ORDERS)
         cointype = intent.getStringExtra(ConstData.COIN_TYPE)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
        TAB_WEIXIN = getString(R.string.wei_xin)
-        payChain = TAB_CARDS
         chainNames = ArrayList()
         chainNames?.add(TAB_CARDS)
         chainNames?.add(TAB_IDPAY)
         chainNames?.add(TAB_WEIXIN)
-        chainNames?.add(TAB_PAYPAID)
-        if (payChain == getString(R.string.id_pay)){
-
+        //chainNames?.add(TAB_PAYPAID)
+        if (payChain == getString(R.string.wei_xin)){
+            binding?.cardsColor?.visibility = View.GONE
+            binding?.aliColor?.visibility =View.GONE
+            binding?.weiXinColor?.visibility = View.VISIBLE
         }
-        if (payChain == getString(R.string.id_pay)){
-
+        if (payChain == getString(R.string.cards)){
+            binding?.cardsColor?.visibility = View.VISIBLE
+            binding?.aliColor?.visibility =View.GONE
+            binding?.weiXinColor?.visibility = View.GONE
         }
-        if (payChain == getString(R.string.id_pay)){
-
-        }
-        if (payChain == getString(R.string.id_pay)){
-
+        if(payChain == getString(R.string.id_pay)){
+            binding?.cardsColor?.visibility = View.GONE
+            binding?.aliColor?.visibility =View.VISIBLE
+            binding?.weiXinColor?.visibility = View.GONE
         }
       binding?.payName?.setText(payChain)
 
@@ -67,15 +70,17 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.pay){
+            payChain = binding?.payName?.text?.toString()
             choosePayMethodWindow()
         }
         else if (id == R.id.btn_confirm){
             cancelDialog()
         }
         else if (id == R.id.btn_cancel) {
+            payChain = binding?.payName?.text?.toString()
             val extras = Bundle()
             extras.putString(ConstData.COIN_TYPE,cointype)
-            extras.putString(ConstData.C2C_ORDER, payChain)
+            extras.putString(ConstData.C2C_ORDERS, payChain)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
 
         }
@@ -92,6 +97,21 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
                         payChain = item
+                        if (payChain == getString(R.string.wei_xin)){
+                            binding?.cardsColor?.visibility = View.GONE
+                            binding?.aliColor?.visibility =View.GONE
+                            binding?.weiXinColor?.visibility = View.VISIBLE
+                        }
+                        if (payChain == getString(R.string.cards)){
+                            binding?.cardsColor?.visibility = View.VISIBLE
+                            binding?.aliColor?.visibility =View.GONE
+                            binding?.weiXinColor?.visibility = View.GONE
+                        }
+                        if (payChain == getString(R.string.id_pay)){
+                            binding?.cardsColor?.visibility = View.GONE
+                            binding?.aliColor?.visibility =View.VISIBLE
+                            binding?.weiXinColor?.visibility = View.GONE
+                        }
                         binding?.payName?.setText(payChain)
                     }
                 })
@@ -120,6 +140,13 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
+        }
+        dialog.findViewById<SpanCheckedTextView>(R.id.range).setOnClickListener { v ->
+            if (dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == false) {
+                dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = true
+            }
+            else
+                dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = false
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 

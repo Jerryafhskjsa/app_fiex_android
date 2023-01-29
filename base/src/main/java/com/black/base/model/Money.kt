@@ -4,6 +4,7 @@ class Money {
     var usdt: Double? = null
     var cny: Double? = null
     var total: Double? = null
+    var forze: Double? = null
     var rate: Double? = null
     var btc: Double? = null
     var tigerUsdt: Double? = null

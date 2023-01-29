@@ -4,6 +4,9 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -57,6 +60,14 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     private var c2COneKeyFragment: C2COneKeyFragment? = null
     private var c2CCustomerFragment: C2CCustomerFragment? = null
     private var supportCoins: ArrayList<C2CSupportCoin?>? = null
+    private val watcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            checkClickable()
+        }
+
+        override fun afterTextChanged(s: Editable) {}
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_old)
@@ -102,7 +113,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         chainNames?.add(TAB_IDPAY)
         chainNames?.add(TAB_WEIXIN)
         chainNames?.add(TAB_PAYPAID)
-
+        checkClickable()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -114,10 +125,12 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         if (id == R.id.c2c_one_key) {
             type = 0
             refresh(type)
+            checkClickable()
             // selectTab(TAB_ONE_KEY)
         } else if (id == R.id.c2c_customer) {
             type = 1
             refresh(type)
+            checkClickable()
             // selectTab(TAB_CUSTOMER)
         }
        else if (id == R.id.area_choose){
@@ -231,7 +244,8 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.amount?.isChecked = true
             binding?.accont?.isChecked = false
             binding?.money?.visibility = View.VISIBLE
-            binding?.moneyAccount?.visibility = View.GONE
+            binding?.moneyAccount1?.visibility = View.GONE
+            checkClickable()
         }
         else if (id == R.id.accont){
             binding?.moneyAmount?.visibility = View.GONE
@@ -240,7 +254,8 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.amount?.isChecked = false
             binding?.accont?.isChecked = true
             binding?.money?.visibility = View.GONE
-            binding?.moneyAccount?.visibility = View.VISIBLE
+            binding?.moneyAccount1?.visibility = View.VISIBLE
+            checkClickable()
         }
         else if (id == R.id.quilk_point){
             quilkDialog()
@@ -248,6 +263,12 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         else if (id == R.id.quilk_point_sale){
             quilkSaleDialog()
         }
+    }
+    private fun checkClickable() {
+        binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
+        binding?.btnConfirmSale?.isEnabled = !(TextUtils.isEmpty(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
     }
     private fun refresh(type :Int){
         if (type == 0){

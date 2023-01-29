@@ -259,6 +259,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                             walletList!![i]?.totalAmount = spotBalanceList!![k]?.balance?.toDouble()!!
                             walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
                             walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
+                            walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
                             walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
                             walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
                             break
@@ -271,10 +272,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
         var walletTotal = 0.0
         var totalAmount = 0.0
+        var coinFtoze = 0.0
         var walletTotalCNY = 0.0
         walletList?.run {
             for (wallet in walletList!!) {
                 walletTotal += wallet?.estimatedAvailableAmount
+                    ?: 0.toDouble()
+                coinFtoze += wallet?.coinFroze
                     ?: 0.toDouble()
                 walletTotalCNY += wallet?.estimatedAvailableAmountCny
                     ?: 0.toDouble()
@@ -285,6 +289,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
             it.usdt = walletTotal
             it.cny = walletTotalCNY
+            it.forze = coinFtoze
             val price = C2CApiServiceHelper?.coinUsdtPrice?.usdt
             it.rate = price
             it.total = totalAmount

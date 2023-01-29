@@ -31,11 +31,12 @@
                     android:gravity="center"
                     android:padding="@dimen/middle_padding"
                     android:text="@string/one_c2c" />
-                <com.black.base.widget.SpanTextView
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/range"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/text_size_10"
-                    android:drawableLeft="@drawable/icon_payment_active_che"
+                    android:drawableLeft="@drawable/c2c_range"
                     android:layout_gravity="center"
                     android:padding="@dimen/text_size_20"
                     android:textColor="@color/black"

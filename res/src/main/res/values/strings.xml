@@ -316,7 +316,7 @@
     <string name="cards">银行卡</string>
     <string name="wei_xin">微信</string>
     <string name="order_generated">订单已生成</string>
-    <string name="time_between">请在%s内付款给卖家</string>
+    <string name="time_between">请在内付款给卖家</string>
     <string name="wait1">预计将在</string>
     <string name="seller_confirm_too">对方已付款，请确认收款</string>
     <string name="wait2">内收到对方付款</string>

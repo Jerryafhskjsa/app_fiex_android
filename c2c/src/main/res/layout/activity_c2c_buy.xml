@@ -209,7 +209,7 @@
                                     android:layout_weight="1"
                                     android:background="@null"
                                     android:hint="@string/please_put_money"
-                                    android:inputType="number"
+                                    android:inputType="numberDecimal"
                                     android:maxLines="1"
                                     android:padding="0dp" />
 
@@ -248,7 +248,7 @@
                                     android:layout_weight="1"
                                     android:background="@null"
                                     android:hint="@string/please_put_amount"
-                                    android:inputType="number"
+                                    android:inputType="numberDecimal"
                                     android:maxLines="1"
                                     android:padding="0dp" />
 
@@ -258,7 +258,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/text_size_10"
                                     android:gravity="right"
-                                    android:inputType="number"
+                                    android:inputType="numberDecimal"
                                     android:maxLines="1"
                                     android:padding="0dp"
                                     android:text="USDT" />
@@ -333,6 +333,7 @@
                                 android:layout_width="300dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+
                                 android:layout_marginTop="@dimen/text_size_20"
                                 android:layout_marginBottom="@dimen/text_size_20"
                                 android:padding="@dimen/middle_padding"
@@ -429,6 +430,7 @@
                                 android:text="@string/sale_name" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/seller"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -479,16 +481,38 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/exchange_method" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="horizontal">
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/text_size_10"
-                                android:layout_weight="1"
-                                android:gravity="right"
                                 android:text="@string/id_pay"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                android:drawableLeft="@drawable/ali_color"
                                 android:textColor="@color/black"
                                 android:textStyle="bold" />
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/wei_xin"
+                                    android:layout_marginRight="@dimen/text_size_20"
+                                    android:drawableLeft="@drawable/wei_xin_color"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold" />
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/cards"
+                                    android:drawableLeft="@drawable/c2c_cards_color"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold" />
+                        </LinearLayout>
                         </LinearLayout>
 
                         <View

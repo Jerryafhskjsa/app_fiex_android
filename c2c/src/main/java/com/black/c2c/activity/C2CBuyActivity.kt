@@ -4,11 +4,14 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
@@ -17,6 +20,8 @@ import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cBuyBinding
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.CommonUtil
+import com.black.util.NumberUtil
 import kotlinx.android.synthetic.main.activity_c2c_buy.*
 
 @Route(value = [RouterConstData.C2C_BUY])
@@ -25,11 +30,12 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         private var TAB_CARDS: String? = null
         private var TAB_IDPAY: String? = null
         private var TAB_WEIXIN: String? = null
-        private var TAB_PAYPAID: String? = "PayPai"
+       // private var TAB_PAYPAID: String? = "PayPai"
     }
     private var binding: ActivityC2cBuyBinding? = null
     private var cointype = "USDT"
     private var payChain: String? = null
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
     private var chainNames: MutableList<String?>? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
@@ -41,6 +47,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         override fun afterTextChanged(s: Editable) {}
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buy)
@@ -49,6 +56,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.amount?.setOnClickListener(this)
         binding?.payTime?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.unitPrice?.setOnClickListener(this)
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
         binding?.btnConfirm?.setText(getString(R.string.buy_02) + cointype)
@@ -60,7 +68,8 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         chainNames?.add(TAB_CARDS)
         chainNames?.add(TAB_IDPAY)
         chainNames?.add(TAB_WEIXIN)
-        chainNames?.add(TAB_PAYPAID)
+        //chainNames?.add(TAB_PAYPAID)
+
         checkClickable()
     }
     override fun getTitleText(): String? {
@@ -72,6 +81,9 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             choosePayMethodWindow()
         }
         else if (id == R.id.unit_price){
+        }
+        else if (id == R.id.seller){
+            BlackRouter.getInstance().build(RouterConstData.C2C_SELLER).go(mContext)
         }
         else if (id == R.id.pay_time){
             payTimeDialog()
@@ -107,10 +119,13 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
                         payChain = item
+                        var num1 = binding?.putAmount?.text
+                        var num2 = binding?.putMoney?.text
                         val extras = Bundle()
                         extras.putString(ConstData.COIN_TYPE,cointype)
-                        extras.putString(ConstData.C2C_ORDER, payChain)
-                        extras.putString(ConstData.C2C_ORDER, payChain)
+                        extras.putString(ConstData.BUY_PRICE,rate.toString())
+                        extras.putString(ConstData.COIN_TYPE,cointype)
+                        extras.putString(ConstData.C2C_ORDERS, payChain)
                         BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
                     }
                 })
@@ -144,18 +159,89 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         }
 
     }
-    private fun checkClickable(){
-        if ( binding?.amount?.isChecked == false){
-            var amount = binding?.putAmount?.text
-            binding?.one?.text = amount
-            binding?.two?.setText(amount)
+    private fun checkClickable() {
+        binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.putAmount?.text.toString().trim { it <= ' ' })
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
+        if (cointype == "usdt"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
         }
-        if ( binding?.amount?.isChecked == true){
-            var money = binding?.putMoney?.text
-            binding?.one?.text = money
-            binding?.two?.text = money
+        if (cointype == "eth"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.eth
+        }
+        if (cointype == "btc"){
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.btc
+        }
+        binding?.unitPrice?.setText(rate.toString())
+        if (binding?.amount?.isChecked == false) {
+             var amount = CommonUtil.parseDouble(binding?.putAmount?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount * rate!!,
+                        4,
+                        4
+                    )
+                )
+            } else {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+            }
 
         }
+        if (binding?.amount?.isChecked == true) {
+            var amount =
+                CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount,
+                        4,
+                        4
+                    )
+                )
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount / rate!!,
+                        4,
+                        4
+                    )
+                )
+            } else {
+                binding?.one?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+                binding?.two?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        0.0f,
+                        4,
+                        4
+                    )
+                )
+            }
 
+        }
     }
 }
