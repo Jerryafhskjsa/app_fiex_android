@@ -57,6 +57,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.payTime?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.unitPrice?.setOnClickListener(this)
+        binding?.seller?.setOnClickListener(this)
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
         binding?.btnConfirm?.setText(getString(R.string.buy_02) + cointype)

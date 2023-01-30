@@ -40,6 +40,10 @@ object ConstData {
     const val USER_VERIFY_ING = "2"
     const val USER_VERIFY_FAIL = "3"
 
+    const val USER_WATTING = "1"//商家申请审核中
+    const val USER_YES = "2"//通过
+    const val USER_NO = "3"//不通过
+
     const val TAB_HOME = 0
     const val TAB_QUOTATION = 1
     const val TAB_TRANSATION = 2

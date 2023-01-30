@@ -34,7 +34,7 @@ object WalletApiServiceHelper {
     private val walletCache: ArrayList<Wallet?> = ArrayList()
     private val walletLeverCache: ArrayList<WalletLever?> = ArrayList()
 
-    private var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
+    var userBalanceWrapperCache:UserBalanceWarpper = UserBalanceWarpper()
 
     private const val COIN_INFO = 1
     private const val WALLET = 2

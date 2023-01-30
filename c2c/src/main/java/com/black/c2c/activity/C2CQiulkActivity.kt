@@ -19,6 +19,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.view.DeepControllerWindow
+import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cMainBinding
 import com.black.c2c.databinding.ActivityC2cOldBinding
@@ -306,6 +307,10 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         val display = resources.displayMetrics
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
+        dialog.findViewById<SpanTextView>(R.id.merchant).setOnClickListener{
+                v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY1).go(this)
+        }
         dialog.show()
     }
     private fun choosePayMethodWindow() {

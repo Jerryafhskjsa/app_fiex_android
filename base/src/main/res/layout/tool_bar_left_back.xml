@@ -68,7 +68,6 @@
                 android:layout_gravity="right|center_vertical"
                 android:background="@null"
                 android:contentDescription="@null"
-                android:onClick="onBackClick"
                 android:scaleType="centerInside"
                 android:visibility="gone"
                 android:src="@drawable/icon_asset_record" />

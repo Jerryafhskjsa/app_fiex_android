@@ -36,6 +36,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <LinearLayout
+                    android:id="@+id/bar_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -45,15 +46,21 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                            android:layout_marginLeft="@dimen/text_size_15"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:text="1"
+                            android:background="@drawable/gray_c2c"
                             />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_5"
-                            android:layout_marginRight="@dimen/text_size_5"
+                            android:layout_marginRight="@dimen/text_size_15"
                             android:text="提交申请"
                             android:textSize="@dimen/text_size_14"
                             android:textStyle="bold"/>
@@ -62,19 +69,25 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/btn_vector"
+
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                            android:layout_marginLeft="@dimen/text_size_15"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:text="2"
+                            android:background="@drawable/green_c2c"
                             />
 
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="等待审核"
-                            android:textColor="#03CA89"
                             android:layout_marginLeft="@dimen/text_size_5"
-                            android:layout_marginRight="@dimen/text_size_5"
+                            android:textColor="#03CA89"
+                            android:layout_marginRight="@dimen/text_size_15"
                             android:textSize="@dimen/text_size_14"
                             />
                         <ImageView
@@ -82,10 +95,17 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/btn_vector"
+
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                            android:layout_marginLeft="@dimen/text_size_15"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:text="3"
+                            android:background="@drawable/gray_c2c"
                             />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
@@ -95,15 +115,12 @@
                             android:layout_marginRight="@dimen/text_size_5"
                             android:text="审核结果"
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            />
+
                     </LinearLayout>
                     <ImageView
                         android:layout_marginTop="50dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:src="@drawable/btn_frame_three"/>
 
                     <com.black.base.widget.SpanTextView
@@ -113,7 +130,8 @@
                         android:layout_marginTop="@dimen/text_size_20"
                         android:textColor="@color/black"
                         android:text="请您耐心等待"
-                        android:textSize="@dimen/text_size_20"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_16"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="200dp"
@@ -122,9 +140,10 @@
                         android:layout_marginTop="@dimen/text_size_20"
                         android:textColor="@color/black"
                         android:text="将在7个工作日内审核完毕"
-                        android:textSize="@dimen/text_size_20"
+                        android:textSize="@dimen/text_size_14"
                         />
                 </LinearLayout>
+
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>

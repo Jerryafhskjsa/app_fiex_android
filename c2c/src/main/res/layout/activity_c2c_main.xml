@@ -45,7 +45,6 @@
                             android:layout_gravity="center_vertical"
                             android:background="@null"
                             android:contentDescription="@null"
-                            android:onClick="onBackClick"
                             android:paddingLeft="15dp"
                             android:paddingRight="15dp"
                             android:scaleType="centerInside"

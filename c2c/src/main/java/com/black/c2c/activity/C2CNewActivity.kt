@@ -2,6 +2,7 @@ package com.black.c2c.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
@@ -23,6 +24,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
 import com.black.base.widget.SpanCheckedTextView
+import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cMainBinding
 import com.black.c2c.fragment.C2CCustomerFragment
@@ -72,6 +74,7 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.c2cCustomer?.setOnClickListener(this)
         binding?.moneyChoose?.setOnClickListener(this)
         binding?.areaChoose?.setOnClickListener(this)
+        binding?.actionBarBack?.setOnClickListener(this)
         binding?.bills?.setOnClickListener(this)
         binding?.rate?.setOnClickListener(this)
         binding?.filterTitle?.setOnClickListener(this)
@@ -172,6 +175,10 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         else if (id == R.id.settings){
             settingsDialog()
+        }
+        else if (id == R.id.action_bar_back){
+            finish()
+            return
         }
 
         else if (id == R.id.area_choose){
@@ -402,6 +409,10 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
         val display = resources.displayMetrics
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
+        dialog.findViewById<SpanTextView>(R.id.merchant).setOnClickListener{
+            v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY1).go(this)
+        }
         dialog.show()
     }
     private fun init(){

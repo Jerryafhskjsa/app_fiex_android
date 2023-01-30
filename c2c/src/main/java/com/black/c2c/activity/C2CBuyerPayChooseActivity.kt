@@ -1,14 +1,18 @@
 package com.black.c2c.activity
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.ConstData
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.widget.SpanCheckedTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActiivtyPayForSellerBinding
 import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
@@ -68,6 +72,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.weiXin?.visibility = View.GONE
         }
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.btnCancel?.setOnClickListener(this)
         binding?.num1?.setOnClickListener(this)
         binding?.num2?.setOnClickListener(this)
         binding?.num3?.setOnClickListener(this)
@@ -86,10 +91,79 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm) {
-            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER_PAY).go(mContext)
+            confirmDialog()
+
+        }
+        if (id == R.id.btn_cancel) {
+            cancelDialog()
         }
     }
     private fun checkClickable(){
 
+    }
+    private fun cancelDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.cancel_dialog, null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            FryingUtil.showToast(mContext,"取消订单成功")
+            if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == true){
+                val intent = Intent(this, C2CNewActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else{
+                FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
+            }
+        }
+        dialog.findViewById<SpanCheckedTextView>(R.id.range).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == false
+        }
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun confirmDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.cancel_dialog_two ,null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER_PAY).go(mContext)
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
     }
 }

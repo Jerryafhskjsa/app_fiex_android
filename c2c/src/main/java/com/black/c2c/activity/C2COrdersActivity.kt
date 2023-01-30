@@ -2,11 +2,13 @@ package com.black.c2c.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.ConstData
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.widget.SpanCheckedTextView
@@ -142,15 +144,17 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener {
             dialog.dismiss()
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.range).setOnClickListener { v ->
-            if (dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == false) {
-                dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = true
-            }
-            else
-                dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == false
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
-
-            dialog.dismiss()
+            if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked){
+                val intent = Intent(this@C2COrdersActivity, C2CNewActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else{
+                FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
+            }
         }
     }
 }

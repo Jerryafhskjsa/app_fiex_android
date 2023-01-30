@@ -44,15 +44,21 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                            android:layout_marginLeft="@dimen/text_size_15"
+                            android:textColor="@color/white"
+                            android:gravity="center_horizontal"
+                            android:text="1"
+                            android:background="@drawable/green_c2c"
                             />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_5"
-                            android:layout_marginRight="@dimen/text_size_5"
+                            android:layout_marginRight="@dimen/text_size_15"
                             android:text="提交申请"
                             android:textColor="#03CA89"
                             android:textSize="@dimen/text_size_14"
@@ -64,17 +70,22 @@
                             android:src="@drawable/btn_vector"
 
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                        android:layout_marginLeft="@dimen/text_size_15"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:text="2"
+                        android:background="@drawable/gray_c2c"
+                        />
 
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="等待审核"
                             android:layout_marginLeft="@dimen/text_size_5"
-                            android:layout_marginRight="@dimen/text_size_5"
+                            android:layout_marginRight="@dimen/text_size_15"
                             android:textSize="@dimen/text_size_14"
                             />
                         <ImageView
@@ -84,9 +95,15 @@
                             android:src="@drawable/btn_vector"
 
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="18dp"
+                            android:layout_height="@dimen/text_size_18"
+                            android:layout_marginLeft="@dimen/text_size_15"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:text="3"
+                            android:background="@drawable/gray_c2c"
                             />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
@@ -96,10 +113,7 @@
                             android:layout_marginRight="@dimen/text_size_5"
                             android:text="审核结果"
                             />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            />
+
                     </LinearLayout>
 
                     <View
@@ -124,7 +138,6 @@
                             android:layout_height="10dp" />
 
                         <com.black.lib.view.InputLinearLayout
-                            android:id="@+id/phone_layout_verify"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext_default"
@@ -132,13 +145,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/phone_code_vieify"
+                                android:id="@+id/num1"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/hint_phone_code"
+                                android:hint="中英字符或数字，16字符以内"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -165,7 +178,6 @@
                             android:layout_height="10dp" />
 
                         <com.black.lib.view.InputLinearLayout
-                            android:id="@+id/mail_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext_default"
@@ -173,13 +185,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/mail_code"
+                                android:id="@+id/num2"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/mail_code"
+                                android:hint="请输入姓名"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -209,8 +221,8 @@
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/country_code"
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/country_code_1"
                                     style="@style/EditTextStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -221,10 +233,12 @@
                                     android:layout_width="8dp"
                                     android:layout_height="16dp"
                                     android:layout_marginLeft="5dp"
-                                    android:src="@drawable/icon_setting_arrow_down"></ImageView>
+                                    android:src="@drawable/icon_setting_arrow_down">
+
+                                </ImageView>
 
                                 <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/phone_account"
+                                   android:id="@+id/num3"
                                     style="@style/EditTextStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -255,7 +269,6 @@
                             android:layout_height="10dp" />
 
                         <com.black.lib.view.InputLinearLayout
-                            android:id="@+id/phone_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext_default"
@@ -263,13 +276,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/phone_code"
+                                android:id="@+id/num4"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/hint_phone_code"
+                                android:hint="请输入电报"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -301,12 +314,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/num5"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/hint_phone_code"
+                                android:hint="请输入邮箱"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -338,12 +352,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/num6"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/mail_code"
+                                android:hint="请输入紧急联系人姓名"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -372,7 +387,8 @@
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <com.black.base.widget.SpanMaterialEditText
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/country_code_2"
                                     style="@style/EditTextStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -387,6 +403,7 @@
                                 </ImageView>
 
                                 <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/num7"
                                     style="@style/EditTextStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -417,7 +434,6 @@
                             android:layout_height="10dp" />
 
                         <com.black.lib.view.InputLinearLayout
-                            android:id="@+id/google_code_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext_default"
@@ -425,13 +441,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/google_code"
+                                android:id="@+id/num8"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/google_code_1"
+                                android:hint="请选择与本人关系"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -456,12 +472,13 @@
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/num9"
                                 style="@style/EditTextStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@null"
-                                android:hint="@string/google_code_1"
+                                android:hint="请输入常驻地址"
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:padding="0dp" />
@@ -499,7 +516,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/middle_padding"
-                            android:text="电话：用于工作人员处理日常申诉订单与您快速核实信息，请务必保持该电话畅通。电报：用于视频核实本人身份以及认证完成后为您提供一对一的服务与指导。紧急联系人与常住地址：用于进一步核实广告方KYC信息，确保交易更安全。" />
+                            android:text="1.电话：用于工作人员处理日常申诉订单与您快速核实信息，请务必保持该电话畅通。2.电报：用于视频核实本人身份以及认证完成后为您提供一对一的服务与指导。3.紧急联系人与常住地址：用于进一步核实广告方KYC信息，确保交易更安全。" />
                         <LinearLayout
                             android:id="@+id/bottom_layout"
                             android:layout_width="match_parent"

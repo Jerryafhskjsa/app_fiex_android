@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellerConfirmBinding
@@ -73,8 +75,17 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
+        dialog.findViewById<SpanCheckedTextView>(R.id.range).setOnClickListener { v ->
+            dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == false
+        }
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-            BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(this)
+            if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked) {
+                FryingUtil.showToast(mContext,"放币成功")
+                BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(this)
+            }
+            else{
+                FryingUtil.showToast(mContext,"请先确认是否收到该笔款项")
+            }
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
