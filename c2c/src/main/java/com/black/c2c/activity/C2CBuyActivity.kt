@@ -90,6 +90,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             payTimeDialog()
         }
         else if (id == R.id.amount){
+            binding?.putAmount?.text = null
             binding?.barA?.visibility = View.VISIBLE
             binding?.barB?.visibility = View.GONE
             binding?.amount?.isChecked = true
@@ -99,6 +100,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             checkClickable()
         }
         else if (id == R.id.accont){
+            binding?.putMoney?.text = null
             binding?.barB?.visibility = View.VISIBLE
             binding?.barA?.visibility = View.GONE
             binding?.amount?.isChecked = false

@@ -12,7 +12,13 @@ class C2CSeller : BaseAdapterItem() {
             : String? = null
     var amountLimit //限额
             : Double? = null
+    var account //数量
+            : Double? = null
     var price //价格
+            : Double? = null
+    var orderQuantity //完成量
+            : Double? = null
+    var orderRate //完成率
             : Double? = null
     var coinType //币种
             : String? = null

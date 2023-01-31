@@ -243,6 +243,12 @@
         <item name="android:textColor">@color/T1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
     </style>
+    <style name="ButtonGreenLight">
+        <item name="android:background">@drawable/btn_light_green</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/T1</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
     <style name="ButtonRed">
         <item name="android:background">@drawable/btn_red</item>
         <item name="android:gravity">center</item>

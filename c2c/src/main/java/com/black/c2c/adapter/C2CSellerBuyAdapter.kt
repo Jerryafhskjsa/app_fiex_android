@@ -23,26 +23,28 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         val c2CSeller = getItem(position)
         val viewHolder = holder.dataBing
         viewHolder?.firstLetter?.setText(if (TextUtils.isEmpty(c2CSeller?.name)) "?" else c2CSeller?.name!![0].toString())
-        viewHolder?.name?.setText(c2CSeller?.name)
-        viewHolder?.limit?.setText(String.format("数量 %s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.amountLimit, 8, 2, 8)))
+        viewHolder?.id?.setText(c2CSeller?.name)
+        viewHolder?.num1?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.price, 8, 2, 8)))
+        viewHolder?.finish?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.price, 8, 2, 8)))
+        viewHolder?.num2?.setText("成单量 " + c2CSeller?.orderQuantity.toString() + " | 成单率" + String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.orderRate, 8, 2, 8)))
         val paymentTypeList = c2CSeller?.paymentTypes
         if (paymentTypeList != null && paymentTypeList.isNotEmpty() && paymentTypeList.contains(C2CPayment.BANK)) {
-            viewHolder?.payBank?.visibility = View.VISIBLE
+            viewHolder?.cards?.visibility = View.VISIBLE
         } else {
-            viewHolder?.payBank?.visibility = View.GONE
+            viewHolder?.cards?.visibility = View.GONE
         }
         if (paymentTypeList != null && paymentTypeList.isNotEmpty() && paymentTypeList.contains(C2CPayment.ALIPAY)) {
-            viewHolder?.payAli?.visibility = View.VISIBLE
+            viewHolder?.ali?.visibility = View.VISIBLE
         } else {
-            viewHolder?.payAli?.visibility = View.GONE
+            viewHolder?.ali?.visibility = View.GONE
         }
         if (paymentTypeList != null && !paymentTypeList.isEmpty() && paymentTypeList.contains(C2CPayment.WECHAT)) {
-            viewHolder?.payWe?.visibility = View.VISIBLE
+            viewHolder?.weiXin?.visibility = View.VISIBLE
         } else {
-            viewHolder?.payWe?.visibility = View.GONE
+            viewHolder?.weiXin?.visibility = View.GONE
         }
 
-        viewHolder?.priceCny?.setText(String.format("%s %s", NumberUtil.formatNumberNoGroup(c2CSeller?.price), getString(R.string.cny)))
+        viewHolder?.num3?.setText(String.format("￥ %s - ￥ %s", NumberUtil.formatNumberNoGroup(c2CSeller?.amountLimit)))
         viewHolder?.btnHandle?.setOnClickListener {
             if (onHandleClickListener != null) {
                 onHandleClickListener!!.onHandleClick(c2CSeller)

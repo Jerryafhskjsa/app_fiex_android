@@ -200,10 +200,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/one"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
+                                android:textColor="@color/tab_contranct_text"
                                 android:gravity="center"
                                 android:text="USDT" />
 
@@ -213,10 +214,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/two"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:textColor="@color/tab_contranct_text"
                                 android:text="BTC" />
                             <View
                                 android:layout_width="5dp"
@@ -224,10 +226,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/three"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:textColor="@color/tab_contranct_text"
                                 android:text="BUSD" />
                             <View
                                 android:layout_width="5dp"
@@ -235,10 +238,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/four"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:textColor="@color/tab_contranct_text"
                                 android:text="BNB" />
 
                         </LinearLayout>
@@ -251,10 +255,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/five"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:textColor="@color/tab_contranct_text"
                                 android:text="DOGE" />
                             <View
                                 android:layout_width="5dp"
@@ -262,10 +267,11 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/six"
-                                style="@style/ButtonGrayLight"
+                                style="@style/ButtonGreenLight"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:textColor="@color/tab_contranct_text"
                                 android:text="ETH" />
                             <View
                                 android:layout_width="5dp"
@@ -430,7 +436,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/first"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -443,7 +449,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/second"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -455,7 +461,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/third"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -467,7 +473,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/fourth"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -479,7 +485,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/fifth"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -491,7 +497,7 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/sixth"
-                                    style="@style/ButtonGray"
+                                    style="@style/ButtonGreenLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
@@ -512,13 +518,23 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-
+                                    android:textSize="@dimen/text_size_12"
                                     android:text="@string/reference_quotation" />
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/rate_2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/text_size_12"
+                                    android:textColor="@color/black_real"
+                                    android:text="6.78 CNY/USDT" />
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:layout_weight="1"
+                                    android:textSize="@dimen/text_size_12"
                                     android:textColor="@color/C5"
                                     android:text="@string/advice" />
                             </LinearLayout>
@@ -547,6 +563,7 @@
                                     android:layout_marginBottom="@dimen/text_size_5"
                                     android:textColor="@color/C5"
                                     android:layout_weight="1"
+                                    android:textSize="@dimen/text_size_12"
                                     android:text="@string/advice_null" />
                             </LinearLayout>
                             <LinearLayout
@@ -558,14 +575,19 @@
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:orientation="horizontal">
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/change"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
+                                    android:textSize="@dimen/text_size_12"
                                     android:text="@string/number_of_transactions" />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/change_two"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
+                                    android:textSize="@dimen/text_size_12"
+                                    android:textColor="@color/black_real"
                                     android:layout_weight="1"
                                     android:text="-USDT" />
                             </LinearLayout>
@@ -581,27 +603,28 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
+                                    android:textSize="@dimen/text_size_12"
                                     android:text="@string/payment_method" />
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/id_pay_layout"
+                                android:id="@+id/cards_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_marginLeft="@dimen/text_size_20"
                                 android:layout_marginRight="@dimen/text_size_20"
-                                style="@style/ButtonGray"
-                                android:layout_marginTop="@dimen/text_size_5"
+                                style="@style/ButtonGreenLight"
+                                android:layout_marginTop="@dimen/text_size_10"
                                 android:orientation="horizontal">
                                 <ImageView
-                                    android:id="@+id/id_pay_Image"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:background="@drawable/c2c_cards_color"
+                                    android:paddingBottom="@dimen/text_size_16"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     />
                                 <com.black.base.widget.SpanTextView
-                                    android:id="@+id/id_pay_id"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/text_size_5"
@@ -611,7 +634,6 @@
                                     android:layout_gravity="center_vertical"
                                     android:text="@string/cards" />
                                 <com.black.base.widget.SpanTextView
-                                    android:id="@+id/id_pay"
                                     android:layout_width="220dp"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/text_size_20"
@@ -621,12 +643,98 @@
                                     android:layout_gravity="center_vertical"
                                     android:text="6222222222222" />
                             <ImageView
-                                android:id="@+id/id_pay_concrete"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/arrow_right"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/id_pay_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:visibility="gone"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                style="@style/ButtonGreenLight"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ali_color"
+                                    android:layout_gravity="center_vertical"
+                                    android:paddingBottom="@dimen/text_size_16"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    />
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/text_size_5"
+                                    android:layout_marginTop="6dp"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/id_pay" />
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="220dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/text_size_20"
+                                    android:layout_marginTop="6dp"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="13778037105" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/text_size_10"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/arrow_right"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/wei_xin_layout"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                style="@style/ButtonGreenLight"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/wei_xin_color"
+                                    android:paddingBottom="@dimen/text_size_16"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    />
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/text_size_5"
+                                    android:layout_marginTop="6dp"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="@string/wei_xin" />
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/wei_xin_id"
+                                    android:layout_width="220dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/text_size_20"
+                                    android:layout_marginTop="6dp"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="13778037105" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                   android:layout_marginLeft="@dimen/text_size_10"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/arrow_right"/>
                             </LinearLayout>
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/btn_confirm"
@@ -652,12 +760,10 @@
                         </LinearLayout>
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/quilk_point"
-                            android:layout_width="400dp"
+                            android:layout_width="350dp"
                             android:layout_marginTop="@dimen/text_size_20"
                             android:background="@drawable/bg_green_white"
                             android:layout_height="60dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="@dimen/text_size_10"
                             android:layout_gravity="center"
                             android:drawableLeft="@drawable/quilk_point"
                             android:drawableRight="@drawable/icon_setting_arrow_down"
@@ -667,12 +773,10 @@
                             android:text="@string/buy_quilk" />
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/quilk_point_sale"
-                            android:layout_width="400dp"
+                            android:layout_width="350dp"
                             android:layout_marginTop="@dimen/text_size_20"
                             android:background="@drawable/bg_green_white"
                             android:layout_height="60dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="@dimen/text_size_10"
                             android:layout_gravity="center"
                             android:drawableLeft="@drawable/quilk_point"
                             android:drawableRight="@drawable/icon_setting_arrow_down"

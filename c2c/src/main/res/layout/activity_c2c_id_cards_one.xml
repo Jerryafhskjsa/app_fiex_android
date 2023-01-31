@@ -143,7 +143,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:text="1.拍摄时，手持本人身份证正面，将持证的手臂和上半身整个拍进照片，脸部、身份证上所有信息清晰且不能被遮挡."
-                        android:textSize="@dimen/text_size_14"
+                        android:textSize="@dimen/text_size_12"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="323dp"
@@ -181,7 +181,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:text="1.户口本需要上传本人信息页原件，请确保上传的图片无遮挡且清晰可见、无反光"
-                        android:textSize="@dimen/text_size_14"
+                        android:textSize="@dimen/text_size_12"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="323dp"
@@ -219,7 +219,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:text="1.房产证、租房合同、水电费清单是为了确保您的地址信息真实有效：证件中地址如与基本信息中所填常住地址不同，我们会要求您说明原因"
-                        android:textSize="@dimen/text_size_14"
+                        android:textSize="@dimen/text_size_12"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="330dp"
@@ -281,7 +281,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:text="本人（姓名），身份证号（身份证号码），我的资金来源合法可靠，自愿交易比特币等数字资产，本人充分了解数字货币及潜在风险，本人具有抗风险的能力并愿意承担一切风险。另外，我确定此账号所有操作均为本人操作，该账号所产生的一切法律责任，由我个人承担。"
-                        android:textSize="@dimen/text_size_14"
+                        android:textSize="@dimen/text_size_12"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="330dp"
@@ -289,7 +289,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:text="视频最大支持100M，建议时长3分钟以下，分辨率超过360P"
-                        android:textSize="@dimen/text_size_14"
+                        android:textSize="@dimen/text_size_12"
                         />
                     <com.black.base.widget.SpanTextView
                         android:layout_width="323dp"
@@ -367,15 +367,27 @@
                         android:padding="0dp" />
 
                 </com.black.lib.view.InputLinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_14"
+                    android:background="@drawable/c2c_range"/>
                     <com.black.base.widget.SpanCheckedTextView
-                        android:id="@+id/bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/text_size_10"
-                        android:drawableLeft="@drawable/c2c_range"
+                        android:layout_marginBottom="@dimen/text_size_10"
                         android:layout_gravity="center"
                         android:textColor="@color/black"
                         android:text="已同意冻结 1000 USDT 作为广告方保证金，且同意《广告发布协议》" />
+            </LinearLayout>
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/btn_submit"
                         style="@style/ButtonBlue"

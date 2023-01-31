@@ -1,5 +1,6 @@
 package com.black.c2c.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.c2c.C2CSupportCoin
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -27,6 +29,8 @@ import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.CommonUtil
+import com.black.util.NumberUtil
 import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.C2C_QIULK])
@@ -52,7 +56,9 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     private  var otherType = false
     private  var otherType2 = false
     private  var otherType3 = false
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
     private var tab = TAB_QUCILK
+    private var ciontype = "USDT"
     private var payChain: String? = null
     private var fManager: FragmentManager? = null
     private var typeList: MutableList<String>? = null
@@ -93,6 +99,8 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.settings?.setOnClickListener(this)
         binding?.person?.setOnClickListener(this)
         binding?.idPayLayout?.setOnClickListener(this)
+        binding?.weiXinLayout?.setOnClickListener(this)
+        binding?.cardsLayout?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.quilkPoint?.setOnClickListener(this)
         binding?.accont?.setOnClickListener(this)
@@ -101,6 +109,8 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.quilkPointSale?.setOnClickListener(this)
         binding?.adviceNull?.setOnClickListener(this)
         binding?.btnConfirmSale?.setOnClickListener(this)
+        binding?.putMoney?.addTextChangedListener(watcher)
+        binding?.moneyAccount?.addTextChangedListener(watcher)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
@@ -113,7 +123,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         chainNames?.add(TAB_CARDS)
         chainNames?.add(TAB_IDPAY)
         chainNames?.add(TAB_WEIXIN)
-        chainNames?.add(TAB_PAYPAID)
+       // chainNames?.add(TAB_PAYPAID)
         checkClickable()
     }
 
@@ -166,57 +176,90 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         else if (id == R.id.id_pay_layout){
             choosePayMethodWindow()
         }
+        else if (id == R.id.cards_layout){
+            choosePayMethodWindow()
+        }
+        else if (id == R.id.wei_xin_layout){
+            choosePayMethodWindow()
+        }
         else if (id == R.id.settings){
             settingsDialog()
         }
 
         else if (id == R.id.one){
+            binding?.advice?.visibility = View.VISIBLE
+            binding?.adviceNull?.visibility = View.GONE
+            ciontype = binding?.one?.text.toString()
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
             binding?.one?.isChecked = true
             binding?.two?.isChecked = false
             binding?.three?.isChecked = false
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = false
+            checkClickable()
         }
         else if (id == R.id.two){
+            binding?.advice?.visibility = View.VISIBLE
+            binding?.adviceNull?.visibility = View.GONE
+            ciontype = binding?.two?.text.toString()
             binding?.one?.isChecked = false
             binding?.two?.isChecked = true
             binding?.three?.isChecked = false
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = false
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.btc
+            checkClickable()
         }
         else if (id == R.id.three){
+            binding?.advice?.visibility = View.GONE
+            binding?.adviceNull?.visibility = View.VISIBLE
+            ciontype = binding?.three?.text.toString()
             binding?.one?.isChecked = false
             binding?.two?.isChecked = false
             binding?.three?.isChecked = true
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = false
+            checkClickable()
         }
         else if (id == R.id.four){
+            binding?.advice?.visibility = View.GONE
+            binding?.adviceNull?.visibility = View.VISIBLE
+            ciontype = binding?.four?.text.toString()
             binding?.one?.isChecked = false
             binding?.two?.isChecked = false
             binding?.three?.isChecked = false
             binding?.four?.isChecked = true
             binding?.five?.isChecked = false
             binding?.six?.isChecked = false
+            checkClickable()
         }
         else if (id == R.id.five){
+            binding?.advice?.visibility = View.GONE
+            binding?.adviceNull?.visibility = View.VISIBLE
+            ciontype = binding?.five?.text.toString()
             binding?.one?.isChecked = false
             binding?.two?.isChecked = false
             binding?.three?.isChecked = false
             binding?.four?.isChecked = false
             binding?.five?.isChecked = true
             binding?.six?.isChecked = false
+            checkClickable()
         }
         else if (id == R.id.six){
+            binding?.advice?.visibility = View.VISIBLE
+            binding?.adviceNull?.visibility = View.GONE
+            ciontype = binding?.six?.text.toString()
             binding?.one?.isChecked = false
             binding?.two?.isChecked = false
             binding?.three?.isChecked = false
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = true
+            rate = C2CApiServiceHelper?.coinUsdtPrice?.eth
+            checkClickable()
         }
         else if (id == R.id.sven){
         }
@@ -239,6 +282,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.putMoney?.setText("10000")
         }
         else if (id == R.id.amount){
+            binding?.change?.setText(getString(R.string.number_of_transactions))
             binding?.moneyAmount?.visibility = View.VISIBLE
             binding?.barA?.visibility = View.VISIBLE
             binding?.barB?.visibility = View.GONE
@@ -246,15 +290,18 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.accont?.isChecked = false
             binding?.money?.visibility = View.VISIBLE
             binding?.moneyAccount1?.visibility = View.GONE
+            binding?.moneyAccount?.text = null
             checkClickable()
         }
         else if (id == R.id.accont){
+            binding?.change?.setText(getString(R.string.total_price))
             binding?.moneyAmount?.visibility = View.GONE
             binding?.barB?.visibility = View.VISIBLE
             binding?.barA?.visibility = View.GONE
             binding?.amount?.isChecked = false
             binding?.accont?.isChecked = true
             binding?.money?.visibility = View.GONE
+            binding?.putMoney?.text = null
             binding?.moneyAccount1?.visibility = View.VISIBLE
             checkClickable()
         }
@@ -265,11 +312,57 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             quilkSaleDialog()
         }
     }
+
     private fun checkClickable() {
+        if (binding?.three?.isChecked == true || binding?.four?.isChecked == true || binding?.five?.isChecked == true){
+            binding?.advice?.visibility = View.GONE
+            binding?.adviceNull?.visibility = View.VISIBLE
+        }
+        else{
+            binding?.advice?.visibility = View.VISIBLE
+            binding?.adviceNull?.visibility = View.GONE
+        }
+        binding?.rate2?.setText(rate.toString() + "CNY/" + ciontype)
         binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
-                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' })||binding?.three?.isChecked == true || binding?.four?.isChecked == true || binding?.five?.isChecked == true)
         binding?.btnConfirmSale?.isEnabled = !(TextUtils.isEmpty(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
-                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
+                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' })||binding?.three?.isChecked == true || binding?.four?.isChecked == true || binding?.five?.isChecked == true)
+        if (binding?.amount?.isChecked == false) {
+            val amount = CommonUtil.parseDouble(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.changeTwo?.setText( "￥" +
+                    NumberUtil.formatNumberNoGroup(
+                        amount!! * rate!!,
+                        4,
+                        4
+                    )
+                )
+            }
+                else {
+                binding?.changeTwo?.setText( "￥" )
+            }
+
+        }
+        if (binding?.amount?.isChecked == true) {
+            val amount =
+                CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
+            if (amount != null) {
+                binding?.changeTwo?.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        amount!! / rate!!,
+                        4,
+                        4
+                    ) + ciontype
+                )
+            }
+                else
+             {
+                binding?.changeTwo?.setText(
+                    "-" + ciontype
+                )
+            }
+
+        }
     }
     private fun refresh(type :Int){
         if (type == 0){
@@ -324,7 +417,21 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
                         window: ChooseWalletControllerWindow<String?>,
                         item: String?
                     ) {
-                        binding?.idPayId?.setText(item)
+                       if (item == TAB_CARDS){
+                           binding?.cardsLayout?.visibility = View.VISIBLE
+                           binding?.weiXinLayout?.visibility = View.GONE
+                           binding?.idPayLayout?.visibility = View.GONE
+                       }
+                        if (item == TAB_IDPAY){
+                            binding?.idPayLayout?.visibility = View.VISIBLE
+                            binding?.weiXinLayout?.visibility = View.GONE
+                            binding?.cardsLayout?.visibility = View.GONE
+                        }
+                        if (item == TAB_WEIXIN){
+                            binding?.weiXinLayout?.visibility = View.VISIBLE
+                            binding?.cardsLayout?.visibility = View.GONE
+                            binding?.idPayLayout?.visibility = View.GONE
+                        }
                         payChain = item
                     }
                 })

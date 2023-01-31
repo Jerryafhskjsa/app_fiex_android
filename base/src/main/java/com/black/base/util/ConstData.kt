@@ -65,6 +65,7 @@ object ConstData {
     const val TEMP_IMG_NAME_01 = "tmp_image_01.png"
     const val TEMP_IMG_NAME_02 = "tmp_image_02.png"
     const val TEMP_IMG_NAME_03 = "tmp_image_03.png"
+    const val TEMP_IMG_NAME_04 = "tmp_image_04.png"
 
     const val REQUEST_STORAGE_PR = 100 //sd卡权限请求
     const val REQUEST_CAMERA_PR = 200 //摄像头权限请求
