@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivitySellerChooseBinding
@@ -30,7 +31,10 @@ class C2CMcApply: BaseActionBarActivity(), View.OnClickListener{
             binding?.bar?.isChecked = binding?.bar?.isChecked == false
         }
         if (id == R.id.btn_submit){
-            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY2).go(this)
+            val extras = Bundle()
+            var boolean = binding?.bar?.isChecked
+            extras.putBoolean("isVisibility",boolean?: false)
+            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY2).with(extras).go(this)
         }
     }
 }

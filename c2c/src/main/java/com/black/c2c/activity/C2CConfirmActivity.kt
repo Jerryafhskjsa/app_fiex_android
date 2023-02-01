@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
@@ -17,6 +18,22 @@ import com.black.router.annotation.Route
 @Route(value = [RouterConstData.C2C_CONFRIM])
 class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cConfirmBinding? = null
+    private var TotalTime : Long = 24*60*60*1000 //总时长 24h
+    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
+    override fun onFinish(){
+    }
+
+        override fun onTick(millisUntilFinished: Long) {
+            if (TotalTime >= 0){
+                val hour = millisUntilFinished/1000/60/60%24
+                var minute=millisUntilFinished/1000/60%60
+                var second=millisUntilFinished/1000%60
+                binding?.time?.setText("$hour: $minute: $second")}
+            else{
+                FryingUtil.showToast(mContext,"订单已取消")
+            }
+        }
+    }.start()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_confirm)

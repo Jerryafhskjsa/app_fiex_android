@@ -198,6 +198,7 @@ object ConstData {
     const val IS_SUCCESS = "is_success"
     const val C2C_ORDER = "c2c_order"
     const val C2C_ORDERS = "c2c_orders"
+    const val C2C_TIME = "c2c_time"
     const val C2C_ORDER_ID = "c2c_order_id"
     const val C2C_ORDER_DATA = "c2c_order_data"
     const val C2C_DIRECTION = "c2c_direction"

@@ -525,14 +525,15 @@
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
-                style="@style/ButtonReturnGreen"
+                android:id="@+id/time"
+                style="@style/ButtonBlue"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
-                android:text="申述 24：00：00" />
+                android:text="@string/exchange" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

@@ -337,7 +337,9 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_assets_wallet.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_empty.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_assets.xml" value="0.22" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_detail.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header.xml" value="0.3537037037037037" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_main.xml" value="0.1537037037037037" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main.xml" value="0.16354166666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.16354166666666667" />
@@ -405,19 +407,21 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_result_two.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_sell.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_confirm.xml" value="0.14666666666666667" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_wait.xml" value="0.14666666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_wait.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_weixin.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_pay_method.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_choose.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_msg.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/bills_dialog.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/btn_c2c_wait_buy.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/btn_c2c_wait_buy.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog_two.xml" value="0.142368533561351" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/dialog_c2c_buy_create.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer.xml" value="0.14322359982898675" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy_item.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy_item.xml" value="0.14322359982898675" />
@@ -439,6 +443,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/sell_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/shen_shu_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/state_dialog.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/two_ma_dialog.xml" value="0.142368533561351" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_c2c_one_key_buy_tab.xml" value="0.1" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_first_c2c.xml" value="0.13333333333333333" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_second_c2c.xml" value="0.1470713980333476" />
@@ -486,6 +491,7 @@
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_default.xml" value="0.125" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_disable.xml" value="0.125" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_pressed.xml" value="0.1295" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_white_c2c.xml" value="0.1185" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_white_gray.xml" value="0.1205" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_white_gray_1.xml" value="0.1205" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_white_gray_2.xml" value="0.1205" />

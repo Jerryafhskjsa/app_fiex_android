@@ -75,7 +75,7 @@ class C2CHandleHelper(private val context: Activity, private val permissionHelpe
                         checkBindPaymentMethod()
                     } else {
                         val color = SkinCompatResources.getColor(context, R.color.T7)
-                        val agreementText = "我已理解并同意<a href=\"" + UrlConfig.URL_C2C_RULE + "\">《FBSEX Global C2C交易用户服务协议》</a>的全部内容"
+                        val agreementText = "我已理解并同意<a href=\"" + UrlConfig.URL_C2C_RULE + "\">《SoeasyEX Global C2C交易用户服务协议》</a>的全部内容"
                         val agreementTextSpanned: Spanned?
                         agreementTextSpanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             Html.fromHtml(agreementText, Html.FROM_HTML_MODE_LEGACY)

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivitySellerChooseBinding
@@ -18,6 +19,7 @@ class C2CApply2: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.view_second_c2c)
+        binding?.bar?.isChecked = intent?.getBooleanExtra("isVisibility", false)!!
         binding?.bar?.setOnClickListener(this)
         binding?.btnSubmit?.setOnClickListener(this)
     }
@@ -31,7 +33,10 @@ class C2CApply2: BaseActionBarActivity(), View.OnClickListener{
             binding?.bar?.isChecked = binding?.bar?.isChecked == false
         }
         if (id == R.id.btn_submit){
-            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY3).go(this)
+            val extras = Bundle()
+            var boolean = binding?.bar?.isChecked
+            extras.putBoolean("isVisibility",boolean?:false)
+            BlackRouter.getInstance().build(RouterConstData.C2C_APPLY3).with(extras).go(this)
         }
     }
 }

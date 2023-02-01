@@ -84,7 +84,7 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
                 if (hasPaymentMethod) {
                     next.run()
                 } else {
-                    alertBindPaymentMethod("尊敬的FBSEX用户，您还未 设置或激收款方式，请前往设置并激活。")
+                    alertBindPaymentMethod("尊敬的SoeasyEX用户，您还未 设置或激收款方式，请前往设置并激活。")
                 }
             }
         })
@@ -108,7 +108,7 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
                 if (hasPaymentMethod) {
                     next.run()
                 } else {
-                    alertBindPaymentMethod("尊敬的FBSEX用户，您还未 设置或激银行卡收款方式，不可进行快捷买卖。请前往设置并激活。")
+                    alertBindPaymentMethod("尊敬的SoeasyEX用户，您还未 设置或激银行卡收款方式，不可进行快捷买卖。请前往设置并激活。")
                 }
             }
         })
@@ -133,7 +133,7 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
     private fun agreeC2CRule(next: Runnable) {
         val userInfo = CookieUtil.getUserInfo(context) ?: return
         val color = SkinCompatResources.getColor(context, R.color.T7)
-        val agreementText = "我已理解并同意<a href=\"" + UrlConfig.URL_C2C_RULE + "\">《FBSEX Global C2C交易用户服务协议》</a>的全部内容"
+        val agreementText = "我已理解并同意<a href=\"" + UrlConfig.URL_C2C_RULE + "\">《SoeasyEX Global C2C交易用户服务协议》</a>的全部内容"
         var agreementTextSpanned: Spanned? = null
         agreementTextSpanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Html.fromHtml(agreementText, Html.FROM_HTML_MODE_LEGACY)
@@ -172,7 +172,7 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
 //            next.run()
 //        } else {
 //            val confirmDialog = ConfirmDialog(context, "提示",
-//                    "尊敬的FBSEX用户，您还未设置资金密码。不能进行该操作！",
+//                    "尊敬的SoeasyEX用户，您还未设置资金密码。不能进行该操作！",
 //                    OnConfirmCallback { confirmDialog ->
 //                        confirmDialog.dismiss()
 //                        BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER).go(context)

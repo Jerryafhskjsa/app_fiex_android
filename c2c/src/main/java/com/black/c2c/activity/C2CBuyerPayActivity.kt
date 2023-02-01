@@ -2,6 +2,7 @@ package com.black.c2c.activity
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -25,11 +26,27 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
 
         override fun afterTextChanged(s: Editable) {}
     }
+    private var TotalTime : Long = 15*60*1000 //总时长 15min
+    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
+    override fun onFinish(){
+    }
+
+        override fun onTick(millisUntilFinished: Long) {
+            if (TotalTime >= 0){
+                var minute=millisUntilFinished/1000/60%60
+                var second=millisUntilFinished/1000%60
+                binding?.time?.setText("$minute:$second")}
+            else{
+                FryingUtil.showToast(mContext,"订单已取消")
+            }
+        }
+    }.start()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.btn_c2c_wait_buy)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
+        countDownTimer
         checkClickable()
     }
     override fun getTitleText(): String? {
@@ -38,7 +55,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm) {
-            BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(mContext)
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).go(mContext)
         }
         if (id == R.id.btn_cancel) {
             cancelDialog()

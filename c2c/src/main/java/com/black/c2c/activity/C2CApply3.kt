@@ -19,6 +19,7 @@ class C2CApply3: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.view_third_c2c)
+        binding?.bar?.isChecked = intent?.getBooleanExtra("isVisibility", false)!!
         binding?.bar?.setOnClickListener(this)
         binding?.btnSubmit?.setOnClickListener(this)
     }
