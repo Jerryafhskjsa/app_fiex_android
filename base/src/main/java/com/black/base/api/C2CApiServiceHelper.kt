@@ -3,10 +3,7 @@ package com.black.base.api
 import android.content.Context
 import android.util.SparseArray
 import com.black.base.manager.ApiManager
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.c2c.*
 import com.black.base.model.clutter.CoinUsdtPrice
 import com.black.base.model.user.PaymentMethod
@@ -21,6 +18,7 @@ import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
+import java.math.BigDecimal
 
 object C2CApiServiceHelper {
     private var gson: Gson = Gson()
@@ -460,6 +458,7 @@ object C2CApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
+
     fun getCoinTypeList(
         context: Context?,
         callback: Callback<HttpRequestResultDataList<C2CSupportCoin?>?>?
@@ -469,6 +468,20 @@ object C2CApiServiceHelper {
         }
         ApiManager.build(context).getService(C2CApiService::class.java)
             ?.getCoinTypeList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+//C2C支持的币种
+    fun getCoinTypeList2(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<C2CSupportCoin?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context).getService(C2CApiService::class.java)
+            ?.getC2CSupportCoin()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -489,5 +502,85 @@ object C2CApiServiceHelper {
             ?.getC2CMerchantFast(coinType, type, pageNum, pageSize)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    //新增广告
+    fun getC2CADConfig(
+        context: Context?,
+        coinType: String,
+        currencyCoin: String,
+        direction: String,
+        payMethods: String,
+        priceParam: BigDecimal,
+        priceType: Int,
+        singleLimitMax: BigDecimal,
+        singleLimitMin: BigDecimal,
+        totalAmount: BigDecimal,
+        completedOrders: Int?,
+        completion: BigDecimal?,
+        registeredDays: Int?,
+        remark: String? ,
+        soldOutTime: Int?,
+        callback: Callback<HttpRequestResultDataList<C2CNewAD?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CCreateAD(coinType, currencyCoin, direction, payMethods, priceParam, priceType, singleLimitMax, singleLimitMin, totalAmount, completedOrders, completion, registeredDays, remark, soldOutTime)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //删除广告
+    fun getDeleteAD(
+    context: Context?,
+    id: String,
+    callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CADDelete(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //指数价格
+    fun getC2CIndexPrice(
+        context: Context?,
+        currencyCoin: String?,
+        callback: Callback<HttpRequestResultDataList<C2CIndexPrice?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CIndexPrice(currencyCoin)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    //首页广告
+    fun getC2CADList(
+        context: Context?,
+        coinType: String?,
+        currencyCoinType: String?,
+        direction: String?,
+        gteAmount:BigDecimal?,
+        gteSingleLimitMin:BigDecimal?,
+        payMethods: String?,
+        payMethod: String?,
+        page: Int?,
+        size: Int?,
+        callback: Callback<HttpRequestResultDataList<C2CADData<C2CMainAD?>?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CADList(coinType ,currencyCoinType ,direction ,gteAmount ,gteSingleLimitMin ,payMethods ,payMethod ,page ,size)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 }

@@ -1,14 +1,12 @@
 package com.black.base.api
 
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.PagingData
+import com.black.base.model.*
 import com.black.base.model.c2c.*
 import com.black.base.model.user.PaymentMethod
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
 import retrofit2.http.*
+import java.math.BigDecimal
 
 interface C2CApiService {
     @GET(UrlConfig.C2C.URL_C2C_MERCHANT)
@@ -73,4 +71,171 @@ interface C2CApiService {
 
     @GET(UrlConfig.C2C.URL_C2C_MERCHANT_FAST)
     fun getC2CMerchantFast(@Query("coinType") coinType: String?, @Query("direction") direction: String?, @Query("pageNum") pageNum: Int, @Query("pageSize") pageSize: Int): Observable<HttpRequestResultDataList<C2CSeller?>?>?
+
+    //OTC广告
+    @GET(UrlConfig.C2C.URL_C2C_CONFIG)
+    fun getC2CConfig(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_CONFIG_V2)
+    fun getC2CConfigV2(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_CREATE)
+    fun getC2CCreateAD(@Query("coinType") coinType: String, @Query("currencyCoin") currencyCoin: String, @Query("direction") direction: String, @Query("payMethods") payMethods: String, @Query("priceParam") priceParam: BigDecimal, @Query("priceType") priceType: Int, @Query("singleLimitMax") singleLimitMax: BigDecimal, @Query("singleLimitMin") singleLimitMin: BigDecimal, @Query("totalAmount") totalAmount: BigDecimal, completedOrders: Int?, @Query("completion") completion: BigDecimal?, @Query("registeredDays") registeredDays: Int?, @Query("remark") remark: String? , @Query("soldOutTime") soldOutTime: Int?,): Observable<HttpRequestResultDataList<C2CNewAD?>?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_CURRENT_PRICE)
+    fun getC2CPriceCurrent(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_AD_DELETE)
+    fun getC2CADDelete(@Query("id") id: String): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_INDEX_PRICE)
+    fun getC2CIndexPrice(@Query("currencyCoin") currencyCoin: String?): Observable<HttpRequestResultDataList<C2CIndexPrice?>?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_AD_INFO)
+    fun getC2CADInfo(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_AD_LIST)
+    fun getC2CADList(@Query("coinType") coinType: String?,@Query("currencyCoin") currencyCoin: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:BigDecimal?,@Query("gteSingleLimitMin") gteSingleLimitMin:BigDecimal?, payMethods: String?,@Query("payMethod") payMethod: String?,@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultDataList<C2CADData<C2CMainAD?>?>?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_AD_MERCHANT_PAGE)
+    fun getC2CADMerchantPage(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_MY_LIST)
+    fun getC2CMyList(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_PRICE)
+    fun getC2CPrc(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_PUBLISH)
+    fun getC2CPublish(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_QUICK_PUBLISH)
+    fun getC2CQuickPublish(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_QUICK_CONFIG)
+    fun getC2CQuickConfig(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_SOLD_OUT)
+    fun getC2CSoldOut(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_SUPPORT_COIN)
+    fun getC2CSupportCoin(): Observable<HttpRequestResultDataList<C2CSupportCoin?>?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_AD_UPDATE)
+    fun getC2CADUpdate(): Observable<HttpRequestResultString?>?
+
+    //OTC用户相关接口
+    @GET(UrlConfig.C2C.URL_C2C_ACCOUNT)
+    fun getC2CAccount(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_APPLY_PAYEE)
+    fun getC2CApplyPayee(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_DELETE)
+    fun getC2CDelete(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_PAYEE)
+    fun getC2CPayee(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_RECEIPT)
+    fun getC2CReceipt(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_USERINFO)
+    fun getC2CUserInfo(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_OPEN)
+    fun getC2COpen(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_REFUSE_PAYEE)
+    fun getC2CRefusePayee(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_SET_RECEIPT)
+    fun getC2CSetReceipt(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_UNBIND_PAYEE)
+    fun getC2CUnbindPayee(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_UPDATE)
+    fun getC2CUpdate(): Observable<HttpRequestResultString?>?
+
+    //OTC订单
+    @POST(UrlConfig.C2C.URL_C2C_CANCEL)
+    fun getC2CCancel(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_CONFIRM_PAY)
+    fun getC2CConfirmPay(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_CP)
+    fun getC2CCP(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_CREATE_V2)
+    fun getC2CCreateV2(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_GP)
+    fun getC2CGP(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_ORDER_INFO)
+    fun getC2COrderInfo(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_OI_V2)
+    fun getC2COIV2(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_OL)
+    fun getC2COL(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_OO)
+    fun getC2COO(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_UFC)
+    fun getC2CUFC(): Observable<HttpRequestResultString?>?
+
+    //OTC商家相关
+    @POST(UrlConfig.C2C.URL_C2C_ADD_P)
+    fun getC2CAddP(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_MCA)
+    fun getC2CMca(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_MCN)
+    fun getC2CMcn(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_GM)
+    fun getC2CGm(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_GPL)
+    fun getC2CGpl(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_MCP)
+    fun getC2CMcp(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_MP)
+    fun getC2CMp(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_QVF)
+    fun getC2CQvf(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_MUP)
+    fun getC2CMup(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_UMC)
+    fun getC2CUmc(): Observable<HttpRequestResultString?>?
+
+    //申述、登陆、谷歌验证
+    @POST(UrlConfig.C2C.URL_CA)
+    fun getC2CCa(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_VFC)
+    fun getC2CVfc(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_CU)
+    fun getC2CCu(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_LOGIN)
+    fun getC2CLogin(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_ALLEGE)
+    fun getC2CAllege(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_ALLEGE_INFO)
+    fun getC2CAllegeInfo(): Observable<HttpRequestResultString?>?
 }

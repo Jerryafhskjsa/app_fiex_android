@@ -2,9 +2,13 @@ package com.black.base.model.c2c
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class C2CSupportCoin : Parcelable {
-    var coinType: String? = null
+    var coinType:String? = null
+    var currencyCoinDisplay: ArrayList<Objects?>? = null
+    var currencyCoins: ArrayList<String?>? = null
     var coinName: String? = null
     var minOrderAmount: Double? = null
     var precision: Int? = null
@@ -26,7 +30,6 @@ class C2CSupportCoin : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(coinType)
         dest.writeString(coinName)
         if (minOrderAmount == null) {
             dest.writeByte(0.toByte())

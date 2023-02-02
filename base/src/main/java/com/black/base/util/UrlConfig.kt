@@ -255,9 +255,147 @@ object UrlConfig {
     }
 
     object C2C {
+        //OTC用户相关接口
+        //C2C用户账户
+        const val URL_C2C_ACCOUNT = "otc/user/account"
+        //申请收款人
+        const val  URL_C2C_APPLY_PAYEE = "otc/user/applyPayee"
+        //删除数据
+        const val URL_C2C_DELETE = "otc/user/deleteReceipt"
+        //作为收款人信息
+        const val URL_C2C_PAYEE = "otc/user/getPayee"
+        //获取所有收付款信息
+        const val URL_C2C_RECEIPT = "otc/user/getReceipt"
+        //otc用户信息
+        const val URL_C2C_USERINFO = "otc/user/info"
+        //开通
+        const val URL_C2C_OPEN = "otc/user/open"
+        //拒绝成为收款人
+        const val URL_C2C_REFUSE_PAYEE = "otc/user/refusePayee"
+        //设置收付款
+        const val URL_C2C_SET_RECEIPT = "otc/user/setReceipt"
+        //解绑收款人
+        const val URL_C2C_UNBIND_PAYEE = "otc/user/unbindPayee"
+        //修改收付款状态
+        const val URL_C2C_UPDATE = "otc/user/updateReceiptStatus"
+
+
+        //OTC广告相关接口
+
+        //广告参数配置信息
+        const val URL_C2C_CONFIG = "otc/advertising/config"
+        //广告参数配置信息
+        const val URL_C2C_CONFIG_V2 = "otc/advertising/config/V2"
+        //新增广告
+        const val URL_C2C_CREATE = "otc/advertising/create"
+        //otc动态价格,根据价格类型、币种、法币、方向查询唯一价格
+        const val URL_C2C_CURRENT_PRICE = "otc/advertising/currentPrice"
+        //删除广告
+        const val URL_C2C_AD_DELETE = "otc/advertising/delete"
+        //otc指数价格
+        const val URL_C2C_INDEX_PRICE = "otc/advertising/indexPrice"
+        //广告详情
+        const val URL_C2C_AD_INFO = "otc/advertising/info"
+        //首页广告
+        const val URL_C2C_AD_LIST = "otc/advertising/list"
+        //商家详情页广告
+        const val URL_C2C_AD_MERCHANT_PAGE = "otc/advertising/merchantPage"
+        //我的广告
+        const val URL_C2C_MY_LIST = "otc/advertising/myList"
+        //otc动态价格
+        const val URL_C2C_PRICE = "otc/advertising/price"
+        //发布广告
+        const val URL_C2C_PUBLISH = "otc/advertising/publish"
+        //快速下单广告查询
+        const val URL_C2C_QUICK_PUBLISH = "otc/advertising/quickAdvertising"
+        //快速下单配置
+        const val URL_C2C_QUICK_CONFIG = "otc/advertising/quickOrderConfig"
+        //下架广告
+        const val URL_C2C_SOLD_OUT = "otc/advertising/soldOut"
+        //广告支持币种
+        const val URL_C2C_SUPPORT_COIN = "otc/advertising/supportCoin"
+        //修改广告
+        const val URL_C2C_AD_UPDATE = "otc/advertising/update"
+
+//
+
+        //OTC聊天
+        //创建c2c订单-回复 图片
+        const val URL_C2C_CREATE_IMG = "otc/order/reply/createImg"
+        //创建c2c订单-回复文字
+        const val URL_C2C_CRATE_TXT = "otc/order/reply/createTxt"
+        //c2c订单-回复列表
+        const val URL_C2C_REPLY_LIST = "otc/order/reply/list"
+        //c2c订单-拉取消息
+        const val URL_C2C_REPLY_PULL = "otc/order/reply/pull"
+        //c2c订单-实时推送消息
+        const val URL_C2C_REAL_TIME = "otc/order/reply/realtime"
+        //
+        //OTC订单
+        //撤单
+        const val URL_C2C_CANCEL = "otc/order/cancel"
+        //确认付款
+        const val URL_C2C_CONFIRM_PAY = "otc/order/confirmPayment"
+        //确认付款并收币
+        const val URL_C2C_CP = "otc/order/confirmReceipt"
+        //下单V2
+        const val URL_C2C_CREATE_V2 = "otc/order/createV2"
+        //根据订单Id获取卖方收款方式
+        const val URL_C2C_GP = "otc/order/getReceipt"
+        //订单详情
+        const val URL_C2C_ORDER_INFO = "otc/order/info"
+        //订单详情V2
+        const val URL_C2C_OI_V2 = "otc/order/info/v2"
+        //我的订单
+        const val URL_C2C_OL = "otc/order/list"
+        //操作台订单
+        const val URL_C2C_OO = "otc/order/operatorOrders"
+        //未完成订单数
+        const val URL_C2C_UFC = "otc/order/unfinishedCount"
+        //
+
+        //商家相关
+        //添加收款人
+        const val URL_C2C_ADD_P = "otc/merchant/addPayee"
+        //申请商家
+        const val URL_C2C_MCA = "otc/merchant/apply"
+        //昵称校验
+        const val URL_MCN = "otc/merchant/checkName"
+        //获取商家信息
+        const val URL_C2C_GM = "otc/merchant/getMerchant"
+        //获取收款人列表
+        const val URL_C2C_GPL = "otc/merchant/getPayeeList"
+        //商家信息
+        const val URL_C2C_MCP = "otc/merchant/merchantPage"
+        //退出商家
+        const val URL_C2C_MP = "otc/merchant/quit"
+        //能否退出商家
+        const val URL_C2C_QVF = "otc/merchant/quitVerify"
+        //解绑收款人
+        const val URL_MUP = "otc/merchant/unbindPayee"
+        //升级商家
+        const val URL_C2C_UMC = "otc/merchant/upgradeMerchant"
+        //
+
+        //谷歌验证
+        //checkAuth
+        const val URL_CA = "otc/check/auth"
+        //verifyCode
+        const val URL_VFC = "otc/verify-code"
+        //上传文件
+        const val URL_CU = "otc/commons/upload"
+        //登陆
+        const val URL_LOGIN = " otc/user/login"
+        //
+        //OTC申述
+        //申诉操作
+        const val URL_C2C_ALLEGE = "otc/allege/allege"
+        //申述详情
+        const val URL_C2C_ALLEGE_INFO = "otc/allege/info"
+        //
+
         //C2C价格 商户列表
         const val URL_C2C_MERCHANT = "c2c/store/list"
-
         //C2C下单
         const val URL_C2C_CREATE_ORDER = "c2c/order/create"
         const val URL_C2C_CREATE_ORDER_BUY = "c2c/order/buy"
