@@ -564,6 +564,7 @@ object C2CApiServiceHelper {
     //首页广告
     fun getC2CADList(
         context: Context?,
+        isShowLoading: Boolean,
         coinType: String?,
         currencyCoinType: String?,
         direction: String?,
@@ -573,7 +574,7 @@ object C2CApiServiceHelper {
         payMethod: String?,
         page: Int?,
         size: Int?,
-        callback: Callback<HttpRequestResultDataList<C2CADData<C2CMainAD?>?>?>?
+        callback: Callback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -581,6 +582,6 @@ object C2CApiServiceHelper {
         ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CADList(coinType ,currencyCoinType ,direction ,gteAmount ,gteSingleLimitMin ,payMethods ,payMethod ,page ,size)
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 }

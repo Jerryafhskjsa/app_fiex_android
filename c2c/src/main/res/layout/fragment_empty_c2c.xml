@@ -4,40 +4,56 @@
     <data>
 
         <variable
-            name="listViewEmptyLongModel"
+            name="financialRechargeRecordModel"
             type="Object" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.black.lib.refresh.QRefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_gravity="center"
-            android:background="@color/transparent"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_list_empty" />
-
-            <View
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/double_padding" />
+                android:layout_height="match_parent"
+                android:background="@color/B1"
+                android:fadingEdge="none"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-            <com.black.base.widget.SpanTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/list_view_empty_default"
-                android:textColor="@color/T2"
-                android:textSize="@dimen/text_size_14" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-    </FrameLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/B2"
+                        android:descendantFocusability="blocksDescendants">
 
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                        <include
+                            android:id="@+id/empty_view"
+                            layout="@layout/list_view_empty_long" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </com.black.lib.refresh.QRefreshLayout>
+    </LinearLayout>
 </layout>

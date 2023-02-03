@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
+import com.black.base.model.*
+import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2COrder
 import com.black.base.model.c2c.C2CSeller
 import com.black.base.model.c2c.C2CSupportCoin
@@ -36,9 +35,9 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
     private var binding: FragmentC2cCustomerBuyItemBinding? = null
 
     private var adapter: C2CSellerBuyAdapter? = null
+    private var coinType = "USDT"
     private var currentPage = 1
     private var total = 0
-    var isHasGotData = false
         private set
     private var supportCoin: C2CSupportCoin? = null
 
@@ -70,14 +69,14 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-        getSellerList(false)
+        //getC2CADData(false)
         return binding?.root
     }
 
     override fun onResume() {
         super.onResume()
         getUserInfo(null)
-        getSellerList(false)
+        //getC2CADData(false)
     }
 
     override fun doResetSkinResources() {
@@ -90,7 +89,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
         adapter?.notifyDataSetChanged()
     }
 
-    override fun onHandleClick(c2CSeller: C2CSeller?) {
+    override fun onHandleClick(c2CSeller: C2CMainAD?) {
         //买入USDT
         fryingHelper.checkUserAndDoing(Runnable {
             if (supportCoin == null || mContext == null) {
@@ -109,13 +108,13 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
 
     override fun onRefresh() {
         currentPage = 1
-        getSellerList(false)
+        //getC2CADData(false)
     }
 
     override fun onLoad() {
         if (total > adapter?.count ?: 0) {
             currentPage += 1
-            getSellerList(true)
+            //getC2CADData(true)
         }
     }
 
@@ -124,28 +123,29 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
         binding?.refreshLayout?.setLoading(false)
     }
 
-    fun getSellerList(isShowLoading: Boolean) {
-        isHasGotData = true
-        C2CApiServiceHelper.getC2CSellerList(activity, isShowLoading, if (supportCoin == null) null else supportCoin!!.coinType, C2COrder.ORDER_BUY, currentPage, 10, object : NormalCallback<HttpRequestResultData<PagingData<C2CSeller?>?>?>(mContext!!) {
+
+    private fun getC2CADData(isShowLoading: Boolean) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, coinType, null,  null, null, null, null, null, null, null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<PagingData<C2CSeller?>?>?) {
+            override fun callback(returnData: HttpRequestResultData<C2CADData<C2CMainAD?>?>?) {
                 onRefreshEnd()
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    total = returnData.data?.totalCount ?: 0
+                    total = returnData.data?.total ?: 0
                     if (currentPage == 1) {
-                        adapter?.data = returnData.data?.list
+                        adapter?.data = returnData.data?.data
                     } else {
-                        adapter?.addAll(returnData.data?.list)
+                        adapter?.addAll(returnData.data?.data)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {
-                    FryingUtil.showToast(activity, if (returnData == null) "null" else returnData.msg)
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
         })
     }
+
 }

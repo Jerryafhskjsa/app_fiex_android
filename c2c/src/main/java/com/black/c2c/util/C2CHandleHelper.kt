@@ -11,10 +11,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
-import com.black.base.model.c2c.C2CAgreement
-import com.black.base.model.c2c.C2COrder
-import com.black.base.model.c2c.C2CSeller
-import com.black.base.model.c2c.C2CSupportCoin
+import com.black.base.model.c2c.*
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ConfirmDialog
@@ -29,7 +26,7 @@ import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 
-class C2CHandleHelper(private val context: Activity, private val permissionHelper: PermissionHelper, fryingHelper: FryingHelper, private val userInfo: UserInfo?, private val c2CSeller: C2CSeller?, private val direction: String, private val supportCoin: C2CSupportCoin) {
+class C2CHandleHelper(private val context: Activity, private val permissionHelper: PermissionHelper, fryingHelper: FryingHelper, private val userInfo: UserInfo?, private val c2CSeller: C2CMainAD?, private val direction: String, private val supportCoin: C2CSupportCoin) {
     private val c2CHandleCheckHelper: C2CHandleCheckHelper = C2CHandleCheckHelper(context, permissionHelper, fryingHelper)
 
     fun handle() {
@@ -120,7 +117,7 @@ class C2CHandleHelper(private val context: Activity, private val permissionHelpe
         })
     }
 
-    private fun showBuyDialog(c2CSeller: C2CSeller?) {
+    private fun showBuyDialog(c2CSeller: C2CMainAD?) {
         val c2CCreateWidget = C2CCreateWidget(context, direction, c2CSeller, supportCoin)
         c2CCreateWidget.setOnC2CHandlerListener(object : C2CCreateWidget.OnC2CHandlerListener {
             override fun onCancel(widget: C2CCreateWidget?) {

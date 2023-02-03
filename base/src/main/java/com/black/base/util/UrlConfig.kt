@@ -25,7 +25,7 @@ object UrlConfig {
         var apiTypeDes = "/uc/"
         when (apiType) {
             ApiType.URl_UC -> apiTypeDes = "/uc/"
-            ApiType.URL_API -> apiTypeDes = "/api/"
+            ApiType.URL_API -> apiTypeDes = "/otc/api/"
             ApiType.URL_PRO -> apiTypeDes = "/pro/"
             ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi/"
             ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi/"

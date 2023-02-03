@@ -1,15 +1,17 @@
 package com.black.base.model.c2c
 
+import android.content.Context
+import com.black.base.model.BaseAdapterItem
 import java.math.BigDecimal
 
-class C2CMainAD {
+class C2CMainAD: BaseAdapterItem() {
     var canCreateOrderForQueryUser: Boolean? = null	//当前用户是否可下此广告的订单
     var coinType: String? = null	//币种
     var completedOrders: Int? = null	//完成订单数
-    var completion: String? = null	//订单完成率	number
+    var completion: BigDecimal? = null	//订单完成率	number
     var createTime: String? = null
     var currencyCoin: String? = null	//法币币种	string
-    var currentPrice:BigDecimal? = null	//当前价格，页面展示用此字段展示单价	number
+    var currentPrice:Double? = null	//当前价格，页面展示用此字段展示单价	number
     var direction: String? = null	//方向	string
     var finishedOrderAmount:BigDecimal? = null	//	此广告已完成量	number
     var id:String? = null
@@ -31,5 +33,6 @@ class C2CMainAD {
     var status: Int? = null	//	广告状态(1:新建，2:上架，审核中,3：上架，审核通过，4：下架,5:审核不通过)
     var totalAmount:BigDecimal? = null	//	可买入或者出售总量
     var updateTime: String? = null
-    var more: Boolean? = null
+
+
 }

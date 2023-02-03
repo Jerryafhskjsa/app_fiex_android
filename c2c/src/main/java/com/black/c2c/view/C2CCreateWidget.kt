@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.*
 import com.black.base.filter.NumberFilter
 import com.black.base.filter.PointLengthFilter
+import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2COrder
 import com.black.base.model.c2c.C2CSeller
 import com.black.base.model.c2c.C2CSupportCoin
@@ -16,9 +17,10 @@ import com.black.base.util.ImageLoader
 import com.black.c2c.R
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
+import java.math.BigDecimal
 import java.math.RoundingMode
 
-class C2CCreateWidget(private val context: Context, private val type: String, private val c2CSeller: C2CSeller?, supportCoin: C2CSupportCoin?) : CompoundButton.OnCheckedChangeListener {
+class C2CCreateWidget(private val context: Context, private val type: String, private val c2CSeller: C2CMainAD?, supportCoin: C2CSupportCoin?) : CompoundButton.OnCheckedChangeListener {
     private val imageLoader: ImageLoader = ImageLoader(context)
     private val precision: Int = supportCoin?.precision ?: 0
     private val minAmount: Double = supportCoin?.minOrderAmount ?: 0.0
@@ -66,12 +68,12 @@ class C2CCreateWidget(private val context: Context, private val type: String, pr
         val amountRadio = contentView.findViewById<RadioButton>(R.id.type_amount)
         amountRadio.setOnCheckedChangeListener(this)
         val priceView = contentView.findViewById<TextView>(R.id.price)
-        priceView.text = context.getString(R.string.c2c_price, NumberUtil.formatNumberNoGroup(c2CSeller?.price))
+        priceView.text = context.getString(R.string.c2c_price, NumberUtil.formatNumberNoGroup(c2CSeller?.currentPrice))
         inputCNYLayout = contentView.findViewById(R.id.cny_layout)
         inputAmountLayout = contentView.findViewById(R.id.amount_layout)
         editView = contentView.findViewById(R.id.edit_text)
         val cnyEditView = contentView.findViewById<EditText>(R.id.cny_edit_text)
-        val price: Double = c2CSeller?.price ?: 0.0
+        val price: Double = c2CSeller?.currentPrice ?: 0.0
         val amountTextWatcher: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

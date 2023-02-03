@@ -23,7 +23,6 @@ class EmptyC2cFragment : BaseFragment() {
             return layout
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_empty_c2c, container, false)
-        layout = binding?.root as FrameLayout
         if(arguments != null){
             val position = arguments!!.getInt(AutoHeightViewPager.POSITION)
             mViewPager?.setViewPosition(layout!!, position)

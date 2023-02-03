@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentTransaction
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CSupportCoin
@@ -27,9 +28,11 @@ import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cMainBinding
+import com.black.c2c.fragment.C2CCustomerBuyItemFragment
 import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
 import com.black.frying.fragment.EmptyC2cFragment
+import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -37,7 +40,7 @@ import com.google.android.material.tabs.TabLayout
 import java.util.*
 
 @Route(value = [RouterConstData.C2C_NEW])
-class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
+ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener{
     companion object {
         private const val TAB_ONE_KEY = 1
         private const val TAB_CUSTOMER = 2
@@ -424,37 +427,39 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             fragmentList = ArrayList()
         }
         fragmentList?.clear()
-        fragmentList?.add(EmptyC2cFragment().also {
+        binding?.refreshLayout?.setLoading(false)
+        binding?.refreshLayout?.setRefreshing(false)
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyC2cFragment().also {
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyC2cFragment().also {
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyC2cFragment().also {
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyC2cFragment().also {
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyC2cFragment().also {
+        fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
 //            assetsWalletFragment = it
@@ -565,4 +570,5 @@ class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener {
             }
             return list
         }
+
 }

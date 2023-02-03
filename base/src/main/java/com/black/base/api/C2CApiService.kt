@@ -95,7 +95,7 @@ interface C2CApiService {
     fun getC2CADInfo(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_AD_LIST)
-    fun getC2CADList(@Query("coinType") coinType: String?,@Query("currencyCoin") currencyCoin: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:BigDecimal?,@Query("gteSingleLimitMin") gteSingleLimitMin:BigDecimal?, payMethods: String?,@Query("payMethod") payMethod: String?,@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultDataList<C2CADData<C2CMainAD?>?>?>?
+    fun getC2CADList(@Query("coinType") coinType: String?,@Query("currencyCoin") currencyCoin: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:BigDecimal?,@Query("gteSingleLimitMin") gteSingleLimitMin:BigDecimal?, payMethods: String?,@Query("payMethod") payMethod: String?,@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_AD_MERCHANT_PAGE)
     fun getC2CADMerchantPage(): Observable<HttpRequestResultString?>?
