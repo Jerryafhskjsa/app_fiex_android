@@ -35,7 +35,7 @@ import com.black.lib.refresh.QRefreshLayout.OnLoadMoreCheckListener
 import com.black.net.HttpRequestResult
 import skin.support.content.res.SkinCompatResources
 
-class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener {
+class C2CCustomerSaleItemFragment : BaseFragment(), QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener {
     private var binding: FragmentC2cCustomerSaleItemBinding? = null
 
     private var adapter: C2CSellerSellAdapter? = null
@@ -46,10 +46,6 @@ class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefr
     private var supportCoin: C2CSupportCoin? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_c2c_customer_sale_item, container, false)
-        val bundle = arguments
-        if (bundle != null) {
-            supportCoin = bundle.getParcelable(ConstData.C2C_SUPPORT_COIN)
-        }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_c2c_customer_buy_item, container, false)
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -61,7 +57,6 @@ class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefr
         decoration.setDrawable(drawable)
         binding?.recyclerView?.addItemDecoration(decoration)
         adapter = C2CSellerSellAdapter(mContext!!, BR.c2cOneKeySaleItemModel, null)
-        adapter?.setOnHandleClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
@@ -83,28 +78,6 @@ class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefr
         getC2CADData(false)
     }
 
-    override fun doResetSkinResources() {
-        val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
-        val drawable = SkinCompatResources.getDrawable(mContext, R.drawable.divider_list_item_l1)
-        drawable.alpha = (0.3 * 255).toInt()
-        decoration.setDrawable(drawable)
-        binding?.recyclerView?.addItemDecoration(decoration)
-        adapter?.resetSkinResources()
-        adapter?.notifyDataSetChanged()
-    }
-
-    override fun onHandleClick(c2CSeller: C2CMainAD?) {
-        //出售
-        fryingHelper.checkUserAndDoing(Runnable {
-            if (supportCoin == null || mContext == null) {
-                return@Runnable
-            }
-            mContext?.let {
-                val userInfo = CookieUtil.getUserInfo(it)
-                C2CHandleHelper(it, it, it.fryingHelper, userInfo, c2CSeller, C2COrder.ORDER_BUY, supportCoin!!).handle()
-            }
-        }, C2C_INDEX)
-    }
 
     override fun onLoadMoreCheck(): Boolean {
         return total > adapter?.count ?: 0
@@ -130,7 +103,7 @@ class C2CCustomerSaleItemFragment : BaseFragment(), OnHandleClickListener, QRefr
 
     private fun getC2CADData(isShowLoading: Boolean) {
         isHasGotData = true
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, null, null,  null, null, null, null, null, null, null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 super.error(type, error)

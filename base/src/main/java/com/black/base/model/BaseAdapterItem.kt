@@ -21,6 +21,7 @@ abstract class BaseAdapterItem {
         const val MINING_PROFIT_DOUBLE_RECORD = 13
         const val C2C_ORDER = 14
         const val C2C_SELLER = 15
+        const val C2C_AD = 16
         const val C2C_ORDER_ITEM_M_RIGHT = 0 //商家在右边
         const val C2C_ORDER_ITEM_C_LEFT = 1 //用户在左边
         const val C2C_ORDER_ITEM_M_LEFT = 2 //商家在左边

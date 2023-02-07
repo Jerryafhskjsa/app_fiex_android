@@ -16,7 +16,15 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.C2CADData
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2CSupportCoin
+import com.black.base.model.c2c.OrderConfig
+import com.black.base.model.wallet.Wallet
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
@@ -27,6 +35,7 @@ import com.black.c2c.databinding.ActivityC2cMainBinding
 import com.black.c2c.databinding.ActivityC2cOldBinding
 import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
@@ -51,8 +60,10 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     }
 
     private var binding: ActivityC2cOldBinding? = null
+    private var c2cList: C2CMainAD? = null
     private var currentTab = 0
     private var type = 0
+    private var currencyCoin = "CNY"
     private  var otherType = false
     private  var otherType2 = false
     private  var otherType3 = false
@@ -125,6 +136,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         chainNames?.add(TAB_WEIXIN)
        // chainNames?.add(TAB_PAYPAID)
         checkClickable()
+        getC2CADData()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -168,10 +180,10 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             BlackRouter.getInstance().build(RouterConstData.C2C_MINE).go(mContext)
         }
         else if (id == R.id.btn_confirm){
-            BlackRouter.getInstance().build(RouterConstData.C2C_BUY).go(this)
+            getC2CQuickSearch()
         }
         else if (id == R.id.btn_confirm_sale){
-            BlackRouter.getInstance().build(RouterConstData.C2C_SELL).go(this)
+            getC2CQuickSearch()
         }
         else if (id == R.id.id_pay_layout){
             choosePayMethodWindow()
@@ -482,5 +494,69 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener  {
             v -> dialog.dismiss()
         }
+    }
+    //快速下单配置
+    private fun getC2CADData() {
+        C2CApiServiceHelper.getC2CQuickOrder(mContext, ciontype,currencyCoin,  object : NormalCallback<HttpRequestResultData<OrderConfig?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
+                binding?.refreshLayout?.setRefreshing(false)
+                binding?.refreshLayout?.setLoading(false)
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<OrderConfig?>?) {
+                binding?.refreshLayout?.setRefreshing(false)
+                binding?.refreshLayout?.setLoading(false)
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    var dataList = returnData.data
+                    showData(dataList)
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+    //快速下单查询
+    private fun getC2CQuickSearch() {
+        val gteAmount = if (binding?.putMoney?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! / rate!!
+        else CommonUtil.parseDouble(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
+        val gteCurrencyCoinAmount = if (binding?.moneyAccount?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
+        else CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! * rate!!
+        val direction = if (binding?.c2cCustomer?.isChecked == true) "B" else "S"
+        val coinType = if (binding?.one?.isChecked == true) "USDT" else "BTC"
+        C2CApiServiceHelper.getC2CQuickSearch(mContext,gteAmount,gteCurrencyCoinAmount, coinType ,direction,null,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
+                binding?.refreshLayout?.setRefreshing(false)
+                binding?.refreshLayout?.setLoading(false)
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
+                binding?.refreshLayout?.setRefreshing(false)
+                binding?.refreshLayout?.setLoading(false)
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    c2cList = returnData.data
+                    val bundle = Bundle()
+                    bundle.putParcelable(ConstData.C2C_LIST, c2cList)
+                    if (c2cList?.canCreateOrderForQueryUser == true && direction == " B "){
+                        BlackRouter.getInstance().build(RouterConstData.C2C_BUY).with(bundle).go(mContext)
+                    }
+                    else if (c2cList?.canCreateOrderForQueryUser == true && direction == " S "){
+                        BlackRouter.getInstance().build(RouterConstData.C2C_SELL).with(bundle).go(mContext)
+                    }
+                    else{
+                        FryingUtil.showToast(mContext, "当前用户不满足下单条件")
+                    }
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+    private fun showData(dataList:OrderConfig?){
+        binding?.putMoney?.setHint(dataList?.currencyCoinAmountMin?.toString() + "起")
+        binding?.moneyAccount?.setHint("最大可售" + dataList?.coinAmountMax?.toString())
     }
 }

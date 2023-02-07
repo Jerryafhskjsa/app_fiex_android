@@ -13,8 +13,6 @@ import com.black.c2c.databinding.ListItemC2cSellerBuyBinding
 import com.black.util.NumberUtil
 
 class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2CMainAD?>?) : BaseRecycleDataBindAdapter<C2CMainAD?, ListItemC2cSellerBuyBinding>(context, variableId, data) {
-    private var onHandleClickListener: OnHandleClickListener? = null
-
     override fun getResourceId(): Int {
         return R.layout.list_item_c2c_seller_buy
     }
@@ -23,6 +21,16 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         super.onBindViewHolder(holder, position)
         val c2CSeller = getItem(position)
         val viewHolder = holder.dataBing
+        if(c2CSeller?.canCreateOrderForQueryUser == false )
+        {
+            viewHolder?.btnHandle?.isEnabled = false
+            viewHolder?.btnHandle?.setText("当前用户不可下此广告的订单")
+        }
+        else
+        {
+            viewHolder?.btnHandle?.isEnabled = true
+            viewHolder?.btnHandle?.setText(getString(R.string.buy_02))
+        }
         viewHolder?.firstLetter?.setText(if (TextUtils.isEmpty(c2CSeller?.realName)) "?" else c2CSeller?.realName!![0].toString())
         viewHolder?.id?.setText(c2CSeller?.realName)
         viewHolder?.num1?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.currentPrice, 8, 2, 8)))
@@ -66,14 +74,8 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         }
 
         viewHolder?.num3?.setText(String.format("￥ %s - ￥ %s", NumberUtil.formatNumberNoGroup(c2CSeller?.singleLimitMin ), NumberUtil.formatNumberNoGroup(c2CSeller?.singleLimitMax )))
-        viewHolder?.btnHandle?.setOnClickListener {
-            if (onHandleClickListener != null) {
-                onHandleClickListener!!.onHandleClick(c2CSeller)
-            }
-        }
+
     }
 
-    fun setOnHandleClickListener(onHandleClickListener: OnHandleClickListener?) {
-        this.onHandleClickListener = onHandleClickListener
-    }
+
 }

@@ -424,17 +424,19 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy_item.xml" value="0.14322359982898675" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_sale_item.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy_item.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/list_c2c_bills.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_c_left.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_c_right.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_m_left.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_m_right.xml" value="0.14322359982898675" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_seller_buy.xml" value="0.3333333333333333" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_seller_sell.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_seller_buy.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_seller_sell.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/mct.xml" value="0.1333903377511757" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/mct_imt_activity.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/money_choose_dialog.xml" value="0.22" />

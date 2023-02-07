@@ -176,6 +176,7 @@ object ConstData {
     const val ACCOUNT = "account"
     const val COIN_TYPE = "coin_type"
     const val WALLET = "wallet"
+    const val C2C_LIST = "c2c_list"
     const val WALLET_BILL = "wallet_bill"
     const val COIN_WALLET = "coin_wallet"
     const val WALLET_INFO = "wallet_info"

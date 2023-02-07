@@ -13,40 +13,35 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CMainAD
-import com.black.base.model.c2c.C2COrder
-import com.black.base.model.c2c.C2CSeller
 import com.black.base.model.c2c.C2CSupportCoin
-import com.black.base.util.ConstData
-import com.black.base.util.CookieUtil
+import com.black.base.model.wallet.FinancialRecord
 import com.black.base.util.FryingUtil
 import com.black.c2c.BR
 import com.black.c2c.R
 import com.black.c2c.adapter.C2CSellerBuyAdapter
-import com.black.c2c.adapter.OnHandleClickListener
 import com.black.c2c.databinding.FragmentC2cCustomerBuyItemBinding
-import com.black.c2c.util.C2CHandleHelper
 import com.black.lib.refresh.QRefreshLayout
 import com.black.lib.refresh.QRefreshLayout.OnLoadListener
 import com.black.lib.refresh.QRefreshLayout.OnLoadMoreCheckListener
 import com.black.net.HttpRequestResult
 import skin.support.content.res.SkinCompatResources
+import java.util.ArrayList
 
-class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener {
+class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener {
     private var binding: FragmentC2cCustomerBuyItemBinding? = null
-
+    private var layout: View? = null
     private var adapter: C2CSellerBuyAdapter? = null
     private var coinType = "USDT"
     private var currentPage = 1
     private var total = 0
-        private set
     private var supportCoin: C2CSupportCoin? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val bundle = arguments
-        if (bundle != null) {
-            supportCoin = bundle.getParcelable(ConstData.C2C_SUPPORT_COIN)
+        if (layout != null) {
+            return layout
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_c2c_customer_buy_item, container, false)
+        layout = binding?.root
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -57,11 +52,9 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
         decoration.setDrawable(drawable)
         binding?.recyclerView?.addItemDecoration(decoration)
         adapter = C2CSellerBuyAdapter(mContext!!, BR.listItemC2CSallerBuyModel, null)
-        adapter?.setOnHandleClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
-        binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
 
@@ -69,52 +62,28 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-        //getC2CADData(false)
-        return binding?.root
+        getC2CADData(false)
+        return layout
     }
 
-    override fun onResume() {
-        super.onResume()
-        getUserInfo(null)
-        //getC2CADData(false)
-    }
 
-    override fun doResetSkinResources() {
-        val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
-        val drawable = SkinCompatResources.getDrawable(mContext, R.drawable.divider_list_item_l1)
-        drawable.alpha = (0.3 * 255).toInt()
-        decoration.setDrawable(drawable)
-        binding?.recyclerView?.addItemDecoration(decoration)
-        adapter?.resetSkinResources()
-        adapter?.notifyDataSetChanged()
-    }
-
-    override fun onHandleClick(c2CSeller: C2CMainAD?) {
-        //买入USDT
-        fryingHelper.checkUserAndDoing(Runnable {
-            if (supportCoin == null || mContext == null) {
-                return@Runnable
-            }
-            mContext?.let {
-                val userInfo = CookieUtil.getUserInfo(it)
-                C2CHandleHelper(it, it, it.fryingHelper, userInfo, c2CSeller, C2COrder.ORDER_BUY, supportCoin!!).handle()
-            }
-        }, C2C_INDEX)
-    }
 
     override fun onLoadMoreCheck(): Boolean {
-        return total > adapter?.count ?: 0
+        return total > (adapter?.count ?: 0)
     }
 
     override fun onRefresh() {
         currentPage = 1
-        //getC2CADData(false)
+        getC2CADData(false)
     }
 
     override fun onLoad() {
-        if (total > adapter?.count ?: 0) {
+        if (total > (adapter?.count ?: 0)) {
             currentPage += 1
-            //getC2CADData(true)
+            getC2CADData(true)
+        }
+        else{
+            binding?.refreshLayout?.setLoading(false)
         }
     }
 
@@ -125,9 +94,10 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, coinType, null,  null, null, null, null, null, null, null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
+                showData(null)
                 super.error(type, error)
             }
 
@@ -135,17 +105,22 @@ class C2CCustomerBuyItemFragment : BaseFragment(), OnHandleClickListener, QRefre
                 onRefreshEnd()
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     total = returnData.data?.total ?: 0
-                    if (currentPage == 1) {
-                        adapter?.data = returnData.data?.data
-                    } else {
-                        adapter?.addAll(returnData.data?.data)
-                    }
-                    adapter?.notifyDataSetChanged()
+                    var dataList = returnData.data?.data
+                    showData(dataList)
                 } else {
+                    showData(null)
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
         })
     }
-
+    private fun showData(dataList: ArrayList<C2CMainAD?>?) {
+        onRefreshEnd()
+        if (currentPage == 1) {
+            adapter?.data = dataList
+        } else {
+            adapter?.addAll(dataList)
+        }
+        adapter?.notifyDataSetChanged()
+    }
 }

@@ -5,7 +5,7 @@
 
         <variable
             name="listItemC2CSallerBuyModel"
-            type="Object" />
+            type="com.black.base.model.c2c.C2CMainAD" />
     </data>
 
     <FrameLayout
@@ -222,6 +222,18 @@
                     android:paddingLeft="@dimen/double_padding"
                     android:paddingRight="@dimen/double_padding"
                     android:text="@string/c2c_buy"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_handle_sell"
+                    style="@style/ButtonRed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/double_padding"
+                    android:paddingRight="@dimen/double_padding"
+                    android:text="@string/c2c_sell"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
             </LinearLayout>

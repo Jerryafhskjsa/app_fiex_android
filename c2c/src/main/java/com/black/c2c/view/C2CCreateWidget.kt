@@ -73,7 +73,7 @@ class C2CCreateWidget(private val context: Context, private val type: String, pr
         inputAmountLayout = contentView.findViewById(R.id.amount_layout)
         editView = contentView.findViewById(R.id.edit_text)
         val cnyEditView = contentView.findViewById<EditText>(R.id.cny_edit_text)
-        val price: Double = c2CSeller?.currentPrice ?: 0.0
+        val price: Double? = 0.0
         val amountTextWatcher: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -81,7 +81,7 @@ class C2CCreateWidget(private val context: Context, private val type: String, pr
                 if (editView?.isFocused == true) {
                     val amount = CommonUtil.parseDouble(editView?.text.toString())
                     if (amount != null) {
-                        cnyEditView.setText(NumberUtil.formatNumberNoGroup(amount * price, RoundingMode.FLOOR, 0, precision))
+                        cnyEditView.setText(NumberUtil.formatNumberNoGroup(amount * price!!, RoundingMode.FLOOR, 0, precision))
                     } else {
                         cnyEditView.setText("")
                     }
@@ -96,7 +96,7 @@ class C2CCreateWidget(private val context: Context, private val type: String, pr
                 if (cnyEditView.isFocused) {
                     val cny = CommonUtil.parseDouble(cnyEditView.text.toString())
                     if (cny != null) {
-                        editView?.setText(NumberUtil.formatNumberNoGroup(if (price == 0.0) 0 else cny / price, RoundingMode.FLOOR, 0, precision))
+                        editView?.setText(NumberUtil.formatNumberNoGroup(if (price == 0.0) 0 else cny / price!!, RoundingMode.FLOOR, 0, precision))
                     } else {
                         editView?.setText("")
                     }
@@ -112,7 +112,7 @@ class C2CCreateWidget(private val context: Context, private val type: String, pr
         cnyEditView.filters = arrayOf(NumberFilter(), PointLengthFilter(precision))
         //        cnyTextWatcher.setJoinTextWatchers(amountTextWatcher);
         cnyEditView.addTextChangedListener(cnyTextWatcher)
-        cnyEditView.hint = String.format("最小%s金额%s", if (C2COrder.ORDER_BUY == type) "购买" else "出售", NumberUtil.formatNumberNoGroup(minAmount * price, precision))
+        cnyEditView.hint = String.format("最小%s金额%s", if (C2COrder.ORDER_BUY == type) "购买" else "出售", NumberUtil.formatNumberNoGroup(minAmount * price!!, precision))
         val btnCancel = contentView.findViewById<View>(R.id.btn_cancel)
         btnCancel.setOnClickListener {
             if (onC2CHandlerListener != null) {
