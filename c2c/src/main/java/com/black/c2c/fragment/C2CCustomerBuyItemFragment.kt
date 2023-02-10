@@ -8,14 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2CSupportCoin
-import com.black.base.model.wallet.FinancialRecord
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
+import com.black.base.util.RouterConstData
+import com.black.base.view.ImageSlider
 import com.black.c2c.BR
 import com.black.c2c.R
 import com.black.c2c.adapter.C2CSellerBuyAdapter
@@ -24,14 +27,18 @@ import com.black.lib.refresh.QRefreshLayout
 import com.black.lib.refresh.QRefreshLayout.OnLoadListener
 import com.black.lib.refresh.QRefreshLayout.OnLoadMoreCheckListener
 import com.black.net.HttpRequestResult
+import com.black.router.BlackRouter
 import skin.support.content.res.SkinCompatResources
 import java.util.ArrayList
 
-class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener {
+class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener
+    {
+    private var isVisibility: Boolean = false
     private var binding: FragmentC2cCustomerBuyItemBinding? = null
     private var layout: View? = null
     private var adapter: C2CSellerBuyAdapter? = null
-    private var coinType = "USDT"
+    private var coinType: String? = null
+    private var direction: String? = null
     private var currentPage = 1
     private var total = 0
     private var supportCoin: C2CSupportCoin? = null
@@ -42,6 +49,9 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_c2c_customer_buy_item, container, false)
         layout = binding?.root
+        coinType = arguments?.getString(ConstData.COIN_TYPE).toString()
+        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        direction = if (!isVisibility) "B" else "S"
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -55,6 +65,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
+        binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
 
@@ -65,8 +76,6 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         getC2CADData(false)
         return layout
     }
-
-
 
     override fun onLoadMoreCheck(): Boolean {
         return total > (adapter?.count ?: 0)
@@ -94,7 +103,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,coinType,direction,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)

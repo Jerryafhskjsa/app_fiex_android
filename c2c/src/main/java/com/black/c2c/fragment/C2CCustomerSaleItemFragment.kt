@@ -103,7 +103,7 @@ class C2CCustomerSaleItemFragment : BaseFragment(), QRefreshLayout.OnRefreshList
 
     private fun getC2CADData(isShowLoading: Boolean) {
         isHasGotData = true
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,null,null,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 super.error(type, error)

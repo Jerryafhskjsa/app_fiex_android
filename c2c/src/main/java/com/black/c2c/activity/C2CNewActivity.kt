@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
 import android.view.*
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
@@ -67,6 +69,7 @@ import java.util.*
     private var fManager: FragmentManager? = null
     private var typeList: MutableList<String>? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
+    private var  c2CCustomerBuyItemFragment: C2CCustomerBuyItemFragment? = null
     private var c2COneKeyFragment: C2COneKeyFragment? = null
     private var c2CCustomerFragment: C2CCustomerFragment? = null
     private var supportCoins: ArrayList<C2CSupportCoin?>? = null
@@ -164,10 +167,12 @@ import java.util.*
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.c2c_one_key) {
+            init()
             type = 0
             refresh(type)
            // selectTab(TAB_ONE_KEY)
         } else if (id == R.id.c2c_customer) {
+            init()
             type = 1
             refresh(type)
            // selectTab(TAB_CUSTOMER)
@@ -205,7 +210,7 @@ import java.util.*
 
         }
         else if (id == R.id.bills){
-
+            BlackRouter.getInstance().build(RouterConstData.C2C_BILLS).go(this)
         }
         else if (id == R.id.person){
             BlackRouter.getInstance().build(RouterConstData.C2C_MINE).go(mContext)
@@ -427,10 +432,11 @@ import java.util.*
             fragmentList = ArrayList()
         }
         fragmentList?.clear()
-        binding?.refreshLayout?.setLoading(false)
-        binding?.refreshLayout?.setRefreshing(false)
         fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
+            val coinType = "USDT"
+            bundle.putString(ConstData.COIN_TYPE,coinType)
+            bundle.putBoolean("isVisibility", binding?.c2cOneKey?.isChecked ?: false)
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
@@ -476,5 +482,6 @@ import java.util.*
             binding?.c2cCustomer?.isChecked = false
         }
     }
+
 
 }

@@ -3,26 +3,30 @@ package com.black.c2c.activity
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
-import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
+import com.black.base.model.C2CADData
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2CMainAD
 import com.black.base.util.ConstData
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cBuyBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
-import kotlinx.android.synthetic.main.activity_c2c_buy.*
+
 
 @Route(value = [RouterConstData.C2C_BUY])
 class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -33,9 +37,10 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
        // private var TAB_PAYPAID: String? = "PayPai"
     }
     private var binding: ActivityC2cBuyBinding? = null
-    private var cointype = "USDT"
+    private var c2cList: C2CMainAD? = null
+    private var cointype:String? = "USDT"
     private var payChain: String? = null
-    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+    private var rate :Double? = 0.0
     private var chainNames: MutableList<String?>? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
@@ -51,6 +56,8 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buy)
+        c2cList = intent.getParcelableExtra(ConstData.C2C_AD)
+        getC2CADData()
         binding?.accont?.setOnClickListener(this)
         binding?.accont?.setOnClickListener(this)
         binding?.amount?.setOnClickListener(this)
@@ -60,16 +67,10 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.seller?.setOnClickListener(this)
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
-        binding?.btnConfirm?.setText(getString(R.string.buy_02) + cointype)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
-        payChain = TAB_CARDS
-        chainNames = ArrayList()
-        chainNames?.add(TAB_CARDS)
-        chainNames?.add(TAB_IDPAY)
-        chainNames?.add(TAB_WEIXIN)
-        //chainNames?.add(TAB_PAYPAID)
+
 
         checkClickable()
     }
@@ -163,17 +164,9 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
 
     }
     private fun checkClickable() {
+        rate =  CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
         binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.putAmount?.text.toString().trim { it <= ' ' })
                 && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
-        if (cointype == "usdt"){
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
-        }
-        if (cointype == "eth"){
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.eth
-        }
-        if (cointype == "btc"){
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.btc
-        }
         binding?.unitPrice?.setText(rate.toString())
         if (binding?.amount?.isChecked == false) {
              var amount = CommonUtil.parseDouble(binding?.putAmount?.text.toString().trim { it <= ' ' })
@@ -246,5 +239,95 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             }
 
         }
+    }
+    private fun init(c2CMainAD: C2CMainAD?){
+        binding?.totalJie?.setText(c2CMainAD?.completedOrders.toString())
+        binding?.unitPrice?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CMainAD?.priceParam, 8, 2, 8)))
+        binding?.xianE?.setText(String.format("￥ %s - ￥ %s", NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMin ), NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMax )))
+        binding?.seller?.setText(c2CMainAD?.realName)
+        binding?.btnConfirm?.setText(getString(R.string.buy_02) + c2CMainAD?.coinType)
+        val paymentTypeList = c2CMainAD?.payMethods
+        if (paymentTypeList != null && paymentTypeList == "[3]") {
+            binding?.cards?.visibility = View.VISIBLE
+            binding?.ali?.visibility = View.GONE
+            binding?.weiXin?.visibility = View.GONE
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+        }
+        if (paymentTypeList != null && paymentTypeList== "[1]") {
+            binding?.ali?.visibility = View.VISIBLE
+            binding?.cards?.visibility = View.GONE
+            binding?.weiXin?.visibility = View.GONE
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
+        }
+        if (paymentTypeList != null && paymentTypeList== "[2]") {
+            binding?.weiXin?.visibility = View.VISIBLE
+            binding?.ali?.visibility = View.GONE
+            binding?.cards?.visibility = View.GONE
+            payChain = TAB_WEIXIN
+            chainNames = ArrayList()
+            chainNames?.add(TAB_WEIXIN)
+        }
+        if (paymentTypeList != null && paymentTypeList == "[1,2]") {
+            binding?.weiXin?.visibility = View.VISIBLE
+            binding?.ali?.visibility = View.VISIBLE
+            binding?.cards?.visibility = View.GONE
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_WEIXIN)
+        }
+        if (paymentTypeList != null && paymentTypeList== "[1,3]") {
+            binding?.weiXin?.visibility = View.GONE
+            binding?.ali?.visibility = View.VISIBLE
+            binding?.cards?.visibility = View.VISIBLE
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_IDPAY)
+        }
+        if (paymentTypeList != null && paymentTypeList== "[2,3]") {
+            binding?.weiXin?.visibility = View.VISIBLE
+            binding?.ali?.visibility = View.GONE
+            binding?.cards?.visibility = View.VISIBLE
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_WEIXIN)
+        }
+        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
+            binding?.weiXin?.visibility = View.VISIBLE
+            binding?.ali?.visibility = View.VISIBLE
+            binding?.cards?.visibility = View.VISIBLE
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_WEIXIN)
+        }
+    }
+
+    private fun getC2CADData() {
+        val id = intent.getStringExtra(ConstData.PAIR)
+        C2CApiServiceHelper.getC2CADID(mContext, id,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    c2cList = returnData.data
+                    init(c2cList)
+
+
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

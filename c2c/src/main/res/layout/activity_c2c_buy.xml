@@ -86,6 +86,7 @@
                                 android:text="@string/quota" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/xian_e"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -457,6 +458,7 @@
                                 android:text="@string/order_total" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/total_jie"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -490,6 +492,7 @@
                                 android:orientation="horizontal">
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/ali"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/id_pay"
@@ -498,6 +501,7 @@
                                 android:textColor="@color/black"
                                 android:textStyle="bold" />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/wei_xin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/wei_xin"
@@ -506,6 +510,7 @@
                                     android:textColor="@color/black"
                                     android:textStyle="bold" />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/cards"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/cards"

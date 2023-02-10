@@ -581,24 +581,33 @@ object C2CApiServiceHelper {
     fun getC2CADList(
         context: Context?,
         isShowLoading: Boolean,
-        /*coinType: String?,
-        currencyCoinType: String?,
+        coinType: String?,
         direction: String?,
         gteAmount:Double?,
-        gteSingleLimitMin:Double?,
-        payMethods: String?,
         payMethod: String?,
-        page: Int?,
-        size: Int?,*/
         callback: Callback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CADList() //coinType ,currencyCoinType ,direction ,gteAmount ,gteSingleLimitMin ,payMethods ,payMethod ,page ,size*/
+            ?.getC2CADList(coinType,direction,gteAmount,payMethod)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+    //广告详情
+    fun getC2CADID(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultData<C2CMainAD?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CADInfo(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
     //快速下单配置
     fun getC2CQuickOrder(

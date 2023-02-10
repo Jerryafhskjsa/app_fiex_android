@@ -29,39 +29,45 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/c2c_cards_color"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/first_letter"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/text_size_20"
-                        android:background="@drawable/c2c_cards_color"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:gravity="center"
                         android:text="春风"
                         android:textColor="@color/T4"
                         android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
-
+                    </LinearLayout>
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/id"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/text_size_20"
                         android:gravity="center"
-                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginLeft="@dimen/text_size_5"
                         android:text="春风十里"
                         android:textColor="@color/black_real"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:background="@drawable/c2c_star">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
+                            android:layout_marginLeft="2dp"
                             android:layout_gravity="center"
                             android:src="@drawable/c2c_gou_gou" />
                     </LinearLayout>
@@ -224,18 +230,19 @@
                     android:text="@string/c2c_buy"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
+
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_handle_sell"
                     style="@style/ButtonRed"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
-                    android:visibility="gone"
                     android:gravity="center"
                     android:paddingLeft="@dimen/double_padding"
                     android:paddingRight="@dimen/double_padding"
                     android:text="@string/c2c_sell"
                     android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
         </RelativeLayout>
 

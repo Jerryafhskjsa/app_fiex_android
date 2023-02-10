@@ -174,7 +174,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
 
         }
         else if (id == R.id.bills){
-
+            BlackRouter.getInstance().build(RouterConstData.C2C_BILLS).go(this)
         }
         else if (id == R.id.person){
             BlackRouter.getInstance().build(RouterConstData.C2C_MINE).go(mContext)
@@ -525,7 +525,8 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         else CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! * rate!!
         val direction = if (binding?.c2cCustomer?.isChecked == true) "B" else "S"
         val coinType = if (binding?.one?.isChecked == true) "USDT" else "BTC"
-        C2CApiServiceHelper.getC2CQuickSearch(mContext,gteAmount,gteCurrencyCoinAmount, coinType ,direction,null,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+        val payMethod = if (binding?.cardsLayout?.visibility == View.VISIBLE) "3" else if (binding?.weiXinLayout?.visibility == View.VISIBLE)"2" else "1"
+        C2CApiServiceHelper.getC2CQuickSearch(mContext,gteAmount,gteCurrencyCoinAmount, coinType ,direction,payMethod,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 binding?.refreshLayout?.setRefreshing(false)
                 binding?.refreshLayout?.setLoading(false)
@@ -540,10 +541,10 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
                     val bundle = Bundle()
                     bundle.putParcelable(ConstData.C2C_LIST, c2cList)
                     if (c2cList?.canCreateOrderForQueryUser == true && direction == " B "){
-                        BlackRouter.getInstance().build(RouterConstData.C2C_BUY).with(bundle).go(mContext)
+                        BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(bundle).go(mContext)
                     }
                     else if (c2cList?.canCreateOrderForQueryUser == true && direction == " S "){
-                        BlackRouter.getInstance().build(RouterConstData.C2C_SELL).with(bundle).go(mContext)
+                        BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(bundle).go(mContext)
                     }
                     else{
                         FryingUtil.showToast(mContext, "当前用户不满足下单条件")

@@ -92,11 +92,11 @@ interface C2CApiService {
     fun getC2CIndexPrice(@Query("currencyCoin") currencyCoin: String?): Observable<HttpRequestResultDataList<C2CIndexPrice?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_AD_INFO)
-    fun getC2CADInfo(): Observable<HttpRequestResultString?>?
+    fun getC2CADInfo(@Query("id") id: String?): Observable<HttpRequestResultData<C2CMainAD?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_AD_LIST)
-    fun getC2CADList(): Observable<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
-    //@Query("coinType") coinType: String?,@Query("currencyCoinType") currencyCoinType: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:Double?,@Query("gteSingleLimitMin") gteSingleLimitMin:Double?, payMethods: String?,@Query("payMethod") payMethod: String?,@Query("page") page: Int?,@Query("size") size: Int?
+    fun getC2CADList(@Query("coinType") coinType: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:Double?,@Query("payMethod") payMethod: String?): Observable<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
+
     @GET(UrlConfig.C2C.URL_C2C_AD_MERCHANT_PAGE)
     fun getC2CADMerchantPage(): Observable<HttpRequestResultString?>?
 
@@ -110,7 +110,7 @@ interface C2CApiService {
     fun getC2CPublish(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_QUICK_PUBLISH)
-    fun getC2CQuickPublish(@Query("gteAmount") gteAmount: Double?,@Query("gteCurrencyCoinAmount") gteCurrencyCoinAmount: Double?,@Query("coinType") coinType: String?,@Query("direction") direction: String?,@Query("payMethod") payMethod: String?): Observable<HttpRequestResultData<C2CMainAD?>?>?
+    fun getC2CQuickPublish(@Query("gteAmount") gteAmount: Double?,@Query("gteCurrencyCoinAmount") gteCurrencyCoinAmount: Double?,@Query("coinType") coinType: String?,@Query("direction") direction: String?,@Query("payMethod")payMethod: String?): Observable<HttpRequestResultData<C2CMainAD?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_QUICK_CONFIG)
     fun getC2CQuickConfig(@Query("coinType") coinType: String?,@Query("currencyCoin") currencyCoin: String?): Observable<HttpRequestResultData<OrderConfig?>?>?

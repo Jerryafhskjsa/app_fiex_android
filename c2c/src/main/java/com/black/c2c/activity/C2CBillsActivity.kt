@@ -71,6 +71,7 @@ class C2CBillsActivity: BaseActionBarActivity(),   QRefreshLayout.OnRefreshListe
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
         binding?.recyclerView?.layoutManager = layoutManager
+        getC2CADData(false)
     }
 
     override fun onClick(v: View) {

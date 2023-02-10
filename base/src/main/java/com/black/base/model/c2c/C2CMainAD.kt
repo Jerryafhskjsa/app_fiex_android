@@ -3,11 +3,12 @@ package com.black.base.model.c2c
 import android.os.Parcel
 import android.os.Parcelable
 import com.black.base.model.BaseAdapterItem
-import java.math.BigDecimal
+import com.black.base.model.wallet.WalletBill
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.Comparator
-
-class C2CMainAD: BaseAdapterItem , Parcelable {
+@Parcelize
+class C2CMainAD  : BaseAdapterItem() ,Parcelable {
     var canCreateOrderForQueryUser: Boolean? = null	//当前用户是否可下此广告的订单
     var coinType: String? = null	//币种
     var completedOrders: Int? = 0	//完成订单数
@@ -36,9 +37,9 @@ class C2CMainAD: BaseAdapterItem , Parcelable {
     var status: Int? = 0	//	广告状态(1:新建，2:上架，审核中,3：上架，审核通过，4：下架,5:审核不通过)
     var totalAmount:Double? = null	//	可买入或者出售总量
     var updateTime: String? = null
-
-    constructor()
-    constructor(`in`: Parcel) {
+/*
+    constructor(`in`: Parcel): this() {
+        canCreateOrderForQueryUser = `in`.readByte().toInt() != 0
         coinType = `in`.readString()
         completedOrders = `in`.readInt()
         completion = `in`.readDouble()
@@ -67,14 +68,12 @@ class C2CMainAD: BaseAdapterItem , Parcelable {
         totalAmount = `in`.readDouble()
         updateTime = `in`.readString()
     }
-    override fun getType(): Int {
-        return C2C_AD
-    }
 
     override fun describeContents(): Int {
         return 0
     }
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeByte((if (canCreateOrderForQueryUser!!) 1 else 0).toByte())
         dest.writeString(coinType)
         dest.writeInt(completedOrders!!)
         dest.writeDouble(completion!!)
@@ -104,31 +103,15 @@ class C2CMainAD: BaseAdapterItem , Parcelable {
         dest.writeString(updateTime)
 
     }
-
-    val sortLetter: Char?
-        get() = if (coinType == null || coinType!!.trim { it <= ' ' }.isEmpty()) {
-            null
-        } else coinType!!.trim { it <= ' ' }.toUpperCase(Locale.getDefault())[0]
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<C2CMainAD?> = object : Parcelable.Creator<C2CMainAD?> {
-            override fun createFromParcel(`in`: Parcel): C2CMainAD? {
-                return C2CMainAD(`in`)
-            }
-
-            override fun newArray(size: Int): Array<C2CMainAD?> {
-                return arrayOfNulls(size)
-            }
+    companion object CREATOR : Parcelable.Creator<C2CMainAD> {
+        override fun createFromParcel(parcel: Parcel): C2CMainAD {
+            return C2CMainAD(parcel)
         }
-        var COMPARATOR_CHOOSE_COIN: java.util.Comparator<C2CMainAD?> = Comparator { o1, o2 ->
-            if (o1 == null || o2 == null) {
-                return@Comparator 0
-            }
-            val c1 = o1.sortLetter
-            val c2 = o2.sortLetter
-            if (c1 == null || c2 == null) 0 else c1.compareTo(c2)
+
+        override fun newArray(size: Int): Array<C2CMainAD?> {
+            return arrayOfNulls(size)
         }
-    }
+    }*/
 }
 
 
