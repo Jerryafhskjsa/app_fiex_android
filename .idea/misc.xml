@@ -380,6 +380,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/view_transfer_record_wallet_chooser.xml" value="0.10208333333333333" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_google_layout.xml" value="0.14010416666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_mail_layout.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/base/src/main/res/layout/view_verify_password_layout.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_phone_layout.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single_tab.xml" value="0.1" />

@@ -26,6 +26,7 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
+import kotlinx.android.synthetic.main.activity_c2c_buy.*
 
 
 @Route(value = [RouterConstData.C2C_BUY])
@@ -56,7 +57,6 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buy)
-        c2cList = intent.getParcelableExtra(ConstData.C2C_AD)
         getC2CADData()
         binding?.accont?.setOnClickListener(this)
         binding?.accont?.setOnClickListener(this)
@@ -80,7 +80,15 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){
+            val two = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+            val xianMin = CommonUtil.parseDouble(binding?.xianMin?.text.toString().trim { it <= ' ' })
+            val xianMax = CommonUtil.parseDouble(binding?.xianMax?.text.toString().trim { it <= ' ' })
+            if (two != null && two >= xianMin!! && two <= xianMax!!){
             choosePayMethodWindow()
+        }
+            else{
+                FryingUtil.showToast(mContext, "请输入限额内的金额")
+            }
         }
         else if (id == R.id.unit_price){
         }
@@ -112,6 +120,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         }
     }
     private fun choosePayMethodWindow() {
+        getC2CADData()
         if (payChain != null && chainNames!!.size > 0) {
             val chooseWalletDialog = ChooseWalletControllerWindow(this as Activity,
                 getString(R.string.choose_pay),
@@ -123,13 +132,14 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
                         payChain = item
-                        var num1 = binding?.putAmount?.text
-                        var num2 = binding?.putMoney?.text
+                        val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+                        val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
+                        val num3 = c2cList?.id
                         val extras = Bundle()
-                        extras.putString(ConstData.COIN_TYPE,cointype)
-                        extras.putString(ConstData.BUY_PRICE,rate.toString())
-                        extras.putString(ConstData.COIN_TYPE,cointype)
-                        extras.putString(ConstData.C2C_ORDERS, payChain)
+                        extras.putParcelable(ConstData.C2C_LIST,c2cList)
+                        extras.putDouble(ConstData.BUY_PRICE,num1!!)
+                        extras.putDouble(ConstData.BIRTH,num2!!)
+                        extras.putString(ConstData.COIN_TYPE,num3)
                         BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
                     }
                 })
@@ -164,12 +174,13 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
 
     }
     private fun checkClickable() {
+            binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.putAmount?.text.toString().trim { it <= ' ' })
+                    && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' })
+                    )
         rate =  CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
-        binding?.btnConfirm?.isEnabled = !(TextUtils.isEmpty(binding?.putAmount?.text.toString().trim { it <= ' ' })
-                && TextUtils.isEmpty(binding?.putMoney?.text.toString().trim { it <= ' ' }))
         binding?.unitPrice?.setText(rate.toString())
         if (binding?.amount?.isChecked == false) {
-             var amount = CommonUtil.parseDouble(binding?.putAmount?.text.toString().trim { it <= ' ' })
+             val amount = CommonUtil.parseDouble(binding?.putAmount?.text.toString().trim { it <= ' ' })
             if (amount != null) {
                 binding?.one?.setText(
                     NumberUtil.formatNumberNoGroup(
@@ -243,10 +254,21 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     private fun init(c2CMainAD: C2CMainAD?){
         binding?.totalJie?.setText(c2CMainAD?.completedOrders.toString())
         binding?.unitPrice?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CMainAD?.priceParam, 8, 2, 8)))
-        binding?.xianE?.setText(String.format("￥ %s - ￥ %s", NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMin ), NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMax )))
+        binding?.xianMin?.setText(String.format("%s", NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMin )))
+        binding?.xianMax?.setText(String.format("%s", NumberUtil.formatNumberNoGroup(c2CMainAD?.singleLimitMax )))
         binding?.seller?.setText(c2CMainAD?.realName)
         binding?.btnConfirm?.setText(getString(R.string.buy_02) + c2CMainAD?.coinType)
         val paymentTypeList = c2CMainAD?.payMethods
+        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
+            binding?.ali?.visibility = View.VISIBLE
+            binding?.cards?.visibility = View.VISIBLE
+            binding?.weiXin?.visibility = View.VISIBLE
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_WEIXIN)
+        }
         if (paymentTypeList != null && paymentTypeList == "[3]") {
             binding?.cards?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
@@ -293,19 +315,9 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.VISIBLE
-            payChain = TAB_CARDS
+            payChain = TAB_WEIXIN
             chainNames = ArrayList()
             chainNames?.add(TAB_CARDS)
-            chainNames?.add(TAB_WEIXIN)
-        }
-        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
-            binding?.weiXin?.visibility = View.VISIBLE
-            binding?.ali?.visibility = View.VISIBLE
-            binding?.cards?.visibility = View.VISIBLE
-            payChain = TAB_CARDS
-            chainNames = ArrayList()
-            chainNames?.add(TAB_CARDS)
-            chainNames?.add(TAB_IDPAY)
             chainNames?.add(TAB_WEIXIN)
         }
     }

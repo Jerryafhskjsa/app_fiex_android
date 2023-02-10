@@ -642,4 +642,20 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+    //下单
+    fun getC2COrder(
+        context: Context?,
+        advertisingId: String?,
+        amount: Double?,
+        price: Double?,
+        callback: Callback<HttpRequestResultData<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CCreateV2(advertisingId, amount, price)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
 }

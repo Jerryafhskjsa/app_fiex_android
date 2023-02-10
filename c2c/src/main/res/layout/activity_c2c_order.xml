@@ -144,6 +144,7 @@
                                 android:text="@string/total_money" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/total"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -155,7 +156,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/price"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_20"
@@ -170,6 +170,7 @@
                                 android:text="@string/price" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -194,6 +195,7 @@
                                 android:text="@string/amount" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/account"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -227,6 +229,7 @@
                                 android:text="@string/order_number" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/ad_id"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"

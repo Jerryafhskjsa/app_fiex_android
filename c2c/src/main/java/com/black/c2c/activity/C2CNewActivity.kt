@@ -22,7 +22,9 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CSupportCoin
+import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
@@ -59,7 +61,7 @@ import java.util.*
     }
 
     private var binding: ActivityC2cMainBinding? = null
-
+    private var userInfo: UserInfo? = null
     private var currentTab = 0
     private var type = 0
     private  var otherType = false
@@ -75,6 +77,11 @@ import java.util.*
     private var supportCoins: ArrayList<C2CSupportCoin?>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userInfo = CookieUtil.getUserInfo(mContext)
+        if (userInfo == null) {
+            finish()
+            return
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_main)
         binding?.c2cOneKey?.setOnClickListener(this)
         binding?.c2cCustomer?.setOnClickListener(this)

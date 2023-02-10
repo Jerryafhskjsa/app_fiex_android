@@ -1,7 +1,9 @@
 package com.black.base.lib.verify
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.drawable.PaintDrawable
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -56,15 +58,15 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
     private var moneyPasswordBinding: ViewVerifyMoneyPasswordLayoutBinding? = null
 
     protected var phoneCaptcha: String? = null
-
     private var getPhoneCodeLocked = false
-    private var getPhoneCodeLockedTime = 0
+    private var countDownTimer: CountDownTimer? = null
+    private var getPhoneCodeLockedTime = 60
     private val getPhoneCodeLockTimer: Runnable = object : Runnable {
 
         override fun run() {
-            getPhoneCodeLockedTime--;
+            getPhoneCodeLockedTime--
             if (getPhoneCodeLockedTime <= 0) {
-                getPhoneCodeLocked = false;
+                getPhoneCodeLocked = false
                 phoneBinding?.getPhoneCode?.setText(R.string.get_check_code)
             } else {
                 phoneBinding?.getPhoneCode?.setText(activity.getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
@@ -75,13 +77,13 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
 
     protected var mailCaptcha: String? = null
     private var getMailCodeLocked = false
-    private var getMailCodeLockedTime = 0
+    private var getMailCodeLockedTime = 60
     private val getMailCodeLockTimer: Runnable = object : Runnable {
 
         override fun run() {
             getMailCodeLockedTime--;
             if (getMailCodeLockedTime <= 0) {
-                getMailCodeLocked = false;
+                getMailCodeLocked = false
                 mailBinding?.getMailCode?.setText(R.string.get_check_code)
             } else {
                 mailBinding?.getMailCode?.setText(activity.getString(R.string.aler_get_code_locked, getMailCodeLockedTime.toString()))
@@ -105,21 +107,34 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
 
     //获取手机验证码
     open fun getPhoneVerifyCode() {
-        if (getPhoneCodeLocked) {
-            return
-        }
         phoneCaptcha = null
+        val TotalTime:Long = 60*1000
+        countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
+        @SuppressLint("ResourceAsColor")
+        override fun onFinish(){
+            phoneBinding?.getPhoneCode?.isEnabled = true
+            phoneBinding?.getPhoneCode?.setTextColor(R.color.T9)
+            phoneBinding?.getPhoneCode?.setText(R.string.get_check_code)
+        }
+
+            @SuppressLint("ResourceAsColor")
+            override fun onTick(millisUntilFinished: Long) {
+                if (TotalTime > 0){
+                    val second=millisUntilFinished/1000%60
+                    phoneBinding?.getPhoneCode?.isEnabled = false
+                    phoneBinding?.getPhoneCode?.setTextColor(R.color.C2)
+                    phoneBinding?.getPhoneCode?.setText("$second" + "秒后可重发")}
+                if (TotalTime <= 0){
+                    phoneBinding?.getPhoneCode?.setTextColor(R.color.T9)
+                }
+            }
+        }.start()
         UserApiServiceHelper.getVerifyCode(activity, target.phone, target.poneCountyCode, alwaysNoToken, object : NormalCallback<HttpRequestResultString?>(activity) {
             override fun callback(returnData: HttpRequestResultString?) {
+
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))
                     phoneCaptcha = returnData.data
-                    //发送成功后，锁定按钮
-                    if (!getPhoneCodeLocked) {
-                        getPhoneCodeLocked = true
-                        getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getPhoneCodeLockTimer)
-                    }
                 } else {
                     FryingUtil.showToast(activity, if (returnData?.msg == null) "null" else returnData.msg)
                 }
@@ -129,22 +144,37 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
 
     //获取邮箱验证码
     open fun getMailVerifyCode() {
-        if (getMailCodeLocked) {
-            return
+        val TotalTime:Long = 60*1000
+        countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
+        @SuppressLint("ResourceAsColor")
+        override fun onFinish(){
+            mailBinding?.getMailCode?.isEnabled = true
+            mailBinding?.getMailCode?.setTextColor(R.color.T9)
+            mailBinding?.getMailCode?.setText(R.string.get_check_code)
         }
+
+            @SuppressLint("ResourceAsColor")
+            override fun onTick(millisUntilFinished: Long) {
+                if (TotalTime > 0){
+                    val second=millisUntilFinished/1000%60
+                    mailBinding?.getMailCode?.isEnabled = false
+                    mailBinding?.getMailCode?.setTextColor(R.color.C2)
+                    mailBinding?.getMailCode?.setText("$second" + "秒后可重发")}
+
+                if (TotalTime <= 0)
+                {
+                    mailBinding?.getMailCode?.setTextColor(R.color.T9)
+                }
+            }
+        }.start()
         mailCaptcha = null
-        FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))
         UserApiServiceHelper.getVerifyCode(activity, target.mail, null, alwaysNoToken, object : NormalCallback<HttpRequestResultString?>(activity) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))
                     mailCaptcha = returnData.data
+                    FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))
                     //锁定发送按钮
-                    if (!getMailCodeLocked) {
-                        getMailCodeLocked = true
-                        getMailCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getMailCodeLockTimer)
-                    }
                 } else {
                     FryingUtil.showToast(activity, if (returnData == null) "" else returnData.msg)
                 }
@@ -214,6 +244,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
             R.id.get_phone_code -> {
                 //发送手机验证码
                 getPhoneVerifyCode()
+
             }
             R.id.get_mail_code -> {
                 //发送邮箱验证码

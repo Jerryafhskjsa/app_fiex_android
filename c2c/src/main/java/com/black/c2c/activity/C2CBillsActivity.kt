@@ -16,7 +16,9 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CBills
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.BR
@@ -39,6 +41,7 @@ class C2CBillsActivity: BaseActionBarActivity(),   QRefreshLayout.OnRefreshListe
     companion object {
         private val TAB_TITLES = arrayOfNulls<String>(4) //标题
     }
+    private var userInfo: UserInfo? = null
     private var binding: ActivityC2cBillsBinding? = null
     private var fragmentList: ArrayList<Fragment>? = null
     private var adapter: C2CBillsAdapter? = null
@@ -47,6 +50,11 @@ class C2CBillsActivity: BaseActionBarActivity(),   QRefreshLayout.OnRefreshListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userInfo = CookieUtil.getUserInfo(mContext)
+        if (userInfo == null) {
+            finish()
+            return
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_bills)
         binding?.numOne?.setOnClickListener(this)
         binding?.numTwo?.setOnClickListener(this)
