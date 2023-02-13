@@ -20,6 +20,9 @@ interface UserApiService {
     @POST(UrlConfig.User.URL_USER_LOGIN)
     fun getProToken(): Observable<HttpRequestResultData<ProTokenResult?>?>?
 
+    @POST(UrlConfig.User.OTC_LOGIN)
+    fun getOtcToken(): Observable<HttpRequestResultData<ProTokenResult?>?>?
+
     @GET(UrlConfig.User.URL_WS_TOKEN)
     fun getWsToken(): Observable<HttpRequestResultString?>?
 

@@ -8,10 +8,16 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.BtnC2cWaitBuyBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
@@ -91,5 +97,21 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
 
             dialog.dismiss()
         }
+    }
+    private fun getPayChoose() {
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

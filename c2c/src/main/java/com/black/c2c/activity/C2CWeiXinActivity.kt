@@ -5,9 +5,15 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.OtcReceiptDTO
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cWeixinBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
@@ -31,10 +37,29 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_submit){
-            BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            getReceipt()
         }
         else if (id == R.id.photo){
 
         }
+    }
+    private fun getReceipt(){
+        val  otcReceiptDTO: OtcReceiptDTO? = null
+        otcReceiptDTO?.name = binding?.name?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO?.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO?.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
+        C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                } else {
+
+                    FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

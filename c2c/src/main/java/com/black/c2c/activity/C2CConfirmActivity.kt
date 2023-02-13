@@ -21,6 +21,7 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var TotalTime : Long = 24*60*60*1000 //总时长 24h
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
+        binding?.btnConfirmNew?.isEnabled = true
     }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -28,7 +29,9 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                 val hour = millisUntilFinished/1000/60/60%24
                 var minute=millisUntilFinished/1000/60%60
                 var second=millisUntilFinished/1000%60
-                binding?.time?.setText("$hour: $minute: $second")}
+                binding?.time?.setText("$hour: $minute: $second")
+                binding?.btnConfirmNew?.isEnabled = false
+            }
             else{
                 FryingUtil.showToast(mContext,"订单已取消")
             }

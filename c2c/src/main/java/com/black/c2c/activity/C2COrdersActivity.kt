@@ -202,9 +202,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked){
-                val intent = Intent(this@C2COrdersActivity, C2CNewActivity::class.java)
-                startActivity(intent)
-                finish()
+                getC2cCancel()
             }
             else{
                 FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
@@ -225,6 +223,28 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val id = returnData.data
                     binding?.adId?.setText(id)
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+    //撤单
+    private fun getC2cCancel(){
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2COrderCancel(mContext, id,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext,"取消订单成功")
+                    val intent = Intent(this@C2COrdersActivity, C2CNewActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)

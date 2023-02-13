@@ -53,6 +53,14 @@ object UserApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context,callback))
     }
 
+    //获取otc_token
+    fun getOtcToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_API).getService(UserApiService::class.java)
+            ?.getOtcToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
     //获取ws-token
     fun getWsToken(context: Context,callback:Callback<HttpRequestResultString?>){
         ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)

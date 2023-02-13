@@ -428,6 +428,10 @@ import java.util.*
             v ->
             BlackRouter.getInstance().build(RouterConstData.C2C_APPLY1).go(this)
         }
+        dialog.findViewById<SpanTextView>(R.id.settings).setOnClickListener{
+                v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_PAY).go(this)
+        }
         dialog.findViewById<SpanTextView>(R.id.btn_bills).setOnClickListener{
                 v ->
             BlackRouter.getInstance().build(RouterConstData.C2C_BILLS).go(this)

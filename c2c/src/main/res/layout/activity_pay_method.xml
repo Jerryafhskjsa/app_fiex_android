@@ -106,6 +106,7 @@
                         android:id="@+id/btn_confirm_new"
                         style="@style/ButtonReturnGreen"
                         android:layout_width="300dp"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:layout_marginBottom="@dimen/text_size_20"
                         android:layout_height="wrap_content"
@@ -113,6 +114,7 @@
                         android:padding="@dimen/middle_padding"
                         android:text="@string/add_new" />
                     <LinearLayout
+                        android:id="@+id/ti_shi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/text_size_10"

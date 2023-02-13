@@ -163,6 +163,9 @@ object UrlConfig {
         //user_login
         const val URL_USER_LOGIN = "user/login"
 
+        //otc_login
+        const val  OTC_LOGIN = "otc/user/login"
+
         //ws_token
         const val URL_WS_TOKEN = "user/ws-token"
 

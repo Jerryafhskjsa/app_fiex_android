@@ -388,6 +388,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 user!!.ticket = ticket
                             }
                             getProToken(mContext)
+                            getOtcToken(mContext)
                         }
                     } else {
                         FryingUtil.showToast(
@@ -397,6 +398,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
             })
+
     }
 
     /**
@@ -463,6 +465,30 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         )
                         getWsToken(mContext)
                         getFutureToken(mContext)
+
+                    }
+                }
+            })
+    }
+
+    //获取Otc-token
+    private fun getOtcToken(context: Context) {
+        UserApiServiceHelper.getOtcToken(
+            context,
+            object : Callback<HttpRequestResultData<ProTokenResult?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        val otcTokenResult: ProTokenResult? = result.data
+                        var otcToken = otcTokenResult?.proToken
+                        var otcTokenExpiredTime = otcTokenResult?.expireTime
+                        HttpCookieUtil.saveProToken(context, otcToken)
+                        HttpCookieUtil.saveProTokenExpiredTime(
+                            context,
+                            otcTokenExpiredTime.toString()
+                        )
 
                     }
                 }

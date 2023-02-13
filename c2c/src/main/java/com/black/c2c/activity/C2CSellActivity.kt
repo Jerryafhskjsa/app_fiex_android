@@ -1,5 +1,6 @@
 package com.black.c2c.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +10,9 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
+import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
+import com.black.base.view.ChooseWalletControllerWindow
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellBinding
 import com.black.router.BlackRouter
@@ -44,7 +47,6 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_sell)
         binding?.accont?.setOnClickListener(this)
-        binding?.accont?.setOnClickListener(this)
         binding?.amount?.setOnClickListener(this)
         binding?.payTime?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
@@ -68,7 +70,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){
-            choosePayMethodWindow()
+            choosePayMethodWindowOld()
         }
         else if (id == R.id.unit_price){
         }
@@ -94,7 +96,34 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             checkClickable()
         }
     }
-    private fun choosePayMethodWindow() {
+    private fun choosePayMethodWindowOld() {
+        if (payChain != null && chainNames!!.size > 0) {
+            val chooseWalletDialog = ChooseWalletControllerWindow(this as Activity,
+                getString(R.string.choose_pay),
+                payChain,
+                chainNames,
+                object : ChooseWalletControllerWindow.OnReturnListener<String?> {
+                    override fun onReturn(
+                        window: ChooseWalletControllerWindow<String?>,
+                        item: String?
+                    ) {
+                        payChain = item
+                        val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+                        val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
+                        val extras = Bundle()
+                        extras.putDouble(ConstData.BUY_PRICE,num1!!)
+                        extras.putDouble(ConstData.BIRTH,num2!!)
+                        BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(extras).go(mContext)
+                    }
+                })
+            chooseWalletDialog.show()
+        }
+        else {
+            choosePayMethodWindowOld()
+        }
+
+    }
+    private fun choosePayMethodWindowNew() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.sell_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window

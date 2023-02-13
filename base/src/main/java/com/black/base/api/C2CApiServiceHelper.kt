@@ -658,4 +658,106 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+
+    //撤单
+    fun getC2COrderCancel(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultData<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CCancel(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //订单详情
+    fun getC2CDetails(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultData<C2COrderDetails?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2COrderInfo(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //确认付款
+    fun getConfirmPay(
+        context: Context?,
+        id: String?,
+        payEeId: Int?,
+        payMethod: Int?,
+        receiptId: Int?,
+        callback: Callback<HttpRequestResultData<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CConfirmPay(id, payEeId, payMethod, receiptId )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    //获得所有收付款信息
+    fun getAllPay(
+        context: Context?,
+        callback: Callback<HttpRequestResultData<PayInfo?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CReceipt()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    //作为收款人信息
+    fun getSellerMsg(
+        context: Context?,
+        callback: Callback<HttpRequestResultData<C2CSellerMsg?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CPayee()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    //删除收款方式
+    fun getPayDelete(
+        context: Context?,
+        receiptId: Int?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CDelete(receiptId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    //设置收付款
+    fun getReceipt(
+        context: Context?,
+        otcReceiptDTO: OtcReceiptDTO?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CSetReceipt(otcReceiptDTO)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
 }

@@ -103,7 +103,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,coinType,direction,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,coinType,"S",null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)

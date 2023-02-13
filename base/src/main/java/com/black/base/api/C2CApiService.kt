@@ -132,13 +132,13 @@ interface C2CApiService {
     fun getC2CApplyPayee(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_DELETE)
-    fun getC2CDelete(): Observable<HttpRequestResultString?>?
+    fun getC2CDelete(@Query("receiptId") receiptId: Int?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_PAYEE)
-    fun getC2CPayee(): Observable<HttpRequestResultString?>?
+    fun getC2CPayee(): Observable<HttpRequestResultData<C2CSellerMsg?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_RECEIPT)
-    fun getC2CReceipt(): Observable<HttpRequestResultString?>?
+    fun getC2CReceipt(): Observable<HttpRequestResultData<PayInfo?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_USERINFO)
     fun getC2CUserInfo(): Observable<HttpRequestResultString?>?
@@ -150,7 +150,7 @@ interface C2CApiService {
     fun getC2CRefusePayee(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_SET_RECEIPT)
-    fun getC2CSetReceipt(): Observable<HttpRequestResultString?>?
+    fun getC2CSetReceipt(@Body otcReceiptDTO:OtcReceiptDTO?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_UNBIND_PAYEE)
     fun getC2CUnbindPayee(): Observable<HttpRequestResultString?>?
@@ -160,10 +160,10 @@ interface C2CApiService {
 
     //OTC订单
     @POST(UrlConfig.C2C.URL_C2C_CANCEL)
-    fun getC2CCancel(): Observable<HttpRequestResultString?>?
+    fun getC2CCancel(@Query("id") id: String?): Observable<HttpRequestResultData<String?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CONFIRM_PAY)
-    fun getC2CConfirmPay(): Observable<HttpRequestResultString?>?
+    fun getC2CConfirmPay(@Query("id") id: String?,@Query("payEeId") payEeId: Int?,@Query("payMethod") payMethod: Int?, @Query("receiptId") receiptId: Int?):  Observable<HttpRequestResultData<String?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CP)
     fun getC2CCP(): Observable<HttpRequestResultString?>?
@@ -175,7 +175,7 @@ interface C2CApiService {
     fun getC2CGP(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_ORDER_INFO)
-    fun getC2COrderInfo(): Observable<HttpRequestResultString?>?
+    fun getC2COrderInfo(@Query("id") id: String?): Observable<HttpRequestResultData<C2COrderDetails?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_OI_V2)
     fun getC2COIV2(): Observable<HttpRequestResultString?>?

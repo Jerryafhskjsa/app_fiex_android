@@ -10,6 +10,11 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.model.c2c.ReceiptInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -17,6 +22,7 @@ import com.black.base.widget.SpanCheckedTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActiivtyPayForSellerBinding
 import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
@@ -26,7 +32,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var sellerName: String? = null
     private val mHandler = Handler()
     private var payFor: String? = null
-
+    private var receiptInfo: ReceiptInfo? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
@@ -83,6 +89,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.num8?.setOnClickListener(this)
         binding?.num1?.setOnClickListener(this)
         countDownTimer
+        getPayChoose()
         checkClickable()
     }
 
@@ -152,11 +159,8 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
-            FryingUtil.showToast(mContext,"取消订单成功")
             if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked == true){
-                val intent = Intent(this, C2CNewActivity::class.java)
-                startActivity(intent)
-                finish()
+                getC2cCancel()
             }
             else{
                 FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
@@ -190,11 +194,68 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER_PAY).go(mContext)
+            getC2cConfirm()
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
+    }
+    private fun getPayChoose() {
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    receiptInfo = returnData.data?.receiptInfo
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+    //撤单
+    private fun getC2cCancel(){
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2COrderCancel(mContext, id,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext,"取消订单成功")
+                    val intent = Intent(this@C2CBuyerPayChooseActivity, C2CNewActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+    //确认付款
+    private fun getC2cConfirm(){
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getConfirmPay(mContext, id,null,null,null,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    BlackRouter.getInstance().build(RouterConstData.C2C_BUYER_PAY).go(mContext)
+                } else {
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }
