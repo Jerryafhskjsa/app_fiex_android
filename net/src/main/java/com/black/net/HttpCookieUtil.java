@@ -9,12 +9,14 @@ public class HttpCookieUtil {
     public final static String HTTP_COOKIE = "http_cookie";
     public final static String JSESSION_ID = "jsession_id";
     public final static String UC_TOKEN = "uc_token";
+    public final static String API_TOKEN = "api_token";
     public final static String TICKET = "ticket";
     public final static String TRADE_TOKEN = "trade_token";
     public final static String PRO_TOKEN = "pro_token";
     public final static String FUTURE_TOKEN = "token";
     public final static String LISTEN_KEY = "listen_key";
     public final static String PRO_TOKEN_EXPIRED_TIME = "pro_token_expired_time";
+    public final static String API_TOKEN_EXPIRED_TIME = "api_token_expired_time";
     public final static String WS_TOKEN = "ws_token";
 
     public static SharedPreferences getSharedPreferences(Context context) {
@@ -39,6 +41,12 @@ public class HttpCookieUtil {
     public static void saveUcToken(Context context, String ucToken) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(UC_TOKEN, ucToken);
+        editor.commit();
+    }
+
+    public static void saveApiToken(Context context, String apiToken) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(API_TOKEN, apiToken);
         editor.commit();
     }
 
@@ -90,12 +98,22 @@ public class HttpCookieUtil {
         editor.commit();
     }
 
+    public static void saveApiTokenExpiredTime(Context context, String apiTokenExpiredTime) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(API_TOKEN_EXPIRED_TIME, apiTokenExpiredTime);
+        editor.commit();
+    }
+
     public static String getJsessionId(Context context) {
         return getSharedPreferences(context).getString(JSESSION_ID, null);
     }
 
     public static String getUcToken(Context context) {
         return getSharedPreferences(context).getString(UC_TOKEN, null);
+    }
+
+    public static String getApiToken(Context context) {
+        return getSharedPreferences(context).getString(API_TOKEN, null);
     }
 
     public static String getListenKey(Context context) {
@@ -157,6 +175,11 @@ public class HttpCookieUtil {
         editor.remove(PRO_TOKEN).commit();
     }
 
+    public static void deleteApiToken(Context context) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.remove(API_TOKEN).commit();
+    }
+
     public static void deleteSessionId(Context context) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.remove(JSESSION_ID).commit();
@@ -167,6 +190,7 @@ public class HttpCookieUtil {
         deleteTicket(context);
         deleteTradeToken(context);
         deleteProToken(context);
+        deleteApiToken(context);
         deleteWsToken(context);
         deleteSessionId(context);
         deleteFutureToken(context);

@@ -161,7 +161,7 @@
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="已完成"
+                                    android:text="已付款"
                                     android:textColor="@color/c2c_tab_buy"
                                     android:textSize="@dimen/text_size_13"
                                     android:textStyle="bold" />
@@ -191,7 +191,7 @@
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="已取消"
+                                    android:text="未付款"
                                     android:textColor="@color/c2c_tab_buy"
                                     android:textSize="@dimen/text_size_13"
                                     android:textStyle="bold" />
@@ -221,7 +221,7 @@
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="申述"
+                                    android:text="申述中"
                                     android:textColor="@color/c2c_tab_buy"
                                     android:textSize="@dimen/text_size_13"
                                     android:textStyle="bold" />

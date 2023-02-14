@@ -51,7 +51,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         layout = binding?.root
         coinType = arguments?.getString(ConstData.COIN_TYPE).toString()
         isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
-        direction = if (!isVisibility) "B" else "S"
+        direction = if (!isVisibility) "S" else "B"
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -73,6 +73,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
+        binding?.refreshLayout?.setRefreshing(true)
         getC2CADData(false)
         return layout
     }
@@ -85,7 +86,6 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         currentPage = 1
         getC2CADData(false)
     }
-
     override fun onLoad() {
         if (total > (adapter?.count ?: 0)) {
             currentPage += 1
@@ -111,7 +111,6 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
             }
 
             override fun callback(returnData: HttpRequestResultData<C2CADData<C2CMainAD?>?>?) {
-                onRefreshEnd()
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     total = returnData.data?.total ?: 0
                     var dataList = returnData.data?.data
@@ -124,7 +123,8 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         })
     }
     private fun showData(dataList: ArrayList<C2CMainAD?>?) {
-        onRefreshEnd()
+        binding?.refreshLayout?.setRefreshing(false)
+        binding?.refreshLayout?.setLoading(false)
         if (currentPage == 1) {
             adapter?.data = dataList
         } else {

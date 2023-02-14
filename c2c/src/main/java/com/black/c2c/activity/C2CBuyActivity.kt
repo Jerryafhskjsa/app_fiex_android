@@ -91,6 +91,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             }
         }
         else if (id == R.id.unit_price){
+            getC2CADData()
         }
         else if (id == R.id.seller){
             BlackRouter.getInstance().build(RouterConstData.C2C_SELLER).go(mContext)

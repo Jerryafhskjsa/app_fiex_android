@@ -89,8 +89,37 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
-                            android:layout_weight="1"
-                            android:text="￥6000,00 - ￥12000,00"
+                            android:text="￥"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/xian_min"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="1000"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="-"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="￥"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/xian_max"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="2000"
                             android:textColor="@color/black"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -326,8 +355,161 @@
                                 android:textColor="@color/C1" />
 
                         </com.black.lib.view.InputLinearLayout>
+                        <LinearLayout
+                            android:id="@+id/methods_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            style="@style/ButtonGreenLight"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:layout_marginTop="6dp"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:hint="请选择付款方式" />
 
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/arrow_right"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/cards_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:visibility="gone"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            style="@style/ButtonGreenLight"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/c2c_cards_color"
+                                android:paddingBottom="@dimen/text_size_16"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                />
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/cards" />
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="220dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="6222222222222" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/arrow_right"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/id_pay_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:visibility="gone"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            style="@style/ButtonGreenLight"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ali_color"
+                                android:layout_gravity="center_vertical"
+                                android:paddingBottom="@dimen/text_size_16"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                />
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/id_pay" />
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="220dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="13778037105" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/arrow_right"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/wei_xin_layout"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            style="@style/ButtonGreenLight"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/wei_xin_color"
+                                android:paddingBottom="@dimen/text_size_16"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                />
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/wei_xin" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/wei_xin_id"
+                                android:layout_width="220dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_vertical"
+                                android:text="13778037105" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/arrow_right"/>
+                        </LinearLayout>
                         <LinearLayout
                             android:id="@+id/advice"
                             android:layout_width="match_parent"
@@ -449,9 +631,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/sale_name" />
+                            android:text="@string/buyer_name" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -478,6 +661,7 @@
                             android:text="@string/order_total" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/total_jie"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -503,15 +687,41 @@
                             android:gravity="center"
                             android:text="@string/exchange_method" />
 
-                        <com.black.base.widget.SpanTextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@string/id_pay"
-                            android:textColor="@color/black"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/ali"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/id_pay"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                android:drawableLeft="@drawable/ali_color"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/wei_xin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/wei_xin"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                android:drawableLeft="@drawable/wei_xin_color"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/cards"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/cards"
+                                android:drawableLeft="@drawable/c2c_cards_color"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
                     </LinearLayout>
 
 

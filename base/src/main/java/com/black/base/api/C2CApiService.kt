@@ -181,7 +181,7 @@ interface C2CApiService {
     fun getC2COIV2(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_OL)
-    fun getC2COL(@Query("direction") direction: String?,@Query("status") status: Int?): Observable<HttpRequestResultData<C2CADData<C2CBills?>?>?>?
+    fun getC2COL(@Query("coinType") coinType: String?, @Query("currencyCoinType") currencyCoin: String?,  @Query("direction") direction: String?,  @Query("gteAmount") gteAmount: Double?,  @Query("gteCurrencyCoinAmount") gteCurrencyCoinAmount: Double?,  @Query("page") page: Int?, @Query("size") size: Int?, @Query("status") status: Int?): Observable<HttpRequestResultData<C2CADData<C2CBills?>?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_OO)
     fun getC2COO(): Observable<HttpRequestResultString?>?
@@ -230,12 +230,13 @@ interface C2CApiService {
     @POST(UrlConfig.C2C.URL_CU)
     fun getC2CCu(): Observable<HttpRequestResultString?>?
 
-    @POST(UrlConfig.C2C.URL_LOGIN)
-    fun getC2CLogin(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_ALLEGE)
     fun getC2CAllege(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_ALLEGE_INFO)
     fun getC2CAllegeInfo(): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_LOGIN)
+    fun getC2CLogin(): Observable<HttpRequestResultData<ProTokenResult?>?>?
 }

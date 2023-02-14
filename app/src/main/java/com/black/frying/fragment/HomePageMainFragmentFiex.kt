@@ -249,8 +249,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
-            R.id.c2c -> BlackRouter.getInstance().build(RouterConstData.C2C_NEW)
-                .go(mContext)
+            R.id.c2c ->  if(CookieUtil.getUserInfo(mContext!!) == null){
+                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+            }else {
+                BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
+            }
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
             R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)

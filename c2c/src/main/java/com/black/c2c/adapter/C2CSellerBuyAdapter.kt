@@ -105,6 +105,7 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         viewHolder?.btnHandleSell?.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.putParcelable(ConstData.C2C_LIST, c2CSeller)
+            bundle.putString(ConstData.PAIR,c2CSeller?.id)
             BlackRouter.getInstance().build(RouterConstData.C2C_SELL).with(bundle).go(context)
         }
     }

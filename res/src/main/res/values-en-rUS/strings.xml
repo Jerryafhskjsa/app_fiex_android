@@ -77,6 +77,7 @@
     <string name="message">Message</string>
     <string name="pay_time">Pay time</string>
     <string name="sale_name">Seller nickname</string>
+    <string name="buyer_name">Buyer nickname</string>
     <string name="notice1">Please go to the following account to confirm the buyer payment of</string>
     <string name="notice3">After the order is completed, if there is sufficient evidence to prove that the source of funds is illegal, an appeal can be filed before the end of the countdown</string>
     <string name="notice2"> </string>

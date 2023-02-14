@@ -2,12 +2,16 @@ package com.black.c2c.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.nfc.Tag
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import android.widget.CompoundButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
@@ -19,8 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
+import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
+import com.black.base.model.ProTokenResult
 import com.black.base.model.c2c.C2CSupportCoin
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
@@ -37,9 +43,11 @@ import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
 import com.black.frying.fragment.EmptyC2cFragment
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.Callback
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
@@ -174,11 +182,13 @@ import java.util.*
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.c2c_one_key) {
+            fragmentList?.clear()
             init()
             type = 0
             refresh(type)
            // selectTab(TAB_ONE_KEY)
         } else if (id == R.id.c2c_customer) {
+            fragmentList?.clear()
             init()
             type = 1
             refresh(type)
@@ -442,6 +452,7 @@ import java.util.*
         if (fragmentList == null) {
             fragmentList = ArrayList()
         }
+
         fragmentList?.clear()
         fragmentList?.add(C2CCustomerBuyItemFragment().also {
             val bundle = Bundle()
@@ -493,6 +504,5 @@ import java.util.*
             binding?.c2cCustomer?.isChecked = false
         }
     }
-
 
 }

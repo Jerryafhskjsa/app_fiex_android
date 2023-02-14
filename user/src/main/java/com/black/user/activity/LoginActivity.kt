@@ -473,7 +473,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     //获取Otc-token
     private fun getOtcToken(context: Context) {
-        UserApiServiceHelper.getOtcToken(
+        C2CApiServiceHelper.getOtcToken(
             context,
             object : Callback<HttpRequestResultData<ProTokenResult?>?>() {
                 override fun error(type: Int, error: Any?) {
@@ -484,8 +484,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         val otcTokenResult: ProTokenResult? = result.data
                         var otcToken = otcTokenResult?.proToken
                         var otcTokenExpiredTime = otcTokenResult?.expireTime
-                        HttpCookieUtil.saveProToken(context, otcToken)
-                        HttpCookieUtil.saveProTokenExpiredTime(
+                        Log.d(TAG, "apiToken = " + otcToken)
+                        Log.d(TAG, "expireTime = " + otcTokenExpiredTime)
+                        HttpCookieUtil.saveApiToken(context, otcToken)
+                        HttpCookieUtil.saveApiTokenExpiredTime(
                             context,
                             otcTokenExpiredTime.toString()
                         )

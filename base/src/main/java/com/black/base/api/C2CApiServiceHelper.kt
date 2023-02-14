@@ -565,15 +565,21 @@ object C2CApiServiceHelper {
     fun getC2COL(
         context: Context?,
         isShowLoading: Boolean,
+        coinType: String?,
+        currencyCoinType: String?,
         direction: String?,
+        gteAmount: Double?,
+        gteCurrencyCoinAmount: Double?,
+        page: Int?,
+        size:Int?,
         status: Int?,
         callback: Callback<HttpRequestResultData<C2CADData<C2CBills?>?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2COL(direction,status)
+        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2COL(coinType,currencyCoinType,direction,gteAmount,gteCurrencyCoinAmount,page,size,status)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -759,5 +765,13 @@ object C2CApiServiceHelper {
             ?.getC2CSetReceipt(otcReceiptDTO)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //获取otc_token
+    fun getOtcToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CLogin()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
     }
 }

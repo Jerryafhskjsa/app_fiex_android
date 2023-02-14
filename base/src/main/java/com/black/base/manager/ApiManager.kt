@@ -73,6 +73,20 @@ class ApiManager {
             return apiManager
         }
 
+        //otc专用
+        fun build2(context: Context, noToken: Boolean,apiType : String): ApiManager {
+            var context1 = context.applicationContext
+            val apiManager = instance
+            val language = LanguageUtil.getLanguageSetting(context1)
+            val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
+            val deviceId = CommonUtil.getDeviceId(context1)
+            var realUrl = UrlConfig.getFiexHost(context1,apiType)
+            var token = if (noToken) null else HttpCookieUtil.getApiToken(context1)
+            apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, realUrl, deviceId, lang, token, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
+            return apiManager
+        }
+
+
         fun clearCache() {
             ApiManagerImpl.clearCache()
             val cacheFile = File(ConstData.CACHE_PATH)

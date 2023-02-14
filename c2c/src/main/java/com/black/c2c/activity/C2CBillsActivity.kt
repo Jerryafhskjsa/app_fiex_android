@@ -1,7 +1,9 @@
 package com.black.c2c.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.C2CADData
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
+import com.black.base.model.ProTokenResult
 import com.black.base.model.c2c.C2CBills
 import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.user.UserInfo
@@ -29,9 +32,11 @@ import com.black.c2c.databinding.ActivitySellerChooseBinding
 import com.black.c2c.databinding.ViewFirstC2cBinding
 import com.black.c2c.databinding.ViewSecondC2cBinding
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.Callback
 import skin.support.content.res.SkinCompatResources
 import java.util.ArrayList
 
@@ -159,7 +164,7 @@ class C2CBillsActivity: BaseActionBarActivity(),   QRefreshLayout.OnRefreshListe
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2COL(mContext, isShowLoading,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CBills?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2COL(mContext, isShowLoading,null,null,null,null,null,null,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CBills?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)
@@ -188,4 +193,5 @@ class C2CBillsActivity: BaseActionBarActivity(),   QRefreshLayout.OnRefreshListe
         }
         adapter?.notifyDataSetChanged()
     }
+
 }
