@@ -58,7 +58,7 @@ class FinancialRecordActivity : BaseActionBarActivity(), View.OnClickListener {
         binding!!.extractRecord.setOnClickListener(this)
         binding!!.rechargeRecord.setOnClickListener(this)
 
-        initFragmentList()
+        init()
 
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -138,7 +138,7 @@ class FinancialRecordActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.viewPager?.setCurrentItem(position, true)
     }
 
-    private fun initFragmentList() {
+    private fun init() {
         if (fragmentList == null) {
             fragmentList = ArrayList()
         }

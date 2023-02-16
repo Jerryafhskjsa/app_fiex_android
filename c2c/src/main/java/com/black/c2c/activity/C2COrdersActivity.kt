@@ -8,24 +8,20 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import android.widget.SeekBar
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
-import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
-import com.black.base.model.future.FundingRateBean
-import com.black.base.model.future.LeverageBracketBean
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.widget.SpanCheckedTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cOrderBinding
+import com.black.c2c.util.C2CHandleCheckHelper
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -49,7 +45,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     private var cointype: String? = null
     private val mHandler = Handler()
     private var payFor: String? = null
-
+    private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
@@ -77,16 +73,12 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userInfo = CookieUtil.getUserInfo(mContext)
-        if (userInfo == null) {
-            finish()
-            return
-        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_order)
         binding?.pay?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
         c2cList = intent.getParcelableExtra(ConstData.C2C_LIST)
+        c2CHandleCheckHelper = C2CHandleCheckHelper(mContext, BaseActionBarActivity(),fryingHelper)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
        TAB_WEIXIN = getString(R.string.wei_xin)
@@ -214,21 +206,33 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         val id = intent.getStringExtra(ConstData.COIN_TYPE)
         val price = intent.getDoubleExtra(ConstData.BIRTH,0.0)
         val amount = intent.getDoubleExtra(ConstData.BUY_PRICE,0.0)
-        C2CApiServiceHelper.getC2COrder(mContext, id,amount,price,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-            }
+        c2CHandleCheckHelper?.run {
+            checkLoginUser(Runnable {
+                    C2CApiServiceHelper.getC2COrder(
+                        mContext,
+                        id,
+                        amount,
+                        price,
+                        object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+                            override fun error(type: Int, error: Any?) {
+                                super.error(type, error)
+                            }
 
-            override fun callback(returnData: HttpRequestResultData<String?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    val id = returnData.data
-                    binding?.adId?.setText(id)
-                } else {
+                            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    val id = returnData.data
+                                    binding?.adId?.setText(id)
+                                } else {
 
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
-            }
-        })
+                                    FryingUtil.showToast(
+                                        mContext,
+                                        if (returnData == null) "null" else returnData.msg
+                                    )
+                                }
+                            }
+                        })
+                })
+        }
     }
 
     //撤单

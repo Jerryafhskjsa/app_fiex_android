@@ -11,6 +11,7 @@ class User {
     var password: String? = null
     var token: String? = null
     var ucToken: String? = null
+    var apiToken: String? = null
     var ticket: String? = null
     var loginDate: Long? = null
     var isCurrentUser = false
@@ -27,6 +28,7 @@ class User {
         password = cursor.getString(cursor.getColumnIndex("password"))
         token = cursor.getString(cursor.getColumnIndex("token"))
         ucToken = cursor.getString(cursor.getColumnIndex("uc_token"))
+        apiToken = cursor.getString(cursor.getColumnIndex("api_token"))
         ticket = cursor.getString(cursor.getColumnIndex("ticket"))
         loginDate = cursor.getLong(cursor.getColumnIndex("login_date"))
         isCurrentUser = cursor.getInt(cursor.getColumnIndex("is_current_user")) == 1
@@ -41,6 +43,7 @@ class User {
             values.put("password", password)
             values.put("token", token)
             values.put("uc_token", ucToken)
+            values.put("api_token", apiToken)
             values.put("ticket", ticket)
             values.put("login_date", loginDate)
             values.put("is_current_user", if (isCurrentUser) 1 else 0)

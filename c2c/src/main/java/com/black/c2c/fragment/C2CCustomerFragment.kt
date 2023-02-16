@@ -127,13 +127,11 @@ class C2CCustomerFragment : BaseFragment(), View.OnClickListener {
             val bundle = Bundle()
             bundle.putParcelableArrayList(ConstData.C2C_SUPPORT_COINS, supportCoins)
             c2CCustomerBuyFragment!!.arguments = bundle
-            c2CCustomerBuyFragment!!.setSupportCoins(supportCoins)
         }
         if (c2CCustomerSaleFragment != null) {
             val bundle = Bundle()
             bundle.putParcelableArrayList(ConstData.C2C_SUPPORT_COINS, supportCoins)
             c2CCustomerSaleFragment!!.arguments = bundle
-            c2CCustomerSaleFragment!!.setSupportCoins(supportCoins)
         }
     }
 }

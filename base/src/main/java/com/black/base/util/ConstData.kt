@@ -135,6 +135,7 @@ object ConstData {
     /*----------Pref KEys-------*/
     const val IS_NEW_APP = "is_new_app"
     const val TOKEN = "token"
+    const val API_TOKEN = "apiToken"
     const val TYPE = "type"
     const val VERIFY_CODE = "verify_code"
     const val PHONE_CAPTCHA = "phone_captcha"

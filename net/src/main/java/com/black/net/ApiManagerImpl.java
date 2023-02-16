@@ -193,6 +193,7 @@ public class ApiManagerImpl {
             String ticket = HttpCookieUtil.getTicket(context);
             String trade_token = HttpCookieUtil.getTradeToken(context);
             String pro_token = HttpCookieUtil.getProToken(context);
+            String api_token = HttpCookieUtil.getApiToken(context);
             String future_token = HttpCookieUtil.geFutureToken(context);
             String ws_token = HttpCookieUtil.getWsToken(context);
 
@@ -244,6 +245,13 @@ public class ApiManagerImpl {
                     JSESSIONIDCookie += ";pro-token=" + pro_token + ";";
                 } else {
                     JSESSIONIDCookie += "pro-token=" + pro_token + ";";
+                }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(api_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";api-token=" + api_token + ";";
+                } else {
+                    JSESSIONIDCookie += "api-token=" + api_token + ";";
                 }
             }
             if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {

@@ -33,7 +33,6 @@ import java.util.ArrayList
 
 class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoadListener, OnLoadMoreCheckListener
     {
-    private var isVisibility: Boolean = false
     private var binding: FragmentC2cCustomerBuyItemBinding? = null
     private var layout: View? = null
     private var adapter: C2CSellerBuyAdapter? = null
@@ -41,7 +40,6 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
     private var direction: String? = null
     private var currentPage = 1
     private var total = 0
-    private var supportCoin: C2CSupportCoin? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
@@ -50,8 +48,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_c2c_customer_buy_item, container, false)
         layout = binding?.root
         coinType = arguments?.getString(ConstData.COIN_TYPE).toString()
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
-        direction = if (!isVisibility) "S" else "B"
+        direction = arguments?.getString(ConstData.COIN_INFO).toString()
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -103,7 +100,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading,coinType,"S",null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, coinType, direction,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)

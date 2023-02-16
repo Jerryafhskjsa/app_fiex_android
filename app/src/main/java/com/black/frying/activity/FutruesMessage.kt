@@ -1,4 +1,4 @@
-package com.black.wallet.activity
+package com.black.frying.activity
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -27,8 +27,8 @@ import com.black.wallet.fragment.FinancialRechargeRecordFragment
 import java.util.*
 
 //合约记录
-@Route(value = [RouterConstData.FINANCIAL_RECORD])
-class FinancialRecordActivity : BaseActionBarActivity(), View.OnClickListener {
+@Route(value = [RouterConstData.FUTURE_RECORD])
+class FutureMessageActivity : BaseActionBarActivity(), View.OnClickListener {
     companion object {
         private val TAB_TITLES = arrayOfNulls<String>(4) //标题
     }

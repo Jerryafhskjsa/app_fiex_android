@@ -28,6 +28,10 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
         fryingHelper.checkUserAndDoing(next, 1)
     }
 
+    fun otcLoginHelper(next: Runnable?){
+
+    }
+
     fun checkRealName(next: Runnable) {
         val userInfo = CookieUtil.getUserInfo(context)
         if (userInfo != null && userInfo.isRealName()) {

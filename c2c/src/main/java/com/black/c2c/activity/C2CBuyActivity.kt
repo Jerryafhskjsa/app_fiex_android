@@ -21,6 +21,7 @@ import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cBuyBinding
+import com.black.c2c.util.C2CHandleCheckHelper
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -42,6 +43,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     private var cointype:String? = "USDT"
     private var payChain: String? = null
     private var rate :Double? = 0.0
+    private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var chainNames: MutableList<String?>? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
@@ -57,6 +59,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buy)
+        c2CHandleCheckHelper = C2CHandleCheckHelper(mContext, BaseActionBarActivity(),fryingHelper)
         getC2CADData()
         binding?.accont?.setOnClickListener(this)
         binding?.accont?.setOnClickListener(this)
@@ -80,15 +83,23 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){
-            val two = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
-            val xianMin = CommonUtil.parseDouble(binding?.xianMin?.text.toString().trim { it <= ' ' })
-            val xianMax = CommonUtil.parseDouble(binding?.xianMax?.text.toString().trim { it <= ' ' })
-            if (two != null && two >= xianMin!! && two <= xianMax!!){
-            choosePayMethodWindow()
-        }
-            else{
-                FryingUtil.showToast(mContext, "请输入限额内的金额")
-            }
+            c2CHandleCheckHelper?.run {
+                checkLoginUser(Runnable {
+                    checkRealName(Runnable {
+                        val two =
+                            CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+                        val xianMin = CommonUtil.parseDouble(
+                            binding?.xianMin?.text.toString().trim { it <= ' ' })
+                        val xianMax = CommonUtil.parseDouble(
+                            binding?.xianMax?.text.toString().trim { it <= ' ' })
+                        if (two != null && two >= xianMin!! && two <= xianMax!!) {
+                            choosePayMethodWindow()
+                        } else {
+                            FryingUtil.showToast(mContext, "请输入限额内的金额")
+                        }
+                    })
+                })
+                    }
         }
         else if (id == R.id.unit_price){
             getC2CADData()

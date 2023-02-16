@@ -112,6 +112,7 @@ object CookieUtil {
     fun deleteToken(context: Context) {
         val editor = getSharedPreferences(context).edit()
         editor.remove(ConstData.TOKEN)
+        editor.remove(ConstData.API_TOKEN)
         editor.commit()
     }
 

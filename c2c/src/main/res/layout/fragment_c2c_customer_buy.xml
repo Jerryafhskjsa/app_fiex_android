@@ -14,28 +14,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/coin_tab"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/bg_asset_coin_corner"
                 android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                app:tabBackground="@color/transparent"
-                app:tabMaxWidth="200dp"
-                app:tabMinWidth="20dp"
-                app:tabPaddingBottom="0dp"
-                app:tabPaddingEnd="20dp"
-                app:tabPaddingStart="0dp"
-                app:tabPaddingTop="0dp"
                 app:tabRippleColor="@color/transparent"
-                app:tabTextAppearance="@style/DefaultTabStyle" />
+                android:overScrollMode="never"
+                android:scrollbars="none" />
 
             <View
                 android:layout_width="match_parent"
@@ -43,33 +32,61 @@
                 android:layout_gravity="bottom"
                 android:background="@color/L1_ALPHA60" />
 
-        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/C1_ALPHA10"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingTop="6dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="6dp">
-
-            <ImageView
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/money_choose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_c2c_warning" />
-
-            <com.black.base.widget.SpanTextView
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/money"
+                android:textColor="@color/c2c_money"
+                android:drawableRight="@drawable/c2c_drawable"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/method_choose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:text="@string/all_pay"
+                android:textColor="@color/c2c_money"
+                android:drawableRight="@drawable/c2c_drawable"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:drawablePadding="4dp"
-                android:gravity="top"
-                android:text="@string/c2c_warning"
-                android:textColor="@color/C1"
-                android:textSize="@dimen/text_size_14" />
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/filter_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/text_size_20"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="right"
+                    android:text="@string/filter_title"
+                    android:textColor="@color/c2c_money"
+                    android:textSize="@dimen/text_size_14"
+                    android:drawableRight="@drawable/c2c_drawable"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginRight="@dimen/text_size_15"
+            android:layout_marginLeft="@dimen/text_size_15"
+            android:layout_height="1dp"
+            android:background="@color/C2"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"

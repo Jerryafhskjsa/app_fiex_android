@@ -373,8 +373,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {
                         val ucToken = result?.data?.ucToken
                         val ticket = result?.data?.ticket
-                        Log.d(TAG, "ucToken = " + ucToken)
-                        Log.d(TAG, "ticket = " + ticket)
+                        Log.d(TAG, "ucToken = $ucToken")
+                        Log.d(TAG, "ticket = $ticket")
                         if (TextUtils.isEmpty(ucToken)) {
                             FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                         } else {
@@ -484,14 +484,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         val otcTokenResult: ProTokenResult? = result.data
                         var otcToken = otcTokenResult?.proToken
                         var otcTokenExpiredTime = otcTokenResult?.expireTime
-                        Log.d(TAG, "apiToken = " + otcToken)
-                        Log.d(TAG, "expireTime = " + otcTokenExpiredTime)
-                        HttpCookieUtil.saveApiToken(context, otcToken)
-                        HttpCookieUtil.saveApiTokenExpiredTime(
-                            context,
-                            otcTokenExpiredTime.toString()
-                        )
+                        Log.d(TAG, "apiToken = $otcToken")
+                        Log.d(TAG, "expireTime = $otcTokenExpiredTime")
+                        if (TextUtils.isEmpty(otcToken)) {
+                            FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
+                        } else {
+                            HttpCookieUtil.saveApiToken(context, otcToken)
+                            HttpCookieUtil.saveApiTokenExpiredTime(
+                                context,
+                                otcTokenExpiredTime.toString()
+                            )
+                            user!!.token = otcToken
+                            user?.apiToken = otcToken
 
+                        }
                     }
                 }
             })
