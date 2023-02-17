@@ -98,7 +98,7 @@ interface C2CApiService {
     fun getC2CADList(@Query("coinType") coinType: String?,@Query("direction") direction: String?,@Query("gteAmount") gteAmount:Double?,@Query("payMethod") payMethod: String?): Observable<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_AD_MERCHANT_PAGE)
-    fun getC2CADMerchantPage(): Observable<HttpRequestResultString?>?
+    fun getC2CADMerchantPage(@Query("merchantId")merchantId: Int?): Observable<HttpRequestResultData<C2CMainAD?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_MY_LIST)
     fun getC2CMyList(): Observable<HttpRequestResultString?>?
@@ -194,7 +194,7 @@ interface C2CApiService {
     fun getC2CAddP(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_MCA)
-    fun getC2CMca(): Observable<HttpRequestResultString?>?
+    fun getC2CMca(@Body otcMerchantDTO: OtcMerchantDTO?): Observable<HttpRequestResultData<String?>?>?
 
     @POST(UrlConfig.C2C.URL_MCN)
     fun getC2CMcn(): Observable<HttpRequestResultString?>?
@@ -206,7 +206,7 @@ interface C2CApiService {
     fun getC2CGpl(): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_MCP)
-    fun getC2CMcp(): Observable<HttpRequestResultString?>?
+    fun getC2CMcp(@Query("merchantId")merchantId: Int?): Observable<HttpRequestResultData<C2CSMSG?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_MP)
     fun getC2CMp(): Observable<HttpRequestResultString?>?

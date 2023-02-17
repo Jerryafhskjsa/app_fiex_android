@@ -130,12 +130,14 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_20"
                         android:textStyle="bold"/>
-                    <ImageView
+                    <LinearLayout
                         android:id="@+id/one"
                         android:layout_width="224dp"
                         android:layout_height="140dp"
                         android:layout_marginTop="@dimen/text_size_10"
-                        android:src="@drawable/btn_c2c_id_three"/>
+                        android:orientation="vertical"
+                       >
+                    </LinearLayout>
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="330dp"
@@ -168,12 +170,13 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_20"
                         android:textStyle="bold"/>
-                    <ImageView
+                    <LinearLayout
                         android:id="@+id/two"
                         android:layout_width="224dp"
                         android:layout_height="140dp"
+                        android:orientation="vertical"
                         android:layout_marginTop="@dimen/text_size_10"
-                        android:src="@drawable/btn_c2c_id_two"/>
+                        />
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="330dp"
@@ -206,12 +209,13 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_20"
                         android:textStyle="bold"/>
-                    <ImageView
+                    <LinearLayout
                         android:id="@+id/three"
                         android:layout_width="224dp"
                         android:layout_height="140dp"
+                        android:orientation="vertical"
                         android:layout_marginTop="@dimen/text_size_10"
-                        android:src="@drawable/btn_c2c_id_two"/>
+                       />
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="330dp"
@@ -252,12 +256,13 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_20"
                         android:textStyle="bold"/>
-                    <ImageView
+                    <LinearLayout
                         android:id="@+id/four"
                         android:layout_width="224dp"
                         android:layout_height="140dp"
+                        android:orientation="vertical"
                         android:layout_marginTop="@dimen/text_size_10"
-                        android:src="@drawable/btn_c2c_id_two"/>
+                        />
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
@@ -355,7 +360,7 @@
                     android:orientation="horizontal">
 
                     <com.black.base.widget.SpanMaterialEditText
-
+                        android:id="@+id/coin_type"
                         style="@style/EditTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

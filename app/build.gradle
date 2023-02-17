@@ -14,7 +14,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.PHONE_VERSION_CODE.toInteger()
         versionName project.PHONE_VERSION_NAME
-        multiDexEnabled true
+        multiDexEnabled false
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {

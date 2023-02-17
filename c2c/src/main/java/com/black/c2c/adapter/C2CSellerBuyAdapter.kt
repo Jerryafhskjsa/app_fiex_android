@@ -91,14 +91,6 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         viewHolder?.btnHandle?.setOnClickListener { v ->
             val extras = Bundle()
             extras.putParcelable(ConstData.C2C_AD, c2CSeller)
-            /*extras.putString(ConstData.COIN_TYPE,c2CSeller?.coinType)
-            extras.putString(ConstData.REAL_NAME,c2CSeller?.realName)
-            extras.putInt(ConstData.C2C_LIST,c2CSeller?.merchantId!!)
-            extras.putInt(ConstData.C2C_ORDER_NO,c2CSeller.completedOrders!!)
-            extras.putDouble(ConstData.WALLET_BILL,c2CSeller.currentPrice!!)
-            extras.putDouble(ConstData.COIN_WALLET,c2CSeller.singleLimitMax!!)
-            extras.putDouble(ConstData.WALLET_INFO,c2CSeller.singleLimitMin!!)
-            extras.putString(ConstData.WALLET_MEMO_NEEDED,c2CSeller.payMethods)*/
             extras.putString(ConstData.PAIR,c2CSeller?.id)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY).with(extras).go(context)
         }

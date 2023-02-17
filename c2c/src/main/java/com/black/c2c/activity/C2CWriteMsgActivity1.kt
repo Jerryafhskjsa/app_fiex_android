@@ -11,6 +11,7 @@ import com.black.base.api.CommonApiServiceHelper
 import com.black.base.model.CountryCode
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
+import com.black.base.util.ConstData
 import com.black.base.util.RouterConstData
 import com.black.base.view.CountryChooseWindow
 import com.black.c2c.R
@@ -82,7 +83,24 @@ class C2CWriteMsgActivity1: BaseActionBarActivity(), View.OnClickListener{
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_submit){
-            BlackRouter.getInstance().build(RouterConstData.C2C_MSG2).go(this)
+            val bundle = Bundle()
+            val address = binding?.num9?.text?.trim { it <= ' ' }.toString()
+            val email = binding?.num5?.text?.trim { it <= ' ' }.toString()
+            val emergencyName = binding?.num6?.text?.trim { it <= ' ' }.toString()
+            val emergencyTel = binding?.num7?.text?.trim { it <= ' ' }.toString()
+            val name = binding?.num1?.text?.trim { it <= ' ' }.toString()
+            val nickName = binding?.num2?.text?.trim { it <= ' ' }.toString()
+            val relation = binding?.num8?.text?.trim { it <= ' ' }.toString()
+            val tel = binding?.num3?.text?.trim { it <= ' ' }.toString()
+            bundle.putString("address", address)
+            bundle.putString("email", email)
+            bundle.putString("emergencyName", emergencyName)
+            bundle.putString("emergencyTel", emergencyTel)
+            bundle.putString("name" ,name)
+            bundle.putString("nickName" ,nickName)
+            bundle.putString("relation" ,relation)
+            bundle.putString("tel" ,tel)
+            BlackRouter.getInstance().build(RouterConstData.C2C_MSG2).with(bundle).go(this)
         }
         if (id == R.id.country_code_1){
             code1()

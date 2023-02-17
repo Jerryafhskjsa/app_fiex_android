@@ -15,6 +15,13 @@ import android.widget.ImageView
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.api.UserApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.OtcMerchantDTO
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -25,14 +32,18 @@ import com.black.c2c.databinding.ActivityC2cIdCardsOneBinding
 import com.black.c2c.databinding.ActivitySellerChooseBinding
 import com.black.c2c.databinding.ViewFirstC2cBinding
 import com.black.c2c.databinding.ViewSecondC2cBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
 import com.black.util.PictureUtils
+import kotlinx.android.synthetic.main.c2c_pay_methods_list.*
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
+import java.util.HashMap
 
 @Route(value = [RouterConstData.C2C_MSG2])
 class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
@@ -43,6 +54,17 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
     private val selectTypes: MutableList<String?> = ArrayList(2)
     private var binding: ActivityC2cIdCardsOneBinding? = null
     private val photoImageList: MutableList<PhotoImageItem> = ArrayList()
+    private var address: String? = null
+    private var email: String? = null
+    private var emergencyName: String? = null
+    private var emergencyTel: String? = null
+    private var name: String? = null
+    private var nickName: String? = null
+    private var relation: String? = null
+    private var tel: String? = null
+    private var level: String? = "V2"
+    private var coinType: String? = "USDT"
+    private var otcMerchantDTO: OtcMerchantDTO? = null
     internal inner class PhotoImageItem {
         var path: String? = null
         var parent: ViewGroup? = null
@@ -70,6 +92,14 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
             selectTypes.add(CAMERA)
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_id_cards_one)
+        address = intent.getStringExtra("address")
+        email = intent.getStringExtra("email")
+        emergencyName = intent.getStringExtra("emergencyName")
+        emergencyTel = intent.getStringExtra("emergencyTel")
+        name = intent.getStringExtra("name")
+        nickName = intent.getStringExtra("nickName")
+        relation = intent.getStringExtra("relation")
+        tel = intent.getStringExtra("tel")
         binding?.appBarLayout?.findViewById<ImageButton>(R.id.img_action_bar_right)?.visibility = View.VISIBLE
         binding?.bar?.setOnClickListener(this)
         binding?.btnSubmit?.setOnClickListener(this)
@@ -77,6 +107,7 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
         binding?.two?.setOnClickListener(this)
         binding?.three?.setOnClickListener(this)
         binding?.four?.setOnClickListener(this)
+        refreshPhotoImageLayout()
     }
 
     override fun getTitleText(): String? {
@@ -89,35 +120,11 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
         }
         if (id == R.id.btn_submit){
             if (binding?.bar?.isChecked == true) {
-                BlackRouter.getInstance().build(RouterConstData.C2C_WATTING).go(this)
+                submitRealNameAuthenticate()
             }
             else{
                 FryingUtil.showToast(mContext,"请先阅读《广告发布协议》")
             }
-        }
-        if (id == R.id.one){
-            val item = PhotoImageItem()
-            val imageLayout = binding?.one
-            item.imageLayout = imageLayout
-            showSelectPhoto(item)
-        }
-        if (id == R.id.two){
-            val item = PhotoImageItem()
-            val imageLayout = binding?.two
-            item.imageLayout = imageLayout
-            showSelectPhoto(item)
-        }
-        if (id == R.id.three){
-            val item = PhotoImageItem()
-            val imageLayout = binding?.three
-            item.imageLayout = imageLayout
-            showSelectPhoto(item)
-        }
-        if (id == R.id.four){
-            val item = PhotoImageItem()
-            val imageLayout = binding?.four
-            item.imageLayout = imageLayout
-            showSelectPhoto(item)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,7 +153,6 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
             path?.let { getImage(it) }
         }
     }
-
 
 
     private var thisItem: PhotoImageItem? = null
@@ -230,28 +236,152 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
                 thisItem?.photoImageView?.setImageBitmap(photoBmp)
                 thisItem?.parent?.tag = savePath
                 thisItem?.show(thisItem?.parent)
+                refreshPhotoImageLayout()
             }
-            //            ImageButton imageButton = null;
-//            switch (selectTag) {
-//                case SELECT_FRONT:
-//                    imageButton = binding?.realNameLayout01?;
-//                    break;
-//                case SELECT_BACK:
-//                    imageButton = binding?.realNameLayout02?;
-//                    break;
-//                case SELECT_PERSON:
-//                    imageButton = binding?.realNameLayout03?;
-//                    break;
-//            }
-//            if (imageButton != null && savePath != null) {
-//                imageButton.setImageBitmap(photoBmp);
-//                imageButton.setTag(savePath);
-//            } else if (imageButton != null) {
-//                imageButton.setImageBitmap(null);
-//                imageButton.setTag(null);
-//            }
+
         } catch (e: IOException) {
             CommonUtil.printError(applicationContext, e)
         }
+    }
+    private fun createPhotoImageItem(): PhotoImageItem {
+        val item = PhotoImageItem()
+        val imageLayout = View.inflate(mContext, R.layout.activity_seller_image_select, null)
+        item.imageLayout = imageLayout
+        item.imageLayout?.setOnClickListener {
+            if (item.path == null) {
+                showSelectPhoto(item)
+            }
+        }
+        item.photoImageView = imageLayout?.findViewById(R.id.real_name_img)
+        item.photoImageDeleteView = imageLayout?.findViewById(R.id.real_name_img_delete)
+        item.photoImageDeleteView?.setOnClickListener {
+            if (item.path != null) {
+                removePhotoImageItem(item)
+            }
+        }
+        return item
+    }
+
+    //删除照片选择视图
+    private fun removePhotoImageItem(item: PhotoImageItem) {
+        photoImageList.remove(item)
+        refreshPhotoImageLayout()
+    }
+
+    private fun refreshPhotoImageLayout() {
+        for (item in photoImageList) {
+            if (item.parent != null) {
+                item.parent?.removeView(item.imageLayout)
+            }
+        }
+        //重新梳理item，移除没有数据的ITEM
+
+        var count = photoImageList.size
+        for (i in count - 1 downTo 0) {
+            val item = photoImageList[i]
+            if (item.path == null) {
+                photoImageList.remove(item)
+            }
+        }
+        //添加新的ITEM
+        count = photoImageList.size
+        if (count < 4) {
+            photoImageList.add(createPhotoImageItem())
+        }
+        for (i in photoImageList.indices) {
+            val item = photoImageList[i]
+            var parent: ViewGroup? = null
+            when (i) {
+                0 -> parent = binding?.one
+                1 -> parent = binding?.two
+                2 -> parent = binding?.three
+                3 -> parent = binding?.four
+            }
+            if (parent != null) {
+                item.show(parent)
+            }
+        }
+    }
+
+    private fun submitRealNameAuthenticate() {
+        val pathList: MutableList<String?> = ArrayList(4)
+        for (item in photoImageList) {
+            if (item.path != null) {
+                pathList.add(item.path)
+            }
+        }
+        if (pathList.isEmpty()) {
+            FryingUtil.showToast(mContext, getString(R.string.please_upload_pic))
+            return
+        }
+        val needUploadCount = pathList.size
+        upLoadCount = 0
+        val imgUrlList: MutableList<String> = ArrayList(4)
+        upLoadPhoto(pathList, object : Callback<String?>() {
+            override fun callback(result: String?) {
+                upLoadCount++
+                result?.also {
+                    imgUrlList.add(result)
+                }
+                if (upLoadCount >= needUploadCount) {
+                    val imageStrings = StringBuilder()
+                    for (imUrl in imgUrlList) {
+                        if (imageStrings.isEmpty()) {
+                            imageStrings.append(imgUrlList)
+                        } else {
+                            imageStrings.append(",").append(imgUrlList)
+                        }
+                    }
+                    getApply(imageStrings.toString())
+                }
+
+            }
+
+            override fun error(type: Int, error: Any) {}
+        })
+    }
+
+    var upLoadCount = 0
+    private fun upLoadPhoto(pathList: List<String?>, callBack: Callback<String?>?) {
+        for (path in pathList) { //先上传图片，根据返回的路径，进行验证
+            val fileParams: MutableMap<String, File> = HashMap()
+            fileParams["file"] = File(path)
+            UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                override fun callback(returnData: HttpRequestResultString?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
+                        callBack?.callback(returnData.data)
+                    } else {
+                        FryingUtil.showToast(mContext, returnData?.msg)
+                    }
+                }
+            })
+        }
+    }
+    private fun getApply( image: String?) {
+        level = binding?.cards?.text?.trim { it <= ' '}.toString()
+        coinType = binding?.coinType?.text?.trim { it <= ' '}.toString()
+        otcMerchantDTO?.level = level
+        otcMerchantDTO?.marginCoinType = coinType
+        otcMerchantDTO?.address = address
+        otcMerchantDTO?.name = name
+        otcMerchantDTO?.email = email
+        otcMerchantDTO?.nickName = nickName
+        otcMerchantDTO?.emergencyName = emergencyName
+        otcMerchantDTO?.emergencyTel = emergencyTel
+        otcMerchantDTO?.tel = tel
+        C2CApiServiceHelper.getSellerApply(mContext, otcMerchantDTO,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    BlackRouter.getInstance().build(RouterConstData.C2C_WATTING).go(mContext)
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

@@ -601,6 +601,22 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    //商家详情页广告
+    fun getC2CSellerAD(
+        context: Context?,
+        isShowLoading: Boolean,
+        merchantId: Int?,
+        callback: Callback<HttpRequestResultData<C2CMainAD?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CADMerchantPage(merchantId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
     //广告详情
     fun getC2CADID(
         context: Context?,
@@ -763,6 +779,36 @@ object C2CApiServiceHelper {
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CSetReceipt(otcReceiptDTO)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 获取商家信息
+    fun getSellerMsg(
+        context: Context?,
+        merchantId: Int?,
+        callback: Callback<HttpRequestResultData<C2CSMSG?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CMcp(merchantId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 商家申请
+    fun getSellerApply(
+        context: Context?,
+        otcMerchantDTO: OtcMerchantDTO?,
+        callback: Callback<HttpRequestResultData<String?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CMca(otcMerchantDTO)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

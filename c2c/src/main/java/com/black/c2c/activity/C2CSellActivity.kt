@@ -102,7 +102,11 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             payTimeDialog()
         }
         else if (id == R.id.name){
-            BlackRouter.getInstance().build(RouterConstData.C2C_SELLER).go(mContext)
+            getC2CADData()
+            val merchantId = c2cList?.merchantId
+            val bundle = Bundle()
+            bundle.putInt(ConstData.BIRTH, merchantId!!)
+            BlackRouter.getInstance().build(RouterConstData.C2C_SELLER).with(bundle).go(mContext)
         }
         else if (id == R.id.amount){
             binding?.barA?.visibility = View.VISIBLE
