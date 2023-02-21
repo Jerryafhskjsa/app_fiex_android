@@ -410,10 +410,11 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_result_three.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_result_two.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_sell.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_confirm.xml" value="0.14666666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_confirm.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_seller_wait.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_weixin.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_pay_method.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_real_name_authenticate_image_select.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_choose.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_image_select.xml" value="0.1333903377511757" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_seller_msg.xml" value="0.22" />
@@ -519,6 +520,7 @@
         <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_thumb.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/drawable/splash.xml" value="0.121" />
         <entry key="..\:/fiex/res/src/main/res/xml/network_security_config.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/user/src/main/res/layout/activity_account_manager.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_fiex.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_new_pwd.xml" value="0.17916666666666667" />
@@ -534,6 +536,7 @@
         <entry key="..\:/fiex/user/src/main/res/layout/activity_recommend_new.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_safe_bind.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_safe_center.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/user/src/main/res/layout/list_item_account.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_asset_coin_detail.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_asset_transfer.xml" value="0.22" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/activity_extract.xml" value="0.16666666666666666" />

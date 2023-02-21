@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.black.base.BaseApplication
 import com.black.base.R
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.FryingSingleToast
 import com.black.base.model.*
@@ -608,19 +609,90 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
         }
     }
 
-    private fun refreshToken(error: Any?){
-        var path:String? = null
-        if(error is Request){
+    private fun refreshToken(error: Any?) {
+        var path: String? = null
+        if (error is Request) {
             path = error?.url()?.url()?.path
         }
-        if(CookieUtil.getUserInfo(mContext) != null && path != null){
-            if(path.contains("/uc/")){
+        if (CookieUtil.getUserInfo(mContext) != null && path != null) {
+            if (path.contains("/uc/")) {
                 HttpCookieUtil.deleteCookies(mContext)
                 CookieUtil.deleteUserInfo(mContext)
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }
-            if(path.contains("/pro/")){
-                UserApiServiceHelper.getProToken(mContext!!, object:Callback<HttpRequestResultData<ProTokenResult?>?>() {
+            if (path.contains("/pro/")) {
+                UserApiServiceHelper.getProToken(
+                    mContext!!,
+                    object : Callback<HttpRequestResultData<ProTokenResult?>?>() {
+                        override fun error(type: Int, error: Any?) {
+                            if (type == ConstData.ERROR_TOKEN_INVALID) {
+                                UserApiServiceHelper.getTicket(
+                                    mContext!!,
+                                    object : Callback<HttpRequestResultString?>() {
+                                        override fun error(type: Int, error: Any?) {
+                                            if (type == ConstData.ERROR_TOKEN_INVALID) {
+                                                FryingUtil.showToast(
+                                                    mContext,
+                                                    getString(R.string.login_over_time),
+                                                    FryingSingleToast.ERROR
+                                                )
+                                                CookieUtil.deleteUserInfo(mContext)
+                                                CookieUtil.deleteToken(mContext)
+                                                //退回到主界面并要求登录
+                                                BlackRouter.getInstance()
+                                                    .build(RouterConstData.HOME_PAGE)
+                                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                                    .go(mContext) { _, _ ->
+                                                        if (!FryingUtil.checkRouteUri(
+                                                                mContext,
+                                                                RouterConstData.HOME_PAGE
+                                                            )
+                                                        ) {
+                                                            finish()
+                                                        }
+                                                        BlackRouter.getInstance()
+                                                            .build(RouterConstData.LOGIN)
+                                                            .go(mContext)
+                                                    }
+                                            }
+                                        }
+
+                                        override fun callback(result: HttpRequestResultString?) {
+                                            if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                                                var ticket: String? = result.data
+                                                HttpCookieUtil.saveTicket(mContext, ticket)
+                                            } else {
+                                                HttpCookieUtil.deleteCookies(mContext)
+                                                CookieUtil.deleteUserInfo(mContext)
+                                                BlackRouter.getInstance()
+                                                    .build(RouterConstData.LOGIN).go(mContext)
+                                            }
+                                        }
+                                    })
+                            }
+                        }
+
+                        override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                            if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                                var proTokenResult: ProTokenResult? = result.data
+                                var proToken = proTokenResult?.proToken
+                                var proTokenExpiredTime = proTokenResult?.expireTime
+                                HttpCookieUtil.saveProToken(mContext, proToken)
+                                HttpCookieUtil.saveProTokenExpiredTime(
+                                    mContext,
+                                    proTokenExpiredTime.toString()
+                                )
+                            } else {
+                                HttpCookieUtil.deleteCookies(mContext)
+                                CookieUtil.deleteUserInfo(mContext)
+                                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+                            }
+                        }
+                    })
+            }
+            if(path.contains("/otc/api/")){
+                UserApiServiceHelper.getOtcToken(mContext!!, object:Callback<HttpRequestResultData<LoginVO?>?>() {
                     override fun error(type: Int, error: Any?) {
                         if(type == ConstData.ERROR_TOKEN_INVALID){
                             UserApiServiceHelper.getTicket(mContext!!, object:Callback<HttpRequestResultString?>() {
@@ -654,13 +726,13 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
                             })
                         }
                     }
-                    override fun callback(result: HttpRequestResultData<ProTokenResult?>?) {
+                    override fun callback(result: HttpRequestResultData<LoginVO?>?) {
                         if(result != null && result.code == HttpRequestResult.SUCCESS){
-                            var proTokenResult: ProTokenResult? = result.data
-                            var proToken = proTokenResult?.proToken
-                            var proTokenExpiredTime =proTokenResult?.expireTime
-                            HttpCookieUtil.saveProToken(mContext,proToken)
-                            HttpCookieUtil.saveProTokenExpiredTime(mContext,proTokenExpiredTime.toString())
+                            var otcResult: LoginVO? = result.data
+                            var otcToken = otcResult?.token
+                            var otcTokenExpiredTime =otcResult?.expireTime
+                            HttpCookieUtil.saveApiToken(mContext,otcToken)
+                            HttpCookieUtil.saveApiTokenExpiredTime(mContext,otcTokenExpiredTime.toString())
                         }else{
                             HttpCookieUtil.deleteCookies(mContext)
                             CookieUtil.deleteUserInfo(mContext)

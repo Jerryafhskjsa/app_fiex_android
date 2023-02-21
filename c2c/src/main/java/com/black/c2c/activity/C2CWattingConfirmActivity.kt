@@ -1,10 +1,18 @@
 package com.black.c2c.activity
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.model.c2c.OtcReceiptModel
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.widget.SpanCheckedTextView
@@ -12,6 +20,7 @@ import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellerConfirmBinding
 import com.black.c2c.databinding.ActivityC2cSellerWaitBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
@@ -27,6 +36,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.num1?.setOnClickListener(this)
         binding?.num2?.setOnClickListener(this)
         binding?.num3?.setOnClickListener(this)
+        getPayChoose()
         /*binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_mail)?.setOnClickListener{}
         binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_phone)?.setOnClickListener{}*/
     }
@@ -80,8 +90,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         }
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             if(dialog.findViewById<SpanCheckedTextView>(R.id.range).isChecked) {
-                FryingUtil.showToast(mContext,"放币成功")
-                BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(this)
+                getConfirm()
             }
             else{
                 FryingUtil.showToast(mContext,"请先确认是否收到该笔款项")
@@ -92,4 +101,65 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             dialog.dismiss()
         }
     }
+    private fun getConfirm(){
+        val id = intent.getStringExtra(ConstData.PAIR)
+        C2CApiServiceHelper.getConfirmGet(mContext, id , object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext,"放币成功")
+                    BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(context)
+                } else {
+
+                    FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+    private fun getPayChoose() {
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val payMethod = returnData.data?.payMethod
+                    binding?.money?.setText(returnData.data?.currencyCoinAmount.toString())
+                    binding?.name1?.setText(returnData.data?.merchantNickname)
+                    binding?.price?.setText(returnData.data?.price.toString())
+                    binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
+                    binding?.time?.setText(returnData.data?.createTime)
+                    binding?.id?.setText("")
+                    binding?.name2?.setText("")
+                    binding?.realName
+                    if (payMethod == 3) {
+                        binding?.name3
+                        binding?.cardsNum
+                        binding?.cpy
+                        binding?.otherCmy
+                    }
+                    else if (payMethod == 1){
+                    binding?.name4
+                    binding?.aliNum
+                    binding?.maTwo
+                    }
+                    else {
+                        binding?.maOne
+                        binding?.name5
+                        binding?.weiXinNum
+                    }
+
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
 }

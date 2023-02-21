@@ -1,6 +1,7 @@
 package com.black.base.api
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.SparseArray
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
@@ -15,6 +16,7 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
@@ -728,6 +730,21 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+
+    fun getConfirmGet(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CCP(id )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
     //获得所有收付款信息
     fun getAllPay(
         context: Context?,
@@ -768,17 +785,45 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+
     //设置收付款
     fun getReceipt(
         context: Context?,
-        otcReceiptDTO: OtcReceiptDTO?,
+        OtcReceiptModel: OtcReceiptModel?,
         callback: Callback<HttpRequestResultString?>?
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CSetReceipt(otcReceiptDTO)
+            ?.getC2CSetReceipt(OtcReceiptModel)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    //谷歌验证
+    fun getCheckAuth(
+        context: Context?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CCa()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+    fun getVFD(
+        context: Context?,
+        googleCode: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CVfc(googleCode)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -813,11 +858,5 @@ object C2CApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    //获取otc_token
-    fun getOtcToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CLogin()
-            ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context,callback))
-    }
+
 }

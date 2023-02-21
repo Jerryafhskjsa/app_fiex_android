@@ -123,6 +123,7 @@
                             android:text="@string/total_money" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -167,7 +168,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
-                            android:layout_weight="1"
                             android:text="@string/notice1"
                             android:textColor="@color/C5" />
                         <com.black.base.widget.SpanTextView
@@ -176,15 +176,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
-                            android:layout_weight="1"
-                            android:text="帅"
+                            android:text=" 帅 "
                             android:textColor="@color/black" />
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
-                            android:layout_weight="1"
                             android:text="@string/notice2"
                             android:textColor="@color/C5" />
                     </LinearLayout>
@@ -196,7 +194,6 @@
                     android:visibility="gone"
                     android:orientation="vertical">
                     <LinearLayout
-                        android:id="@+id/price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/text_size_20"
@@ -211,6 +208,7 @@
                             android:text="@string/price" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -235,6 +233,7 @@
                             android:text="@string/amount" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -268,6 +267,7 @@
                             android:text="@string/order_number" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -298,6 +298,7 @@
                             android:text="@string/created_time" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -317,12 +318,14 @@
                         android:orientation="horizontal">
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/buyer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/buyer" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/real_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -409,7 +412,11 @@
                             android:textColor="@color/C5" />
                     </LinearLayout>
                 </LinearLayout>
-
+            <LinearLayout
+                android:id="@+id/cards"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -430,6 +437,7 @@
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -446,6 +454,7 @@
                             android:text="@string/name2" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/name3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -476,6 +485,7 @@
                             android:text="@string/cmy_account" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/cards_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -506,6 +516,7 @@
                             android:text="@string/cmy_name" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/cpy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -515,30 +526,263 @@
                             android:textColor="@color/black" />
 
                     </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_20"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_marginRight="@dimen/text_size_20"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/other_cmy" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/other_cmy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="滨江支行"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ali"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_size_20"
-                        android:layout_marginTop="@dimen/text_size_20"
-                        android:layout_marginRight="@dimen/text_size_20"
-                        android:orientation="horizontal">
 
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/other_cmy" />
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:src="@drawable/icon_c2c_alipay"/>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_15"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:gravity="center"
+                                android:text="@string/id_pay"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/name2" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/name4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="帅"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/num5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/btn_bar_to" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_size_10"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="滨江支行"
-                            android:textColor="@color/black" />
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/ali_pay_num" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/ali_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="74777474747774"
+                                android:textColor="@color/black" />
+                            <ImageView
+                                android:id="@+id/num4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/btn_bar_to" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:text="@string/collection_code" />
+
+                            <ImageView
+                                android:id="@+id/ma_two"
+                                android:layout_width="@dimen/text_size_20"
+                                android:layout_height="@dimen/text_size_20"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:gravity="right"
+                                android:background="@drawable/btn_two_ma" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/wei_xin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:src="@drawable/icon_c2c_wechat"/>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_15"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:gravity="center"
+                                android:text="@string/wei_xin"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/name2" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/name5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="帅"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/num6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/btn_bar_to" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/weixin_num" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/wei_xin_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="74777474747774"
+                                android:textColor="@color/black" />
+                            <ImageView
+                                android:id="@+id/num7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/btn_bar_to" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:text="@string/collection_code" />
+
+                            <ImageView
+                                android:id="@+id/ma_one"
+                                android:layout_width="@dimen/text_size_20"
+                                android:layout_height="@dimen/text_size_20"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:gravity="right"
+                                android:background="@drawable/btn_two_ma" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"

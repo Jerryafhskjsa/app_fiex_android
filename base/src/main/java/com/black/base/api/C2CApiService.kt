@@ -150,7 +150,7 @@ interface C2CApiService {
     fun getC2CRefusePayee(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_SET_RECEIPT)
-    fun getC2CSetReceipt(@Body otcReceiptDTO:OtcReceiptDTO?): Observable<HttpRequestResultString?>?
+    fun getC2CSetReceipt(@Body OtcReceiptModel:OtcReceiptModel?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_UNBIND_PAYEE)
     fun getC2CUnbindPayee(): Observable<HttpRequestResultString?>?
@@ -166,7 +166,7 @@ interface C2CApiService {
     fun getC2CConfirmPay(@Query("id") id: String?,@Query("payEeId") payEeId: Int?,@Query("payMethod") payMethod: Int?, @Query("receiptId") receiptId: Int?):  Observable<HttpRequestResultData<String?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CP)
-    fun getC2CCP(): Observable<HttpRequestResultString?>?
+    fun getC2CCP(@Query("id") id: String?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CREATE_V2)
     fun getC2CCreateV2(@Query("advertisingId") advertisingId: String?,@Query("amount") amount: Double?,@Query("price") price: Double?): Observable<HttpRequestResultData<String?>?>?
@@ -225,7 +225,7 @@ interface C2CApiService {
     fun getC2CCa(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_VFC)
-    fun getC2CVfc(): Observable<HttpRequestResultString?>?
+    fun getC2CVfc(@Query("googleCode") googleCode: String?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_CU)
     fun getC2CCu(): Observable<HttpRequestResultString?>?

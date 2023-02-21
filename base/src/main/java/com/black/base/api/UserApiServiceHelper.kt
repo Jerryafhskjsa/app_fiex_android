@@ -54,7 +54,7 @@ object UserApiServiceHelper {
     }
 
     //获取otc_token
-    fun getOtcToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
+    fun getOtcToken(context: Context?,callback:Callback<HttpRequestResultData<LoginVO?>?>){
         ApiManager.build(context!!,true,UrlConfig.ApiType.URL_API).getService(UserApiService::class.java)
             ?.getOtcToken()
             ?.compose(RxJavaHelper.observeOnMainThread())

@@ -141,15 +141,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                         <LinearLayout
-                            android:id="@+id/photo"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:gravity="center"
-                            android:background="@drawable/bg_edittext_default">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/add_group_member"/>
+                            android:id="@+id/one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         </LinearLayout>
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
@@ -197,6 +192,22 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="21dp"
+                                android:background="@color/T11_ALPHA5">
+
+                            </View>
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/google_code_copy"
+                                style="@style/EditTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="15dp"
+                                android:text="@string/paste"
+                                android:textColor="#03CA89"
+                                android:textSize="@dimen/text_size_14" />
                         </com.black.lib.view.InputLinearLayout>
 
 

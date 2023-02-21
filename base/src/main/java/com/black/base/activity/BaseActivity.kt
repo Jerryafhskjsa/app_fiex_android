@@ -408,6 +408,56 @@ open class BaseActivity : Activity(), PermissionHelper, GeeTestInterface, RouteC
                     }
                 })
             }
+           if(path.contains("/otc/api/")){
+                UserApiServiceHelper.getOtcToken(mContext!!, object:Callback<HttpRequestResultData<LoginVO?>?>() {
+                    override fun error(type: Int, error: Any?) {
+                        if(type == ConstData.ERROR_TOKEN_INVALID){
+                            UserApiServiceHelper.getTicket(mContext!!, object:Callback<HttpRequestResultString?>() {
+                                override fun error(type: Int, error: Any?) {
+                                    if(type == ConstData.ERROR_TOKEN_INVALID){
+                                        FryingUtil.showToast(mContext, getString(R.string.login_over_time), FryingSingleToast.ERROR)
+                                        CookieUtil.deleteUserInfo(mContext)
+                                        CookieUtil.deleteToken(mContext)
+                                        //退回到主界面并要求登录
+                                        BlackRouter.getInstance().build(RouterConstData.HOME_PAGE)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                            .go(mContext) { _, _ ->
+                                                if (!FryingUtil.checkRouteUri(mContext, RouterConstData.HOME_PAGE)) {
+                                                    finish()
+                                                }
+                                                BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+                                            }
+                                    }
+                                }
+                                override fun callback(result: HttpRequestResultString?) {
+                                    if(result != null && result.code == HttpRequestResult.SUCCESS){
+                                        var ticket: String? = result.data
+                                        HttpCookieUtil.saveTicket(mContext,ticket)
+                                    }else{
+                                        HttpCookieUtil.deleteCookies(mContext)
+                                        CookieUtil.deleteUserInfo(mContext)
+                                        BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    override fun callback(result: HttpRequestResultData<LoginVO?>?) {
+                        if(result != null && result.code == HttpRequestResult.SUCCESS){
+                            var otcResult: LoginVO? = result.data
+                            var otcToken = otcResult?.token
+                            var otcTokenExpiredTime =otcResult?.expireTime
+                            HttpCookieUtil.saveApiToken(mContext,otcToken)
+                            HttpCookieUtil.saveApiTokenExpiredTime(mContext,otcTokenExpiredTime.toString())
+                        }else{
+                            HttpCookieUtil.deleteCookies(mContext)
+                            CookieUtil.deleteUserInfo(mContext)
+                            BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
+                        }
+                    }
+                })
+            }
         }
     }
 

@@ -73,7 +73,7 @@
     <string name="pay_time">付款时限</string>
     <string name="sale_name">卖家昵称</string>
     <string name="buyer_name">买家昵称</string>
-    <string name="notice1">请前往以下账户，确认买家付款</string>
+    <string name="notice1">请前往以下账户，确认买家</string>
     <string name="notice3">订单完成后，有充分证据证明资金来源不合法的，可在倒计时结束前提起申诉</string>
     <string name="notice2">付款</string>
     <string name="created_time">创建时间</string>

@@ -14,6 +14,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.model.c2c.ReceiptInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -32,7 +33,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var sellerName: String? = null
     private val mHandler = Handler()
     private var payFor: String? = null
-    private var receiptInfo: ReceiptInfo? = null
+    private var receiptInfo: OtcReceiptModel? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){

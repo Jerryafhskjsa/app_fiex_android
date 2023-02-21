@@ -1,5 +1,6 @@
 package com.black.c2c.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -8,13 +9,12 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
-import com.black.base.model.c2c.OtcReceiptDTO
+import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActicityC2cCardsBinding
 import com.black.net.HttpRequestResult
-import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -60,13 +60,44 @@ class C2CCardsActivity: BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun getReceipt(){
-        val  otcReceiptDTO: OtcReceiptDTO? = null
+        val  otcReceiptDTO: OtcReceiptModel? = null
         otcReceiptDTO?.name = binding?.name?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO?.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO?.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO?.depositBank = binding?.cardsCmy?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO?.subbranch = binding?.otherCmy?.text?.trim{ it <= ' '}.toString()
         C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                } else {
+
+                    FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+    private fun googleVerify(){
+        C2CApiServiceHelper.getCheckAuth(mContext,  object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    getGoogle(mContext)
+                } else {
+
+                    FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+    private fun getGoogle(context: Context){
+        C2CApiServiceHelper.getVFD(mContext, null, object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }

@@ -20,18 +20,13 @@ import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
-import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.OtcMerchantDTO
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
-import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cIdCardsOneBinding
-import com.black.c2c.databinding.ActivitySellerChooseBinding
-import com.black.c2c.databinding.ViewFirstC2cBinding
-import com.black.c2c.databinding.ViewSecondC2cBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -39,7 +34,6 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
 import com.black.util.PictureUtils
-import kotlinx.android.synthetic.main.c2c_pay_methods_list.*
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList

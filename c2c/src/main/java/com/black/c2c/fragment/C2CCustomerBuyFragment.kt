@@ -1,9 +1,11 @@
 package com.black.c2c.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
@@ -129,6 +131,7 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
             }
         }
     }
+    @SuppressLint("CutPasteId")
     private fun moneyDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.money_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -150,7 +153,9 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
-            binding?.moneyChoose?.isChecked = false
+            binding?.moneyChoose?.isChecked =
+                dialog.findViewById<EditText>(R.id.put_money).text != null
+
         }
         dialog.findViewById<View>(R.id.one).setOnClickListener { v ->
             dialog.findViewById<TextView>(R.id.put_money).text = "100"
@@ -174,6 +179,7 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
             dialog.findViewById<TextView>(R.id.put_money).text = ""
         }
     }
+    @SuppressLint("CutPasteId")
     private fun methodDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.money_choose_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -196,7 +202,7 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
             dialog.dismiss()
-            binding?.methodChoose?.isChecked = false
+            binding?.methodChoose?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.one).setOnClickListener {
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
@@ -206,23 +212,21 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.two).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = true
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked != true
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.three).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = true
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked != true
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.four).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked != true
         }
     }
+    @SuppressLint("CutPasteId")
     private fun filterDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.filter_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -245,7 +249,8 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
-            binding?.filterTitle?.isChecked = false
+            binding?.filterTitle?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked || dialog.findViewById<EditText>(R.id.put_money).text != null
+
         }
         dialog.findViewById<View>(R.id.reset).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
@@ -267,21 +272,18 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.two).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = true
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked != true
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.three).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = true
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = false
+            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked != true
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.four).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked = false
-            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = true
+            dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked =
+                dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked != true
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.first).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.first).isChecked = true

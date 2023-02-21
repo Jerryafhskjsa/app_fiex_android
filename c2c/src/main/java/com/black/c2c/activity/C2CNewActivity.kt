@@ -2,6 +2,7 @@ package com.black.c2c.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -11,9 +12,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.api.UserApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.ProTokenResult
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
 import com.black.base.widget.SpanTextView
@@ -22,20 +28,17 @@ import com.black.c2c.databinding.ActivityC2cMainBinding
 import com.black.c2c.fragment.C2CCustomerBuyFragment
 import com.black.c2c.fragment.C2CCustomerBuyItemFragment
 import com.black.c2c.fragment.C2CCustomerSaleFragment
+import com.black.net.HttpCookieUtil
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.Callback
 import java.util.*
 
 @Route(value = [RouterConstData.C2C_NEW])
  class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener{
     companion object {
         private val TAB_TITLES = arrayOfNulls<String>(2)
-        private var TAB_SALE: String? = null
-        private var TAB_BUY: String? = null
-        private var TAB_BUSD: String? = null
-        private var TAB_BNB: String? = null
-        private var TAB_ETH: String? = null
-        private var TAB_DOGE: String? = null
         private val TAB_SELF = "自选区"
         private val TAB_QUCILK = "快捷区"
 
@@ -70,7 +73,6 @@ import java.util.*
         typeList!!.add(TAB_QUCILK)
         TAB_TITLES[0] = "B"
         TAB_TITLES[1] = "S"
-
         init()
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -173,14 +175,17 @@ import java.util.*
         dialog.findViewById<SpanTextView>(R.id.merchant).setOnClickListener{
             v ->
             BlackRouter.getInstance().build(RouterConstData.C2C_APPLY1).go(this)
+            dialog.dismiss()
         }
         dialog.findViewById<SpanTextView>(R.id.settings).setOnClickListener{
                 v ->
             BlackRouter.getInstance().build(RouterConstData.C2C_PAY).go(this)
+            dialog.dismiss()
         }
         dialog.findViewById<SpanTextView>(R.id.btn_bills).setOnClickListener{
                 v ->
             BlackRouter.getInstance().build(RouterConstData.C2C_BILLS).go(this)
+            dialog.dismiss()
         }
         dialog.show()
     }
