@@ -38,6 +38,8 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
     private var adapter: C2CSellerBuyAdapter? = null
     private var coinType: String? = null
     private var direction: String? = null
+    private var paymethod: String? = null
+    private var money: Double? = null
     private var currentPage = 1
     private var total = 0
 
@@ -49,6 +51,8 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
         layout = binding?.root
         coinType = arguments?.getString(ConstData.COIN_TYPE).toString()
         direction = arguments?.getString(ConstData.COIN_INFO).toString()
+        paymethod ="[" + arguments?.getString(ConstData.BIRTH) + "]"
+        money = arguments?.getString(ConstData.PAIR)?.toDouble()
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -100,7 +104,7 @@ class C2CCustomerBuyItemFragment : BaseFragment(),  QRefreshLayout.OnRefreshList
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, coinType, direction,null,null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CADList(mContext, isShowLoading, coinType, direction, money, null,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)

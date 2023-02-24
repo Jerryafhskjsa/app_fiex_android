@@ -1,9 +1,11 @@
 package com.black.c2c.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
@@ -33,6 +35,8 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
 
     private var binding: FragmentC2cCustomerBuyBinding? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
+    private var money: String? = null
+    private var paymethod: String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
         if (binding != null) {
@@ -71,7 +75,7 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
 
         binding?.coinTab?.setSelectedTabIndicatorHeight(0)
         binding?.coinTab?.tabMode = TabLayout.MODE_SCROLLABLE
-        init()
+        init(paymethod, money)
         binding?.viewPager?.adapter =
             object : FragmentStatePagerAdapter(childFragmentManager) {
                 override fun getItem(position: Int): Fragment {
@@ -129,6 +133,7 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
             }
         }
     }
+    @SuppressLint("CutPasteId")
     private fun moneyDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.money_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -150,7 +155,9 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
-            binding?.moneyChoose?.isChecked = false
+            binding?.moneyChoose?.isChecked = dialog.findViewById<EditText>(R.id.put_money) != null
+            money = if (dialog.findViewById<EditText>(R.id.put_money) == null) null else dialog.findViewById<EditText>(R.id.put_money).text.toString().trim { it <= ' ' }
+            init(paymethod, money)
         }
         dialog.findViewById<View>(R.id.one).setOnClickListener { v ->
             dialog.findViewById<TextView>(R.id.put_money).text = "100"
@@ -174,6 +181,7 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
             dialog.findViewById<TextView>(R.id.put_money).text = ""
         }
     }
+    @SuppressLint("CutPasteId")
     private fun methodDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.money_choose_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -196,7 +204,11 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
             dialog.dismiss()
-            binding?.methodChoose?.isChecked = false
+            binding?.methodChoose?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked
+            var paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            init(paymethod, money)
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.one).setOnClickListener {
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
@@ -223,6 +235,7 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
             dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked = true
         }
     }
+    @SuppressLint("CutPasteId")
     private fun filterDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.filter_dialog, null)
         val dialog = Dialog(mContext!!, R.style.AlertDialog)
@@ -245,7 +258,12 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
-            binding?.filterTitle?.isChecked = false
+            binding?.filterTitle?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked || dialog.findViewById<EditText>(R.id.put_money).text != null
+            paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            money =if (dialog.findViewById<EditText>(R.id.put_money) == null) null else dialog.findViewById<EditText>(R.id.put_money).text.toString().trim { it <= ' ' }
+            init(paymethod, money)
         }
         dialog.findViewById<View>(R.id.reset).setOnClickListener { v ->
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
@@ -303,7 +321,7 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
             binding?.filterTitle?.isChecked = false
         }
     }
-    private fun init(){
+    private fun init(paymethods: String? , money : String?){
         if (fragmentList == null) {
             fragmentList = ArrayList()
         }
@@ -314,6 +332,8 @@ class C2CCustomerSaleFragment : BaseFragment(), View.OnClickListener{
             val coinType = "USDT"
             bundle.putString(ConstData.COIN_TYPE,coinType)
             bundle.putString(ConstData.COIN_INFO,"S")
+            bundle.putString(ConstData.BIRTH,paymethods)
+            bundle.putString(ConstData.PAIR, money)
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)

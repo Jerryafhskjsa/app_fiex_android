@@ -7,8 +7,8 @@ import java.net.URL
 
 object UrlConfig {
     val HOSTS = arrayOf(
-        "https://abexxx.net",//fiex测试环境
-        "https://www.soeasyex.com",//正式环境
+        "http://abexxx.net",//fiex测试环境
+        "http://www.soeasyex.com",//正式环境
     )
 
     var serverHost = ArrayList<String?>()

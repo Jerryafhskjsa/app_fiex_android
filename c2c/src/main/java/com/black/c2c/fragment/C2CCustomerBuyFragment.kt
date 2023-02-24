@@ -15,9 +15,12 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.widget.SpanCheckedTextView
+import com.black.base.widget.SpanTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.FragmentC2cCustomerBuyBinding
+import com.black.util.CommonUtil
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_c2c_order.*
 import java.util.*
 
 class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
@@ -35,6 +38,8 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
 
     private var binding: FragmentC2cCustomerBuyBinding? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
+    private var money: String? = null
+    private var paymethod: String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
         if (binding != null) {
@@ -73,7 +78,7 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
 
         binding?.coinTab?.setSelectedTabIndicatorHeight(0)
         binding?.coinTab?.tabMode = TabLayout.MODE_SCROLLABLE
-        init()
+        init(paymethod,money)
         binding?.viewPager?.adapter =
             object : FragmentStatePagerAdapter(childFragmentManager) {
                 override fun getItem(position: Int): Fragment {
@@ -153,9 +158,9 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
-            binding?.moneyChoose?.isChecked =
-                dialog.findViewById<EditText>(R.id.put_money).text != null
-
+                   binding?.moneyChoose?.isChecked = dialog.findViewById<EditText>(R.id.put_money) != null
+            money = if (dialog.findViewById<EditText>(R.id.put_money) == null) null else dialog.findViewById<EditText>(R.id.put_money).text.toString().trim { it <= ' ' }
+            init(paymethod, money)
         }
         dialog.findViewById<View>(R.id.one).setOnClickListener { v ->
             dialog.findViewById<TextView>(R.id.put_money).text = "100"
@@ -203,6 +208,10 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
             dialog.dismiss()
             binding?.methodChoose?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked
+            var paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            init(paymethod, money)
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.one).setOnClickListener {
             dialog.findViewById<SpanCheckedTextView>(R.id.one).isChecked = true
@@ -250,6 +259,11 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
             binding?.filterTitle?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked || dialog.findViewById<EditText>(R.id.put_money).text != null
+            paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            money =if (dialog.findViewById<EditText>(R.id.put_money) == null) null else dialog.findViewById<EditText>(R.id.put_money).text.toString().trim { it <= ' ' }
+            init(paymethod, money)
 
         }
         dialog.findViewById<View>(R.id.reset).setOnClickListener { v ->
@@ -305,7 +319,7 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
             binding?.filterTitle?.isChecked = false
         }
     }
-    private fun init(){
+    private fun init(paymethods: String?, money: String?){
         if (fragmentList == null) {
             fragmentList = ArrayList()
         }
@@ -315,6 +329,8 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
             val bundle = Bundle()
             val coinType = "USDT"
             bundle.putString(ConstData.COIN_TYPE,coinType)
+            bundle.putString(ConstData.BIRTH,paymethods)
+            bundle.putString(ConstData.PAIR, money)
             bundle.putString(ConstData.COIN_INFO,"B")
             it.arguments = bundle
 //            assetsWalletFragment = it

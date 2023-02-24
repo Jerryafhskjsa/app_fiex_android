@@ -28,6 +28,7 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pay_method)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnConfirmNew?.setOnClickListener(this)
+        getAllPay()
     }
 
     override fun getTitleText(): String? {

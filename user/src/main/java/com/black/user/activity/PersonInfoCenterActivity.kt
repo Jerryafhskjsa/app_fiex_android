@@ -144,7 +144,7 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
                     var avatarUrl:String? = returnData.data
                     if(avatarUrl != null){
-                        if (!avatarUrl.startsWith("https")){
+                        if (!avatarUrl.startsWith("http")){
                             avatarUrl = UrlConfig.getHost(mContext) + avatarUrl
                         }
                     }

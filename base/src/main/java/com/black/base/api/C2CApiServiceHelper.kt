@@ -580,7 +580,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2COL(coinType,currencyCoinType,direction,gteAmount,gteCurrencyCoinAmount,page,size,status)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -591,7 +591,7 @@ object C2CApiServiceHelper {
         isShowLoading: Boolean,
         coinType: String?,
         direction: String?,
-        gteAmount:Double?,
+        gteSingleLimitMin:Double?,
         payMethod: String?,
         callback: Callback<HttpRequestResultData<C2CADData<C2CMainAD?>?>?>?
     ) {
@@ -599,7 +599,7 @@ object C2CApiServiceHelper {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CADList(coinType,direction,gteAmount,payMethod)
+            ?.getC2CADList(coinType,direction,gteSingleLimitMin,payMethod)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -795,7 +795,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CSetReceipt(OtcReceiptModel)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -858,5 +858,11 @@ object C2CApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-
+    //获取otc_token
+    fun getOtcToken(context: Context?,callback:Callback<HttpRequestResultData<LoginVO?>?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getOtcToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
 }

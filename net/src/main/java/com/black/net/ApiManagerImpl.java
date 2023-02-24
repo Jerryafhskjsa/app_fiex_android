@@ -233,6 +233,13 @@ public class ApiManagerImpl {
                     JSESSIONIDCookie += "ticket=" + ticket + ";";
                 }
             }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(api_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";api-token=" + api_token + ";";
+                } else {
+                    JSESSIONIDCookie += "api-token=" + api_token + ";";
+                }
+            }
             if (JSESSIONIDCookie != null && !TextUtils.isEmpty(trade_token)) {
                 if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
                     JSESSIONIDCookie += ";trade-token=" + trade_token + ";";
@@ -245,13 +252,6 @@ public class ApiManagerImpl {
                     JSESSIONIDCookie += ";pro-token=" + pro_token + ";";
                 } else {
                     JSESSIONIDCookie += "pro-token=" + pro_token + ";";
-                }
-            }
-            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(api_token)) {
-                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
-                    JSESSIONIDCookie += ";api-token=" + api_token + ";";
-                } else {
-                    JSESSIONIDCookie += "api-token=" + api_token + ";";
                 }
             }
             if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {

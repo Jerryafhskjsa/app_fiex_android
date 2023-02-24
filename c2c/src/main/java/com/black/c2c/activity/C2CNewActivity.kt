@@ -15,6 +15,7 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.LoginVO
 import com.black.base.model.ProTokenResult
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
@@ -74,6 +75,7 @@ import java.util.*
         TAB_TITLES[0] = "B"
         TAB_TITLES[1] = "S"
         init()
+        getOtcToken(mContext)
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragmentList!![position]
@@ -223,6 +225,29 @@ import java.util.*
 //            assetsWalletFragment?.setEventListener(this)
         })
 
+    }
+    //获取Otc-token
+    private fun getOtcToken(context: Context) {
+        C2CApiServiceHelper.getOtcToken(
+            context,
+            object : Callback<HttpRequestResultData<LoginVO?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+                override fun callback(result: HttpRequestResultData<LoginVO?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        val otcTokenResult: LoginVO? = result.data
+                        val otcToken = otcTokenResult?.token
+                        val otcTokenExpiredTime = otcTokenResult?.expireTime
+                        HttpCookieUtil.saveApiToken(context, otcToken)
+                        HttpCookieUtil.saveApiTokenExpiredTime(
+                            context,
+                            otcTokenExpiredTime.toString()
+                        )
+
+                    }
+                }
+
+            })
     }
 
 }
