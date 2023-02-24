@@ -8,16 +8,23 @@ import android.os.CountDownTimer
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultData
+import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cConfirmBinding
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
 @Route(value = [RouterConstData.C2C_CONFRIM])
 class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cConfirmBinding? = null
+    private var id: String? = null
     private var TotalTime : Long = 24*60*60*1000 //总时长 24h
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
@@ -40,11 +47,14 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_confirm)
+        id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnConfirmNew?.setOnClickListener(this)
         binding?.actionBarBack?.setOnClickListener(this)
         binding?.wallet?.setOnClickListener(this)
         binding?.msg?.setOnClickListener(this)
         binding?.wallet?.getPaint()?.setFlags(Paint.FAKE_BOLD_TEXT_FLAG)
+        getC2COIV2()
+        countDownTimer
     }
 
     override fun onClick(v: View) {
@@ -88,5 +98,44 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
 
             dialog.dismiss()
         }
+    }
+    //订单详情
+    fun getC2COIV2(){
+        C2CApiServiceHelper.getC2COIV2(
+            mContext,
+            id,
+            object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
+                }
+
+                override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        binding?.id?.setText(id)
+                        binding?.coinType?.setText(returnData.data?.coinType)
+                        binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
+                        binding?.price?.setText(returnData.data?.price.toString())
+                        binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                        binding?.time?.setText(returnData.data?.createTime)
+                        binding?.realName?.setText(returnData.data?.otherSideRealName)
+                        binding?.realNameName?.setText(returnData.data?.payEeRealName)
+                        val payMethod = returnData.data?.payMethod
+                        if (payMethod == 2) {
+                            binding?.payFor?.setText(getString(R.string.cards))
+                        }
+                        else if (payMethod == 1){
+                            binding?.payFor?.setText(getString(R.string.wei_xin))
+                        }
+                        else {
+                            binding?.payFor?.setText(getString(R.string.id_pay))
+                        }
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (returnData == null) "null" else returnData.msg
+                        )
+                    }
+                }
+            })
     }
 }

@@ -172,13 +172,13 @@ interface C2CApiService {
     fun getC2CCreateV2(@Query("advertisingId") advertisingId: String?,@Query("amount") amount: Double?,@Query("price") price: Double?): Observable<HttpRequestResultData<String?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_GP)
-    fun getC2CGP(): Observable<HttpRequestResultString?>?
+    fun getC2CGP(@Query("id") id: String?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.C2C.URL_C2C_ORDER_INFO)
     fun getC2COrderInfo(@Query("id") id: String?): Observable<HttpRequestResultData<C2COrderDetails?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_OI_V2)
-    fun getC2COIV2(): Observable<HttpRequestResultString?>?
+    fun getC2COIV2(@Query("id") id: String?): Observable<HttpRequestResultData<C2COrderDetails?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_OL)
     fun getC2COL(@Query("coinType") coinType: String?, @Query("currencyCoinType") currencyCoin: String?,  @Query("direction") direction: String?,  @Query("gteAmount") gteAmount: Double?,  @Query("gteCurrencyCoinAmount") gteCurrencyCoinAmount: Double?,  @Query("page") page: Int?, @Query("size") size: Int?, @Query("status") status: Int?): Observable<HttpRequestResultData<C2CADData<C2CBills?>?>?>?

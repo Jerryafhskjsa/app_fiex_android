@@ -317,7 +317,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(C2CApiService::class.java)
+        ApiManager.build(context,false, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getOrderDetail(orderId)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -580,7 +580,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build2(context,false, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2COL(coinType,currencyCoinType,direction,gteAmount,gteCurrencyCoinAmount,page,size,status)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -677,7 +677,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CCreateV2(advertisingId, amount, price)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -692,12 +692,25 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CCancel(id)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
-
+    //根据订单id获取卖方收款方式
+    fun getC2CGP(
+    context: Context?,
+    id: String?,
+    callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CGP(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
     //订单详情
     fun getC2CDetails(
         context: Context?,
@@ -712,7 +725,20 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
-
+    //订单详情v2
+    fun getC2COIV2(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultData<C2COrderDetails?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2COIV2(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
     //确认付款
     fun getConfirmPay(
         context: Context?,

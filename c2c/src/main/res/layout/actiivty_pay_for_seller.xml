@@ -204,19 +204,21 @@
                             android:text="@string/name2" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/name"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="帅"
+                            android:text=""
                             android:textColor="@color/black" />
 
                         <ImageView
                             android:id="@+id/num1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:background="@drawable/btn_bar_to"
+                             />
                     </LinearLayout>
 
                     <LinearLayout
@@ -234,12 +236,13 @@
                             android:text="@string/cmy_account" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/name2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="74777474747774"
+                            android:text=""
                             android:textColor="@color/black" />
                         <ImageView
                             android:id="@+id/num2"
@@ -264,12 +267,13 @@
                             android:text="@string/cmy_name" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/name3"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="中国农业银行"
+                            android:text=""
                             android:textColor="@color/black" />
                         <ImageView
                             android:id="@+id/num3"
@@ -293,12 +297,13 @@
                             android:text="@string/other_cmy" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/name4"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="滨江支行"
+                            android:text=""
                             android:textColor="@color/black" />
                         <ImageView
                             android:id="@+id/num4"
@@ -309,7 +314,6 @@
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/id_pay"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -331,7 +335,7 @@
                                 android:src="@drawable/icon_c2c_alipay" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -366,12 +370,13 @@
                                 android:text="@string/name2" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/name5"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="帅"
+                                android:text=""
                                 android:textColor="@color/black" />
 
                             <ImageView
@@ -396,12 +401,13 @@
                                 android:text="@string/ali_pay_num" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/name6"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="1333333333"
+                                android:text=""
                                 android:textColor="@color/black" />
                             <ImageView
                                 android:id="@+id/num6"
@@ -433,12 +439,10 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="right"
                                 android:src="@drawable/btn_frame_four" />
-
-
+                        </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/wei_xin"
-                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
@@ -460,7 +464,7 @@
                                     android:src="@drawable/icon_share_weixin" />
 
                                 <com.black.base.widget.SpanTextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="@dimen/text_size_10"
@@ -495,12 +499,13 @@
                                     android:text="@string/name2" />
 
                                 <com.black.base.widget.SpanTextView
-                                    android:layout_width="wrap_content"
+                                    android:id="@+id/name7"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     android:layout_weight="1"
                                     android:gravity="right"
-                                    android:text="帅"
+                                    android:text=""
                                     android:textColor="@color/black" />
 
                                 <ImageView
@@ -525,12 +530,13 @@
                                     android:text="@string/weixin_num" />
 
                                 <com.black.base.widget.SpanTextView
-                                    android:layout_width="wrap_content"
+                                    android:id="@+id/name8"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     android:layout_weight="1"
                                     android:gravity="right"
-                                    android:text="kinki"
+                                    android:text=""
                                     android:textColor="@color/black" />
                                 <ImageView
                                     android:id="@+id/num8"
@@ -564,7 +570,7 @@
                                     android:src="@drawable/btn_frame_four" />
 
 
-                            </LinearLayout>
+
                         </LinearLayout>
                     </LinearLayout>
                     <com.black.base.widget.SpanTextView

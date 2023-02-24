@@ -11,7 +11,6 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/id"
             android:background="@color/B2">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -130,7 +129,8 @@
                             android:text="@string/total_money" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/total"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
@@ -145,7 +145,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <LinearLayout
-                            android:id="@+id/price"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_20"
@@ -160,11 +159,12 @@
                                 android:text="@string/price" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/price"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="6.89"
+                                android:text=""
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
@@ -184,7 +184,8 @@
                                 android:text="@string/amount" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/amount"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
@@ -217,6 +218,7 @@
                                 android:text="@string/order_number" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/id"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -247,6 +249,7 @@
                                 android:text="@string/created_time" />
 
                             <com.black.base.widget.SpanTextView
+                                android:id="@+id/create_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -272,7 +275,8 @@
                                 android:text="卖家昵称" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/real_name"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
@@ -297,12 +301,13 @@
                                 android:text="接单总数" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/real_name_name"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="kinki"
+                                android:text=""
                                 android:textColor="@color/black" />
                         </LinearLayout>
                         <View
@@ -327,7 +332,8 @@
                                 android:text="@string/exchange_method" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/payment_method"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
@@ -351,7 +357,8 @@
                                 android:text="收款人" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/person"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
@@ -372,10 +379,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="支付宝账号" />
+                                android:text="账号" />
 
                             <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/ad"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
@@ -385,6 +393,7 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/ma"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_20"
@@ -453,7 +462,6 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <LinearLayout
-            android:id="@+id/id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

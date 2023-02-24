@@ -24,6 +24,7 @@ import com.black.router.annotation.Route
 @Route(value = [RouterConstData.C2C_BUYER_PAY])
 class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: BtnC2cWaitBuyBinding? = null
+    private var id: String? = null
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -50,20 +51,24 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.btn_c2c_wait_buy)
+        id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
         countDownTimer
+        getPayChoose()
         checkClickable()
     }
     override fun getTitleText(): String? {
         return "等待卖家确认收款并放币"
     }
     override fun onClick(v: View) {
-        val id = v.id
-        if (id == R.id.btn_confirm) {
+        val id2 = v.id
+        if (id2 == R.id.btn_confirm) {
+            val bundle = Bundle()
+            bundle.putString(ConstData.BUY_PRICE,id)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).go(mContext)
         }
-        if (id == R.id.btn_cancel) {
+        if (id2 == R.id.btn_cancel) {
             cancelDialog()
         }
     }
@@ -99,7 +104,6 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
         }
     }
     private fun getPayChoose() {
-        val id = intent.getStringExtra(ConstData.COIN_TYPE)
         C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -107,6 +111,29 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    binding?.id?.setText(id)
+                    binding?.coinType?.setText(returnData.data?.coinType)
+                    binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
+                    binding?.price?.setText(returnData.data?.price.toString())
+                    binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                    binding?.time?.setText(returnData.data?.createTime)
+                    binding?.realName?.setText(returnData.data?.otherSideRealName)
+                    binding?.realNameName?.setText(returnData.data?.payEeRealName)
+                    binding?.person?.setText(returnData.data?.receiptInfo?.name)
+                    binding?.ad?.setText(returnData.data?.receiptInfo?.account)
+                    val payMethod = returnData.data?.payMethod
+                    if (payMethod == 0){
+                        binding?.paymentMethod?.setText(getString(R.string.id_pay))
+                        binding?.ma?.visibility = View.VISIBLE
+                    }
+                    else if (payMethod == 1){
+                        binding?.paymentMethod?.setText(getString(R.string.wei_xin))
+                        binding?.ma?.visibility = View.VISIBLE
+                    }
+                    else{
+                        binding?.paymentMethod?.setText(getString(R.string.cards))
+                        binding?.ma?.visibility = View.GONE
+                    }
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)

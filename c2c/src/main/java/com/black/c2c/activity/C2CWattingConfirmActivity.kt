@@ -27,16 +27,18 @@ import com.black.router.annotation.Route
 @Route(value = [RouterConstData.C2C_WAITE2])
 class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cSellerConfirmBinding? = null
+    private var id: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_seller_confirm)
+        id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.aboveBar?.setOnClickListener(this)
         binding?.bottomBar?.setOnClickListener(this)
         binding?.num1?.setOnClickListener(this)
         binding?.num2?.setOnClickListener(this)
         binding?.num3?.setOnClickListener(this)
-        getPayChoose()
+        getC2COIV2()
         /*binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_mail)?.setOnClickListener{}
         binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_phone)?.setOnClickListener{}*/
     }
@@ -102,7 +104,6 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         }
     }
     private fun getConfirm(){
-        val id = intent.getStringExtra(ConstData.PAIR)
         C2CApiServiceHelper.getConfirmGet(mContext, id , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -111,7 +112,9 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext,"放币成功")
-                    BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).go(context)
+                    val extras = Bundle()
+                    extras.putString(ConstData.BUY_PRICE,id)
+                    BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).with(extras).go(context)
                 } else {
 
                     FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
@@ -119,47 +122,53 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             }
         })
     }
-    private fun getPayChoose() {
-        val id = intent.getStringExtra(ConstData.COIN_TYPE)
-        C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-            }
 
-            override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    val payMethod = returnData.data?.payMethod
-                    binding?.money?.setText(returnData.data?.currencyCoinAmount.toString())
-                    binding?.name1?.setText(returnData.data?.merchantNickname)
-                    binding?.price?.setText(returnData.data?.price.toString())
-                    binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
-                    binding?.time?.setText(returnData.data?.createTime)
-                    binding?.id?.setText("")
-                    binding?.name2?.setText("")
-                    binding?.realName
-                    if (payMethod == 3) {
-                        binding?.name3
-                        binding?.cardsNum
-                        binding?.cpy
-                        binding?.otherCmy
-                    }
-                    else if (payMethod == 1){
-                    binding?.name4
-                    binding?.aliNum
-                    binding?.maTwo
-                    }
-                    else {
-                        binding?.maOne
-                        binding?.name5
-                        binding?.weiXinNum
-                    }
-
-                } else {
-
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+    //订单详情
+    fun getC2COIV2(){
+        C2CApiServiceHelper.getC2COIV2(
+            mContext,
+            id,
+            object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
                 }
-            }
-        })
-    }
 
+                override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        binding?.id?.setText(id)
+                        binding?.coinType?.setText(returnData.data?.coinType)
+                        binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
+                        binding?.price?.setText(returnData.data?.price.toString())
+                        binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                        binding?.time?.setText(returnData.data?.createTime)
+                        binding?.realName?.setText(returnData.data?.otherSideRealName)
+                        binding?.realNameName?.setText(returnData.data?.payEeRealName)
+                        binding?.name1?.setText(returnData.data?.payEeRealName)
+                        binding?.name2?.setText(returnData.data?.payEeRealName)
+                        val payMethod = returnData.data?.payMethod
+                        if (payMethod == 2) {
+                            binding?.name3?.setText(returnData.data?.receiptInfo?.name)
+                            binding?.cardsNum?.setText(returnData.data?.receiptInfo?.account)
+                            binding?.cpy?.setText(returnData.data?.receiptInfo?.depositBank)
+                            binding?.otherCmy?.setText(returnData.data?.receiptInfo?.subbranch)
+                        }
+                        else if (payMethod == 1){
+                            binding?.name4?.setText(returnData.data?.receiptInfo?.name)
+                            binding?.aliNum?.setText(returnData.data?.receiptInfo?.account)
+                            val maTwo = returnData.data?.receiptInfo?.receiptImage
+                        }
+                        else {
+                            val maOne = returnData.data?.receiptInfo?.receiptImage
+                            binding?.name5?.setText(returnData.data?.receiptInfo?.name)
+                            binding?.weiXinNum?.setText(returnData.data?.receiptInfo?.account)
+                        }
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (returnData == null) "null" else returnData.msg
+                        )
+                    }
+                }
+            })
+    }
 }

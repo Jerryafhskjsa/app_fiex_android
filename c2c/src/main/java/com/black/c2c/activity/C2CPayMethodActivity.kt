@@ -3,6 +3,9 @@ package com.black.c2c.activity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
@@ -12,22 +15,44 @@ import com.black.base.model.c2c.C2CSellerMsg
 import com.black.base.model.c2c.PayInfo
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.c2c.BR
 import com.black.c2c.R
+import com.black.c2c.adapter.C2CBillsAdapter
+import com.black.c2c.adapter.PayMethodsAdapter
 
 import com.black.c2c.databinding.ActivityPayMethodBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import skin.support.content.res.SkinCompatResources
 
 @Route(value = [RouterConstData.C2C_PAY])
 class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityPayMethodBinding? = null
     private var list: ArrayList<PayInfo?>? = null
+    private var adapter: PayMethodsAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pay_method)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnConfirmNew?.setOnClickListener(this)
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = RecyclerView.VERTICAL
+        layoutManager.isSmoothScrollbarEnabled = true
+        binding?.recyclerView?.layoutManager = layoutManager
+        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val drawable = SkinCompatResources.getDrawable(this, R.drawable.divider_list_item_l1)
+        drawable.alpha = (0.6 * 255).toInt()
+        decoration.setDrawable(drawable)
+        binding?.recyclerView?.addItemDecoration(decoration)
+        adapter = PayMethodsAdapter(mContext, BR.listItemC2COrderListModel, null)
+        binding?.recyclerView?.adapter = adapter
+        binding?.recyclerView?.isNestedScrollingEnabled = false
+        binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
+        binding?.recyclerView?.isNestedScrollingEnabled = false
+        binding?.recyclerView?.setHasFixedSize(true)
+        binding?.recyclerView?.isFocusable = false
+        binding?.recyclerView?.layoutManager = layoutManager
         getAllPay()
     }
 
@@ -52,6 +77,7 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
             override fun callback(returnData: HttpRequestResultData<C2CSellerMsg?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     list = returnData.data?.list
+                    adapter?.addAll(list)
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -59,5 +85,7 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
             }
         })
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.black.c2c.util
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
@@ -39,15 +40,13 @@ class C2CHandleCheckHelper(private val context: Context, private val permissionH
                     object : OnConfirmCallback {
                         override fun onConfirmClick(confirmDialog: ConfirmDialog) {
                             CommonUtil.checkActivityAndRun(context) {
-                                permissionHelper.requestCameraPermissions(Runnable {
-                                    permissionHelper.requestStoragePermissions(Runnable {
-                                        BlackRouter.getInstance().build(RouterConstData.PERSON_INFO_CENTER).go(context) { routeResult, _ ->
+                                        BlackRouter.getInstance().build(RouterConstData.PERSON_INFO_CENTER)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                            .go(context){ routeResult, _ ->
                                             if (routeResult) {
                                                 confirmDialog.dismiss()
                                             }
                                         }
-                                    })
-                                })
                             }
                         }
 

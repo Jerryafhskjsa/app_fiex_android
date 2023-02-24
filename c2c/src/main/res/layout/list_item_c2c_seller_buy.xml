@@ -225,6 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:gravity="center"
+                    android:clickable="false"
                     android:paddingLeft="@dimen/double_padding"
                     android:paddingRight="@dimen/double_padding"
                     android:text="@string/c2c_buy"

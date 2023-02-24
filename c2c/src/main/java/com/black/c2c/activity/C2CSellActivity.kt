@@ -139,13 +139,8 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
                         payChain = item
-                        val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
-                        val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
-                        val extras = Bundle()
-                        extras.putDouble(ConstData.BUY_PRICE,num1!!)
-                        extras.putDouble(ConstData.BIRTH,num2!!)
-                        BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(extras).go(mContext)
-                    }
+                        getC2COrder()
+                         }
                 })
             chooseWalletDialog.show()
         }
@@ -356,5 +351,34 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                 }
             }
         })
+    }
+    private fun getC2COrder(){
+        val id = intent.getStringExtra(ConstData.PAIR)
+        val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+        val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
+        C2CApiServiceHelper.getC2COrder(
+            mContext,
+            id,
+            num1,
+            num2,
+            object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
+                }
+
+                override fun callback(returnData: HttpRequestResultData<String?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        val id = returnData.data
+                        val extras = Bundle()
+                        extras.putString(ConstData.BUY_PRICE,id)
+                        BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(extras).go(mContext)
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (returnData == null) "null" else returnData.msg
+                        )
+                    }
+                }
+            })
     }
 }

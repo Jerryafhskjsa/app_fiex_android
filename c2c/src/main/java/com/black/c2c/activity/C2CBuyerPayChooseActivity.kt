@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.model.c2c.OtcReceiptModel
@@ -33,6 +34,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var sellerName: String? = null
     private val mHandler = Handler()
     private var payFor: String? = null
+    private var id: String? = null
     private var receiptInfo: OtcReceiptModel? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
@@ -60,22 +62,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.actiivty_pay_for_seller)
-        payFor = intent.getStringExtra(ConstData.C2C_ORDER)
-        if (payFor == "银行卡"){
-            binding?.cards?.visibility = View.VISIBLE
-            binding?.idPay?.visibility = View.GONE
-            binding?.weiXin?.visibility = View.GONE
-        }
-        if (payFor == "微信"){
-            binding?.weiXin?.visibility = View.VISIBLE
-            binding?.idPay?.visibility = View.GONE
-            binding?.cards?.visibility = View.GONE
-        }
-        else{
-            binding?.idPay?.visibility = View.VISIBLE
-            binding?.cards?.visibility = View.GONE
-            binding?.weiXin?.visibility = View.GONE
-        }
+        id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.idPayMa?.setOnClickListener(this)
@@ -90,6 +77,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.num8?.setOnClickListener(this)
         binding?.num1?.setOnClickListener(this)
         countDownTimer
+        getC2CGP()
         getPayChoose()
         checkClickable()
     }
@@ -203,7 +191,6 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         }
     }
     private fun getPayChoose() {
-        val id = intent.getStringExtra(ConstData.COIN_TYPE)
         C2CApiServiceHelper.getC2CDetails(mContext, id,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -212,6 +199,48 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     receiptInfo = returnData.data?.receiptInfo
+                    binding?.name?.setText(receiptInfo?.name)
+                    binding?.name2?.setText(receiptInfo?.account)
+                    binding?.name3?.setText(receiptInfo?.depositBank)
+                    binding?.name4?.setText(receiptInfo?.subbranch)
+                    binding?.name5?.setText(receiptInfo?.name)
+                    binding?.name6?.setText(receiptInfo?.account)
+                    binding?.name7?.setText(receiptInfo?.name)
+                    binding?.name8?.setText(receiptInfo?.account)
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+    //获取首付款方式
+    private fun getC2CGP() {
+        val id = intent.getStringExtra(ConstData.COIN_TYPE)
+        C2CApiServiceHelper.getC2CGP(mContext, id,  object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    payFor = returnData.data
+                    if (payFor == "2"){
+                        binding?.cards?.visibility = View.VISIBLE
+                        binding?.idPay?.visibility = View.GONE
+                        binding?.weiXin?.visibility = View.GONE
+                    }
+                    if (payFor == "1"){
+                        binding?.weiXin?.visibility = View.VISIBLE
+                        binding?.idPay?.visibility = View.GONE
+                        binding?.cards?.visibility = View.GONE
+                    }
+                    else{
+                        binding?.idPay?.visibility = View.VISIBLE
+                        binding?.cards?.visibility = View.GONE
+                        binding?.weiXin?.visibility = View.GONE
+                    }
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)

@@ -153,6 +153,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         val num3 = c2cList?.id
                         val extras = Bundle()
                         extras.putParcelable(ConstData.C2C_LIST,c2cList)
+                        extras.putString(ConstData.REAL_NAME,payChain)
                         extras.putDouble(ConstData.BUY_PRICE,num1!!)
                         extras.putDouble(ConstData.BIRTH,num2!!)
                         extras.putString(ConstData.COIN_TYPE,num3)

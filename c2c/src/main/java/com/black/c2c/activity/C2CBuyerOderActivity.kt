@@ -19,6 +19,7 @@ import com.black.router.annotation.Route
 class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivityC2cBuyerOderBinding? = null
     private var sellerName: String? = "帅"
+    private var id: String? = null
     private var payChain: String? = null
     var TotalTime: Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
@@ -46,7 +47,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buyer_oder)
-        payChain = intent.getStringExtra(ConstData.C2C_ORDER)
+        id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.add?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.send?.setOnClickListener(this)

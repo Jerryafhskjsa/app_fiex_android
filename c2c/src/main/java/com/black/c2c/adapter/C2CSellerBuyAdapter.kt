@@ -28,21 +28,23 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         if ( c2CSeller?.direction == "B") {
             viewHolder?.btnHandle?.visibility = View.VISIBLE
             viewHolder?.btnHandleSell?.visibility = View.GONE
-            if (c2CSeller.canCreateOrderForQueryUser == false) {
+            if (c2CSeller.canCreateOrderForQueryUser == true) {
+                viewHolder?.btnHandle?.isEnabled = true
+                viewHolder?.btnHandle?.setText(getString(R.string.buy_02))
+            } else  {
                 viewHolder?.btnHandle?.isEnabled = false
                 viewHolder?.btnHandle?.setText("当前用户不可下此广告的订单")
-            } else {
-                viewHolder?.btnHandle?.isEnabled = true
             }
         }
         else{
             viewHolder?.btnHandleSell?.visibility = View.VISIBLE
             viewHolder?.btnHandle?.visibility = View.GONE
-            if (c2CSeller?.canCreateOrderForQueryUser == false) {
+            if (c2CSeller?.canCreateOrderForQueryUser == true) {
+                viewHolder?.btnHandle?.setText(getString(R.string.sell))
+                viewHolder?.btnHandleSell?.isEnabled = true
+            } else {
                 viewHolder?.btnHandleSell?.isEnabled = false
                 viewHolder?.btnHandleSell?.setText("当前用户不可下此广告的订单")
-            } else {
-                viewHolder?.btnHandleSell?.isEnabled = true
             }
         }
         viewHolder?.firstLetter?.setText(if (TextUtils.isEmpty(c2CSeller?.realName)) "?" else c2CSeller?.realName!![0].toString())

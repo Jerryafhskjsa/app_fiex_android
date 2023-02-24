@@ -15,6 +15,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ChooseWalletControllerWindow
@@ -44,11 +45,15 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     private var payChain: String? = null
     private var cointype: String? = null
     private val mHandler = Handler()
-    private var payFor: String? = null
+    private var id2: String? = null
+    private var payFor: Int? = null
     private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
+        getC2cCancel()
+        FryingUtil.showToast(mContext,"订单已取消")
+        finish()
     }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -56,10 +61,8 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
             var minute=millisUntilFinished/1000/60%60
             var second=millisUntilFinished/1000%60
             binding?.time?.setText("$minute:$second")}
-            else{
-                FryingUtil.showToast(mContext,"订单已取消")
-                finish()
-            }
+
+
         }
     }.start()
 
@@ -74,6 +77,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_order)
+        payChain = intent.getStringExtra(ConstData.REAL_NAME)
         binding?.pay?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
@@ -81,11 +85,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         c2CHandleCheckHelper = C2CHandleCheckHelper(mContext, BaseActionBarActivity(),fryingHelper)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
-       TAB_WEIXIN = getString(R.string.wei_xin)
-        chainNames = ArrayList()
-        chainNames?.add(TAB_CARDS)
-        chainNames?.add(TAB_IDPAY)
-        chainNames?.add(TAB_WEIXIN)
+        TAB_WEIXIN = getString(R.string.wei_xin)
         //chainNames?.add(TAB_PAYPAID)
         if (payChain == getString(R.string.wei_xin)){
             binding?.cardsColor?.visibility = View.GONE
@@ -123,9 +123,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         else if (id == R.id.btn_cancel) {
             payChain = binding?.payName?.text?.toString()
             val extras = Bundle()
-            extras.putString(ConstData.COIN_TYPE,cointype)
-            extras.putString(ConstData.C2C_ORDERS, payChain)
-            extras.putLong(ConstData.C2C_TIME,TotalTime)
+            extras.putString(ConstData.BUY_PRICE,id2)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
 
         }
@@ -220,14 +218,15 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
 
                             override fun callback(returnData: HttpRequestResultData<String?>?) {
                                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                    val id = returnData.data
+                                     id2 = returnData.data
+                                    getC2COIV2(id)
                                     binding?.adId?.setText(id)
                                 } else {
-
                                     FryingUtil.showToast(
                                         mContext,
                                         if (returnData == null) "null" else returnData.msg
                                     )
+                                    finish()
                                 }
                             }
                         })
@@ -255,5 +254,46 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                 }
             }
         })
+    }
+
+    //订单详情
+    fun getC2COIV2(id: String?){
+        C2CApiServiceHelper.getC2COIV2(
+            mContext,
+            id,
+            object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
+                }
+
+                override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        binding?.coinType?.setText(returnData.data?.coinType)
+                        binding?.total?.setText(returnData.data?.amount.toString())
+                        binding?.price?.setText(returnData.data?.price.toString())
+                        binding?.account?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                        binding?.createTime?.setText(returnData.data?.createTime)
+                        binding?.name?.setText(returnData.data?.otherSideRealName)
+                        binding?.accountTotal?.setText(returnData.data?.otherSideCompletedOrders30Days.toString())
+                        payFor = returnData.data?.payMethod
+                        chainNames = ArrayList()
+                        if (payFor == 2) {
+                            chainNames?.add(TAB_CARDS)
+                        }
+                        if (payFor == 0) {
+                            chainNames?.add(TAB_IDPAY)
+                        }
+                        else {
+                            chainNames?.add(TAB_WEIXIN)
+                        }
+                    } else {
+
+                        FryingUtil.showToast(
+                            mContext,
+                            if (returnData == null) "null" else returnData.msg
+                        )
+                    }
+                }
+            })
     }
 }
