@@ -426,6 +426,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/dialog_c2c_buy_create.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_bills.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_customer_buy_item.xml" value="0.14322359982898675" />
@@ -434,6 +435,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_buy_item.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_one_key_sale_item.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_c2c_some_bills.xml" value="0.14621633176571183" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_msg_basic.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_c2c_bills.xml" value="0.22" />

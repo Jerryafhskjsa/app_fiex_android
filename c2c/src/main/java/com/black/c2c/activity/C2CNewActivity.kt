@@ -74,8 +74,8 @@ import java.util.*
         typeList!!.add(TAB_QUCILK)
         TAB_TITLES[0] = "B"
         TAB_TITLES[1] = "S"
-        init()
         getOtcToken(mContext)
+        init()
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragmentList!![position]

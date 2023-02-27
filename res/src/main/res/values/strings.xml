@@ -311,6 +311,9 @@
     <string name="search_coin">搜索币种</string>
     <string name="all_coin">全部币种</string>
     <string name="all">全部</string>
+    <string name="payed">已付款</string>
+    <string name="dispayed">未付款</string>
+    <string name="canceled">已取消</string>
     <string name="china">中国</string>
     <string name="america">美国</string>
     <string name="id_pay">支付宝</string>

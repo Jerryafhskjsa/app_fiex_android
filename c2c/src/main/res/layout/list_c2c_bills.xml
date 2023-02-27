@@ -26,9 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buy_02"
-                android:textColor="@color/C1"
                 android:textSize="@dimen/text_size_16"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
             <com.black.base.widget.SpanTextView
                 android:id="@+id/coin_type"
                 android:layout_width="wrap_content"

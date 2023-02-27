@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.black.base.R
 import com.black.base.model.BaseAdapterItem
+import java.util.*
 
 class C2CBills: BaseAdapterItem() {
     var advertisingId: String? = null	//广告id	string
@@ -38,30 +39,22 @@ class C2CBills: BaseAdapterItem() {
 
         var statusText = context.getString(R.string.number_default)
         when(status) {
-            0 -> {
-                statusText = context.getString(R.string.financial_deal)
-            }
-            1 -> {
-                statusText = context.getString(R.string.financial_wait_check)
+            -1 -> {
+                statusText = "取消"
             }
             2 -> {
-                statusText = context.getString(R.string.financial_canceled)
+                statusText = "待付款"
             }
             3 -> {
-                statusText = context.getString(R.string.financial_ensuming)
+                statusText = "已付款"
             }
             4 -> {
-                statusText = context.getString(R.string.financial_checked)
+                statusText = "已放币"
             }
             5 -> {
-                statusText = context.getString(R.string.financial_doing)
+                statusText = "卖单审核中"
             }
-            6 -> {
-                statusText = context.getString(R.string.financial_failed)
-            }
-            7 -> {
-                statusText = context.getString(R.string.rall_back)
-            }
+
         }
         return statusText
     }

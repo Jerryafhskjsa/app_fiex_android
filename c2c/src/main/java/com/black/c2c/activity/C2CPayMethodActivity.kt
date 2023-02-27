@@ -29,7 +29,7 @@ import skin.support.content.res.SkinCompatResources
 @Route(value = [RouterConstData.C2C_PAY])
 class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityPayMethodBinding? = null
-    private var list: ArrayList<PayInfo?>? = null
+    private var list: ArrayList<C2CSellerMsg?>? = null
     private var adapter: PayMethodsAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +76,7 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
 
             override fun callback(returnData: HttpRequestResultData<C2CSellerMsg?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    list = returnData.data?.list
+
                     adapter?.addAll(list)
                 } else {
 

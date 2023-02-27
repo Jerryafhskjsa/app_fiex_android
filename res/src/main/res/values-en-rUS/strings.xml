@@ -311,6 +311,9 @@
     <string name="search_coin">Search</string>
     <string name="all_coin">All Currencies</string>
     <string name="all">All</string>
+    <string name="payed">Paid</string>
+    <string name="dispayed">dispayed</string>
+    <string name="canceled">canceled</string>
     <string name="china">China</string>
     <string name="america">America</string>
     <string name="id_pay">Id pay</string>
