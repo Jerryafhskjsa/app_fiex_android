@@ -292,43 +292,66 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.name?.setText(c2CMainAD?.realName)
         binding?.btnConfirm?.setText(getString(R.string.buy_02) + c2CMainAD?.coinType)
         val paymentTypeList = c2CMainAD?.payMethods
-        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1,2]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
             binding?.weiXin?.visibility = View.VISIBLE
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[3]") {
+        if (paymentTypeList != null && paymentTypeList == "[1]") {
             binding?.cards?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
         }
-        if (paymentTypeList != null && paymentTypeList== "[1]") {
+        if (paymentTypeList != null && paymentTypeList== "[0]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
         }
         if (paymentTypeList != null && paymentTypeList== "[2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.GONE
+            payChain = TAB_WEIXIN
+            chainNames = ArrayList()
+            chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[1,2]") {
+        if (paymentTypeList != null && paymentTypeList == "[0,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
-
+            payChain = TAB_IDPAY
+            chainNames = ArrayList()
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList== "[1,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1]") {
             binding?.weiXin?.visibility = View.GONE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
-
+            payChain = TAB_CARDS
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_IDPAY)
         }
-        if (paymentTypeList != null && paymentTypeList== "[2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[1,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.VISIBLE
-
+            payChain = TAB_WEIXIN
+            chainNames = ArrayList()
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_WEIXIN)
         }
     }
 

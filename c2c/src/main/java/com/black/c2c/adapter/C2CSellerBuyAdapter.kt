@@ -53,12 +53,12 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
         viewHolder?.num1?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.priceParam, 8, 2, 8)))
         viewHolder?.finish?.setText("成单量 " + c2CSeller?.completedOrders.toString() + " | 成单率" + String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.completion, 8, 2, 8)) + "%")
         val paymentTypeList = c2CSeller?.payMethods
-        if (paymentTypeList != null && paymentTypeList == "[3]") {
+        if (paymentTypeList != null && paymentTypeList == "[1]") {
             viewHolder?.cards?.visibility = View.VISIBLE
             viewHolder?.ali?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.GONE
         }
-        if (paymentTypeList != null && paymentTypeList== "[1]") {
+        if (paymentTypeList != null && paymentTypeList== "[0]") {
             viewHolder?.ali?.visibility = View.VISIBLE
             viewHolder?.cards?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.GONE
@@ -73,17 +73,17 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
             viewHolder?.cards?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.VISIBLE
         }
-        if (paymentTypeList != null && paymentTypeList== "[1,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1]") {
             viewHolder?.ali?.visibility = View.VISIBLE
             viewHolder?.cards?.visibility = View.VISIBLE
             viewHolder?.weiXin?.visibility = View.GONE
         }
-        if (paymentTypeList != null && paymentTypeList== "[2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[1,2]") {
             viewHolder?.weiXin?.visibility = View.VISIBLE
             viewHolder?.ali?.visibility = View.GONE
             viewHolder?.cards?.visibility = View.VISIBLE
         }
-        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1,2]") {
             viewHolder?.weiXin?.visibility = View.VISIBLE
             viewHolder?.ali?.visibility = View.VISIBLE
             viewHolder?.cards?.visibility = View.VISIBLE
@@ -94,12 +94,14 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
             val extras = Bundle()
             extras.putParcelable(ConstData.C2C_AD, c2CSeller)
             extras.putString(ConstData.PAIR,c2CSeller?.id)
+            extras.putString(ConstData.REAL_NAME, c2CSeller?.payMethods)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY).with(extras).go(context)
         }
         viewHolder?.btnHandleSell?.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.putParcelable(ConstData.C2C_LIST, c2CSeller)
             bundle.putString(ConstData.PAIR,c2CSeller?.id)
+            bundle.putString(ConstData.REAL_NAME, c2CSeller?.payMethods)
             BlackRouter.getInstance().build(RouterConstData.C2C_SELL).with(bundle).go(context)
         }
     }

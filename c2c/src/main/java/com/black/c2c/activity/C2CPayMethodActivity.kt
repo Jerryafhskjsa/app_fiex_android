@@ -1,5 +1,6 @@
 package com.black.c2c.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -8,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.NormalCallback
+import com.black.base.model.*
 import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.model.c2c.C2CSellerMsg
 import com.black.base.model.c2c.PayInfo
@@ -29,7 +29,7 @@ import skin.support.content.res.SkinCompatResources
 @Route(value = [RouterConstData.C2C_PAY])
 class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityPayMethodBinding? = null
-    private var list: ArrayList<C2CSellerMsg?>? = null
+    private var list: ArrayList<PayInfo?>? = null
     private var adapter: PayMethodsAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,17 +69,26 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
         }
     }
     private fun getAllPay(){
-        C2CApiServiceHelper.getSellerMsg(mContext, object : NormalCallback<HttpRequestResultData<C2CSellerMsg?>?>(mContext) {
+        C2CApiServiceHelper.getAllPay(mContext, object : NormalCallback<HttpRequestResultDataList<PayInfo?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<C2CSellerMsg?>?) {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-
+                    binding?.btnConfirmNew?.visibility = View.VISIBLE
+                    binding?.btnConfirm?.visibility = View.GONE
+                    binding?.adviceNull?.visibility = View.VISIBLE
+                    binding?.tiShi?.visibility = View.GONE
+                    list = returnData.data
                     adapter?.addAll(list)
+                    adapter?.notifyDataSetChanged()
                 } else {
-
+                    binding?.btnConfirm?.visibility = View.VISIBLE
+                    binding?.btnConfirmNew?.visibility = View.GONE
+                    binding?.tiShi?.visibility = View.VISIBLE
+                    binding?.adviceNull?.visibility = View.GONE
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }

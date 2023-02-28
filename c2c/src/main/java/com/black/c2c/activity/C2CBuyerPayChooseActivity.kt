@@ -252,12 +252,12 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     //撤单
     private fun getC2cCancel(){
         val id = intent.getStringExtra(ConstData.COIN_TYPE)
-        C2CApiServiceHelper.getC2COrderCancel(mContext, id,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+        C2CApiServiceHelper.getC2COrderCancel(mContext, id,  object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<String?>?) {
+            override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext,"取消订单成功")
                     val intent = Intent(this@C2CBuyerPayChooseActivity, C2CNewActivity::class.java)

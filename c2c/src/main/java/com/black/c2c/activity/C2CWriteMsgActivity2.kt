@@ -363,12 +363,12 @@ class C2CWriteMsgActivity2: BaseActionBarActivity(), View.OnClickListener{
         otcMerchantDTO?.emergencyName = emergencyName
         otcMerchantDTO?.emergencyTel = emergencyTel
         otcMerchantDTO?.tel = tel
-        C2CApiServiceHelper.getSellerApply(mContext, otcMerchantDTO,  object : NormalCallback<HttpRequestResultData<String?>?>(mContext!!) {
+        C2CApiServiceHelper.getSellerApply(mContext, otcMerchantDTO,  object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<String?>?) {
+            override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     BlackRouter.getInstance().build(RouterConstData.C2C_WATTING).go(mContext)
                 } else {

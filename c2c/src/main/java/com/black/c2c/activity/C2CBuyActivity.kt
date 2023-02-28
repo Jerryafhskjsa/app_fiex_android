@@ -2,6 +2,7 @@ package com.black.c2c.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.icu.util.CurrencyAmount
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -151,13 +152,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
                         val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
                         val num3 = c2cList?.id
-                        val extras = Bundle()
-                        extras.putParcelable(ConstData.C2C_LIST,c2cList)
-                        extras.putString(ConstData.REAL_NAME,payChain)
-                        extras.putDouble(ConstData.BUY_PRICE,num1!!)
-                        extras.putDouble(ConstData.BIRTH,num2!!)
-                        extras.putString(ConstData.COIN_TYPE,num3)
-                        BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
+                        getC2COrder(num3, num1, num2)
                     }
                 })
             chooseWalletDialog.show()
@@ -276,7 +271,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.seller?.setText(c2CMainAD?.realName)
         binding?.btnConfirm?.setText(getString(R.string.buy_02) + c2CMainAD?.coinType)
         val paymentTypeList = c2CMainAD?.payMethods
-        if (paymentTypeList != null && paymentTypeList== "[1,2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1,2]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
             binding?.weiXin?.visibility = View.VISIBLE
@@ -286,7 +281,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames?.add(TAB_CARDS)
             chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[3]") {
+        if (paymentTypeList != null && paymentTypeList == "[1]") {
             binding?.cards?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
@@ -294,7 +289,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames = ArrayList()
             chainNames?.add(TAB_CARDS)
         }
-        if (paymentTypeList != null && paymentTypeList== "[1]") {
+        if (paymentTypeList != null && paymentTypeList== "[0]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
@@ -310,7 +305,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames = ArrayList()
             chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[1,2]") {
+        if (paymentTypeList != null && paymentTypeList == "[0,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
@@ -319,7 +314,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames?.add(TAB_IDPAY)
             chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList== "[1,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,1]") {
             binding?.weiXin?.visibility = View.GONE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
@@ -328,7 +323,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames?.add(TAB_CARDS)
             chainNames?.add(TAB_IDPAY)
         }
-        if (paymentTypeList != null && paymentTypeList== "[2,3]") {
+        if (paymentTypeList != null && paymentTypeList== "[1,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.VISIBLE
@@ -358,5 +353,34 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                 }
             }
         })
+    }
+    private fun getC2COrder(id: String?, amount: Double?, price: Double?) {
+        C2CApiServiceHelper.getC2COrder(
+            mContext,
+            id,
+            amount,
+            price,
+            object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+                override fun error(type: Int, error: Any?) {
+                    super.error(type, error)
+                }
+
+                override fun callback(returnData: HttpRequestResultData<String?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        val id2 = returnData.data
+                        val extras = Bundle()
+                        extras.putParcelable(ConstData.C2C_LIST,c2cList)
+                        extras.putString(ConstData.REAL_NAME,payChain)
+                        extras.putString(ConstData.COIN_TYPE,id2)
+                        BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
+                    } else {
+                        FryingUtil.showToast(
+                            mContext,
+                            if (returnData == null) "null" else returnData.msg
+                        )
+                        finish()
+                    }
+                }
+            })
     }
 }

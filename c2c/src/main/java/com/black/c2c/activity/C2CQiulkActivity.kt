@@ -526,42 +526,64 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     //快速下单查询
     private fun getC2CQuickSearch() {
+        val xianMin = CommonUtil.parseDouble(
+            binding?.putMoney?.hint.toString().trim { it <= ' ' })
+        val xianMax = CommonUtil.parseDouble(
+            binding?.moneyAccount?.hint.toString().trim { it <= ' ' })
         val gteAmount = if (binding?.putMoney?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! / rate!!
         else CommonUtil.parseDouble(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
         val gteCurrencyCoinAmount = if (binding?.moneyAccount?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
         else CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! * rate!!
         val direction = if (binding?.c2cCustomer?.isChecked == true) "B" else "S"
         val coinType = if (binding?.one?.isChecked == true) "USDT" else "BTC"
-        val payMethod = if (binding?.cardsLayout?.visibility == View.VISIBLE) "3" else if (binding?.weiXinLayout?.visibility == View.VISIBLE)"2" else "1"
-        C2CApiServiceHelper.getC2CQuickSearch(mContext,gteAmount,gteCurrencyCoinAmount, coinType ,direction,payMethod,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
-            override fun error(type: Int, error: Any?) {
-                binding?.refreshLayout?.setRefreshing(false)
-                binding?.refreshLayout?.setLoading(false)
-                super.error(type, error)
-            }
+        val payMethod = if (binding?.cardsLayout?.visibility == View.VISIBLE) "[1]" else if (binding?.weiXinLayout?.visibility == View.VISIBLE)"[2]" else "[0]"
+        if (gteAmount != null && gteAmount >= xianMin!! && gteAmount <= xianMax!!) {
+            C2CApiServiceHelper.getC2CQuickSearch(
+                mContext,
+                gteAmount,
+                gteCurrencyCoinAmount,
+                coinType,
+                direction,
+                payMethod,
+                object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+                    override fun error(type: Int, error: Any?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
+                        super.error(type, error)
+                    }
 
-            override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
-                binding?.refreshLayout?.setRefreshing(false)
-                binding?.refreshLayout?.setLoading(false)
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    c2cList = returnData.data
-                    val bundle = Bundle()
-                    bundle.putParcelable(ConstData.C2C_LIST, c2cList)
-                    if (c2cList?.canCreateOrderForQueryUser == true && direction == " B "){
-                        BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(bundle).go(mContext)
-                    }
-                    else if (c2cList?.canCreateOrderForQueryUser == true && direction == " S "){
-                        BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(bundle).go(mContext)
-                    }
-                    else{
-                        FryingUtil.showToast(mContext, "当前用户不满足下单条件")
-                    }
-                } else {
+                    override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
+                        binding?.refreshLayout?.setRefreshing(false)
+                        binding?.refreshLayout?.setLoading(false)
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            c2cList = returnData.data
+                            val extras = Bundle()
+                            extras.putParcelable(ConstData.C2C_LIST, c2cList)
+                            extras.putString(ConstData.REAL_NAME, payChain)
+                            extras.putDouble(ConstData.BUY_PRICE, gteCurrencyCoinAmount!!)
+                            extras.putDouble(ConstData.BIRTH, gteAmount!!)
+                            extras.putString(ConstData.COIN_TYPE, c2cList?.id)
+                            if (c2cList?.canCreateOrderForQueryUser == true && direction == " B ") {
+                                BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS)
+                                    .with(extras).go(mContext)
+                            } else if (c2cList?.canCreateOrderForQueryUser == true && direction == " S ") {
+                                BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1)
+                                    .with(extras).go(mContext)
+                            }
 
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
+                        } else {
+
+                            FryingUtil.showToast(
+                                mContext,
+                                if (returnData == null) "null" else returnData.msg
+                            )
+                        }
+                    }
+                })
+        }
+            else {
+                FryingUtil.showToast(mContext, "请输入限额内的金额")
             }
-        })
     }
     private fun showData(dataList:OrderConfig?){
         binding?.putMoney?.setHint(dataList?.currencyCoinAmountMin?.toString() + "起")

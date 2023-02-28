@@ -138,7 +138,7 @@ interface C2CApiService {
     fun getC2CPayee(): Observable<HttpRequestResultData<C2CSellerMsg?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_RECEIPT)
-    fun getC2CReceipt(): Observable<HttpRequestResultData<PayInfo?>?>?
+    fun getC2CReceipt(): Observable<HttpRequestResultDataList<PayInfo?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_USERINFO)
     fun getC2CUserInfo(): Observable<HttpRequestResultString?>?
@@ -157,10 +157,25 @@ interface C2CApiService {
 
     @POST(UrlConfig.C2C.URL_C2C_UPDATE)
     fun getC2CUpdate(): Observable<HttpRequestResultString?>?
+    //OTC聊天
+    @POST(UrlConfig.C2C.URL_C2C_CREATE_IMG)
+    fun getC2CImage(@Query("id") id: String?): Observable<HttpRequestResultString?>?
+
+    @POST(UrlConfig.C2C.URL_C2C_CRATE_TXT)
+    fun getC2CText(@Query("id") id: String?,@Query("content") content: String?): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_REPLY_LIST)
+    fun getC2CList(@Query("id") id: String?): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_REPLY_PULL)
+    fun getC2CPull(@Query("id") id: String?,@Query("replyId") replyId: String?): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.C2C.URL_C2C_REAL_TIME)
+    fun getC2CTime(): Observable<HttpRequestResultString?>?
 
     //OTC订单
     @POST(UrlConfig.C2C.URL_C2C_CANCEL)
-    fun getC2CCancel(@Query("id") id: String?): Observable<HttpRequestResultData<String?>?>?
+    fun getC2CCancel(@Query("id") id: String?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CONFIRM_PAY)
     fun getC2CConfirmPay(@Query("id") id: String?,@Query("payEeId") payEeId: Int?,@Query("payMethod") payMethod: Int?, @Query("receiptId") receiptId: Int?):  Observable<HttpRequestResultData<String?>?>?
@@ -194,7 +209,7 @@ interface C2CApiService {
     fun getC2CAddP(): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_MCA)
-    fun getC2CMca(@Body otcMerchantDTO: OtcMerchantDTO?): Observable<HttpRequestResultData<String?>?>?
+    fun getC2CMca(@Body otcMerchantDTO: OtcMerchantDTO?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_MCN)
     fun getC2CMcn(): Observable<HttpRequestResultString?>?

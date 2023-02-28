@@ -687,7 +687,7 @@ object C2CApiServiceHelper {
     fun getC2COrderCancel(
         context: Context?,
         id: String?,
-        callback: Callback<HttpRequestResultData<String?>?>?
+        callback: Callback<HttpRequestResultString?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -774,7 +774,7 @@ object C2CApiServiceHelper {
     //获得所有收付款信息
     fun getAllPay(
         context: Context?,
-        callback: Callback<HttpRequestResultData<PayInfo?>?>?
+        callback: Callback<HttpRequestResultDataList<PayInfo?>?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -873,7 +873,7 @@ object C2CApiServiceHelper {
     fun getSellerApply(
         context: Context?,
         otcMerchantDTO: OtcMerchantDTO?,
-        callback: Callback<HttpRequestResultData<String?>?>?
+        callback: Callback<HttpRequestResultString?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -890,5 +890,81 @@ object C2CApiServiceHelper {
             ?.getOtcToken()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
+    // 回复图片
+    fun getC2CImage(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CImage(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 回复文字
+    fun getC2CText(
+        context: Context?,
+        id: String?,
+        content: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CText(id, content)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 回复列表
+    fun getC2CList(
+        context: Context?,
+        id: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CList(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 拉取消息
+    fun getC2CPull(
+        context: Context?,
+        id: String?,
+        replyId: String?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CPull(id,replyId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 实时推送消息
+    fun getC2CTime(
+        context: Context?,
+        callback: Callback<HttpRequestResultString?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CTime()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 }
