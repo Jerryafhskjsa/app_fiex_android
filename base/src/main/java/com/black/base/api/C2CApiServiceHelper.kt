@@ -701,7 +701,7 @@ object C2CApiServiceHelper {
     fun getC2CGP(
     context: Context?,
     id: String?,
-    callback: Callback<HttpRequestResultString?>?
+    callback: Callback<HttpRequestResultDataList<PayInfo?>?>?
     ) {
         if (context == null || callback == null) {
             return

@@ -14,8 +14,10 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.C2CADData
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -148,11 +150,11 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         window: ChooseWalletControllerWindow<String?>,
                         item: String?
                     ) {
-                        payChain = item
+
                         val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
                         val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
                         val num3 = c2cList?.id
-                        getC2COrder(num3, num1, num2)
+                        getC2COrder(num3, num1, num2, item)
                     }
                 })
             chooseWalletDialog.show()
@@ -354,7 +356,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             }
         })
     }
-    private fun getC2COrder(id: String?, amount: Double?, price: Double?) {
+    private fun getC2COrder(id: String?, amount: Double?, price: Double?, payChain: String?) {
         C2CApiServiceHelper.getC2COrder(
             mContext,
             id,
@@ -368,9 +370,13 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                 override fun callback(returnData: HttpRequestResultData<String?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         val id2 = returnData.data
+                        val item = if (binding?.ali?.visibility == View.VISIBLE)"0" else "" +
+                                       if (binding?.cards?.visibility == View.VISIBLE) "1" else "" +
+                                       if (binding?.weiXin?.visibility == View.VISIBLE) "2" else ""
                         val extras = Bundle()
+                        extras.putString(ConstData.PAIR, item)
                         extras.putParcelable(ConstData.C2C_LIST,c2cList)
-                        extras.putString(ConstData.REAL_NAME,payChain)
+                        extras.putString(ConstData.USER_YES ,payChain)
                         extras.putString(ConstData.COIN_TYPE,id2)
                         BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
                     } else {

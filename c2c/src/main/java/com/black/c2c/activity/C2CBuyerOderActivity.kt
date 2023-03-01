@@ -24,7 +24,7 @@ import com.black.router.annotation.Route
 class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivityC2cBuyerOderBinding? = null
     private var sellerName: String? = "帅"
-    private var id: String? = null
+    private var id2: String? = null
     private var payChain: String? = null
     var TotalTime: Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
@@ -52,7 +52,8 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buyer_oder)
-        id = intent.getStringExtra(ConstData.BUY_PRICE)
+        id2 = intent.getStringExtra(ConstData.BUY_PRICE)
+        payChain = intent.getStringExtra(ConstData.USER_YES)
         binding?.add?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.send?.setOnClickListener(this)
@@ -67,6 +68,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
         val id = v.id
         if (id == R.id.btn_confirm) {
             val extras = Bundle()
+            extras.putString(ConstData.BUY_PRICE, id2)
             extras.putString(ConstData.C2C_ORDER, payChain)
             BlackRouter.getInstance().build(RouterConstData.C2C_PAY_FOR).with(extras).go(mContext)
         }
@@ -76,7 +78,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     //回复图片
     private fun getC2cImage(){
-        C2CApiServiceHelper.getC2CImage(mContext, id , object : NormalCallback<HttpRequestResultString?>(mContext) {
+        C2CApiServiceHelper.getC2CImage(mContext, id2 , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
@@ -93,7 +95,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
     //回复文本
     private fun getC2cText(){
-        C2CApiServiceHelper.getC2CText(mContext, id ,null, object : NormalCallback<HttpRequestResultString?>(mContext) {
+        C2CApiServiceHelper.getC2CText(mContext, id2 ,null, object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
@@ -109,7 +111,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
   //回复列表
     private fun getC2cList(){
-        C2CApiServiceHelper.getC2CList(mContext, id , object : NormalCallback<HttpRequestResultString?>(mContext) {
+        C2CApiServiceHelper.getC2CList(mContext, id2 , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
@@ -125,7 +127,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
     //拉去更新
     private fun getC2cPull(){
-        C2CApiServiceHelper.getC2CPull(mContext, id ,null, object : NormalCallback<HttpRequestResultString?>(mContext) {
+        C2CApiServiceHelper.getC2CPull(mContext, id2 ,null, object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }

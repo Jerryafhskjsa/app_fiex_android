@@ -36,12 +36,14 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
     private var TotalTime : Long = 15*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
+        binding?.btnCancel?.isEnabled = true
     }
 
         override fun onTick(millisUntilFinished: Long) {
             if (TotalTime >= 0){
                 var minute=millisUntilFinished/1000/60%60
                 var second=millisUntilFinished/1000%60
+                binding?.btnCancel?.isEnabled = false
                 binding?.time?.setText("$minute:$second")}
             else{
                 FryingUtil.showToast(mContext,"订单已取消")
@@ -66,7 +68,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
         if (id2 == R.id.btn_confirm) {
             val bundle = Bundle()
             bundle.putString(ConstData.BUY_PRICE,id)
-            BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).go(mContext)
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).with(bundle).go(mContext)
         }
         if (id2 == R.id.btn_cancel) {
             cancelDialog()

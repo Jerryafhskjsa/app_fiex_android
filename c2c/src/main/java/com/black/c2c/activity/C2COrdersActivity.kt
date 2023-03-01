@@ -13,10 +13,12 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2COrderDetails
+import com.black.base.model.c2c.PayInfo
 import com.black.base.model.user.UserInfo
 import com.black.base.util.*
 import com.black.base.view.ChooseWalletControllerWindow
@@ -47,6 +49,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     private var cointype: String? = null
     private val mHandler = Handler()
     private var id2: String? = null
+    private var item: String? = null
     private var payFor: Int? = null
     private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
@@ -78,17 +81,46 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_order)
-        payChain = intent.getStringExtra(ConstData.REAL_NAME)
+        payChain = intent.getStringExtra(ConstData.USER_YES)
         id2 = intent.getStringExtra(ConstData.COIN_TYPE)
+        item = intent.getStringExtra(ConstData.PAIR)
         binding?.pay?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
         c2cList = intent.getParcelableExtra(ConstData.C2C_LIST)
         binding?.adId?.setText(id2)
+        binding?.payName?.setText(payChain)
         c2CHandleCheckHelper = C2CHandleCheckHelper(mContext, BaseActionBarActivity(),fryingHelper)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
+        chainNames = ArrayList()
+        if (item == "1") {
+            chainNames?.add(TAB_CARDS)
+        }
+        else if (item == "0") {
+            chainNames?.add(TAB_IDPAY)
+        }
+        else if (item == "2") {
+            chainNames?.add(TAB_WEIXIN)
+        }
+        else if (item == "01") {
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_CARDS)
+        }
+        else if (item == "02") {
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_WEIXIN)
+        }
+        else if (item == "12") {
+            chainNames?.add(TAB_WEIXIN)
+            chainNames?.add(TAB_CARDS)
+        }
+        else {
+            chainNames?.add(TAB_IDPAY)
+            chainNames?.add(TAB_CARDS)
+            chainNames?.add(TAB_WEIXIN)
+        }
         //chainNames?.add(TAB_PAYPAID)
         if (payChain == getString(R.string.wei_xin)){
             binding?.cardsColor?.visibility = View.GONE
@@ -105,7 +137,6 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
             binding?.aliColor?.visibility =View.VISIBLE
             binding?.weiXinColor?.visibility = View.GONE
         }
-      binding?.payName?.setText(payChain)
         countDownTimer
         getC2COIV2(id2)
     }
@@ -117,18 +148,16 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.pay){
-            payChain = binding?.payName?.text?.toString()
             choosePayMethodWindow()
         }
         else if (id == R.id.btn_confirm){
             cancelDialog()
         }
         else if (id == R.id.btn_cancel) {
-            payChain = binding?.payName?.text?.toString()
             val extras = Bundle()
-            extras.putString(ConstData.BUY_PRICE,id2)
+            extras.putString(ConstData.BUY_PRICE, id2)
+            extras.putString(ConstData.USER_YES, payChain)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
-
         }
     }
     private fun checkClickable(){
@@ -239,23 +268,12 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                 override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         binding?.coinType?.setText(returnData.data?.coinType)
-                        binding?.total?.setText(returnData.data?.amount.toString())
+                        binding?.account?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
-                        binding?.account?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                        binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
                         binding?.createTime?.setText(returnData.data?.createTime)
                         binding?.name?.setText(returnData.data?.otherSideRealName)
                         binding?.accountTotal?.setText(returnData.data?.otherSideCompletedOrders30Days.toString())
-                        payFor = returnData.data?.payMethod
-                        chainNames = ArrayList()
-                        if (payFor == 2) {
-                            chainNames?.add(TAB_CARDS)
-                        }
-                        if (payFor == 0) {
-                            chainNames?.add(TAB_IDPAY)
-                        }
-                        else {
-                            chainNames?.add(TAB_WEIXIN)
-                        }
                     } else {
 
                         FryingUtil.showToast(

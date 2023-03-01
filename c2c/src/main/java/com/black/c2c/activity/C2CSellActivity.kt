@@ -11,8 +11,10 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -60,15 +62,8 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
         binding?.btnConfirm?.setText(getString(R.string.sell) + cointype)
-        TAB_CARDS = getString(R.string.cards)
-        TAB_IDPAY = getString(R.string.id_pay)
-        TAB_WEIXIN = getString(R.string.wei_xin)
-        payChain = TAB_IDPAY
-        chainNames = ArrayList()
-        chainNames?.add(TAB_IDPAY)
-        chainNames?.add(TAB_CARDS)
-        chainNames?.add(TAB_WEIXIN)
         getC2CADData()
+        getAllPay()
         checkClickable()
     }
     override fun getTitleText(): String? {
@@ -85,6 +80,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                     BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).go(mContext)
                 }
                 else{
+                    getAllPay()
                     choosePayMethodWindowOld()
                 }
             }
@@ -96,6 +92,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             getC2CADData()
         }
         else if (id == R.id.methods_layout){
+            getAllPay()
             choosePayMethodWindowOld()
         }
         else if (id == R.id.pay_time){
@@ -128,7 +125,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         }
     }
     private fun choosePayMethodWindowOld() {
-        if (payChain != null && chainNames!!.size > 0) {
+        if (chainNames!!.size > 0) {
             val chooseWalletDialog = ChooseWalletControllerWindow(this as Activity,
                 getString(R.string.choose_pay),
                 payChain,
@@ -139,6 +136,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
                         payChain = item
+                        binding?.methodsLayout?.setText(payChain)
                         getC2COrder()
                          }
                 })
@@ -296,62 +294,36 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
             binding?.weiXin?.visibility = View.VISIBLE
-            payChain = TAB_IDPAY
-            chainNames = ArrayList()
-            chainNames?.add(TAB_IDPAY)
-            chainNames?.add(TAB_CARDS)
-            chainNames?.add(TAB_WEIXIN)
         }
         if (paymentTypeList != null && paymentTypeList == "[1]") {
             binding?.cards?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
-            payChain = TAB_CARDS
-            chainNames = ArrayList()
-            chainNames?.add(TAB_CARDS)
         }
         if (paymentTypeList != null && paymentTypeList== "[0]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
-            payChain = TAB_IDPAY
-            chainNames = ArrayList()
-            chainNames?.add(TAB_IDPAY)
         }
         if (paymentTypeList != null && paymentTypeList== "[2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.GONE
-            payChain = TAB_WEIXIN
-            chainNames = ArrayList()
-            chainNames?.add(TAB_WEIXIN)
         }
         if (paymentTypeList != null && paymentTypeList == "[0,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
-            payChain = TAB_IDPAY
-            chainNames = ArrayList()
-            chainNames?.add(TAB_IDPAY)
-            chainNames?.add(TAB_WEIXIN)
         }
         if (paymentTypeList != null && paymentTypeList== "[0,1]") {
             binding?.weiXin?.visibility = View.GONE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.VISIBLE
-            payChain = TAB_CARDS
-            chainNames = ArrayList()
-            chainNames?.add(TAB_CARDS)
-            chainNames?.add(TAB_IDPAY)
         }
         if (paymentTypeList != null && paymentTypeList== "[1,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.VISIBLE
-            payChain = TAB_WEIXIN
-            chainNames = ArrayList()
-            chainNames?.add(TAB_CARDS)
-            chainNames?.add(TAB_WEIXIN)
         }
     }
 
@@ -404,4 +376,40 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                 }
             })
     }
+    //获得用户收款方式
+    private fun getAllPay(){
+        C2CApiServiceHelper.getAllPay(mContext, object : NormalCallback<HttpRequestResultDataList<PayInfo?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+
+            override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val dataList: ArrayList<PayInfo?>? = returnData.data
+                    show(dataList)
+                } else {
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+    private fun show(dataList: ArrayList<PayInfo?>?) {
+        TAB_CARDS = getString(R.string.cards)
+        TAB_IDPAY = getString(R.string.id_pay)
+        TAB_WEIXIN = getString(R.string.wei_xin)
+        chainNames = ArrayList()
+        val num = dataList!!.size - 1
+        for (i in 0..num) {
+                if (dataList[i]?.type!! == 0 && binding?.ali?.visibility == View.VISIBLE) {
+                    chainNames?.add(TAB_IDPAY + "                         " + dataList[i]?.account)
+                } else if (dataList[i]?.type!! == 1 && binding?.cards?.visibility == View.VISIBLE) {
+                    chainNames?.add(TAB_CARDS + "                         " + dataList[i]?.account)
+                } else if (dataList[i]?.type!! == 2 && binding?.weiXin?.visibility == View.VISIBLE) {
+                    chainNames?.add(TAB_WEIXIN + "                         " + dataList[i]?.account)
+                }
+            }
+        }
+
 }

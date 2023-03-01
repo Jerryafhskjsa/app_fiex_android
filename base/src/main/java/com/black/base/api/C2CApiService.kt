@@ -187,7 +187,7 @@ interface C2CApiService {
     fun getC2CCreateV2(@Query("advertisingId") advertisingId: String?,@Query("amount") amount: Double?,@Query("price") price: Double?): Observable<HttpRequestResultData<String?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_GP)
-    fun getC2CGP(@Query("id") id: String?): Observable<HttpRequestResultString?>?
+    fun getC2CGP(@Query("id") id: String?): Observable<HttpRequestResultDataList<PayInfo?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_ORDER_INFO)
     fun getC2COrderInfo(@Query("id") id: String?): Observable<HttpRequestResultData<C2COrderDetails?>?>?

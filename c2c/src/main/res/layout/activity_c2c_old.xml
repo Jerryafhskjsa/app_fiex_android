@@ -625,6 +625,7 @@
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/cards"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/text_size_5"
@@ -633,22 +634,17 @@
                                     android:textStyle="bold"
                                     android:layout_gravity="center_vertical"
                                     android:text="@string/cards" />
-                                <com.black.base.widget.SpanTextView
-                                    android:id="@+id/cards_num"
-                                    android:layout_width="220dp"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="@dimen/text_size_20"
-                                    android:layout_marginTop="6dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="6222222222222" />
+                                   android:gravity="right">
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/arrow_right"/>
+                            </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
                                 android:id="@+id/id_pay_layout"
@@ -669,6 +665,7 @@
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/ali"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/text_size_5"
@@ -677,22 +674,17 @@
                                     android:textStyle="bold"
                                     android:layout_gravity="center_vertical"
                                     android:text="@string/id_pay" />
-                                <com.black.base.widget.SpanTextView
-                                    android:id="@+id/ali_num"
-                                    android:layout_width="220dp"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="@dimen/text_size_20"
-                                    android:layout_marginTop="6dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="13778037105" />
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/text_size_10"
-                                    android:layout_gravity="center_vertical"
-                                    android:background="@drawable/arrow_right"/>
+                                    android:gravity="right">
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="@dimen/text_size_10"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/arrow_right"/>
+                                </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
                                 android:id="@+id/wei_xin_layout"
@@ -713,6 +705,7 @@
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     />
                                 <com.black.base.widget.SpanTextView
+                                    android:id="@+id/wei_xin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/text_size_5"
@@ -721,22 +714,17 @@
                                     android:textStyle="bold"
                                     android:layout_gravity="center_vertical"
                                     android:text="@string/wei_xin" />
-                                <com.black.base.widget.SpanTextView
-                                    android:id="@+id/wei_xin_id"
-                                    android:layout_width="220dp"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="@dimen/text_size_20"
-                                    android:layout_marginTop="6dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="13778037105" />
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                   android:layout_marginLeft="@dimen/text_size_10"
-                                    android:layout_gravity="center_vertical"
-                                    android:background="@drawable/arrow_right"/>
+                                    android:gravity="right">
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="@dimen/text_size_10"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/arrow_right"/>
+                                </LinearLayout>
                             </LinearLayout>
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/btn_confirm"
