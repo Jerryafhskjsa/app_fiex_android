@@ -609,7 +609,7 @@ object C2CApiServiceHelper {
         context: Context?,
         isShowLoading: Boolean,
         merchantId: Int?,
-        callback: Callback<HttpRequestResultData<C2CMainAD?>?>?
+        callback: Callback<HttpRequestResultData<SellerAD<C2CMainAD?>?>?>?
     ) {
         if (context == null || callback == null) {
             return

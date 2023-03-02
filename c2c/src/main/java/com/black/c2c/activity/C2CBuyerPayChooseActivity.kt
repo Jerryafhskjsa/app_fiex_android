@@ -174,7 +174,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     private fun confirmDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.cancel_dialog_two ,null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -190,29 +190,21 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         val layoutParams =
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
-        if (payChain == getString(R.string.id_pay))
+        /*else if (payChain == getString(R.string.cards))
         {
-            val name = binding?.name5?.text?.trim { it <= ' ' }.toString() +  " " + binding?.name6?.text?.trim { it <= ' ' }.toString()
-            dialog.findViewById<TextView>(R.id.ali_pay).visibility = View.VISIBLE
-            dialog.findViewById<TextView>(R.id.wei_xin).visibility = View.GONE
-            dialog.findViewById<TextView>(R.id.cards).visibility = View.GONE
-            dialog.findViewById<TextView>(R.id.name).text = name
-        }
-        else if (payChain == getString(R.string.cards))
-        {
-            val name = binding?.name?.text?.trim { it <= ' ' }.toString() +  " " + binding?.name2?.text?.trim { it <= ' ' }.toString()
+            val name = binding?.name?.text?.toString() + binding?.name2?.text?.toString()
             dialog.findViewById<TextView>(R.id.cards).visibility = View.VISIBLE
             dialog.findViewById<TextView>(R.id.wei_xin).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.ali_pay).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.name).text = name
         }
         else {
-            val name = binding?.name7?.text?.trim { it <= ' ' }.toString() +  " " + binding?.name8?.text?.trim { it <= ' ' }.toString()
+            val name = binding?.name7?.text?.toString() + binding?.name8?.text?.toString()
             dialog.findViewById<TextView>(R.id.wei_xin).visibility = View.VISIBLE
             dialog.findViewById<TextView>(R.id.ali_pay).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.cards).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.name).text = name
-        }
+        }*/
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             getC2cConfirm()
@@ -233,7 +225,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     receiptInfo = returnData.data?.receiptInfo
                     binding?.name1?.setText(returnData.data?.realName)
-                    binding?.money?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
+                    binding?.money?.setText("￥ " + (returnData.data?.amount!! * returnData.data?.price!!).toString())
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
@@ -242,7 +234,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         })
     }
 
-    //获取卖家首付款方式
+    //获取卖家收付款方式
     private fun getC2CGP() {
         C2CApiServiceHelper.getC2CGP(mContext, id2,  object : NormalCallback<HttpRequestResultDataList<PayInfo?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
@@ -251,48 +243,45 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    receiptId = returnData.data!![0]?.id
-                        if (payChain == getString(R.string.id_pay))
-                    {
-                        binding?.idPay?.visibility = View.VISIBLE
-                        binding?.cards?.visibility = View.GONE
-                        binding?.weiXin?.visibility = View.GONE
-                        for (i in 0..returnData.data!!.size)
-                            if (returnData.data!![i]?.type == 0)
-                            {
-                                binding?.name5?.setText(returnData.data!![i]?.name)
-                                binding?.name6?.setText(returnData.data!![i]?.account)
-                                val image = returnData.data!![i]?.receiptImage
-                            }
+                    if (returnData.data == null) {
+                        FryingUtil.showToast(mContext, "卖家收款方式已修改")
+                        return
+                    } else {
+                        receiptId = returnData.data!![0]?.id
+                        if (payChain == getString(R.string.id_pay)) {
+                            binding?.idPay?.visibility = View.VISIBLE
+                            binding?.cards?.visibility = View.GONE
+                            binding?.weiXin?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 0) {
+                                    binding?.name5?.setText(returnData.data!![i]?.name)
+                                    binding?.name6?.setText(returnData.data!![i]?.account)
+                                    val image = returnData.data!![i]?.receiptImage
+                                }
+                        } else if (payChain == getString(R.string.cards)) {
+                            binding?.cards?.visibility = View.VISIBLE
+                            binding?.idPay?.visibility = View.GONE
+                            binding?.weiXin?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 1) {
+                                    binding?.name?.setText(returnData.data!![i]?.name)
+                                    binding?.name2?.setText(returnData.data!![i]?.account)
+                                    binding?.name3?.setText(returnData.data!![i]?.depositBank)
+                                    binding?.name4?.setText(returnData.data!![i]?.depositBank)
+                                }
+                        } else {
+                            binding?.weiXin?.visibility = View.VISIBLE
+                            binding?.idPay?.visibility = View.GONE
+                            binding?.cards?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 2) {
+                                    binding?.name7?.setText(returnData.data!![i]?.name)
+                                    binding?.name8?.setText(returnData.data!![i]?.account)
+                                    val image = returnData.data!![i]?.receiptImage
+                                }
+                        }
                     }
-                    else if (payChain == getString(R.string.cards))
-                    {
-                        binding?.cards?.visibility = View.VISIBLE
-                        binding?.idPay?.visibility = View.GONE
-                        binding?.weiXin?.visibility = View.GONE
-                        for (i in 0..returnData.data!!.size)
-                            if (returnData.data!![i]?.type == 0)
-                            {
-                                binding?.name?.setText(returnData.data!![i]?.name)
-                                binding?.name2?.setText(returnData.data!![i]?.account)
-                                binding?.name3?.setText(returnData.data!![i]?.depositBank)
-                                binding?.name4?.setText(returnData.data!![i]?.depositBank)
-                            }
-                    }
-                    else
-                    {
-                        binding?.weiXin?.visibility = View.VISIBLE
-                        binding?.idPay?.visibility = View.GONE
-                        binding?.cards?.visibility = View.GONE
-                        for (i in 0..returnData.data!!.size)
-                            if (returnData.data!![i]?.type == 0)
-                            {
-                                binding?.name7?.setText(returnData.data!![i]?.name)
-                                binding?.name8?.setText(returnData.data!![i]?.account)
-                                val image = returnData.data!![i]?.receiptImage
-                            }
-                    }
-                } else {
+                }else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }

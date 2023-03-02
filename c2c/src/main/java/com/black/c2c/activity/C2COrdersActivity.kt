@@ -155,6 +155,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         }
         else if (id == R.id.btn_cancel) {
             val extras = Bundle()
+            payChain = binding?.payName?.text.toString()
             extras.putString(ConstData.BUY_PRICE, id2)
             extras.putString(ConstData.USER_YES, payChain)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)

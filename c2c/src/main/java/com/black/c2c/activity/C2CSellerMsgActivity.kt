@@ -17,6 +17,7 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2CSMSG
+import com.black.base.model.c2c.SellerAD
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -40,6 +41,7 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivitySellerMsgBinding? = null
     private var merchantId: Int? = null
     private var dataList:ArrayList<C2CMainAD?>? = ArrayList()
+    private var sellList:ArrayList<C2CMainAD?>? = ArrayList()
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var c2CMsgBasicFragment: C2CMsgBasicFragment? = null
     private var c2CSADFragment: C2CSADFragment? = null
@@ -188,17 +190,21 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
         })
     }
     private fun getC2CAD(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2CSellerAD(mContext, isShowLoading, merchantId,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CSellerAD(mContext, isShowLoading, merchantId,  object : NormalCallback<HttpRequestResultData<SellerAD<C2CMainAD?>?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
             @SuppressLint("SetTextI18n")
-            override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
+            override fun callback(returnData: HttpRequestResultData<SellerAD<C2CMainAD?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val data = returnData.data
-                    dataList?.add(data)
-                    binding?.ad?.setText("广告(" + dataList?.size +  ")")
+                    dataList = data?.buy
+                    sellList = data?.sell
+                    val num1: Int? = dataList?.size
+                    val num2: Int? = sellList?.size
+                    val num3: Int = if (num1 == null && num2 == null) 0 else if (num1 == null && num2 != null) num2 else if (num1 != null && num2 == null) num1 else num1!! + num2!!
+                    binding?.ad?.text = "广告($num3)"
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }

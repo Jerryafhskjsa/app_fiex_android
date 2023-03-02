@@ -14,6 +14,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.SellerAD
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.c2c.BR
@@ -36,6 +37,7 @@ class C2CSADFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoad
     private var coinType: String? = null
     private var direction: String? = null
     private var dataList: ArrayList<C2CMainAD?>? = ArrayList()
+    private var sellList: ArrayList<C2CMainAD?>? = ArrayList()
     private var currentPage = 1
     private var total = 0
 
@@ -107,9 +109,10 @@ class C2CSADFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoad
         }
         adapter?.notifyDataSetChanged()
     }
+
     private fun getC2CAD(isShowLoading: Boolean) {
         val merchantId = arguments?.getInt(ConstData.PAIR)
-        C2CApiServiceHelper.getC2CSellerAD(mContext, isShowLoading, merchantId,  object : NormalCallback<HttpRequestResultData<C2CMainAD?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2CSellerAD(mContext, isShowLoading, merchantId,  object : NormalCallback<HttpRequestResultData<SellerAD<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)
@@ -117,15 +120,12 @@ class C2CSADFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoad
             }
 
             @SuppressLint("SetTextI18n")
-            override fun callback(returnData: HttpRequestResultData<C2CMainAD?>?) {
+            override fun callback(returnData: HttpRequestResultData<SellerAD<C2CMainAD?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val data = returnData.data
-                    dataList?.add(data)
-                    total = if (dataList == null) {
-                        0
-                    } else {
-                        dataList!!.size
-                    }
+                    dataList = data?.buy
+                    sellList = data?.sell
+                    dataList = dataList?.plus(sellList!!) as ArrayList<C2CMainAD?>?
                     showData(dataList)
                 } else {
                     showData(null)

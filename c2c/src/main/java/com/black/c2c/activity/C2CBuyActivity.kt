@@ -151,7 +151,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         item: String?
                     ) {
 
-                        val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+                        val num1 = CommonUtil.parseDouble(binding?.one?.text.toString().trim { it <= ' ' })
                         val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
                         val num3 = c2cList?.id
                         getC2COrder(num3, num1, num2, item)

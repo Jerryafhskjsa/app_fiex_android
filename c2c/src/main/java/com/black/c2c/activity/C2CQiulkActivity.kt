@@ -91,7 +91,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         if (rate == null)
         {
-            binding?.refreshLayout?.setRefreshing(true)
+            binding?.refreshLayout?.setRefreshing(false)
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_old)
         binding?.c2cOneKey?.setOnClickListener(this)
@@ -453,25 +453,27 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
                         window: ChooseWalletControllerWindow<String?>,
                         item: String?
                     ) {
-                        if (item == TAB_CARDS){
-                            binding?.cardsLayout?.visibility = View.VISIBLE
-                            binding?.weiXinLayout?.visibility = View.GONE
-                            binding?.idPayLayout?.visibility = View.GONE
-                            binding?.cards?.setText(item)
-                        }
-                        if (item == TAB_IDPAY){
-                            binding?.idPayLayout?.visibility = View.VISIBLE
-                            binding?.weiXinLayout?.visibility = View.GONE
-                            binding?.cardsLayout?.visibility = View.GONE
-                            binding?.ali?.setText(item)
-                        }
-                        if (item == TAB_WEIXIN){
-                            binding?.weiXinLayout?.visibility = View.VISIBLE
-                            binding?.cardsLayout?.visibility = View.GONE
-                            binding?.idPayLayout?.visibility = View.GONE
-                            binding?.weiXin?.setText(item)
-                        }
                         payChain = item
+                        when(payChain) {
+                            TAB_CARDS -> {
+                                binding?.cardsLayout?.visibility = View.VISIBLE
+                                binding?.weiXinLayout?.visibility = View.GONE
+                                binding?.idPayLayout?.visibility = View.GONE
+                                binding?.cards?.setText(payChain)
+                            }
+                            TAB_IDPAY -> {
+                                binding?.idPayLayout?.visibility = View.VISIBLE
+                                binding?.weiXinLayout?.visibility = View.GONE
+                                binding?.cardsLayout?.visibility = View.GONE
+                                binding?.ali?.setText(payChain)
+                            }
+                             TAB_WEIXIN -> {
+                                binding?.weiXinLayout?.visibility = View.VISIBLE
+                                binding?.cardsLayout?.visibility = View.GONE
+                                binding?.idPayLayout?.visibility = View.GONE
+                                binding?.weiXin?.setText(payChain)
+                            }
+                        }
 
                     }
                 })

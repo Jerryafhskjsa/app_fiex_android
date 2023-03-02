@@ -69,7 +69,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
         if (id == R.id.btn_confirm) {
             val extras = Bundle()
             extras.putString(ConstData.BUY_PRICE, id2)
-            extras.putString(ConstData.C2C_ORDER, payChain)
+            extras.putString(ConstData.USER_YES, payChain)
             BlackRouter.getInstance().build(RouterConstData.C2C_PAY_FOR).with(extras).go(mContext)
         }
         }

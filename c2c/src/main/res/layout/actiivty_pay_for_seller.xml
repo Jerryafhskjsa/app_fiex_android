@@ -52,6 +52,7 @@
                         android:orientation="horizontal">
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/seller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_20"
@@ -147,6 +148,7 @@
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/cards"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -315,6 +317,7 @@
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/id_pay"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -444,6 +447,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/wei_xin"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
