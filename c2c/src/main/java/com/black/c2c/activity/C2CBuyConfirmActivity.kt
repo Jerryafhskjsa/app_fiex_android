@@ -18,7 +18,7 @@ import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 
-@Route(value = [RouterConstData.C2C_BUY_CONFRIM], beforePath = RouterConstData.C2C_NEW)
+@Route(value = [RouterConstData.C2C_BUY_CONFRIM])
 class C2CBuyConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cBuyConfirmBinding? = null
     private var id: String? = null

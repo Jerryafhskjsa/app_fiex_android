@@ -50,8 +50,8 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
 
         override fun onTick(millisUntilFinished: Long) {
             if (TotalTime >= 0){
-                var minute=millisUntilFinished/1000/60%60
-                var second=millisUntilFinished/1000%60
+                val minute=millisUntilFinished/1000/60%60
+                val second=millisUntilFinished/1000%60
                 binding?.time?.setText("$minute:$second")}
             else{
                 FryingUtil.showToast(mContext,"订单已取消")
@@ -139,7 +139,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     private fun cancelDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.cancel_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -190,21 +190,28 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         val layoutParams =
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
-        /*else if (payChain == getString(R.string.cards))
+        if (payChain == getString(R.string.cards)) {
+            val name = binding?.name?.text?.toString() + "  " + binding?.name2?.text?.toString()
+            dialog.findViewById<TextView>(R.id.name).text = name
+            dialog.findViewById<View>(R.id.cards).visibility = View.VISIBLE
+            dialog.findViewById<View>(R.id.wei_xin).visibility = View.GONE
+            dialog.findViewById<View>(R.id.ali_pay).visibility = View.GONE
+        }
+        else if (payChain == getString(R.string.id_pay))
         {
-            val name = binding?.name?.text?.toString() + binding?.name2?.text?.toString()
-            dialog.findViewById<TextView>(R.id.cards).visibility = View.VISIBLE
-            dialog.findViewById<TextView>(R.id.wei_xin).visibility = View.GONE
-            dialog.findViewById<TextView>(R.id.ali_pay).visibility = View.GONE
+            val name = binding?.name5?.text?.toString() + "  " + binding?.name6?.text?.toString()
+            dialog.findViewById<View>(R.id.cards).visibility = View.VISIBLE
+            dialog.findViewById<View>(R.id.wei_xin).visibility = View.GONE
+            dialog.findViewById<View>(R.id.ali_pay).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.name).text = name
         }
         else {
-            val name = binding?.name7?.text?.toString() + binding?.name8?.text?.toString()
-            dialog.findViewById<TextView>(R.id.wei_xin).visibility = View.VISIBLE
-            dialog.findViewById<TextView>(R.id.ali_pay).visibility = View.GONE
-            dialog.findViewById<TextView>(R.id.cards).visibility = View.GONE
+            val name = binding?.name7?.text?.toString() + "  " + binding?.name8?.text?.toString()
+            dialog.findViewById<View>(R.id.wei_xin).visibility = View.VISIBLE
+            dialog.findViewById<View>(R.id.ali_pay).visibility = View.GONE
+            dialog.findViewById<View>(R.id.cards).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.name).text = name
-        }*/
+        }
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             getC2cConfirm()

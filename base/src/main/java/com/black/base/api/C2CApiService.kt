@@ -126,7 +126,7 @@ interface C2CApiService {
 
     //OTC用户相关接口
     @GET(UrlConfig.C2C.URL_C2C_ACCOUNT)
-    fun getC2CAccount(): Observable<HttpRequestResultString?>?
+    fun getC2CAccount(): Observable<HttpRequestResultDataList<UserCoinAccount?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_APPLY_PAYEE)
     fun getC2CApplyPayee(): Observable<HttpRequestResultString?>?
@@ -141,7 +141,7 @@ interface C2CApiService {
     fun getC2CReceipt(): Observable<HttpRequestResultDataList<PayInfo?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_USERINFO)
-    fun getC2CUserInfo(): Observable<HttpRequestResultString?>?
+    fun getC2CUserInfo(): Observable<HttpRequestResultData<C2CUserInfo?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_OPEN)
     fun getC2COpen(): Observable<HttpRequestResultString?>?

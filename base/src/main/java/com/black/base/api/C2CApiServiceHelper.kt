@@ -967,4 +967,32 @@ object C2CApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
+
+    // 得到用户信息
+    fun getC2CUserInfo(
+        context: Context?,
+        callback: Callback<HttpRequestResultData<C2CUserInfo?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CUserInfo()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
+
+    // 得到user/account
+    fun getC2CUserAccount(
+        context: Context?,
+        callback: Callback<HttpRequestResultDataList<UserCoinAccount?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+            ?.getC2CAccount()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
 }

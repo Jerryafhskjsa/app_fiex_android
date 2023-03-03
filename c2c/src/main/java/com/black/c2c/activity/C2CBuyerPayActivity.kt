@@ -60,14 +60,14 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
         getPayChoose()
         checkClickable()
     }
-    override fun getTitleText(): String? {
+    override fun getTitleText(): String {
         return "等待卖家确认收款并放币"
     }
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm) {
             val bundle = Bundle()
-            bundle.putString(ConstData.BUY_PRICE,id2)
+            bundle.putString(ConstData.BUY_PRICE , id2)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).with(bundle).go(mContext)
         }
         if (id == R.id.btn_cancel) {
@@ -118,7 +118,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
                     binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                     binding?.price?.setText(returnData.data?.price.toString())
                     binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                    binding?.time?.setText(returnData.data?.createTime)
+                    binding?.createTime?.setText(returnData.data?.createTime)
                     binding?.realName?.setText(returnData.data?.otherSideRealName)
                     binding?.realNameName?.setText(returnData.data?.otherSideAllOrders30Days.toString())
                     binding?.person?.setText(returnData.data?.receiptInfo?.name)
