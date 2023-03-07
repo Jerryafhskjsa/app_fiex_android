@@ -1,5 +1,6 @@
 package com.black.c2c.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
@@ -25,6 +27,7 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
     private var TotalTime : Long = 5*60*1000 //总时长 15min
     var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
     override fun onFinish(){
+        getC2cCancel(id)
     }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -41,6 +44,7 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_seller_wait)
         id = intent.getStringExtra(ConstData.BUY_PRICE)
+        binding?.idNum?.setText(id)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.num?.setOnClickListener(this)
         countDownTimer
@@ -88,5 +92,27 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
                     }
                 }
             })
+    }
+
+    //撤单
+    private fun getC2cCancel(id: String?){
+
+        C2CApiServiceHelper.getC2COrderCancel(mContext, id,  object : NormalCallback<HttpRequestResultString?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext,"取消订单成功")
+                    val intent = Intent(this@C2CWattingActivity, C2CNewActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

@@ -71,7 +71,7 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
         val financialRecord = adapter?.getItem(position)
         val extras = Bundle()
         val id = financialRecord?.id
-        extras.putString("id", id)
+        extras.putString(ConstData.BUY_PRICE, id)
         BlackRouter.getInstance()
             .build(RouterConstData.C2C_BUY_CONFRIM)
             .with(extras)

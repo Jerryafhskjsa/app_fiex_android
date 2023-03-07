@@ -589,7 +589,15 @@
                                     android:textSize="@dimen/text_size_12"
                                     android:textColor="@color/black_real"
                                     android:layout_weight="1"
-                                    android:text="-USDT" />
+                                    android:text="11" />
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/coin_type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:textSize="@dimen/text_size_12"
+                                    android:textColor="@color/black_real"
+                                    android:text="USDT" />
                             </LinearLayout>
                             <LinearLayout
                                 android:id="@+id/payment_method"

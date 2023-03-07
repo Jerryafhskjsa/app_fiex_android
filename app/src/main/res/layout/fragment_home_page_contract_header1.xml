@@ -32,7 +32,7 @@
                     android:background="@drawable/bg_transaction_buy"
                     android:checked="true"
                     android:text="@string/contract_buy"
-                    android:textColor="@color/btn_buy_check" />
+                    android:textColor="@color/btn_sale_check" />
 
                 <com.black.base.widget.SpanCheckedTextView
                     android:id="@+id/btn_sale"

@@ -167,6 +167,7 @@
                             android:paddingRight="8dp"
                             android:layout_marginBottom="2dp"
                             android:text="0.00%"
+                            android:textStyle="bold"
                             android:textColor="@color/T10"
                             android:textSize="@dimen/text_size_12" />
 

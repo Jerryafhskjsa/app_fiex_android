@@ -14,6 +14,7 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.C2CUserInfo
 import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -21,6 +22,7 @@ import com.black.base.util.RouterConstData
 import com.black.base.view.ChooseWalletControllerWindow
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellBinding
+import com.black.c2c.util.C2CHandleCheckHelper
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -39,6 +41,8 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     private var cointype = "USDT"
     private var payChain: String? = null
     private var id: String? = null
+    private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
+    private var c2CUserInfo: C2CUserInfo? = null
     private var rate: Double? = null
     private var chainNames: MutableList<String?>? = null
 
@@ -54,6 +58,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_sell)
+        c2CHandleCheckHelper = C2CHandleCheckHelper(mContext, BaseActionBarActivity(),fryingHelper)
         id = intent.getStringExtra(ConstData.PAIR)
         binding?.accont?.setOnClickListener(this)
         binding?.amount?.setOnClickListener(this)
@@ -61,11 +66,14 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.name?.setOnClickListener(this)
         binding?.methodsLayout?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.allMoney?.setOnClickListener(this)
+        binding?.allAmount?.setOnClickListener(this)
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
         binding?.btnConfirm?.setText(getString(R.string.sell) + cointype)
         getC2CADData()
         getAllPay()
+        getC2CUserInfo()
         checkClickable()
     }
     override fun getTitleText(): String {
@@ -74,6 +82,9 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){
+            c2CHandleCheckHelper?.run {
+                checkLoginUser(Runnable {
+                    checkRealName(Runnable {
             val two = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
             val xianMin = CommonUtil.parseDouble(binding?.xianMin?.text.toString().trim { it <= ' ' })
             val xianMax = CommonUtil.parseDouble(binding?.xianMax?.text.toString().trim { it <= ' ' })
@@ -82,6 +93,9 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             }
             else{
                 FryingUtil.showToast(mContext, "请输入限额内的金额")
+            }
+                    })
+                })
             }
         }
         else if (id == R.id.unit_price){
@@ -93,6 +107,12 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         }
         else if (id == R.id.pay_time){
             payTimeDialog()
+        }
+        else if (id == R.id.all_money){
+            binding?.putMoney?.setText(binding?.cny?.text)
+        }
+        else if (id == R.id.all_amount){
+            binding?.putAmount?.setText(binding?.balance?.text)
         }
         else if (id == R.id.name){
             getC2CADData()
@@ -365,7 +385,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
             choosePayMethodWindowOld()
         }
         else {
-            val num1 = CommonUtil.parseDouble(binding?.two?.text.toString().trim { it <= ' ' })
+            val num1 = CommonUtil.parseDouble(binding?.one?.text.toString().trim { it <= ' ' })
             val num2 =
                 CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
             C2CApiServiceHelper.getC2COrder(
@@ -420,6 +440,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         TAB_WEIXIN = getString(R.string.wei_xin)
         chainNames = ArrayList()
         val num = dataList!!.size - 1
+
         for (i in 0..num) {
                 if (dataList[i]?.type!! == 0 && binding?.ali?.visibility == View.VISIBLE) {
                     TAB_IDPAY = TAB_IDPAY + "                         " + dataList[i]?.account
@@ -433,5 +454,24 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                 }
             }
         }
+    //得到账户资产
+    private fun getC2CUserInfo(){
+        C2CApiServiceHelper.getC2CUserInfo(mContext, object : NormalCallback<HttpRequestResultData<C2CUserInfo?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
 
+            override fun callback(returnData: HttpRequestResultData<C2CUserInfo?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val money = (returnData.data?.coinVOS!![0]?.avAmount!! * CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })!!).toString()
+                    val amount = returnData.data?.coinVOS!![0]?.avAmount.toString()
+                    binding?.cny?.setText(money)
+                    binding?.balance?.setText(amount)
+                } else {
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+
+    }
 }

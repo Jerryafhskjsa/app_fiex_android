@@ -2,16 +2,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_selected="true">
-        <bitmap android:src="@drawable/icon_tab_assets_pre" />
+        <bitmap android:src="@drawable/icon_tab_assets_green" />
     </item>
     <item android:state_checked="true">
-        <bitmap android:src="@drawable/icon_tab_assets_pre" />
+        <bitmap android:src="@drawable/icon_tab_assets_green" />
     </item>
     <item android:state_focused="true">
-        <bitmap android:src="@drawable/icon_tab_assets_pre" />
+        <bitmap android:src="@drawable/icon_tab_assets_green" />
     </item>
     <item android:state_pressed="true">
-        <bitmap android:src="@drawable/icon_tab_assets_pre" />
+        <bitmap android:src="@drawable/icon_tab_assets_green" />
     </item>
     <item>
         <bitmap android:src="@drawable/icon_tab_assets_nor" />

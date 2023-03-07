@@ -43,12 +43,12 @@ import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiManagerImpl {
-    private static final String TAG = "ApiManagerImpl";
+public class ApiManagerImpl2 {
+    private static final String TAG = "ApiManagerImpl2";
     public static final int DEFAULT_TIME_OUT = 30;//超时时间5s
     public static final int DEFAULT_READ_TIME_OUT = 30;//读取时间
     public static final int DEFAULT_WRITE_TIME_OUT = 30;//读取时间
-    private static final Map<String, SoftReference<ApiManagerImpl>> managerCache = Collections.synchronizedMap(new HashMap<String, SoftReference<ApiManagerImpl>>());// 软引用
+    private static final Map<String, SoftReference<ApiManagerImpl2>> managerCache = Collections.synchronizedMap(new HashMap<String, SoftReference<ApiManagerImpl2>>());// 软引用
     private static String globalCookie;
     public String JSESSIONIDCookie = null;
 
@@ -63,20 +63,20 @@ public class ApiManagerImpl {
         }
     }
 
-    public synchronized static ApiManagerImpl getInstance(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
+    public synchronized static ApiManagerImpl2 getInstance(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
         String key = getKey(url, deviceId, lang, ucToken);
-        SoftReference<ApiManagerImpl> apiManagerRef = managerCache.get(key);
-        ApiManagerImpl apiManager = apiManagerRef == null ? null : apiManagerRef.get();
+        SoftReference<ApiManagerImpl2> apiManagerRef = managerCache.get(key);
+        ApiManagerImpl2 apiManager = apiManagerRef == null ? null : apiManagerRef.get();
 //        Log.d(TAG, "url = " + url);
         if (apiManager == null) {
-            apiManager = new ApiManagerImpl(context, cachePath, url, deviceId, lang, ucToken, apiCookieHelper, interceptHelper);
+            apiManager = new ApiManagerImpl2(context, cachePath, url, deviceId, lang, ucToken, apiCookieHelper, interceptHelper);
             managerCache.put(key, new SoftReference<>(apiManager));
         }
 //        Log.d(TAG, "apiManager = " + apiManager);
         return apiManager;
     }
 
-    private ApiManagerImpl(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
+    private ApiManagerImpl2(Context context, String cachePath, String url, String deviceId, String lang, String ucToken, ApiCookieHelper apiCookieHelper, HttpInterceptHelper interceptHelper) throws Throwable {
         this.apiCookieHelper = apiCookieHelper;
         this.interceptHelper = interceptHelper;
         //OkHttpClient配置
@@ -201,7 +201,7 @@ public class ApiManagerImpl {
             Request.Builder requestBuilder = original.newBuilder();
             requestBuilder
                     .header("charset", "UTF-8")
-                    .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                    .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .header("User-Agent", getUserAgent(context))
                     .header("ASI-UUID", deviceId)
@@ -214,7 +214,7 @@ public class ApiManagerImpl {
                     .header("Authorization", ucToken1 == null ? "" : ucToken1)
 //                        .header("Authorization-uc", ucToken == null ? "" : ucToken)
 //                        .header("Authorization-pro", pro_token == null ? "" : pro_token)
-                          .header("Authorization-otc", otc_token == null ? "" : otc_token)
+                    .header("Authorization-otc", otc_token == null ? "" : otc_token)
 //                        .header("Authorization-ft", "")
                     .header("Accept-Encoding", "gzip, deflate")
                     .header("Cache-Control", "no-cache");

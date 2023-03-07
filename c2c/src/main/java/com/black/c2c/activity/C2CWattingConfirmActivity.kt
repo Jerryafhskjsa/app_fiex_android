@@ -142,25 +142,34 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
                         binding?.time?.setText(returnData.data?.createTime)
                         binding?.realName?.setText(returnData.data?.otherSideRealName)
-                        binding?.realNameName?.setText(returnData.data?.payEeRealName)
-                        binding?.name1?.setText(returnData.data?.payEeRealName)
-                        binding?.name2?.setText(returnData.data?.payEeRealName)
+                        binding?.realNameName?.setText(returnData.data?.otherSideRN)
+                        binding?.name1?.setText(returnData.data?.otherSideRealName)
+                        binding?.name2?.setText(returnData.data?.otherSideRealName)
                         val payMethod = returnData.data?.payMethod
                         if (payMethod == 2) {
                             binding?.name3?.setText(returnData.data?.receiptInfo?.name)
                             binding?.cardsNum?.setText(returnData.data?.receiptInfo?.account)
                             binding?.cpy?.setText(returnData.data?.receiptInfo?.depositBank)
                             binding?.otherCmy?.setText(returnData.data?.receiptInfo?.subbranch)
+                            binding?.weiXin?.visibility = View.VISIBLE
+                            binding?.cards?.visibility = View.GONE
+                            binding?.ali?.visibility = View.GONE
                         }
                         else if (payMethod == 1){
                             binding?.name4?.setText(returnData.data?.receiptInfo?.name)
                             binding?.aliNum?.setText(returnData.data?.receiptInfo?.account)
                             val maTwo = returnData.data?.receiptInfo?.receiptImage
+                            binding?.cards?.visibility = View.VISIBLE
+                            binding?.weiXin?.visibility = View.GONE
+                            binding?.ali?.visibility = View.GONE
                         }
                         else {
                             val maOne = returnData.data?.receiptInfo?.receiptImage
                             binding?.name5?.setText(returnData.data?.receiptInfo?.name)
                             binding?.weiXinNum?.setText(returnData.data?.receiptInfo?.account)
+                            binding?.ali?.visibility = View.VISIBLE
+                            binding?.cards?.visibility = View.GONE
+                            binding?.weiXin?.visibility = View.GONE
                         }
                     } else {
                         FryingUtil.showToast(

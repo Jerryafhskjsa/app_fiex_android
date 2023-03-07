@@ -37,7 +37,7 @@
                     android:includeFontPadding="false"
                     android:text="@string/k_buy"
                     android:textAlignment="center"
-                    android:textColor="@color/btn_buy_check"
+                    android:textColor="@color/btn_sale_check"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
                 <com.black.base.widget.SpanCheckedTextView
@@ -423,7 +423,7 @@
                     android:paddingEnd="10dp"
                     android:progressDrawable="@color/transparent"
                     android:splitTrack="false"
-                    android:thumb="@drawable/icon_thumbcount_bar"
+                    android:thumb="@drawable/icon_thumbcount_bar_green"
                     android:thumbOffset="0dp" />
             </FrameLayout>
             <RelativeLayout

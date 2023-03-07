@@ -3,12 +3,16 @@ package com.black.c2c.activity
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
@@ -31,6 +35,8 @@ import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.CommonUtil
+import com.google.zxing.WriterException
 
 @Route(value = [RouterConstData.C2C_PAY_FOR])
 class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -41,6 +47,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var payEeId: Int? = null
     private var receiptId: Int? = null
     private var id2: String? = null
+    private var image: String? = null
     private var payChain: String? = null
     private var receiptInfo: OtcReceiptModel? = null
     private var TotalTime : Long = 15*60*1000 //总时长 15min
@@ -133,8 +140,21 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(R.id.btn_submit).setOnClickListener { v ->
-            FryingUtil.showToast(mContext,"保存成功")
+            FryingUtil.showToast(mContext, "保存成功")
             dialog.dismiss()
+        }
+        if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
+            var qrcodeBitmap: Bitmap? = null
+            try {
+                qrcodeBitmap = CommonUtil.createQRCode(
+                    image,
+                    400,
+                    0
+                )
+            } catch (e: WriterException) {
+                CommonUtil.printError(mContext, e)
+            }
+            dialog.findViewById<ImageView>(R.id.two_ma).setImageBitmap(qrcodeBitmap)
         }
     }
     private fun cancelDialog() {
@@ -263,7 +283,20 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                                 if (returnData.data!![i]?.type == 0) {
                                     binding?.name5?.setText(returnData.data!![i]?.name)
                                     binding?.name6?.setText(returnData.data!![i]?.account)
-                                    val image = returnData.data!![i]?.receiptImage
+                                    image = returnData.data!![i]?.receiptImage
+                                    if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
+                                        var qrcodeBitmap: Bitmap? = null
+                                        try {
+                                            qrcodeBitmap = CommonUtil.createQRCode(
+                                                image,
+                                                25,
+                                                0
+                                            )
+                                        } catch (e: WriterException) {
+                                            CommonUtil.printError(mContext, e)
+                                        }
+                                        binding?.idPayMa?.setImageBitmap(qrcodeBitmap)
+                                    }
                                 }
                         } else if (payChain == getString(R.string.cards)) {
                             binding?.cards?.visibility = View.VISIBLE
@@ -284,7 +317,20 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                                 if (returnData.data!![i]?.type == 2) {
                                     binding?.name7?.setText(returnData.data!![i]?.name)
                                     binding?.name8?.setText(returnData.data!![i]?.account)
-                                    val image = returnData.data!![i]?.receiptImage
+                                    image = returnData.data!![i]?.receiptImage
+                                    if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
+                                        var qrcodeBitmap: Bitmap? = null
+                                        try {
+                                            qrcodeBitmap = CommonUtil.createQRCode(
+                                                image,
+                                                25,
+                                                0
+                                            )
+                                        } catch (e: WriterException) {
+                                            CommonUtil.printError(mContext, e)
+                                        }
+                                        binding?.weiXinMa?.setImageBitmap(qrcodeBitmap)
+                                    }
                                 }
                         }
                     }

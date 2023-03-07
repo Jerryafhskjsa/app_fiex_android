@@ -370,13 +370,13 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
                         amount!! / rate!!,
                         4,
                         4
-                    ) + ciontype
+                    )
                 )
             }
             else
             {
                 binding?.changeTwo?.setText(
-                    "-" + ciontype
+                    "-"
                 )
             }
 
@@ -545,10 +545,10 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     //快速下单查询
     private fun getC2CQuickSearch() {
-        val gteAmount = if (binding?.putMoney?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! / rate!!
+        val gteAmount = if (binding?.putMoney?.text != null)CommonUtil.parseDouble(binding?.changeTwo?.text.toString().trim { it <= ' ' })
         else CommonUtil.parseDouble(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
-        val gteCurrencyCoinAmount = if (binding?.moneyAccount?.text != null)CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })
-        else CommonUtil.parseDouble(binding?.putMoney?.text.toString().trim { it <= ' ' })!! * rate!!
+        val gteCurrencyCoinAmount = if (binding?.moneyAccount?.text != null)CommonUtil.parseDouble(binding?.moneyAccount?.text.toString().trim { it <= ' ' })
+        else CommonUtil.parseDouble(binding?.changeTwo?.text.toString().trim { it <= ' ' })
         val direction = if (binding?.c2cCustomer?.isChecked == true) "B" else "S"
         val coinType = if (binding?.one?.isChecked == true) "USDT" else "BTC"
         val payMethod = if (binding?.cardsLayout?.visibility == View.VISIBLE) "3" else if (binding?.weiXinLayout?.visibility == View.VISIBLE)"2" else "1"

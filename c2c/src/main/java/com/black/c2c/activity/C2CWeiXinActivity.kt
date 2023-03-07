@@ -90,7 +90,7 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_submit){
-            getReceipt()
+            submitRealNameAuthenticate()
         }
         if (id == R.id.google_code_copy){
             CommonUtil.pasteText(mContext, object : Callback<String?>() {

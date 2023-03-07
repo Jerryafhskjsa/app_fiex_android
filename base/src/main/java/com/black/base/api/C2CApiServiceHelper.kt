@@ -580,7 +580,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build2(context,false, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build(context,false, UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2COL(coinType,currencyCoinType,direction,gteAmount,gteCurrencyCoinAmount,page,size,status)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -677,7 +677,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CCreateV2(advertisingId, amount, price)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -692,7 +692,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CCancel(id)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -706,7 +706,7 @@ object C2CApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build2(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
+        ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
             ?.getC2CGP(id)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))

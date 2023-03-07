@@ -22,7 +22,7 @@
             app:tabRippleColor="@android:color/transparent"
             app:tabIndicator="@drawable/bg_tab_indicator"
             app:tabTextAppearance="@style/MainTabStyle"
-            app:tabIndicatorColor="#1571FF"
+            app:tabIndicatorColor="@color/T13"
             app:tabSelectedTextColor="#ffffff"
             app:tabTextColor="#000000"
             app:tabIndicatorHeight="32dp"

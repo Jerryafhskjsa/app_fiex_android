@@ -17,6 +17,7 @@ import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CMainAD
+import com.black.base.model.c2c.C2CUserInfo
 import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -46,6 +47,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
     private var cointype:String? = "USDT"
     private var payChain: String? = null
     private var rate :Double? = 0.0
+    private var c2CUserInfo: C2CUserInfo? = null
     private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var chainNames: MutableList<String?>? = null
 
@@ -71,13 +73,13 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.unitPrice?.setOnClickListener(this)
         binding?.seller?.setOnClickListener(this)
+        binding?.allAmount?.setOnClickListener(this)
+        binding?.allMoney?.setOnClickListener(this)
         binding?.putMoney?.addTextChangedListener(watcher)
         binding?.putAmount?.addTextChangedListener(watcher)
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
-
-
         checkClickable()
     }
     override fun getTitleText(): String? {
@@ -116,6 +118,14 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         }
         else if (id == R.id.pay_time){
             payTimeDialog()
+        }
+        else if (id == R.id.all_amount){
+            val money = c2cList?.totalAmount.toString()
+            binding?.putAmount?.setText(money)
+        }
+        else if (id == R.id.all_money){
+            val money = (c2cList?.totalAmount!! * CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })!!).toString()
+            binding?.putMoney?.setText(money)
         }
         else if (id == R.id.amount){
             binding?.putAmount?.text = null

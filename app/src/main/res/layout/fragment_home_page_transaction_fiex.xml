@@ -24,7 +24,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_tab_corner"
             app:tabIndicator="@drawable/bg_tab_indicator"
-            app:tabIndicatorColor="#1571FF"
+            app:tabIndicatorColor="@color/T13"
             app:tabIndicatorGravity="center"
             app:tabIndicatorHeight="32dp"
             app:tabMode="fixed"

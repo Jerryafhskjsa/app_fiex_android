@@ -153,7 +153,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if ((mContext as HomePageActivity).transactionTabType != -1) {
             tabType = (mContext as HomePageActivity).transactionTabType
         }
-        colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
+        colorWin = SkinCompatResources.getColor(mContext, R.color.T13)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
         binding = DataBindingUtil.inflate(

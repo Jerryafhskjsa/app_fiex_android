@@ -130,7 +130,7 @@
                                     android:layout_width="26dp"
                                     android:layout_height="26dp"
                                     android:layout_alignParentBottom="true"
-                                    android:background="@drawable/icon_type_right_arrow" />
+                                    android:background="@drawable/icon_type_right_arrow_green" />
                             </RelativeLayout>
                         </RelativeLayout>
                         <LinearLayout
@@ -148,7 +148,7 @@
                                 <ImageView
                                     android:id="@+id/icon_deposit"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_deposit" />
+                                    android:src="@drawable/fiex_icon_deposit_green" />
 
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
@@ -163,7 +163,7 @@
                                 <ImageView
                                     android:id="@+id/icon_referral"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_deposit" />
+                                    android:src="@drawable/icon_deposit_green" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_referral"
@@ -174,10 +174,11 @@
                                 android:id="@+id/rel_support"
                                 style="@style/HomeFeturesItem"
                                 android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_support"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_support"/>
+                                    android:src="@drawable/icon_support_green" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_support"
@@ -191,7 +192,7 @@
                                 <ImageView
                                     android:id="@+id/icon_futures"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_futures"/>
+                                    android:src="@drawable/icon_futures_green"/>
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"
@@ -206,7 +207,7 @@
                                 <ImageView
                                     android:id="@+id/icon_more"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_more" />
+                                    android:src="@drawable/icon_more_green" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_more"
@@ -408,14 +409,13 @@
                                     android:layout_height="100dp"
                                     android:layout_marginRight="5dp"
                                     android:layout_weight="1"
-                                    app:cardCornerRadius="10dp"
                                     app:cardElevation="1dp"
                                     app:cardMaxElevation="10dp"
                                     >
                                     <ImageView
                                         android:layout_width="match_parent"
                                         android:layout_height="100dp"
-                                        android:background="@drawable/main_2_bg"/>
+                                        android:background="@drawable/main_two_bg"/>
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -454,7 +454,6 @@
                                 android:layout_height="100dp"
                                 android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
-                                app:cardCornerRadius="10dp"
                                 app:cardElevation="1dp"
                                 app:cardMaxElevation="10dp"
                                 >
@@ -462,7 +461,7 @@
                                     android:id="@+id/c2c"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
-                                    android:background="@drawable/main_3_bg"/>
+                                    android:background="@drawable/main_two_bg"/>
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

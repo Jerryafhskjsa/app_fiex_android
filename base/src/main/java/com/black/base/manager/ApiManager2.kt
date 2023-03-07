@@ -9,30 +9,30 @@ import com.black.net.HttpCookieUtil
 import com.black.util.CommonUtil
 import java.io.File
 
-class ApiManager {
+class ApiManager2 {
     private var apiManagerIml: ApiManagerImpl? = null
     fun <T> getService(tClass: Class<T>?): T? {
         return apiManagerIml?.create(tClass)
     }
 
     companion object {
-        private var apiManager: ApiManager? = null
-        private val instance: ApiManager
+        private var apiManager: ApiManager2? = null
+        private val instance: ApiManager2
             get() {
                 if (apiManager == null) {
-                    apiManager = ApiManager()
+                    apiManager = ApiManager2()
                 }
                 return apiManager!!
             }
 
-        fun build(context: Context): ApiManager {
+        fun build(context: Context): ApiManager2 {
             return build(context.applicationContext, false)
         }
 
         /**
          * 测速专用
          */
-        fun buildTestSpeed(context: Context,url:String?):ApiManager{
+        fun buildTestSpeed(context: Context,url:String?):ApiManager2{
             var context1 = context
             context1 = context1.applicationContext
             val apiManager = instance
@@ -44,7 +44,7 @@ class ApiManager {
             return apiManager
         }
 
-        fun build(context: Context, noToken: Boolean): ApiManager {
+        fun build(context: Context, noToken: Boolean): ApiManager2 {
             var context1 = context
             context1 = context1.applicationContext
             val apiManager = instance
@@ -55,14 +55,14 @@ class ApiManager {
             return apiManager
         }
 
-        fun build(context: Context,apiType:String): ApiManager {
+        fun build(context: Context,apiType:String): ApiManager2 {
             return build(context.applicationContext, false,apiType)
         }
 
         /**
          * apiType->uc,api,pro
          */
-        fun build(context: Context, noToken: Boolean,apiType : String): ApiManager {
+        fun build(context: Context, noToken: Boolean,apiType : String): ApiManager2 {
             val context1 = context.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
@@ -75,7 +75,7 @@ class ApiManager {
         }
 
         //otc专用
-        fun build2(context: Context, noToken: Boolean,apiType : String): ApiManager {
+        fun build2(context: Context, noToken: Boolean,apiType : String): ApiManager2 {
             val context1 = context.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
@@ -89,7 +89,7 @@ class ApiManager {
 
 
         fun clearCache() {
-            ApiManagerImpl.clearCache()
+            ApiManagerImpl2.clearCache()
             val cacheFile = File(ConstData.CACHE_PATH)
             try {
                 if (cacheFile != null && cacheFile.exists() && cacheFile.isDirectory) {
