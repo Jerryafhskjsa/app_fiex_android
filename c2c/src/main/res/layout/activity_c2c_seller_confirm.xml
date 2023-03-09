@@ -189,6 +189,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/bottom"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -826,6 +827,8 @@
             style="@style/ButtonBlue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:layout_marginLeft="@dimen/text_size_20"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/text_size_20"

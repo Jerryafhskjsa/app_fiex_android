@@ -71,11 +71,50 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
         val financialRecord = adapter?.getItem(position)
         val extras = Bundle()
         val id = financialRecord?.id
-        extras.putString(ConstData.BUY_PRICE, id)
-        BlackRouter.getInstance()
-            .build(RouterConstData.C2C_BUY_CONFRIM)
-            .with(extras)
-            .go(mContext)
+        val status = financialRecord?.status
+        if (status == -1) {
+            extras.putString(ConstData.BUY_PRICE, id)
+            BlackRouter.getInstance()
+                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .with(extras)
+                .go(mContext)
+        }
+        if (status == 2) {
+            extras.putString(ConstData.COIN_TYPE, id)
+            if (financialRecord?.direction == "B") {
+                BlackRouter.getInstance()
+                    .build(RouterConstData.C2C_ORDERS)
+                    .with(extras)
+                    .go(mContext)
+            }
+            else{
+                BlackRouter.getInstance()
+                    .build(RouterConstData.C2C_WAITE1)
+                    .with(extras)
+                    .go(mContext)
+            }
+        }
+        if (status == 3) {
+            extras.putString(ConstData.BUY_PRICE, id)
+            BlackRouter.getInstance()
+                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .with(extras)
+                .go(mContext)
+        }
+        if (status == 4) {
+            extras.putString(ConstData.BUY_PRICE, id)
+            BlackRouter.getInstance()
+                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .with(extras)
+                .go(mContext)
+        }
+        if (status == 5) {
+            extras.putString(ConstData.BUY_PRICE, id)
+            BlackRouter.getInstance()
+                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .with(extras)
+                .go(mContext)
+        }
     }
 
     override fun onLoadMoreCheck(): Boolean {
@@ -115,7 +154,7 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
                 onRefreshEnd()
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     total = returnData.data?.total ?: 0
-                    var dataList = returnData.data?.data
+                    val dataList = returnData.data?.data
                     showData(dataList)
                 } else {
                     showData(null)

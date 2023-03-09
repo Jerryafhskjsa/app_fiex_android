@@ -14,32 +14,20 @@ import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cSellerWaitBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import java.util.*
 
 @Route(value = [RouterConstData.C2C_WAITE1])
 class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cSellerWaitBinding? = null
     private var id: String? = null
-    private var TotalTime : Long = 5*60*1000 //总时长 15min
-    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
-    override fun onFinish(){
-        getC2cCancel(id)
-    }
-
-        override fun onTick(millisUntilFinished: Long) {
-            if (TotalTime >= 0){
-                var minute=millisUntilFinished/1000/60%60
-                var second=millisUntilFinished/1000%60
-                binding?.time?.setText("$minute:$second")}
-            else{
-                FryingUtil.showToast(mContext,"订单已取消")
-            }
-        }
-    }.start()
+    private var totalTime : Long = 15*60*1000 //总时长 15min
+    private var countDownTimer: CountDownTimer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_seller_wait)
@@ -47,7 +35,6 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.idNum?.setText(id)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.num?.setOnClickListener(this)
-        countDownTimer
         getC2COIV2()
        /* binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_mail)?.setOnClickListener{}
         binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_phone)?.setOnClickListener{}*/
@@ -82,7 +69,24 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.account?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                        binding?.createTime?.setText(returnData.data?.createTime)
+                        val time = TimeUtil.getTime(returnData.data?.createTime)
+                        binding?.createTime?.setText(time)
+                        val time1 = returnData.data?.validTime?.time
+                        val calendar: Calendar = Calendar.getInstance()
+                        val time2 = calendar.time.time
+                        totalTime = time1!!.minus(time2)
+                        countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+                        override fun onFinish(){
+                            binding?.time?.setText("00:00")
+                            FryingUtil.showToast(mContext,"订单已取消")
+                            finish()
+                        }
+                            override fun onTick(millisUntilFinished: Long) {
+                                val minute = millisUntilFinished / 1000 / 60 % 60
+                                val second = millisUntilFinished / 1000 % 60
+                                binding?.time?.setText("$minute:$second")
+                            }
+                        }.start()
                     } else {
 
                         FryingUtil.showToast(

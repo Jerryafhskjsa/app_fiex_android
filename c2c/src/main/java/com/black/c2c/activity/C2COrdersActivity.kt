@@ -32,6 +32,8 @@ import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import java.math.RoundingMode
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.C2C_ORDERS])
 class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
@@ -52,23 +54,8 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
     private var item: String? = null
     private var payFor: Int? = null
     private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
-    private var TotalTime : Long = 15*60*1000 //总时长 15min
-    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
-    override fun onFinish(){
-        getC2cCancel(id2)
-        FryingUtil.showToast(mContext,"订单已取消")
-        finish()
-    }
-
-        override fun onTick(millisUntilFinished: Long) {
-            if (TotalTime >= 0){
-            var minute=millisUntilFinished/1000/60%60
-            var second=millisUntilFinished/1000%60
-            binding?.time?.setText("$minute:$second")}
-
-
-        }
-    }.start()
+    private var totalTime : Long = 15*60*1000 //总时长 15min
+    private var countDownTimer: CountDownTimer? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -95,10 +82,10 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
         chainNames = ArrayList()
-        if (item == "1") {
+        if (item == "0") {
             chainNames?.add(TAB_CARDS)
         }
-        else if (item == "0") {
+        else if (item == "1") {
             chainNames?.add(TAB_IDPAY)
         }
         else if (item == "2") {
@@ -108,11 +95,11 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
             chainNames?.add(TAB_IDPAY)
             chainNames?.add(TAB_CARDS)
         }
-        else if (item == "02") {
+        else if (item == "12") {
             chainNames?.add(TAB_IDPAY)
             chainNames?.add(TAB_WEIXIN)
         }
-        else if (item == "12") {
+        else if (item == "02") {
             chainNames?.add(TAB_WEIXIN)
             chainNames?.add(TAB_CARDS)
         }
@@ -137,7 +124,6 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
             binding?.aliColor?.visibility =View.VISIBLE
             binding?.weiXinColor?.visibility = View.GONE
         }
-        countDownTimer
         getC2COIV2(id2)
     }
 
@@ -272,9 +258,26 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.account?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                        binding?.createTime?.setText(returnData.data?.createTime)
+                        val time = TimeUtil.getTime(returnData.data?.createTime)
+                        binding?.createTime?.setText(time)
                         binding?.name?.setText(returnData.data?.otherSideRealName)
                         binding?.accountTotal?.setText(returnData.data?.otherSideCompletedOrders30Days.toString())
+                        val time1 = returnData.data?.validTime?.time
+                        val calendar: Calendar = Calendar.getInstance()
+                        val time2 = calendar.time.time
+                        totalTime = time1!!.minus(time2)
+                        countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+                        override fun onFinish(){
+                            binding?.time?.setText("00:00")
+                            FryingUtil.showToast(mContext,"订单已取消")
+                            finish()
+                        }
+                            override fun onTick(millisUntilFinished: Long) {
+                                val minute = millisUntilFinished / 1000 / 60 % 60
+                                val second = millisUntilFinished / 1000 % 60
+                                binding?.time?.setText("$minute:$second")
+                            }
+                        }.start()
                     } else {
 
                         FryingUtil.showToast(

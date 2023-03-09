@@ -12,6 +12,7 @@ import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cBuyConfirmBinding
 import com.black.net.HttpRequestResult
@@ -31,6 +32,11 @@ class C2CBuyConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.wallet?.setOnClickListener(this)
         binding?.msg?.setOnClickListener(this)
         getPayChoose()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
     override fun onClick(v: View) {
@@ -60,15 +66,16 @@ class C2CBuyConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                     binding?.account?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                     binding?.price?.setText(returnData.data?.price.toString())
                     binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                    binding?.createTime?.setText(returnData.data?.createTime)
+                    val time = TimeUtil.getTime(returnData.data?.createTime)
+                    binding?.createTime?.setText(time)
                     binding?.realName?.setText(returnData.data?.otherSideRealName)
                     binding?.totalAmount?.setText(returnData.data?.otherSideAllOrders30Days.toString())
                     val payMethod = returnData.data?.payMethod
-                    if (payMethod == 0){
+                    if (payMethod == 1){
                         binding?.paymentMethod?.setText(getString(R.string.id_pay))
                         binding?.ma?.visibility = View.VISIBLE
                     }
-                    else if (payMethod == 1){
+                    else if (payMethod == 2){
                         binding?.paymentMethod?.setText(getString(R.string.wei_xin))
                         binding?.ma?.visibility = View.VISIBLE
                     }

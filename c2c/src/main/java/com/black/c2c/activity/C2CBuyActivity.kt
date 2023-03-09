@@ -293,7 +293,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames?.add(TAB_CARDS)
             chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[1]") {
+        if (paymentTypeList != null && paymentTypeList == "[0]") {
             binding?.cards?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
@@ -301,7 +301,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames = ArrayList()
             chainNames?.add(TAB_CARDS)
         }
-        if (paymentTypeList != null && paymentTypeList== "[0]") {
+        if (paymentTypeList != null && paymentTypeList== "[1]") {
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
             binding?.weiXin?.visibility = View.GONE
@@ -317,7 +317,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames = ArrayList()
             chainNames?.add(TAB_WEIXIN)
         }
-        if (paymentTypeList != null && paymentTypeList == "[0,2]") {
+        if (paymentTypeList != null && paymentTypeList == "[1,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.VISIBLE
             binding?.cards?.visibility = View.GONE
@@ -335,7 +335,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             chainNames?.add(TAB_CARDS)
             chainNames?.add(TAB_IDPAY)
         }
-        if (paymentTypeList != null && paymentTypeList== "[1,2]") {
+        if (paymentTypeList != null && paymentTypeList== "[0,2]") {
             binding?.weiXin?.visibility = View.VISIBLE
             binding?.ali?.visibility = View.GONE
             binding?.cards?.visibility = View.VISIBLE
@@ -380,8 +380,8 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                 override fun callback(returnData: HttpRequestResultData<String?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         val id2 = returnData.data
-                        val item = if (binding?.ali?.visibility == View.VISIBLE)"0" else "" +
-                                       if (binding?.cards?.visibility == View.VISIBLE) "1" else "" +
+                        val item = if (binding?.cards?.visibility == View.VISIBLE)"0" else "" +
+                                       if (binding?.ali?.visibility == View.VISIBLE) "1" else "" +
                                        if (binding?.weiXin?.visibility == View.VISIBLE) "2" else ""
                         val extras = Bundle()
                         extras.putString(ConstData.PAIR, item)

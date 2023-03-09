@@ -53,6 +53,14 @@
                     android:text="@string/confirm_wait"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_14" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/last_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_14" />
 
             </LinearLayout>
 

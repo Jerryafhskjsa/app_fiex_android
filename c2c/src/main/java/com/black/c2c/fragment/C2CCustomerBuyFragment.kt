@@ -208,9 +208,9 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
             dialog.dismiss()
             binding?.methodChoose?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked
-            var paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
-            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
-            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            var paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "0" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",1" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",2" else " "
             init(paymethod, money)
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.one).setOnClickListener {
@@ -259,9 +259,9 @@ class C2CCustomerBuyFragment : BaseFragment(), View.OnClickListener{
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
             binding?.filterTitle?.isChecked = dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked || dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked || dialog.findViewById<EditText>(R.id.put_money).text != null
-            paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "1" else null
-            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",2" else " "
-            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",3" else " "
+            paymethod = if (dialog.findViewById<SpanCheckedTextView>(R.id.two).isChecked) "0" else null
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.three).isChecked) ",1" else " "
+            paymethod += if (dialog.findViewById<SpanCheckedTextView>(R.id.four).isChecked) ",2" else " "
             money =if (dialog.findViewById<EditText>(R.id.put_money) == null) null else dialog.findViewById<EditText>(R.id.put_money).text.toString().trim { it <= ' ' }
             init(paymethod, money)
 

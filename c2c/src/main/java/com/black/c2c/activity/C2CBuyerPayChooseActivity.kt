@@ -37,6 +37,7 @@ import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import com.google.zxing.WriterException
+import java.util.*
 
 @Route(value = [RouterConstData.C2C_PAY_FOR])
 class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -50,21 +51,9 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
     private var image: String? = null
     private var payChain: String? = null
     private var receiptInfo: OtcReceiptModel? = null
-    private var TotalTime : Long = 15*60*1000 //总时长 15min
-    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
-    override fun onFinish(){
-    }
+    private var totalTime : Long = 15*60*1000 //总时长 15min
+    private var countDownTimer: CountDownTimer? = null
 
-        override fun onTick(millisUntilFinished: Long) {
-            if (TotalTime >= 0){
-                val minute=millisUntilFinished/1000/60%60
-                val second=millisUntilFinished/1000%60
-                binding?.time?.setText("$minute:$second")}
-            else{
-                FryingUtil.showToast(mContext,"订单已取消")
-            }
-        }
-    }.start()
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -91,7 +80,6 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.num7?.setOnClickListener(this)
         binding?.num8?.setOnClickListener(this)
         binding?.num1?.setOnClickListener(this)
-        countDownTimer
         getC2CGP()
         getAllPay()
         getPayChoose()
@@ -253,8 +241,23 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                     receiptInfo = returnData.data?.receiptInfo
                     binding?.name1?.setText(returnData.data?.realName)
                     binding?.money?.setText("￥ " + (returnData.data?.amount!! * returnData.data?.price!!).toString())
+                    val time1 = returnData.data?.validTime?.time
+                    val calendar: Calendar = Calendar.getInstance()
+                    val time2 = calendar.time.time
+                    totalTime = time1!!.minus(time2)
+                    countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+                    override fun onFinish(){
+                        binding?.time?.setText("00:00")
+                        FryingUtil.showToast(mContext,"订单已取消")
+                        finish()
+                    }
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = millisUntilFinished / 1000 / 60 % 60
+                            val second = millisUntilFinished / 1000 % 60
+                            binding?.time?.setText("$minute:$second")
+                        }
+                    }.start()
                 } else {
-
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
@@ -280,7 +283,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                             binding?.cards?.visibility = View.GONE
                             binding?.weiXin?.visibility = View.GONE
                             for (i in 0 until returnData.data!!.size)
-                                if (returnData.data!![i]?.type == 0) {
+                                if (returnData.data!![i]?.type == 1) {
                                     binding?.name5?.setText(returnData.data!![i]?.name)
                                     binding?.name6?.setText(returnData.data!![i]?.account)
                                     image = returnData.data!![i]?.receiptImage
@@ -303,7 +306,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                             binding?.idPay?.visibility = View.GONE
                             binding?.weiXin?.visibility = View.GONE
                             for (i in 0 until returnData.data!!.size)
-                                if (returnData.data!![i]?.type == 1) {
+                                if (returnData.data!![i]?.type == 0) {
                                     binding?.name?.setText(returnData.data!![i]?.name)
                                     binding?.name2?.setText(returnData.data!![i]?.account)
                                     binding?.name3?.setText(returnData.data!![i]?.depositBank)
@@ -369,11 +372,11 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         getAllPay()
         if (payChain == getString(R.string.id_pay))
         {
-             payFor = 0
+             payFor = 1
         }
         else if (payChain == getString(R.string.cards))
         {
-            payFor = 1
+            payFor = 0
         }
         else
         {

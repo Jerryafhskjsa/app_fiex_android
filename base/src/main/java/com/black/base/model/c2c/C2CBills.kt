@@ -1,7 +1,6 @@
 package com.black.base.model.c2c
 
 import android.content.Context
-import android.text.TextUtils
 import com.black.base.R
 import com.black.base.model.BaseAdapterItem
 import java.util.*
@@ -16,7 +15,7 @@ class C2CBills: BaseAdapterItem() {
     var chatRoomId: String? = null	//聊天室房间id	string
     var checkLatestNews: Boolean? = false	//是否查看订单最新状态	boolean
     var coinType: String? = null	//币种	string
-    var createTime: String? = null		//string
+    var createTime: Date? = null		//string
     var currencyCoin: String? = null	//法币币种	string
     var currencyCoinAmount: Double? = 0.0	//法币总量	number
     var direction: String? = null	//方向	string
@@ -32,7 +31,7 @@ class C2CBills: BaseAdapterItem() {
     var status: Int? = null	//订单状态(-1:取消,2:待付款,3:已付款,4:已放币(完成),5:卖单审核中)	integer
     var takerId: Int? = null	//下单的otc用户id	integer
     var updateTime: String? = null		//string
-    var validTime: String? = null	//有效时间	string
+    var validTime: Date? = null	//有效时间	string
     var whetherTaker: Boolean? = false	//是否taker	boolean
 
     fun getStatusText(context: Context): String {

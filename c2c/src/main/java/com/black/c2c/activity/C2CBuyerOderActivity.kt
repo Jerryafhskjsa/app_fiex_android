@@ -11,6 +11,7 @@ import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
+import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -19,6 +20,7 @@ import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import java.util.*
 
 @Route(value = [RouterConstData.C2C_BUYER])
 class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -26,21 +28,8 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     private var sellerName: String? = "帅"
     private var id2: String? = null
     private var payChain: String? = null
-    var TotalTime: Long = 15*60*1000 //总时长 15min
-    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
-    override fun onFinish(){
-    }
-
-        override fun onTick(millisUntilFinished: Long) {
-            if (TotalTime >= 0){
-                val minute=millisUntilFinished/1000/60%60
-                val second=millisUntilFinished/1000%60
-                binding?.time?.setText("$minute:$second")}
-            else{
-                FryingUtil.showToast(mContext,"订单已取消")
-            }
-        }
-    }.start()
+    private var totalTime: Long = 15*60*1000 //总时长 15min
+    private var countDownTimer: CountDownTimer? = null
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -58,7 +47,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.send?.setOnClickListener(this)
         binding?.phone?.setOnClickListener(this)
-        countDownTimer
+        getPayChoose()
         checkClickable()
     }
     override fun getTitleText(): String? {
@@ -76,6 +65,40 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     private fun checkClickable(){
 
     }
+
+    //获取总价
+    private fun getPayChoose() {
+        C2CApiServiceHelper.getC2CDetails(mContext, id2,  object : NormalCallback<HttpRequestResultData<C2COrderDetails?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val time1 = returnData.data?.validTime?.time
+                    val calendar: Calendar = Calendar.getInstance()
+                    val time2 = calendar.time.time
+                    totalTime = time1!!.minus(time2)
+                    countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+                    override fun onFinish(){
+                        binding?.time?.setText("00:00")
+                        FryingUtil.showToast(mContext,"订单已取消")
+                        finish()
+                    }
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = millisUntilFinished / 1000 / 60 % 60
+                            val second = millisUntilFinished / 1000 % 60
+                            binding?.time?.setText("$minute:$second")
+                        }
+                    }.start()
+                } else {
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+
     //回复图片
     private fun getC2cImage(){
         C2CApiServiceHelper.getC2CImage(mContext, id2 , object : NormalCallback<HttpRequestResultString?>(mContext) {

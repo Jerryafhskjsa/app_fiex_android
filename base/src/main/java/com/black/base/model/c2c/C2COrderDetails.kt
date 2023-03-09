@@ -2,7 +2,9 @@ package com.black.base.model.c2c
 
 import android.os.Parcel
 import android.os.Parcelable
+import retrofit2.http.Body
 import java.math.BigDecimal
+import java.util.*
 
 class C2COrderDetails() : Parcelable {
     var advertisingId: String? = null	    //广告id	string
@@ -12,14 +14,14 @@ class C2COrderDetails() : Parcelable {
     var amount: BigDecimal? = null	        //下单成交量	number(bigdecimal)
     var buyerFee: BigDecimal? = null	    //买价手续费	number(bigdecimal)
     var canAllege: Boolean? = null	        //是否可申述	boolean
-    var canAllegeEndTime: String? = null	//可申述结束时间	string(date-time)
-    var canAllegeStartTime: String? = null 	//可申述开始时间	string(date-time)
-    var canCancelTime: String? = null	    //可以取消订单时间，(status=2(待付款),3(已付款)、5(审核中)时可取消，其他状态时=null)，status=5时小于当前时间可以取消，status=2时大于当前时间可以取消	string(date-time)
+    var canAllegeEndTime: Date? = null	//可申述结束时间	string(date-time)
+    var canAllegeStartTime: Date? = null 	//可申述开始时间	string(date-time)
+    var canCancelTime: Date? = null	    //可以取消订单时间，(status=2(待付款),3(已付款)、5(审核中)时可取消，其他状态时=null)，status=5时小于当前时间可以取消，status=2时大于当前时间可以取消	string(date-time)
     var canceledReason: String? = null	    //取消原因（用户主动取消，订单超时取消）	string
     var chatRoomId: String? = null	        //聊天室房间id	string
     var checkLatestNews: Boolean? = null	//是否查看订单最新状态	boolean
     var coinType: String? = null	        //币种	string
-    var createTime: String? = null		    //string(date-time)
+    var createTime: Date? = null		    //string(date-time)
     var currencyCoin: String? = null	    //法币币种	string
     var currencyCoinAmount: BigDecimal? = null	//法币总量	number(bigdecimal)
     var direction: String? = null	        //方向	string
@@ -45,8 +47,8 @@ class C2COrderDetails() : Parcelable {
     var sellerFee: BigDecimal? = null	   //卖家手续费	number(bigdecimal)
     var status: Int? = null	               //订单状态(-1:取消,2:待付款,3:已付款,4:已放币(完成),5:卖单审核中)	integer(int32)
     var takerId: Int? = null        	   //下单的otc用户id	integer(int32)
-    var updateTime: String? = null		   //string(date-time)
-    var validTime: String? = null	       //有效时间	string(date-time)
+    var updateTime: Date? = null		   //string(date-time)
+    var validTime: Date? = null	       //有效时间	string(date-time)
     var whetherTaker: String? = null       //是否taker	boolean
 
     constructor(parcel: Parcel) : this() {
@@ -55,14 +57,10 @@ class C2COrderDetails() : Parcelable {
         allegeStatus = parcel.readValue(Int::class.java.classLoader) as? Int
         alleged = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
         canAllege = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-        canAllegeEndTime = parcel.readString()
-        canAllegeStartTime = parcel.readString()
-        canCancelTime = parcel.readString()
         canceledReason = parcel.readString()
         chatRoomId = parcel.readString()
         checkLatestNews = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
         coinType = parcel.readString()
-        createTime = parcel.readString()
         currencyCoin = parcel.readString()
         direction = parcel.readString()
         id = parcel.readString()
@@ -84,8 +82,6 @@ class C2COrderDetails() : Parcelable {
         receiptInfo = parcel.readParcelable(OtcReceiptModel::class.java.classLoader)
         status = parcel.readValue(Int::class.java.classLoader) as? Int
         takerId = parcel.readValue(Int::class.java.classLoader) as? Int
-        updateTime = parcel.readString()
-        validTime = parcel.readString()
         whetherTaker = parcel.readString()
     }
 
@@ -95,14 +91,10 @@ class C2COrderDetails() : Parcelable {
         parcel.writeValue(allegeStatus)
         parcel.writeValue(alleged)
         parcel.writeValue(canAllege)
-        parcel.writeString(canAllegeEndTime)
-        parcel.writeString(canAllegeStartTime)
-        parcel.writeString(canCancelTime)
         parcel.writeString(canceledReason)
         parcel.writeString(chatRoomId)
         parcel.writeValue(checkLatestNews)
         parcel.writeString(coinType)
-        parcel.writeString(createTime)
         parcel.writeString(currencyCoin)
         parcel.writeString(direction)
         parcel.writeString(id)
@@ -124,8 +116,6 @@ class C2COrderDetails() : Parcelable {
         parcel.writeParcelable(receiptInfo, flags)
         parcel.writeValue(status)
         parcel.writeValue(takerId)
-        parcel.writeString(updateTime)
-        parcel.writeString(validTime)
         parcel.writeString(whetherTaker)
     }
 
@@ -142,4 +132,5 @@ class C2COrderDetails() : Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 }

@@ -15,11 +15,13 @@ import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.c2c.R
 import com.black.c2c.databinding.BtnC2cWaitBuyBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import java.util.*
 
 @Route(value = [RouterConstData.C2C_BUYER_PAY])
 class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
@@ -33,30 +35,15 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
 
         override fun afterTextChanged(s: Editable) {}
     }
-    private var TotalTime : Long = 15*60*1000 //总时长 15min
-    var countDownTimer = object : CountDownTimer(TotalTime,1000){//1000ms运行一次onTick里面的方法
-    override fun onFinish(){
-        binding?.btnCancel?.isEnabled = true
-    }
+    private var totalTime : Long = 15*60*1000 //总时长 15min
+    var countDownTimer: CountDownTimer? = null
 
-        override fun onTick(millisUntilFinished: Long) {
-            if (TotalTime >= 0){
-                var minute=millisUntilFinished/1000/60%60
-                var second=millisUntilFinished/1000%60
-                binding?.btnCancel?.isEnabled = false
-                binding?.time?.setText("$minute:$second")}
-            else{
-                FryingUtil.showToast(mContext,"订单已取消")
-            }
-        }
-    }.start()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.btn_c2c_wait_buy)
         id2 = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
-        countDownTimer
         getPayChoose()
         checkClickable()
     }
@@ -118,13 +105,29 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
                     binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                     binding?.price?.setText(returnData.data?.price.toString())
                     binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                    binding?.createTime?.setText(returnData.data?.createTime)
+                    val time = TimeUtil.getTime(returnData.data?.createTime)
+                    binding?.createTime?.setText(time)
                     binding?.realName?.setText(returnData.data?.otherSideRealName)
                     binding?.realNameName?.setText(returnData.data?.otherSideAllOrders30Days.toString())
                     binding?.person?.setText(returnData.data?.receiptInfo?.name)
                     binding?.ad?.setText(returnData.data?.receiptInfo?.account)
+                    val time1 = returnData.data?.canAllegeStartTime?.time
+                    val calendar: Calendar = Calendar.getInstance()
+                    val time2 = calendar.time.time
+                    totalTime = time1!!.minus(time2)
+                    countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+                    override fun onFinish(){
+                        binding?.time?.setText("00:00")
+                        FryingUtil.showToast(mContext,"可以进行申述")
+                    }
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = millisUntilFinished / 1000 / 60 % 60
+                            val second = millisUntilFinished / 1000 % 60
+                            binding?.time?.setText("$minute:$second")
+                        }
+                    }.start()
                     val payMethod = returnData.data?.payMethod
-                    if (payMethod == 0){
+                    if (payMethod == 1){
                         binding?.paymentMethod?.setText(getString(R.string.id_pay))
                         binding?.ma?.visibility = View.VISIBLE
                     }

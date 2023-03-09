@@ -15,6 +15,7 @@ import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.SpanTextView
 import com.black.c2c.R
@@ -70,7 +71,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     }
     private fun cancelDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.confirm_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -140,7 +141,8 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                        binding?.time?.setText(returnData.data?.createTime)
+                        val time = TimeUtil.getTime(returnData.data?.createTime)
+                        binding?.time?.setText(time)
                         binding?.realName?.setText(returnData.data?.otherSideRealName)
                         binding?.realNameName?.setText(returnData.data?.otherSideRN)
                         binding?.name1?.setText(returnData.data?.otherSideRealName)
@@ -155,7 +157,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                             binding?.cards?.visibility = View.GONE
                             binding?.ali?.visibility = View.GONE
                         }
-                        else if (payMethod == 1){
+                        else if (payMethod == 0){
                             binding?.name4?.setText(returnData.data?.receiptInfo?.name)
                             binding?.aliNum?.setText(returnData.data?.receiptInfo?.account)
                             val maTwo = returnData.data?.receiptInfo?.receiptImage

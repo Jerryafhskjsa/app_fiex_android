@@ -15,6 +15,7 @@ import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.c2c.R
 import com.black.c2c.databinding.ActivityC2cConfirmBinding
 import com.black.net.HttpRequestResult
@@ -73,7 +74,7 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         }    }
     private fun cancelDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.shen_shu_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -116,14 +117,15 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                        binding?.time?.setText(returnData.data?.createTime)
+                        val time = TimeUtil.getTime(returnData.data?.createTime)
+                        binding?.time?.setText(time)
                         binding?.realName?.setText(returnData.data?.otherSideRealName)
                         binding?.realNameName?.setText(returnData.data?.payEeRealName)
                         val payMethod = returnData.data?.payMethod
-                        if (payMethod == 2) {
+                        if (payMethod == 0) {
                             binding?.payFor?.setText(getString(R.string.cards))
                         }
-                        else if (payMethod == 1){
+                        else if (payMethod == 2){
                             binding?.payFor?.setText(getString(R.string.wei_xin))
                         }
                         else {
