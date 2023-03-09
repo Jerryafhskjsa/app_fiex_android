@@ -74,7 +74,6 @@ import java.util.*
         typeList!!.add(TAB_QUCILK)
         TAB_TITLES[0] = "B"
         TAB_TITLES[1] = "S"
-        getOtcToken(mContext)
         init()
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -226,28 +225,4 @@ import java.util.*
         })
 
     }
-    //获取Otc-token
-    private fun getOtcToken(context: Context) {
-        C2CApiServiceHelper.getOtcToken(
-            context,
-            object : Callback<HttpRequestResultData<LoginVO?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
-                override fun callback(result: HttpRequestResultData<LoginVO?>?) {
-                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                        val otcTokenResult: LoginVO? = result.data
-                        val otcToken = otcTokenResult?.token
-                        val otcTokenExpiredTime = otcTokenResult?.expireTime
-                        HttpCookieUtil.saveApiToken(context, otcToken)
-                        HttpCookieUtil.saveApiTokenExpiredTime(
-                            context,
-                            otcTokenExpiredTime.toString()
-                        )
-
-                    }
-                }
-
-            })
-    }
-
 }

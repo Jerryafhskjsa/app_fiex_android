@@ -402,7 +402,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                             val id2 = returnData.data
                             val extras = Bundle()
-                            extras.putString(ConstData.BUY_PRICE, id2)
+                            extras.putString(ConstData.COIN_TYPE, id2)
                             BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(extras)
                                 .go(mContext)
                         } else {

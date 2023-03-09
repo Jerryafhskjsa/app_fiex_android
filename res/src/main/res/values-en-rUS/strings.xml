@@ -320,6 +320,7 @@
     <string name="cards">Cards</string>
     <string name="wei_xin">Wei xin</string>
     <string name="order_generated">Order generated</string>
+    <string name="order_canceled">Order canceled</string>
     <string name="time_between">Please pay the seller within %s</string>
     <string name="wait1">It is expected that</string>
     <string name="seller_confirm_too">The other party has paid, please confirm receipt</string>
@@ -836,6 +837,8 @@
     <string name="language">Language</string>
     <string name="exchange_rates">exchange Rate</string>
     <string name="exchange">Exchange</string>
+    <string name="state">State</string>
+    <string name="order_again">Order again</string>
     <string name="comprehensive_bill">Comprehensive bill</string>
     <string name="super_rebate">Super Discount</string>
     <string name="language_cny">CNY</string>

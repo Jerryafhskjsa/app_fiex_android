@@ -81,7 +81,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/text_size_20"
-                                            android:src="@drawable/btn_c2c_msg" />
+                                            android:src="@drawable/btn_c2c_msg_2" />
 
                                         <com.black.base.widget.SpanTextView
                                             android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
                                             android:textSize="@dimen/text_size_14" />
 
                                         <com.black.base.widget.SpanTextView
-                                            android:id="@+id/id"
+                                            android:id="@+id/much"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:ellipsize="none"
@@ -214,11 +214,11 @@
                     android:orientation="horizontal">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/direction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/sell"
-                        android:textColor="#FF5A4E"
                         android:textSize="@dimen/text_size_18"
                         android:textStyle="bold" />
 
@@ -357,6 +357,7 @@
                             android:text="@string/order_number" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -387,6 +388,7 @@
                             android:text="@string/created_time" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/create_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
@@ -531,14 +533,14 @@
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/time"
-                style="@style/ButtonBlue"
+                style="@style/ButtonReturnGreen"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/exchange" />
+                android:text="申述" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

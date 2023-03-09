@@ -87,6 +87,18 @@ class ApiManager {
             return apiManager
         }
 
+    //理财专用
+    fun build3(context: Context, noToken: Boolean): ApiManager {
+        val context1 = context.applicationContext
+        val apiManager = instance
+        val language = LanguageUtil.getLanguageSetting(context1)
+        val lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
+        val deviceId = CommonUtil.getDeviceId(context1)
+        val realUrl = UrlConfig.getFinancalUrl(context1)
+        val token = if (noToken) null else HttpCookieUtil.getUcToken(context1)
+        apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, realUrl, deviceId, lang, token, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
+        return apiManager
+    }
 
         fun clearCache() {
             ApiManagerImpl.clearCache()

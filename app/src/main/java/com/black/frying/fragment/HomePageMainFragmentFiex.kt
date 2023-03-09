@@ -161,6 +161,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         binding!!.btnNoticeMore.setOnClickListener(this)
         binding!!.c2c.setOnClickListener(this)
         binding!!.btnUserinfo.setOnClickListener(this)
+        binding!!.cvStaking.setOnClickListener(this)
         binding!!.btnSearchMenu.setOnClickListener(this)
         binding!!.btnScanMenu.setOnClickListener(this)
         binding!!.btnMoreMenu.setOnClickListener(this)
@@ -253,6 +254,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
+            }
+            R.id.cv_staking -> {
+                val bundle = Bundle()
+                bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
+                bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
+                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(this)
             }
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)

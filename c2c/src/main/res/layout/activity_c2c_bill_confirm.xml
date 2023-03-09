@@ -154,25 +154,37 @@
                                             android:paddingLeft="20dp"
                                             android:paddingTop="@dimen/text_size_10"
                                             android:singleLine="true"
-                                            android:text="已存入法币账户"
+                                            android:text="@string/sell_successful"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text_size_14" />
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="vertical">
+
                                         <com.black.base.widget.SpanTextView
-                                            android:id="@+id/wallet"
+                                            android:id="@+id/much"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:ellipsize="none"
                                             android:paddingLeft="10dp"
                                             android:paddingTop="@dimen/text_size_10"
                                             android:singleLine="true"
-                                            android:text="@string/see_wallet"
+                                            android:text="0.0 USDT"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/text_size_14"
-                                            android:textStyle="bold" />
+                                            android:textSize="@dimen/text_size_14" />
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical">
+                                            <com.black.base.widget.SpanTextView
+                                                android:id="@+id/wallet"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:ellipsize="none"
+                                                android:paddingLeft="10dp"
+                                                android:paddingTop="@dimen/text_size_10"
+                                                android:singleLine="true"
+                                                android:text="@string/see_wallet"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text_size_14"
+                                                android:textStyle="bold" />
                                             <View
                                                 android:layout_width="match_parent"
                                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -202,11 +214,12 @@
                         android:orientation="horizontal">
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/direction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/buy_02"
-                            android:textColor="#03CA89"
+                            android:text="@string/sell"
+                            android:textColor="#FF5A4E"
                             android:textSize="@dimen/text_size_18"
                             android:textStyle="bold" />
 
@@ -311,7 +324,7 @@
                                 android:text="@string/amount" />
 
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/account"
+                                android:id="@+id/amount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -399,7 +412,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="卖家昵称" />
+                                android:text="@string/buyer" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name"
@@ -425,10 +438,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="接单总数" />
+                                android:text="@string/name_real" />
 
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/total_amount"
+                                android:id="@+id/real_name_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -445,7 +458,6 @@
                             android:layout_marginRight="@dimen/text_size_20"
                             android:background="@color/C2" />
                         <LinearLayout
-                            android:id="@+id/ma"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_20"
@@ -462,7 +474,7 @@
                                 android:text="@string/exchange_method" />
 
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/payment_method"
+                                android:id="@+id/pay_for"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_10"
@@ -479,7 +491,6 @@
                             android:layout_marginTop="@dimen/text_size_20"
                             android:layout_marginRight="@dimen/text_size_20"
                             android:background="@color/C2" />
-
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.appbar.AppBarLayout>
@@ -494,14 +505,15 @@
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
-                style="@style/ButtonBlue"
+                android:id="@+id/time"
+                style="@style/ButtonReturnGreen"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/exchange" />
+                android:text="@string/order_again" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

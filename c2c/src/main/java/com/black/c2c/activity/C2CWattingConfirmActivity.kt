@@ -2,16 +2,20 @@ package com.black.c2c.activity
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.HttpRequestResultData
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2COrderDetails
 import com.black.base.model.c2c.OtcReceiptModel
+import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -24,6 +28,8 @@ import com.black.c2c.databinding.ActivityC2cSellerWaitBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.CommonUtil
+import com.google.zxing.WriterException
 
 @Route(value = [RouterConstData.C2C_WAITE2])
 class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
@@ -148,30 +154,31 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.name1?.setText(returnData.data?.otherSideRealName)
                         binding?.name2?.setText(returnData.data?.otherSideRealName)
                         val payMethod = returnData.data?.payMethod
-                        if (payMethod == 2) {
+                        getC2CGP(payMethod)
+                        if (payMethod == 0) {
                             binding?.name3?.setText(returnData.data?.receiptInfo?.name)
                             binding?.cardsNum?.setText(returnData.data?.receiptInfo?.account)
                             binding?.cpy?.setText(returnData.data?.receiptInfo?.depositBank)
                             binding?.otherCmy?.setText(returnData.data?.receiptInfo?.subbranch)
-                            binding?.weiXin?.visibility = View.VISIBLE
-                            binding?.cards?.visibility = View.GONE
-                            binding?.ali?.visibility = View.GONE
-                        }
-                        else if (payMethod == 0){
-                            binding?.name4?.setText(returnData.data?.receiptInfo?.name)
-                            binding?.aliNum?.setText(returnData.data?.receiptInfo?.account)
-                            val maTwo = returnData.data?.receiptInfo?.receiptImage
                             binding?.cards?.visibility = View.VISIBLE
                             binding?.weiXin?.visibility = View.GONE
                             binding?.ali?.visibility = View.GONE
+                        }
+                        else if (payMethod == 1){
+                            binding?.name4?.setText(returnData.data?.receiptInfo?.name)
+                            binding?.aliNum?.setText(returnData.data?.receiptInfo?.account)
+                            val maTwo = returnData.data?.receiptInfo?.receiptImage
+                            binding?.ali?.visibility = View.VISIBLE
+                            binding?.weiXin?.visibility = View.GONE
+                            binding?.cards?.visibility = View.GONE
                         }
                         else {
                             val maOne = returnData.data?.receiptInfo?.receiptImage
                             binding?.name5?.setText(returnData.data?.receiptInfo?.name)
                             binding?.weiXinNum?.setText(returnData.data?.receiptInfo?.account)
-                            binding?.ali?.visibility = View.VISIBLE
+                            binding?.weiXin?.visibility = View.VISIBLE
                             binding?.cards?.visibility = View.GONE
-                            binding?.weiXin?.visibility = View.GONE
+                            binding?.ali?.visibility = View.GONE
                         }
                     } else {
                         FryingUtil.showToast(
@@ -181,5 +188,85 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                     }
                 }
             })
+    }
+
+    //获取卖家收付款方式
+    private fun getC2CGP(paMethod: Int?) {
+        C2CApiServiceHelper.getC2CGP(mContext, id,  object : NormalCallback<HttpRequestResultDataList<PayInfo?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    if (returnData.data == null) {
+                        FryingUtil.showToast(mContext, "卖家收款方式已修改")
+                        return
+                    } else {
+                        if ( paMethod== 1) {
+                            binding?.ali?.visibility = View.VISIBLE
+                            binding?.cards?.visibility = View.GONE
+                            binding?.weiXin?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 1) {
+                                    binding?.name4?.setText(returnData.data!![i]?.name)
+                                    binding?.aliNum?.setText(returnData.data!![i]?.account)
+                                    val image = returnData.data!![i]?.receiptImage
+                                    if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
+                                        var qrcodeBitmap: Bitmap? = null
+                                        try {
+                                            qrcodeBitmap = CommonUtil.createQRCode(
+                                                image,
+                                                25,
+                                                0
+                                            )
+                                        } catch (e: WriterException) {
+                                            CommonUtil.printError(mContext, e)
+                                        }
+                                        binding?.maTwo?.setImageBitmap(qrcodeBitmap)
+                                    }
+                                }
+                        } else if (paMethod == 0) {
+                            binding?.cards?.visibility = View.VISIBLE
+                            binding?.ali?.visibility = View.GONE
+                            binding?.weiXin?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 0) {
+                                    binding?.name3?.setText(returnData.data!![i]?.name)
+                                    binding?.cardsNum?.setText(returnData.data!![i]?.account)
+                                    binding?.cpy?.setText(returnData.data!![i]?.depositBank)
+                                    binding?.otherCmy?.setText(returnData.data!![i]?.depositBank)
+                                }
+                        } else {
+                            binding?.weiXin?.visibility = View.VISIBLE
+                            binding?.ali?.visibility = View.GONE
+                            binding?.cards?.visibility = View.GONE
+                            for (i in 0 until returnData.data!!.size)
+                                if (returnData.data!![i]?.type == 2) {
+                                    binding?.name5?.setText(returnData.data!![i]?.name)
+                                    binding?.weiXinNum?.setText(returnData.data!![i]?.account)
+                                    val image = returnData.data!![i]?.receiptImage
+                                    if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
+                                        var qrcodeBitmap: Bitmap? = null
+                                        try {
+                                            qrcodeBitmap = CommonUtil.createQRCode(
+                                                image,
+                                                25,
+                                                0
+                                            )
+                                        } catch (e: WriterException) {
+                                            CommonUtil.printError(mContext, e)
+                                        }
+                                        binding?.maOne?.setImageBitmap(qrcodeBitmap)
+                                    }
+                                }
+                        }
+                    }
+                }else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
     }
 }

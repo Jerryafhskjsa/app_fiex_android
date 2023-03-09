@@ -389,6 +389,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             }
                             getProToken(mContext)
                             getOtcToken(mContext)
+                            getFicToken(mContext)
                         }
                     } else {
                         FryingUtil.showToast(
@@ -492,6 +493,31 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                         }
                     }
+
+            })
+    }
+
+    //获取fic-token
+    private fun getFicToken(context: Context) {
+        UserApiServiceHelper.getFicToken(
+            context,
+            object : Callback<HttpRequestResultData<LoginVO?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultData<LoginVO?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                        val ficTokenResult: LoginVO? = result.data
+                        val ficToken = ficTokenResult?.token
+                        val ficTokenExpiredTime = ficTokenResult?.expireTime
+                        HttpCookieUtil.saveFicToken(context, ficToken)
+                        HttpCookieUtil.saveFicTokenExpiredTime(
+                            context,
+                            ficTokenExpiredTime.toString()
+                        )
+
+                    }
+                }
 
             })
     }

@@ -320,6 +320,7 @@
     <string name="cards">银行卡</string>
     <string name="wei_xin">微信</string>
     <string name="order_generated">订单已生成</string>
+    <string name="order_canceled">订单已取消</string>
     <string name="time_between">请在内付款给卖家</string>
     <string name="wait1">预计将在</string>
     <string name="seller_confirm_too">对方已付款，请确认收款</string>
@@ -836,6 +837,8 @@
     <string name="language">语言</string>
     <string name="exchange_rates">汇率</string>
     <string name="exchange">划转</string>
+    <string name="state">申述</string>
+    <string name="order_again">再次下单</string>
     <string name="comprehensive_bill">综合账单</string>
     <string name="super_rebate">超级折扣</string>
     <string name="language_cny">人民币</string>CNY

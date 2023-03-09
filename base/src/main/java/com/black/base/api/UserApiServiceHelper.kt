@@ -6,40 +6,29 @@ import android.text.TextUtils
 import com.black.base.api.CommonApiServiceHelper.geetestInit
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.clutter.HomeSymbolList
-import com.black.base.model.filter.GeeTestResult
-import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.*
-import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletConfig
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.util.FryingUtil.getLoadDialog
 import com.black.base.util.FryingUtil.showToast
-import com.black.base.util.GeeTestHelper.GeeTestApi1Callback
-import com.black.base.util.GeeTestHelper.GeeTestApi2Callback
 import com.black.base.view.LoadingDialog
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import com.netease.nis.captcha.Captcha
 import com.netease.nis.captcha.CaptchaConfiguration
 import com.netease.nis.captcha.CaptchaListener
-import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
-import java.util.ArrayList
 
 object UserApiServiceHelper {
     //获取ticket
     fun getTicket(context: Context,callback:Callback<HttpRequestResultString?>){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+        ApiManager.build(context,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
             ?.getTicket()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context,callback))
@@ -47,7 +36,7 @@ object UserApiServiceHelper {
 
     //获取pro-token
     fun getProToken(context: Context,callback:Callback<HttpRequestResultData<ProTokenResult?>?>){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+        ApiManager.build(context,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
             ?.getProToken()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context,callback))
@@ -61,9 +50,25 @@ object UserApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context,callback))
     }
 
+    //获取fic_token
+    fun getFicToken(context: Context?,callback:Callback<HttpRequestResultData<LoginVO?>?>){
+        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_FIC).getService(UserApiService::class.java)
+            ?.getFicToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
+    //跳转至理财
+    fun backFinancal(context: Context?,callback:Callback<HttpRequestResultData<LoginVO?>?>){
+        ApiManager.build3(context!!,true).getService(UserApiService::class.java)
+            ?.getFicToken()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context,callback))
+    }
+
     //获取ws-token
     fun getWsToken(context: Context,callback:Callback<HttpRequestResultString?>){
-        ApiManager.build(context!!,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
+        ApiManager.build(context,true,UrlConfig.ApiType.URL_PRO).getService(UserApiService::class.java)
             ?.getWsToken()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context,callback))

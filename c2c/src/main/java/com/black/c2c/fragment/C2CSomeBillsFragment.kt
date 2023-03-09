@@ -75,13 +75,13 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
         if (status == -1) {
             extras.putString(ConstData.BUY_PRICE, id)
             BlackRouter.getInstance()
-                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .build(RouterConstData.C2C_BILL_CANCEL)
                 .with(extras)
                 .go(mContext)
         }
         if (status == 2) {
             extras.putString(ConstData.COIN_TYPE, id)
-            if (financialRecord?.direction == "B") {
+            if (financialRecord.direction == "B") {
                 BlackRouter.getInstance()
                     .build(RouterConstData.C2C_ORDERS)
                     .with(extras)
@@ -97,21 +97,21 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
         if (status == 3) {
             extras.putString(ConstData.BUY_PRICE, id)
             BlackRouter.getInstance()
-                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .build(RouterConstData.C2C_BILL_CONFRIM)
                 .with(extras)
                 .go(mContext)
         }
         if (status == 4) {
             extras.putString(ConstData.BUY_PRICE, id)
             BlackRouter.getInstance()
-                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .build(RouterConstData.C2C_BILL_CONFRIM)
                 .with(extras)
                 .go(mContext)
         }
         if (status == 5) {
             extras.putString(ConstData.BUY_PRICE, id)
             BlackRouter.getInstance()
-                .build(RouterConstData.C2C_BUY_CONFRIM)
+                .build(RouterConstData.C2C_BILL_CONFRIM)
                 .with(extras)
                 .go(mContext)
         }

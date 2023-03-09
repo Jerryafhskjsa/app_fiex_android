@@ -31,7 +31,7 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_seller_wait)
-        id = intent.getStringExtra(ConstData.BUY_PRICE)
+        id = intent.getStringExtra(ConstData.COIN_TYPE)
         binding?.idNum?.setText(id)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.num?.setOnClickListener(this)

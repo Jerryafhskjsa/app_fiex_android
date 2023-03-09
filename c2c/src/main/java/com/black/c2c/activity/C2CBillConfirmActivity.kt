@@ -17,22 +17,23 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.TimeUtil
 import com.black.c2c.R
+import com.black.c2c.databinding.ActivityC2cBillConfirmBinding
 import com.black.c2c.databinding.ActivityC2cConfirmBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import skin.support.content.res.SkinCompatResources
 import java.util.*
 
-@Route(value = [RouterConstData.C2C_CONFRIM])
-class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
-    private var binding: ActivityC2cConfirmBinding? = null
+@Route(value = [RouterConstData.C2C_BILL_CONFRIM])
+class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
+    private var binding: ActivityC2cBillConfirmBinding? = null
     private var id: String? = null
     private var totalTime : Long = 24*60*60*1000 //总时长 24h
-    var countDownTimer : CountDownTimer? = null
-
+    private var countDownTimer : CountDownTimer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_confirm)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_bill_confirm)
         id = intent.getStringExtra(ConstData.BUY_PRICE)
         binding?.btnConfirmNew?.setOnClickListener(this)
         binding?.actionBarBack?.setOnClickListener(this)
@@ -49,7 +50,7 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             cancelDialog()
         }
         if (id == R.id.action_bar_back) {
-            val intent = Intent(this, C2CNewActivity::class.java)
+            val intent = Intent(this, C2CBillsActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -102,24 +103,40 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
                         binding?.price?.setText(returnData.data?.price.toString())
                         binding?.total?.setText((returnData.data?.amount!! * returnData.data?.price!!).toString())
-                        binding?.createTime?.setText(TimeUtil.getTime(returnData.data?.createTime))
+                        val time = TimeUtil.getTime(returnData.data?.createTime)
+                        binding?.createTime?.setText(time)
                         binding?.realName?.setText(returnData.data?.otherSideRealName)
                         binding?.realNameName?.setText(returnData.data?.payEeRealName)
-                        val time1 = returnData.data?.canAllegeEndTime?.time
-                        val calendar: Calendar = Calendar.getInstance()
-                        val time2 = calendar.time.time
-                        totalTime = time1!!.minus(time2)
-                        countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
-                        override fun onFinish(){
-                            binding?.btnConfirmNew?.visibility = View.GONE
+                        val c1 = SkinCompatResources.getColor(context, R.color.T13)
+                        val t5 = SkinCompatResources.getColor(context, R.color.T5)
+                        if (returnData.data?.direction == "B")
+                        {
+                            binding?.btnConfirmNew?.visibility
+                            binding?.time?.setText(getString(R.string.order_again))
+                            binding?.direction?.setText(getString(R.string.buy_02))
+                            binding?.direction?.setTextColor(c1)
                         }
-                            override fun onTick(millisUntilFinished: Long) {
-                                val hour = millisUntilFinished / 1000 / 60 / 60 % 24
-                                val minute = millisUntilFinished / 1000 / 60 % 60
-                                val second = millisUntilFinished / 1000 % 60
-                                binding?.time?.setText(getString(R.string.state) + "$hour:$minute:$second")
-                            }
-                        }.start()
+                        if (returnData.data?.direction == "S") {
+                            binding?.direction?.setText(getString(R.string.sell))
+                            binding?.direction?.setTextColor(t5)
+                            val time1 = returnData.data?.canAllegeEndTime?.time
+                            val calendar: Calendar = Calendar.getInstance()
+                            val time2 = calendar.time.time
+                            totalTime = time1!!.minus(time2)
+                            countDownTimer = object : CountDownTimer(totalTime, 1000) {
+                                //1000ms运行一次onTick里面的方法
+                                override fun onFinish() {
+                                    binding?.btnConfirmNew?.visibility = View.GONE
+                                }
+
+                                override fun onTick(millisUntilFinished: Long) {
+                                    val hour = millisUntilFinished / 1000 / 60 / 60 % 24
+                                    val minute = millisUntilFinished / 1000 / 60 % 60
+                                    val second = millisUntilFinished / 1000 % 60
+                                    binding?.time?.setText(getString(R.string.state) + "$hour:$minute:$second")
+                                }
+                            }.start()
+                        }
                         val payMethod = returnData.data?.payMethod
                         if (payMethod == 0) {
                             binding?.payFor?.setText(getString(R.string.cards))

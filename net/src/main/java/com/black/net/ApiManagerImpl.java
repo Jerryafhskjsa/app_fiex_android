@@ -194,6 +194,7 @@ public class ApiManagerImpl {
             String trade_token = HttpCookieUtil.getTradeToken(context);
             String pro_token = HttpCookieUtil.getProToken(context);
             String otc_token = HttpCookieUtil.getApiToken(context);
+            String fic_token = HttpCookieUtil.getFicToken(context);
             String future_token = HttpCookieUtil.geFutureToken(context);
             String ws_token = HttpCookieUtil.getWsToken(context);
 
@@ -202,6 +203,7 @@ public class ApiManagerImpl {
             requestBuilder
                     .header("charset", "UTF-8")
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                    //.header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .header("User-Agent", getUserAgent(context))
                     .header("ASI-UUID", deviceId)
@@ -215,6 +217,7 @@ public class ApiManagerImpl {
 //                        .header("Authorization-uc", ucToken == null ? "" : ucToken)
 //                        .header("Authorization-pro", pro_token == null ? "" : pro_token)
                           .header("Authorization-otc", otc_token == null ? "" : otc_token)
+                    .header("Authorization-financial", fic_token == null ? "" : fic_token)
 //                        .header("Authorization-ft", "")
                     .header("Accept-Encoding", "gzip, deflate")
                     .header("Cache-Control", "no-cache");
@@ -253,6 +256,13 @@ public class ApiManagerImpl {
                     JSESSIONIDCookie += ";otc-token=" + otc_token + ";";
                 } else {
                     JSESSIONIDCookie += "otc-token=" + otc_token + ";";
+                }
+            }
+            if (JSESSIONIDCookie != null && !TextUtils.isEmpty(fic_token)) {
+                if (JSESSIONIDCookie.lastIndexOf(";") == -1) {
+                    JSESSIONIDCookie += ";fic-token=" + fic_token + ";";
+                } else {
+                    JSESSIONIDCookie += "fic-token=" + fic_token + ";";
                 }
             }
             if (JSESSIONIDCookie != null && !TextUtils.isEmpty(future_token)) {

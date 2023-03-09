@@ -21,17 +21,18 @@ object UrlConfig {
     }
 
     //https://fiex.io/futures/fapi/market/v1/public/q/deal?symbol=btc_usdt&num=30
-    fun getFiexHost(context: Context, apiType: String?): String? {
+    fun getFiexHost(context: Context, apiType: String?): String {
         var apiTypeDes = "/uc/"
         when (apiType) {
             ApiType.URl_UC -> apiTypeDes = "/uc/"
+            ApiType.URL_FIC -> apiTypeDes = "/api/"
             ApiType.URL_API -> apiTypeDes = "/otc/api/"
             ApiType.URL_PRO -> apiTypeDes = "/pro/"
             ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi/"
             ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi/"
         }
         var index = getIndex(context)
-        var serverHost = CookieUtil.getServerHost(context)
+        val serverHost = CookieUtil.getServerHost(context)
         if (serverHost != null && serverHost.size > 0) {
             return serverHost[index] + apiTypeDes
         }
@@ -84,6 +85,9 @@ object UrlConfig {
         return HOSTS[getIndex(context)]
     }
 
+    fun getFinancalUrl(mContext: Context): String {
+        return  "http://financial.abexxx.net/financing?from=app"
+    }
 
     fun getFactionRuleUrl(mContext: Context): String {
         return getHost(mContext) + "/pages/league_info/"
@@ -144,7 +148,8 @@ object UrlConfig {
 
     object ApiType {
         const val URl_UC = "uc"
-        const val URL_API = "api"
+        const val URL_API = "otc/api"
+        const val URL_FIC = "api"
         const val URL_PRO = "pro"
         const val URL_FUT_F = "fut_f" //合约U本位
         const val URL_FUT_D = "fut_d" //合约币本位
@@ -165,6 +170,9 @@ object UrlConfig {
 
         //otc_login
         const val  OTC_LOGIN = "otc/user/login"
+
+        //fic_login
+        const val  FIC_LOGIN = "financial/user/login"
 
         //ws_token
         const val URL_WS_TOKEN = "user/ws-token"
