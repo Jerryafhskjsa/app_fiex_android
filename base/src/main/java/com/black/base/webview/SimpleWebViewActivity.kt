@@ -13,6 +13,7 @@ import com.black.base.R
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
+import com.black.base.util.LanguageUtil
 import com.black.base.util.RouterConstData
 import com.black.router.annotation.Route
 import java.util.*
@@ -25,6 +26,7 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
     protected var actionBarLayoutId = 0
     protected var title: String? = null
     protected var url: String? = null
+    protected var lang: String? = null
     protected var webView: WebView? = null
     var headTitleView: TextView? = null
         private set
@@ -32,6 +34,8 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_web_view)
+        val language = LanguageUtil.getLanguageSetting(mContext)
+        lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
         webView = findViewById(R.id.web_view)
         webView?.setWebViewClient(WebViewClient())
         webView?.setFocusable(true)
@@ -129,7 +133,8 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
         private get() {
             val sbCookie = StringBuilder() //创建一个拼接cookie的容器,为什么这么拼接，大家查阅一下http头Cookie的结构
             //            sbCookie.append(_mApplication.getUserInfo().getSessionID());//拼接sessionId
-            sbCookie.append(String.format("domain=%s", ".ggtoken.xin"))
+            sbCookie.append(String.format("lang=%s" , lang))
+            sbCookie.append(String.format(";from=%s", "app"))
             sbCookie.append(String.format(";path=%s", "/"))
             sbCookie.append(String.format(";Platform=%s", "Android"))
             val token = CookieUtil.getToken(this)
@@ -137,8 +142,9 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
                 sbCookie.append(String.format(";Authorization=%s", token))
             }
             val cookies: MutableList<String?> = ArrayList()
-            cookies.add(String.format("domain=%s", ".ggtoken.xin"))
+            cookies.add(String.format("lang=%s", lang))
             cookies.add(String.format(";path=%s", "/"))
+            cookies.add(String.format(";from=%s", "app"))
             cookies.add(String.format(";Platform=%s", "Android"))
             if (!TextUtils.isEmpty(token)) {
                 cookies.add(String.format(";Authorization=%s", token))
@@ -159,7 +165,9 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
             cookieManager.setAcceptCookie(true)
             cookieManager.removeSessionCookie() // 移除
             cookieManager.removeAllCookie()
-            cookieManager.setCookie(url, String.format("Domain=%s", ".ggtoken.xin"))
+
+            cookieManager.setCookie(url,String.format("lang=%s" , lang))
+            cookieManager.setCookie(url, String.format("from=%s", "app"))
             cookieManager.setCookie(url, String.format("Path=%s", "/"))
             cookieManager.setCookie(url, String.format("Platform=%s", "Android"))
             val token = CookieUtil.getToken(context)

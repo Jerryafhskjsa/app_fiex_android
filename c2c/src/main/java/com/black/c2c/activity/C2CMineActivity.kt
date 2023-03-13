@@ -12,6 +12,7 @@ import com.black.base.model.c2c.C2CUserInfo
 import com.black.base.model.c2c.CoinVOS
 import com.black.base.model.c2c.UserCoinAccount
 import com.black.base.model.user.UserInfo
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.UrlConfig
@@ -24,13 +25,14 @@ import com.black.router.annotation.Route
 @Route(value = [RouterConstData.C2C_MINE])
 class C2CMineActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivityC2cMineBinding? = null
-    private val userInfo = UserInfo()
+    private var userInfo = UserInfo()
     private val money = WalletApiServiceHelper.userBalanceWrapperCache.spotBalance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_mine)
         binding?.linTransfer?.setOnClickListener(this)
+        userInfo = CookieUtil.getUserInfo(this)!!
         binding?.id?.setText(userInfo.id)
         getC2CUserInfo()
         getC2CUserAccount()
@@ -73,7 +75,6 @@ class C2CMineActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultDataList<UserCoinAccount?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    binding?.id?.setText(returnData.data!![0]?.userId)
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }

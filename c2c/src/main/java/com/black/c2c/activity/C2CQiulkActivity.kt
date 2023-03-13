@@ -1,22 +1,17 @@
 package com.black.c2c.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.C2CApiServiceHelper
-import com.black.base.model.C2CADData
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.NormalCallback
@@ -24,7 +19,6 @@ import com.black.base.model.c2c.C2CMainAD
 import com.black.base.model.c2c.C2CSupportCoin
 import com.black.base.model.c2c.OrderConfig
 import com.black.base.model.c2c.PayInfo
-import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -32,7 +26,6 @@ import com.black.base.view.ChooseWalletControllerWindow
 import com.black.base.view.DeepControllerWindow
 import com.black.base.widget.SpanTextView
 import com.black.c2c.R
-import com.black.c2c.databinding.ActivityC2cMainBinding
 import com.black.c2c.databinding.ActivityC2cOldBinding
 import com.black.c2c.fragment.C2CCustomerFragment
 import com.black.c2c.fragment.C2COneKeyFragment
@@ -46,40 +39,26 @@ import kotlin.collections.ArrayList
 @Route(value = [RouterConstData.C2C_QIULK])
 class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     companion object {
-        private const val TAB_ONE_KEY = 1
-        private const val TAB_CUSTOMER = 2
-        private val TAB_TITLES = arrayOfNulls<String>(6)
         private var TAB_CARDS: String? = null
         private var TAB_IDPAY: String? = null
         private var TAB_WEIXIN: String? = null
-        private var TAB_PAYPAID: String? = "PayPai"
-        private var TAB_ETH: String? = null
-        private var TAB_DOGE: String? = null
-        private val TAB_SELF = "自选区"
-        private val TAB_QUCILK = "快捷区"
+        private var TAB_SELF: String? = null
+        private var TAB_QUCILK: String? = null
 
     }
 
     private var binding: ActivityC2cOldBinding? = null
     private var dataList:OrderConfig? = null
     private var c2cList: C2CMainAD? = null
-    private var currentTab = 0
     private var type = 0
     private var currencyCoin = "CNY"
-    private  var otherType = false
-    private  var otherType2 = false
-    private  var otherType3 = false
-    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+    private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var tab = TAB_QUCILK
     private var ciontype = "USDT"
     private var payChain: String? = null
     private var fManager: FragmentManager? = null
     private var typeList: MutableList<String>? = null
     private var chainNames: MutableList<String?>? = null
-    private var fragmentList: java.util.ArrayList<Fragment>? = null
-    private var c2COneKeyFragment: C2COneKeyFragment? = null
-    private var c2CCustomerFragment: C2CCustomerFragment? = null
-    private var supportCoins: ArrayList<C2CSupportCoin?>? = null
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -131,11 +110,13 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
         TAB_CARDS = getString(R.string.cards)
         TAB_IDPAY = getString(R.string.id_pay)
         TAB_WEIXIN = getString(R.string.wei_xin)
+        TAB_QUCILK = getString(R.string.shortcut_area)
+        TAB_SELF = getString(R.string.self_selection_area)
         payChain = TAB_CARDS
         fManager = supportFragmentManager
         typeList = ArrayList()
-        typeList!!.add(TAB_SELF)
-        typeList!!.add(TAB_QUCILK)
+        typeList?.add(TAB_SELF!!)
+        typeList?.add(TAB_QUCILK!!)
         chainNames?.clear()
         chainNames = ArrayList()
         chainNames?.add(TAB_CARDS)
@@ -182,9 +163,6 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
 
             }).show()
         }
-        else if (id == R.id.rate){
-
-        }
         else if (id == R.id.bills){
             BlackRouter.getInstance().build(RouterConstData.C2C_BILLS).go(this)
         }
@@ -214,7 +192,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.advice?.visibility = View.VISIBLE
             binding?.adviceNull?.visibility = View.GONE
             ciontype = binding?.one?.text.toString()
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+            rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
             binding?.one?.isChecked = true
             binding?.two?.isChecked = false
             binding?.three?.isChecked = false
@@ -233,7 +211,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = false
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.btc
+            rate = C2CApiServiceHelper.coinUsdtPrice?.btc
             checkClickable()
         }
         else if (id == R.id.three){
@@ -282,7 +260,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             binding?.four?.isChecked = false
             binding?.five?.isChecked = false
             binding?.six?.isChecked = true
-            rate = C2CApiServiceHelper?.coinUsdtPrice?.eth
+            rate = C2CApiServiceHelper.coinUsdtPrice?.eth
             checkClickable()
         }
         else if (id == R.id.sven){
@@ -356,7 +334,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             if (amount != null) {
                 binding?.changeTwo?.setText( "￥" +
                         NumberUtil.formatNumberNoGroup(
-                            amount!! * rate!!,
+                            amount * rate!!,
                             4,
                             4
                         )
@@ -373,7 +351,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             if (amount != null) {
                 binding?.changeTwo?.setText(
                     NumberUtil.formatNumberNoGroup(
-                        amount!! / rate!!,
+                        amount / rate!!,
                         4,
                         4
                     )
@@ -417,7 +395,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     private fun settingsDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.bills_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes

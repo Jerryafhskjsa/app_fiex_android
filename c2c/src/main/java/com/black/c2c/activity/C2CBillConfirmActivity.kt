@@ -29,30 +29,37 @@ import java.util.*
 class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     private var binding: ActivityC2cBillConfirmBinding? = null
     private var id: String? = null
+    private var adid: String? = null
     private var totalTime : Long = 24*60*60*1000 //总时长 24h
     private var countDownTimer : CountDownTimer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_bill_confirm)
         id = intent.getStringExtra(ConstData.BUY_PRICE)
-        binding?.btnConfirmNew?.setOnClickListener(this)
+        binding?.orderAgain?.setOnClickListener(this)
+        binding?.time?.setOnClickListener(this)
         binding?.actionBarBack?.setOnClickListener(this)
         binding?.wallet?.setOnClickListener(this)
         binding?.msg?.setOnClickListener(this)
         binding?.wallet?.getPaint()?.setFlags(Paint.FAKE_BOLD_TEXT_FLAG)
         getC2COIV2()
-        countDownTimer
     }
 
     override fun onClick(v: View) {
         val id = v.id
-        if (id == R.id.btn_confirm_new) {
+        if (id == R.id.time) {
             cancelDialog()
         }
         if (id == R.id.action_bar_back) {
             val intent = Intent(this, C2CBillsActivity::class.java)
             startActivity(intent)
             finish()
+        }
+        if (id == R.id.order_again){
+            getC2COIV2()
+            val extras = Bundle()
+            extras.putString(ConstData.PAIR, adid)
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUY).with(extras).go(mContext)
         }
 
         if (id == R.id.wallet) {
@@ -98,6 +105,7 @@ class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
 
                 override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        adid = returnData.data?.advertisingId
                         binding?.id?.setText(id)
                         binding?.coinType?.setText(returnData.data?.coinType)
                         binding?.amount?.setText(returnData.data?.amount.toString() + returnData.data?.coinType)
@@ -111,12 +119,12 @@ class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         val t5 = SkinCompatResources.getColor(context, R.color.T5)
                         if (returnData.data?.direction == "B")
                         {
-                            binding?.btnConfirmNew?.visibility
-                            binding?.time?.setText(getString(R.string.order_again))
+                            binding?.orderAgain?.visibility = View.VISIBLE
                             binding?.direction?.setText(getString(R.string.buy_02))
                             binding?.direction?.setTextColor(c1)
                         }
                         if (returnData.data?.direction == "S") {
+                            binding?.time?.visibility = View.VISIBLE
                             binding?.direction?.setText(getString(R.string.sell))
                             binding?.direction?.setTextColor(t5)
                             val time1 = returnData.data?.canAllegeEndTime?.time
@@ -126,7 +134,7 @@ class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                             countDownTimer = object : CountDownTimer(totalTime, 1000) {
                                 //1000ms运行一次onTick里面的方法
                                 override fun onFinish() {
-                                    binding?.btnConfirmNew?.visibility = View.GONE
+                                    binding?.time?.visibility = View.GONE
                                 }
 
                                 override fun onTick(millisUntilFinished: Long) {

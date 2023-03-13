@@ -8,7 +8,7 @@ import java.net.URL
 object UrlConfig {
     val HOSTS = arrayOf(
         "http://abexxx.net",//fiex测试环境
-        "http://www.soeasyex.com",//正式环境
+        "https://www.soeasyex.com",//正式环境
     )
 
     var serverHost = ArrayList<String?>()
@@ -86,6 +86,7 @@ object UrlConfig {
     }
 
     fun getFinancalUrl(mContext: Context): String {
+        val language = LanguageUtil.getLanguageSetting(mContext)
         return  "http://financial.abexxx.net/financing?from=app"
     }
 

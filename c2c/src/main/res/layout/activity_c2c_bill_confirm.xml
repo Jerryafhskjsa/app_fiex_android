@@ -510,6 +510,17 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:layout_marginBottom="@dimen/text_size_20"
+                android:padding="@dimen/middle_padding" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/order_again"
+                style="@style/ButtonReturnGreen"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
