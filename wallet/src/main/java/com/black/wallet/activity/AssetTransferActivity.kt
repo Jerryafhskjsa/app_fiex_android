@@ -271,7 +271,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private val doTransfer:Unit
         get() {
-            var inputValue = binding?.editAmount?.text.toString()
+            val inputValue = binding?.editAmount?.text.toString()
             if(TextUtils.isEmpty(inputValue)){
                 FryingUtil.showToast(this,getString(R.string.input_amount))
                 return
@@ -281,7 +281,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 return
             }
             coinCount = BigDecimal(binding?.editAmount?.text.toString())
-            var transferCoin = AssetTransfer()
+            val transferCoin = AssetTransfer()
             transferCoin.amount = coinCount
             transferCoin.coin = selectedCoin?.coin
             transferCoin.fromWalletType = fromAccount?.type?.lowercase()
@@ -298,8 +298,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
 
     private fun initAccountData(supportAccount:AssetTransferTypeList?){
-        var spot = supportAccount?.mainName
-        var transName = supportAccount?.transferName
+        val spot = supportAccount?.mainName
+        val transName = supportAccount?.transferName
         if(supportFromAccountData == null){
             supportFromAccountData = ArrayList()
         }else{

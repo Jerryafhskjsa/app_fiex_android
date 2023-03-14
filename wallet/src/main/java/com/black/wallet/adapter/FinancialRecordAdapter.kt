@@ -11,6 +11,10 @@ import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListItemFinancialRecordBinding
 import skin.support.content.res.SkinCompatResources
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FinancialRecordAdapter(context: Context, variableId: Int, data: ArrayList<FinancialRecord?>?) : BaseRecycleDataBindAdapter<FinancialRecord?, ListItemFinancialRecordBinding>(context, variableId, data) {
     private var onHandleClickListener: OnHandleClickListener? = null
@@ -56,7 +60,12 @@ class FinancialRecordAdapter(context: Context, variableId: Int, data: ArrayList<
         ////0已完成 1待审核 2已取消 3确认中 4审核通过 5转账中 -1 失败
         viewHolder?.status?.setText(record?.getStatusText(context))
         viewHolder?.status?.setTextColor(color)
-        viewHolder?.time?.setText(if (record?.createdTime == null) nullAmount else record.createdTime)
+        val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        val date = df.parse(record?.createdTime)
+        val df1 = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK)
+        val date1 = df1.parse(date.toString())
+        val df2: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        viewHolder?.time?.setText(df2.format(date1))
 //        holder.timeView.setTextColor(normalColor);
         //        holder.timeView.setTextColor(normalColor);
         viewHolder?.confirmAmount?.setText(if (record?.txFee == null) nullAmount else NumberUtil.formatNumberNoGroup(record.txFee))

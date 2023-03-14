@@ -193,12 +193,14 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
         val total = year * 10000 + (month + 1) * 100 + day
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            binding?.refreshLayout?.setRefreshing(false)
+            binding?.refreshLayout?.setLoading(false)
             if (!isShowLoading) {
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total1 = year * 10000 + month * 100 + day
-                val date: Date = Date(year,month,day)
+                val date: Date = Date(year,month,day + 1)
                 oder.startTime = date.time
                 if (total >= total1) {
                     binding?.start?.setText(
@@ -222,7 +224,7 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total2 = year * 10000 + month * 100 + day
-                val date: Date = Date(year,month,day)
+                val date: Date = Date(year,month,day + 1)
                 val time = date.time
                 if (total >= total2 && time >= oder.startTime!!){
                     oder.endTime = time
@@ -278,14 +280,14 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                     override fun callback(returnData: HttpRequestResultBean<PagingData<CostBill?>?>?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        if (returnData != null && returnData.returnCode == HttpRequestResult.SUCCESS) {
                             val oderList = returnData.result?.items
                             adapter?.data = oderList
                             adapter?.notifyDataSetChanged()
                         } else {
                             FryingUtil.showToast(
                                 mContext,
-                                if (returnData == null) "null" else returnData.msg
+                                if (returnData == null) "null" else returnData.msgInfo
                             )
 
                         }

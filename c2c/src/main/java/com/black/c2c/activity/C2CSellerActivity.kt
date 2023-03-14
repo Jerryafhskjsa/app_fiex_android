@@ -20,6 +20,9 @@ class C2CSellerActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.idPay?.setOnClickListener(this)
         binding?.weiXin?.setOnClickListener(this)
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
 
     override fun getTitleText(): String? {
         return super.getString(R.string.get_method)

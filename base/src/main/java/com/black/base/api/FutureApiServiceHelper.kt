@@ -274,7 +274,7 @@ object FutureApiServiceHelper {
      */
 
     fun getBalanceBills(
-        coin: String?,
+        coinType: String?,
         direction: String?,
         limit: Int?,
         symbol: String?,
@@ -289,7 +289,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getBalancesBills(coin, symbol , type , startTime , endTime )
+            ?.getBalancesBills(coinType, direction ,limit, type , startTime , endTime )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, callback))
     }

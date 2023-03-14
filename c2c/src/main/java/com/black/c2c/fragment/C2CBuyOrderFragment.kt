@@ -75,7 +75,7 @@ class C2CBuyOrderFragment : BaseFragment(),View.OnClickListener
             }
 
         })
-        getC2cList()
+        //getC2cList()
 
         return layout
     }
@@ -83,7 +83,6 @@ class C2CBuyOrderFragment : BaseFragment(),View.OnClickListener
     override fun onClick(v: View?) {
         val id = v?.id
         if (id ==R.id.send){
-            getC2CImage()
             getC2CTime()
             getC2cText()
             getC2CPull()

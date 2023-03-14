@@ -57,6 +57,11 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
     }
 
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String? {
         return  sellerName
     }

@@ -43,6 +43,10 @@ class C2CConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         countDownTimer
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm_new) {

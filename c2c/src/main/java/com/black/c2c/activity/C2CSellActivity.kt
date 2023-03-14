@@ -76,6 +76,10 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         getC2CUserInfo()
         checkClickable()
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String {
         return getString(R.string.sell) + cointype
     }

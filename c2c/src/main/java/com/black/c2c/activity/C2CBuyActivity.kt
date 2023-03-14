@@ -82,6 +82,11 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
         TAB_WEIXIN = getString(R.string.wei_xin)
         checkClickable()
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String? {
         return getString(R.string.buy_02) + cointype
     }

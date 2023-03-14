@@ -50,6 +50,11 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun getTitleText(): String {
         return "等待卖家确认收款并放币"
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm) {

@@ -67,6 +67,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
 
         override fun afterTextChanged(s: Editable) {}
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (rate == null)
@@ -133,8 +134,9 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
     }
 
     override fun isStatusBarDark(): Boolean {
-        return false
+        return !super.isStatusBarDark()
     }
+
 
     override fun onClick(v: View) {
         val id = v.id

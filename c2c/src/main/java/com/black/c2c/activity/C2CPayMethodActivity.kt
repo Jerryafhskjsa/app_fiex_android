@@ -59,6 +59,10 @@ class C2CPayMethodActivity : BaseActionBarActivity(), View.OnClickListener{
     override fun getTitleText(): String? {
         return super.getString(R.string.get_method)
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm){

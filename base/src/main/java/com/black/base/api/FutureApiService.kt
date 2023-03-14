@@ -217,8 +217,9 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_BALANCE_BILLS)
     fun getBalancesBills(
-        @Query("coin") coin: String?,
-        @Query("symbol") symbol: String?,
+        @Query("coinType") coinType: String?,
+        @Query("direction") direction: String?,
+        @Query("limit") limit: Int?,
         @Query("type") type: String?,
         @Query("startTime") startTime: Long?,
         @Query("endTime") endTime: Long?,

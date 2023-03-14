@@ -86,6 +86,10 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         checkClickable()
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm) {

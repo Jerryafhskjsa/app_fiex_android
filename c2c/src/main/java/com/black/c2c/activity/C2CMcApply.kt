@@ -25,6 +25,11 @@ class C2CMcApply: BaseActionBarActivity(), View.OnClickListener{
     override fun getTitleText(): String? {
         return  "商家详情"
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.bar){

@@ -80,6 +80,10 @@ class C2CWriteMsgActivity1: BaseActionBarActivity(), View.OnClickListener{
     override fun getTitleText(): String? {
         return  "填写申请人资料"
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_submit){

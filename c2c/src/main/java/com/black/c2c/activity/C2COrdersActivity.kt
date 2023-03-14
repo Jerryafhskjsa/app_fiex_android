@@ -127,6 +127,9 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         getC2COIV2(id2)
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
 
     override fun getTitleText(): String? {
         return getString(R.string.order_generated)

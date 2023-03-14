@@ -174,5 +174,10 @@
                 android:textSize="@dimen/text_size_13" />
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_size_2"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:background="@color/C2"/>
     </LinearLayout>
 </layout>

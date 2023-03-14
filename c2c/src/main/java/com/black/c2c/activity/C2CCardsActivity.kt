@@ -44,6 +44,11 @@ class C2CCardsActivity: BaseActionBarActivity(), View.OnClickListener {
     override fun getTitleText(): String? {
         return super.getString(R.string.pay_add)
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_submit){

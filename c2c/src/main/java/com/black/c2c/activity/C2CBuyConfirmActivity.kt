@@ -39,6 +39,10 @@ class C2CBuyConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         finish()
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_confirm_new) {

@@ -282,13 +282,13 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
                     override fun callback(returnData: HttpRequestResultBean<PagingData<FlowBill?>?>?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        if (returnData != null && returnData.returnCode == HttpRequestResult.SUCCESS) {
                             val oderList = returnData.result?.items
                             adapter?.data = oderList
                             adapter?.notifyDataSetChanged()
                         }
                         else {
-                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msgInfo)
 
                         }
                     }
@@ -306,13 +306,13 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
                     override fun callback(returnData: HttpRequestResultBean<PagingData<FlowBill?>?>?) {
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        if (returnData != null && returnData.returnCode == HttpRequestResult.SUCCESS) {
                             val oderList = returnData.result?.items
                             adapter?.data = oderList
                             adapter?.notifyDataSetChanged()
                         }
                         else {
-                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                            FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msgInfo)
 
                         }
                     }

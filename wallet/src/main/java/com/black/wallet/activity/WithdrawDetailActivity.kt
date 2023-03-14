@@ -10,12 +10,16 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.model.wallet.FinancialRecord
 import com.black.base.util.RouterConstData
+import com.black.base.util.TimeUtil
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivityWithdrawDetailBinding
 import skin.support.content.res.SkinCompatResources
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Route(value = [RouterConstData.WITHDRAW_DETAIL])
 class WithdrawDetailActivity : BaseActionBarActivity(), View.OnClickListener {
@@ -48,7 +52,12 @@ class WithdrawDetailActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.memo?.setText(record!!.memo)
         }
         binding?.txid?.setText(if (record!!.txNetworkId == null) "" else record!!.txNetworkId)
-        binding?.time?.setText(record!!.createdTime)
+        val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        val date = df.parse(record?.createdTime)
+        val df1 = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK)
+        val date1 = df1.parse(date.toString())
+        val df2: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        binding?.time?.setText(df2.format(date1))
     }
 
     override fun isStatusBarDark(): Boolean {

@@ -27,6 +27,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/coin_type_recharge"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_14" />
@@ -35,7 +36,7 @@
                 android:id="@+id/coin_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:textColor="@color/T7"
                 android:textSize="@dimen/text_size_20" />
@@ -57,6 +58,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/recharge_amount"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -65,7 +67,7 @@
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:textColor="@color/T7"
                 android:textSize="@dimen/text_size_20" />
@@ -87,6 +89,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/recharge_confirm"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -95,7 +98,7 @@
                 android:id="@+id/confirm_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_16" />
@@ -117,6 +120,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/recharge_status"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -125,7 +129,7 @@
                 android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_14" />
@@ -147,6 +151,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/recharge_address"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -155,7 +160,7 @@
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:lineSpacingExtra="10dp"
                 android:textColor="@color/T1"
@@ -185,6 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wallet_target"
+                    android:layout_marginLeft="@dimen/text_size_10"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />
 
@@ -192,7 +198,7 @@
                     android:id="@+id/memo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_marginRight="@dimen/text_size_10"
                     android:gravity="right"
                     android:textColor="@color/T1"
                     android:textSize="@dimen/text_size_14" />
@@ -214,6 +220,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="@string/recharge_time"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -222,7 +229,7 @@
                 android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_14" />
@@ -243,6 +250,7 @@
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:text="Txid"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
@@ -251,7 +259,7 @@
                 android:id="@+id/txid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:gravity="right"
                 android:lineSpacingExtra="10dp"
                 android:textColor="@color/T1"

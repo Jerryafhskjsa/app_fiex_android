@@ -37,6 +37,10 @@ class C2CMineActivity: BaseActionBarActivity(), View.OnClickListener {
         getC2CUserInfo()
         getC2CUserAccount()
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.lin_transfer){

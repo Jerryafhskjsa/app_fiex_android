@@ -1,6 +1,7 @@
 package com.black.user.activity
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
@@ -36,38 +37,8 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
     private var chooseWindow: CountryChooseWindow? = null
     private var mailCaptcha: String? = null
     private var phoneCaptcha: String? = null
-
-    private val mHandler = Handler()
-
-    private var getPhoneCodeLocked = false
-    private var getPhoneCodeLockedTime = 0
-    private val getPhoneCodeLockTimer = object : Runnable {
-        override fun run() {
-            getPhoneCodeLockedTime--
-            if (getPhoneCodeLockedTime <= 0) {
-                getPhoneCodeLocked = false
-                binding?.getVerifyCodePhone?.setText(R.string.get_check_code)
-            } else {
-                binding?.getVerifyCodePhone?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-    }
-
-    private var getMailCodeLocked = false
-    private var getMailCodeLockedTime = 0
-    private val getMailCodeLockTimer = object : Runnable {
-        override fun run() {
-            getMailCodeLockedTime--
-            if (getMailCodeLockedTime <= 0) {
-                getMailCodeLocked = false
-                binding?.getVerifyCodeMail?.setText(R.string.get_check_code)
-            } else {
-                binding?.getVerifyCodeMail?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-    }
+    private var getMailCodeLockedTime: Long = 0
+    private var countDownTimer: CountDownTimer? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -199,9 +170,6 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
 
     //获取手机验证码
     private fun getPhoneVerifyCode() {
-        if (getPhoneCodeLocked) {
-            return
-        }
         val telCountryCode = if (binding?.countryCode?.tag == null) null else binding?.countryCode?.tag.toString()
         if (TextUtils.isEmpty(telCountryCode)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_choose_country))
@@ -217,11 +185,21 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                     phoneCaptcha = returnData.data
-                    if (!getPhoneCodeLocked) {
-                        getPhoneCodeLocked = true
-                        getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getPhoneCodeLockTimer)
-                    }
+                    getMailCodeLockedTime = 1000*60
+                    countDownTimer = object : CountDownTimer(getMailCodeLockedTime,1000) {
+                        //1000ms运行一次onTick里面的方法
+                        override fun onFinish() {
+                            binding?.getVerifyCodeMail?.setText(R.string.sent)
+                        }
+
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = millisUntilFinished / 1000 / 60 % 60
+                            val second = millisUntilFinished / 1000 % 60
+                            binding?.getVerifyCodeMail?.setText("$minute:$second")
+                        }
+                    }.start()
+
+
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
                 }
@@ -237,12 +215,21 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                     mailCaptcha = returnData.data
-                    //锁定发送按钮
-                    if (!getMailCodeLocked) {
-                        getMailCodeLocked = true
-                        getMailCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getMailCodeLockTimer)
-                    }
+                        getMailCodeLockedTime = 60*1000
+                    countDownTimer = object : CountDownTimer(getMailCodeLockedTime,1000) {
+                        //1000ms运行一次onTick里面的方法
+                        override fun onFinish() {
+                            binding?.getVerifyCodeMail?.setText(R.string.sent)
+                        }
+
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = millisUntilFinished / 1000 / 60 % 60
+                            val second = millisUntilFinished / 1000 % 60
+                            binding?.getVerifyCodeMail?.setText("$minute:$second")
+                        }
+                    }.start()
+
+
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
                 }

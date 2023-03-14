@@ -53,6 +53,10 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
     override fun getTitleText(): String? {
         return super.getString(R.string.waite_confirm)
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_cancel){

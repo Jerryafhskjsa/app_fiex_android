@@ -102,6 +102,11 @@ class SpotBillActivity: BaseActionBarActivity(), View.OnClickListener {
         when (v.id) {
         }
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String {
         return getString(R.string.history_record)
     }

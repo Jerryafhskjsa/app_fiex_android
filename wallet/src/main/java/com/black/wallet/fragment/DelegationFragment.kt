@@ -185,8 +185,6 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
                         if (returnData != null) {
                             var orderData = returnData?.result
                             var orderList = orderData?.items
-
-
                         }
                     }
                 })

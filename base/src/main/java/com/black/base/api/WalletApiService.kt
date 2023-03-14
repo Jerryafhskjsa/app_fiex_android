@@ -27,7 +27,7 @@ interface WalletApiService {
     fun getSupportCoin(@Query("fromWalletType") fromAccount:String?,@Query("toWalletType") toAccount:String?): Observable<HttpRequestResultDataList<CanTransferCoin?>?>?
 
     @POST(UrlConfig.Wallet.URL_TRANSFER)
-    fun doTransfer(@Body bean:AssetTransfer?): Observable<HttpRequestResultString?>?
+    fun doTransfer(@Body transferData:AssetTransfer?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_TRANSFER_RECORD)
     fun getWalletTransferRecord(@Query("coin") coin: String?,@Query("page") page: Int?, @Query("size") pageSize: Int?, @Query("fromType") fromType: String?,@Query("toType") toType: String?): Observable<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>?

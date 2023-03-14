@@ -31,8 +31,11 @@ class WattingApplyActivity: BaseActionBarActivity(){
         }*/
         getResult()
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
 
-    override fun getTitleText(): String? {
+    override fun getTitleText(): String {
         return  if (result == ConstData.USER_WATTING)"审核中" else "审核结果"
     }
     private fun getResult(){

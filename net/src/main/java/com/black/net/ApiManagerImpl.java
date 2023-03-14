@@ -202,9 +202,8 @@ public class ApiManagerImpl {
             Request.Builder requestBuilder = original.newBuilder();
             requestBuilder
                     .header("charset", "UTF-8")
-                    .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                    //.header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
+                    //.header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                    //.header("Accept", "application/json")
                     .header("User-Agent", getUserAgent(context))
                     .header("ASI-UUID", deviceId)
                     .header("platform", "Android")

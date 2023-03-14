@@ -100,9 +100,8 @@ import java.util.*
         refreshCurrentType(actionType)
         changeFragment(if (actionType == ConstData.TAB_EXCHANGE) 0 else 1)
     }
-
     override fun isStatusBarDark(): Boolean {
-        return false
+        return !super.isStatusBarDark()
     }
 
     override fun onClick(v: View) {

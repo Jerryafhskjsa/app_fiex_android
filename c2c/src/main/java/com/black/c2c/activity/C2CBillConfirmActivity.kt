@@ -45,6 +45,10 @@ class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
         getC2COIV2()
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.time) {

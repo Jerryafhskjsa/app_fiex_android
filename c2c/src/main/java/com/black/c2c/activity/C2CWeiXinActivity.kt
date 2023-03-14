@@ -83,6 +83,9 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
         }
         refreshPhotoImageLayout()
     }
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
 
     override fun getTitleText(): String? {
         return super.getString(R.string.pay_add)

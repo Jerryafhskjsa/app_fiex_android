@@ -40,6 +40,10 @@ class C2CWattingActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.root?.findViewById<SpanTextView>(R.id.img_action_bar_phone)?.setOnClickListener{}*/
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String? {
         return super.getString(R.string.waite)
     }

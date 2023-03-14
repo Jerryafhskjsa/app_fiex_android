@@ -67,6 +67,11 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
             }
         }
     }
+
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DICTIONARY = getString(R.string.select_picture)

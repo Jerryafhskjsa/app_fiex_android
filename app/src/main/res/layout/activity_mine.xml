@@ -161,8 +161,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
                         android:visibility="gone"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/double_padding"
                         android:paddingBottom="@dimen/double_padding">
                         <LinearLayout

@@ -24,6 +24,10 @@ class C2CApply3: BaseActionBarActivity(), View.OnClickListener{
         binding?.btnSubmit?.setOnClickListener(this)
     }
 
+    override fun isStatusBarDark(): Boolean {
+        return !super.isStatusBarDark()
+    }
+
     override fun getTitleText(): String? {
         return  "商家详情"
     }
