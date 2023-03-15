@@ -18,7 +18,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal">
@@ -27,9 +27,7 @@
                 android:id="@+id/coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:maxLines="1"
-                android:text="action"
                 android:textColor="@color/T14"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
@@ -38,14 +36,10 @@
                 android:id="@+id/direction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/text_size_10"
-                android:layout_toRightOf="@+id/coin"
-                android:maxLines="1"
-                android:text="--"
                 android:textColor="@color/C1"
                 android:textSize="@dimen/text_size_14" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,6 +115,10 @@
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_size_2"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:background="@color/C2"/>
     </LinearLayout>
 </layout>

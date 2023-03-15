@@ -8,5 +8,5 @@ class FlowBill: BaseAdapterItem() {
     val coin: String? = null
     val id: String? = null
     val positionSide: String? = null
-    val symbols: String? = null
+    val symbol: String? = null
 }

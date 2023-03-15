@@ -27,9 +27,9 @@ class FlowAdapter(context: Context, variableId: Int, data: ArrayList<FlowBill?>?
         super.onBindViewHolder(holder, position)
         val oderList = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(oderList?.symbols)
-        viewHolder?.direction?.setText(R.string.all)
-        viewHolder?.amount?.setText(if (oderList?.createdTime == null)nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", oderList.createdTime!!))
-        viewHolder?.capitalCost?.setText(NumberUtil.formatNumberNoGroup(oderList?.cast,4,2))
+        viewHolder?.action?.setText(if (oderList?.symbol == "btc_usdt")  "BTC_USDT" + context.getString(R.string.sustainable) else "ETH_USDT")
+        viewHolder?.direction?.setText(if(oderList?.positionSide == "LONG") getString(R.string.contract_buy_raise) else getString(R.string.contract_sell_raise))
+        viewHolder?.amount?.setText(if (oderList?.createdTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", oderList.createdTime!!))
+        viewHolder?.capitalCost?.setText((if (oderList?.cast == null) nullAmount else NumberUtil.formatNumberNoGroup(oderList.cast,8,4)) + "USDT")
     }
 }

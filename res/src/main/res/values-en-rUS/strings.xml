@@ -96,6 +96,7 @@
     <string name="exchange_method">Transaction mode</string>
     <string name="status_closed">Unbound</string>
     <string name="perpetual_warehouse_by_warehouse">Perpetual_warehouse_by_warehouse 50X</string>
+    <string name="sustainable">Sustainable</string>
     <string name="warehouse_by_warehouse">Warehouse by warehouse 50XMore</string>
     <string name="full_warehouse">Full warehouse 50XEmpty</string>
     <string name="bind_google_title">Bind Google Identity Authenticator</string>
@@ -352,6 +353,10 @@
     <string name="capital_cost">Capital cost</string>
     <string name="position_reduce">Position reduction</string>
     <string name="merge">Merge</string>
+    <string name="distribution_of_experience_fund">Distribution of experience fund</string>
+    <string name="experience_gold_deduction">Experience gold deduction</string>
+    <string name="experience_gold_recovery">Experience gold recovery</string>
+    <string name="cash_return">Cash return</string>
     <string name="close_positions">Close position</string>
     <string name="take_over">Take over</string>
     <string name="qiang_ping">Forced liquidation</string>
@@ -369,6 +374,7 @@
     <string name="ti_shi">The legal currency transaction is an OTC transaction. The fund does not pass through the platform, and the platform will not automatically deduct the money. You need to manually transfer it to the other party, and the other party can receive the money.</string>
     <string name="weixin_num">WeChat account</string>
     <string name="please_weixin">Please enter your WeChat account</string>
+    <string name="put_your_said">Put your said here</string>
     <string name="ali_pay_num">Alipay account</string>
     <string name="collection_code">Collection code</string>
     <string name="please_ali_pay">Please enter Alipay accoun</string>

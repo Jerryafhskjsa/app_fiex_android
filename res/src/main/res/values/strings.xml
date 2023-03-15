@@ -96,6 +96,7 @@
     <string name="exchange_method">交易方式</string>
     <string name="status_closed">未绑定</string>
     <string name="perpetual_warehouse_by_warehouse">永续逐仓 50X</string>
+    <string name="sustainable">永续</string>
     <string name="warehouse_by_warehouse">逐仓50X多</string>
     <string name="full_warehouse">全仓50X空</string>
     <string name="bind_google_title">绑定谷歌身份认证器</string>
@@ -352,6 +353,10 @@
     <string name="capital_cost">资金费用</string>
     <string name="position_reduce">自动减仓</string>
     <string name="merge">仓位合并</string>
+    <string name="distribution_of_experience_fund">体验金发放</string>
+    <string name="experience_gold_deduction">体验金抵扣</string>
+    <string name="experience_gold_recovery">体验金回收</string>
+    <string name="cash_return">返现</string>
     <string name="close_positions">平仓盈亏</string>
     <string name="take_over">仓位接管</string>
     <string name="qiang_ping">强平清算</string>
@@ -369,6 +374,7 @@
     <string name="ti_shi">法币交易属于OTC交易，资金不经过平台，平台不会自动扣款，需要您手动自行转账给对方，对方才能收到款项。</string>
     <string name="weixin_num">微信账号</string>
     <string name="please_weixin">请输入微信账号</string>
+    <string name="put_your_said">在此输入你的对话</string>
     <string name="ali_pay_num">支付宝账号</string>
     <string name="collection_code">收款码</string>
     <string name="please_ali_pay">请输入支付宝账号</string>

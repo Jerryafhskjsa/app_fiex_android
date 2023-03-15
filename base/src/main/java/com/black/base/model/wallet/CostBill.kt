@@ -14,7 +14,7 @@ import com.black.base.model.BaseAdapterItem
         var coin: String? = null
         var id: String? = null
         var type: String? = null
-        var symbols: String? = null
+        var symbol: String? = null
 
      constructor(parcel: Parcel) : this() {
          createdTime = parcel.readValue(Long::class.java.classLoader) as? Long
@@ -24,7 +24,7 @@ import com.black.base.model.BaseAdapterItem
          coin = parcel.readString()
          id = parcel.readString()
          type = parcel.readString()
-         symbols = parcel.readString()
+         symbol = parcel.readString()
      }
 
 
@@ -43,6 +43,15 @@ import com.black.base.model.BaseAdapterItem
              else -> "--"
          }
          }
+
+     fun getSymbol(context: Context): String {
+         return if (symbol == null){
+             "--"
+         } else when(symbol) {
+             "btc_usdt" -> "BTC_USDT" + context.getString(R.string.sustainable)
+             else -> "--"
+         }
+     }
      override fun writeToParcel(parcel: Parcel, flags: Int) {
          parcel.writeString(coin)
          parcel.writeValue(createdTime)
@@ -51,7 +60,7 @@ import com.black.base.model.BaseAdapterItem
          parcel.writeValue(amount)
          parcel.writeValue(afterAmount)
          parcel.writeValue(side)
-         parcel.writeString(symbols)
+         parcel.writeString(symbol)
      }
 
      override fun describeContents(): Int {

@@ -1231,7 +1231,7 @@ class HomePageContractFragment : BaseFragment(),
             return
         }
         var availableOpenData = FutureService.getAvailableOpenData(
-            BigDecimal(price), longLeverage!!, shortLeverage!!, BigDecimal.ZERO,
+            BigDecimal(price), longLeverage, shortLeverage, BigDecimal.ZERO,
             BigDecimal.ZERO
         )
         when (transactionType) {

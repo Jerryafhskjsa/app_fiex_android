@@ -38,11 +38,11 @@ import java.util.*
 
 class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     companion object {
-        private const val TYPE_U_CONTRACT = "U本位"
-        private const val TYPE_COIN_CONTRACT = "币本位"
-        private const val TYPE_ALL = "全部"
-        private const val TYPE_BTC = "BTC_USDT"
-        private const val TYPE_ETH = "ETH_USDT"
+        private  var TYPE_U_CONTRACT = ""
+        private  var TYPE_COIN_CONTRACT = ""
+        private  var TYPE_ALL = ""
+        private  var TYPE_BTC = "BTC_USDT"
+        private  var TYPE_ETH = "ETH_USDT"
     }
     private var wallet: Wallet? = null
     private var binding: FragmentDelegationBinding? = null
@@ -85,10 +85,13 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         binding?.start?.setOnClickListener(this)
         binding?.end?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
+        TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
+        TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
+        TYPE_ALL = getString(R.string.all)
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
-        getFoundingRateList()
+        getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
         return layout
     }
 
@@ -106,9 +109,11 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                             otherType = item
                             when (item) {
                                 TYPE_U_CONTRACT -> {
+                                    getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
                                     binding?.usdM?.setText(R.string.usdt_base_contract)
                                 }
                                 TYPE_COIN_CONTRACT -> {
+                                    getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
                                     binding?.usdM?.setText(R.string.coin_base_contract)
                                     binding?.all?.setText(R.string.all)
                                 }
@@ -137,7 +142,7 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                         override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                             window.dismiss()
                             type = item
-                            getFoundingRateList()
+                            getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
                             when (item) {
                                 TYPE_ALL -> {
                                     binding?.all?.setText(R.string.all)
@@ -201,9 +206,10 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total1 = year * 10000 + month * 100 + day
-                val date: Date = Date(year,month,day)
+                val date: Date = Date(year - 1900,month - 1 ,day - 1)
                 oder.startTime = date.time
                 if (total >= total1) {
+                    getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
                     binding?.start?.setText(
                         String.format(
                             Locale.getDefault(),
@@ -224,10 +230,11 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
                 val total2 = year * 10000 + month * 100 + day
-                val date: Date = Date(year,month,day)
+                val date: Date = Date(year - 1900,month - 1,day)
                 val time = date.time
                 if (total >= total2 && time >= oder.startTime!!){
                     oder.endTime = time
+                    getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
                     binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
                 }
                 else{
@@ -247,19 +254,20 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
 
 
 override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        val financialRecord = adapter?.getItem(position)
-        val extras = Bundle()
+      //  val financialRecord = adapter?.getItem(position)
+      //  val extras = Bundle()
     }
 
     override fun onRefresh() {
         currentPage = 1
-        getFoundingRateList()
+        getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
+
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getFoundingRateList()
+            getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -270,9 +278,9 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
     }
 
     //获取资金费率
-    private fun getFoundingRateList() {
-        if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getFoundingRateList(  null, null,"NEXT",20, oder.startTime , oder.endTime , mContext,
+    private fun getFoundingRateList(otherType: String? ,type: String? ,startTime: Long? ,endTime: Long?) {
+        if (otherType == TYPE_U_CONTRACT || otherType == null) {
+            FutureApiServiceHelper.getFoundingRateList(if (type == TYPE_ALL) null else type, null,"NEXT",20, startTime , endTime , mContext,
                 object : Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
@@ -296,7 +304,7 @@ override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int,
         }
 
         else{
-            FutureApiServiceHelper.getCoinFoundingRateList(null, null,null, null , oder.startTime ,oder.endTime,  mContext,
+            FutureApiServiceHelper.getCoinFoundingRateList(if (type == TYPE_ALL) null else type, null,"NEXT", 20 , startTime , endTime,  mContext,
                 object : Callback<HttpRequestResultBean<PagingData<FlowBill?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

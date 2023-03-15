@@ -20,6 +20,7 @@ import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
 import com.black.base.model.future.Constants
 import com.black.base.model.future.OrderBean
+import com.black.base.model.future.OrderBeanItem
 import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletTransferRecord
 import com.black.base.net.HttpCallbackSimple
@@ -33,6 +34,7 @@ import com.black.wallet.R
 import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     companion object {
@@ -168,6 +170,10 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
         return total > adapter?.count!!
     }
 
+    private fun show(orderList: ArrayList<OrderBeanItem>?){
+
+
+    }
     //获取当前委托记录
     private fun getLimitPricePlanData() {
         //U本位
@@ -183,8 +189,9 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
-                            var orderData = returnData?.result
-                            var orderList = orderData?.items
+                            val orderData = returnData.result
+                            val orderList = orderData?.items
+                            show(orderList)
                         }
                     }
                 })

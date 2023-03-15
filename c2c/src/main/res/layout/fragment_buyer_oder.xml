@@ -75,8 +75,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:background="@color/B1"
-                                    android:hint="在此输入你的对话"
+                                    android:background="@color/white"
+                                    android:hint="@string/put_your_said"
                                     android:inputType="number"
                                     android:maxLines="1"
                                     android:padding="0dp" />

@@ -3,8 +3,6 @@ package com.black.wallet.fragment
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
@@ -12,41 +10,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.FutureApiServiceHelper
-import com.black.base.api.WalletApiService
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.NormalCallback
-import com.black.base.model.PagingData
 import com.black.base.model.future.OrderBean
-import com.black.base.model.future.PlanUnionBean
-import com.black.base.model.future.PlansBean
 import com.black.base.model.wallet.Order
 import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletTransferRecord
-import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
-import com.black.base.widget.SpanTextView
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
 import com.black.wallet.adapter.ContractOdersAdapter
-import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
 
 class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     companion object {
-        private const val TYPE_U_CONTRACT = "U本位"
-        private const val TYPE_COIN_CONTRACT = "币本位"
-        private const val TYPE_ALL = "全部"
-        private const val TYPE_BTC = "BTCUSDT"
-        private const val TYPE_ETH = "ETHUSDT"
+        private  var TYPE_U_CONTRACT = ""
+        private  var TYPE_COIN_CONTRACT = ""
+        private  var TYPE_ALL = ""
+        private  var TYPE_BTC = "BTC_USDT"
+        private  var TYPE_ETH = "ETH_USDT"
     }
     private var wallet: Wallet? = null
     private var binding: FragmentDelegationBinding? = null
@@ -89,10 +76,13 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         binding?.btnAll?.setOnClickListener(this)
         binding?.start?.setOnClickListener(this)
         binding?.end?.setOnClickListener(this)
+        TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
+        TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
+        TYPE_ALL = getString(R.string.all)
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
-        getHistoryList()
+        getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
         return layout
     }
 
@@ -103,12 +93,13 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
                         otherType = item
-                        getHistoryList()
-                        when(item){
+                        when(otherType){
                             TYPE_U_CONTRACT -> {
+                                getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                                 binding?.usdM?.setText(R.string.usdt_base_contract)
                             }
                             TYPE_COIN_CONTRACT -> {
+                                getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                                 binding?.usdM?.setText(R.string.coin_base_contract)
                                 binding?.all?.setText(R.string.all)
                             }
@@ -133,15 +124,17 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
                         type = item
-                        getHistoryList()
                         when(item){
                             TYPE_ALL -> {
+                                getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                                 binding?.all?.setText(R.string.all)
                             }
                             TYPE_BTC -> {
+                                getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                                 binding?.all?.setText("BTCUSDT")
                             }
                             TYPE_ETH -> {
+                                getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                                 binding?.all?.setText("ETHUSDT")
                             }
                         }
@@ -196,10 +189,11 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
-                val date: Date = Date(year,month,day)
+                val date = Date(year - 1900,month - 1,day - 1)
                 oder.startTime = date.time
-                var total1 = year * 10000 + month * 100 + day
+                val total1 = year * 10000 + month * 100 + day
                 if (total >= total1) {
+                    getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
                     binding?.start?.setText(
                         String.format(
                             Locale.getDefault(),
@@ -220,12 +214,13 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
                 day = datePickerDialog.dayOfMonth
-                val date: Date = Date(year,month,day)
+                val date = Date(year - 1900,month - 1,day)
                 val time =date.time
                 val total2 = year * 10000 + month * 100 + day
                 if (total >= total2 && time >= oder.startTime!!){
-                    oder.startTime = time
-                binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
+                    oder.endTime = time
+                    getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
+                    binding?.end?.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day)).toString()
             }
                 else{
                     FryingUtil.showToast(mContext, getString(R.string.please_choose_correct_time))
@@ -250,13 +245,13 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
 
     override fun onRefresh() {
         currentPage = 1
-        getHistoryList()
+        getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
     }
 
     override fun onLoad() {
         if (total > adapter?.count!!) {
             currentPage++
-            getHistoryList()
+            getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
         } else {
             binding?.refreshLayout?.setLoading(false)
         }
@@ -267,9 +262,9 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     }
 
     //获取历史订单
-    private fun getHistoryList() {
-        if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL) null else type ,null, "NEXT",20,oder.startTime , oder.endTime , mContext ,false,
+    private fun getHistoryList(otherType: String? , type: String? , startTime: Long? , endTime: Long?) {
+        if (otherType == TYPE_U_CONTRACT || otherType == null) {
+            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL) null else type ,null, "NEXT",20, startTime ,endTime , mContext ,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
@@ -292,7 +287,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         }
 
         else{
-            FutureApiServiceHelper.getCoinHistoryList(null, null,"NEXT", 20, oder.startTime , oder.endTime ,mContext,false,
+            FutureApiServiceHelper.getCoinHistoryList(if (type == TYPE_ALL) null else type, null,"NEXT", 20, startTime , endTime ,mContext,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

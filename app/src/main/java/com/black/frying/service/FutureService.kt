@@ -1103,7 +1103,7 @@ object FutureService {
             .multiply(BigDecimal(contractSize.toString()))
         var result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
-            .minus(orderValue!!)
+            .minus(orderValue)
             .divide(price.times(contractSize!!), 8, RoundingMode.DOWN)
         return result
     }

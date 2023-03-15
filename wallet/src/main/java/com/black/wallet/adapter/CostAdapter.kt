@@ -21,9 +21,9 @@ class CostAdapter (context: Context, variableId: Int, data: ArrayList<CostBill?>
         val oderList = getItem(position)
         val viewHolder = holder.dataBing
         viewHolder?.type?.setText(oderList?.getType(context))
-        viewHolder?.direction?.setText(oderList?.symbols)
-        viewHolder?.amount?.setText(if (oderList?.createdTime == null)nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", oderList.createdTime!!))
-        viewHolder?.money?.setText(NumberUtil.formatNumberNoGroup(oderList?.amount,4,2))
+        viewHolder?.direction?.setText(oderList?.getSymbol(context))
+        viewHolder?.amount?.setText(if (oderList?.createdTime == null)nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", oderList.createdTime!!))
+        viewHolder?.money?.setText(NumberUtil.formatNumberNoGroup(oderList?.amount,8,4))
         viewHolder?.coin?.setText(oderList?.coin)
     }
 }
