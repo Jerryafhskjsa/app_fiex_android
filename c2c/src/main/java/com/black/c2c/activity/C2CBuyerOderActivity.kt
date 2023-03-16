@@ -16,7 +16,7 @@ import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
-import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
+import com.black.c2c.databinding.ActivityC2cSellBinding
 import com.black.c2c.fragment.C2CBuyOrderFragment
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -26,7 +26,7 @@ import kotlin.collections.ArrayList
 
 @Route(value = [RouterConstData.C2C_BUYER])
 class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
-    private var binding: ActivityC2cBuyerOderBinding? = null
+    private var binding: ActivityC2cSellBinding? = null
     private var sellerName: String? = "帅"
     private var id2: String? = null
     private var payChain: String? = null
@@ -35,13 +35,13 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
     private var countDownTimer: CountDownTimer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_buyer_oder)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_sell)
         id2 = intent.getStringExtra(ConstData.BUY_PRICE)
         payChain = intent.getStringExtra(ConstData.USER_YES)
         binding?.btnConfirm?.setOnClickListener(this)
         getPayChoose()
         init()
-        binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
+       /* binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragmentList!![position]
             }
@@ -53,7 +53,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
             override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
 
             }
-        }
+        }*/
 
     }
 
@@ -97,7 +97,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
                 override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        binding?.money?.setText("￥" + (returnData.data?.amount!! * returnData.data?.price!!).toString())
+                       // binding?.money?.setText("￥" + (returnData.data?.amount!! * returnData.data?.price!!).toString())
                         val time1 = returnData.data?.validTime?.time
                         val calendar: Calendar = Calendar.getInstance()
                         val time2 = calendar.time.time
@@ -105,7 +105,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                         countDownTimer = object : CountDownTimer(totalTime, 1000) {
                             //1000ms运行一次onTick里面的方法
                             override fun onFinish() {
-                                binding?.time?.setText("00:00")
+                              //  binding?.time?.setText("00:00")
                                 FryingUtil.showToast(mContext, "订单已取消")
                                 finish()
                             }
@@ -113,7 +113,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                             override fun onTick(millisUntilFinished: Long) {
                                 val minute = millisUntilFinished / 1000 / 60 % 60
                                 val second = millisUntilFinished / 1000 % 60
-                                binding?.time?.setText("$minute:$second")
+                               // binding?.time?.setText("$minute:$second")
                             }
                         }.start()
                     } else {

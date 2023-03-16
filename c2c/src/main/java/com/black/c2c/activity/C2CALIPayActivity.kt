@@ -222,7 +222,7 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
     }
     private fun createPhotoImageItem(): PhotoImageItem {
         val item = PhotoImageItem()
-        val imageLayout = View.inflate(mContext,R.layout.activity_real_name_authenticate_image_select,null)
+        val imageLayout = View.inflate(mContext,R.layout.activity_seller_image_select,null)
         item.imageLayout = imageLayout
         item.imageLayout?.setOnClickListener {
             if (item.path == null) {

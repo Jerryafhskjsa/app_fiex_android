@@ -130,7 +130,7 @@
                                     android:layout_width="26dp"
                                     android:layout_height="26dp"
                                     android:layout_alignParentBottom="true"
-                                    android:background="@drawable/icon_type_right_arrow_green" />
+                                    android:background="@drawable/icon_type_right_arrow" />
                             </RelativeLayout>
                         </RelativeLayout>
                         <LinearLayout
@@ -148,7 +148,7 @@
                                 <ImageView
                                     android:id="@+id/icon_deposit"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_deposit_green" />
+                                    android:src="@drawable/fiex_icon_deposit" />
 
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
@@ -163,7 +163,7 @@
                                 <ImageView
                                     android:id="@+id/icon_referral"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/icon_deposit_green" />
+                                    android:src="@drawable/fiex_icon_deposit" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_referral"
@@ -174,11 +174,10 @@
                                 android:id="@+id/rel_support"
                                 style="@style/HomeFeturesItem"
                                 android:layout_weight="2">
-
                                 <ImageView
                                     android:id="@+id/icon_support"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/icon_support_green" />
+                                    android:src="@drawable/fiex_icon_support"/>
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_support"
@@ -192,7 +191,7 @@
                                 <ImageView
                                     android:id="@+id/icon_futures"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/icon_futures_green"/>
+                                    android:src="@drawable/fiex_icon_futures"/>
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"
@@ -207,7 +206,7 @@
                                 <ImageView
                                     android:id="@+id/icon_more"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/icon_more_green" />
+                                    android:src="@drawable/fiex_icon_more" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_more"
@@ -403,57 +402,59 @@
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_marginTop="10dp">
-                                <androidx.cardview.widget.CardView
-                                    android:id="@+id/cv_staking"
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cv_staking"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="1dp"
+                                app:cardMaxElevation="10dp"
+                                >
+                                <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_weight="1"
-                                    app:cardElevation="1dp"
-                                    app:cardMaxElevation="10dp"
-                                    >
-                                    <ImageView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="100dp"
-                                        android:background="@drawable/main_two_bg"/>
-                                    <RelativeLayout
-                                        android:layout_width="match_parent"
+                                    android:background="@drawable/main_2_bg"/>
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:cardElevation="2dp">
+                                    <TextView
+                                        android:id="@+id/tv_stkaing_title"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        app:cardElevation="2dp">
-                                        <TextView
-                                            android:id="@+id/tv_stkaing_title"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="15dp"
-                                            android:layout_marginTop="15dp"
-                                            android:text="Staking"
-                                            android:textColor="@color/B2"
-                                            android:textSize="@dimen/text_size_16"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_below="@+id/tv_stkaing_title"
-                                            android:layout_marginLeft="15dp"
-                                            android:layout_marginTop="15dp"
-                                            android:text="New Coin Management Divides Earnings"
-                                            android:textColor="@color/B3"
-                                            android:textSize="@dimen/text_size_12" />
-                                        <ImageView
-                                            android:layout_width="24dp"
-                                            android:layout_height="24dp"
-                                            android:layout_alignParentRight="true"
-                                            android:layout_marginTop="12dp"
-                                            android:layout_marginRight="16dp"
-                                            android:src="@drawable/icon_main_staking"/>
-                                    </RelativeLayout>
-                                </androidx.cardview.widget.CardView>
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="15dp"
+                                        android:text="Staking"
+                                        android:textColor="@color/B2"
+                                        android:textSize="@dimen/text_size_16"
+                                        android:textStyle="bold" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/tv_stkaing_title"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="15dp"
+                                        android:text="New Coin Management Divides Earnings"
+                                        android:textColor="@color/B3"
+                                        android:textSize="@dimen/text_size_12" />
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginTop="12dp"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/icon_main_staking"/>
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/cv_buy_coin"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
                                 android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
+                                app:cardCornerRadius="10dp"
                                 app:cardElevation="1dp"
                                 app:cardMaxElevation="10dp"
                                 >
@@ -461,7 +462,7 @@
                                     android:id="@+id/c2c"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
-                                    android:background="@drawable/main_two_bg"/>
+                                    android:background="@drawable/main_3_bg"/>
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

@@ -31,7 +31,6 @@ import com.black.base.util.RouterConstData
 import com.black.base.widget.SpanCheckedTextView
 import com.black.c2c.R
 import com.black.c2c.databinding.ActiivtyPayForSellerBinding
-import com.black.c2c.databinding.ActivityC2cBuyerOderBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route

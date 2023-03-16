@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">SoeasyEx</string>
+    <string name="app_name">Fiex</string>
     <string name="edt_account_hint">手机号</string>
     <string name="get_check_code">获取验证码</string>
     <string name="cancel">取消</string>

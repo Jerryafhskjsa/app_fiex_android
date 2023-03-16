@@ -247,7 +247,7 @@
         <item name="android:textSize">@dimen/text_size_15</item>
     </style>
     <style name="ButtonGreenLight">
-        <item name="android:background">@drawable/btn_light_green</item>
+        <item name="android:background">@drawable/btn_green</item>
         <item name="android:gravity">left</item>
         <item name="android:textColor">@color/T1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
@@ -278,7 +278,7 @@
     <style name="ButtonReturnGreen">
         <item name="android:background">@drawable/btn_green_4</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">#E622C177</item>
+        <item name="android:textColor">#031ECA</item>
         <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:textStyle">bold</item>
     </style>
