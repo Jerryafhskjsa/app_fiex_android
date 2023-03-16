@@ -58,9 +58,9 @@ open class BaseApplication : Application() {
 
     fun initLanguageItems(context: Context) {
         languages = ArrayList()
-        languages!!.add(FryingLanguage(Locale.CHINESE, 0, context.getString(R.string.language_chinese)))
+        languages!!.add( FryingLanguage(Locale.ENGLISH, 0, context.getString(R.string.language_english)))
         languages!!.add( FryingLanguage(Locale.TAIWAN, 1, context.getString(R.string.language_chinese_tw)))
-        languages!!.add( FryingLanguage(Locale.ENGLISH, 2, context.getString(R.string.language_english)))
+        languages!!.add(FryingLanguage(Locale.CHINESE, 2, context.getString(R.string.language_chinese)))
         languages!!.add( FryingLanguage(Locale.JAPANESE, 3, context.getString(R.string.language_janpanese)))
         languages!!.add( FryingLanguage(Locale.UK, 4, context.getString(R.string.language_english_uk)))
     }

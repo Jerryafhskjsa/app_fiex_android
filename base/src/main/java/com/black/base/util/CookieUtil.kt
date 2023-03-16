@@ -364,8 +364,7 @@ object CookieUtil {
         if(sets != null){
             data = sets.toList() as ArrayList<String?>?
             for (i in data?.indices!!){
-                sortData?.add(0, UrlConfig.HOSTS[0])
-                sortData?.add(1,  UrlConfig.HOSTS[1])
+                sortData?.add(0,  UrlConfig.HOSTS)
             }
         }
         return sortData

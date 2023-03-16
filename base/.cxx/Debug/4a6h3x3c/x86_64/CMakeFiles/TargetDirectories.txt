@@ -1,0 +1,5 @@
+C:/fiex/base/.cxx/Debug/4a6h3x3c/x86_64/CMakeFiles/edit_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/x86_64/CMakeFiles/rebuild_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/x86_64/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/x86_64/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/x86_64/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir

@@ -10,9 +10,7 @@ import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.manager.ApiManager
-import com.black.base.manager.ApiManager2
 import com.black.base.util.*
-import com.black.frying.service.FutureService
 import com.black.lib.permission.Permission
 import com.black.lib.permission.ZbPermission
 import com.black.lib.permission.ZbPermission.ZbPermissionCallback

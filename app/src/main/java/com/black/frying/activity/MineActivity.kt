@@ -99,12 +99,12 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.version?.setText(String.format("V%s" ,CommonUtil.getVersionName(this, "1.0.0")))
         val currentLanguage = LanguageUtil.getLanguageSetting(mContext)?.languageCode
         val exchange = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
-        if (currentLanguage == null || currentLanguage == 0) {
+        if (currentLanguage == null || currentLanguage == 2) {
             binding?.currentLanguage?.setText(R.string.language_chinese)
         } else {
             binding?.currentLanguage?.setText(R.string.language_english)
         }
-        if (exchange == null || exchange == 0) {
+        if (exchange == null || exchange == 1) {
             binding?.currentExchangeRates?.setText(R.string.language_cny)
         }
         else {
@@ -117,8 +117,8 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         }
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
-        initServiceApi()
-        getNetworkLines(false)
+        //initServiceApi()
+        //getNetworkLines(false)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -465,7 +465,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     private fun initServiceApi() {
         for (i in UrlConfig.HOSTS.indices) {
-            val hostUrl = UrlConfig.HOSTS[i]
+            val hostUrl = UrlConfig.HOSTS
             var fryingLinesConfig = FryingLinesConfig()
             fryingLinesConfig.lineUrl = hostUrl
             fryingLinesConfig.index = i

@@ -5,9 +5,9 @@ import java.util.*
 
 class FryingLanguage(locale: Locale, languageCode: Int, languageText: String) {
     companion object {
-        const val Chinese = 0
+        const val English = 0
         const val Chinese_tw = 1
-        const val English = 2
+        const val Chinese = 2
         const val Japanese = 3
         const val English_uk = 4
     }

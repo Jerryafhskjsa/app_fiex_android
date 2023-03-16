@@ -1,23 +1,14 @@
 package com.black.base.util
 
 import android.content.Context
-import android.util.Log
 import com.black.util.CommonUtil
-import java.net.URL
 
 object UrlConfig {
-    val HOSTS = arrayOf(
-        "http://abexxx.net",//fiex测试环境
-        "https://soeasyex.com",//正式环境
-    )
+    val HOSTS = "https://fiex.live"
 
-    var serverHost = ArrayList<String?>()
 
-    fun getHost(context: Context): String? {
-        if (serverHost.size > 0) {
-            return serverHost[getIndex(context)]
-        }
-        return HOSTS[getIndex(context)]
+    fun getHost(context: Context): String {
+        return HOSTS
     }
 
     //https://fiex.io/futures/fapi/market/v1/public/q/deal?symbol=btc_usdt&num=30
@@ -31,27 +22,15 @@ object UrlConfig {
             ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi/"
             ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi/"
         }
-        var index = getIndex(context)
-        val serverHost = CookieUtil.getServerHost(context)
-        if (serverHost != null && serverHost.size > 0) {
-            return serverHost[index] + apiTypeDes
-        }
-        if (index > HOSTS.size - 1) {
-            index = 0
-        }
-        return HOSTS[index] + apiTypeDes
+
+        return HOSTS + apiTypeDes
     }
 
+    private val SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/ws/"//正式
 
-    private val SOCKET_HOSTS_SOEASTEX = arrayOf(
-        "wss://abexxx.net/ws/",//测试
-        "wss://soeasyex.com/ws/",//正式
-    )
 
-    private val SPOT_SOCKET_HOSTS_SOEASTEX = arrayOf(
-        "wss://abexxx.net/socket",//测试
-        "wss://soeasyex.com/socket",//正式
-    )
+    private val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/socket"//正式
+
 
 
     fun getIndex(context: Context): Int {
@@ -65,12 +44,12 @@ object UrlConfig {
      * type->"user","market"
      */
     fun getSocketHostSoeasyEx(context: Context?,type:String?):String{
-        return SOCKET_HOSTS_SOEASTEX[getIndex(context!!)]+type
+        return SOCKET_HOSTS_SOEASTEX + type
     }
 
 
     fun getSpotSocketHostSoeasyEx(context: Context?):String{
-        return SPOT_SOCKET_HOSTS_SOEASTEX[getIndex(context!!)]
+        return SPOT_SOCKET_HOSTS_SOEASTEX
     }
 
     //币种图标
@@ -82,7 +61,7 @@ object UrlConfig {
 
 
     fun getSocketHost(context: Context): String {
-        return HOSTS[getIndex(context)]
+        return HOSTS
     }
 
     fun getFinancalUrl(mContext: Context): String {

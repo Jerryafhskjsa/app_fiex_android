@@ -250,11 +250,13 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
-            R.id.c2c ->  if(CookieUtil.getUserInfo(mContext!!) == null){
+            R.id.c2c ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+                /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
-            }
+            }*/
             R.id.cv_staking -> {
                 val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))

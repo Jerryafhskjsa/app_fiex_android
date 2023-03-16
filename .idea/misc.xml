@@ -473,6 +473,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/view_third_c2c.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_finger_print_check.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/clutter/src/main/res/layout/activity_gestrue_password_check_unback.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/clutter/src/main/res/layout/activity_language_setting.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/community/src/main/res/layout/activity_faction_detail.xml" value="0.1115861479264643" />
         <entry key="..\:/fiex/community/src/main/res/layout/activity_red_packet_detail.xml" value="0.14520894892359645" />
         <entry key="..\:/fiex/community/src/main/res/layout/list_item_faction_list.xml" value="0.17447916666666666" />
@@ -556,6 +557,7 @@
         <entry key="..\:/fiex/user/src/main/res/layout/activity_real_name_authenticate_second.xml" value="0.22" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_real_name_menu.xml" value="0.13039760581445062" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_recommend_new.xml" value="0.17916666666666667" />
+        <entry key="..\:/fiex/user/src/main/res/layout/activity_register.xml" value="0.22" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_safe_bind.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_safe_center.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/list_item_account.xml" value="0.1470713980333476" />

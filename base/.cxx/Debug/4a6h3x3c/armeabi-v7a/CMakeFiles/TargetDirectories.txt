@@ -1,0 +1,5 @@
+C:/fiex/base/.cxx/Debug/4a6h3x3c/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/armeabi-v7a/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/armeabi-v7a/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+C:/fiex/base/.cxx/Debug/4a6h3x3c/armeabi-v7a/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir

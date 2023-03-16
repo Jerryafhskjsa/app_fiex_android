@@ -52,11 +52,12 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/chinese"
+                        android:id="@+id/english"
                         style="@style/MenuListItem"
-                        android:text="@string/language_chinese"
+                        android:text="@string/language_english"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/chinese_tw"
                         style="@style/MenuListItem"
@@ -65,11 +66,12 @@
                         android:textSize="@dimen/text_size_16" />
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/english"
+                        android:id="@+id/chinese"
                         style="@style/MenuListItem"
-                        android:text="@string/language_english"
+                        android:text="@string/language_chinese"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/janpanese"
                         style="@style/MenuListItem"
