@@ -3,6 +3,7 @@ package com.black.base.api
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
+import com.black.base.R
 import com.black.base.api.CommonApiServiceHelper.geetestInit
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
@@ -14,6 +15,8 @@ import com.black.base.util.FryingUtil.showToast
 import com.black.base.view.LoadingDialog
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
+import com.geetest.captcha.GTCaptcha4Client
+import com.geetest.captcha.GTCaptcha4Config
 import com.google.gson.JsonObject
 import com.netease.nis.captcha.Captcha
 import com.netease.nis.captcha.CaptchaConfiguration
@@ -111,61 +114,6 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun showCaptcha(context: Context?,captchaId:String?, callBack: Callback<String?>?) {
-        if (context !is Activity || callBack == null) {
-            return
-        }
-        val doRunnable: Runnable = object : Runnable {
-            private fun showLoadingDialog(loadingDialog: LoadingDialog?) {
-                loadingDialog?.show()
-            }
-
-            private fun closeLoadingDialog(loadingDialog: LoadingDialog?) {
-                loadingDialog?.dismiss()
-            }
-
-            override fun run() {
-                val loadingDialog = getLoadDialog(context, null)
-                showLoadingDialog(loadingDialog)
-                val captchaConfiguration = CaptchaConfiguration
-                    .Builder()
-                    .captchaId(captchaId)
-                    .listener(object:CaptchaListener{
-                        override fun onReady() {
-                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                        }
-
-                        override fun onValidate(result: String?, validate: String?, message: String?) {
-                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                            //验证结果，valiadte，可以根据返回的三个值进行用户自定义二次验证
-                            if (validate?.isNotEmpty() == true) {
-                                callBack.callback(validate)
-                            } else {
-                                callBack.error(0, message)
-                            }
-                        }
-
-                        override fun onError(code: Int, errormsg: String?) {
-                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                            //出错
-                            callBack.error(0, errormsg)
-                        }
-
-                        override fun onClose(closeType: Captcha.CloseType?) {
-                            context.runOnUiThread { closeLoadingDialog(loadingDialog) }
-                            //callBack.error(0, "已取消");
-                            //用户取消加载或者用户取消验证，关闭异步任务，也可根据情况在其他地方添加关闭异步任务接口
-                        }
-
-                    })
-                    .build(context)
-                val captcha = Captcha.getInstance().init(captchaConfiguration)
-                captcha.validate()
-            }
-        }
-        context.runOnUiThread(Runnable { doRunnable.run() })
-    }
-
     fun getVerifyCode(context: Context?, userName: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {
 //        getVerifyCode(context, userName, telCountryCode, false, callback)
         getVerifyCodeOld(context,userName,telCountryCode,false,callback)
@@ -194,34 +142,38 @@ object UserApiServiceHelper {
                         }
                         if(jsonObject != null){
                             var type = jsonObject.getString("type")
-                            var captchaId = jsonObject.getString("gt")
+                            val captchaId = jsonObject.getString("gt")
                             var newCaptcha = jsonObject.getString("new_captcha")
-                            showCaptcha(context,captchaId, object : Callback<String?>() {
-                                override fun callback(captcha: String?) {
-                                    verifyCodeCallBack.captcha = captcha
-//                                    ApiManager.build(context,true,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
-//                                        ?.sendVerifyCode(userName, telCountryCode, captcha)
-//                                        ?.compose(RxJavaHelper.observeOnMainThread())
-//                                        ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
-                                    var jsonObject = JsonObject()
-                                    jsonObject.addProperty("validate",captcha)
-                                    sendVerifyCodeGeeTest(context,userName,telCountryCode,jsonObject.toString(),object :
-                                        Callback<HttpRequestResultString?>() {
-                                        override fun error(type: Int, error: Any?) {
-                                        }
+                            val config = GTCaptcha4Config
+                                .Builder()
+                                .setTimeOut(10000)
+                                .build()
+                            val gtCaptcha4Client = GTCaptcha4Client.getClient(context)
+                                .init(captchaId, config)
+                                gtCaptcha4Client.addOnSuccessListener(GTCaptcha4Client.OnSuccessListener { b, s ->
+                                    if (b){
+                                        verifyCodeCallBack.captcha = s
+                                        sendVerifyCodeGeeTest(context,userName,telCountryCode,s.toString(),object :
+                                            Callback<HttpRequestResultString?>() {
+                                            override fun error(type: Int, error: Any?) {
+                                            }
 
-                                        override fun callback(returnData: HttpRequestResultString?) {
-                                        }
+                                            override fun callback(returnData: HttpRequestResultString?) {
 
-                                    })
-                                }
+                                            }
 
-                                override fun error(type: Int, error: Any) {
-                                    if (context is Activity) {
-                                        context.runOnUiThread { showToast(context, error.toString()) }
+                                        })
                                     }
-                                }
-                            })
+                                    else{
+
+                                    }
+                                } )
+                                gtCaptcha4Client.addOnFailureListener(GTCaptcha4Client.OnFailureListener {
+                                     fun onFailure() {
+
+                                    }
+                                })
+                                .verifyWithCaptcha()
                         }
                     } else {
                         showToast(context, if (returnData == null) "null" else returnData.msg)

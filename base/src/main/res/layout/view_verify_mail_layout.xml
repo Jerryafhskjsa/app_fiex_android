@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/send_code"
-            android:textColor="@color/T7"
+            android:textColor="@color/T13"
             android:textSize="@dimen/text_size_16" />
     </com.black.lib.view.InputLinearLayout>
 </layout>

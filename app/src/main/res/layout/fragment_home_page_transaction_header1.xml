@@ -423,7 +423,7 @@
                     android:paddingEnd="10dp"
                     android:progressDrawable="@color/transparent"
                     android:splitTrack="false"
-                    android:thumb="@drawable/icon_thumbcount_bar_green"
+                    android:thumb="@drawable/icon_thumbcount_bar"
                     android:thumbOffset="0dp" />
             </FrameLayout>
             <RelativeLayout

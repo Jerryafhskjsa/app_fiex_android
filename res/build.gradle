@@ -83,6 +83,7 @@ dependencies {
     api 'com.umeng.umsdk:analytics:8.0.0'
     api 'com.yanzhenjie:permission:2.0.0-rc2'
     api files('libs/pinyin4j-2.5.0.jar')
+    api(name: 'geetest_captcha_android_v1.8.1.1_20230112', ext: 'aar')
     api(name: 'geetest_sensebot_android_v4.1.4_20190719', ext: 'aar')
     api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
 

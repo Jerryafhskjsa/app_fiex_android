@@ -18,6 +18,7 @@ import cn.jpush.android.api.TagAliasCallback
 import cn.jpush.android.ups.JPushUPSManager
 import com.black.base.BaseApplication
 import com.black.base.model.FryingExchangeRates
+import com.black.base.model.FryingLanguage
 import com.black.base.model.FryingStyleChange
 import com.black.base.util.*
 import com.black.im.config.CustomFaceConfig
@@ -121,7 +122,8 @@ class FryingApplication : BaseApplication() {
                     checkTokenError = false
                 }
                 if (!LanguageUtil.isSameWithSetting(activity)) {
-                    LanguageUtil.changeAppLanguage(activity, LanguageUtil.getLanguageSetting(activity), true)
+                    LanguageUtil.changeAppLanguage(activity, FryingLanguage(Locale.ENGLISH, 0, getString(
+                        com.black.base.R.string.language_english)), true)
                 }
                 //ExchangeRatesUtil.setExChangeRatesSetting(activity, FryingExchangeRates(0,"CNY"))
             }

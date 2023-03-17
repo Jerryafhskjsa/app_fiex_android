@@ -149,7 +149,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
         @SuppressLint("ResourceAsColor")
         override fun onFinish(){
             mailBinding?.getMailCode?.isEnabled = true
-            mailBinding?.getMailCode?.setTextColor(R.color.T9)
+            mailBinding?.getMailCode?.setTextColor(R.color.T13)
             mailBinding?.getMailCode?.setText(R.string.get_check_code)
         }
 
@@ -163,7 +163,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
 
                 if (TotalTime <= 0)
                 {
-                    mailBinding?.getMailCode?.setTextColor(R.color.T9)
+                    mailBinding?.getMailCode?.setTextColor(R.color.T13)
                 }
             }
         }.start()

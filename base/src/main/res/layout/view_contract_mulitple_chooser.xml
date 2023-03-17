@@ -27,7 +27,7 @@
 
         <com.black.base.widget.SpanTextView
             android:id="@+id/direction"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@color/T9"
             android:gravity="center"

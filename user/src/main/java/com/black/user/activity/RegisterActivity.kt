@@ -3,6 +3,7 @@ package com.black.user.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
@@ -37,24 +38,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         private val TAG = RegisterActivity::class.java.simpleName
     }
 
-    private var type = ConstData.AUTHENTICATE_TYPE_PHONE
+    private var type = ConstData.AUTHENTICATE_TYPE_MAIL
     private var binding: ActivityRegisterBinding? = null
+    private var countDownTimer: CountDownTimer? = null
+    private var totalTime: Long = 60 * 1000
 
-    private val mHandler = Handler()
-    private var getPhoneCodeLocked = false
-    private var getPhoneCodeLockedTime = 0
-    private val getPhoneCodeLockTimer = object : Runnable {
-        override fun run() {
-            getPhoneCodeLockedTime--
-            if (getPhoneCodeLockedTime <= 0) {
-                getPhoneCodeLocked = false
-                binding?.getPhoneCode?.setText(R.string.get_check_code)
-            } else {
-                binding?.getPhoneCode?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-    }
 
     private var thisCountry: CountryCode? = null
     private var chooseWindow: CountryChooseWindow? = null
@@ -103,8 +91,8 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                 binding?.countryCode?.setText("+" + thisCountry?.code)
             }
         })
-
         initChooseWindowData()
+        changeLoinType(type)
         checkClickable()
     }
 
@@ -235,9 +223,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
     //获取手机验证码
     private fun getPhoneVerifyCode() {
-        if (getPhoneCodeLocked) {
-            return
-        }
         val telCountryCode = if (binding?.countryCode?.tag == null) null else binding?.countryCode?.tag.toString()
         if (TextUtils.isEmpty(telCountryCode)) {
             FryingUtil.showToast(mContext, getString(R.string.alert_choose_country))
@@ -248,15 +233,22 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
             return
         }
-        UserApiServiceHelper.getVerifyCode(this, userName, telCountryCode, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+        countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+        override fun onFinish(){
+            binding?.getPhoneCode?.isEnabled = true
+            binding?.getPhoneCode?.setText(getString(R.string.send_code))
+        }
+            override fun onTick(millisUntilFinished: Long) {
+                val second = millisUntilFinished / 1000 % 60
+                binding?.getPhoneCode?.isEnabled = false
+                binding?.getPhoneCode?.setText("$second")
+            }
+        }.start()
+        UserApiServiceHelper.getVerifyCodeOld(this, userName, telCountryCode, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                if (returnData != null) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
-                    if (!getPhoneCodeLocked) {
-                        getPhoneCodeLocked = true
-                        getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getPhoneCodeLockTimer)
-                    }
+
                 } else {
                     FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
                 }
@@ -271,19 +263,19 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
             return
         }
-        UserApiServiceHelper.getVerifyCode(this, userName, null, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+        countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+        override fun onFinish(){
+            binding?.getPhoneCode?.isEnabled = true
+            binding?.getPhoneCode?.setText(getString(R.string.send_code))
+        }
+            override fun onTick(millisUntilFinished: Long) {
+                val second = millisUntilFinished / 1000 % 60
+                binding?.getPhoneCode?.isEnabled = false
+                binding?.getPhoneCode?.setText("$second")
+            }
+        }.start()
+        UserApiServiceHelper.getVerifyCodeOld(this, userName, null, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
-                    //锁定发送按钮
-                    if (!getPhoneCodeLocked) {
-                        getPhoneCodeLocked = true
-                        getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                        mHandler.post(getPhoneCodeLockTimer)
-                    }
-                } else {
-                    FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
-                }
             }
         })
     }

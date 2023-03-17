@@ -82,6 +82,7 @@ open class BaseApplication : Application() {
     open fun getLanguage(type:Int): FryingLanguage? {
         if (languages == null || languages!!.isEmpty()) {
             initLanguageItems(this)
+
         }
         return languages?.get(type)
     }
