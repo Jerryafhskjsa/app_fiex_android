@@ -105,10 +105,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.currentLanguage?.setText(R.string.language_english)
         }
         if (exchange == null || exchange == 1) {
-            binding?.currentExchangeRates?.setText(R.string.language_cny)
+            binding?.currentExchangeRates?.setText(R.string.exchange_rates_usd)
         }
         else {
-            binding?.currentExchangeRates?.setText(R.string.exchange_rates_usd)
+            binding?.currentExchangeRates?.setText(R.string.language_cny)
         }
         if (CommonUtil.isApkInDebug(applicationContext)) {
             binding?.serverSetting?.visibility = View.VISIBLE

@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.Money
@@ -156,13 +157,14 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
                 var usd = String.format("≈%s USD", nullAmount)
                 var cny = String.format("≈%S CNY", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+                val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 if (total != null && exChange == 0) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
                     cny = String.format("≈%S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2))
                 }
                 if (total != null && exChange == 1) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2) + " "
-                    usd = String.format("≈%S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt, 8, 2, 2))
+                    usd = String.format("≈%S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.usdt!! * rates!!, 8, 2, 2))
                 }
                 if (exChange == 0){
                 val holeAmountString = usdt + cny

@@ -7,7 +7,9 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
+import com.black.base.model.FryingExchangeRates
 import com.black.base.model.FryingLanguage
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.LanguageUtil
 import com.black.base.util.RouterConstData
@@ -65,6 +67,13 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
         }
         if (language != LanguageUtil.getLanguageSetting(this)) {
             LanguageUtil.changeAppLanguage(this, language, true)
+            if (language.languageCode == 0) {
+                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
+            }
+            if (language.languageCode == 2)
+            {
+                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
+            }
             onLanguageChanged()
             BlackRouter.getInstance().build(RouterConstData.START_PAGE)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

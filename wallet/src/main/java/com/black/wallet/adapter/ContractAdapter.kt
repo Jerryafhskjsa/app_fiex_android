@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.wallet.TigerWallet
 import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.ImageLoader
@@ -34,7 +35,6 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
-        val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
             viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
             viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
             if (isVisibility) {

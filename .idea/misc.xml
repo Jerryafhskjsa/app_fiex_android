@@ -332,6 +332,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/activity_dear_pair_search.xml" value="0.15185185185185185" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_entrust_records_new.xml" value="0.1537037037037037" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_futrues_message.xml" value="0.17447916666666666" />
+        <entry key="..\:/fiex/app/src/main/res/layout/activity_k_line_full.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_mine.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_start_page_new.xml" value="0.1" />
         <entry key="..\:/fiex/app/src/main/res/layout/dialog_global_ad.xml" value="0.17916666666666667" />
@@ -516,6 +517,7 @@
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_red_default.xml" value="0.121" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_red_disable.xml" value="0.121" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_red_pressed.xml" value="0.121" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/btn_reg_check_box.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return.xml" value="0.1295" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_default.xml" value="0.125" />
         <entry key="..\:/fiex/res/src/main/res/drawable/btn_return_disable.xml" value="0.125" />

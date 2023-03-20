@@ -65,7 +65,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="4dp"
-                                android:background="@drawable/bg_login_devide_bar_title"
+                                android:background="@color/T13"
                                 />
                         </LinearLayout>
                         <View
@@ -93,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
                             android:visibility="gone"
-                            android:background="@drawable/bg_login_devide_bar_title"
+                            android:background="@color/T13"
                             />
                         </LinearLayout>
                         </LinearLayout>

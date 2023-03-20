@@ -61,7 +61,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var bgDefault: Int? = null
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
-    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+    private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
 
@@ -342,10 +342,31 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             else{
                 val total = binding?.money?.tag as Money?
-                val total2 = binding?.moneyCny?.tag as Money?
-                binding?.moneyCny?.setText(if(total?.total == null && total2?.tigercny == null) "≈ 0.0CNY" else if( total?.total == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total?.total!! * (total.rate!!) + total2?.tigercny!! *  (total.rate!!), 8, 2, 2) + "CNY")
-                binding?.money?.setText(if (total?.total == null && total2?.tigerUsdt == null) "0.0USDT" else if(total?.total == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.total != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.total!! + total2?.tigerUsdt!! , 8, 2, 2) )
-        }
+                var usdt = "$nullAmount "
+                var usd = String.format("≈ %s USD", nullAmount)
+                var cny = String.format("≈ %S CNY", nullAmount)
+                val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+                val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+                if (total != null && exChange == 0) {
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2))
+                    binding?.money?.setText(usdt)
+                    binding?.moneyCny?.setText(cny)
+                }
+                if (total != null && exChange == 1) {
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * rates!!, 8, 2, 2))
+                    binding?.money?.setText(usdt)
+                    binding?.moneyCny?.setText(usd)
+                }
+                if (exChange == 0){
+                    binding?.money?.setText(usdt)
+                    binding?.moneyCny?.setText(cny)
+                }
+                if (exChange == 1){
+                    binding?.money?.setText(usdt)
+                    binding?.moneyCny?.setText(usd)
+                }  }
         }
     }
 

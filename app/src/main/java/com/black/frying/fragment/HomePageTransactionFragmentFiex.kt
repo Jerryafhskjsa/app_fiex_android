@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.TradeApiServiceHelper
 import com.black.base.api.WalletApiServiceHelper
@@ -129,6 +130,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private var currentBalanceSell: UserBalance? = null
 
     private var layout: View? = null
+    private var rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdt
+    private var exchanged = 0
     private var binding: FragmentHomePageTransactionFiexBinding? = null
     private var viewModel: TransactionViewModel? = null
     private var deepViewBinding: TransactionDeepViewBinding? = null
@@ -156,6 +159,15 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         colorWin = SkinCompatResources.getColor(mContext, R.color.T13)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
+        exchanged = ExchangeRatesUtil.getExchangeRatesSetting(mContext as HomePageActivity)!!.rateCode
+        if (exchanged == 0)
+        {
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
+        }
+        if (exchanged == 1)
+        {
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+        }
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_home_page_transaction_fiex,
@@ -961,10 +973,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
             binding!!.fragmentHomePageTransactionHeader1.priceCny.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    viewModel!!.getCurrentPriceCNY()!! * price / viewModel!!.getCurrentPrice(),
+                    price * rates!!,
                     4,
                     4
-                )
+                ) + if (exchanged  == 0) "CNY" else "USD"
             )
         } else {
             binding!!.fragmentHomePageTransactionHeader1.priceCny.setText(
@@ -972,7 +984,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     0.0f,
                     4,
                     4
-                )
+                ) + if (exchanged  == 0) "CNY" else "USD"
             )
         }
     }
@@ -1731,6 +1743,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         val color =
             if (pairStatus.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorT3 else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
         val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+        val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         if (exChangeRates == 0) {
             binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
             binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
@@ -1742,10 +1755,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         } else {
             binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(pairStatus.currentPriceFormat)
             binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
-                String.format(
-                    "≈ %s USD",
-                    pairStatus.currentPriceFormat
-                )
+                String.format("≈%s USD", if (pairStatus.currentPriceFormat == null) "0" else pairStatus.currentPriceFormat?.toDouble()!! * rates!!)
             )
         }
         binding!!.fragmentHomePageTransactionHeader1.currentPrice.setTextColor(color)
@@ -1753,17 +1763,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun updateCurrentPairPrice(price: String?) {
-        val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
-        if (exChangeRates == 1) {
             binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
 //        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
             if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
                 binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
                     "≈" + NumberUtil.formatNumberNoGroup(
-                        viewModel!!.getCurrentPrice(),
+                        rates!! * price.toDouble(),
                         4,
                         4
-                    ) + "$"
+                    )
+                            + if (exchanged == 0) "CNY" else "USD"
                 )
             } else {
                 binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
@@ -1771,30 +1780,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         0.0f,
                         4,
                         4
-                    ) + "$"
+                    )  + if (exchanged == 0) "CNY" else "USD"
                 )
             }
-        } else {
-            binding!!.fragmentHomePageTransactionHeader1.currentPrice.setText(price)
-//        binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(String.format("≈ %s", price))
-            if (price != null && price.toDouble() > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
-                binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
-                    "≈" + NumberUtil.formatNumberNoGroup(
-                        viewModel!!.getCurrentPriceCNY()!! * price.toDouble() / viewModel!!.getCurrentPrice(),
-                        4,
-                        4
-                    ) + "CNY"
-                )
-            } else {
-                binding!!.fragmentHomePageTransactionHeader1.currentPriceCny.setText(
-                    "≈" + NumberUtil.formatNumberNoGroup(
-                        0.0f,
-                        4,
-                        4
-                    ) + "CNY"
-                )
-            }
-        }
+
     }
 
     //更新涨跌幅

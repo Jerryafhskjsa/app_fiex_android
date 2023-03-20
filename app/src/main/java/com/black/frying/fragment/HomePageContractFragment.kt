@@ -1,6 +1,7 @@
 package com.black.frying.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -113,6 +114,8 @@ class HomePageContractFragment : BaseFragment(),
 
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
+    private var rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdt
+    private var exchanged = 0
     private var currentOrderType: String? = "LIMIT"
     private var currentUnitType: String? = "USDT"
     private var currentTimeInForceType: String? = "GTC"
@@ -202,6 +205,13 @@ class HomePageContractFragment : BaseFragment(),
         }
         if ((mContext as HomePageActivity).transactionTabType != -1) {
             tabType = (mContext as HomePageActivity).transactionTabType
+        }
+        exchanged = ExchangeRatesUtil.getExchangeRatesSetting(mContext as HomePageActivity)!!.rateCode
+        if (exchanged == 0) {
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
+        }
+        if (exchanged == 1) {
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         }
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
@@ -1309,10 +1319,11 @@ class HomePageContractFragment : BaseFragment(),
         if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
             header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    viewModel!!.getCurrentPriceCNY()!! * price / viewModel!!.getCurrentPrice(),
+                    price * rates!!,
                     4,
                     4
                 )
+                + if (exchanged  == 0) "CNY" else "USD"
             )
         } else {
             header1View?.priceCny?.setText(
@@ -1321,6 +1332,7 @@ class HomePageContractFragment : BaseFragment(),
                     4,
                     4
                 )
+                + if (exchanged == 0) "CNY" else "USD"
             )
         }
     }
@@ -1362,24 +1374,24 @@ class HomePageContractFragment : BaseFragment(),
         when (type) {
             "MARKET" -> {
                 typeDes = getString(R.string.order_type_market)
-                binding!!.fragmentHomePageContractHeader1?.linPrice.visibility = View.GONE
-                binding!!.fragmentHomePageContractHeader1?.linPrinceCny.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
             }
             "LIMIT" -> {
                 typeDes = getString(R.string.order_type_limit)
-                binding!!.fragmentHomePageContractHeader1?.linPrice.visibility = View.VISIBLE
-                binding!!.fragmentHomePageContractHeader1?.linPrinceCny.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
             }
         }
-        binding!!.fragmentHomePageContractHeader1?.orderType.text = typeDes
+        binding!!.fragmentHomePageContractHeader1.orderType.text = typeDes
     }
 
     private fun refreshUnitType(type: String?) {
-        binding!!.fragmentHomePageContractHeader1?.unitType.text = type
+        binding!!.fragmentHomePageContractHeader1.unitType.text = type
     }
 
     private fun refreshTimeInForceType(type: String?) {
-        binding!!.fragmentHomePageContractHeader1?.withLimitType.text = type
+        binding!!.fragmentHomePageContractHeader1.withLimitType.text = type
     }
 
     //刷新交易区控件
@@ -2078,13 +2090,13 @@ class HomePageContractFragment : BaseFragment(),
             if (C2CApiServiceHelper?.coinUsdtPrice?.usdt == null) {
                 return
             }
-            var usdtPrice = C2CApiServiceHelper?.coinUsdtPrice?.usdt
             header1View?.currentPriceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    usdtPrice!! * price.toDouble(),
+                    rates!! * price.toDouble(),
                     4,
                     4
                 )
+                + if (exchanged == 0) "CNY" else "USD"
             )
         } else {
             header1View?.currentPriceCny?.setText(
@@ -2093,6 +2105,7 @@ class HomePageContractFragment : BaseFragment(),
                     4,
                     4
                 )
+                + if (exchanged == 0) "CNY" else "USD"
             )
         }
     }

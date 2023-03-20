@@ -42,7 +42,7 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
-        val rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+        var rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
         val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
         viewHolder?.coinType?.setText(
             if (wallet?.coinType == null) "" else wallet.coinType.toString().uppercase()
@@ -65,16 +65,19 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
                 if (wallet?.totalAmount == null) getString(
                     R.string.number_default
                 ) else if (exChange == 0) "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.totalAmount * rate!!,
+                    wallet.totalAmount * rates!!,
                     10,
                     2,
                     2
-                ) else "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.totalAmount,
+                ) else {
+                    rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+                    "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet.totalAmount * rates!!,
                     10,
                     2,
                     2
                 )
+                }
             )
         } else {
             viewHolder?.totalCny?.setText("****")

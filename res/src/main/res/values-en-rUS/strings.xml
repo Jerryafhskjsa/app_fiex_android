@@ -981,10 +981,10 @@
     <string name="contract_sell_raise">Sell/sell long</string>
     <string name="contract_bond">Deposit</string>
     <string name="contract_bond_empty">Margin</string>
-    <string name="contract_can_buy_raise">Multiple opening is allowed</string>
+    <string name="contract_can_buy_raise">Max open more</string>
     <string name="contract_can_sell_fail">Can be leveled</string>
     <string name="contract_can_sell_raise">Can level multiple positions</string>
-    <string name="contract_can_buy_fall">Can be left blank</string>
+    <string name="contract_can_buy_fall">Max open blank</string>
     <string name="contract_buy_in">Buy</string>
     <string name="contract_sell_out">Selling</string>
     <string name="contract_stop_surplus_price">Stop earning</string>

@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.TextWatcher
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -15,26 +12,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.C2CApiServiceHelper
-import com.black.base.api.WalletApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.Money
 import com.black.base.model.wallet.TigerWallet
-import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.RouterConstData
-import com.black.base.util.SocketDataContainer
-import com.black.frying.fragment.EmptyFragment
-import com.black.frying.fragment.HomePageContractFragment
-import com.black.frying.util.UdeskUtil
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
 import com.black.util.NumberUtil
@@ -43,22 +31,16 @@ import com.black.wallet.R
 import com.black.wallet.adapter.ContractAdapter
 import com.black.wallet.databinding.FragmentContractNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
-import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_home_page_mine.*
 
 class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var walletList: ArrayList<TigerWallet?>? = null
     private var isVisibility: Boolean = false
     private var searchKey: String? = null
     private var doSearch = true
-    private var clear = true
     private var type: Int = 0
-    private var fragmentList: MutableList<Fragment>? = null
-    private var tabSets: List<String?>? = null
     private var binding: FragmentContractNormalBinding? = null
     private var layout: View? = null
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
-    private var tigerWalletList: ArrayList<TigerWallet?>? = ArrayList()
     private var adapter: ContractAdapter? = null
     private var eventListener:ContractEventResponseListener? = null
 
@@ -141,7 +123,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
         doSearch = (if (eventListener?.getContractWalletCoinFilter() == null) false else eventListener?.getContractWalletCoinFilter()!!)
         binding?.btnWalletFilter?.isChecked = doSearch
     }
-    fun isSearch():Boolean?{
+    fun isSearch():Boolean{
         return doSearch
     }
 
@@ -196,10 +178,10 @@ private fun refresh(type: Int){
     }
 }
     fun setData(data: ArrayList<TigerWallet?>?) {
-        var showData: ArrayList<TigerWallet?>? = data
+        val showData: ArrayList<TigerWallet?>? = data
         if (type == 0) {
             for (wallet in data!!) {
-                data?.clear()
+                data.clear()
                 if (wallet?.coinType == "USDT")
                     showData?.add(wallet)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -234,23 +216,145 @@ private fun refresh(type: Int){
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
                 var cny = String.format("≈ %S CNY", nullAmount)
-
-                if (total != null) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.tigerUsdt, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.tigerUsdt!! * rate!!, 8, 2, 2))
+                val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+                val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+                if (total != null && exChange == 0) {
+                    usdt =
+                        NumberUtil.formatNumberDynamicScaleNoGroup(total.tigerUsdt, 8, 2, 2) + " "
+                    cny = String.format(
+                        "≈ %S CNY",
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.tigerUsdt!! * rate!!,
+                            8,
+                            2,
+                            2
+                        )
+                    )
                     val wallet = total.tigerUsdt!! + total.profit!!
                     val walletCny = rate!! * (total.tigerUsdt!! + total.profit!!)
-                    binding?.money?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(wallet, 8, 2, 2))
-                    binding?.moneyCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(walletCny, 8, 2, 2)))
-
+                    binding?.money?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            wallet,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.moneyCny?.setText(
+                        String.format(
+                            "≈ %S CNY",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(walletCny, 8, 2, 2)
+                        )
+                    )
+                    binding?.moneyTotal?.setText(usdt)
+                    binding?.moneyTotalCny?.setText(cny)
+                    binding?.profit?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.profit,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.profitCny?.setText(
+                        String.format(
+                            "≈ %S CNY",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(
+                                rate!! * (total.profit!!),
+                                8,
+                                2,
+                                2
+                            )
+                        )
+                    )
+                    binding?.margin?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.tigerUsdt?.minus(
+                                total.crossedMargin!!
+                            ), 8, 2, 2
+                        )
+                    )
+                    binding?.marginCny?.setText(
+                        String.format(
+                            "≈ %S CNY",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(
+                                (total.tigerUsdt!!.minus(total.crossedMargin!!)) * rate!!,
+                                8,
+                                2,
+                                2
+                            )
+                        )
+                    )
                 }
-                binding?.moneyTotal?.setText(usdt)
-                binding?.moneyTotalCny?.setText(cny)
-                binding?.profit?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.profit, 8, 2, 2))
-                binding?.profitCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(rate!! * (total?.profit!!), 8, 2, 2)))
-                binding?.margin?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigerUsdt?.minus(total.crossedMargin!!), 8, 2, 2))
-                binding?.marginCny?.setText(String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup((total?.tigerUsdt!!.minus(total.crossedMargin!!)) * rate!!, 8, 2, 2)))
-                 }
+                else{
+                    usdt =
+                        NumberUtil.formatNumberDynamicScaleNoGroup(total?.tigerUsdt, 8, 2, 2) + " "
+                    cny = String.format(
+                        "≈ %S USD",
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total?.tigerUsdt!! * rates!!,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    val wallet = total.tigerUsdt!! + total.profit!!
+                    val walletCny = rates * (total.tigerUsdt!! + total.profit!!)
+                    binding?.money?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            wallet,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.moneyCny?.setText(
+                        String.format(
+                            "≈ %S USD",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(walletCny, 8, 2, 2)
+                        )
+                    )
+                    binding?.moneyTotal?.setText(usdt)
+                    binding?.moneyTotalCny?.setText(cny)
+                    binding?.profit?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.profit,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.profitCny?.setText(
+                        String.format(
+                            "≈ %S USD",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(
+                                rates * (total.profit!!),
+                                8,
+                                2,
+                                2
+                            )
+                        )
+                    )
+                    binding?.margin?.setText(
+                        NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.tigerUsdt?.minus(
+                                total.crossedMargin!!
+                            ), 8, 2, 2
+                        )
+                    )
+                    binding?.marginCny?.setText(
+                        String.format(
+                            "≈ %S USD",
+                            NumberUtil.formatNumberDynamicScaleNoGroup(
+                                (total.tigerUsdt!!.minus(total.crossedMargin!!)) * rates,
+                                8,
+                                2,
+                                2
+                            )
+                        )
+                    )
+                }
+            }
         }
     }
 

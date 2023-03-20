@@ -153,6 +153,7 @@ object UserApiServiceHelper {
                                 gtCaptcha4Client.addOnSuccessListener(GTCaptcha4Client.OnSuccessListener { b, s ->
                                     if (b){
                                         verifyCodeCallBack.captcha = s
+                                        FryingUtil.showToast(context, context.getString(R.string.alert_verify_code_success))
                                         sendVerifyCodeGeeTest(context,userName,telCountryCode,s.toString(),object :
                                             Callback<HttpRequestResultString?>() {
                                             override fun error(type: Int, error: Any?) {
@@ -165,7 +166,7 @@ object UserApiServiceHelper {
                                         })
                                     }
                                     else{
-
+                                        FryingUtil.showToast(context, context.getString(R.string.alert_verify_code_failed))
                                     }
                                 } )
                                 gtCaptcha4Client.addOnFailureListener(GTCaptcha4Client.OnFailureListener {

@@ -109,9 +109,10 @@ class FryingApplication : BaseApplication() {
         WebView(applicationContext).destroy()
         //初始化腾讯i
         initTencentIM()
-        initLanguageItems(applicationContext)
+        //initLanguageItems(applicationContext)
+        LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
         StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
-        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0,"CNY"))
+        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
         initFilters()
         BlackRouter.getInstance().init(this)
         BlackRouter.getInstance().setWebViewPath(RouterConstData.WEB_VIEW)

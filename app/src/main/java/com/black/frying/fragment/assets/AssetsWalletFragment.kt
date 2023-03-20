@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.black.base.api.C2CApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.FryingExchangeRates.Companion.cny
@@ -17,6 +18,7 @@ import com.black.base.model.Money
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.RouterConstData
 import com.black.frying.fragment.HomePageAssetsFragment
 import com.black.lib.refresh.QRefreshLayout
@@ -123,17 +125,159 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 val total2: Money? = binding?.futureUsdt?.tag as Money?
-                val cny = total?.total!! * (total?.rate!!)
-                binding?.spotUsdt?.setText(if (total?.total == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + "USDT")
-                binding?.futureUsdt?.setText(if (total2?.tigerUsdt == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt, 8, 2, 2) + "USDT")
-                binding?.financialUsdt?.setText("0.00 USDT")
-                binding?.capitalUsdt?.setText("0.00 USDT")
-                binding?.spotCny?.setText(if (total?.total == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(cny, 8, 2, 2) )
-                binding?.futureCny?.setText(if (total2 == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup((total2.tigerUsdt!! * total.rate!!), 8, 2, 2) )
-                binding?.financialCny?.setText("≈ ￥0.00")
-                binding?.capitalCny?.setText("≈ ￥0.00")
-                binding?.moneyTotalcny?.setText(if(total?.total == null && total2?.tigercny == null) "≈ 0.0 CNY" else if( total?.total  == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigercny, 8, 2, 2)  + "CNY" else if(total?.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(cny, 8, 2, 2) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(cny + total2?.tigerUsdt!! * (total.rate!!), 8, 2, 2) + "CNY")
-                binding?.moneyTotal?.setText(if (total?.total == null && total2?.tigerUsdt == null) "0.0 USDT" else if(total?.total == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(total2.tigerUsdt , 8, 2, 2) + "USDT" else if(total?.total != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + "USDT"  else NumberUtil.formatNumberDynamicScaleNoGroup(total?.total!! + total2?.tigerUsdt!! , 8, 2, 2) )        }
+                val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
+                val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+                if (exChange == 0) {
+                    val cny = total?.total!! * (total.rate!!)
+                    binding?.spotUsdt?.setText(
+                        if (total.total == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.total,
+                            8,
+                            2,
+                            2
+                        ) + "USDT"
+                    )
+                    binding?.futureUsdt?.setText(
+                        if (total2?.tigerUsdt == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigerUsdt,
+                            8,
+                            2,
+                            2
+                        ) + "USDT"
+                    )
+                    binding?.financialUsdt?.setText("0.00 USDT")
+                    binding?.capitalUsdt?.setText("0.00 USDT")
+                    binding?.spotCny?.setText(
+                        if (total.total == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.futureCny?.setText(
+                        if (total2 == null) "≈ ￥0.00" else "≈ ￥" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            (total2.tigerUsdt!! * total.rate!!),
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.financialCny?.setText("≈ ￥0.00")
+                    binding?.capitalCny?.setText("≈ ￥0.00")
+                    binding?.moneyTotalcny?.setText(
+                        if (total.total == null && total2?.tigercny == null) "≈ 0.0 CNY" else if (total?.total == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigercny,
+                            8,
+                            2,
+                            2
+                        ) + "CNY" else if (total?.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny,
+                            8,
+                            2,
+                            2
+                        ) + "CNY" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny + total2?.tigerUsdt!! * (total.rate!!),
+                            8,
+                            2,
+                            2
+                        ) + "CNY"
+                    )
+                    binding?.moneyTotal?.setText(
+                        if (total.total == null && total2?.tigerUsdt == null) "0.0 USDT" else if (total?.total == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigerUsdt,
+                            8,
+                            2,
+                            2
+                        ) + "USDT" else if (total?.total != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.total,
+                            8,
+                            2,
+                            2
+                        ) + "USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total?.total!! + total2?.tigerUsdt!!,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                }
+                else{
+                    val cny = total?.total!! * rates!!
+                    binding?.spotUsdt?.setText(
+                        if (total.total == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.total,
+                            8,
+                            2,
+                            2
+                        ) + "USDT"
+                    )
+                    binding?.futureUsdt?.setText(
+                        if (total2?.tigerUsdt == null) "0.00 USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigerUsdt,
+                            8,
+                            2,
+                            2
+                        ) + "USDT"
+                    )
+                    binding?.financialUsdt?.setText("0.00 USDT")
+                    binding?.capitalUsdt?.setText("0.00 USDT")
+                    binding?.spotCny?.setText(
+                        if (total.total == null) "≈ $0.00" else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.futureCny?.setText(
+                        if (total2 == null) "≈ $0.00" else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            (total2.tigerUsdt!! * rates),
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                    binding?.financialCny?.setText("≈ $0.00")
+                    binding?.capitalCny?.setText("≈ $0.00")
+                    binding?.moneyTotalcny?.setText(
+                        if (total.total == null && total2?.tigercny == null) "≈ 0.0 USD" else if (total.total == null && total2?.tigercny != null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigerUsdt!! * rates,
+                            8,
+                            2,
+                            2
+                        ) + "USD" else if (total.total != null && total2?.tigercny == null) "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny,
+                            8,
+                            2,
+                            2
+                        ) + "USD" else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+                            cny + total2?.tigerUsdt!! * rates,
+                            8,
+                            2,
+                            2
+                        ) + "USD"
+                    )
+                    binding?.moneyTotal?.setText(
+                        if (total.total == null && total2?.tigerUsdt == null) "0.0 USDT" else if (total.total == null && total2?.tigerUsdt != null) NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total2.tigerUsdt,
+                            8,
+                            2,
+                            2
+                        ) + "USDT" else if (total.total != null && total2?.tigerUsdt == null) NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.total,
+                            8,
+                            2,
+                            2
+                        ) + "USDT" else NumberUtil.formatNumberDynamicScaleNoGroup(
+                            total.total!! + total2?.tigerUsdt!!,
+                            8,
+                            2,
+                            2
+                        )
+                    )
+                }
+            }
         }
     }
 
