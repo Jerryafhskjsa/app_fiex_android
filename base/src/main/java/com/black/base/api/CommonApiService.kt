@@ -54,7 +54,7 @@ interface CommonApiService {
     fun getNoticeHome(@Path("language") languageKey: String?, @Query("per_page") pageSize: Int, @Query("page") page: Int): Observable<NoticeHome?>?
 
     @GET(UrlConfig.Config.URL_PAIR_DESCRIPTION)
-    fun getPairDescription(@Query("currency") coinName: String?, @Query("language") lang: String?): Observable<HttpRequestResultData<PairDescription?>?>?
+    fun getPairDescription(@Query("currency") coinName: String?): Observable<HttpRequestResultData<PairDescription?>?>?
 
     @GET(UrlConfig.Config.URL_GLOBAL_AD)
     fun getGlobalAd(@Query("language") language: String?, @Query("noticeName") noticeName: String?): Observable<HttpRequestResultData<GlobalAd?>?>?

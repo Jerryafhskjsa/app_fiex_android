@@ -455,7 +455,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
         }
         val language = LanguageUtil.getLanguageSetting(context)
         onKLineModelListener.onPairDescription(ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(CommonApiService::class.java)
-                ?.getPairDescription(coinType, if (language != null && language.languageCode == 4) "4" else "1")
+                ?.getPairDescription(coinType)
                 ?.compose(RxJavaHelper.observeOnMainThread()))
     }
 

@@ -207,7 +207,7 @@ public class ApiManagerImpl {
                     .header("User-Agent", getUserAgent(context))
                     .header("ASI-UUID", deviceId)
                     .header("platform", "Android")
-//                        .header("lang", lang)
+                    .header("lang", lang)
                     .header("Client-Type", "Android")
 //                        .header("Accept-Language", "Android")
 //                        .header("platform", "Android")

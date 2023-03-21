@@ -174,10 +174,11 @@
                                 android:id="@+id/rel_support"
                                 style="@style/HomeFeturesItem"
                                 android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_support"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_support"/>
+                                    android:src="@drawable/fiex_icon_support" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_support"
@@ -188,10 +189,11 @@
                                 android:id="@+id/rel_futures"
                                 style="@style/HomeFeturesItem"
                                 android:layout_weight="2">
+
                                 <ImageView
                                     android:id="@+id/icon_futures"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_futures"/>
+                                    android:src="@drawable/fiex_icon_futures" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"

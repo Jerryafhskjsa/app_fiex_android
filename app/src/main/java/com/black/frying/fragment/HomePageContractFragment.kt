@@ -79,7 +79,7 @@ import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-//首页合约
+//首页合约简介
 @Route(
     value = [RouterConstData.HOME_CONTRACT],
     fragmentParentPath = RouterConstData.HOME_PAGE,
@@ -1316,7 +1316,7 @@ class HomePageContractFragment : BaseFragment(),
     private fun computePriceCNY() {
         val price = CommonUtil.parseDouble(
             header1View?.price?.text.toString().trim { it <= ' ' })
-        if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
+        if (price != null && price > 0) {
             header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
                     price * rates!!,

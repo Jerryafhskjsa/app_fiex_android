@@ -27,7 +27,7 @@
     <string name="price">Price</string>
     <string name="amount">Quantity</string>
     <string name="balance">Balance</string>
-    <string name="entrust_current">Current delegation</string>
+    <string name="entrust_current">Open orders</string>
     <string name="real_name">Real name </string>
     <string name="time">Time</string>
     <string name="cny">CNY</string>
@@ -484,8 +484,8 @@
     <string name="filter_demand_into">Deposit</string>
     <string name="filter_demand_out">Remove</string>
     <string name="filter_demand_reward">Interest</string>
-    <string name="filter_entrust_new">Current delegation</string>
-    <string name="filter_entrust_his">Historical Delegation</string>
+    <string name="filter_entrust_new">Open orders</string>
+    <string name="filter_entrust_his">History order</string>
     <string name="filter_financial_into">Charging</string>
     <string name="filter_financial_out">Cash withdrawal</string>
     <string name="filter_recommend_level_01">Level 1</string>

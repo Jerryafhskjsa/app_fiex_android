@@ -110,7 +110,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
 
             override fun afterTextChanged(s: Editable) {}
         })
-        binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
+                binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
                 eventListener?.setWalletCoinFilter(isChecked)
                 eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_CONTRACT)
                 doSearch = isChecked
@@ -120,11 +120,11 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
 
     override fun onResume() {
         super.onResume()
-        doSearch = (if (eventListener?.getContractWalletCoinFilter() == null) false else eventListener?.getContractWalletCoinFilter()!!)
-        binding?.btnWalletFilter?.isChecked = doSearch
+        doSearch = (if (eventListener?.getContractWalletCoinFilter() == null) true else eventListener?.getContractWalletCoinFilter()!!)
+        binding?.btnWalletFilter?.isChecked = true
     }
     fun isSearch():Boolean{
-        return doSearch
+        return true
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -180,14 +180,9 @@ private fun refresh(type: Int){
     fun setData(data: ArrayList<TigerWallet?>?) {
         val showData: ArrayList<TigerWallet?>? = data
         if (type == 0) {
-            for (wallet in data!!) {
-                data.clear()
-                if (wallet?.coinType == "USDT")
-                    showData?.add(wallet)
                 binding?.refreshLayout?.setRefreshing(false)
                 adapter?.data = showData
                 adapter?.notifyDataSetChanged()
-            }
         }
         else{
             binding?.refreshLayout?.setRefreshing(false)

@@ -165,6 +165,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         binding!!.btnSearchMenu.setOnClickListener(this)
         binding!!.btnScanMenu.setOnClickListener(this)
         binding!!.btnMoreMenu.setOnClickListener(this)
+        binding!!.relDeposit.setOnClickListener(this)
+        binding!!.relFutures.setOnClickListener(this)
+        binding!!.relSupport.setOnClickListener(this)
+        binding!!.relReferral.setOnClickListener(this)
+        binding!!.relMore.setOnClickListener(this)
         layout?.viewTreeObserver?.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -251,6 +256,20 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
             R.id.c2c ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+            R.id.rel_deposit ->
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .go(mContext)
+            R.id.rel_support ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+            R.id.rel_futures ->
+                BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
+            R.id.rel_more ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+            R.id.rel_referral ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
                 /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)

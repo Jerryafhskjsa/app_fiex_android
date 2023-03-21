@@ -155,14 +155,14 @@ object CommonApiServiceHelper {
     fun getPairDescription(
         context: Context?,
         coinName: String?,
-        lang: String?,
+
         callback: Callback<HttpRequestResultData<PairDescription?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context).getService(CommonApiService::class.java)
-            ?.getPairDescription(coinName, lang)
+            ?.getPairDescription(coinName)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, false, callback))
     }

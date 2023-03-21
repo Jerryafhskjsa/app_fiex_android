@@ -127,8 +127,8 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         binding?.btnWalletFilter?.isChecked = doSearch
     }
 
-    fun isSearch():Boolean?{
-        return doSearch
+    fun isSearch():Boolean{
+        return true
     }
 
 
