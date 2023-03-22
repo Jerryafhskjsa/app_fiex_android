@@ -35,7 +35,7 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_web_view)
         val language = LanguageUtil.getLanguageSetting(mContext)
-        lang = if (language != null && language.languageCode == 4) "en" else "zh-cn"
+        lang = if (language != null && language.languageCode == 0) "en" else "zh-cn"
         webView = findViewById(R.id.web_view)
         webView?.setWebViewClient(WebViewClient())
         webView?.setFocusable(true)

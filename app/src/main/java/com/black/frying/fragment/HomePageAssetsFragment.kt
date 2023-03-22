@@ -348,14 +348,14 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 if (total != null && exChange == 0) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
                     binding?.money?.setText(usdt)
                     binding?.moneyCny?.setText(cny)
                 }
                 if (total != null && exChange == 1) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * rates!!, 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
                     binding?.money?.setText(usdt)
                     binding?.moneyCny?.setText(usd)
                 }

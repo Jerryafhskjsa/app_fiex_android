@@ -126,17 +126,21 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
     private fun getWalletData(){
         walletList?.clear()
         for (i in supportCoinInfoList!!.indices){
-            var wallet = Wallet()
-            wallet.coinAmount = BigDecimal.valueOf(0.00)
-            for (j in userSoptBanlace!!.indices){
-                if(supportCoinInfoList!![i]?.coinType.equals(userSoptBanlace!![j]?.coin)){
-                    wallet.coinAmount = (userSoptBanlace!![j]?.availableBalance)?.toBigDecimal()
+            if ( supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.supportDeposit == true && supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.supportWithdraw == true) {
+                val wallet = Wallet()
+                wallet.coinAmount = BigDecimal.valueOf(0.00)
+                for (j in userSoptBanlace!!.indices) {
+                    if (supportCoinInfoList!![i]?.coinType.equals(userSoptBanlace!![j]?.coin)) {
+                        wallet.coinAmount = (userSoptBanlace!![j]?.availableBalance)?.toBigDecimal()
+                    }
                 }
+                wallet.coinType = supportCoinInfoList!![i]?.coinType
+                wallet.coinIconUrl =
+                    supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.logosUrl
+                wallet.coinTypeDes =
+                    supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.coinFullName
+                walletList?.add(wallet)
             }
-            wallet.coinType = supportCoinInfoList!![i]?.coinType
-            wallet.coinIconUrl = supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.logosUrl
-            wallet.coinTypeDes = supportCoinInfoList!![i]?.config?.get(0)?.coinConfigVO?.coinFullName
-            walletList?.add(wallet)
         }
     }
 

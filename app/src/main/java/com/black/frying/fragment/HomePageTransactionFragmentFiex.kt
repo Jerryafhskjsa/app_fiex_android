@@ -1,8 +1,10 @@
 package com.black.frying.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -61,6 +63,10 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
+import com.black.wallet.util.DipPx
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.BR
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageTransactionFiexBinding
@@ -222,6 +228,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         binding!!.recyclerView.isNestedScrollingEnabled = false
         binding!!.recyclerView.setHasFixedSize(true)
         binding!!.recyclerView.isFocusable = false
+        binding!!.fragmentHomePageTransactionHeader2.assets.setOnClickListener(this)
+        binding!!.fragmentHomePageTransactionHeader2.openOrder.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader2.showAllCheckbox.setOnClickListener(this)
         return layout
     }
@@ -239,6 +247,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.onResume()
         getTradeOrderCurrent()
         updateDear(isDear)
+        getUserBalanceCallback()
         initTicker()
     }
 
@@ -693,6 +702,22 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     }
                 }
             }
+            R.id.assets -> {
+                binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.GONE
+                binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.VISIBLE
+                binding?.fragmentHomePageTransactionHeader2?.assets?.isChecked = true
+                binding?.fragmentHomePageTransactionHeader2?.openOrder?.isChecked = false
+                binding?.assetsList?.visibility = View.VISIBLE
+                binding?.orderInfo?.visibility = View.GONE
+            }
+            R.id.open_order -> {
+                binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.GONE
+                binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.VISIBLE
+                binding?.fragmentHomePageTransactionHeader2?.assets?.isChecked = false
+                binding?.fragmentHomePageTransactionHeader2?.openOrder?.isChecked = true
+                binding?.orderInfo?.visibility = View.VISIBLE
+                binding?.assetsList?.visibility = View.GONE
+            }
         }
     }
 
@@ -1021,6 +1046,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         resetAmountLength()
         refreshCurrentWallet()
         refreshTransactionHardViews()
+        refreshAsstes()
+        getUserBalanceCallback()
         refreshUsable()
         refreshData()
         currentOrderType = "LIMIT"
@@ -1163,6 +1190,33 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel!!.getCurrentWallet(tabType)
     }
 
+    private fun refreshAsstes(){
+            if (currentBalanceSell != null) {
+                binding!!.unable.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        currentBalanceSell?.availableBalance?.toDoubleOrNull(),
+                        RoundingMode.FLOOR,
+                        0,
+                        8
+                    )
+                )
+            } else {
+                binding!!.unable.setText("0.0")
+            }
+            if (currentBalanceBuy != null) {
+                binding!!.usable2.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
+                        RoundingMode.FLOOR,
+                        0,
+                        8
+                    )
+                )
+            } else {
+                binding!!.usable2.setText("0.0")
+            }
+
+    }
     private fun refreshUsable() {
         activity?.runOnUiThread {
             //买入
@@ -1249,9 +1303,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     //显示当前委托
+    @SuppressLint("SetTextI18n")
     private fun showCurrentOrderList(data: ArrayList<TradeOrderFiex?>?) {
-        adapter?.data = data
-        adapter?.notifyDataSetChanged()
+        if (data == null){
+            binding?.fragmentHomePageTransactionHeader2?.openOrder?.setText(getString(R.string.entrust_current) + "(0)")
+        }
+        else {
+            binding?.fragmentHomePageTransactionHeader2?.openOrder?.setText(getString(R.string.entrust_current) + "(" + data.size + ")")
+            adapter?.data = data
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     //更新当前委托
@@ -1492,7 +1553,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 if (returnData != null) {
                     currentBalanceBuy = returnData.first
                     currentBalanceSell = returnData.second
+
                 }
+                refreshAsstes()
                 refreshUsable()
             }
 
@@ -1516,6 +1579,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 if (returnData != null) {
                     currentWallet = returnData.first
                     currentEstimatedWallet = returnData.second
+                    binding!!.coinType2.setText(viewModel?.getCoinType())
+                    binding!!.coinTypeDes2.setText(viewModel?.getCoinType())
+                    if (returnData.first?.coinIconUrl != null) {
+                        val requestOptions = RequestOptions
+                            .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
+                        Glide.with(mContext!!)
+                            .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext!!, returnData.first?.coinIconUrl)))
+                            .apply(requestOptions)
+                            .into(binding?.iconCoin!!)
+                    }
                 }
                 refreshUsable()
             }
@@ -1579,17 +1652,17 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     )
                 } else {
                     val checkExplodePrice =
-                        leverDetail?.burstPrice == null || leverDetail.burstPrice == BigDecimal.ZERO
+                        leverDetail.burstPrice == null || leverDetail.burstPrice == BigDecimal.ZERO
                     binding?.actionBarLayout?.explodePrice?.setText(
                         String.format(
                             "%s%s",
                             if (checkExplodePrice) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
-                                leverDetail?.burstPrice,
+                                leverDetail.burstPrice,
                                 9,
                                 0,
                                 viewModel?.getPrecision()!!
                             ),
-                            if (checkExplodePrice || leverDetail?.afterCoinType == null) nullAmount else leverDetail.afterCoinType
+                            if (checkExplodePrice || leverDetail.afterCoinType == null) nullAmount else leverDetail.afterCoinType
                         )
                     )
                 }

@@ -192,12 +192,12 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 if (total != null && exChange == 0) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * (total.rate!!), 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
                 }
                 if (total != null && exChange == 1) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.total, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.total!! * rates!!, 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
                 }
                 binding?.profitLoss?.setText(": 0.0 USDT")
                 if (exChange == 0){

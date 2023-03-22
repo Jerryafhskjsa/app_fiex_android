@@ -215,7 +215,7 @@ class TransactionViewModel(
             override fun onSuccess(value: UserBalance?) {
                 onTransactionModelListener?.run {
                     if (value != null) {
-                        onTransactionModelListener?.onUserBalanceChanged(value)
+                        onTransactionModelListener.onUserBalanceChanged(value)
                     }
                 }
             }
@@ -227,7 +227,7 @@ class TransactionViewModel(
             override fun onSuccess(value: TradeOrderFiex?) {
                 onTransactionModelListener?.run {
                     if (value != null) {
-                        onTransactionModelListener?.onUserTradeOrderChanged(value)
+                        onTransactionModelListener.onUserTradeOrderChanged(value)
                     }
                 }
             }
@@ -240,7 +240,7 @@ class TransactionViewModel(
             override fun onSuccess(value: PairDeal?) {
                 onTransactionModelListener?.run {
                     if (value != null && currentPairStatus.pair != null) {
-                        onTransactionModelListener?.onPairDeal(value)
+                        onTransactionModelListener.onPairDeal(value)
                     }
                 }
             }
@@ -609,10 +609,10 @@ class TransactionViewModel(
                             var balanceList: ArrayList<UserBalance?>? = null
                             when (balanceType) {
                                 ConstData.BalanceType.SPOT -> {
-                                    balanceList = balances?.spotBalance
+                                    balanceList = balances.spotBalance
                                 }
                                 ConstData.BalanceType.CONTRACT -> {
-                                    balanceList = balances?.tigerBalance
+                                    balanceList = balances.tigerBalance
                                 }
                             }
                             if (balanceList != null) {
@@ -759,12 +759,12 @@ class TransactionViewModel(
         currentPairStatus.precision = precision
     }
 
-    fun getPrecision(): Int? {
+    fun getPrecision(): Int {
         return currentPairStatus.precision
     }
 
     fun getPrecisionDeep(precision: Int?): Deep? {
-        var deepList = currentPairStatus.supportingPrecisionList
+        val deepList = currentPairStatus.supportingPrecisionList
         if (deepList != null) {
             for (deep in deepList) {
                 if (precision == deep.precision) {

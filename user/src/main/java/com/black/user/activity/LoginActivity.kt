@@ -22,6 +22,7 @@ import com.black.base.model.*
 import com.black.base.model.user.SuffixResult
 import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
+import com.black.base.net.NormalObserver
 import com.black.base.net.NormalObserver2
 import com.black.base.util.*
 import com.black.base.view.CountryChooseWindow
@@ -40,6 +41,7 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 @Route(value = [RouterConstData.LOGIN])
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -271,7 +273,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun doLogin(username: String, password: String, telCountryCode: String?) {
+    /*private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
         ApiManager.build(this, false, UrlConfig.ApiType.URl_UC)
             .getService<UserApiService>(UserApiService::class.java)
@@ -362,17 +364,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         Observable.empty()
                     }
                 }
-            })
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
-                override fun afterRequest() {
-                    hideLoading()
-                }
+            })*/
+            //?.observeOn(AndroidSchedulers.mainThread())
+            //?.subscribe
+    private fun doLogin(username: String, password: String, telCountryCode: String?) {
+        UserApiServiceHelper.login(mContext,username,password,telCountryCode, object : Callback<HttpRequestResultData<SuffixResult?>?>() {
+            override fun error(type: Int, error: Any?) {
+            }
 
                 override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                        val ucToken = result?.data?.ucToken
-                        val ticket = result?.data?.ticket
+                        val ucToken = result.data?.ucToken
+                        val ticket = result.data?.ticket
                         Log.d(TAG, "ucToken = $ucToken")
                         Log.d(TAG, "ticket = $ticket")
                         if (TextUtils.isEmpty(ucToken)) {
@@ -530,7 +533,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
             override fun callback(result: HttpRequestResultString?) {
                 if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                    var wsToken = result.data
+                    val wsToken = result.data
                     HttpCookieUtil.saveWsToken(context, wsToken)
                     onGetTokenSuccess()
                 }

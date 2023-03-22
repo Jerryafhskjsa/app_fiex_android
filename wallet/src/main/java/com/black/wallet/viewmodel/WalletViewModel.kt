@@ -339,7 +339,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         var totalProfit = 0.0
         var totalCrossedMargin = 0.0
         tigerWalletList?.run {
-            for (wallet in tigerWalletList!!) {
+            for (wallet in tigerWalletList) {
                 walletTotal += wallet?.estimatedTotalAmount
                     ?: 0.toDouble()
                 walletTotalCNY += wallet?.estimatedAvailableAmountCny

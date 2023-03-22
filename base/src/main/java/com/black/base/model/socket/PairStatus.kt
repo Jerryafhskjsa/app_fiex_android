@@ -139,10 +139,10 @@ open class PairStatus : BaseAdapterItem(), Findable {
         }
 
     fun getSupportOrderTypeList(): ArrayList<String?>? {
-        var typeList: ArrayList<String?>? = ArrayList()
+        val typeList: ArrayList<String?>? = ArrayList()
         if (supportOrderType != null) {
-            var typeArray = supportOrderType!!.split(",").toTypedArray()
-            var temp = typeArray.toList()
+            val typeArray = supportOrderType!!.split(",").toTypedArray()
+            val temp = typeArray.toList()
             for (i in temp.indices) {
                 typeList?.add(temp[i])
             }

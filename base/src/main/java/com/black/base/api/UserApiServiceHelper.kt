@@ -331,7 +331,7 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {
+    fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultData<SuffixResult?>?>?) {
         if (context == null || callback == null) {
             return
         }
@@ -522,12 +522,12 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
-    fun checkMainChatEnable(context: Context?, callback: Callback<HttpRequestResultString?>?) {
+    fun getSupportUrl(context: Context?, callback: Callback<HttpRequestResultData<String?>?>?) {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
-                ?.checkMainChatEnable()
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+                ?.getSupportUrl()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

@@ -17,20 +17,20 @@ import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
 import com.black.base.adapter.BaseViewPagerAdapter
 import com.black.base.api.PairApiServiceHelper
+import com.black.base.api.UserApiServiceHelper
+import com.black.base.api.WalletApiService
+import com.black.base.api.WalletApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.Money
-import com.black.base.model.NormalCallback
+import com.black.base.manager.ApiManager
+import com.black.base.model.*
 import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
-import com.black.base.model.wallet.CoinInfo
-import com.black.base.model.wallet.CoinInfoType
-import com.black.base.model.wallet.Wallet
+import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
@@ -261,8 +261,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
                     .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
                     .go(mContext)
-            R.id.rel_support ->
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+            R.id.rel_support -> {
+                getSupportUrl()
+            }
             R.id.rel_futures ->
                 BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -277,10 +278,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
             }*/
             R.id.cv_staking -> {
-                val bundle = Bundle()
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+               /* val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
                 bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
-                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(this)
+                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)*/
             }
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
@@ -464,6 +466,29 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         )
     }
 
+    private fun getSupportUrl(){
+        UserApiServiceHelper.getSupportUrl(mContext, object : NormalCallback<HttpRequestResultData<String?>?>(mContext!!) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val url = returnData.data
+                    val bundle = Bundle()
+                    bundle.putString(
+                        ConstData.TITLE,
+                        getString(com.black.user.R.string.support)
+                    )
+                    bundle.putString(ConstData.URL, url)
+                    BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+                } else {
+
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
         var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" }

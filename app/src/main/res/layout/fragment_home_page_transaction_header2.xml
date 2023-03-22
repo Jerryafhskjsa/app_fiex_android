@@ -17,35 +17,70 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.black.base.widget.SpanTextView
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/open_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/entrust_current"
-                    android:textColor="@color/black_real"
+                    android:textColor="@color/c2c_tab_buy"
                     android:textSize="@dimen/text_size_13"
                     android:textStyle="bold" />
 
                 <View
+                    android:id="@+id/bar_a"
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/trans_bg_entrust_title_line"></View>
+                    android:background="@drawable/trans_bg_entrust_title_line">
+
+                </View>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_size_10"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/assets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_tab_asset"
+                    android:textColor="@color/c2c_tab_buy"
+                    android:textSize="@dimen/text_size_13"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/bar_b"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/trans_bg_entrust_title_line">
+                </View>
+            </LinearLayout>
             </LinearLayout>
 
-            <com.black.base.widget.SpanTextView
+            <ImageView
                 android:id="@+id/total_current"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/text_size_15"
                 android:layout_alignParentRight="true"
-                android:text="@string/trade_history"
-                android:textColor="@color/T13"
-                android:textSize="@dimen/text_size_13" />
+                android:src="@drawable/icon_promotions_record" />
         </RelativeLayout>
 
         <RelativeLayout

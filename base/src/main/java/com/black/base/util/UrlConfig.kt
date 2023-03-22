@@ -69,6 +69,10 @@ object UrlConfig {
         return  "http://financial.abexxx.net/financing?from=app"
     }
 
+    fun getSupportsUrl(mContext: Context): String {
+        return  "https://support.fiex.io/hc"
+    }
+
     fun getFactionRuleUrl(mContext: Context): String {
         return getHost(mContext) + "/pages/league_info/"
     }
@@ -240,6 +244,9 @@ object UrlConfig {
 
         //检查是否可以进入主聊天室
         const val URL_CHECK_MAIN_CHAT_ENABLE = "user/main/chat/check"
+
+        //检查是否可以进入主聊天室
+        const val URL_SUPPORT = "telegram/url"
 
         //同意杠杆交易协议
         const val URL_AGREE_LEVER_PROTOCOL = "user/openlever/update"

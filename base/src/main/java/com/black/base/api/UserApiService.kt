@@ -12,7 +12,7 @@ interface UserApiService {
     //get jsessionId
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_TOKEN)
-    fun getToken(@Field("telCountryCode") telCountryCode: String?, @Field("username") username: String?, @Field("password") password: String?): Observable<HttpRequestResultString?>?
+    fun getToken(@Field("telCountryCode") telCountryCode: String?, @Field("username") username: String?, @Field("password") password: String?): Observable<HttpRequestResultData<SuffixResult?>?>?
 
     @POST(UrlConfig.User.URL_TICKET)
     fun getTicket(): Observable<HttpRequestResultString?>?
@@ -146,6 +146,9 @@ interface UserApiService {
 
     @GET(UrlConfig.User.URL_CHECK_MAIN_CHAT_ENABLE)
     fun checkMainChatEnable(): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.User.URL_SUPPORT)
+    fun getSupportUrl(): Observable<HttpRequestResultData<String?>?>?
 
     @FormUrlEncoded
     @POST(UrlConfig.User.URL_AGREE_LEVER_PROTOCOL)

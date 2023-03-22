@@ -160,7 +160,7 @@ class AccountManagerActivity : BaseActionBarActivity(), View.OnClickListener {
         showLoading()
         ApiManager.build(this, true).getService(UserApiService::class.java)
                 ?.getToken(user.userName, user.password, user.telCountryCode)
-                ?.materialize()
+                /*?.materialize()
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.flatMap(object : RequestFunction<HttpRequestResultString?, RequestObserveResult<HttpRequestResultString?>>() {
@@ -233,7 +233,9 @@ class AccountManagerActivity : BaseActionBarActivity(), View.OnClickListener {
                     }
                 })
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : NormalObserver2<HttpRequestResultString?>(this) {
+                ?.subscribe*/
+                (object : NormalObserver2<HttpRequestResultString?>(this) {
+
                     override fun afterRequest() {
                         hideLoading()
                     }

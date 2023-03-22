@@ -62,17 +62,17 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         }
         if (isVisibility) {
             viewHolder?.totalCny?.setText(
-                if (wallet?.totalAmount == null) getString(
+                if (wallet?.estimatedAvailableAmount == null) getString(
                     R.string.number_default
                 ) else if (exChange == 0) "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.totalAmount * rates!!,
+                    wallet.estimatedAvailableAmountCny!! * rates!!,
                     10,
                     2,
                     2
                 ) else {
                     rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                     "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
-                    wallet.totalAmount * rates!!,
+                    wallet.estimatedAvailableAmountCny!! * rates!!,
                     10,
                     2,
                     2
@@ -83,11 +83,10 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
             viewHolder?.totalCny?.setText("****")
         }
         if (wallet?.coinIconUrl != null) {
-            var requestOptions = RequestOptions
+            val requestOptions = RequestOptions
                 .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
-
             Glide.with(context)
-                .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet?.coinIconUrl)))
+                .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet.coinIconUrl)))
                 .apply(requestOptions)
                 .into(viewHolder?.iconCoin!!)
         }
