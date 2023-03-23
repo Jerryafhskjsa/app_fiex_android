@@ -258,7 +258,7 @@ class IMChatRoomInfoActivity : BaseActionBarActivity(), View.OnClickListener, QR
             binding?.groupNickNameLayout?.isEnabled = false
             binding?.btnExit?.visibility = View.GONE
         } else {
-            binding?.groupNickName?.text = if (TextUtils.isEmpty(selfInfo.nameCard)) "未填写" else selfInfo.nameCard
+            binding?.groupNickName?.text = if (TextUtils.isEmpty(selfInfo.nameCard)) getString(R.string.not_filled_in) else selfInfo.nameCard
             binding?.groupNickNameLayout?.isEnabled = true
             if (selfInfo.role == TIMGroupMemberRoleType.ROLE_TYPE_ADMIN || selfInfo.role == TIMGroupMemberRoleType.ROLE_TYPE_NORMAL) {
                 binding?.btnExit?.visibility = View.VISIBLE
@@ -270,8 +270,8 @@ class IMChatRoomInfoActivity : BaseActionBarActivity(), View.OnClickListener, QR
 
     private fun showGroupInfo(groupInfo: GroupInfo) {
         binding?.groupName?.text = if (groupInfo.groupName == null) "" else groupInfo.groupName
-        binding?.groupIntroduction?.text = if (TextUtils.isEmpty(groupInfo.introduction)) "未填写" else groupInfo.introduction
-        binding?.groupNotice?.text = if (TextUtils.isEmpty(groupInfo.notice)) "未填写" else groupInfo.notice
+        binding?.groupIntroduction?.text = if (TextUtils.isEmpty(groupInfo.introduction)) getString(R.string.not_filled_in) else groupInfo.introduction
+        binding?.groupNotice?.text = if (TextUtils.isEmpty(groupInfo.notice)) getString(R.string.not_filled_in) else groupInfo.notice
         val ownerInfo = groupInfo.ownerInfo
         val ownerTIMInfo = ownerInfo?.detail
         if (ownerTIMInfo != null) {

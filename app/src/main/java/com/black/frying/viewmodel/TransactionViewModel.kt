@@ -458,7 +458,7 @@ class TransactionViewModel(
     }
 
     fun setCurrentPairorderType(type: String?) {
-        currentOrderType = type
+       currentOrderType = type
     }
 
     fun getCurrentPairStatus(pair: String?) {

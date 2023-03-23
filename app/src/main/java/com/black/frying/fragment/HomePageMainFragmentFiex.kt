@@ -3,6 +3,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -475,13 +476,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             override fun callback(returnData: HttpRequestResultData<String?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val url = returnData.data
-                    val bundle = Bundle()
+                    val intent = Intent(Intent.ACTION_VIEW , Uri.parse(url))
+                    startActivity(intent)
+                    /*val bundle = Bundle()
                     bundle.putString(
                         ConstData.TITLE,
                         getString(com.black.user.R.string.support)
                     )
                     bundle.putString(ConstData.URL, url)
-                    BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+                    BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)*/
                 } else {
 
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)

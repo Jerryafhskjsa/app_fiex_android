@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/double_padding"
                         android:layout_marginRight="@dimen/double_padding"
-                        android:hint="请输入昵称"
+                        android:hint="@string/put_nick_name"
                         android:imeOptions="actionSearch" />
 
                     <com.black.base.widget.SpanTextView

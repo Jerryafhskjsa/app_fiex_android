@@ -94,7 +94,7 @@
                         android:id="@+id/total_profit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="总权益(usdt)"
+                        android:text="@string/total_equity"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_12" />
 
@@ -126,7 +126,7 @@
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="资金费率/结算时间"
+                    android:text="@string/fond_time"
                     android:textColor="@color/T11_ALPHA60"
                     android:textSize="@dimen/text_size_12">
 

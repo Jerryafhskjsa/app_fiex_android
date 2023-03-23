@@ -23,6 +23,8 @@
     <string name="sale">卖出</string>
     <string name="image">头像</string>
     <string name="nick_name">昵称</string>
+    <string name="total_equity">总权益(usdt)</string>
+    <string name="put_nick_name">请输入昵称</string>
     <string name="not_filled_in">未填写</string>
     <string name="price">价格</string>
     <string name="amount">数量</string>
@@ -125,6 +127,7 @@
     <string name="input_phone_code_veifily">请新手机短信验证码！</string>
     <string name="deep">深度</string>
     <string name="direction">方向</string>
+    <string name="fond_time">资金费率/结算时间</string>
     <string name="cny_maybe">≈</string>
     <string name="consult">在线客服</string>
     <string name="forget_gesture_password">忘记手势密码</string>
@@ -133,7 +136,7 @@
     <string name="friend">朋友圈</string>
     <string name="list_view_empty_default">暂无记录</string>
     <string name="list_view_empty_pay">暂无收款记录</string>
-    <string name="invite_code_hint">邀请码（选填）</string>
+    <string name="invite_code_hint">邀请码（必填）</string>
     <string name="safe_mail_check">开启邮箱认证</string>
     <string name="safe_bind_check">开启安全认证</string>
     <string name="jump">跳过</string>
@@ -195,6 +198,10 @@
     <string name="can_not_withdraw">账号状态更改,暂不可提现，请联系客服</string>
     <string name="withdraw_must_bind_mail">为了您的安全，请在绑定邮箱或者Google验证后进行提现</string>
     <string name="withdraw_must_bind_phone">为了您的安全，请在绑定手机或者Google验证后进行提现</string>
+    <string name="bind_mine">是否前往安全中心中心进行验证</string>
+    <string name="get_support">是否跳转客服获取邀请码</string>
+    <string name="primary">初级认证</string>
+    <string name="ti_shi_2">提示</string>
     <string name="withdraw_must_money_password">请设置资金密码</string>
     <string name="can_not_withdraw_02">该币暂不支持提币</string>
     <string name="deal">成交</string>
@@ -320,6 +327,7 @@
     <string name="id_pay">支付宝</string>
     <string name="cards">银行卡</string>
     <string name="wei_xin">微信</string>
+    <string name="change_nickName">修改昵称</string>
     <string name="order_generated">订单已生成</string>
     <string name="order_canceled">订单已取消</string>
     <string name="time_between">请在内付款给卖家</string>
@@ -524,7 +532,7 @@
     <string name="price_unit">计价单位</string>
     <string name="coin_choose">币种选择</string>
     <string name="coin_search_failed">币种查找失败！</string>
-    <string name="add_address">添加%s地址</string>
+    <string name="add_address">添加地址</string>
     <string name="coin_type_recharge">充币币种</string>
     <string name="coin_type_extract">提币币种</string>
     <string name="recharge_address">充币地址</string>

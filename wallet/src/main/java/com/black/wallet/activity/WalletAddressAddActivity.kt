@@ -65,7 +65,7 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
         }
         checkClickable()
         if(coinAddress != null){
-           binding!!.remark?.setText(coinAddress?.name)
+           binding!!.remark.setText(coinAddress?.name)
            binding?.extractAddress?.setText(coinAddress?.coinWallet)
            binding?.memo?.setText(coinAddress?.memo)
         }
@@ -76,7 +76,7 @@ class WalletAddressAddActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun getTitleText(): String? {
-        return getString(R.string.add_address, coinType ?: "")
+        return getString(R.string.add_address)
     }
 
     override fun onClick(v: View) {

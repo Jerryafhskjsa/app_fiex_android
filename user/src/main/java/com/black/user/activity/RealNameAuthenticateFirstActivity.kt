@@ -66,7 +66,7 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
             override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {
                 chooseWindow.dismiss()
                 thisCountry = countryCode
-                binding?.country?.setText(countryCode?.zh)
+                binding?.country?.setText(countryCode?.en)
                 binding?.country?.tag = countryCode
                 checkClickable()
             }

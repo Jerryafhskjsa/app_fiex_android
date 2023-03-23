@@ -151,7 +151,7 @@ class CountryChooseWindow(private val activity: Activity, private val type: Int,
             result.addAll(dataSource)
         } else {
             for (countryCode in dataSource) {
-                if (countryCode?.zh != null && true == countryCode.zh?.contains(key) || countryCode?.en != null && true == countryCode.en?.contains(key)) {
+                if (countryCode?.en != null && true == countryCode.en?.contains(key)) {
                     result.add(countryCode)
                 }
             }

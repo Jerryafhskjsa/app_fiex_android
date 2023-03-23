@@ -152,7 +152,7 @@
                                 android:layout_toRightOf="@+id/icon_verify"
                                 android:paddingLeft="5dp"
                                 android:paddingRight="@dimen/default_padding"
-                                android:text="初级认证"
+                                android:text="@string/primary"
                                 android:textColor="@color/T4"
                                 android:textSize="@dimen/text_size_10" />
                         </RelativeLayout>

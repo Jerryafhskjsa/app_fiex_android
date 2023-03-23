@@ -120,7 +120,7 @@
                                 android:drawableRight="@drawable/icon_left"
                                 android:drawablePadding="6dp"
                                 android:gravity="right"
-                                android:hint="未填写"
+                                android:hint="@string/not_filled_in"
                                 android:textColor="@color/T1"
                                 android:textColorHint="@color/T2"
                                 android:textSize="@dimen/text_size_16" />

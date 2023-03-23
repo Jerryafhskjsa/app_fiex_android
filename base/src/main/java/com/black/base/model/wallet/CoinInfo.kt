@@ -15,6 +15,7 @@ class CoinInfo : Parcelable {
     var maxWithdrawSingle: Double? = null
     var maxWithdrawOneDay: Double? = null
     var withdrawFee: Double? = null
+    var withdrawFeeRate: Double? = null
     var minimumTradeAmount: Double? = null
     var minimumDepositAmount: Double? = null
     var blockConfirm: String? = null

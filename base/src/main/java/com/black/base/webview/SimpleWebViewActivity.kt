@@ -70,7 +70,7 @@ class SimpleWebViewActivity : BaseActionBarActivity() {
         webView?.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY)
         synchronousWebCookies(this, url, webViewCookie)
         webView?.addJavascriptInterface(SimpleJavaScriptInterface(this), "frying_add")
-        webView?.webViewClient = SimpleWebViewClient(this)
+        //webView?.webViewClient = SimpleWebViewClient(this)
         //设置响应js 的Alert()函数
         webView?.webChromeClient = SimpleWebChromeClient(this)
         webView?.loadUrl(if (url == null) "" else url)

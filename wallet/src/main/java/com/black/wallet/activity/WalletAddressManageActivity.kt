@@ -111,7 +111,7 @@ class WalletAddressManageActivity : BaseActivity(), View.OnClickListener,
             bundle.putString(ConstData.COIN_CHAIN, coinChain)
             bundle.putParcelable(ConstData.COIN_INFO, coinInfo)
             BlackRouter.getInstance().build(RouterConstData.WALLET_ADDRESS_ADD).with(bundle)
-                .withRequestCode(ConstData.WALLET_ADDRESS_ADD).go(this)
+                .withRequestCode(ConstData.WALLET_ADDRESS_ADD).go(mContext)
         }
     }
 

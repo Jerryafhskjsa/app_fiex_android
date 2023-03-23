@@ -55,14 +55,14 @@ class NickNameChangeActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     override fun getTitleText(): String {
-        return "修改昵称"
+        return getString(R.string.change_nickName)
     }
 
     override fun onClick(v: View) {
         if (v.id == R.id.btn_modify) {
             val nickName = binding?.nickName?.text.toString()
             if (TextUtils.isEmpty(nickName)) {
-                FryingUtil.showToast(this, "请输入昵称")
+                FryingUtil.showToast(this, getString(R.string.put_nick_name))
             } else {
                 val userIdHeader = IMHelper.getUserIdHeader(mContext)
                 IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {

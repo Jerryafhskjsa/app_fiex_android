@@ -46,7 +46,7 @@ class CountryCode : BaseAdapterItem, Parcelable {
     }
 
     val display: String
-        get() = (if (zh == null) "" else zh) + "  " + if (en == null) "" else en
+        get() = if (en == null) "" else en!!
 
     override fun describeContents(): Int {
         return 0
@@ -72,7 +72,7 @@ class CountryCode : BaseAdapterItem, Parcelable {
         }
         @JvmField
         val CREATOR: Parcelable.Creator<CountryCode?> = object : Parcelable.Creator<CountryCode?> {
-            override fun createFromParcel(`in`: Parcel): CountryCode? {
+            override fun createFromParcel(`in`: Parcel): CountryCode {
                 return CountryCode(`in`)
             }
 

@@ -23,6 +23,8 @@
     <string name="sale">Sell</string>
     <string name="image">Image</string>
     <string name="nick_name">NickName</string>
+    <string name="total_equity">Total equity(usdt)</string>
+    <string name="put_nick_name">Please put nick name</string>
     <string name="not_filled_in">Not filled in</string>
     <string name="price">Price</string>
     <string name="amount">Quantity</string>
@@ -125,6 +127,7 @@
     <string name="input_phone_code_veifily">Please create a new SMS verification code</string>
     <string name="deep">Depth</string>
     <string name="direction">Direction</string>
+    <string name="fond_time"> Fund rate/settlement time</string>
     <string name="cny_maybe">≈</string>
     <string name="consult">Online customer service</string>
     <string name="forget_gesture_password">Forgot the gesture password</string>
@@ -133,7 +136,7 @@
     <string name="friend">Circle of Friends</string>
     <string name="list_view_empty_default">No record at present</string>
     <string name="list_view_empty_pay">No collection record</string>
-    <string name="invite_code_hint">Invitation code (optional)</string>
+    <string name="invite_code_hint">Invitation code (Required)</string>
     <string name="safe_mail_check">Enable mailbox authentication</string>
     <string name="safe_bind_check">Enable security authentication</string>
     <string name="jump">Skip</string>
@@ -195,6 +198,10 @@
     <string name="can_not_withdraw">The account status has changed and the withdrawal is not available. Please contact customer service</string>
     <string name="withdraw_must_bind_mail">For your security, please withdraw cash after binding your mailbox or Google verification</string>
     <string name="withdraw_must_bind_phone">For your safety, please withdraw cash after binding your mobile phone or Google verification</string>
+    <string name="bind_mine">Whether to go to safe center for verification</string>
+    <string name="get_support">Whether to jump to customer service to obtain the invitation code</string>
+    <string name="primary">Primary Certification</string>
+    <string name="ti_shi_2">Point out </string>
     <string name="withdraw_must_money_password">Please set the fund password</string>
     <string name="can_not_withdraw_02">The currency does not support withdrawal at present</string>
     <string name="deal">Closing</string>
@@ -320,6 +327,7 @@
     <string name="id_pay">Id pay</string>
     <string name="cards">Cards</string>
     <string name="wei_xin">Wei xin</string>
+    <string name="change_nickName">Change nickName</string>
     <string name="order_generated">Order generated</string>
     <string name="order_canceled">Order canceled</string>
     <string name="time_between">Please pay the seller within %s</string>
@@ -524,7 +532,7 @@
     <string name="price_unit">Pricing unit</string>
     <string name="coin_choose">Currency Selection</string>
     <string name="coin_search_failed">Failed to find currency</string>
-    <string name="add_address">Add% s address</string>
+    <string name="add_address">Add address</string>
     <string name="coin_type_recharge">Currency Recharge</string>
     <string name="coin_type_extract">Withdrawal currency</string>
     <string name="recharge_address">Charge address</string>

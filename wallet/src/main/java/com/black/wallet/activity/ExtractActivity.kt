@@ -1,13 +1,14 @@
 package com.black.wallet.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.View
+import android.view.*
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
@@ -21,6 +22,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
+import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.*
 import com.black.base.net.NormalObserver
 import com.black.base.util.*
@@ -44,6 +46,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     protected var wallet: Wallet? = null
     protected var coinType: String? = null
     protected var coinInfo: CoinInfoType? = null
+    private var userInfo: UserInfo? = null
     private var coinInfoReal: CoinInfo? = null
     private var coinChain:String? = null
     private var chainNames:ArrayList<String>? = null
@@ -60,7 +63,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         coinType = wallet?.coinType
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_extract)
-        var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
+        val actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
         binding?.chooseCoinLayout?.setOnClickListener(this)
@@ -72,8 +75,12 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         binding?.extractCount?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val amount = CommonUtil.parseDouble(binding?.extractCount?.text.toString().trim { it <= ' ' })
-                binding?.arriveCount?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount < coinInfoReal?.withdrawFee!!) getString(R.string.actual_receive_amount,"0.0")  else getString(R.string.actual_receive_amount,NumberUtil.formatNumberNoGroup(amount - coinInfoReal?.withdrawFee!!))
+                var amount = CommonUtil.parseDouble(binding?.extractCount?.text.toString().trim { it <= ' ' })
+                if (amount == null)
+                    amount = 0.0
+                binding?.arriveCount?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount < coinInfoReal?.withdrawFee!!) getString(R.string.actual_receive_amount,"0.0")  else getString(R.string.actual_receive_amount,NumberUtil.formatNumberNoGroup(amount - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount))
+                binding?.poundage?.setText(getString(R.string.fee_amount,String.format("%s %s", NumberUtil.formatNumberNoGroup(coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount,4,8), coinType)))
+
             }
             override fun afterTextChanged(s: Editable) {}
         })
@@ -84,6 +91,19 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         if (wallet != null) {
             selectCoin(wallet)
         }
+        userInfo = CookieUtil.getUserInfo(mContext)
+        if (userInfo == null) {
+            return
+        }
+        if (TextUtils.equals(userInfo?.phoneSecurityStatus, "0") &&  TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
+            FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_phone))
+            getDialog()
+        }
+        if (TextUtils.equals(userInfo?.emailSecurityStatus, "0") && TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
+            FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_mail))
+            getDialog()
+        }
+       
     }
 
     override fun onResume() {
@@ -101,7 +121,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
     private fun showChainChooseDialog(){
         if(coinChain != null && chainNames!!.size >0){
-            var chooseWalletDialog =  ChooseWalletControllerWindow(mContext as Activity,
+            val chooseWalletDialog =  ChooseWalletControllerWindow(mContext as Activity,
                 getString(R.string.get_chain_name),
                 coinChain,
                 chainNames,
@@ -197,7 +217,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
                 ConstData.WALLET_ADDRESS_MANAGE ->{
-                    var address:String? = data?.getStringExtra(ConstData.COIN_ADDRESS)
+                    val address:String? = data?.getStringExtra(ConstData.COIN_ADDRESS)
                     binding?.extractAddress?.setText(address)
                 }
             }
@@ -271,10 +291,11 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 } else if (TextUtils.equals("7", authType)) {
                     type = VerifyType.PHONE or VerifyType.MAIL or VerifyType.GOOGLE
                 } else {
-                    FryingUtil.showToast(mContext, "为了您的安全，请在绑定邮箱、手机或者Google验证后进行提现")
+                    getDialog()
                     return
                 }
                 if (type == VerifyType.NONE) {
+                    getDialog()
                     FryingUtil.showToast(mContext, getString(R.string.withdraw_error_level_low))
                     return
                 }
@@ -304,6 +325,34 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
     }
 
+    private fun getDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.withdraw_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER).go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
 
     private fun selectCoin(wallet: Wallet?) {
         this.wallet = wallet
@@ -381,7 +430,6 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             binding?.extractCount?.hint = getString(R.string.extract_single,
                     NumberUtil.formatNumberNoGroup(coinInfoReal?.minWithdrawSingle, 2, 15),
                     NumberUtil.formatNumberNoGroup(coinInfoReal?.maxWithdrawSingle, 2, 15))
-            binding?.poundage?.setText(getString(R.string.fee_amount,String.format("%s %s", NumberUtil.formatNumberNoGroup(coinInfoReal?.withdrawFee), coinType)))
             binding?.arriveCount?.text = String.format("0.00 %s", coinType)
         } else {
             binding?.extractAddress?.setText(R.string.extract_not_support)

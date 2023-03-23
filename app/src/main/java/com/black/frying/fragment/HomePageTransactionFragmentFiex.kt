@@ -334,6 +334,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 inputNumber = true
                 computeTotal()
+                computePriceCNY()
                 refreshSubmitButton()
                 val count = CommonUtil.parseDouble(
                     binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
@@ -344,8 +345,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         if(max.compareTo(BigDecimal(0.00)) == 0){
                             return
                         }
-                        var countB = count?.let { BigDecimal(it) }
-                        var progress = (countB?.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
+                        val countB = count.let { BigDecimal(it) }
+                        val progress = (countB.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
                             BigDecimal(100)
                         )
                         binding!!.fragmentHomePageTransactionHeader1.countBar.progress =
@@ -392,7 +393,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.show_all_checkbox -> {
-                var checkBox: CheckBox = v as CheckBox
+                val checkBox: CheckBox = v as CheckBox
                 Log.d("sss--->", checkBox.isChecked.toString())
                 isShowAll = checkBox.isChecked
                 getTradeOrderCurrent()
@@ -913,12 +914,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //计算总额
     private fun computeTotal() {
-        val price = CommonUtil.parseDouble(
+        var price = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
         val count = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
                 .trim { it <= ' ' })
         if (price != null) {
+            price *= 0.99
             if (count != null && (count != 0.0)) {
                 if (currentOrderType.equals("LIMIT")) {
                     binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
@@ -969,7 +971,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     if (price != null && count != null) {
                         binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
                             NumberUtil.formatNumberNoGroup(
-                                price * count!!,
+                                price * count,
                                 RoundingMode.FLOOR,
                                 viewModel!!.getAmountLength(),
                                 viewModel!!.getAmountLength()
@@ -1060,16 +1062,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         when (type) {
             "MARKET" -> {
                 typeDes = getString(R.string.order_type_market)
-                binding!!.fragmentHomePageTransactionHeader1?.linPrice.visibility = View.GONE
-                binding!!.fragmentHomePageTransactionHeader1?.linPrinceCny.visibility = View.GONE
+                binding!!.fragmentHomePageTransactionHeader1.linPrice.visibility = View.GONE
+                binding!!.fragmentHomePageTransactionHeader1.linPrinceCny.visibility = View.GONE
             }
             "LIMIT" -> {
                 typeDes = getString(R.string.order_type_limit)
-                binding!!.fragmentHomePageTransactionHeader1?.linPrice.visibility = View.VISIBLE
-                binding!!.fragmentHomePageTransactionHeader1?.linPrinceCny.visibility = View.VISIBLE
+                binding!!.fragmentHomePageTransactionHeader1.linPrice.visibility = View.VISIBLE
+                binding!!.fragmentHomePageTransactionHeader1.linPrinceCny.visibility = View.VISIBLE
             }
         }
-        binding!!.fragmentHomePageTransactionHeader1?.orderType.text = typeDes
+        binding!!.fragmentHomePageTransactionHeader1.orderType.text = typeDes
     }
 
     private fun refreshSubmitButton() {

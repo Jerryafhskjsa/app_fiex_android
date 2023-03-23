@@ -1,22 +1,21 @@
 package com.black.user.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.View
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
-import com.black.base.model.CountryCode
-import com.black.base.model.HttpRequestResultDataList
-import com.black.base.model.HttpRequestResultString
-import com.black.base.model.NormalCallback
+import com.black.base.model.*
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -59,7 +58,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
-        binding?.countryCode?.tag = "86"
+        binding?.countryCode?.tag = "61"
         binding?.countryCode?.setOnClickListener(this)
         binding?.phoneAccount?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
@@ -81,7 +80,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
         if (thisCountry == null) {
             thisCountry = CountryCode()
-            thisCountry?.code = "86"
+            thisCountry?.code = "61"
         }
         chooseWindow = CountryChooseWindow(this, thisCountry, object : OnCountryChooseListener {
             override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {
@@ -193,6 +192,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                     ?: false)
                     || TextUtils.isEmpty(binding?.phoneAccount?.text.toString().trim { it <= ' ' })
                     || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' }))
+
             ConstData.AUTHENTICATE_TYPE_MAIL -> binding?.btnRegister?.isEnabled = !(!(binding?.registerAgreementCheck?.isChecked
                     ?: false)
                     || TextUtils.isEmpty(binding?.mailAccount?.text.toString().trim { it <= ' ' })
@@ -316,9 +316,12 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
             return
         }
-        if (password.length < 8) {
+        /*if (password.length < 8) {
             FryingUtil.showToast(mContext, getString(R.string.alert_password_too_short))
             return
+        }*/
+        if (TextUtils.isEmpty(binding?.phoneInviteCode?.text.toString().trim { it <= ' ' })) {
+            getDialog()
         }
         //        if (TextUtils.isDigitsOnly(password)) {
 //            FryingUtil.showToast(mContext, getString(R.string.alert_password_all_number))
@@ -364,10 +367,13 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_password))
             return
         }
-        if (password.length < 8) {
+        if (TextUtils.isEmpty(binding?.phoneInviteCode?.text.toString().trim { it <= ' ' })) {
+            getDialog()
+        }
+        /*if (password.length < 8) {
             FryingUtil.showToast(mContext, getString(R.string.alert_password_too_short))
             return
-        }
+        }*/
         //        if (TextUtils.isDigitsOnly(password)) {
 //            FryingUtil.showToast(mContext, getString(R.string.alert_password_all_number))
 //            return
@@ -384,6 +390,61 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
                     FryingUtil.showToast(mContext, getString(R.string.alert_registrer_success))
                     onRegisterSuccess(userName)
                 } else {
+                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                }
+            }
+        })
+    }
+
+
+    private fun getDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.support_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            getUrl()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+    }
+
+    private fun getUrl(){
+        UserApiServiceHelper.getSupportUrl(mContext, object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
+            override fun error(type: Int, error: Any?) {
+                super.error(type, error)
+            }
+
+            override fun callback(returnData: HttpRequestResultData<String?>?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    val url = returnData.data
+                    val intent = Intent(Intent.ACTION_VIEW , Uri.parse(url))
+                    startActivity(intent)
+                    /*val bundle = Bundle()
+                    bundle.putString(
+                        ConstData.TITLE,
+                        getString(com.black.user.R.string.support)
+                    )
+                    bundle.putString(ConstData.URL, url)
+                    BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)*/
+                } else {
+
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
