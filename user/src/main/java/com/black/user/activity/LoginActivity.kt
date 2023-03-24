@@ -431,7 +431,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
      * 获取listen-key
      */
     private fun getListenKey(context: Context) {
-        FutureApiServiceHelper.getListenKey(context!!, false,
+        FutureApiServiceHelper.getListenKey(context, false,
             object : Callback<HttpRequestResultBean<String>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->getListenKey", error.toString());

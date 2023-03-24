@@ -417,9 +417,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     leverDetail?.run {
                         AlertMessageDialog(
                             mContext!!,
-                            "爆仓说明",
+                            getString(R.string.bao),
                             String.format(
-                                "当前风险率达到%s%%时，系统将强制回收您当前账户内的所有借贷资产。",
+                                getString(R.string.feng_xian),
                                 NumberUtil.formatNumberNoGroupHardScale(
                                     leverDetail?.burstRate!! * BigDecimal(100), 2
                                 )
@@ -467,6 +467,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 }
             }
             R.id.lin_order_type -> {
+                currentOrderType = binding!!.fragmentHomePageTransactionHeader1.orderType.text.toString()
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentOrderType,

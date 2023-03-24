@@ -452,6 +452,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         if(userInfo != null){
             refreshUserViews()
         }else{
+            binding?.btnLoginOut?.visibility = View.GONE
             reloadUserInfo()
         }
         fryingHelper.onResume()

@@ -50,8 +50,12 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         wallet = intent.getParcelableExtra(ConstData.WALLET)
-        coinType = wallet?.coinType
-
+        if (coinType == null){
+            coinType = "USDT"
+        }
+        else {
+            coinType = wallet?.coinType
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recharge)
 
         var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)

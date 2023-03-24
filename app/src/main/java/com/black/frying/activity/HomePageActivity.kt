@@ -101,6 +101,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                 tabHost?.tabWidget?.requestFocus(View.FOCUS_FORWARD)
             }
         }
+        //
         PairStatusPopupWindow.reset()
         val routeFragmentIndex = intent.getIntExtra("routeFragmentIndex", -1)
         if (routeFragmentIndex != -1) {

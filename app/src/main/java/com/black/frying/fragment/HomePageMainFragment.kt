@@ -217,7 +217,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
                     val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()
-                        bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+                        bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_REGULAR)
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
                         BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
                     }

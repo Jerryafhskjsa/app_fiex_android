@@ -1,6 +1,7 @@
 package com.black.frying.fragment
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -12,9 +13,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Pair
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.CheckedTextView
 import android.widget.SeekBar
@@ -58,6 +57,7 @@ import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -121,7 +121,7 @@ class HomePageContractFragment : BaseFragment(),
     private var currentTimeInForceType: String? = "GTC"
     private var inputNumber: Boolean? = false//是否手动输入数量
     private var isDear: Boolean? = null
-
+    private var token: String? = null
     private var recordViewPager: AutoHeightViewPager? = null
     private var recordTab: TabLayout? = null
     private var headerView: FragmentHomePageContractHeaderBinding? = null
@@ -213,6 +213,10 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         }
+        token = HttpCookieUtil.getProToken(mContext as HomePageActivity)
+        if (token == null && CookieUtil.getUserInfo(mContext as HomePageActivity) != null){
+            openDialog()
+        }
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -248,6 +252,191 @@ class HomePageContractFragment : BaseFragment(),
         return layout
     }
 
+    private fun openDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+           getFutrueOpen()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+
+    private fun getFutrueOpen(){
+        FutureApiServiceHelper.openAccount(
+            context, false,
+            object : Callback<HttpRequestResultBean<String?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultBean<String?>?) {
+                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                       FryingUtil.showToast(context,getString(R.string.future_success))
+                        //oneDialog()
+                    }
+                }
+
+            })
+    }
+
+    private fun oneDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+            twoDialog()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun twoDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+           threeDialog()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun threeDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+            fourDialog()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun fourDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+            fiveDialog()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun fiveDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+            getFutrueOpen()
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+    }
     private fun initAdjustLeverageData() {
         buyMultiChooseBean = ContractMultiChooseBean()
         buyMultiChooseBean?.maxMultiple = 100
@@ -283,6 +472,7 @@ class HomePageContractFragment : BaseFragment(),
         initAdjustLeverageData()
         updateDear(isDear)
         FutureService.getContractSize(viewModel?.getCurrentPair())
+        header1View?.currentPriceLayout?.setOnClickListener(this)
         if (header1View?.tagPrice?.text.toString().isNotEmpty()) {
 //            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
         }
@@ -290,6 +480,7 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1.notLoginLayout.visibility = View.VISIBLE
             binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.GONE
             binding!!.fragmentHomePageContractHeader1.notLoginBtn.setOnClickListener(this)
+
 
         } else {
             binding!!.fragmentHomePageContractHeader1.loginStatus.visibility = View.VISIBLE
@@ -371,6 +562,7 @@ class HomePageContractFragment : BaseFragment(),
         headerView = binding?.fragmentHomePageContractHeader
         headerView?.linBuyMultiple?.setOnClickListener(this)
         headerView?.linSellMultiple?.setOnClickListener(this)
+
     }
 
     //开仓平仓
@@ -665,7 +857,7 @@ class HomePageContractFragment : BaseFragment(),
         } else {
             getString(R.string.contract_down)
         }
-        des = typeDes + multiDes + orientationDes
+        des = "$typeDes $multiDes $orientationDes"
         return des
     }
 
@@ -694,14 +886,27 @@ class HomePageContractFragment : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.current_price_layout -> {
+                Currentdialog()
+            }
             R.id.not_login_btn -> {
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }
             R.id.lin_buy_multiple -> {
-                showOrientationMultipleDialog(buyMultiChooseBean)
+                if (CookieUtil.getUserInfo(context!!) == null) {
+                    //未登录，请求登陆
+                    fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
+                } else {
+                    showOrientationMultipleDialog(buyMultiChooseBean)
+                }
             }
             R.id.lin_sell_multiple -> {
-                showOrientationMultipleDialog(sellMultiChooseBean)
+                if (CookieUtil.getUserInfo(context!!) == null) {
+                    //未登录，请求登陆
+                    fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
+                } else {
+                    showOrientationMultipleDialog(sellMultiChooseBean)
+                }
             }
             R.id.tab_transaction_coin -> {
                 if (tabType != ConstData.TAB_COIN) {
@@ -717,9 +922,9 @@ class HomePageContractFragment : BaseFragment(),
                     leverDetail?.run {
                         AlertMessageDialog(
                             mContext!!,
-                            "爆仓说明",
+                            getString(R.string.bao),
                             String.format(
-                                "当前风险率达到%s%%时，系统将强制回收您当前账户内的所有借贷资产。",
+                               getString(R.string.feng_xian),
                                 NumberUtil.formatNumberNoGroupHardScale(
                                     leverDetail?.burstRate!! * BigDecimal(100), 2
                                 )
@@ -757,6 +962,7 @@ class HomePageContractFragment : BaseFragment(),
             }
 
             R.id.lin_order_type -> {
+                currentOrderType =  binding!!.fragmentHomePageContractHeader1.orderType.text.toString()
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentOrderType,
@@ -772,12 +978,12 @@ class HomePageContractFragment : BaseFragment(),
                             if (currentOrderType.equals("LIMIT")) {
 //                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                             } else if (currentOrderType.equals("MARKET")) {
-//                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.GONE
                             }
                         }
                     }).show()
             }
             R.id.lin_unit_type -> {
+                currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentUnitType,
@@ -797,6 +1003,7 @@ class HomePageContractFragment : BaseFragment(),
                     }).show()
             }
             R.id.lin_limit_type -> {
+                binding!!.fragmentHomePageContractHeader1.withLimitType.text.toString()
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentTimeInForceType,
@@ -983,6 +1190,31 @@ class HomePageContractFragment : BaseFragment(),
                     createOrderFuture(positionSide!!, orderSide!!)
                 }
             }
+        }
+    }
+
+    private fun Currentdialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.current_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
         }
     }
 
@@ -1376,11 +1608,13 @@ class HomePageContractFragment : BaseFragment(),
                 typeDes = getString(R.string.order_type_market)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.GONE
                 binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.GONE
             }
             "LIMIT" -> {
                 typeDes = getString(R.string.order_type_limit)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
                 binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.VISIBLE
             }
         }
         binding!!.fragmentHomePageContractHeader1.orderType.text = typeDes

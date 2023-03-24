@@ -23,7 +23,7 @@
     <string name="sale">卖出</string>
     <string name="image">头像</string>
     <string name="nick_name">昵称</string>
-    <string name="total_equity">总权益(usdt)</string>
+    <string name="total_equity">总权益(USDT)</string>
     <string name="put_nick_name">请输入昵称</string>
     <string name="not_filled_in">未填写</string>
     <string name="price">价格</string>
@@ -36,6 +36,7 @@
     <string name="usdt">USDT</string>
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
+    <string name="open_futrues">当前合约尚未开通，开通后即可进行正常交易，是否开通合约</string>
     <string name="confirmed">已完成</string>
     <string name="sell_successful">您已成功出售</string>
     <string name="see_wallet">查看资产</string>
@@ -327,6 +328,8 @@
     <string name="id_pay">支付宝</string>
     <string name="cards">银行卡</string>
     <string name="wei_xin">微信</string>
+    <string name="future_success">你已成功开通合约!</string>
+    <string name="about_us_intr">FIEX产品介绍，建立加密世界 从FIEX开始。简单实现买卖加密货币，立即注册并开始使用吧。FIEX产品介绍，建立加密世界 从FIEX开始。简单实现买卖加密货币，立即注册并开始使用吧。</string>
     <string name="change_nickName">修改昵称</string>
     <string name="order_generated">订单已生成</string>
     <string name="order_canceled">订单已取消</string>
@@ -694,6 +697,7 @@
     <string name="my_bills">我的订单</string>
     <string name="my_bills_time">若买家未在规定时间付款，订单被系统取消。卖家不可取消订单，你的数字货币将被锁定在托管账户直到订单完成或被取消</string>
     <string name="payment_settings">支付设置</string>
+    <string name="biao_ji_price">该合约实时标记价格。此标记价格将用来计算未实现盈亏及保证金，可能会与合约最新成交价格有所偏差，以避免价格操纵。标记价格的计算是基于指数价格。</string>
     <string name="merchant_application">商家申请</string>
     <string name="novice_guidance">新手指导</string>
     <string name="common_problem">常见问题</string>
@@ -1034,8 +1038,10 @@
     <string name="contract_multiple">倍数</string>
     <string name="contract_tag_price">标记价格</string>
     <string name="contract_index_price">指数价格</string>
-    <string name="contract_raise">升</string>
-    <string name="contract_down">降</string>
+    <string name="contract_raise">多</string>
+    <string name="contract_down">空</string>
+    <string name="bao">爆仓说明</string>
+    <string name="feng_xian">当前风险率达到%s%%时，系统将强制回收您当前账户内的所有借贷资产</string>
     <string name="usd">usd</string>
     <string name="hold_amount">持仓</string>
     <string name="limit_price_entrust">限价委托</string>

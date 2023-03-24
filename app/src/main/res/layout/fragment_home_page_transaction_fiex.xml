@@ -15,46 +15,23 @@
         android:background="@color/B2"
         android:orientation="vertical">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/market_top_tab"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/bg_tab_corner"
-            app:tabIndicator="@drawable/bg_tab_indicator"
-            app:tabIndicatorColor="@color/T13"
-            app:tabIndicatorGravity="center"
-            app:tabIndicatorHeight="32dp"
-            app:tabMode="fixed"
-            app:tabPaddingEnd="0dp"
-            app:tabPaddingStart="0dp"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabSelectedTextColor="#ffffff"
-            app:tabTextAppearance="@style/MainTabStyle"
-            app:tabTextColor="#000000">
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:background="@drawable/bg_tab_indicator"
+            android:orientation="vertical">
 
-            <com.google.android.material.tabs.TabItem
+            <com.black.base.widget.SpanTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spot" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14"
+                android:text="@string/spot"
+                android:textStyle="bold" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/etf" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/index" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/futures" />
-        </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
 
         <include
             android:id="@+id/action_bar_layout"

@@ -270,23 +270,23 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
             data = ArrayList()
         }
         FryingUtil.computeTradeOrderWeightPercent(data, viewModel.askMax)
-        showAskOrder(CommonUtil.getItemFromList(data, 0), binding.handicapSaleLayout01, binding.priceSale01, binding.countSale01)
-        showAskOrder(CommonUtil.getItemFromList(data, 1), binding.handicapSaleLayout02, binding.priceSale02, binding.countSale02)
-        showAskOrder(CommonUtil.getItemFromList(data, 2), binding.handicapSaleLayout03, binding.priceSale03, binding.countSale03)
-        showAskOrder(CommonUtil.getItemFromList(data, 3), binding.handicapSaleLayout04, binding.priceSale04, binding.countSale04)
-        showAskOrder(CommonUtil.getItemFromList(data, 4), binding.handicapSaleLayout05, binding.priceSale05, binding.countSale05)
-        showAskOrder(CommonUtil.getItemFromList(data, 5), binding.handicapSaleLayout06, binding.priceSale06, binding.countSale06)
-        showAskOrder(CommonUtil.getItemFromList(data, 6), binding.handicapSaleLayout07, binding.priceSale07, binding.countSale07)
-        showAskOrder(CommonUtil.getItemFromList(data, 7), binding.handicapSaleLayout08, binding.priceSale08, binding.countSale08)
-        showAskOrder(CommonUtil.getItemFromList(data, 8), binding.handicapSaleLayout09, binding.priceSale09, binding.countSale09)
-        showAskOrder(CommonUtil.getItemFromList(data, 9), binding.handicapSaleLayout10, binding.priceSale10, binding.countSale10)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 0), binding.handicapSaleLayout01, binding.priceSale01, binding.countSale01)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 1), binding.handicapSaleLayout02, binding.priceSale02, binding.countSale02)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 2), binding.handicapSaleLayout03, binding.priceSale03, binding.countSale03)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 3), binding.handicapSaleLayout04, binding.priceSale04, binding.countSale04)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 4), binding.handicapSaleLayout05, binding.priceSale05, binding.countSale05)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 5), binding.handicapSaleLayout06, binding.priceSale06, binding.countSale06)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 6), binding.handicapSaleLayout07, binding.priceSale07, binding.countSale07)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 7), binding.handicapSaleLayout08, binding.priceSale08, binding.countSale08)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 8), binding.handicapSaleLayout09, binding.priceSale09, binding.countSale09)
+        showAskOrder(pair,CommonUtil.getItemFromList(data, 9), binding.handicapSaleLayout10, binding.priceSale10, binding.countSale10)
     }
 
-    private fun showAskOrder(tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
+    private fun showAskOrder(pair: String?,tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
         setOrderBg(layout, tradeOrder)
         layout.tag = tradeOrder
         priceView.text = if (tradeOrder == null) nullAmount else tradeOrder.formattedPrice
-        countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
+        countView.text = if (tradeOrder == null) nullAmount else  NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
     }
 
     //清空显示卖出订单

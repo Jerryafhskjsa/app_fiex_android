@@ -39,6 +39,7 @@ import com.black.base.util.ConstData.CHOOSE_COIN_WITHDRAW
 import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
 import com.black.base.widget.VerticalTextView
+import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.HomeMainRiseFallAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.MainMorePopup
@@ -273,17 +274,16 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
             R.id.rel_referral ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-                /*if(CookieUtil.getUserInfo(mContext!!) == null){
+               /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
             }*/
             R.id.cv_staking -> {
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-               /* val bundle = Bundle()
+                val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
                 bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
-                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)*/
+                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
             }
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)

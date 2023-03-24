@@ -78,6 +78,7 @@
                 android:layout_height="@dimen/default_padding" />
 
             <LinearLayout
+                android:id="@+id/lin_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_transaction_input"
@@ -88,7 +89,6 @@
                     android:layout_height="32dp">
 
                     <LinearLayout
-                        android:id="@+id/lin_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -724,7 +724,7 @@
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:paddingTop="4dp"
-                    android:text="(usdt)"
+                    android:text="(USDT)"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />
 
@@ -748,7 +748,7 @@
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:paddingTop="4dp"
-                    android:text="(Eth)"
+                    android:text="(BTC)"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
@@ -887,7 +887,6 @@
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_sale_01"
                         style="@style/ContractDeepItemTextLeft" />
-
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_01"
                         style="@style/ContractDeepItemTextRight" />

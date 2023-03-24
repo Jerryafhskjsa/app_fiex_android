@@ -342,20 +342,21 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             else{
                 val total = binding?.money?.tag as Money?
+                val total2 = binding?.moneyCny?.tag as Money?
                 var usdt = "$nullAmount "
                 var usd = String.format("≈ %s USD", nullAmount)
                 var cny = String.format("≈ %S CNY", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 if (total != null && exChange == 0) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! + total2?.tigerUsdt!!, 8, 2, 2) + " "
+                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup((total.cny!! + total2.tigerUsdt!!) * (total.rate!!), 8, 2, 2))
                     binding?.money?.setText(usdt)
                     binding?.moneyCny?.setText(cny)
                 }
                 if (total != null && exChange == 1) {
-                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
+                    usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! + total2?.tigerUsdt!!, 8, 2, 2) + " "
+                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup((total.cny!! + total2.tigerUsdt!!) * rates!!, 8, 2, 2))
                     binding?.money?.setText(usdt)
                     binding?.moneyCny?.setText(usd)
                 }
