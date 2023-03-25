@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="55dp"
     android:background="@color/B2"
     android:gravity="center">
 
@@ -23,6 +24,6 @@
         android:maxLines="1"
         android:paddingBottom="4dp"
         android:textColor="@color/home_tab_text_color"
-        android:textSize="@dimen/home_tab_text_size"
+        android:textSize="@dimen/text_size_10"
         android:textStyle="bold" />
 </RelativeLayout>

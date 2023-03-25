@@ -10,9 +10,9 @@
     <string name="login">Login/Registration</string>
     <string name="switching">Automatic switching</string>
     <string name="register_agreement_label">I have read and agreed to</string>
-    <string name="home_tab_main">HomePage</string>
-    <string name="home_tab_transaction">Transaction</string>
-    <string name="home_tab_future">Contract</string>
+    <string name="home_tab_main">Home</string>
+    <string name="home_tab_transaction">Trade</string>
+    <string name="home_tab_future">Futures</string>
     <string name="home_tab_asset">Assets</string>
     <string name="home_tab_c2c">French currency</string>
     <string name="home_tab_demand">The cornucopia</string>
@@ -315,7 +315,7 @@
     <string name="apk_download_error">Failed to download the installation package</string>
     <string name="apk_down_load_hint">Downloading the installation package, please wait</string>
     <string name="withdraw_detail">Cash withdrawal details</string>
-    <string name="home_tab_qutation">Quotations</string>
+    <string name="home_tab_qutation">Market</string>
     <string name="alert_close_success">Close successfully</string>
     <string name="search_coin">Search</string>
     <string name="all_coin">All Currencies</string>
