@@ -63,7 +63,7 @@ class WalletDetailActivity : BaseActivity(),
     private var wallet: Wallet? = null
     private var coinType: String? = null
     private var binding: ActivityWalletDetailBinding? = null
-    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdt
+    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdtToUsd
     private var sets: ArrayList<QuotationSet?>? = null
     private var fragmentList: MutableList<Fragment?>? = null
     private var adapter: WalletBillAdapter? = null
@@ -161,18 +161,18 @@ class WalletDetailActivity : BaseActivity(),
 
 
         val totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
-        totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8))
+        totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
 
         val totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
         totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
-            rate!! * (wallet?.totalAmount!!),
+            rate!! * (wallet?.estimatedAvailableAmountCny!!),
             10,
             2,
             2
-        ) + "CNY")
+        ) + "USD")
 
         val able =  binding?.root?.findViewById<SpanTextView>(R.id.able)
-        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
+        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
 
         val unable =  binding?.root?.findViewById<SpanTextView>(R.id.unable)
         unable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(

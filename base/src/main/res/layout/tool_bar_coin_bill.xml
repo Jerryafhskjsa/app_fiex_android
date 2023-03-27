@@ -99,40 +99,43 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/total_cny"
-                    android:gravity="center_horizontal"
-                    android:background="@color/C2"
-                    android:orientation="horizontal">
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_all_des"
+                        android:layout_below="@+id/total_cny"
+                        android:background="@color/C2"
                         android:gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/text_size_5"
-                        android:maxLines="1"
-                        android:text="@string/daily_earnings"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_all_des"
-                        android:gravity="center_horizontal"
-                        android:maxLines="1"
-                        android:text="≈0"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12" />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/text_size_10"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/text_size_10"
-                        android:background="@drawable/icon_left"/>
-                </LinearLayout>
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_all_des"
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="@string/daily_earnings"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_all_des"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:text="≈0"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/text_size_10"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:background="@drawable/icon_left" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

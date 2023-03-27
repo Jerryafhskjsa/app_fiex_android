@@ -163,7 +163,7 @@
                                 <ImageView
                                     android:id="@+id/icon_referral"
                                     style="@style/HomeFeturesItemImage"
-                                    android:src="@drawable/fiex_icon_deposit" />
+                                    android:src="@drawable/fiex_icon_referral" />
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_referral"

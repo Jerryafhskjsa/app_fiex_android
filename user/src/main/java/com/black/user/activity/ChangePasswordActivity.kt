@@ -3,7 +3,6 @@ package com.black.user.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -13,14 +12,11 @@ import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
-import com.black.base.model.user.User
 import com.black.base.model.user.UserInfo
-import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.net.HttpRequestResult
-import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityChangePasswordBinding
@@ -172,7 +168,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
                     binding?.getPhoneCode?.setText("$second")
                 }
             }.start()
-            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.tel, userInfo!!.telCountryCode,true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+            UserApiServiceHelper.getSendVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
@@ -198,7 +194,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
                     binding?.getMailCode?.setText("$second")
                 }
             }.start()
-            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.email, null,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
+            UserApiServiceHelper.getSendVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))

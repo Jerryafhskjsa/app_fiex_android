@@ -12,26 +12,8 @@
         android:background="@color/B2"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="@dimen/text_size_20"
-            android:background="@drawable/bg_tab_indicator"
-            android:orientation="vertical">
-
-            <com.black.base.widget.SpanTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_14"
-                android:text="@string/usdt_base"
-                android:textStyle="bold" />
-
-        </LinearLayout>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/contract_top_tab"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_marginLeft="10dp"
@@ -57,10 +39,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/coin_base" />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/simulation_base" />
         </com.google.android.material.tabs.TabLayout>
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/contract_main_view_pager"

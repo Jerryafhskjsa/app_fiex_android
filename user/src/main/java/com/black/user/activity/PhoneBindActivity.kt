@@ -215,7 +215,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                     binding?.getPhoneCodeVerify?.setText("$second")
                 }
             }.start()
-            UserApiServiceHelper.getVerifyCodeOld(this, userName, telCountryCode,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
+            UserApiServiceHelper.getSendVerifyCode(this, userName, telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -244,7 +244,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                     binding?.getPhoneCode?.isEnabled = false
                 }
             }.start()
-            UserApiServiceHelper.getVerifyCodeOld(this, userInfo!!.tel , userInfo!!.telCountryCode ,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
+            UserApiServiceHelper.getSendVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
@@ -269,7 +269,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                     binding?.getMailCode?.setText("$second")
                 }
             }.start()
-            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.email, null,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
+            UserApiServiceHelper.getSendVerifyCode(mContext, userInfo!!.email, null,object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))

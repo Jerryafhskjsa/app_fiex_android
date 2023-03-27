@@ -53,7 +53,7 @@
                 <com.black.base.widget.SpanCheckBox
                     android:id="@+id/contract_with_limit"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:button="@drawable/btn_reg_check_box"
                     android:clickable="true"
                     android:focusable="true"

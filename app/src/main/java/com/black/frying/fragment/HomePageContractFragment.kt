@@ -2,7 +2,7 @@ package com.black.frying.fragment
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -556,6 +556,7 @@ class HomePageContractFragment : BaseFragment(),
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
         binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
+        binding?.fragmentHomePageContractHeader2?.bills?.setOnClickListener(this)
     }
 
     private fun initHeader() {
@@ -646,8 +647,8 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun initHeader2() {
-        recordTab = binding!!.fragmentHomePageContractHeader2?.contractTab
-        recordViewPager = binding!!.fragmentHomePageContractHeader2?.contractRecordViewPager
+        recordTab = binding!!.fragmentHomePageContractHeader2.contractTab
+        recordViewPager = binding!!.fragmentHomePageContractHeader2.contractRecordViewPager
 //        binding!!.fragmentHomePageContractHeader2.totalCurrent.setOnClickListener(this)
         initRecordTab()
     }
@@ -1189,6 +1190,12 @@ class HomePageContractFragment : BaseFragment(),
                     }
                     createOrderFuture(positionSide!!, orderSide!!)
                 }
+            }
+
+            R.id.bills -> {
+                BlackRouter.getInstance().build(RouterConstData.CONTRACT_BILL_ACTIVITY)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
             }
         }
     }

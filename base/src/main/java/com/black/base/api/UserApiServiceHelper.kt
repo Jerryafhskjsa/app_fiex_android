@@ -262,6 +262,17 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, true, verifyCodeCallBack))
     }
 
+
+    //绑定身份证
+    fun getSendVerifyCode(context: Context?, userName: String?, telCountryCode: String?,callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
+            ?.sendVerifyCode02(userName, telCountryCode)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+    }
     //绑定身份证
     fun bindIdentity(context: Context?, idType: Int, realName: String?, idNo: String?, idNoImg: String?, countryId: String?, birthday: String?,callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {

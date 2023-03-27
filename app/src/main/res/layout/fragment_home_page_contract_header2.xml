@@ -15,9 +15,13 @@
             android:layout_height="8dp"
             android:background="@color/T11_ALPHA5"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/contract_tab"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
             app:tabBackground="@color/transparent"
@@ -32,6 +36,13 @@
             app:tabPaddingTop="0dp"
             app:tabIndicatorFullWidth="false"
             app:tabTextAppearance="@style/DefaultTabStyle" />
+    <ImageView
+        android:id="@+id/bills"
+        android:layout_width="@dimen/text_size_28"
+        android:layout_height="@dimen/text_size_28"
+        android:layout_marginTop="@dimen/text_size_5"
+        android:src="@drawable/btn_c2c_bills"/>
+    </LinearLayout>
         <com.black.base.widget.AutoHeightViewPager
             android:id="@+id/contract_record_view_pager"
             android:layout_width="match_parent"

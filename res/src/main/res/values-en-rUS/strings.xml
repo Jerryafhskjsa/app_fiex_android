@@ -1001,9 +1001,9 @@
     <string name="contract_sell_out">Sell</string>
     <string name="contract_stop_surplus_price">Take Profit</string>
     <string name="contract_stop_lose_price">Stop Loss</string>
-    <string name="contract_record_tab1">Holding Position (%s)</string>
-    <string name="contract_record_tab2">Stop profit and stop loss (%s)</string>
-    <string name="contract_record_tab3">Current delegation (%s)</string>
+    <string name="contract_record_tab1">Positions(%s)</string>
+    <string name="contract_record_tab2">Profit Loss(%s)</string>
+    <string name="contract_record_tab3">Open Orders(%s)</string>
     <string name="contract_show_all">Display All</string>
     <string name="contract_fast_done">One click position closing</string>
     <string name="contract_fast_cancel">One click profit cancel</string>

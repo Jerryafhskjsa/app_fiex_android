@@ -61,7 +61,7 @@ class HomePageContractFragmentMain : BaseFragment(), View.OnClickListener {
                 try {
                     when(i){
                         0 -> fragmentList?.add(HomePageContractFragment.newSelfInstance(set))
-                        1,2 ->fragmentList?.add(EmptyFragment())
+                        1 ->fragmentList?.add(EmptyFragment())
                     }
 
                 } catch (throwable: Throwable) {

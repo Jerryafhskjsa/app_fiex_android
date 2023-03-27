@@ -38,9 +38,9 @@ import kotlin.collections.ArrayList
 
 class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {
     companion object {
-        private const val TYPE_U_CONTRACT = "U本位"
-        private const val TYPE_COIN_CONTRACT = "币本位"
-        private const val TYPE_ALL = "全部"
+        private var TYPE_U_CONTRACT = ""
+        private var TYPE_COIN_CONTRACT = ""
+        private var TYPE_ALL = ""
         private const val TYPE_BTC = "BTCUSDT"
         private const val TYPE_ETH = "ETHUSDT"
     }
@@ -83,6 +83,9 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
         binding?.contractChoose?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
         binding?.timeChoose?.visibility = View.GONE
+        TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
+        TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
+        TYPE_ALL = getString(R.string.all)
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
