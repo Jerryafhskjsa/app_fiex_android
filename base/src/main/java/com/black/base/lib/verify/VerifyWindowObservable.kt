@@ -129,7 +129,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
                 }
             }
         }.start()
-        UserApiServiceHelper.getVerifyCodeOld(activity, target.phone, target.poneCountyCode, alwaysNoToken, object : NormalCallback<HttpRequestResultString?>(activity) {
+        UserApiServiceHelper.getVerifyCodeOld(activity, target.phone, target.poneCountyCode, true, object : NormalCallback<HttpRequestResultString?>(activity) {
             override fun callback(returnData: HttpRequestResultString?) {
 
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
@@ -167,7 +167,7 @@ abstract class VerifyWindowObservable(protected var activity: Activity, protecte
             }
         }.start()
         mailCaptcha = null
-        UserApiServiceHelper.getVerifyCodeOld(activity, target.mail, null, alwaysNoToken, object : NormalCallback<HttpRequestResultString?>(activity) {
+        UserApiServiceHelper.getVerifyCodeOld(activity, target.mail, null, true, object : NormalCallback<HttpRequestResultString?>(activity) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(activity, activity.getString(R.string.alert_verify_code_success))

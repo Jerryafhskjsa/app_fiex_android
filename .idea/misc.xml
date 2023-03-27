@@ -403,6 +403,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_google_layout.xml" value="0.14010416666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_mail_layout.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_money_password_layout.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/base/src/main/res/layout/view_verify_multiple.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_password_layout.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_phone_layout.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single.xml" value="0.17916666666666667" />
@@ -561,6 +562,7 @@
         <entry key="..\:/fiex/res/src/main/res/drawable/trans_default_bg_corner.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/xml/network_security_config.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_account_manager.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/user/src/main/res/layout/activity_change_password.xml" value="0.22" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_fiex.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_forget_password_new_pwd.xml" value="0.17916666666666667" />

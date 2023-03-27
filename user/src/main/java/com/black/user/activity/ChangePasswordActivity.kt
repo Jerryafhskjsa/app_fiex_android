@@ -2,6 +2,7 @@ package com.black.user.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
@@ -31,40 +32,9 @@ import com.black.util.RSAUtil
 class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
     private var userInfo: UserInfo? = null
     private var binding: ActivityChangePasswordBinding? = null
+    private var countDownTimer: CountDownTimer? = null
+    private var totalTime: Long = 60 * 1000
 
-    private val mHandler = Handler()
-
-    private var getPhoneCodeLocked = false
-    private var getPhoneCodeLockedTime = 0
-    private val getPhoneCodeLockTimer = object : Runnable {
-        override fun run() {
-            getPhoneCodeLockedTime--
-            if (getPhoneCodeLockedTime <= 0) {
-                getPhoneCodeLocked = false
-                binding?.getPhoneCode?.setText(R.string.get_check_code)
-            } else {
-                binding?.getPhoneCode?.setText(getString(R.string.aler_get_code_locked, getPhoneCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-
-    }
-
-    private var getMailCodeLocked = false
-    private var getMailCodeLockedTime = 0
-    private val getMailCodeLockTimer = object : Runnable {
-        override fun run() {
-            getMailCodeLockedTime--
-            if (getMailCodeLockedTime <= 0) {
-                getMailCodeLocked = false
-                binding?.getMailCode?.setText(R.string.get_check_code)
-            } else {
-                binding?.getMailCode?.setText(getString(R.string.aler_get_code_locked, getMailCodeLockedTime.toString()))
-                mHandler.postDelayed(this, ConstData.ONE_SECOND_MILLIS.toLong())
-            }
-        }
-
-    }
 
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -191,19 +161,22 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
     //获取手机验证码
     private val phoneVerifyCode: Unit
         get() {
-            if (getPhoneCodeLocked) {
-                return
+            countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+            override fun onFinish(){
+                binding?.getPhoneCode?.isEnabled = true
+                binding?.getPhoneCode?.setText(getString(R.string.send_code))
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.tel, userInfo!!.telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val second = millisUntilFinished / 1000 % 60
+                    binding?.getPhoneCode?.isEnabled = false
+                    binding?.getPhoneCode?.setText("$second")
+                }
+            }.start()
+            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.tel, userInfo!!.telCountryCode,true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
                         //发送成功后，锁定按钮
-                        if (!getPhoneCodeLocked) {
-                            getPhoneCodeLocked = true
-                            getPhoneCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                            mHandler.post(getPhoneCodeLockTimer)
-                        }
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "" else returnData.msg)
                     }
@@ -214,19 +187,21 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
     //获取邮箱验证码
     private val mailVerifyCode: Unit
         get() {
-            if (getMailCodeLocked) {
-                return
+            countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+            override fun onFinish(){
+                binding?.getMailCode?.isEnabled = true
+                binding?.getMailCode?.setText(getString(R.string.send_code))
             }
-            UserApiServiceHelper.getVerifyCode(mContext, userInfo!!.email, null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val second = millisUntilFinished / 1000 % 60
+                    binding?.getMailCode?.isEnabled = false
+                    binding?.getMailCode?.setText("$second")
+                }
+            }.start()
+            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.email, null,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
-                        //锁定发送按钮
-                        if (!getMailCodeLocked) {
-                            getMailCodeLocked = true
-                            getMailCodeLockedTime = ConstData.GET_CODE_LOCK_TIME
-                            mHandler.post(getMailCodeLockTimer)
-                        }
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "" else returnData.msg)
                     }

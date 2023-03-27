@@ -70,6 +70,10 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         binding?.mailCode?.addTextChangedListener(watcher)
         binding?.getMailCode?.setOnClickListener(this)
         binding?.googleCode?.addTextChangedListener(watcher)
+        if (userInfo!!.tel == null){
+            binding?.phoneLayout?.visibility = View.GONE
+            binding?.phoneOld?.visibility = View.GONE
+        }
         if (TextUtils.equals("1", userInfo!!.googleSecurityStatus)) {
             binding?.googleCode?.visibility = View.VISIBLE
             binding?.googleCodeLayout?.visibility = View.VISIBLE
@@ -95,7 +99,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         binding?.btnSubmit?.setOnClickListener(this)
         if (thisCountry == null) {
             thisCountry = CountryCode()
-            thisCountry?.code = "86"
+            thisCountry?.code = "61"
         }
         chooseWindow = CountryChooseWindow(this, thisCountry, object : OnCountryChooseListener {
             @SuppressLint("SetTextI18n")
@@ -197,25 +201,25 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
                 return
             }
-            UserApiServiceHelper.getVerifyCode(this, userName, telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext) {
+            countDownTimer = object : CountDownTimer(totalTime,1000) {
+                //1000ms运行一次onTick里面的方法
+                override fun onFinish() {
+                    binding?.getPhoneCodeVerify?.isEnabled = true
+                    binding?.getPhoneCodeVerify?.setText(R.string.sent)
+                }
+
+                override fun onTick(millisUntilFinished: Long) {
+                    val minute = millisUntilFinished / 1000 / 60 % 60
+                    val second = millisUntilFinished / 1000 % 60
+                    binding?.getPhoneCodeVerify?.isEnabled = false
+                    binding?.getPhoneCodeVerify?.setText("$second")
+                }
+            }.start()
+            UserApiServiceHelper.getVerifyCodeOld(this, userName, telCountryCode,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                         //锁定发送按钮
-                        countDownTimer = object : CountDownTimer(totalTime,1000) {
-                            //1000ms运行一次onTick里面的方法
-                            override fun onFinish() {
-                                binding?.getPhoneCode?.isEnabled = true
-                                binding?.getPhoneCode?.setText(R.string.sent)
-                            }
-
-                            override fun onTick(millisUntilFinished: Long) {
-                                val minute = millisUntilFinished / 1000 / 60 % 60
-                                val second = millisUntilFinished / 1000 % 60
-                                binding?.getPhoneCode?.isEnabled = false
-                                binding?.getPhoneCode?.setText("$minute:$second")
-                            }
-                        }.start()
                     } else {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
                     }
@@ -226,59 +230,51 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
     //获取当前手机验证码
     private val phoneVerifyCode: Unit
         get() {
-            UserApiServiceHelper.getVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>(mContext) {
+            countDownTimer = object : CountDownTimer(totalTime,1000) {
+                //1000ms运行一次onTick里面的方法
+                override fun onFinish() {
+                    binding?.getPhoneCode?.isEnabled = true
+                    binding?.getPhoneCode?.setText(R.string.sent)
+                }
+
+                override fun onTick(millisUntilFinished: Long) {
+                    val minute = millisUntilFinished / 1000 / 60 % 60
+                    val second = millisUntilFinished / 1000 % 60
+                    binding?.getPhoneCode?.setText("$second")
+                    binding?.getPhoneCode?.isEnabled = false
+                }
+            }.start()
+            UserApiServiceHelper.getVerifyCodeOld(this, userInfo!!.tel , userInfo!!.telCountryCode ,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                         //锁定发送按钮
-                        countDownTimer = object : CountDownTimer(totalTime,1000) {
-                            //1000ms运行一次onTick里面的方法
-                            override fun onFinish() {
-                                binding?.getPhoneCodeVerify?.isEnabled = true
-                                binding?.getPhoneCodeVerify?.setText(R.string.sent)
-                            }
-
-                            override fun onTick(millisUntilFinished: Long) {
-                                val minute = millisUntilFinished / 1000 / 60 % 60
-                                val second = millisUntilFinished / 1000 % 60
-                                binding?.getPhoneCodeVerify?.setText("$minute:$second")
-                                binding?.getPhoneCodeVerify?.isEnabled = false
-                            }
-                        }.start()
                     } else {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
                     }
                 }
             })
         }
+    //获取邮箱验证码
     private val mailVerifyCode: Unit
         get() {
-            val userName = binding?.mailAccount?.text.toString().trim { it <= ' ' }
-            if (TextUtils.isEmpty(userName)) {
-                FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
-                return
+            countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
+            override fun onFinish(){
+                binding?.getMailCode?.isEnabled = true
+                binding?.getMailCode?.setText(getString(R.string.send_code))
             }
-            UserApiServiceHelper.getVerifyCode(this, userName, null, object : NormalCallback<HttpRequestResultString?>(mContext) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val second = millisUntilFinished / 1000 % 60
+                    binding?.getMailCode?.isEnabled = false
+                    binding?.getMailCode?.setText("$second")
+                }
+            }.start()
+            UserApiServiceHelper.getVerifyCodeOld(mContext, userInfo!!.email, null,true, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
-                        //锁定发送按钮
-                        countDownTimer = object : CountDownTimer(totalTime,1000) {
-                            //1000ms运行一次onTick里面的方法
-                            override fun onFinish() {
-                                binding?.getMailCode?.isEnabled = false
-                                binding?.getMailCode?.setText(R.string.sent)
-                            }
-
-                            override fun onTick(millisUntilFinished: Long) {
-                                val minute = millisUntilFinished / 1000 / 60 % 60
-                                val second = millisUntilFinished / 1000 % 60
-                                binding?.getMailCode?.setText("$minute:$second")
-                                binding?.getMailCode?.isEnabled = true
-                            }
-                        }.start()
+                        FryingUtil.showToast(mContext, getString(com.black.base.R.string.alert_verify_code_success))
                     } else {
-                        FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
+                        FryingUtil.showToast(mContext, if (returnData == null) "" else returnData.msg)
                     }
                 }
             })

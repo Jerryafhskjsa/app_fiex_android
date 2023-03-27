@@ -15,21 +15,21 @@ import com.black.base.lib.verify.VerifyType.Companion.PHONE
 class VerifyWindowObservableMultiple(activity: Activity, type: Int, target: Target, alwaysNoToken: Boolean) : VerifyWindowObservable(activity, type, target, alwaysNoToken) {
     override fun placeWorkSpace(workSpaceLayout: LinearLayout?) {
         val multipleBinding: ViewVerifyMultipleBinding = DataBindingUtil.inflate(inflater!!, R.layout.view_verify_multiple, null, false)
-        multipleBinding.contentLayout?.removeAllViews()
+        multipleBinding.contentLayout.removeAllViews()
         if (type and PHONE == PHONE) {
-            multipleBinding.contentLayout?.addView(getPhoneLayout()?.root)
+            multipleBinding.contentLayout.addView(getPhoneLayout()?.root)
         }
         if (type and MAIL == MAIL) {
-            multipleBinding.contentLayout?.addView(getMailLayout()?.root)
+            multipleBinding.contentLayout.addView(getMailLayout()?.root)
         }
         if (type and GOOGLE == GOOGLE) {
-            multipleBinding.contentLayout?.addView(getGoogleLayout()?.root)
+            multipleBinding.contentLayout.addView(getGoogleLayout()?.root)
         }
         if (type and MONEY_PASSWORD == MONEY_PASSWORD) {
-            multipleBinding.contentLayout?.addView(getMoneyPasswordLayout()?.root)
+            multipleBinding.contentLayout.addView(getMoneyPasswordLayout()?.root)
         }
         if (type and PASSWORD == PASSWORD) {
-            multipleBinding.contentLayout?.addView(getPasswordLayout()?.root)
+            multipleBinding.contentLayout.addView(getPasswordLayout()?.root)
         }
         workSpaceLayout?.removeAllViews()
         workSpaceLayout?.addView(multipleBinding.root)

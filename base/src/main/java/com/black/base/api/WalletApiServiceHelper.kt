@@ -322,7 +322,7 @@ object WalletApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(WalletApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.cancelWithdraw(id)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))

@@ -82,7 +82,7 @@
                                     style="@style/EditTextStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="+86"
+                                    android:text="+61"
                                     android:textSize="@dimen/text_size_16" />
 
                                 <ImageView
@@ -112,9 +112,11 @@
 
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/phone_old"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/input_phone_now_code"></com.black.base.widget.SpanTextView>
+                            android:text="@string/input_phone_now_code">
+                        </com.black.base.widget.SpanTextView>
 
                         <View
                             android:layout_width="match_parent"
@@ -164,7 +166,9 @@
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/input_new_phone_code_verify"></com.black.base.widget.SpanTextView>
+                            android:text="@string/input_new_phone_code_verify">
+
+                        </com.black.base.widget.SpanTextView>
 
                         <View
                             android:layout_width="match_parent"

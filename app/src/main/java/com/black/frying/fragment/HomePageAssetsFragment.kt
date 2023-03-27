@@ -42,7 +42,13 @@ import skin.support.content.res.SkinCompatResources
 import kotlin.math.abs
 import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
 import com.black.frying.fragment.assets.AssetsWalletFragment
+import com.black.router.annotation.Route
 
+@Route(
+    value = [RouterConstData.HOME_ASSET],
+    fragmentParentPath = RouterConstData.HOME_PAGE,
+    fragmentIndex = 4
+)
 class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener,
     WalletViewModel.OnWalletModelListener, AssetsSpotFragment.EventResponseListener,
     AssetsContractFragment.ContractEventResponseListener,

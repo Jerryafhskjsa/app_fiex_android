@@ -51,6 +51,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     private var coinChain:String? = null
     private var chainNames:ArrayList<String>? = null
     private var address:String? = null
+    private var amount: Double? = null
     protected var memoNeeded = false
 
     private var binding: ActivityExtractBinding? = null
@@ -91,18 +92,18 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         if (wallet != null) {
             selectCoin(wallet)
         }
-        userInfo = CookieUtil.getUserInfo(mContext)
-        if (userInfo == null) {
-            return
-        }
-        if (TextUtils.equals(userInfo?.phoneSecurityStatus, "0") &&  TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
-            FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_phone))
-            getDialog()
-        }
-        if (TextUtils.equals(userInfo?.emailSecurityStatus, "0") && TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
-            FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_mail))
-            getDialog()
-        }
+        /* userInfo = CookieUtil.getUserInfo(mContext)
+         if (userInfo == null) {
+             return
+         }
+         if (TextUtils.equals(userInfo?.phoneSecurityStatus, "0") &&  TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
+             FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_phone))
+             getDialog()
+         }
+         if (TextUtils.equals(userInfo?.emailSecurityStatus, "0") && TextUtils.equals(userInfo?.googleSecurityStatus, "0")) {
+             FryingUtil.showToast(mContext,  getString(R.string.withdraw_must_bind_mail))
+             getDialog()
+         }*/
        
     }
 
@@ -226,7 +227,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun doSubmit(){
-            val userInfo = CookieUtil.getUserInfo(mContext)
+            userInfo = CookieUtil.getUserInfo(mContext)
             if (userInfo != null) {
 //                if (TextUtils.equals(userInfo.authType, "5") || TextUtils.equals(userInfo.authType, "6")) {
 //                    BlackRouter.getInstance().build(RouterConstData.GOOGLE_GET_KEY).go(mContext)
@@ -241,7 +242,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                     FryingUtil.showToast(mContext, getString(R.string.alert_input_withdraw_address_error))
                     return
                 }
-                if (userInfo.withDrawStatus == null || TextUtils.equals(userInfo.withDrawStatus, "0")) {
+                if (userInfo?.withDrawStatus == null || TextUtils.equals(userInfo?.withDrawStatus, "0")) {
                     FryingUtil.showToast(mContext, getString(R.string.can_not_withdraw))
                     return
                 }
@@ -280,7 +281,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 //authType=用户提现所需验证：1-手机+邮箱  2-手机+google 3-邮箱+google
                 // 4-手机+google+邮箱 5-必须完成邮箱或google其中一项  6-必须完成手机或google其中一项
                 //用户提现所需验证：4-手机+google 5-邮箱+google 6-手机+邮箱  7-手机+google+邮箱 1,2,3-必须完成邮箱或google其中一项  -必须完成手机或google其中一项
-                val authType = userInfo.authType ?: ""
+                val authType = userInfo?.authType
                 var type = VerifyType.NONE
                 if (TextUtils.equals("6", authType)) {
                     type = VerifyType.PHONE or VerifyType.MAIL
@@ -290,14 +291,14 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                     type = VerifyType.MAIL or VerifyType.GOOGLE
                 } else if (TextUtils.equals("7", authType)) {
                     type = VerifyType.PHONE or VerifyType.MAIL or VerifyType.GOOGLE
-                } else {
-                    getDialog()
-                    return
+                } else if (TextUtils.equals("1", authType)){
+                    type = VerifyType.MAIL or VerifyType.PASSWORD
                 }
-                if (type == VerifyType.NONE) {
-                    getDialog()
-                    FryingUtil.showToast(mContext, getString(R.string.withdraw_error_level_low))
-                    return
+                else if (TextUtils.equals("2", authType)){
+                    type = VerifyType.PHONE or VerifyType.PASSWORD
+                }
+                else if (TextUtils.equals("3", authType)){
+                    type = VerifyType.GOOGLE or VerifyType.PASSWORD
                 }
                 //                    type |= VerifyWindow.MONEY_PASSWORD;
                 val target = Target.buildFromUserInfo(userInfo)
@@ -310,7 +311,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                             verifyWindow.dismiss()
                             Observable.empty()
                         } else {
-                            if (checkVerify(authType, returnTarget)) {
+                            if (checkVerify(authType!!, returnTarget)) {
                                 createWithdrawCoinNew(verifyWindow, returnTarget)
                                 Observable.just(1)
                             } else {
@@ -606,12 +607,16 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
         }
         val jsonObject = JsonObject()
+        var amount = CommonUtil.parseDouble(binding?.extractCount?.text.toString().trim { it <= ' ' })
+        if (amount == null)
+            amount = 0.0
         jsonObject.addProperty("coinType", coinType)
-        jsonObject.addProperty("withdrawFee", coinInfoReal?.withdrawFee.toString())
+        jsonObject.addProperty("withdrawFee", coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount)
         jsonObject.addProperty("txTo", binding?.extractAddress?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("amount", binding?.extractCount?.text.toString().trim { it <= ' ' })
+        jsonObject.addProperty("chain", binding?.currentChain?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("memo", memoPost)
-        jsonObject.addProperty("password", if (target != null && !TextUtils.isEmpty(target.password)) target.password else "")
+        jsonObject.addProperty("password", if (target != null && !TextUtils.isEmpty(target.password)) RSAUtil.encryptDataByPublicKey(target.password) else "")
         jsonObject.addProperty("phoneCode", if (target == null) "" else target.phoneCode)
         jsonObject.addProperty("emailCode", if (target == null) "" else target.mailCode)
         jsonObject.addProperty("googleCode", if (target == null) "" else target.googleCode)
@@ -621,7 +626,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         val rsaParam = jsonObject.toString() + "#" + System.currentTimeMillis()
         val rsa = RSAUtil.encryptDataByPublicKey(rsaParam)
         showLoading()
-        ApiManager.build(this).getService(WalletApiService::class.java)
+        ApiManager.build(this,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
                 ?.createWithdraw(rsa)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(object : NormalObserver<HttpRequestResultString?>(this) {
@@ -638,9 +643,8 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            verifyWindow.dismiss()
                             FryingUtil.showToast(mContext, getString(R.string.withdraw_success))
-                            finish()
+                            verifyWindow.dismiss()
                         } else {
                             FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
                         }

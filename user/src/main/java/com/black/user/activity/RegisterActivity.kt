@@ -41,8 +41,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     private var binding: ActivityRegisterBinding? = null
     private var countDownTimer: CountDownTimer? = null
     private var totalTime: Long = 60 * 1000
-
-
     private var thisCountry: CountryCode? = null
     private var chooseWindow: CountryChooseWindow? = null
 

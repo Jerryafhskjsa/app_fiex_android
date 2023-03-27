@@ -876,14 +876,14 @@
 
     <string name="old_psw">Old password</string>
     <string name="new_psw">New password</string>
-    <string name="input_new_phone_number">Enter a new phone number</string>
+    <string name="input_new_phone_number">Enter phone number</string>
     <string name="input_mail_number">Enter the e-mail number</string>
     <string name="input_mail_code">Please enter the email verification code</string>
     <string name="input_google_code">Please enter the Google verification code</string>
     <string name="input_phone_code">Please enter the mobile phone verification code</string>
     <string name="input_phone_now_code">Please enter the current mobile phone verification code</string>
     <string name="input_code">Please enter the verification code</string>
-    <string name="input_new_phone_code_verify">Please enter the verification code of the new phone</string>
+    <string name="input_new_phone_code_verify">Please enter the verification code of the phone</string>
     <string name="password">Account password</string>
     <string name="google_key">google key:</string>
     <string name="style_setting">Style Setting</string>

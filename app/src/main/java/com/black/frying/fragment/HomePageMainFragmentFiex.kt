@@ -79,7 +79,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
 
     private var userInfo: UserInfo? = null
     private var adapter: HomeMainRiseFallAdapter? = null
-
+    private var chooseWallet: Wallet? = null
     private val hotPairMap = HashMap<String?, PairStatus?>()
     private val hardGridViewMap = HashMap<String?, GridView?>()
 
@@ -211,14 +211,16 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                CHOOSE_COIN_RECHARGE -> {
-                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                ConstData.CHOOSE_COIN_RECHARGE -> {
+                    chooseWallet = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()
-                        bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle)
-                            .go(this)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
                     }
                 }
                 CHOOSE_COIN_WITHDRAW -> {
@@ -259,10 +261,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 .go(mContext)//用户信息
             R.id.c2c ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-            R.id.rel_deposit ->
-                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+            R.id.rel_deposit -> {
+                BlackRouter.getInstance().build(RouterConstData.HOME_ASSET)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
+        }
             R.id.rel_support -> {
                 getSupportUrl()
             }

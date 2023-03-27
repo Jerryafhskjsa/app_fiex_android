@@ -876,14 +876,14 @@
 
     <string name="old_psw">旧密码</string>
     <string name="new_psw">新密码</string>
-    <string name="input_new_phone_number">输入新手机号</string>
+    <string name="input_new_phone_number">输入手机号</string>
     <string name="input_mail_number">输入电子邮箱号</string>
     <string name="input_mail_code">请输入邮箱验证码</string>
     <string name="input_google_code">请输入谷歌验证码</string>
     <string name="input_phone_code">请输入手机验证码</string>
     <string name="input_phone_now_code">请输入当前手机验证码</string>
     <string name="input_code">请输入验证码</string>
-    <string name="input_new_phone_code_verify">请输入新手机的验证码</string>
+    <string name="input_new_phone_code_verify">请输入手机的验证码</string>
     <string name="password">账号密码</string>
     <string name="google_key">谷歌密钥:</string>
     <string name="style_setting">风格设置</string>
