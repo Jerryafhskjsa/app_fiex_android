@@ -213,21 +213,6 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         }
-        FutureApiServiceHelper.getAccountInfo(
-            context, false,
-            object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(result: HttpRequestResultBean<AccountInfoBean?>?) {
-                    if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
-                    }
-                    else {
-                        openDialog()
-                    }
-                }
-
-            })
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -500,6 +485,21 @@ class HomePageContractFragment : BaseFragment(),
             Log.d("ttt--->", "Login")
         }
         priceInputFlag = false
+        FutureApiServiceHelper.getAccountInfo(
+            mContext as HomePageActivity,
+            object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultBean<AccountInfoBean?>?) {
+                    if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
+                    }
+                    else {
+                        openDialog()
+                    }
+                }
+
+            })
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
 //        FutureService.getBalanceByCoin(mContext)

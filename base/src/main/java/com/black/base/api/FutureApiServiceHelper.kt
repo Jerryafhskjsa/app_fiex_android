@@ -356,7 +356,6 @@ object FutureApiServiceHelper {
      */
     fun getAccountInfo(
         context: Context?,
-        isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<AccountInfoBean?>?>?
     ) {
         if (context == null || callback == null) {
@@ -366,7 +365,7 @@ object FutureApiServiceHelper {
             .getService(FutureApiService::class.java)
             ?.getAccountInfo()
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.subscribe(HttpCallbackSimple(context, callback))
     }
 
     /**

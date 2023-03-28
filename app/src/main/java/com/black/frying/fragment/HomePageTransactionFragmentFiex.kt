@@ -480,13 +480,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                             refreshOrderType(item)
                             currentOrderType = item
                             viewModel?.setCurrentPairorderType(item)
-                            if (currentOrderType.equals("LIMIT")) {
-                                binding?.fragmentHomePageTransactionHeader1?.relVolume?.visibility =
-                                    View.VISIBLE
-                            } else if (currentOrderType.equals("MARKET")) {
-                                binding?.fragmentHomePageTransactionHeader1?.relVolume?.visibility =
-                                    View.GONE
-                            }
                         }
                     }).show()
             }
@@ -917,16 +910,29 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun computeTotal() {
         var price = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
+        var price2 = CommonUtil.parseDouble(
+            binding!!.fragmentHomePageTransactionHeader1.currentPrice.text.toString().trim { it <= ' ' })
         val count = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
                 .trim { it <= ' ' })
-        if (price != null) {
+        if (price != null && price2 !=  null) {
             price *= 0.99
+            price2 *= 0.99
             if (count != null && (count != 0.0)) {
                 if (currentOrderType.equals("LIMIT")) {
                     binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
                         NumberUtil.formatNumberNoGroup(
                             price * count,
+                            RoundingMode.FLOOR,
+                            viewModel!!.getAmountLength(),
+                            viewModel!!.getAmountLength()
+                        ) + viewModel!!.getSetName()
+                    )
+                }
+                else {
+                    binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
+                        NumberUtil.formatNumberNoGroup(
+                            price2 * count,
                             RoundingMode.FLOOR,
                             viewModel!!.getAmountLength(),
                             viewModel!!.getAmountLength()
@@ -966,18 +972,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         )
                     } else {
                         binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                    }
-                }
-                if (currentOrderType.equals("LIMIT")) {
-                    if (price != null && count != null) {
-                        binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
-                            NumberUtil.formatNumberNoGroup(
-                                price * count,
-                                RoundingMode.FLOOR,
-                                viewModel!!.getAmountLength(),
-                                viewModel!!.getAmountLength()
-                            ) + viewModel!!.getSetName()
-                        )
                     }
                 }
             }
@@ -1063,6 +1057,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         when (type) {
             "MARKET" -> {
                 typeDes = getString(R.string.order_type_market)
+
                 binding!!.fragmentHomePageTransactionHeader1.linPrice.visibility = View.GONE
                 binding!!.fragmentHomePageTransactionHeader1.linPrinceCny.visibility = View.GONE
             }

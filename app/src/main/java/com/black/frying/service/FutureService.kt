@@ -358,7 +358,7 @@ object FutureService {
     }
 
     fun getAccountInfo(context: Context?) {
-        FutureApiServiceHelper.getAccountInfo(context, false,
+        FutureApiServiceHelper.getAccountInfo(context,
             object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->error", error.toString());

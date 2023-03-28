@@ -408,8 +408,8 @@
     <string name="rise_amount">Rise and fall</string>
     <string name="trade_history">Historical Delegation</string>
     <string name="limite_buy">Buy at a limited price</string>
-    <string name="buy_usable">Available for purchase</string>
-    <string name="sale_usable">Available for sale</string>
+    <string name="buy_usable">Available </string>
+    <string name="sale_usable">Available </string>
     <string name="buy_amount_title">Purchase quantity (-)</string>
     <string name="first_sale_date">Release Time</string>
     <string name="sale_total_amount">Total Issuance</string>

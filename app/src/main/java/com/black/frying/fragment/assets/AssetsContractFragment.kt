@@ -159,7 +159,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
                     .go(mContext)}
             R.id.bill -> {
                 FutureApiServiceHelper.getAccountInfo(
-                    context, false,
+                    context,
                     object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
                         override fun error(type: Int, error: Any?) {
                         }

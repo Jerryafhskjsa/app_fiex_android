@@ -448,10 +448,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_padding" />
+
             <RelativeLayout
                 android:id="@+id/rel_volume"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="15dp">
+
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
