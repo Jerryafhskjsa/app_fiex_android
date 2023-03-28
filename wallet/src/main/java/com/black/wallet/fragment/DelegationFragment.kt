@@ -23,7 +23,7 @@ import com.black.lib.refresh.QRefreshLayout
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
-import com.black.wallet.adapter.ContractLimitTabListAdapter
+import com.black.wallet.adapter.ContraLimitTabListAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import kotlin.collections.ArrayList
 
@@ -40,7 +40,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
     private var layout: View? = null
     private var currentPage = 1
     private var total = 0
-    private var adapter: ContractLimitTabListAdapter? = null
+    private var adapter: ContraLimitTabListAdapter? = null
     private var otherType = TYPE_U_CONTRACT
     private var typeList: MutableList<String>? = null
     private var dataList: ArrayList<OrderBeanItem>? = null
@@ -58,7 +58,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        adapter = ContractLimitTabListAdapter(mContext!!, BR.listTabContractPlan,null)
+        adapter = ContraLimitTabListAdapter(mContext!!, BR.listTabContractPlan,null)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
