@@ -91,6 +91,8 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
+        otherType = TYPE_U_CONTRACT
+        type = TYPE_ALL
         getFoundingRateList(otherType,type,oder.startTime,oder.endTime)
         return layout
     }

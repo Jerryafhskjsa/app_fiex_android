@@ -485,6 +485,7 @@
                 android:textSize="@dimen/text_size_13"
                 android:textStyle="bold"
                 android:visibility="gone" />
+
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_handle"
                 android:layout_width="match_parent"

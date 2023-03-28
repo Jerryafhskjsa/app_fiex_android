@@ -346,7 +346,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_detail.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header.xml" value="0.14666666666666667" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header1.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header1.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header2.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_main.xml" value="0.1537037037037037" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main.xml" value="0.16354166666666667" />
@@ -356,6 +356,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_quotation_detail.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_quotation_main.xml" value="0.1537037037037037" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction.xml" value="0.12013681060282172" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_fiex.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.22" />
@@ -368,7 +369,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_search_pair.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_search_pair_delete.xml" value="0.3333333333333333" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_search_pair_title.xml" value="0.17916666666666667" />
-        <entry key="..\:/fiex/app/src/main/res/layout/one_dialog.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/app/src/main/res/layout/one_dialog.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/three_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/two_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/view_home_quotation_tab.xml" value="0.11354166666666667" />
@@ -617,6 +618,7 @@
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_wallet_bill.xml" value="0.17447916666666666" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_item_wallet_transfer_record.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/list_spot_account.xml" value="0.22" />
+        <entry key="..\:/fiex/wallet/src/main/res/layout/list_tab_contract_plan.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/quotation_detail.xml" value="0.10885416666666667" />
         <entry key="..\:/fiex/wallet/src/main/res/layout/withdraw_dialog.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_quotation_detail.xml" value="0.165" />

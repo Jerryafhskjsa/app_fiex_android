@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/open_futrues" />
+                android:text="@string/two_dialog" />
 
             <View
                 android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textColor="@color/partTranslucent"
-                    android:text="@string/cancel" />
+                    android:text="@string/start_futures" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -57,7 +57,7 @@
                     android:gravity="center"
                     android:textColor="@color/T13"
                     android:layout_weight="1"
-                    android:text="@string/confirm" />
+                    android:text="@string/next2" />
 
             </LinearLayout>
 

@@ -28,7 +28,7 @@ class ContractOdersAdapter(context: Context, variableId: Int, data: ArrayList<Or
         viewHolder?.action?.setText(if (oderList.symbol == "btc_usdt") "BTC_USDT" + getString(R.string.sustainable) else "ETH_USDT")
         viewHolder?.direction?.setText(if (oderList.orderSide == "BUY") getString(R.string.contract_buy_raise) else getString(R.string.contract_sell_raise))
         viewHolder?.amount?.setText(CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", oderList.createdTime!!))
-        viewHolder?.accountType?.setText((if(oderList.origQty == null) nullAmount else oderList.origQty.toString()) + "BTC")
+        viewHolder?.accountType?.setText((if(oderList.origQty == null) nullAmount else oderList.origQty.toString()) + "USDT")
         viewHolder?.date?.setText(oderList.price)
         viewHolder?.profit?.setText(if(oderList.closeProfit == null) nullAmount else oderList.closeProfit.toString() + "USDT")
     }

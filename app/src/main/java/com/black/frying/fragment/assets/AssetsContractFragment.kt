@@ -17,14 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.C2CApiServiceHelper
+import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
+import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.Money
+import com.black.base.model.future.AccountInfoBean
 import com.black.base.model.wallet.TigerWallet
 import com.black.base.util.ExchangeRatesUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
+import com.black.util.Callback
 import com.black.util.NumberUtil
 import com.black.wallet.BR
 import com.black.wallet.R
@@ -152,9 +158,25 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)}
             R.id.bill -> {
-                BlackRouter.getInstance().build(RouterConstData.CONTRACT_BILL_ACTIVITY)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)}
+                FutureApiServiceHelper.getAccountInfo(
+                    context, false,
+                    object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
+                        override fun error(type: Int, error: Any?) {
+                        }
+
+                        override fun callback(result: HttpRequestResultBean<AccountInfoBean?>?) {
+                            if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
+                                BlackRouter.getInstance().build(RouterConstData.CONTRACT_BILL_ACTIVITY)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    .go(mContext)
+                            }
+                            else {
+                                FryingUtil.showToast(mContext, getString(R.string.info_futrues))
+                            }
+                        }
+
+                    })
+               }
         }
     }
 private fun refresh(type: Int){

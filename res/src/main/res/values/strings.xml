@@ -36,7 +36,14 @@
     <string name="usdt">USDT</string>
     <string name="useable">可用</string>
     <string name="confirm">确定</string>
+    <string name="start_futures">开始交易</string>
     <string name="open_futrues">当前合约尚未开通，开通后即可进行正常交易，是否开通合约</string>
+    <string name="info_futrues">您当前合约尚未开通。</string>
+    <string name="one_dialog">通过划转资金到合约账户即可进行合约交易</string>
+    <string name="two_dialog">通过点击限价可以选择不同的委托类型进行交易</string>
+    <string name="three_dialog">点击逐仓..可以修改不同的杠杆进行交易</string>
+    <string name="four_dialog">点击设置可以设置偏好设置</string>
+    <string name="five_dialog">点击全部可以显示全部合约</string>
     <string name="confirmed">已完成</string>
     <string name="sell_successful">您已成功出售</string>
     <string name="see_wallet">查看资产</string>
@@ -105,6 +112,11 @@
     <string name="bind_google_title">绑定谷歌身份认证器</string>
     <string name="bind_google_note">请妥善备份密钥以防遗失</string>
     <string name="next">下一步</string>
+    <string name="next1">下一步(1/5)</string>
+    <string name="next2">下一步(2/5)</string>
+    <string name="next3">下一步(3/5)</string>
+    <string name="next4">下一步(4/5)</string>
+    <string name="next5">下一步(5/5)</string>
     <string name="only_one_photo">只能上传一张图片，格式png、jpg、peg大小控制为1M</string>
     <string name="google_code_input_hint">请输入谷歌Code码</string>
     <string name="google_code_1">谷歌Code码</string>
@@ -326,6 +338,7 @@
     <string name="china">中国</string>
     <string name="america">美国</string>
     <string name="id_pay">支付宝</string>
+    <string name="null_bills">当前不存在订单</string>
     <string name="cards">银行卡</string>
     <string name="wei_xin">微信</string>
     <string name="future_success">你已成功开通合约!</string>

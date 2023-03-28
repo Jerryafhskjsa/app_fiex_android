@@ -118,6 +118,7 @@ class CostFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
         list!!.add(TYPE_RECOVER)
         list!!.add(TYPE_GRANT)
         list!!.add(TYPE_DEDUCTION)
+        type = TYPE_ALL
         getBalancesBills(otherType,type,startTime,endTime)
         return layout
     }

@@ -91,7 +91,7 @@ interface FutureApiService {
     /**
      * 开通合约
      */
-    @GET(UrlConfig.Future.URL_OPEN_ACCOUNT)
+    @POST(UrlConfig.Future.URL_OPEN_ACCOUNT)
     fun openAccount(): Observable<HttpRequestResultBean<String?>?>?
 
     /**
@@ -307,5 +307,11 @@ interface FutureApiService {
     @POST(UrlConfig.Future.URL_CANCEL_PLAN_BY_ID)
     fun cancelPlanById(@Field("entrustId") profitId: String?): Observable<HttpRequestResultBean<String>?>?
 
+    /**
+     * 根据id撤销限价委托
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_ORDER_CANCEL)
+    fun cancelOrderId(@Field("orderId") orderId: String?): Observable<HttpRequestResultBean<String>?>?
 
 }

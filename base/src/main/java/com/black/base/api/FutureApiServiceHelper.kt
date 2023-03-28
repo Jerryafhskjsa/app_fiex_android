@@ -861,4 +861,21 @@ object FutureApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
 
     }
+
+    fun cancelOrderId(
+        context: Context?,
+        orderId: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.cancelOrderId(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+
+    }
 }

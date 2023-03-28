@@ -41,9 +41,9 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     private var adapter: ContractOdersAdapter? = null
     private var currentPage = 1
     private var total = 0
-    private var otherType = TYPE_U_CONTRACT
+    private var otherType: String? = null
     private var typeList: MutableList<String>? = null
-    private var type = TYPE_ALL
+    private var type: String? = null
     private var list: MutableList<String>? = null
     private var oder = Order()
 
@@ -79,6 +79,8 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
         TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
         TYPE_ALL = getString(R.string.all)
+        otherType = TYPE_U_CONTRACT
+        type = TYPE_ALL
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)

@@ -213,10 +213,21 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         }
-        token = HttpCookieUtil.getProToken(mContext as HomePageActivity)
-        if (token == null && CookieUtil.getUserInfo(mContext as HomePageActivity) != null){
-            openDialog()
-        }
+        FutureApiServiceHelper.getAccountInfo(
+            context, false,
+            object : Callback<HttpRequestResultBean<AccountInfoBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(result: HttpRequestResultBean<AccountInfoBean?>?) {
+                    if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
+                    }
+                    else {
+                        openDialog()
+                    }
+                }
+
+            })
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -289,9 +300,10 @@ class HomePageContractFragment : BaseFragment(),
                 }
 
                 override fun callback(result: HttpRequestResultBean<String?>?) {
-                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                    if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
+                        binding?.refreshLayout?.setRefreshing(true)
                        FryingUtil.showToast(context,getString(R.string.future_success))
-                        //oneDialog()
+                        oneDialog()
                     }
                 }
 
@@ -299,7 +311,7 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun oneDialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.one_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -327,7 +339,7 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
     private fun twoDialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.two_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -355,7 +367,7 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
     private fun threeDialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.three_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -383,7 +395,7 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
     private fun fourDialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.four_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -411,7 +423,7 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
     private fun fiveDialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.five_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -558,6 +570,7 @@ class HomePageContractFragment : BaseFragment(),
         binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
         binding?.fragmentHomePageContractHeader2?.bills?.setOnClickListener(this)
     }
+
 
     private fun initHeader() {
         headerView = binding?.fragmentHomePageContractHeader
@@ -886,6 +899,10 @@ class HomePageContractFragment : BaseFragment(),
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClick(v: View) {
+        if (CookieUtil.getUserInfo(context!!) == null) {
+            //未登录，请求登陆
+            fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
+        } else {
         when (v.id) {
             R.id.current_price_layout -> {
                 Currentdialog()
@@ -963,10 +980,10 @@ class HomePageContractFragment : BaseFragment(),
             }
 
             R.id.lin_order_type -> {
-                currentOrderType =  binding!!.fragmentHomePageContractHeader1.orderType.text.toString()
+                currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) "LIMIT" else "MARKET"
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
-                    currentOrderType,
+                   currentOrderType,
                     viewModel?.getCurrentPairOrderTypeList() as List<String?>?,
                     object : DeepControllerWindow.OnReturnListener<String?> {
                         override fun onReturn(
@@ -1004,7 +1021,7 @@ class HomePageContractFragment : BaseFragment(),
                     }).show()
             }
             R.id.lin_limit_type -> {
-                binding!!.fragmentHomePageContractHeader1.withLimitType.text.toString()
+                currentTimeInForceType = binding?.fragmentHomePageContractHeader1?.withLimitType?.text.toString()
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentTimeInForceType,
@@ -1197,6 +1214,7 @@ class HomePageContractFragment : BaseFragment(),
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
             }
+        }
         }
     }
 

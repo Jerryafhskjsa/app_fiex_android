@@ -18,6 +18,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.future.Constants
 import com.black.base.model.future.OrderBean
+import com.black.base.model.future.OrderBeanItem
 import com.black.base.model.future.PlansBean
 import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.Wallet
@@ -31,6 +32,7 @@ import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
+import com.black.wallet.adapter.ContractPlanTabListAdapter
 import com.black.wallet.adapter.FinancialRecordAdapter
 import com.black.wallet.adapter.WalletTransferRecordAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
@@ -52,7 +54,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
     private var typeList: MutableList<String>? = null
     private var type = TYPE_ALL
     private var list: MutableList<String>? = null
-    private var adapter: WalletTransferRecordAdapter? = null
+    private var adapter: ContractPlanTabListAdapter? = null
     private var currentPage = 1
     private var total = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,7 +69,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
         binding?.recyclerView?.layoutManager = layoutManager
-        adapter = WalletTransferRecordAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
+        adapter = ContractPlanTabListAdapter(mContext!!, BR.listItemFinancialRecordModel, null)
         adapter?.setOnItemClickListener(this)
         binding?.recyclerView?.adapter = adapter
         binding?.recyclerView?.isNestedScrollingEnabled = false
@@ -89,7 +91,8 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         typeList = ArrayList()
         typeList!!.add(TYPE_U_CONTRACT)
         typeList!!.add(TYPE_COIN_CONTRACT)
-
+        otherType = TYPE_U_CONTRACT
+        type = TYPE_ALL
         getPlanData()
         return layout
     }
@@ -174,6 +177,17 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         return total > adapter?.count!!
     }
 
+    private fun show(dataList: ArrayList<PlansBean?>?){
+        binding?.refreshLayout?.setRefreshing(false)
+        binding?.refreshLayout?.setLoading(false)
+        if (currentPage == 1) {
+            adapter?.data = dataList
+        } else {
+            adapter?.addAll(dataList)
+        }
+        adapter?.notifyDataSetChanged()
+    }
+
     //获取计划委托记录
     private fun getPlanData() {
         if (otherType == TYPE_U_CONTRACT) {
@@ -185,9 +199,10 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
                     }
 
                     override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
-                        binding?.refreshLayout?.setRefreshing(false)
-                        binding?.refreshLayout?.setLoading(false)
                         if (returnData != null) {
+                            total = returnData.result!!.total
+                            val list = returnData.result!!.items
+                            show(list)
                         }
                     }
                 })

@@ -4,6 +4,7 @@ import com.tencent.imsdk.ext.group.TIMGroupPendencyGetType
 
 open class OrderBean(
     val items: ArrayList<OrderBeanItem>,
+    var total: Int = 0
 
 )
 

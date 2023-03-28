@@ -94,7 +94,6 @@ class ContractPlanTabFragment : BaseFragment(),
         val group = binding?.listView?.parent as ViewGroup
         group.addView(emptyView)
         binding?.listView?.emptyView = emptyView
-
         adapter = ContractPlanTabAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
@@ -148,6 +147,7 @@ class ContractPlanTabFragment : BaseFragment(),
         when (v.id) {
             R.id.all_done -> {
                 if (dataList?.size == 0) {
+                    FryingUtil.showToast(activity, getString(R.string.null_bills))
                     return
                 }
                 FutureApiServiceHelper.cancelALlPlan(
@@ -239,13 +239,12 @@ class ContractPlanTabFragment : BaseFragment(),
 
                 override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
                     if (returnData != null) {
-                        var orderData = returnData?.result
-                        var orderList = orderData?.items
-                        planUnionBean?.limitPriceList = orderList
+                        val orderData = returnData.result
+                        val orderList = orderData?.items
+                        planUnionBean.limitPriceList = orderList
                         adapter?.data = planUnionBean.planList
                         adapter?.notifyDataSetChanged()
-                        var count =
-                            planUnionBean?.planList?.size!! + planUnionBean?.limitPriceList?.size!!
+                        val count = planUnionBean.planList?.size!! + planUnionBean.limitPriceList?.size!!
                         onTabModelListener?.onCount(count)
 
                     }

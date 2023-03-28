@@ -40,7 +40,7 @@
         android:id="@+id/bills"
         android:layout_width="@dimen/text_size_28"
         android:layout_height="@dimen/text_size_28"
-        android:layout_marginTop="@dimen/text_size_5"
+        android:layout_marginTop="@dimen/text_size_10"
         android:src="@drawable/btn_c2c_bills"/>
     </LinearLayout>
         <com.black.base.widget.AutoHeightViewPager

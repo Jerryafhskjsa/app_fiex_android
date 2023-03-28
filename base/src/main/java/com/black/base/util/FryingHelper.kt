@@ -19,6 +19,7 @@ class FryingHelper(private val activity: Activity) {
         }
     }
 
+
     fun onResume() {
         if (loginCallback != null && CookieUtil.getUserInfo(activity) != null) {
             val runnable: Runnable = loginCallback!!

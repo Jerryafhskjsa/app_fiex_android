@@ -674,6 +674,9 @@ object UrlConfig {
         //限价委托和市价委托撤销
         const val URL_CANCEL_ALL = "trade/v1/order/cancel-all"
 
+        //限价委托和市价委托撤销
+        const val URL_ORDER_CANCEL = "trade/v1/order/cancel"
+
         //撤销所有止盈止损
         const val URL_CANCEL_ALL_PROFIT_STOP = "trade/v1/entrust/cancel-all-profit-stop"
 

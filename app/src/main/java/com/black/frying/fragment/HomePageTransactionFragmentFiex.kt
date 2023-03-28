@@ -467,7 +467,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 }
             }
             R.id.lin_order_type -> {
-                currentOrderType = binding!!.fragmentHomePageTransactionHeader1.orderType.text.toString()
+                currentOrderType = if (binding?.fragmentHomePageTransactionHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) "LIMIT" else "MARKET"
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                     currentOrderType,
