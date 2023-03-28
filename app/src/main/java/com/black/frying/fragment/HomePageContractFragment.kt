@@ -300,7 +300,7 @@ class HomePageContractFragment : BaseFragment(),
                 }
 
                 override fun callback(result: HttpRequestResultBean<String?>?) {
-                    if (result != null && result.returnCode == HttpRequestResult.SUCCESS) {
+                    if (result?.returnCode == HttpRequestResult.SUCCESS) {
                         binding?.refreshLayout?.setRefreshing(true)
                        FryingUtil.showToast(context,getString(R.string.future_success))
                         oneDialog()
@@ -442,7 +442,6 @@ class HomePageContractFragment : BaseFragment(),
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
-            getFutrueOpen()
             dialog.dismiss()
         }
         dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
