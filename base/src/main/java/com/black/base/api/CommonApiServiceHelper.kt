@@ -230,7 +230,7 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(CommonApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
             ?.getMyPosterList()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -240,7 +240,7 @@ object CommonApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(CommonApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
             ?.getInviteUrl()
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))

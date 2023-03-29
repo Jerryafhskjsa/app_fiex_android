@@ -140,41 +140,85 @@ object UserApiServiceHelper {
                             jsonObject = JSONObject(returnData.data.toString())
                         } catch (e: JSONException) {
                         }
-                        if(jsonObject != null){
+                        if(jsonObject != null) {
                             var type = jsonObject.getString("type")
                             val captchaId = jsonObject.getString("gt")
-                            var newCaptcha = jsonObject.getString("new_captcha")
-                            val config = GTCaptcha4Config
-                                .Builder()
-                                .setTimeOut(10000)
-                                .build()
-                            val gtCaptcha4Client = GTCaptcha4Client.getClient(context)
-                                .init(captchaId, config)
+                            val newCaptcha = jsonObject.getBoolean("new_captcha")
+                            if (newCaptcha) {
+                                val config = GTCaptcha4Config
+                                    .Builder()
+                                    .setTimeOut(10000)
+                                    .build()
+                                val gtCaptcha4Client = GTCaptcha4Client.getClient(context)
+                                    .init(captchaId, config)
                                 gtCaptcha4Client.addOnSuccessListener(GTCaptcha4Client.OnSuccessListener { b, s ->
-                                    if (b){
+                                    if (b) {
                                         verifyCodeCallBack.captcha = s
-                                        FryingUtil.showToast(context, context.getString(R.string.alert_verify_code_success))
-                                        sendVerifyCodeGeeTest(context,userName,telCountryCode,s.toString(),object :
-                                            Callback<HttpRequestResultString?>() {
-                                            override fun error(type: Int, error: Any?) {
-                                            }
+                                        FryingUtil.showToast(
+                                            context,
+                                            context.getString(R.string.alert_verify_code_success)
+                                        )
+                                        sendVerifyCodeGeeTest(
+                                            context,
+                                            userName,
+                                            telCountryCode,
+                                            s.toString(),
+                                            object :
+                                                Callback<HttpRequestResultString?>() {
+                                                override fun error(type: Int, error: Any?) {
+                                                }
 
-                                            override fun callback(returnData: HttpRequestResultString?) {
+                                                override fun callback(returnData: HttpRequestResultString?) {
 
-                                            }
+                                                }
 
-                                        })
+                                            })
+                                    } else {
+                                        FryingUtil.showToast(
+                                            context,
+                                            context.getString(R.string.alert_verify_code_failed)
+                                        )
                                     }
-                                    else{
-                                        FryingUtil.showToast(context, context.getString(R.string.alert_verify_code_failed))
-                                    }
-                                } )
+                                })
                                 gtCaptcha4Client.addOnFailureListener(GTCaptcha4Client.OnFailureListener {
-                                     fun onFailure() {
+                                    fun onFailure() {
 
                                     }
                                 })
-                                .verifyWithCaptcha()
+                                    .verifyWithCaptcha()
+                            }
+                            else
+                            {
+                                sendVerifyCodeGeeTest(
+                                    context,
+                                    userName,
+                                    telCountryCode,
+                                    captchaId,
+                                    object :
+                                        Callback<HttpRequestResultString?>() {
+                                        override fun error(type: Int, error: Any?) {
+                                        }
+
+                                        override fun callback(returnData: HttpRequestResultString?) {
+                                            if (returnData?.code == HttpRequestResult.SUCCESS){
+                                                FryingUtil.showToast(
+                                                    context,
+                                                    context.getString(R.string.alert_verify_code_success)
+                                                )
+                                            }
+                                            else
+                                            {
+                                                FryingUtil.showToast(
+                                                    context,
+                                                   returnData?.msg
+                                                )
+                                            }
+
+                                        }
+
+                                    })
+                            }
+
                         }
                     } else {
                         showToast(context, if (returnData == null) "null" else returnData.msg)
@@ -434,7 +478,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getRecommendCount()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -447,7 +491,7 @@ object UserApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(UserApiService::class.java)
+        ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
                 ?.getRecommendDetail(page, pageSize, level, startTime, endTime)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

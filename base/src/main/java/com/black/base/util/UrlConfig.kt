@@ -95,7 +95,7 @@ object UrlConfig {
 
     //公告中心 https://fbsexco.zendesk.com/hc/en-us   https://fbsexco.zendesk.com/hc/zh-cn
     fun getUrlNoticeAll(context: Context?): String {
-        return "https://fbsexco.zendesk.com/hc/%s"
+        return "https://support.fiex.io/api/v2/help_center/%s/categories/5707832287119/articles"
     }
 
     //聚宝盆协议
@@ -632,7 +632,7 @@ object UrlConfig {
         //公告首頁
         //https://fbsexco.zendesk.com/api/v2/help_center/zh-cn/categories/360002181134/articles.json?page=1&per_page=3
         const val URL_NOTICE_HOME =
-            "https://support.fiex.io/api/v2/help_center/{language}/categories/5324590333455/articles"
+            "https://support.fiex.io/api/v2/help_center/{language}/categories/5707832287119/articles"
 
         //弹出广告
         const val URL_GLOBAL_AD = "notice/currentPhone"

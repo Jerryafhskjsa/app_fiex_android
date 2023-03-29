@@ -104,6 +104,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private var transactionType = 1 //1 买入 2卖出
     private var tabType = ConstData.TAB_COIN
+    private var type = ConstData.BalanceType.SPOT
 
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
@@ -726,6 +727,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         resetPriceLength()
         resetAmountLength()
         refreshCurrentWallet()
+        refreshUserBalance()
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
@@ -858,7 +860,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 CommonUtil.parseDouble(binding!!.fragmentHomePageTransactionHeader1.price.text.toString())
             return if (usable == null || price == null || price == 0.0) null else BigDecimal(usable).divide(
                 BigDecimal(price),
-                2,
+                6,
                 BigDecimal.ROUND_HALF_DOWN
             )
         } else if (transactionType == 2) {
@@ -908,21 +910,23 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     //计算总额
     private fun computeTotal() {
-        var price = CommonUtil.parseDouble(
+        val price = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
-        var price2 = CommonUtil.parseDouble(
+        val price2 = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.currentPrice.text.toString().trim { it <= ' ' })
         val count = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
                 .trim { it <= ' ' })
-        if (price != null && price2 !=  null) {
-            price *= 0.99
-            price2 *= 0.99
+        if (price == null && price2 != null)
+        {
+            binding?.fragmentHomePageTransactionHeader1?.price?.setText(price2.toString())
+        }
+        else if (price != null && price2 !=  null) {
             if (count != null && (count != 0.0)) {
                 if (currentOrderType.equals("LIMIT")) {
                     binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
                         NumberUtil.formatNumberNoGroup(
-                            price * count,
+                            price * count * 0.99,
                             RoundingMode.FLOOR,
                             viewModel!!.getAmountLength(),
                             viewModel!!.getAmountLength()
@@ -932,7 +936,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 else {
                     binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText(
                         NumberUtil.formatNumberNoGroup(
-                            price2 * count,
+                            price2 * count * 0.99,
                             RoundingMode.FLOOR,
                             viewModel!!.getAmountLength(),
                             viewModel!!.getAmountLength()
@@ -975,7 +979,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     }
                 }
             }
-        } else {
+        }
+            else {
             if (transactionType == 1) {
                 binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
                 binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
@@ -992,6 +997,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun computePriceCNY() {
         val price = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
+        rates = if (rates == null) 0.0 else rates
         if (price != null && price > 0 && viewModel!!.getCurrentPriceCNY() != null && viewModel!!.getCurrentPrice() != 0.0) {
             binding!!.fragmentHomePageTransactionHeader1.priceCny.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
@@ -1014,6 +1020,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun clearInput() {
         binding!!.fragmentHomePageTransactionHeader1.price.setText("")
         binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("")
+        binding!!.fragmentHomePageTransactionHeader1.tradeValue.setText("")
         binding!!.fragmentHomePageTransactionHeader1.countBar.progress = 0
         binding!!.fragmentHomePageTransactionHeader1.countProgress.progress = 0
         binding!!.fragmentHomePageTransactionHeader1.amountTwenty.isChecked = false
@@ -1044,12 +1051,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         refreshCurrentWallet()
         refreshTransactionHardViews()
         refreshAsstes()
-        getUserBalanceCallback()
+        refreshUserBalance()
         refreshUsable()
         refreshData()
         currentOrderType = "LIMIT"
         viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
+        initView()
     }
 
     private fun refreshOrderType(type: String?) {
@@ -1188,14 +1196,21 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel!!.getCurrentWallet(tabType)
     }
 
+    //刷新当前钱包
+    private fun refreshUserBalance() {
+        currentBalanceBuy = null
+        currentBalanceSell = null
+        viewModel!!.getCurrentUserBalance(type)
+    }
+
     private fun refreshAsstes(){
             if (currentBalanceSell != null) {
                 binding!!.unable.setText(
                     NumberUtil.formatNumberNoGroup(
                         currentBalanceSell?.availableBalance?.toDoubleOrNull(),
                         RoundingMode.FLOOR,
-                        0,
-                        8
+                        4,
+                        4
                     )
                 )
             } else {
@@ -1206,8 +1221,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     NumberUtil.formatNumberNoGroup(
                         currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
                         RoundingMode.FLOOR,
-                        0,
-                        8
+                        4,
+                        4
                     )
                 )
             } else {
@@ -1224,16 +1239,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         NumberUtil.formatNumberNoGroup(
                             currentBalanceSell?.availableBalance?.toDoubleOrNull(),
                             RoundingMode.FLOOR,
-                            0,
-                            8
+                            4,
+                            4
                         )
                     )
                     binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
                         NumberUtil.formatNumberNoGroup(
                             currentBalanceSell?.freeze?.toDoubleOrNull(),
                             RoundingMode.FLOOR,
-                            0,
-                            8
+                            4,
+                            4
                         )
                     )
                 } else {
@@ -1247,16 +1262,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         NumberUtil.formatNumberNoGroup(
                             currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
                             RoundingMode.FLOOR,
-                            0,
-                            8
+                            4,
+                            4
                         )
                     )
                     binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
                         NumberUtil.formatNumberNoGroup(
                             currentBalanceBuy?.freeze?.toDoubleOrNull(),
                             RoundingMode.FLOOR,
-                            0,
-                            8
+                            4,
+                            4
                         )
                     )
                 } else {
@@ -1505,6 +1520,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     override fun onUserInfoChanged() {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             getTradeOrderCurrent()
+            refreshUserBalance()
             refreshCurrentWallet()
         }
     }

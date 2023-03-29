@@ -248,14 +248,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             R.id.btn_notice_more -> {
                 val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(R.string.notice))
-                bundle.putString(
-                    ConstData.URL,
-                    String.format(
-                        UrlConfig.getUrlNoticeAll(mContext),
-                        FryingUtil.getLanguageKey(mContext)
-                    )
-                )
+                bundle.putString(ConstData.URL, String.format(UrlConfig.getUrlNoticeAll(mContext), FryingUtil.getLanguageKey(mContext)))
                 BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
@@ -276,7 +271,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             R.id.rel_more ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
             R.id.rel_referral ->
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+                BlackRouter.getInstance().build(RouterConstData.RECOMMEND).go(mContext)
                /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {

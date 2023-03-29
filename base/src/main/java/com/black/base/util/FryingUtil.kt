@@ -274,11 +274,11 @@ object FryingUtil {
 
     fun getLanguageKey(context: Context?): String {
         val language = (if (context == null) null else LanguageUtil.getLanguageSetting(context))
-                ?: return "zh-cn"
+                ?: return "en-us"
         return when (language.languageCode) {
-            4 -> "en-us"
-            1 -> "zh-cn"
-            else -> "zh-cn"
+            1 -> "en-us"
+            2-> "zh-cn"
+            else -> "en-us"
         }
     }
 
