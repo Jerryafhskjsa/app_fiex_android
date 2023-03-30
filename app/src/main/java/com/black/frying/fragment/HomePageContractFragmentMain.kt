@@ -12,6 +12,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.util.FryingUtil
 import com.black.base.util.StatusBarUtil
 import com.black.frying.activity.HomePageActivity
+import com.black.frying.contract.FuturesFragment
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractMainBinding
 import com.google.android.material.tabs.TabLayout
@@ -52,7 +53,7 @@ class HomePageContractFragmentMain : BaseFragment(), View.OnClickListener {
     }
 
     private fun initContractGroup() {
-        tabSets = listOf(getString(R.string.usdt_base), getString(R.string.coin_base), getString(R.string.simulation_base))
+        tabSets = listOf(getString(R.string.usdt_base),"new", getString(R.string.coin_base), getString(R.string.simulation_base))
         if (tabSets != null && tabSets!!.isNotEmpty()) {
             val setSize = tabSets!!.size
             fragmentList = ArrayList(setSize)
@@ -61,7 +62,8 @@ class HomePageContractFragmentMain : BaseFragment(), View.OnClickListener {
                 try {
                     when(i){
                         0 -> fragmentList?.add(HomePageContractFragment.newSelfInstance(set))
-                        1 ->fragmentList?.add(EmptyFragment())
+                        1 ->fragmentList?.add(FuturesFragment.newInstance())
+                        2 ->fragmentList?.add(EmptyFragment())
                     }
 
                 } catch (throwable: Throwable) {

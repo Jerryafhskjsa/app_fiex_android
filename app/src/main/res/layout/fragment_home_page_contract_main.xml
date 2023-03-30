@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/coin_base" />
         </com.google.android.material.tabs.TabLayout>
-        <androidx.viewpager.widget.ViewPager
+        <com.black.frying.view.FuturesViewPager
             android:id="@+id/contract_main_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
