@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.black.frying.contract.viewmodel.FuturesTitleViewModel
 import com.black.frying.contract.viewmodel.FuturesViewModel
+import com.black.net.okhttp.OkWebSocket
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesBinding
 
@@ -51,12 +52,16 @@ class FuturesFragment : Fragment() {
             }
             futuresTitleBar.setOnClickListener {
                 // TODO: 选择币种
+                futuresTitleViewModel.goToSelectOtherCoin(requireActivity())
             }
             futuresCoinCharts.setOnClickListener {
                 //todo k线详情
+//                futuresTitleViewModel.goToKlineDetail(requireActivity())
+                viewModel.testSend()
             }
             futuresTransactionMore.setOnClickListener {
                 //todo 更多设置
+                viewModel.startConnect()
             }
         }
         futuresTitleViewModel.coinInfo.observe(
