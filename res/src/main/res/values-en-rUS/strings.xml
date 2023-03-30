@@ -45,6 +45,7 @@
     <string name="four_dialog">Click Settings to set preferences</string>
     <string name="five_dialog">Click  Display All to all contracts</string>
     <string name="confirmed">Confirmed</string>
+    <string name="coin_asset">Current currency to asset</string>
     <string name="sell_successful">You have successfully sold</string>
     <string name="see_wallet">View assets</string>
     <string name="by_0_fee">buy by 0 fee</string>

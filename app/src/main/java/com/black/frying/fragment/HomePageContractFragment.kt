@@ -224,7 +224,6 @@ class HomePageContractFragment : BaseFragment(),
         )
         layout = binding?.root
         viewModel = ContractViewModel(mContext!!, this)
-
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -459,12 +458,14 @@ class HomePageContractFragment : BaseFragment(),
     override fun onResume() {
         super.onResume()
         viewModel?.setTabType(tabType)
-        viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
+        viewModel?.getCurrentUserBalance(ConstData.BalanceType.CONTRACT)
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getLeverageBracketDetail()
         viewModel?.getAggTicker()
         viewModel?.getCurrentDeal()
         viewModel?.onResume()
+        refreshUserBalance()
+        refreshMoney()
         initAdjustLeverageData()
         updateDear(isDear)
         FutureService.getContractSize(viewModel?.getCurrentPair())
@@ -1013,9 +1014,6 @@ class HomePageContractFragment : BaseFragment(),
                             refreshUnitType(item)
                             currentUnitType = item
                             viewModel?.setCurrentUnitType(item)
-                            if (currentOrderType.equals("LIMIT")) {
-                            } else if (currentOrderType.equals("MARKET")) {
-                            }
                         }
                     }).show()
             }
@@ -1043,7 +1041,7 @@ class HomePageContractFragment : BaseFragment(),
                 )
             ) {
                 val bundle = Bundle()
-                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair())
+                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair()?.uppercase())
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }
@@ -1185,6 +1183,7 @@ class HomePageContractFragment : BaseFragment(),
                     }
                 }
                 createOrderFuture(positionSide!!, orderSide!!)
+                refreshMoney()
             }
             //买入/开多
             R.id.btn_handle -> mContext?.let {
@@ -1205,6 +1204,7 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }
                     createOrderFuture(positionSide!!, orderSide!!)
+                    refreshMoney()
                 }
             }
 
@@ -1546,9 +1546,9 @@ class HomePageContractFragment : BaseFragment(),
         ) {
             return
         }
-        var longLeverage = buyMultiChooseBean?.defaultMultiple
-        var shortLeverage = sellMultiChooseBean?.defaultMultiple
-        var availableOpenData = FutureService.getAvailableOpenData(
+        val longLeverage = buyMultiChooseBean?.defaultMultiple
+        val shortLeverage = sellMultiChooseBean?.defaultMultiple
+        val availableOpenData = FutureService.getAvailableOpenData(
             BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount),
             BigDecimal.ZERO
         )
@@ -1713,9 +1713,9 @@ class HomePageContractFragment : BaseFragment(),
                 "/" + viewModel!!.getSetName().toString().uppercase()
             )
             header1View?.deepPriceP?.text =
-                getString(R.string.brackets, viewModel!!.getSetName())
+                getString(R.string.brackets, viewModel!!.getSetName()?.uppercase())
             header1View?.deepAmountName?.text =
-                getString(R.string.brackets, viewModel!!.getCoinType())
+                getString(R.string.brackets, viewModel!!.getCoinType()?.uppercase())
             if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
                 header1View?.btnHandle?.setText(getString(R.string.contract_buy_raise))
                 header1View?.btnHandle1?.setText(getString(R.string.contract_sell_fall))
@@ -2068,12 +2068,23 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    //刷新当前钱包
+    private fun refreshUserBalance() {
+        currentBalanceBuy = null
+        currentBalanceSell = null
+        viewModel!!.getCurrentUserBalance(ConstData.BalanceType.CONTRACT)
+    }
+
+    private fun refreshMoney() {
+       // binding?.fragmentHomePageContractHeader?.totalProfitValue?.setText(currentBalanceBuy?.availableBalance)
+    }
+
     /**
      * 更新总权益
      */
     override fun updateTotalProfit(totalProfit: String) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+            binding!!.fragmentHomePageContractHeader.totalProfitValue.text = totalProfit
         }
     }
 

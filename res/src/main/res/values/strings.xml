@@ -45,6 +45,7 @@
     <string name="four_dialog">点击设置可以设置偏好设置</string>
     <string name="five_dialog">点击全部可以显示全部合约</string>
     <string name="confirmed">已完成</string>
+    <string name="coin_asset">当前币对资产</string>
     <string name="sell_successful">您已成功出售</string>
     <string name="see_wallet">查看资产</string>
     <string name="by_0_fee">0手续费购买</string>

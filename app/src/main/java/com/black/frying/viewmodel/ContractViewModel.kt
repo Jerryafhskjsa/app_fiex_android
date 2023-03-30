@@ -935,10 +935,10 @@ class ContractViewModel(
                             var balanceList: ArrayList<UserBalance?>? = null
                             when (balanceType) {
                                 ConstData.BalanceType.SPOT -> {
-                                    balanceList = balances?.spotBalance
+                                    balanceList = balances.spotBalance
                                 }
                                 ConstData.BalanceType.CONTRACT -> {
-                                    balanceList = balances?.tigerBalance
+                                    balanceList = balances.tigerBalance
                                 }
                             }
                             if (balanceList != null) {
