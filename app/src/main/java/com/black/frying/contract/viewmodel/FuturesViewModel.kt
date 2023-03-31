@@ -1,7 +1,9 @@
 package com.black.frying.contract.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.black.base.model.socket.PairQuotation
 import com.black.base.util.UrlConfig
+import com.black.frying.contract.biz.okwebsocket.SincePriceMessageHandler
 import com.black.frying.service.FutureService.symbol
 import com.black.net.okhttp.OKWebSocketFactory
 import com.black.net.okhttp.OkWebSocket
@@ -21,6 +23,12 @@ class FuturesViewModel : ViewModel() {
         val okWebSocket =
             OKWebSocketFactory.getOkWebSocket(UrlConfig.SOCKET_HOSTS_SOEASTEX + "market")
         okWebSocketHelper = OkWebSocketHelper(okWebSocket)
+        okWebSocketHelper?.start()
+        okWebSocketHelper?.setImessageHandler(object : SincePriceMessageHandler() {
+            override fun consumeMessage(pairQuotation: PairQuotation) {
+
+            }
+        })
     }
 
 

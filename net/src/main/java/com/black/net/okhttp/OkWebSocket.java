@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -47,6 +48,8 @@ public class OkWebSocket extends WebSocketListener {
         return mActionHandler;
     }
 
+
+    public static final int TIME = 10*1000;
     public static final int OK_MESSAGE_OPEN = 0x00001;
     public static final int OK_MESSAGE_MESSAGE = 0x00002;
     public static final int OK_MESSAGE_CLOSING = 0x00003;
@@ -54,9 +57,13 @@ public class OkWebSocket extends WebSocketListener {
     public static final int OK_MESSAGE_FAILURE = 0x00005;
 
 
+
     public static final int ACTION_PAUSE = 0x00001;
     public static final int ACTION_RESUME = 0x00002;
     public static final int ACTION_QUITE = 0x00003;
+
+    public static final int ACTION_PING = 0x00004;
+
 
     private final List<IOkWebSocketMessage> mObserverList = Collections.synchronizedList(new ArrayList<>());
 
@@ -159,6 +166,8 @@ public class OkWebSocket extends WebSocketListener {
                 case ACTION_QUITE:
                     performActionQuite();
                     return true;
+                case ACTION_PING:
+                    performActionPing();
                 default:
                     break;
             }
@@ -166,6 +175,19 @@ public class OkWebSocket extends WebSocketListener {
         };
         mActionHandler = new Handler(mActionHandlerThread.getLooper(), actionCallback);
         connection();
+    }
+
+    private void performActionPing() {
+        if(mWebSocket!=null){
+            mWebSocket.send("ping");
+            sendPingMsg();
+        }
+    }
+
+    private void sendPingMsg() {
+        final Message obtain = Message.obtain();
+        obtain.what = ACTION_PING;
+        mActionHandler.sendMessageDelayed(obtain,TIME);
     }
 
     private void performActionQuite() {
@@ -199,6 +221,7 @@ public class OkWebSocket extends WebSocketListener {
         d("onOpen() called with: webSocket = [" + webSocket + "], response = [" + response + "]");
         super.onOpen(webSocket, response);
         mReceiveHandler.sendEmptyMessage(OK_MESSAGE_OPEN);
+        sendPingMsg();
     }
 
     @Override
@@ -206,6 +229,9 @@ public class OkWebSocket extends WebSocketListener {
         d("onMessage() called with: webSocket = [" + webSocket + "], text = [" + text + "]");
 
         super.onMessage(webSocket, text);
+        if(TextUtils.equals("pong",text)){
+            return;
+        }
         final Message obtain = Message.obtain();
         obtain.what = OK_MESSAGE_MESSAGE;
         obtain.obj = text;

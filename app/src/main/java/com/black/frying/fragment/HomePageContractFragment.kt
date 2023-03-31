@@ -1940,7 +1940,7 @@ class HomePageContractFragment : BaseFragment(),
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             updatePriceSince(tickerBean?.r)
             updateCurrentPairPrice(tickerBean?.c)
-            initInputPriceValue(tickerBean?.c)
+//            initInputPriceValue(tickerBean?.c)
             updateOpenAvailableData()
         }
     }
