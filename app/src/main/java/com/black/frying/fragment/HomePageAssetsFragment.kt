@@ -57,9 +57,9 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     companion object {
         private const val TYPE_CNY = "CNY"
         private const val TYPE_BTC = "BTC"
-        private val TAB_TITLES = arrayOfNulls<String>(5) //标题
+        private val TAB_TITLES = arrayOfNulls<String>(4) //标题
         private var TAB_NORMAL: String? = null
-        private var TAB_CONTRACT: String? = null
+       // private var TAB_CONTRACT: String? = null
         private var TAB_FINANCE: String? = null
         private var TAB_WALLET: String? = null
     }
@@ -136,18 +136,18 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             TAB_NORMAL = it
             TAB_TITLES[1] = TAB_NORMAL
         }
-        getString(R.string.contract_account).also {
+       /* getString(R.string.contract_account).also {
             TAB_CONTRACT = it
             TAB_TITLES[2] = TAB_CONTRACT
-        }
+        }*/
 
         getString(R.string.finance_account).also {
             TAB_FINANCE = it
-            TAB_TITLES[3] = TAB_FINANCE
+            TAB_TITLES[2] = TAB_FINANCE
         }
         getString(R.string.capital_account).also {
             TAB_FINANCE = it
-            TAB_TITLES[4] = TAB_FINANCE
+            TAB_TITLES[3] = TAB_FINANCE
         }
 
 
@@ -302,7 +302,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             normalFragment = it
             normalFragment?.setEventListener(this)
         })
-        fragmentList?.add(AssetsContractFragment().also {
+        /*fragmentList?.add(AssetsContractFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
@@ -311,6 +311,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             contractFragment = it
             contractFragment?.setEventListener(this)
         })
+         */
         fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
