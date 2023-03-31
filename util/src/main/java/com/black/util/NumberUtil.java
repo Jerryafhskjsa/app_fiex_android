@@ -1,5 +1,7 @@
 package com.black.util;
 
+import androidx.annotation.NonNull;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -224,5 +226,14 @@ public class NumberUtil {
             return null;
         }
         return source.charAt(index);
+    }
+
+
+    public static BigDecimal toBigDecimal(@NonNull String value){
+        try {
+            return new BigDecimal(value);
+        } catch (Exception e) {
+            return BigDecimal.ZERO;
+        }
     }
 }

@@ -1853,49 +1853,47 @@ class HomePageContractFragment : BaseFragment(),
      * 数量 = 输入数量/(输入价格*合约面值)
      */
     private fun createOrderFuture(positionSide: String, orderSide: String) {
-        var orderType: String? = currentOrderType
-        var price: String? =
-            header1View?.price?.text.toString().trim { it <= ' ' }
-        if (price?.isEmpty() == true) {
+        val orderType: String? = currentOrderType
+        val price: String = header1View?.price?.text.toString().trim()
+        val priceNum = NumberUtil.toBigDecimal(price)
+        if (priceNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
             return
         }
-        var priceDouble: Double? = CommonUtil.parseDouble(price)
-        var timeInForce: String? = currentTimeInForceType
-        val origQty = header1View?.transactionQuota?.text.toString()
-            .trim { it <= ' ' }
-        if (origQty.isEmpty() || origQty.toInt() == 0) {
+        var priceDouble = NumberUtil.toBigDecimal(price)
+        val timeInForce: String = currentTimeInForceType?:"GTC"
+        val origQty = header1View?.transactionQuota?.text.toString().trim()
+        val origQtyNum = NumberUtil.toBigDecimal(price);
+        if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
-        val totalAmountInt = priceDouble?.times(viewModel?.getContractSize()!!.toDouble())
-            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
 
+        val totalAmountInt = NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"").multiply(priceDouble)//priceDouble.times()
+//            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
         if (orderType.equals("MARKET")) {
-            priceDouble = null
+            priceDouble = BigDecimal.ZERO
         }
         //止盈止损
         var tigerStop: Boolean? = header1View?.contractWithLimit?.isChecked
-        var tigerProfit: String? = header1View?.stopSurplus?.text.toString().trim { it <= ' ' }
-        var tigerProfitValue: Number? = null
-        if (tigerProfit?.isNotEmpty() == true) {
-            tigerProfitValue = tigerProfit.toFloat()
-        }
+        val tigerProfit: String = header1View?.stopSurplus?.text.toString().trim()
+        var tigerProfitValue = NumberUtil.toBigDecimal(tigerProfit)
+//        if (tigerProfitValue == BigDecimal.ZERO) {
+//            tigerProfitValue = tigerProfit.toFloat()
+//        }
 
-        var tigerLose: String? = header1View?.stopLose?.text.toString().trim { it <= ' ' }
-        var tigerLoseValue: Number? = null
-        if (tigerLose?.isNotEmpty() == true) {
-            tigerLoseValue = tigerLose?.toFloat()
-        }
+        val tigerLose: String = header1View?.stopLose?.text.toString().trim()
+        val tigerLoseValue =  NumberUtil.toBigDecimal(tigerLose)
+
         val createRunnable = Runnable {
             FutureApiServiceHelper.createOrder(context,
-                orderSide!!,
+                orderSide,
                 orderType!!,
                 viewModel?.getCurrentPair(),
-                positionSide!!,
-                priceDouble,
+                positionSide,
+                priceDouble.toDouble(),
                 timeInForce,
-                totalAmountInt!!,
+                totalAmountInt.toInt(),
                 tigerProfitValue,
                 tigerLoseValue,
                 false,

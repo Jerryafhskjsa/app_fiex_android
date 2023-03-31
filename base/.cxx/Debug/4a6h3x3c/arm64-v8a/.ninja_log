@@ -12,3 +12,5 @@
 4062	5509	701272367	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	24f4a05fb259755e
 2	3296	701611505	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	59108d00bef321ce
 3296	4948	701611507	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	24f4a05fb259755e
+1	1886	701871956	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	59108d00bef321ce
+1887	2527	701871957	../../../../src/main/jniLibs/arm64-v8a/libfryingSecret.so	24f4a05fb259755e
