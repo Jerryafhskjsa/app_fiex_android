@@ -4,7 +4,7 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    val HOSTS = "https://fiex.live"
+    val HOSTS = "http://abexxx.net"
 
 
     fun getHost(context: Context): String {
@@ -26,10 +26,10 @@ object UrlConfig {
         return HOSTS + apiTypeDes
     }
 
-    private val SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/ws/"//正式
+    private val SOCKET_HOSTS_SOEASTEX = "wss://abexxx.net/ws/"//正式
 
 
-    private val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/socket"//正式
+    private val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://abexxx.net/socket"//正式
 
 
 
@@ -490,6 +490,18 @@ object UrlConfig {
 
         //综合账单查询
         const val URL_WALLET_BILL_FIEX = "balance/bills"
+
+        //充值订单生成
+        const val URL_WALLET_BILL_DEPOSIT = "pay/order/create"
+
+        //充值下单
+        const val URL_WALLET_BILL_CONFIRM = "pay/order/confirm"
+
+        //下单编码
+        const val URL_WALLET_BILL_CODE_LIST = "pay/order/code/list"
+
+        //充值订单
+        const val URL_WALLET_BILL_LIST = "pay/order/list"
 
         /***fiex***/
 

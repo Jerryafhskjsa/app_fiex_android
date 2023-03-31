@@ -30,6 +30,9 @@
     <string name="amount">Quantity</string>
     <string name="balance">Balance</string>
     <string name="entrust_current">Open orders</string>
+    <string name="rade">Payment Channels</string>
+    <string name="you_get">You will get</string>
+    <string name="total_m">Total Amount</string>
     <string name="real_name">Real name </string>
     <string name="time">Time</string>
     <string name="cny">CNY</string>
@@ -160,8 +163,13 @@
 3. Please do not believe any reason for urging the release of currency, and release the digital assets after confirming the receipt of funds to avoid losses
 4. After receiving the incoming SMS, please be sure to log in to the online banking or third-party payment account to confirm whether the payment is received, so as to avoid the wrong release of digital currency due to the receipt of fraudulent SMS</string>
     <string name="change_style">Style switching</string>
+    <string name="mian">Disclaimer</string>
+    <string name="mian2">I have read and agree to the disclaimer</string>
+    <string name="mian3">Please read the disclaimer first</string>
+    <string name="pay_details">Payment Details</string>
     <string name="exit">Are you sure to exit the current account</string>
     <string name="number_default">－</string>
+    <string name="sf">South Africa </string>
     <string name="high">24h high</string>
     <string name="low">24h low</string>
     <string name="_1_day" tools:ignore="UnusedResources">1 day</string>
@@ -366,7 +374,8 @@
     <string name="more">More</string>
     <string name="purchase_by_amount">By amount</string>
     <string name="purchase_by_account">By account</string>
-    <string name="rechange">Recharge</string>
+    <string name="rechange">Deposit</string>
+    <string name="choose_rade">Choose a recharge channel</string>
     <string name="extract">Withdrawal</string>
     <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
@@ -398,6 +407,7 @@
     <string name="not_use">Google verification code is not available</string>
     <string name="ti_shi">The legal currency transaction is an OTC transaction. The fund does not pass through the platform, and the platform will not automatically deduct the money. You need to manually transfer it to the other party, and the other party can receive the money.</string>
     <string name="weixin_num">WeChat account</string>
+    <string name="sheng_ming">You are about to leave the XT website and jump to a new browser window via a third-party external link. The website accessed through this link is not the website of XT, and the risk of page access is borne by the user. We are not responsible for any content, advertising, products, services, or other inquiries on external websites. Providing a link does not mean that XT recognizes any services or products provided by the website. XT shall not be liable for any loss or damage caused by the use of this payment service. If you encounter any problems using the services of this type of website, please contact the website directly.</string>
     <string name="please_weixin">Please enter your WeChat account</string>
     <string name="put_your_said">Put your said here</string>
     <string name="ali_pay_num">Alipay account</string>
@@ -925,6 +935,9 @@
     <string name="confirm_transfer">Confirm Transfer</string>
     <string name="select_wallet">select wallet</string>
     <string name="select_coin">Select Currency</string>
+    <string name="want_buy">I would like to buy it</string>
+    <string name="will_get">I will get</string>
+    <string name="payment_methods">Payment Method</string>
     <string name="transfer_record">transfer Records</string>
     <string name="transfer_record_filter">Filtering Transfer Records</string>
     <string name="check_update">Detect updates</string>

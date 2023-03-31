@@ -552,4 +552,43 @@ object WalletApiServiceHelper {
     }
 
 
+    fun getDepositCreate(context: Context?, payVO: PayVO, callback: Callback<HttpRequestResultData<payOrder?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositCreate(payVO)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositConfirm(context: Context?, orderId: String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositConfirm(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositOrderCodeList(context: Context?, callback: Callback<HttpRequestResultData<Deposit<OrderCode?>?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositCodeList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositOrderList(context: Context?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<payOrder?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositList(page,size)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
 }

@@ -30,6 +30,9 @@
     <string name="amount">数量</string>
     <string name="balance">余额</string>
     <string name="entrust_current">当前委托</string>
+    <string name="rade">支付渠道</string>
+    <string name="you_get">你将得到</string>
+    <string name="total_m">总金额</string>
     <string name="real_name">实名认证</string>
     <string name="time">时间</string>
     <string name="cny">人民币</string>
@@ -159,9 +162,14 @@
         2.您所出售的数字资产，已冻结，请在确认收到对方付款后，点击“放币“支付数字货币
         3.请不要相信任何催促放币的理由，确认收到款项后再释放数字资产，避免造成损失
         4.在收到到账短信后，请务必登录网上银行或第三方支付账号确认是否收到该笔款项，避免因收到诈骗短信错误释放数字货币</string>
+    <string name="mian">免责说明</string>
+    <string name="mian2">我已阅读并同意免责说明</string>
+    <string name="mian3">请先阅读免责说明</string>
+    <string name="pay_details">支付详情</string>
     <string name="change_style">风格切换</string>
     <string name="exit">确认退出当前账号吗？</string>
     <string name="number_default">－</string>
+    <string name="sf">南非</string>
     <string name="high">24h高</string>
     <string name="low">24h低</string>
     <string name="_1_day" tools:ignore="UnusedResources">1天</string>
@@ -367,6 +375,7 @@
     <string name="purchase_by_amount">按金额</string>
     <string name="purchase_by_account">按数量</string>
     <string name="rechange">充值</string>
+    <string name="choose_rade">选择充值渠道</string>
     <string name="extract">提现</string>
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
@@ -398,6 +407,7 @@
     <string name="not_use">谷歌验证码已丢失</string>
     <string name="ti_shi">法币交易属于OTC交易，资金不经过平台，平台不会自动扣款，需要您手动自行转账给对方，对方才能收到款项。</string>
     <string name="weixin_num">微信账号</string>
+    <string name="sheng_ming">您即将离开XT网站并经由第三方外部链接跳转至新的浏览器窗口。通过此链接访问的网站并非XT的所属网站，页面访问风险均由用户自行承担。我们对外部网站的任何内容、广告、产品、服务或其他咨询概不负责。提供链接并不意味着XT对该网站提供的任何服务或产品都认可。XT对因使用本支付服务而造成的任何损失或损害不承担任何责任。如果您在使用此类网站的服务是遇到任何问题，请直接与该网站联系。</string>
     <string name="please_weixin">请输入微信账号</string>
     <string name="put_your_said">在此输入你的对话</string>
     <string name="ali_pay_num">支付宝账号</string>
@@ -925,6 +935,9 @@
     <string name="confirm_transfer">确认转移</string>
     <string name="select_wallet">选择钱包</string>
     <string name="select_coin">选择币种</string>
+    <string name="want_buy">我要买</string>
+    <string name="will_get">我将得到</string>
+    <string name="payment_methods">支付方式</string>
     <string name="transfer_record">划转记录</string>
     <string name="transfer_record_filter">划转记录筛选</string>
     <string name="check_update">检测更新</string>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="extractModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+                <include layout="@layout/tool_bar_left_back" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.lib.refresh.QRefreshLayout
+                android:layout_marginTop="100dp"
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:id="@+id/id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B2"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/default_padding"
+                    android:paddingRight="@dimen/default_padding">
+
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/country"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14" />
+
+                    <LinearLayout
+                        android:id="@+id/choose_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/country"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/sf"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:src="@drawable/icon_down" />
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/want_buy"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="280dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transfer_corner"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/double_padding"
+                            android:paddingRight="@dimen/double_padding">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/phone_code"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/amount"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/choose_coin_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transfer_corner"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/double_padding"
+                            android:paddingRight="@dimen/double_padding">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/current_coin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ZAR"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_13"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:src="@drawable/icon_down" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:gravity="center_vertical"
+                        android:text="@string/will_get"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14">
+
+                    </com.black.base.widget.SpanTextView>
+
+                    <LinearLayout
+                        android:id="@+id/choose_chain_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/current_chain"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="USDT"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:src="@drawable/icon_down" />
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:gravity="center_vertical"
+                        android:text="@string/payment_methods"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_14">
+
+                    </com.black.base.widget.SpanTextView>
+
+                    <LinearLayout
+                        android:id="@+id/withdraw_addr_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_transfer_corner"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingRight="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/extract_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sounth African online banking"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_13"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:src="@drawable/icon_down" />
+                    </LinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/btn_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_margin="@dimen/default_padding"
+                        android:background="@drawable/btn_t8"
+                        android:checked="false"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/next"
+                        android:textColor="@color/T8"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
+                    <LinearLayout
+                        android:id="@+id/bottom_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="vertical"
+                        android:padding="@dimen/double_padding">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/order_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="44dp"
+                            android:checked="false"
+                            android:includeFontPadding="false"
+                            android:text="@string/historical_orders"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <com.black.base.view.EmptyRecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none" />
+
+                        <include
+                            android:id="@+id/empty_view"
+                            layout="@layout/list_view_empty_long" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+            </com.black.lib.refresh.QRefreshLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </RelativeLayout>
+</layout>
