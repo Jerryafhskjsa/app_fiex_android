@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+    <LinearLayout
+        android:id="@+id/futuresMultipleMore"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_contract_buy"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/futuresMultipleMoreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/warehouse_by_warehouse"
+            android:textColor="@color/T9"
+            android:textSize="@dimen/text_size_14" />
+
+        <ImageView
+            android:id="@+id/buy_type_arrow"
+            style="@style/ContractSmallArrow"
+            android:layout_marginStart="5dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp" />
+
+    <LinearLayout
+        android:id="@+id/futuresMultipleLess"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_contract_sell"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/futuresMultipleLessText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/full_warehouse"
+            android:textColor="@color/T10"
+            android:textSize="@dimen/text_size_14" />
+
+        <ImageView
+            android:id="@+id/sell_type_arrow"
+            style="@style/ContractSmallArrow"
+            android:layout_marginStart="5dp" />
+    </LinearLayout>
+</LinearLayout>

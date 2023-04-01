@@ -1,12 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.black.frying.contract.FuturesFragment">
 
     <com.black.frying.contract.biz.view.FutureTitleBar
         android:id="@+id/futuresTitleBarRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-</FrameLayout>
+
+    <com.black.lib.refresh.QRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/futuresAppbarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:elevation="0dp">
+
+                <FrameLayout
+                    app:layout_scrollFlags="scroll"
+                    android:id="@+id/futuresTransactionInfoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="500dp"
+                    />
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <LinearLayout
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/futuresTabLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:tabBackground="@color/transparent"
+                        app:tabRippleColor="@android:color/transparent"
+                        app:tabIndicator="@drawable/tabs_rounded_line_indicator"
+                        app:tabIndicatorColor="@color/T13"
+                        app:tabMaxWidth="200dp"
+                        app:tabMinWidth="20dp"
+                        app:tabMode="scrollable"
+                        app:tabPaddingBottom="0dp"
+                        app:tabPaddingEnd="@dimen/default_padding"
+                        app:tabPaddingStart="@dimen/default_padding"
+                        app:tabPaddingTop="0dp"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabTextAppearance="@style/DefaultTabStyle"
+                        />
+
+                    <ImageView
+                        android:id="@+id/futuresAllBills"
+                        android:layout_width="@dimen/text_size_28"
+                        android:layout_height="@dimen/text_size_28"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="bills"
+                        android:src="@drawable/btn_c2c_bills" />
+                </LinearLayout>
+
+                <com.black.frying.view.FuturesViewPager
+                    android:id="@+id/futuresRecordViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </com.black.lib.refresh.QRefreshLayout>
+</LinearLayout>
