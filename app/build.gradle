@@ -119,6 +119,7 @@ dependencies {
 //    def lifecycle_version = "2.1.0"
 //    implementation "androidx.lifecycle.lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'com.github.warkiz.tickseekbar:tickseekbar:0.1.4'
 
 //    implementation group: 'com.zendesk', name: 'support', version: '5.1.0'
 }

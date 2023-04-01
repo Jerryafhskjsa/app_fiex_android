@@ -12,6 +12,7 @@ import com.fbsex.exchange.R
 class FuturesOrderCreateFragment : Fragment() {
 
     companion object {
+        const val TAG = "FuturesOrderCreateFragment"
         fun newInstance() = FuturesOrderCreateFragment()
     }
 

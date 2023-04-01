@@ -62,7 +62,7 @@ class FuturesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         buildFuturesTitleBar()
-        replaceTransactionFragment(R.id.futuresTransactionInfoLayout, transactionInfoFragment)
+        replaceTransactionFragment(R.id.futuresTransactionInfoLayout, transactionInfoFragment,FuturesTransactionInfoFragment.TAG)
         buildTransRecordView()
     }
 

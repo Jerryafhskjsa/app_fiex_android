@@ -12,6 +12,7 @@ import com.fbsex.exchange.R
 class FuturesTransactionInfoDisplayFragment : Fragment() {
 
     companion object {
+        const val TAG = "FuturesTransactionInfoDisplayFragment"
         fun newInstance() = FuturesTransactionInfoDisplayFragment()
     }
 

@@ -2,17 +2,17 @@ package com.black.frying.contract.utils
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import com.black.frying.contract.FuturesTransactionInfoFragment
 
 fun Fragment.replaceTransactionFragment(
     @IdRes container: Int,
-    transactionInfoFragment: FuturesTransactionInfoFragment
+    transactionInfoFragment: Fragment,
+    tag:String
 ) {
     val beginTransaction = childFragmentManager.beginTransaction()
     beginTransaction.replace(
         container,
         transactionInfoFragment,
-        FuturesTransactionInfoFragment.TAG
+        tag
     )
     beginTransaction.commitAllowingStateLoss()
 }

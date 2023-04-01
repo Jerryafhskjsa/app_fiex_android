@@ -7,15 +7,19 @@
     tools:context="com.black.frying.contract.FuturesTransactionInfoFragment">
 
     <com.black.frying.contract.biz.view.FuturesMultipleSettingView
+        android:id="@+id/futuresMultipleSettingView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.black.base.widget.DashLineView
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp" />
 
     <com.black.frying.contract.biz.view.FuturesAccountInfoView
+        android:id="@+id/futuresAccountAndRate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
