@@ -26,12 +26,12 @@ object UrlConfig {
         return HOSTS + apiTypeDes
     }
 
-//     val SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/ws/"//正式
-     val SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/ws/"//正式
+     val SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/ws/"//正式
+//     val SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/ws/"//正式
 
 
-//     val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/socket"//正式
-     val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/socket"//正式
+     val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://fiex.live/socket"//正式
+//     val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/socket"//正式
 
 
 

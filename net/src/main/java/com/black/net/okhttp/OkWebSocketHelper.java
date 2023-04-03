@@ -5,6 +5,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
     public static final String TAG = "OkWebSocketHelper";
     private final OkWebSocket mOkWebSocket;
@@ -18,6 +22,8 @@ public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
     private IMessageLifeCycle mIMessageLifeCycle = null;
 
     private IMessageHandler mImessageHandler = null;
+
+    private List<IMessageHandler> mMessageHandlers = Collections.synchronizedList(new ArrayList<>());
 
     public void setImessageHandler(IMessageHandler mImessageHandler) {
         this.mImessageHandler = mImessageHandler;
@@ -84,6 +90,7 @@ public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
                 if (observer) {
                     mImessageHandler.processingMessage(data);
                 }
+                notifyMessageHandler(channel,data);
             } catch (JSONException e) {
                 d("onMessage  =====> error message");
                 e.printStackTrace();
@@ -125,10 +132,25 @@ public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
         }
     }
 
+    public OkWebSocketHelper addMessageHandler(IMessageHandler messageHandler) {
+        mMessageHandlers.add(messageHandler);
+        return this;
+    }
+
+    private void notifyMessageHandler(String channel, Object data) {
+        final int size = mMessageHandlers.size();
+        for (int i = size - 1; i >= 0; i--) {
+            final IMessageHandler messageHandler = mMessageHandlers.get(i);
+            if (messageHandler.observerMessage(channel, data)) {
+                messageHandler.processingMessage(data);
+            }
+        }
+    }
+
     public interface IMessageHandler {
         /**
          * data  is  jsonObject  or  jsonArray
-         *  可用 泛型 替代
+         * 可用 泛型 替代
          */
         boolean observerMessage(String channel, Object data);
 

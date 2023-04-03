@@ -1,5 +1,6 @@
 package com.black.frying.contract.utils
 
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -14,7 +15,13 @@ class TransRecordFragmentPagerAdapter(private val listOfFragment :MutableList<Fr
     override fun getCount(): Int {
         return listOfFragment.size
     }
-
+    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+        try {
+            super.restoreState(state, loader)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     override fun getItem(position: Int): Fragment {
        return when (position) {
             0 -> listOfFragment.get(0)
