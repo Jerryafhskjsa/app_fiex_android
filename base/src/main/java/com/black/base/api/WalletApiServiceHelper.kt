@@ -582,7 +582,7 @@ object WalletApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
-    fun getDepositOrderList(context: Context?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<payOrder?>?>?) {
+    fun getDepositOrderList(context: Context?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<PagingData<payOrder?>?>?>) {
         if (context == null || callback == null) {
             return
         }

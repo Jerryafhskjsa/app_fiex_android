@@ -34,8 +34,8 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
         binding?.choose?.setText(order?.bankCode)
         binding?.coinType?.setText(order?.bankCode)
         binding?.amount?.setText(order?.price.toString())
-        binding?.type?.setText(order?.orderAmount.toString())
-        binding?.time?.setText(order?.amount.toString())
+        binding?.type?.setText(order?.orderAmount.toString() + order?.ccyNo)
+        binding?.time?.setText(order?.amount.toString() + order?.coin)
 
     }
 
@@ -74,7 +74,8 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         val bundle = Bundle()
-                        bundle.putString(ConstData.TITLE, returnData.data)
+                        bundle.putString(ConstData.URL, returnData.data)
+                        bundle.putString(ConstData.TITLE, "Pay Bank")
                         BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)

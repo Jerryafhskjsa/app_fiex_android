@@ -22,7 +22,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityAboutUsBinding = DataBindingUtil.setContentView(this, R.layout.activity_about_us)
-        binding.currentVersion.setText(String.format("Fiex V%s", CommonUtil.getVersionName(this, "1.0.0")))
+        binding.currentVersion.setText(String.format("Fiex V%s", CommonUtil.getVersionName(this, null)))
         binding.checkUpdate.setOnClickListener(this)
     }
 
@@ -50,7 +50,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultData<Update?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val update = returnData.data ?: return
-                    if (update.version != null && update.version != CommonUtil.getVersionName(mContext, null)) {
+                    if (update.version != null && update.version + "0.0" != CommonUtil.getVersionName(mContext, null)) {
                         //需要更新
                         FryingUtil.showUpdateDialog(mContext as Activity, update)
                     } else {

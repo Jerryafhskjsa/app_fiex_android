@@ -83,7 +83,7 @@ object CommonApiServiceHelper {
             return
         }
         ApiManager.build(context, true,UrlConfig.ApiType.URl_UC).getService(CommonApiService::class.java)
-            ?.checkUpdate("android")
+            ?.checkUpdate("android","en")
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

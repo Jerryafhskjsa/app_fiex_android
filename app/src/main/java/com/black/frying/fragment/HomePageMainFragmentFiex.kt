@@ -255,9 +255,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
             R.id.c2c ->
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-            R.id.rel_deposit -> {
                 BlackRouter.getInstance().build(RouterConstData.THREEPAYMENT)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
+                    //FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+            R.id.rel_deposit -> {
+                BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
         }

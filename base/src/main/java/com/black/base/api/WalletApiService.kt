@@ -45,7 +45,7 @@ interface WalletApiService {
     fun getDepositCodeList(): Observable<HttpRequestResultData<Deposit<OrderCode?>?>?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_BILL_LIST)
-    fun getDepositList(@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultData<payOrder?>?>?
+    fun getDepositList(@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultData<PagingData<payOrder?>?>?>?
 
     /***fiex***/
 

@@ -24,6 +24,8 @@ class payOrder() : Parcelable {
     var updateTime: Long? = null
     var userId: String? = null
 
+
+
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
         merNo = parcel.readString()

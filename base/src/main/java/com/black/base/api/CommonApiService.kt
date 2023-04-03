@@ -29,7 +29,7 @@ interface CommonApiService {
 
 
     @GET(UrlConfig.Config.URL_UPDATE)
-    fun checkUpdate(@Query("platform") platform: String?): Observable<HttpRequestResultData<Update?>?>?
+    fun checkUpdate(@Query("platform") platform: String?, @Query("language") language: String?): Observable<HttpRequestResultData<Update?>?>?
 
     @GET(UrlConfig.Config.URL_COUNTRY_CODE_LIST)
     fun getCountryCodeList(): Observable<HttpRequestResultDataList<CountryCode?>?>?

@@ -181,7 +181,7 @@
                 android:drawableLeft="@drawable/c2c_range"
                 android:layout_gravity="center"
                 android:textColor="@color/black"
-                android:text="我已阅读并同意" />
+                android:text="@string/i_agree" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_submit"

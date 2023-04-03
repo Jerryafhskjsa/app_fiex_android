@@ -88,7 +88,6 @@
                             android:drawableRight="@drawable/icon_left"
                             android:drawablePadding="6dp"
                             android:gravity="center"
-                            android:text="@string/version"
                             android:textColor="@color/T2"
                             android:textSize="@dimen/text_size_14" />
                         <com.black.base.widget.SpanTextView

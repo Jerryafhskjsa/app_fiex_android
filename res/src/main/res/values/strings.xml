@@ -407,8 +407,9 @@
     <string name="not_use">谷歌验证码已丢失</string>
     <string name="ti_shi">法币交易属于OTC交易，资金不经过平台，平台不会自动扣款，需要您手动自行转账给对方，对方才能收到款项。</string>
     <string name="weixin_num">微信账号</string>
-    <string name="sheng_ming">您即将离开XT网站并经由第三方外部链接跳转至新的浏览器窗口。通过此链接访问的网站并非XT的所属网站，页面访问风险均由用户自行承担。我们对外部网站的任何内容、广告、产品、服务或其他咨询概不负责。提供链接并不意味着XT对该网站提供的任何服务或产品都认可。XT对因使用本支付服务而造成的任何损失或损害不承担任何责任。如果您在使用此类网站的服务是遇到任何问题，请直接与该网站联系。</string>
+    <string name="sheng_ming">您即将离开Fiex网站并经由第三方外部链接跳转至新的浏览器窗口。通过此链接访问的网站并非Fiex的所属网站，页面访问风险均由用户自行承担。我们对外部网站的任何内容、广告、产品、服务或其他咨询概不负责。提供链接并不意味着Fiex对该网站提供的任何服务或产品都认可。Fiex对因使用本支付服务而造成的任何损失或损害不承担任何责任。如果您在使用此类网站的服务是遇到任何问题，请直接与该网站联系。</string>
     <string name="please_weixin">请输入微信账号</string>
+    <string name="i_agree">我已阅读并同意</string>
     <string name="put_your_said">在此输入你的对话</string>
     <string name="ali_pay_num">支付宝账号</string>
     <string name="collection_code">收款码</string>

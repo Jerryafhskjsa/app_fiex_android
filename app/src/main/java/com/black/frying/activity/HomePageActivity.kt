@@ -150,7 +150,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                 Log.d("666666","initAllFutureSymbolList,error")
             }
         })
-        checkUpdate(true)
+        checkUpdate(false)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -342,18 +342,17 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     }
 
     private fun checkUpdate(silent: Boolean) {
-        if (CommonUtil.isApkInDebug(this)) {
+       /* if (CommonUtil.isApkInDebug(this)) {
             return
-        }
+        }*/
         CommonApiServiceHelper.checkUpdate(this, !silent, object : Callback<HttpRequestResultData<Update?>?>() {
             override fun error(type: Int, error: Any) {}
             override fun callback(returnData: HttpRequestResultData<Update?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val update = returnData.data ?: return
-                    if (update.version != null && update.version != CommonUtil.getVersionName(mContext, null)) {
+                    if (update.version != null && update.version + "0.0" != CommonUtil.getVersionName(mContext, null)) {
                         //需要更新
-                        if ((update.force != null && true == update.force)
-                                || update.version != CookieUtil.getUpdateJumpVersion(mContext)) {
+                        if (update.version != CookieUtil.getUpdateJumpVersion(mContext)) {
                             FryingUtil.showUpdateDialog(mContext as Activity, update)
                         }
                     } else {

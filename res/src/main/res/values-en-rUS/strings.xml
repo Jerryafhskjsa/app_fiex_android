@@ -409,6 +409,7 @@
     <string name="weixin_num">WeChat account</string>
     <string name="sheng_ming">You are about to leave the XT website and jump to a new browser window via a third-party external link. The website accessed through this link is not the website of XT, and the risk of page access is borne by the user. We are not responsible for any content, advertising, products, services, or other inquiries on external websites. Providing a link does not mean that XT recognizes any services or products provided by the website. XT shall not be liable for any loss or damage caused by the use of this payment service. If you encounter any problems using the services of this type of website, please contact the website directly.</string>
     <string name="please_weixin">Please enter your WeChat account</string>
+    <string name="i_agree">I have read and agree</string>
     <string name="put_your_said">Put your said here</string>
     <string name="ali_pay_num">Alipay account</string>
     <string name="collection_code">Collection code</string>

@@ -4,11 +4,12 @@ import android.content.Context
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.payOrder
-import com.black.wallet.R
-import com.black.wallet.databinding.ListItemWalletBillBinding
+import com.black.util.CommonUtil
+import com.fbsex.exchange.R
+import com.fbsex.exchange.databinding.DepositListBinding
 import skin.support.content.res.SkinCompatResources
 
-class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder?>?) : BaseRecycleDataBindAdapter<payOrder?, ListItemWalletBillBinding>(context, variableId, data) {
+class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder?>?) : BaseRecycleDataBindAdapter<payOrder?, DepositListBinding>(context, variableId, data) {
     private var c1 = 0
     private var t5 = 0
     private var walletBillTypeMap: Map<String?, String?>? = null
@@ -20,14 +21,17 @@ class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder
     }
 
     override fun getResourceId(): Int {
-        return R.layout.list_item_wallet_bill
+        return R.layout.deposit_list
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ListItemWalletBillBinding>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<DepositListBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-
+        viewHolder?.action?.setText(if (walletBill?.payStatus == -1) "Fail" else if (walletBill?.payStatus == 2) "Confirming" else "New Order")
+        viewHolder?.amount?.setText(walletBill?.amount.toString() + walletBill?.coin)
+        viewHolder?.accountType?.setText(walletBill?.orderAmount.toString() + walletBill?.ccyNo)
+        viewHolder?.date?.setText(if(walletBill?.createTime == null) null else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill?.createTime!!))
     }
 
 }

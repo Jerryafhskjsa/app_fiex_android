@@ -1,5 +1,6 @@
 package com.black.frying.activity
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,8 @@ import com.black.base.model.wallet.WalletBill
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.view.DeepControllerWindow
+import com.black.c2c.activity.C2CNewActivity
 import com.black.frying.adapter.ThirdAdapters
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
@@ -31,9 +34,9 @@ class ThirdPayment: BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefre
     private var adapter: ThirdAdapters? = null
     private var hasMore = false
     private var list: ArrayList<payOrder?>? = null
-    private var list1: ArrayList<String?>? = null
-    private var list2: ArrayList<String?>? = null
-    private var list3: ArrayList<String?>? = null
+    private var list1: MutableList<String>? = null
+    private var list2: MutableList<String>? = null
+    private var list3: MutableList<String>? = null
     private var currentPage = 1
     private var total = 0
 
@@ -41,6 +44,9 @@ class ThirdPayment: BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefre
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, com.fbsex.exchange.R.layout.activity_three_payment)
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.currentCoin?.setOnClickListener(this)
+        binding?.currentChain?.setOnClickListener(this)
+        binding?.extractAddress?.setOnClickListener(this)
         val layoutManager = LinearLayoutManager(mContext)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -81,14 +87,58 @@ class ThirdPayment: BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefre
     override fun onClick(view: View) {
         when(view.id) {
             R.id.btn_confirm -> {
-                val bundle = Bundle()
-                val amount = binding?.phoneCode?.text.toString()
-                val country = binding?.country?.text.toString()
-                val current = binding?.currentCoin?.text.toString()
-                bundle.putString(ConstData.TITLE, amount)
-                bundle.putString(ConstData.BIRTH, country)
-                bundle.putString(ConstData.WALLET, current)
-                BlackRouter.getInstance().build(RouterConstData.CHOOSEPAYMENT).with(bundle).go(mContext)
+                if (binding?.phoneCode?.text == null)
+                    FryingUtil.showToast(mContext ,"Please put amount")
+                else {
+                    val bundle = Bundle()
+                    val amount = binding?.phoneCode?.text.toString()
+                    val country = binding?.country?.text.toString()
+                    val current = binding?.currentCoin?.text.toString()
+                    bundle.putString(ConstData.TITLE, amount)
+                    bundle.putString(ConstData.BIRTH, country)
+                    bundle.putString(ConstData.WALLET, current)
+                    BlackRouter.getInstance().build(RouterConstData.CHOOSEPAYMENT).with(bundle)
+                        .go(mContext)
+                }
+            }
+
+            R.id.current_coin -> {
+                list1?.add("ZAR")
+                DeepControllerWindow(mContext as Activity, null, "ZAR" , list1, object : DeepControllerWindow.OnReturnListener<String> {
+                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                        window.dismiss()
+
+                            binding?.currentCoin?.setText(item)
+
+                    }
+
+                }).show()
+            }
+
+            R.id.current_chain -> {
+                list2?.add("USDT")
+                DeepControllerWindow(mContext as Activity, null, "USDT" , list2, object : DeepControllerWindow.OnReturnListener<String> {
+                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                        window.dismiss()
+
+                        binding?.currentChain?.setText(item)
+
+                    }
+
+                }).show()
+            }
+
+            R.id.extract_address -> {
+                list3?.add("Sounth African online banking")
+                DeepControllerWindow(mContext as Activity, null, "Sounth African online banking" , list3, object : DeepControllerWindow.OnReturnListener<String> {
+                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                        window.dismiss()
+
+                        binding?.extractAddress?.setText(item)
+
+                    }
+
+                }).show()
             }
 
         }
@@ -129,15 +179,15 @@ class ThirdPayment: BaseActivity(), View.OnClickListener, QRefreshLayout.OnRefre
     }
 
     private fun getList(){
-        WalletApiServiceHelper.getDepositOrderList(mContext, 10,1,object : NormalCallback<HttpRequestResultData<payOrder?>?>(mContext) {
+        WalletApiServiceHelper.getDepositOrderList(mContext, 1,10,object : NormalCallback<HttpRequestResultData<PagingData<payOrder?>?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<payOrder?>?) {
+            override fun callback(returnData: HttpRequestResultData<PagingData<payOrder?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    val payOrder: payOrder? = returnData.data
-                    list?.add(payOrder)
+                    val list = returnData.data?.items
+                    total = returnData.data?.total ?: 0
                     if (currentPage == 1) {
                         adapter?.data = (list)
                     } else {
