@@ -15,6 +15,7 @@ import com.black.base.util.RouterConstData
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
+import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.fbsex.exchange.databinding.ActivityChooseDetailsBinding
 
@@ -24,19 +25,71 @@ import com.fbsex.exchange.databinding.ActivityChooseDetailsBinding
 class PaymentDetails: BaseActivity(), View.OnClickListener{
     private var binding: ActivityChooseDetailsBinding? = null
     private var order: payOrder? = null
+    private var direction: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, com.fbsex.exchange.R.layout.activity_choose_details)
         order = intent.getParcelableExtra(ConstData.WALLET)
+        direction = intent.getStringExtra(ConstData.TITLE)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.barA?.setOnClickListener(this)
-        binding?.choose?.setText(order?.bankCode)
-        binding?.coinType?.setText(order?.bankCode)
-        binding?.amount?.setText(order?.price.toString())
-        binding?.type?.setText(order?.orderAmount.toString() + order?.ccyNo)
-        binding?.time?.setText(order?.amount.toString() + order?.coin)
-
+        if (direction == "B") {
+           // binding?.choose?.setText(order?.bankCode)
+            binding?.fee?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.fee, 8, 4, 2)
+                ) + order?.coin
+            )
+            binding?.coinType?.setText(order?.bankCode)
+            binding?.amount?.setText(
+                "1.0000" + order?.ccyNo + String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 4, 2)
+                ) + order?.coin
+            )
+            binding?.type?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.orderAmount, 8, 4, 2)
+                ) + order?.ccyNo
+            )
+            binding?.time?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.orderAmount!! * order?.price!!, 8, 4, 2)
+                ) + order?.coin
+            )
+        }
+        else{
+           // binding?.choose?.setText(order?.bankCode)
+            binding?.fee?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.fee, 8, 4, 2)
+                ) + order?.coin
+            )
+            binding?.coinType?.setText(order?.bankCode)
+            binding?.amount?.setText(
+                "1.0000" + order?.coin + String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 4, 2)
+                ) + order?.ccyNo
+            )
+            binding?.type?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.orderAmount, 8, 4, 2)
+                ) + order?.coin
+            )
+            binding?.time?.setText(
+                String.format(
+                    " ≈ %S ",
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.orderAmount!! * order?.price!!, 8, 4, 2)
+                ) + order?.ccyNo
+            )
+        }
     }
 
 

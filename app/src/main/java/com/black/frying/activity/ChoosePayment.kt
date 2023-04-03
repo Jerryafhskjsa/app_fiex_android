@@ -1,87 +1,136 @@
 package com.black.frying.activity
 
-import android.app.Activity
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.TypedValue
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import com.black.base.activity.BaseActivity
-import com.black.base.api.WalletApiServiceHelper
-import com.black.base.model.*
-import com.black.base.model.wallet.WalletBill
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.ConstData
-import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
-import com.black.base.view.DeepControllerWindow
-import com.black.net.HttpRequestResult
-import com.black.router.BlackRouter
+import com.black.frying.fragment.BuyFragment
+import com.black.frying.fragment.SellFragment
 import com.black.router.annotation.Route
-import com.black.wallet.R
-import com.fbsex.exchange.databinding.ActivityChoosePaymentBinding
-import com.fbsex.exchange.databinding.ActivityThreePaymentBinding
+import com.fbsex.exchange.R
+import java.util.*
+import com.fbsex.exchange.databinding.ActivityBuySellBillBinding
 
+//买卖记录
 @Route(value = [RouterConstData.CHOOSEPAYMENT])
-class ChoosePayment: BaseActivity(), View.OnClickListener{
-    private var binding: ActivityChoosePaymentBinding? = null
-    private var list3: MutableList<String>? = null
+class ChoosePayment: BaseActionBarActivity(), View.OnClickListener {
+  companion object {
+        private val TAB_TITLES = arrayOfNulls<String>(2) //标题
+    }
+
+    private var actionType = ConstData.TAB_EXCHANGE
+
+    private var headTitleView: TextView? = null
+
+    private var binding: ActivityBuySellBillBinding? = null
+
+    private var fragmentList: ArrayList<Fragment>? = null
+    private var rechargeFragment: BuyFragment? = null
+    private var extractFragment: SellFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, com.fbsex.exchange.R.layout.activity_choose_payment)
-        binding?.btnConfirm?.setOnClickListener(this)
-        binding?.extractAddress?.setOnClickListener(this)
+        actionType = intent.getIntExtra(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+        TAB_TITLES[0] = "Buy"
+        TAB_TITLES[1] = "Sell"
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_buy_sell_bill)
+        binding?.extractRecord?.setOnClickListener(this)
+        binding?.rechargeRecord?.setOnClickListener(this)
+        init()
+        binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
+            override fun getItem(position: Int): Fragment {
+                return fragmentList!![position]
+            }
 
+            override fun getCount(): Int {
+                return fragmentList!!.size
+            }
+
+            override fun getPageTitle(position: Int): CharSequence? {
+                return TAB_TITLES[position]
+            }
+
+            override fun restoreState(state: Parcelable?, loader: ClassLoader?) {}
+        }
+        binding?.viewPager?.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                refreshCurrentType(position)
+            }
+
+        })
+        refreshCurrentType(actionType)
+        changeFragment(if (actionType == ConstData.TAB_EXCHANGE) 0 else 1)
     }
-
 
     override fun isStatusBarDark(): Boolean {
         return !super.isStatusBarDark()
     }
 
-    override fun getTitleText(): String? {
-        return getString(R.string.choose_rade)
+    override fun getTitleText(): String {
+        return getString(R.string.history_record)
     }
 
-    override fun onClick(view: View) {
-        when(view.id) {
-            R.id.btn_confirm -> {
-                getDepositCreate()
+    override fun onClick(v: View) {
+        val i = v.id
+       if (i == R.id.recharge_record) {
+            if (ConstData.TAB_EXCHANGE != actionType) {
+                actionType = ConstData.TAB_EXCHANGE
+                refreshCurrentType(actionType)
+                changeFragment(0)
             }
-
-            R.id.extract_address -> {
-                list3?.add("Sounth African online banking")
-                DeepControllerWindow(mContext as Activity, null, "Sounth African online banking" , list3, object : DeepControllerWindow.OnReturnListener<String> {
-                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
-                        window.dismiss()
-
-                        binding?.extractAddress?.setText(item)
-
-                    }
-
-                }).show()
+        } else if (i == R.id.extract_record) {
+            if (ConstData.TAB_WITHDRAW != actionType) {
+                actionType = ConstData.TAB_WITHDRAW
+                refreshCurrentType(actionType)
+                changeFragment(1)
             }
-
         }
     }
-    private fun getDepositCreate() {
-        val amount = intent.getStringExtra(ConstData.TITLE)
-        val payVO = PayVO()
-        payVO.orderAmount = amount
-        WalletApiServiceHelper.getDepositCreate(mContext, payVO, object : NormalCallback<HttpRequestResultData<payOrder?>?>(mContext) {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-            }
 
-            override fun callback(returnData: HttpRequestResultData<payOrder?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    val bundle = Bundle()
-                    val order = returnData.data
-                    bundle.putParcelable(ConstData.WALLET,order)
-                    BlackRouter.getInstance().build(RouterConstData.PAYMENTDETAILS).with(bundle).go(mContext)
-                } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
-            }
-        })
+    private fun refreshCurrentType(type: Int) {
+        if (ConstData.TAB_EXCHANGE == type) {
+            binding!!.extractRecord.isChecked = false
+            binding!!.extractRecord.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+            binding!!.rechargeRecord.isChecked = true
+            binding!!.rechargeRecord.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
+            headTitleView?.text = "Buy"
+        } else if (ConstData.TAB_WITHDRAW == type) {
+            binding!!.extractRecord.isChecked = true
+            binding!!.extractRecord.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
+            binding!!.rechargeRecord.isChecked = false
+            binding!!.rechargeRecord.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+            headTitleView?.text = "Sell"
+        }
     }
 
+    private fun changeFragment(position: Int) {
+        binding?.viewPager?.setCurrentItem(position, true)
+    }
+
+    private fun init() {
+        if (fragmentList == null) {
+            fragmentList = ArrayList()
+        }
+        fragmentList?.clear()
+        fragmentList?.add(BuyFragment().also {
+            val bundle = Bundle()
+            bundle.putString(ConstData.WALLET,"B")
+            it.arguments = bundle
+            rechargeFragment = it
+        })
+        fragmentList?.add(SellFragment().also {
+            val bundle = Bundle()
+            bundle.putString(ConstData.WALLET,"S")
+            it.arguments = bundle
+            extractFragment = it
+        })
+    }
 }

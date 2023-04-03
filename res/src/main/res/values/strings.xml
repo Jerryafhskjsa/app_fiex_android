@@ -374,8 +374,8 @@
     <string name="more">更多</string>
     <string name="purchase_by_amount">按金额</string>
     <string name="purchase_by_account">按数量</string>
-    <string name="rechange">充值</string>
-    <string name="choose_rade">选择充值渠道</string>
+    <string name="rechange">买/卖</string>
+    <string name="choose_rade">选择渠道</string>
     <string name="extract">提现</string>
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
@@ -493,7 +493,7 @@
     <string name="trade_expired">已过期</string>
     <string name="trade_all_deal">全部成交</string>
     <string name="total">全部</string>
-    <string name="total_money">总额</string>
+    <string name="total_money">总额:</string>
     <string name="wallet_bill_deposit">充值</string>
     <string name="wallet_bill_withdraw">提现</string>
     <string name="wallet_bill_cancel_withdraw">取消提现</string>
@@ -937,7 +937,9 @@
     <string name="select_wallet">选择钱包</string>
     <string name="select_coin">选择币种</string>
     <string name="want_buy">我要买</string>
+    <string name="want_sell">我要卖</string>
     <string name="will_get">我将得到</string>
+    <string name="will_receive">我将卖出</string>
     <string name="payment_methods">支付方式</string>
     <string name="transfer_record">划转记录</string>
     <string name="transfer_record_filter">划转记录筛选</string>

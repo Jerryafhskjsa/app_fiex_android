@@ -34,12 +34,18 @@
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
 
-            <ImageView
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/direction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_right_arrow"></ImageView>
+                android:layout_marginLeft="50dp"
+                android:maxLines="1"
+                android:text="action"
+                android:textColor="@color/T14"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -119,5 +125,10 @@
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:background="@color/C2"/>
     </LinearLayout>
 </layout>

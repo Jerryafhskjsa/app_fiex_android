@@ -2,10 +2,13 @@ package com.black.base.model
 
 import android.os.Parcel
 import android.os.Parcelable
-
+import retrofit2.http.Body
 
 class PayVO() : Parcelable {
     var orderAmount: String? = null
+    var orderType: String? = null
+    var accNo: String? = null
+    var accName: String? = null
     var ccyNo: String? = "ZAR"
     var busiCode: String? = "100901"
     var bankCode: String? = "ABSA"
@@ -13,6 +16,9 @@ class PayVO() : Parcelable {
 
     constructor(parcel: Parcel) : this() {
         orderAmount = parcel.readString()
+        orderType = parcel.readString()
+        accNo = parcel.readString()
+        accName = parcel.readString()
         ccyNo = parcel.readString()
         busiCode = parcel.readString()
         bankCode = parcel.readString()
@@ -21,6 +27,9 @@ class PayVO() : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(orderAmount)
+        parcel.writeString(orderType)
+        parcel.writeString(accNo)
+        parcel.writeString(accName)
         parcel.writeString(ccyNo)
         parcel.writeString(busiCode)
         parcel.writeString(bankCode)

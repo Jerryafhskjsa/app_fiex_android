@@ -374,8 +374,8 @@
     <string name="more">More</string>
     <string name="purchase_by_amount">By amount</string>
     <string name="purchase_by_account">By account</string>
-    <string name="rechange">Deposit</string>
-    <string name="choose_rade">Choose a recharge channel</string>
+    <string name="rechange">Buy/Sell</string>
+    <string name="choose_rade">Choose a channel</string>
     <string name="extract">Withdrawal</string>
     <string name="bill">Bill</string>
     <string name="transfer">Transfer</string>
@@ -407,7 +407,7 @@
     <string name="not_use">Google verification code is not available</string>
     <string name="ti_shi">The legal currency transaction is an OTC transaction. The fund does not pass through the platform, and the platform will not automatically deduct the money. You need to manually transfer it to the other party, and the other party can receive the money.</string>
     <string name="weixin_num">WeChat account</string>
-    <string name="sheng_ming">You are about to leave the XT website and jump to a new browser window via a third-party external link. The website accessed through this link is not the website of XT, and the risk of page access is borne by the user. We are not responsible for any content, advertising, products, services, or other inquiries on external websites. Providing a link does not mean that XT recognizes any services or products provided by the website. XT shall not be liable for any loss or damage caused by the use of this payment service. If you encounter any problems using the services of this type of website, please contact the website directly.</string>
+    <string name="sheng_ming">You are about to leave the Fiex website and jump to a new browser window via a third-party external link. The website accessed through this link is not the website of Fiex, and the risk of page access is borne by the user. We are not responsible for any content, advertising, products, services, or other inquiries on external websites. Providing a link does not mean that Fiex recognizes any services or products provided by the website. Fiex shall not be liable for any loss or damage caused by the use of this payment service. If you encounter any problems using the services of this type of website, please contact the website directly.</string>
     <string name="please_weixin">Please enter your WeChat account</string>
     <string name="i_agree">I have read and agree</string>
     <string name="put_your_said">Put your said here</string>
@@ -493,7 +493,7 @@
     <string name="trade_expired">Expired</string>
     <string name="trade_all_deal">All Transactions</string>
     <string name="total">All</string>
-    <string name="total_money">Total money</string>
+    <string name="total_money">Balance:</string>
     <string name="wallet_bill_deposit">Recharge</string>
     <string name="wallet_bill_withdraw">Withdrawal</string>
     <string name="wallet_bill_cancel_withdraw">cancel withdrawal</string>
@@ -937,7 +937,9 @@
     <string name="select_wallet">select wallet</string>
     <string name="select_coin">Select Currency</string>
     <string name="want_buy">I would like to buy it</string>
-    <string name="will_get">I will get</string>
+    <string name="want_sell">I would like to sell it</string>
+    <string name="will_get">I Will Get</string>
+    <string name="will_receive">I Will Receive</string>
     <string name="payment_methods">Payment Method</string>
     <string name="transfer_record">transfer Records</string>
     <string name="transfer_record_filter">Filtering Transfer Records</string>

@@ -582,13 +582,13 @@ object WalletApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
-    fun getDepositOrderList(context: Context?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<PagingData<payOrder?>?>?>) {
+    fun getDepositOrderList(context: Context?,isShowLoading: Boolean, orderType:String?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<PagingData<payOrder?>?>?>) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getDepositList(page,size)
+            ?.getDepositList(orderType,page,size)
             ?.compose(RxJavaHelper.observeOnMainThread())
-            ?.subscribe(HttpCallbackSimple(context, false, callback))
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 }

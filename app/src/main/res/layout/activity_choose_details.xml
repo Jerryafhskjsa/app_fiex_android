@@ -53,8 +53,11 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            style="@style/ButtonWhiteGray"
                             android:orientation="vertical"
                             android:paddingTop="@dimen/double_padding"
+                            android:paddingLeft="@dimen/text_size_10"
+                            android:paddingRight="@dimen/text_size_10"
                             android:paddingBottom="@dimen/double_padding">
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -75,7 +78,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
-                                    android:text="@string/number_default"
+                                    android:text="United Bank of South Africa"
                                     android:textColor="@color/T1"
                                     android:textSize="@dimen/text_size_13" />
                             </RelativeLayout>
@@ -114,6 +117,28 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:text="@string/number_default"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_13" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fee"
+                                    android:textColor="@color/T3"
+                                    android:textSize="@dimen/text_size_13" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:id="@+id/fee"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"

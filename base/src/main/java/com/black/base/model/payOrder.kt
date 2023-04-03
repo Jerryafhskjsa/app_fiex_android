@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 
 class payOrder() : Parcelable {
+    var orderType: String? = null
     var id: String? = null
     var merNo: String? = null
     var pname: String? = null
@@ -18,6 +19,7 @@ class payOrder() : Parcelable {
     var coin: String? = null
     var amount: Double? = 0.0
     var price: Double? = 0.0
+    var fee: Double? = 0.0
     var payStatus: Int? = null
     var orderNo: String? = null
     var createTime: Long? = null

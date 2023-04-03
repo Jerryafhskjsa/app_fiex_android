@@ -12,7 +12,6 @@ import skin.support.content.res.SkinCompatResources
 class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder?>?) : BaseRecycleDataBindAdapter<payOrder?, DepositListBinding>(context, variableId, data) {
     private var c1 = 0
     private var t5 = 0
-    private var walletBillTypeMap: Map<String?, String?>? = null
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -28,7 +27,9 @@ class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(if (walletBill?.payStatus == -1) "Fail" else if (walletBill?.payStatus == 2) "Confirming" else "New Order")
+        viewHolder?.action?.setText(if (walletBill?.orderType == "B") "Buy" else "Sell")
+        viewHolder?.action?.setTextColor(if (walletBill?.orderType == "B") c1 else t5)
+        viewHolder?.direction?.setText(if (walletBill?.payStatus == -1) "Fail" else if (walletBill?.payStatus == 0) "Success" else if (walletBill?.payStatus == 2) "Confirming" else "Submit")
         viewHolder?.amount?.setText(walletBill?.amount.toString() + walletBill?.coin)
         viewHolder?.accountType?.setText(walletBill?.orderAmount.toString() + walletBill?.ccyNo)
         viewHolder?.date?.setText(if(walletBill?.createTime == null) null else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill?.createTime!!))
