@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.WalletApiServiceHelper
@@ -29,6 +30,7 @@ import com.fbsex.exchange.databinding.ActivityThreePaymentBinding
 class ThirdPayment: BaseActivity(), View.OnClickListener{
     private var binding: ActivityThreePaymentBinding? = null
     private var type = "buy"
+    private var bank: String? = null
     private var list: ArrayList<payOrder?>? = null
     private var userBalanceList: ArrayList<UserBalance?>? = null
     private var orderCode: ArrayList<OrderCode>? = null
@@ -36,6 +38,9 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
     private var list2: MutableList<String>? = null
     private var list3: MutableList<String>? = null
     private var list4: MutableList<String>? = null
+    private var payChain1 = "ZAR"
+    private var payChain2 = "Sounth African online banking"
+    private var payChain3 = "United Bank of South Africa"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,24 +51,24 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         binding?.chooseLayout?.setOnClickListener(this)
         binding?.sell?.setOnClickListener(this)
         binding?.buy?.setOnClickListener(this)
-        binding?.bill?.setOnClickListener(this)
         binding?.transferAmount?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
         binding?.withdrawAddrLayout?.setOnClickListener(this)
+        val actionBarRecord: ImageButton? = binding?.root?.findViewById(com.black.wallet.R.id.img_action_bar_right)
+        actionBarRecord?.visibility = View.VISIBLE
+        actionBarRecord?.setOnClickListener(this)
         type = if (binding?.buy?.isChecked == true) "buy" else "sell"
         list1 = ArrayList()
-        list1?.add("ZAR")
         list2 = ArrayList()
         list2?.add("USDT")
         list3 = ArrayList()
-        list3?.add("Sounth African online banking")
         list4 = ArrayList()
+        getUrl()
     }
 
     override fun onResume() {
         super.onResume()
         refresh(type)
-        getUrl()
         getUserBalance(true)
     }
 
@@ -72,7 +77,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
     }
 
     override fun getTitleText(): String? {
-        return getString(R.string.rechange)
+        return getString(R.string.buy_sell)
     }
 
     override fun onClick(view: View) {
@@ -98,11 +103,11 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
 
             R.id.choose_chain_layout -> {
-                DeepControllerWindow(mContext as Activity, getString(R.string.will_receive), "ZAR" , list1, object : DeepControllerWindow.OnReturnListener<String> {
+                DeepControllerWindow(mContext as Activity, getString(R.string.will_receive), payChain1 , list1, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
-
-                            binding?.currentCoin?.setText(item)
+                            //payChain1 = item
+                           // binding?.currentCoin?.setText(item)
 
                     }
 
@@ -110,11 +115,11 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
 
             R.id.choose_coin_layout -> {
-                DeepControllerWindow(mContext as Activity, getString(R.string.rechange), "ZAR" , list1, object : DeepControllerWindow.OnReturnListener<String> {
+                DeepControllerWindow(mContext as Activity, getString(R.string.rechange), payChain1 , list1, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
-
-                        binding?.currentChain?.setText(item)
+                        //payChain1 = item
+                        //binding?.currentChain?.setText(item)
 
                     }
 
@@ -122,10 +127,10 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
 
             R.id.withdraw_addr_layout -> {
-                DeepControllerWindow(mContext as Activity, getString(R.string.payment_methods), "Sounth African online banking" , list3, object : DeepControllerWindow.OnReturnListener<String> {
+                DeepControllerWindow(mContext as Activity, getString(R.string.payment_methods), payChain2 , list3, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
-
+                        payChain2 = item
                         binding?.extractAddress?.setText(item)
 
                     }
@@ -134,9 +139,10 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
 
             R.id.choose_layout -> {
-                DeepControllerWindow(mContext as Activity, getString(R.string.choose_rade), "United Bank of South Africa" , list4, object : DeepControllerWindow.OnReturnListener<String> {
+                DeepControllerWindow(mContext as Activity, getString(R.string.choose_rade), payChain3 , list4, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
+                        payChain3 = item
                         binding?.chooseAddress?.setText(item)
 
                     }
@@ -144,7 +150,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 }).show()
             }
 
-            R.id.bill -> {
+            R.id.img_action_bar_right -> {
                 val bundle = Bundle()
                 bundle.putInt(ConstData.WALLET_HANDLE_TYPE, if (type == "buy") 0 else 1)
                 BlackRouter.getInstance().build(RouterConstData.CHOOSEPAYMENT).with(bundle).go(mContext)
@@ -217,9 +223,21 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             override fun callback(returnData: HttpRequestResultData<Deposit<OrderCode?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     orderCode = returnData.data?.bankCode
+                    val payCode = returnData.data?.payCode
+                    val coinCode = returnData.data?.coinCode
                     for (h in orderCode?.indices!!) {
                     list4?.add(orderCode!![h].en!!)
                     }
+                    for (h in payCode?.indices!!) {
+                        list3?.add(payCode[h].en!!)
+                    }
+                    for (h in coinCode?.indices!!)
+                    {
+                        list1?.add(coinCode[h].code!!)
+                    }
+                    payChain1 = list1!![0]
+                    payChain2 = list3!![0]
+                    payChain3 = list4!![0]
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -229,9 +247,16 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
 
     private fun getDepositCreate(type: String?,account: String? , name: String? , amount: String?) {
         val payVO = PayVO()
+        bank = binding?.chooseAddress?.text?.trim{it <= ' '}.toString()
+        for (h in orderCode?.indices!!) {
+            if (bank == orderCode!![h].en){
+                payVO.bankCode = orderCode!![h].code
+            }
+        }
         payVO.accName = name
         payVO.accNo = account
         payVO.orderType = type
+        payVO.bankCode = binding?.chooseAddress?.text?.trim{it <= ' '}.toString()
         payVO.orderAmount = amount
 
         WalletApiServiceHelper.getDepositCreate(mContext, payVO, object : NormalCallback<HttpRequestResultData<payOrder?>?>(mContext) {
@@ -243,9 +268,11 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val bundle = Bundle()
                     val order = returnData.data
+                    bundle.putString(ConstData.BIRTH,bank)
                     bundle.putString(ConstData.TITLE,type)
                     bundle.putParcelable(ConstData.WALLET,order)
                     BlackRouter.getInstance().build(RouterConstData.PAYMENTDETAILS).with(bundle).go(mContext)
+                    finish()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -253,7 +280,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         })
     }
 
-    //
+    //获得现货usdt资产
     private fun getUserBalance(isShowLoading: Boolean ){
         WalletApiServiceHelper.getUserBalance(this)
             ?.compose(RxJavaHelper.observeOnMainThread())

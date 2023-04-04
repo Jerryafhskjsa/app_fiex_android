@@ -110,14 +110,12 @@
                                     />
                             </LinearLayout>
                         </LinearLayout>
-                        <ImageView
-                            android:id="@+id/bill"
-                            android:layout_width="15dp"
-                            android:layout_height="20dp"
-                            android:layout_marginLeft="180dp"
-                            android:background="@drawable/icon_c2c_order">
-                        </ImageView>
                     </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/C2"/>
+
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
@@ -400,6 +398,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="center_vertical"
+                            android:text="@string/user_name"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_14">
+
+                        </com.black.base.widget.SpanTextView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transfer_corner"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/double_padding"
+                            android:paddingRight="@dimen/double_padding">
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/name"
+                                style="@style/EditTextStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/put_nick_name"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="0dp" />
+                        </LinearLayout>
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
@@ -427,37 +456,6 @@
                             android:layout_weight="1"
                             android:background="@null"
                             android:hint="@string/account"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:padding="0dp" />
-                    </LinearLayout>
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="@dimen/text_size_10"
-                        android:gravity="center_vertical"
-                        android:text="@string/user_name"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14">
-
-                    </com.black.base.widget.SpanTextView>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_transfer_corner"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/double_padding"
-                        android:paddingRight="@dimen/double_padding">
-
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/name"
-                            style="@style/EditTextStyle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:hint="@string/put_nick_name"
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="0dp" />

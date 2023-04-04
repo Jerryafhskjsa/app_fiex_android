@@ -26,11 +26,13 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
     private var binding: ActivityChooseDetailsBinding? = null
     private var order: payOrder? = null
     private var direction: String? = null
+    private var bank: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, com.fbsex.exchange.R.layout.activity_choose_details)
         order = intent.getParcelableExtra(ConstData.WALLET)
+        bank = intent.getStringExtra(ConstData.BIRTH)
         direction = intent.getStringExtra(ConstData.TITLE)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.barA?.setOnClickListener(this)
@@ -42,7 +44,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                     NumberUtil.formatNumberDynamicScaleNoGroup(order?.fee, 8, 4, 2)
                 ) + order?.coin
             )
-            binding?.coinType?.setText(order?.bankCode)
+            binding?.choose?.setText(order?.bankCode)
             binding?.amount?.setText(
                 "1.0000" + order?.ccyNo + String.format(
                     " ≈ %S ",
@@ -70,7 +72,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                     NumberUtil.formatNumberDynamicScaleNoGroup(order?.fee, 8, 4, 2)
                 ) + order?.coin
             )
-            binding?.coinType?.setText(order?.bankCode)
+            binding?.choose?.setText(order?.bankCode)
             binding?.amount?.setText(
                 "1.0000" + order?.coin + String.format(
                     " ≈ %S ",
@@ -130,6 +132,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                         bundle.putString(ConstData.URL, returnData.data)
                         bundle.putString(ConstData.TITLE, "Pay Bank")
                         BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+                        finish()
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                     }

@@ -77,15 +77,17 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     override fun onClick(v: View) {
       when(v.id){
           R.id.recharge -> {
-              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                  .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
-                  .go(this)
+              val bundle = Bundle()
+              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+              bundle.putParcelable(ConstData.WALLET, wallet)
+              BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
           }
 
           R.id.extract -> {
-              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                  .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
-                  .go(this)
+              val bundle = Bundle()
+              bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+              bundle.putParcelable(ConstData.WALLET, wallet)
+              BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
           }
           R.id.transaction -> {
               BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
@@ -98,6 +100,15 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
           R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
 
       }
+    }
+
+    fun setData(data: ArrayList<Wallet?>?) {
+        for (h in data?.indices!!) {
+            if (data[h]?.coinType == "USDT")
+            {
+                wallet = data[h]
+            }
+        }
     }
 
     fun setTotal(total: Money?) {

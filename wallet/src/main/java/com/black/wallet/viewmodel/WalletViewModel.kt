@@ -66,7 +66,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
      * 获取币种配置
      */
     private fun getCoinlistConfig(){
-        WalletApiServiceHelper.getCoinInfoList(context!!, object :Callback<ArrayList<CoinInfoType?>?>(){
+        WalletApiServiceHelper.getCoinInfoList(context, object :Callback<ArrayList<CoinInfoType?>?>(){
             override fun callback(returnData: ArrayList<CoinInfoType?>?) {
                 if (returnData != null) {
                     for (i in returnData){

@@ -374,7 +374,8 @@
     <string name="more">More</string>
     <string name="purchase_by_amount">By amount</string>
     <string name="purchase_by_account">By account</string>
-    <string name="rechange">Buy/Sell</string>
+    <string name="rechange">Deposit</string>
+    <string name="buy_sell">Buy/Sell</string>
     <string name="choose_rade">Choose a channel</string>
     <string name="extract">Withdrawal</string>
     <string name="bill">Bill</string>

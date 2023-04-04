@@ -52,6 +52,7 @@ import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
+import com.black.wallet.viewmodel.WalletViewModel
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
 import com.github.mikephil.charting.charts.LineChart
@@ -71,7 +72,7 @@ import kotlin.collections.HashMap
  *先取symbolList,在取tickers,然后取kLine数据
  */
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
-    ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener, OnMainMoreClickListener {
+    ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
     companion object {
         private const val STATUS_PAGE_COUNT = 2
         private var TAG = HomePageMainFragment::class.java.simpleName

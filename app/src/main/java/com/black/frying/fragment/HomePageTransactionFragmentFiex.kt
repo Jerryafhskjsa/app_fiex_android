@@ -250,6 +250,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         updateDear(isDear)
         getUserBalanceCallback()
         initTicker()
+        getCoinlistConfig()
     }
 
     fun initTicker() {
@@ -1058,6 +1059,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.setCurrentPairorderType(currentOrderType)
         refreshOrderType(currentOrderType)
         initView()
+        getCoinlistConfig()
     }
 
     private fun refreshOrderType(type: String?) {
@@ -1594,7 +1596,6 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     currentWallet = returnData.first
                     currentEstimatedWallet = returnData.second
                     binding!!.coinType2.setText(viewModel?.getCoinType())
-                    binding!!.coinTypeDes2.setText(viewModel?.getCoinType())
                     if (returnData.first?.coinIconUrl != null) {
                         val requestOptions = RequestOptions
                             .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
@@ -1942,5 +1943,31 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 null
             )
         }
+    }
+// 获取币种
+    private fun getCoinlistConfig(){
+        WalletApiServiceHelper.getCoinInfoList(context, object :Callback<ArrayList<CoinInfoType?>?>(){
+            override fun callback(returnData: ArrayList<CoinInfoType?>?) {
+                if (returnData != null ) {
+                    for (i in returnData.indices) {
+                        if (viewModel?.getCoinType() == returnData[i]?.coinType){
+                            val name = returnData[i]?.config?.get(0)?.coinConfigVO?.coinFullName
+                            val url = returnData[i]?.config?.get(0)?.coinConfigVO?.logosUrl
+                            if (url != null) {
+                                val requestOptions = RequestOptions
+                                    .bitmapTransform(RoundedCorners(DipPx.dip2px(context, 15f)))
+                                Glide.with(mContext!!)
+                                    .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext!!, url)))
+                                    .apply(requestOptions)
+                                    .into(binding?.iconCoin2!!)
+                            }
+                            binding?.coinTypeDes2?.setText(name)
+                        }
+                    }
+                }
+            }
+            override fun error(type: Int, error: Any?) {
+            }
+        })
     }
 }

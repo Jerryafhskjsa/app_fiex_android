@@ -46,6 +46,7 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
 import com.black.util.NumberUtil
+import com.black.wallet.viewmodel.WalletViewModel
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainBinding
 import io.reactivex.Observable
@@ -74,6 +75,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
     private var viewModel: MainViewModel? = null
+    private var viewModel2: WalletViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {

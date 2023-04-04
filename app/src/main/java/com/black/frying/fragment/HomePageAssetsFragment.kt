@@ -439,9 +439,9 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 //                    setData(it)
                 }
             }
-            assetsWalletFragment?.run {
+            walletFragment?.run {
                 observable?.subscribe {
-//                                setData(it)
+                                setData(it)
                 }
             }
         }

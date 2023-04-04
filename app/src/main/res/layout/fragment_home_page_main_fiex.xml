@@ -197,7 +197,7 @@
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"
-                                    android:text="@string/futures"
+                                    android:text="@string/home_tab_asset"
                                     />
                             </RelativeLayout>
                             <RelativeLayout

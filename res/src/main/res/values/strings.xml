@@ -374,7 +374,8 @@
     <string name="more">更多</string>
     <string name="purchase_by_amount">按金额</string>
     <string name="purchase_by_account">按数量</string>
-    <string name="rechange">买/卖</string>
+    <string name="rechange">充值</string>
+    <string name="buy_sell">买/卖</string>
     <string name="choose_rade">选择渠道</string>
     <string name="extract">提现</string>
     <string name="bill">账单</string>

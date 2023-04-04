@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.model.FryingStyleChange
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.StyleChangeUtil
@@ -28,7 +29,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         binding.changeUser.setOnClickListener(this)
         binding.aboutUs.setOnClickListener(this)
         binding.styleSetting.setOnClickListener(this)
-        binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,null)))
+        binding.version.setText(String.format("%s" , CookieUtil.getUpdateJumpVersion(mContext)))
         application = getApplication() as BaseApplication
         val style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
         if (style == null || style == 0) {
