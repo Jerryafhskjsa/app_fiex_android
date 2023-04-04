@@ -353,7 +353,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                     if (update.version != null && update.version != CookieUtil.getUpdateJumpVersion(mContext)) {
                         //需要更新
                             FryingUtil.showUpdateDialog(mContext as Activity, update)
-                    } else {
+                    }
+                    else {
                         if (!silent) {
                             FryingUtil.showToast(mContext, getString(R.string.last_version))
                         }

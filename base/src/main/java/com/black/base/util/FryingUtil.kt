@@ -306,7 +306,6 @@ object FryingUtil {
         val alertDialog = AlertDialog.Builder(activity, R.style.AlertDialog).setView(contentView).create()
         alertDialog.setCancelable(false)
         btnUpdateJump.setOnClickListener {
-            CookieUtil.setUpdateJumpVersion(activity, update.version)
             alertDialog.dismiss()
         }
         //强制更新不能关闭
@@ -346,6 +345,7 @@ object FryingUtil {
                     }
 
                     override fun onFinish(file: File) {
+                        CookieUtil.setUpdateJumpVersion(activity, update.version)
                         alertDialog.dismiss()
                         installApk(activity, file)
                     }
