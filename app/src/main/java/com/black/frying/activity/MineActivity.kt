@@ -96,7 +96,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.helpCenter?.setOnClickListener(this)
        // binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
-        binding?.version?.setText(String.format("%s" ,CookieUtil.getUpdateJumpVersion(mContext)))
+        binding?.version?.setText(String.format("V%s",CommonUtil.getVersionName(mContext,"1.2.0")))
         val currentLanguage = LanguageUtil.getLanguageSetting(mContext)?.languageCode
         val exchange = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
         if (currentLanguage == null || currentLanguage == 2) {

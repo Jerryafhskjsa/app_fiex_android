@@ -29,7 +29,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         binding.changeUser.setOnClickListener(this)
         binding.aboutUs.setOnClickListener(this)
         binding.styleSetting.setOnClickListener(this)
-        binding.version.setText(String.format("%s" , CookieUtil.getUpdateJumpVersion(mContext)))
+        binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,"1.2.0")))
         application = getApplication() as BaseApplication
         val style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
         if (style == null || style == 0) {

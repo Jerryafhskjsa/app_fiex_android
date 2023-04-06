@@ -350,9 +350,13 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             override fun callback(returnData: HttpRequestResultData<Update?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val update = returnData.data ?: return
-                    if (update.version != null && update.version != CookieUtil.getUpdateJumpVersion(mContext)) {
+                    if (update.version != null && update.version!![2] != CommonUtil.getVersionName(mContext,"1.2.0")[2]) {
                         //需要更新
+                            update.force = true
                             FryingUtil.showUpdateDialog(mContext as Activity, update)
+                    }
+                    else if (update.version!![2] == CommonUtil.getVersionName(mContext,"1.2.0")[2] && update.version!![4] != CommonUtil.getVersionName(mContext,"1.2.0")[4]){
+                        FryingUtil.showUpdateDialog(mContext as Activity, update)
                     }
                     else {
                         if (!silent) {

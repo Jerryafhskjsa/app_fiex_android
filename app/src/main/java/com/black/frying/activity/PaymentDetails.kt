@@ -127,12 +127,18 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                 }
 
                 override fun callback(returnData: HttpRequestResultString?) {
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        val bundle = Bundle()
-                        bundle.putString(ConstData.URL, returnData.data)
-                        bundle.putString(ConstData.TITLE, "Pay Bank")
-                        BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
-                        finish()
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS ) {
+                        if (direction == "B") {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.URL, returnData.data)
+                            bundle.putString(ConstData.TITLE, "Pay Bank")
+                            BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle)
+                                .go(mContext)
+                            finish()
+                        }
+                        else{
+                            FryingUtil.showToast(mContext, "Checkout Success")
+                        }
                     } else {
                         FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                     }

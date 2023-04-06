@@ -163,7 +163,7 @@ public class ApiManagerImpl {
          *fbsexApp固定值
          */
         StringBuilder sb = new StringBuilder();
-        sb.append("FryingNew/").append(getVersionName(context, "1.0.0")).append(" ");
+        sb.append("FryingNew/").append(getVersionName(context, "1.2.0")).append(" ");
         sb.append("(");
         sb.append(android.os.Build.MODEL).append(";");
         sb.append(android.os.Build.VERSION.RELEASE).append(";");
