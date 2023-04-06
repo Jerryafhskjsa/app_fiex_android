@@ -8,7 +8,7 @@ class FryingLanguage(locale: Locale, languageCode: Int, languageText: String) {
         const val English = 0
         const val Chinese_tw = 1
         const val Chinese = 2
-        const val Japanese = 3
+        const val Vietnam = 3
         const val English_uk = 4
     }
 

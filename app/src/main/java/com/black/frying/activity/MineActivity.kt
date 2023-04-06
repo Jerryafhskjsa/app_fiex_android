@@ -94,15 +94,15 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.notifications?.setOnClickListener(this)
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
-       // binding?.moreLanguage?.setOnClickListener(this)
+        binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
         binding?.version?.setText(String.format("V%s",CommonUtil.getVersionName(mContext,"1.2.0")))
         val currentLanguage = LanguageUtil.getLanguageSetting(mContext)?.languageCode
         val exchange = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
-        if (currentLanguage == null || currentLanguage == 2) {
-            binding?.currentLanguage?.setText(R.string.language_chinese)
-        } else {
+        if (currentLanguage == null || currentLanguage == 2 || currentLanguage == 0) {
             binding?.currentLanguage?.setText(R.string.language_english)
+        } else {
+            binding?.currentLanguage?.setText(R.string.language_vietnam)
         }
         if (exchange == null || exchange == 1) {
             binding?.currentExchangeRates?.setText(R.string.exchange_rates_usd)

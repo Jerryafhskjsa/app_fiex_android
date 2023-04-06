@@ -58,7 +58,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         binding?.capital?.setOnClickListener(this)
         binding?.exchange?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
-        binding?.refreshLayout?.isFocusable = false
+       /* binding?.refreshLayout?.isFocusable = false
         binding?.refreshLayout?.isNestedScrollingEnabled = false
         binding?.refreshLayout?.setRefreshing(true)
         binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
@@ -68,7 +68,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
             }
 
-        })
+        })*/
         return layout
     }
 

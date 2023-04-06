@@ -73,9 +73,9 @@
                         android:textSize="@dimen/text_size_16" />
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/janpanese"
+                        android:id="@+id/vietnam"
                         style="@style/MenuListItem"
-                        android:text="@string/language_janpanese"
+                        android:text="@string/language_vietnam"
                         android:textColor="@color/T1"
                         android:textSize="@dimen/text_size_16" />
                     <com.black.base.widget.SpanTextView

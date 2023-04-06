@@ -51,7 +51,7 @@ class WalletBill() : BaseAdapterItem() , Parcelable {
             "DEAL_FEE_TO_ACCUMULATED" -> context.getString(R.string.fee)
             "C2C_PLACE_ORDER" -> context.getString(R.string.wallet_bill_c2c_place_order)
             "C2C_PROCESS_ORDER" -> context.getString(R.string.wallet_bill_c2c_process_order)
-            "FOUNDATION_FINANCING" -> "抢购"
+            /*"FOUNDATION_FINANCING" -> "抢购"
             "FOUNDATION_INVITE_REWARD" -> "抢购邀请奖励"
             "USER_DEPOSIT_MONEY_INSERTES" -> "存币生息"
             "USER_AIRDROP_AWARD" -> "空投奖励"
@@ -66,9 +66,9 @@ class WalletBill() : BaseAdapterItem() , Parcelable {
             "C2C_MERCHANT_LOCK_AMOUNT" -> "C2C商家保证金"
             "C2C_MERCHANT_UNLOCK_AMOUNT" -> "C2C商家解锁保证金"
             "C2C_ADMIN_AUDIT" -> "C2C交易冻结"
-            "C2C_TRADE_CANCEL" -> "C2C取消交易"
-            "DEPOSITE_INTERNAL_TRANSFER" -> "充值(内部转账)"
-            "USER_COMMUNITY_BONUS" -> "社区分红"
+            "C2C_TRADE_CANCEL" -> "C2C取消交易"*/
+            "DEPOSITE_INTERNAL_TRANSFER" -> "DEPOSITE_INTERNAL_TRANSFER"
+            /*"USER_COMMUNITY_BONUS" -> "社区分红"
             "STAFF_AWARD_FROZEN" -> "员工奖励冻结"
             "STAFF_AWARD" -> "员工奖励发放"
             "CURRENT_FIREST_AWARD" -> "聚宝盆直推奖励"
@@ -77,26 +77,26 @@ class WalletBill() : BaseAdapterItem() , Parcelable {
             "LEAGUE_INVITE_PROFIT" -> "笑傲江湖直推奖励"
             "LEAGUE_OWNER_PROFIT" -> "笑傲江湖掌门奖励"
             "CURRENT_USER_LOCK_IN" -> "聚宝盆存入"
-            "CURRENT_USER_LOCK_OUT" -> "聚宝盆取出"
+            "CURRENT_USER_LOCK_OUT" -> "聚宝盆取出"*/
             "MINING_BKK" -> context.getString(R.string.wallet_bill_mining_bkk)
             "MINING_SHARE" -> context.getString(R.string.wallet_bill_mining_share)
             "MINING_AIR_DROP" -> context.getString(R.string.wallet_bill_mining_air_drop)
             "BKK_BONUS_ON_DEAL" -> context.getString(R.string.wallet_bill_bkk_bonus_on_deal)
             "BORROWING" -> context.getString(R.string.wallet_bill_borrowing)
             "RED_PACKET_TRANSFER" -> context.getString(R.string.wallet_bill_red_packet_transfer)
-            "TRIBE_JOIN" -> "加入部落"
-            "TRIBE_QUIT" -> "部落释放"
-            "TRIBE_CREATE" -> "创建部落"
-            "FEE_BONUS" -> "手续费奖励"
-            "TRIBE_BID" -> "竞标冻结"
-            "TRIBE_BID_FREEZE" -> "竞标解冻"
-            "WITHDRAW_CONFIRM" -> "提现"
-            "WITHDRAW_FEE" -> "提现手续费"
-            "WITHDRAW_CONFIRM_FEE" -> "提现手续费"
-            "CANCEL_WITHDRAW_FEE" -> "取消提现"
-            "DIVIDEND_TRANSFER" -> "分红"
-            "TRIBE_PROFIT_TRANS" -> "部落收益"
-            "LOCK_USER_LOCK_IN" -> "活利宝转入"
+            "TRIBE_JOIN" -> "TRIBE_JOIN"//"加入部落"
+            "TRIBE_QUIT" -> "TRIBE_QUIT"//"部落释放"
+            "TRIBE_CREATE" -> "TRIBE_CREATE"//"创建部落"
+            "FEE_BONUS" -> "FEE_BONUS"//"手续费奖励"
+            "TRIBE_BID" -> "TRIBE_BID"//"竞标冻结"
+            "TRIBE_BID_FREEZE" ->  "TRIBE_BID_FREEZE"//"竞标解冻"
+            "WITHDRAW_CONFIRM" -> "WITHDRAW_CONFIRM"//"提现"
+            "WITHDRAW_FEE" -> "WITHDRAW_FEE"//"提现手续费"
+            "WITHDRAW_CONFIRM_FEE" ->  "WITHDRAW_CONFIRM_FEE"//"提现手续费"
+            "CANCEL_WITHDRAW_FEE" -> "CANCEL_WITHDRAW_FEE"//"取消提现"
+            "DIVIDEND_TRANSFER" -> "DIVIDEND_TRANSFER"//"分红"
+            "TRIBE_PROFIT_TRANS" -> "TRIBE_PROFIT_TRANS"//"部落收益"
+            "LOCK_USER_LOCK_IN" ->  "LOCK_USER_LOCK_IN"//"活利宝转入"
             else -> ""
         }
     }

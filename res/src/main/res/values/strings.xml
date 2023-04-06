@@ -29,6 +29,7 @@
     <string name="not_filled_in">Not filled in</string>
     <string name="price">Price</string>
     <string name="amount">Quantity</string>
+    <string name="id">ID</string>
     <string name="balance">Balance</string>
     <string name="entrust_current">Open orders</string>
     <string name="rade">Payment Channels</string>
@@ -272,7 +273,7 @@
     <string name="language_chinese">Simplified Chinese</string>
     <string name="language_chinese_tw">Traditional Chinese</string>
     <string name="language_english">English (American)</string>
-    <string name="language_janpanese">Japanese</string>
+    <string name="language_vietnam">Vietnam</string>
     <string name="language_english_uk">English (British)</string>
     <string name="welcome_fbsex">Welcome to SoeasyEx</string>
     <string name="alert_server_error">Server exception</string>

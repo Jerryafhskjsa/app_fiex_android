@@ -109,8 +109,8 @@ class FryingApplication : BaseApplication() {
         WebView(applicationContext).destroy()
         //初始化腾讯i
         initTencentIM()
-        //initLanguageItems(applicationContext)
-        LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
+        initLanguageItems(applicationContext)
+        //LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
         StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
         ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
         initFilters()
@@ -123,8 +123,7 @@ class FryingApplication : BaseApplication() {
                     checkTokenError = false
                 }
                 if (!LanguageUtil.isSameWithSetting(activity)) {
-                    LanguageUtil.changeAppLanguage(activity, FryingLanguage(Locale.ENGLISH, 0, getString(
-                        com.black.base.R.string.language_english)), true)
+                    LanguageUtil.changeAppLanguage(activity, LanguageUtil.getLanguageSetting(activity), true)
                 }
                 //ExchangeRatesUtil.setExChangeRatesSetting(activity, FryingExchangeRates(0,"CNY"))
             }

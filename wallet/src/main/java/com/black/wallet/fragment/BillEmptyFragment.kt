@@ -42,6 +42,8 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
     private var adapter: WalletBillAdapter? = null
     private var hasMore = false
     private var currentPage = 1
+    private var direction: String? = null
+    private var id: String? = null
     private var total = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
@@ -91,11 +93,13 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
 
     override fun onRefresh() {
         currentPage = 1
+        direction = null
+        id = null
         getBillData(false)
     }
 
     override fun onLoad() {
-        if (total > adapter?.count!! || hasMore) {
+        if (hasMore) {
             currentPage += 1
             getBillData(true)
         } else {
@@ -104,12 +108,12 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
     }
 
     override fun onLoadMoreCheck(): Boolean {
-        return total > adapter?.count!! || hasMore
+        return hasMore
     }
     //获取综合账单记录
 
     private fun getBillData(isShowLoading: Boolean) {
-        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, null, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
+        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, null,direction,id, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -117,15 +121,20 @@ class BillEmptyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.On
             }
 
             override fun callback(returnData: HttpRequestResultData<PagingData<WalletBill?>?>?) {
-                binding?.refreshLayout?.setRefreshing(false)
-                binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    total = returnData.data?.total!!
+                    binding?.refreshLayout?.setRefreshing(false)
+                    binding?.refreshLayout?.setLoading(false)
+                    direction = "NEXT"
+                    val dataList = returnData.data?.items
+                    val size = dataList?.size!! - 1
                     hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
+                    if (size == 9) {
+                        id = dataList[size]?.id
+                    }
                     if (currentPage == 1) {
-                        adapter?.data = (returnData.data?.items)
+                        adapter?.data = dataList
                     } else {
-                        adapter?.addAll(returnData.data?.items)
+                        adapter?.addAll(dataList)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {

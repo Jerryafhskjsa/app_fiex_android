@@ -478,13 +478,13 @@ object WalletApiServiceHelper {
     }
 
     //综合账单列表
-    fun getWalletBillFiex(context: Context?, isShowLoading: Boolean, coinType: String?,
+    fun getWalletBillFiex(context: Context?, isShowLoading: Boolean, coinType: String?,direction: String?,id:String?,
                       callback: Callback<HttpRequestResultData<PagingData<WalletBill?>?>?>?) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getWalletBillFiex(coinType)
+            ?.getWalletBillFiex(coinType,direction,id)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

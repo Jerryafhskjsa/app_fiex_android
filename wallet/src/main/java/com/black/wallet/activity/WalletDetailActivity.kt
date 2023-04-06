@@ -63,10 +63,12 @@ class WalletDetailActivity : BaseActivity(),
     private var wallet: Wallet? = null
     private var coinType: String? = null
     private var binding: ActivityWalletDetailBinding? = null
-    private var rate = C2CApiServiceHelper?.coinUsdtPrice?.usdtToUsd
+    private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
     private var sets: ArrayList<QuotationSet?>? = null
     private var fragmentList: MutableList<Fragment?>? = null
     private var adapter: WalletBillAdapter? = null
+    private var direction: String? = null
+    private var id: String? = null
     private var currentPage = 1
     private var total = 0
     private var hasMore = false
@@ -196,7 +198,7 @@ class WalletDetailActivity : BaseActivity(),
         if (wallet == null) {
             return
         }
-        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, wallet?.coinType, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
+        WalletApiServiceHelper.getWalletBillFiex(mContext, isShowLoading, wallet?.coinType,direction, id, object : NormalCallback<HttpRequestResultData<PagingData<WalletBill?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
                 binding?.refreshLayout?.setRefreshing(false)
@@ -204,15 +206,20 @@ class WalletDetailActivity : BaseActivity(),
             }
 
             override fun callback(returnData: HttpRequestResultData<PagingData<WalletBill?>?>?) {
-                binding?.refreshLayout?.setRefreshing(false)
-                binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    total = returnData.data?.total!!
+                    binding?.refreshLayout?.setRefreshing(false)
+                    binding?.refreshLayout?.setLoading(false)
+                    direction = "NEXT"
+                    val dataList = returnData.data?.items
+                    val size = dataList?.size!! - 1
                     hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
+                    if (size == 9) {
+                        id = dataList[size]?.id
+                    }
                     if (currentPage == 1) {
-                        adapter?.data = (returnData.data?.items)
+                        adapter?.data = dataList
                     } else {
-                        adapter?.addAll(returnData.data?.items)
+                        adapter?.addAll(dataList)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {
@@ -277,11 +284,13 @@ class WalletDetailActivity : BaseActivity(),
 
     override fun onRefresh() {
         currentPage = 1
+        direction = null
+        id = null
         getBillData(false)
     }
 
     override fun onLoad() {
-        if (total > adapter?.count!! || hasMore) {
+        if ( hasMore) {
             currentPage += 1
             getBillData(true)
         } else {
@@ -290,7 +299,7 @@ class WalletDetailActivity : BaseActivity(),
     }
 
     override fun onLoadMoreCheck(): Boolean {
-        return total > adapter?.count!! || hasMore
+        return  hasMore
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -307,11 +316,11 @@ class WalletDetailActivity : BaseActivity(),
                 }
                 override fun callback(returnData: ArrayList<QuotationSet?>?) {
                     if (returnData != null) {
-                        var setData = ArrayList<QuotationSet?>()
-                        setData?.addAll(returnData)
-                        var optionalSet = QuotationSet()
-                        setData?.add(0,  optionalSet)
-                        if (setData != null && setData?.isNotEmpty()) {
+                        val setData = ArrayList<QuotationSet?>()
+                        setData.addAll(returnData)
+                        val optionalSet = QuotationSet()
+                        setData.add(0,  optionalSet)
+                        if (setData.isNotEmpty()) {
                             sets = setData
                             initQuotationGroup()
                         }
@@ -341,7 +350,7 @@ class WalletDetailActivity : BaseActivity(),
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        mContext?.let {
+        mContext.let {
             val pairStatus = adapter2?.getItem(position)
                 CookieUtil.setCurrentPair(it, pairStatus?.pair)
                 sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)

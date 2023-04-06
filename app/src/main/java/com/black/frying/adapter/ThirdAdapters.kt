@@ -32,7 +32,8 @@ class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder
         viewHolder?.direction?.setText(if (walletBill?.payStatus == -1) "Fail" else if (walletBill?.payStatus == 0) "Success" else if (walletBill?.payStatus == 2) "Confirming" else "Submit")
         viewHolder?.amount?.setText(walletBill?.amount.toString() + walletBill?.coin)
         viewHolder?.accountType?.setText(walletBill?.orderAmount.toString() + walletBill?.ccyNo)
-        viewHolder?.date?.setText(if(walletBill?.createTime == null) null else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill?.createTime!!))
+        viewHolder?.id?.setText(walletBill?.id)
+        viewHolder?.date?.setText(if(walletBill?.createTime == null) null else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createTime!!))
     }
 
 }

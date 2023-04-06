@@ -85,7 +85,7 @@ class SellFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.OnRefre
     }
 
     private fun getList(isShowLoading: Boolean){
-        WalletApiServiceHelper.getDepositOrderList(mContext, isShowLoading,"S",1,10,object : NormalCallback<HttpRequestResultData<PagingData<payOrder?>?>?>(mContext!!) {
+        WalletApiServiceHelper.getDepositOrderList(mContext, isShowLoading,"S",currentPage,10,object : NormalCallback<HttpRequestResultData<PagingData<payOrder?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }

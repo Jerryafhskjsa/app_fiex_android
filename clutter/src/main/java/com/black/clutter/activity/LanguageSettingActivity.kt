@@ -40,8 +40,8 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
         binding?.chineseTw?.tag = application!!.getLanguage(FryingLanguage.Chinese_tw)
         binding?.english?.setOnClickListener(this)
         binding?.english?.tag = application!!.getLanguage(FryingLanguage.English)
-        binding?.janpanese?.setOnClickListener(this)
-        binding?.janpanese?.tag = application!!.getLanguage(FryingLanguage.Japanese)
+        binding?.vietnam?.setOnClickListener(this)
+        binding?.vietnam?.tag = application!!.getLanguage(FryingLanguage.Vietnam)
         binding?.englishUk?.setOnClickListener(this)
         binding?.englishUk?.tag = application!!.getLanguage(FryingLanguage.English_uk)
     }
@@ -56,24 +56,18 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when(v.id){
-            R.id.chinese,R.id.chinese_tw,R.id.english,R.id.janpanese,R.id.english_uk -> changeLanguage(v.tag as FryingLanguage)
+            R.id.chinese,R.id.chinese_tw,R.id.english,R.id.vietnam,R.id.english_uk -> changeLanguage(v.tag as FryingLanguage)
         }
     }
 
     private fun changeLanguage(language: FryingLanguage) {
-        if (language.languageCode != 0 && language.languageCode != 2) {
+        if (language.languageCode != 0  && language.languageCode != 3) {
             FryingUtil.showToast(this, getString(R.string.please_waiting))
             return
         }
         if (language != LanguageUtil.getLanguageSetting(this)) {
             LanguageUtil.changeAppLanguage(this, language, true)
-            if (language.languageCode == 0) {
-                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
-            }
-            if (language.languageCode == 2)
-            {
-                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
-            }
+            ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
             onLanguageChanged()
             BlackRouter.getInstance().build(RouterConstData.START_PAGE)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -87,7 +81,7 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
         refreshLanguageChecked(language, binding?.chinese)
         refreshLanguageChecked(language, binding?.chineseTw)
         refreshLanguageChecked(language, binding?.english)
-        refreshLanguageChecked(language, binding?.janpanese)
+        refreshLanguageChecked(language, binding?.vietnam)
         refreshLanguageChecked(language, binding?.englishUk)
     }
 
