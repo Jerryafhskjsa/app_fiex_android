@@ -967,7 +967,7 @@
     <string name="pls_selected_query">Please select query criteria</string>
     <string name="reback">Return</string>
     <string name="borrow">Lending</string>
-    <string name="type">type</string>
+    <string name="type">Type</string>
     <string name="bill_detail">Bill Details</string>
     <string name="phone">Mobile phone</string>
     <string name="phone_number">Mobile number</string>
@@ -1079,6 +1079,7 @@
     <string name="hold_amount">Hold Amount</string>
     <string name="limit_price_entrust">Limit price entrust</string>
     <string name="plan_entrust">Plan entrust</string>
+
 
 
 </resources>

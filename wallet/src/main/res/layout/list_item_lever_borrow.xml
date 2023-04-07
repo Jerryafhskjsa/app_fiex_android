@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="类型"
+                android:text="@string/type"
                 android:textColor="@color/T3"
                 android:textSize="@dimen/text_size_13" />
 
