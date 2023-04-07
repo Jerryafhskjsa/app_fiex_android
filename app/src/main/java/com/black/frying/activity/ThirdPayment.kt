@@ -247,37 +247,50 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
 
     private fun getDepositCreate(type: String?,account: String? , name: String? , amount: String?) {
         val payVO = PayVO()
-        bank = binding?.chooseAddress?.text?.trim{it <= ' '}.toString()
+        bank = binding?.chooseAddress?.text?.trim { it <= ' ' }.toString()
         for (h in orderCode?.indices!!) {
-            if (bank == orderCode!![h].en){
+            if (bank == orderCode!![h].en) {
                 payVO.bankCode = orderCode!![h].code
             }
         }
         payVO.accName = name
         payVO.accNo = account
         payVO.orderType = type
-        payVO.bankCode = binding?.chooseAddress?.text?.trim{it <= ' '}.toString()
+        payVO.bankCode = binding?.chooseAddress?.text?.trim { it <= ' ' }.toString()
         payVO.orderAmount = amount
+        if (type == "B") {
+            payVO.ccyNo = "ZAR"
+            payVO.coin = "USDT" }
+        else{
+            payVO.ccyNo = "USDT"
+            payVO.coin = "ZAR"
+        }
+            WalletApiServiceHelper.getDepositCreate(
+                mContext,
+                payVO,
+                object : NormalCallback<HttpRequestResultData<payOrder?>?>(mContext) {
+                    override fun error(type: Int, error: Any?) {
+                        super.error(type, error)
+                    }
 
-        WalletApiServiceHelper.getDepositCreate(mContext, payVO, object : NormalCallback<HttpRequestResultData<payOrder?>?>(mContext) {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-            }
-
-            override fun callback(returnData: HttpRequestResultData<payOrder?>?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    val bundle = Bundle()
-                    val order = returnData.data
-                    bundle.putString(ConstData.BIRTH,bank)
-                    bundle.putString(ConstData.TITLE,type)
-                    bundle.putParcelable(ConstData.WALLET,order)
-                    BlackRouter.getInstance().build(RouterConstData.PAYMENTDETAILS).with(bundle).go(mContext)
-                    finish()
-                } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
-            }
-        })
+                    override fun callback(returnData: HttpRequestResultData<payOrder?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            val bundle = Bundle()
+                            val order = returnData.data
+                            bundle.putString(ConstData.BIRTH, bank)
+                            bundle.putString(ConstData.TITLE, type)
+                            bundle.putParcelable(ConstData.WALLET, order)
+                            BlackRouter.getInstance().build(RouterConstData.PAYMENTDETAILS)
+                                .with(bundle).go(mContext)
+                            finish()
+                        } else {
+                            FryingUtil.showToast(
+                                mContext,
+                                if (returnData == null) "null" else returnData.msg
+                            )
+                        }
+                    }
+                })
     }
 
     //获得现货usdt资产

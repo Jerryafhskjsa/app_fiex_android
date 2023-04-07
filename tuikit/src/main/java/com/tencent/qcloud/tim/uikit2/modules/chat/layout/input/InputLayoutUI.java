@@ -217,7 +217,7 @@ abstract class InputLayoutUI extends LinearLayout implements IInputLayout {
                             mActivity.startActivity(intent);
                         }
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.group_id, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //关闭页面或者做其他操作

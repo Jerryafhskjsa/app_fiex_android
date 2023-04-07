@@ -77,7 +77,7 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onLanguageChanged() {
-        var language = LanguageUtil.getLanguageSetting(this)
+        val language = LanguageUtil.getLanguageSetting(this)
         refreshLanguageChecked(language, binding?.chinese)
         refreshLanguageChecked(language, binding?.chineseTw)
         refreshLanguageChecked(language, binding?.english)
@@ -87,11 +87,11 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
 
     private fun refreshLanguageChecked(language: FryingLanguage?, textView: TextView?) {
         if (language == null || textView == null) {
-            return
+            CommonUtil.setTextViewCompoundDrawable(binding?.english, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
         }
-        var tag = textView.tag
+        val tag = textView?.tag
         if(tag is FryingLanguage){
-            if (language.languageCode == tag.languageCode ) {
+            if (language?.languageCode == tag.languageCode ) {
                 CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
             } else {
                 CommonUtil.setTextViewCompoundDrawable(textView, null, 2)
