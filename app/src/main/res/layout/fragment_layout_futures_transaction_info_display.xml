@@ -5,10 +5,551 @@
     android:layout_height="wrap_content"
     tools:context="com.black.frying.contract.FuturesTransactionInfoDisplayFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="order_create" />
+        android:text="Future info display" />
 
+    <LinearLayout style="@style/ContractHeaderNewRight">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/price"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep_price_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deep_price"
+                android:layout_alignParentLeft="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingTop="4dp"
+                android:text="(USDT)"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/amount"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep_amount_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deep_amount"
+                android:layout_alignParentRight="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingTop="4dp"
+                android:text="(BTC)"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_10"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_10"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_10"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_09"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_09"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_09"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_08"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_08"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_08"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_07"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_07"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_07"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_06"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_06"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_06"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_05"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_05"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_05"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_04"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_04"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_04"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_03"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_03"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_03"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_02"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_02"
+                    style="@style/ContractDeepItemTextLeft" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_02"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_sale_layout_01"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_sale_01"
+                    style="@style/ContractDeepItemTextLeft" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_sale_01"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/current_price_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/current_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:text="@string/number_default"
+                        android:textColor="@color/black_real"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/current_price_cny"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:text="@string/number_default"
+                        android:textColor="@color/black_real"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/half_default_padding">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/contract_tag_price"
+                                android:textColor="@color/T14"
+                                android:textSize="@dimen/text_size_10" />
+
+                            <com.black.base.widget.DashLineView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp" />
+                        </LinearLayout>
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/tag_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/half_default_padding"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_10" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/half_default_padding">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="@string/contract_index_price"
+                                android:textColor="@color/T14"
+                                android:textSize="@dimen/text_size_10" />
+
+                            <com.black.base.widget.DashLineView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp" />
+                        </LinearLayout>
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/index_price"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/half_default_padding"
+                            android:textColor="@color/T14"
+                            android:textSize="@dimen/text_size_10" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_01"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_01"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_01"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_02"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_02"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_02"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_03"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_03"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_03"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_04"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_04"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_04"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_05"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_05"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_05"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_06"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_06"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_06"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_07"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_07"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_07"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_08"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_08"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_08"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_09"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_09"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_09"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/handicap_buy_layout_10"
+                style="@style/ContractDeepItemRel">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_buy_10"
+                    style="@style/ContractDeepItemTextLeft1" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/count_buy_10"
+                    style="@style/ContractDeepItemTextRight" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:visibility="visible">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/deep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_transaction_input"
+                android:drawableRight="@drawable/icon_deep"
+                android:drawablePadding="8dp"
+                android:includeFontPadding="false"
+                android:padding="8dp"
+                android:text="@string/number_default"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_10" />
+
+            <ImageView
+                android:id="@+id/display_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:src="@drawable/icon_trade_deep" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_transaction_input"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/lin_deep_postion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="49"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_position"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="default"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_10"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_position_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="Positions"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/L1" />
+
+            <LinearLayout
+                android:id="@+id/lin_deep_depth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="49"
+                android:orientation="vertical">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_depth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="default"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_10"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deep_depth_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="Depth"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
 </FrameLayout>

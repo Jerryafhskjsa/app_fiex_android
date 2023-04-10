@@ -1,7 +1,6 @@
 package com.black.frying.contract.biz.okwebsocket
 
 import com.black.base.model.future.FundRateBean
-import com.black.base.model.socket.PairQuotation
 import com.black.net.okhttp.OkWebSocketHelper
 import com.google.gson.Gson
 import org.json.JSONObject
