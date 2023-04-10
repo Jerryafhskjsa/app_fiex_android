@@ -4,7 +4,7 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    val HOSTS = "https://fiex.live"
+    val HOSTS = "https://hipiex.net"
 
 
     fun getHost(context: Context): String {

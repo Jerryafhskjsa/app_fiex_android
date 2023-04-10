@@ -93,11 +93,11 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
 
     private fun refreshLanguageChecked(language: FryingLanguage?, textView: TextView?) {
         if (language == null || textView == null) {
-            return
+            CommonUtil.setTextViewCompoundDrawable(binding?.chinese, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
         }
-        var tag = textView.tag
+        var tag = textView?.tag
         if(tag is FryingLanguage){
-            if (language.languageCode == tag.languageCode ) {
+            if (language?.languageCode == tag.languageCode ) {
                 CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
             } else {
                 CommonUtil.setTextViewCompoundDrawable(textView, null, 2)

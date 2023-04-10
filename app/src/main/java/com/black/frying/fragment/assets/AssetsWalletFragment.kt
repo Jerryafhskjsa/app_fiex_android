@@ -58,46 +58,46 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         binding?.capital?.setOnClickListener(this)
         binding?.exchange?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
-        binding?.refreshLayout?.isFocusable = false
-        binding?.refreshLayout?.isNestedScrollingEnabled = false
-        binding?.refreshLayout?.setRefreshing(true)
-        binding?.refreshLayout?.setRefreshHolder(RefreshHolderFrying(mContext!!))
-        binding?.refreshLayout?.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                eventListener?.getAssetAllWallet(false)
-                binding!!.refreshLayout.postDelayed({ binding!!.refreshLayout.setRefreshing(false) }, 300)
-            }
-
-        })
         return layout
     }
 
 
 
     override fun onClick(v: View) {
-      when(v.id){
-          R.id.recharge -> {
-              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                  .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
-                  .go(this)
-          }
+        when(v.id){
+            R.id.recharge -> {
+                val bundle = Bundle()
+                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+                bundle.putParcelable(ConstData.WALLET, wallet)
+                BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
+            }
 
-          R.id.extract -> {
-              BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                  .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
-                  .go(this)
-          }
-          R.id.transaction -> {
-              BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
-                  .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                  .go(mContext)}
-          R.id.spot -> {}
-          R.id.future -> {}
-          R.id.capital -> {}
-          R.id.financial -> {}
-          R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
+            R.id.extract -> {
+                val bundle = Bundle()
+                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+                bundle.putParcelable(ConstData.WALLET, wallet)
+                BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
+            }
+            R.id.transaction -> {
+                BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)}
+            R.id.spot -> {}
+            R.id.future -> {}
+            R.id.capital -> {}
+            R.id.financial -> {}
+            R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
 
-      }
+        }
+    }
+
+    fun setData(data: ArrayList<Wallet?>?) {
+        for (h in data?.indices!!) {
+            if (data[h]?.coinType == "USDT")
+            {
+                wallet = data[h]
+            }
+        }
     }
 
     fun setTotal(total: Money?) {

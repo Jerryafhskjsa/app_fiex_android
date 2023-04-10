@@ -33,8 +33,20 @@ interface WalletApiService {
     fun getWalletTransferRecord(@Query("coin") coin: String?,@Query("page") page: Int?, @Query("size") pageSize: Int?, @Query("fromType") fromType: String?,@Query("toType") toType: String?): Observable<HttpRequestResultData<PagingData<WalletTransferRecord?>?>?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_BILL_FIEX)
-    fun getWalletBillFiex(@Query("coin") coin: String?): Observable<HttpRequestResultData<PagingData<WalletBill?>?>?>?
+    fun getWalletBillFiex(@Query("coin") coin: String?,@Query("direction") direction: String?,@Query("id") id: String?): Observable<HttpRequestResultData<PagingData<WalletBill?>?>?>?
 
+   /* @POST(UrlConfig.Wallet.URL_WALLET_BILL_DEPOSIT)
+    fun getDepositCreate(@Body payVO: PayVO?): Observable<HttpRequestResultData<payOrder?>?>?
+
+    @POST(UrlConfig.Wallet.URL_WALLET_BILL_CONFIRM)
+    fun getDepositConfirm(@Query("orderId") orderAmount: String?): Observable<HttpRequestResultString?>?
+
+    @GET(UrlConfig.Wallet.URL_WALLET_BILL_CODE_LIST)
+    fun getDepositCodeList(): Observable<HttpRequestResultData<Deposit<OrderCode?>?>?>?
+
+    @GET(UrlConfig.Wallet.URL_WALLET_BILL_LIST)
+    fun getDepositList(@Query("orderType") orderType: String?,@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultData<PagingData<payOrder?>?>?>?
+*/
     /***fiex***/
 
     // type 3 现货 4 杠杆 不传全部

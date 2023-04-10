@@ -39,7 +39,7 @@ object WalletApiServiceHelper {
     private const val COIN_INFO = 1
     private const val WALLET = 2
     private const val DATA_CACHE_OVER_TIME = 0.5 * 60 * 1000 //20分钟
-            .toLong()
+        .toLong()
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
 
@@ -214,9 +214,9 @@ object WalletApiServiceHelper {
                 resultData.code = HttpRequestResult.SUCCESS
                 val walletConfig = WalletConfig()
                 walletConfig.userCoinAccountVO = gson.fromJson(gson.toJson(walletCache),
-                        object : TypeToken<ArrayList<Wallet?>?>() {}.type)
+                    object : TypeToken<ArrayList<Wallet?>?>() {}.type)
                 walletConfig.userCoinAccountLeverVO = gson.fromJson(gson.toJson(walletLeverCache),
-                        object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
+                    object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
                 resultData.data = walletConfig
                 walletCallback.callback(resultData)
             }
@@ -237,9 +237,9 @@ object WalletApiServiceHelper {
                 resultData.code = HttpRequestResult.SUCCESS
                 val walletConfig = WalletConfig()
                 walletConfig.userCoinAccountVO = gson.fromJson(gson.toJson(walletCache),
-                        object : TypeToken<ArrayList<Wallet?>?>() {}.type)
+                    object : TypeToken<ArrayList<Wallet?>?>() {}.type)
                 walletConfig.userCoinAccountLeverVO = gson.fromJson(gson.toJson(walletLeverCache),
-                        object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
+                    object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
                 resultData.data = walletConfig
                 observer.onNext(resultData)
             }
@@ -257,11 +257,11 @@ object WalletApiServiceHelper {
         val callback = Runnable {
             synchronized(walletCache) {
                 walletCallback?.callback(if (walletCache == null) null else gson.fromJson<ArrayList<Wallet?>?>(gson.toJson(walletCache),
-                        object : TypeToken<ArrayList<Wallet?>?>() {}.type))
+                    object : TypeToken<ArrayList<Wallet?>?>() {}.type))
             }
             synchronized(walletLeverCache) {
                 walletLeverCallback?.callback(if (walletLeverCache == null) null else gson.fromJson<ArrayList<WalletLever?>?>(gson.toJson(walletLeverCache),
-                        object : TypeToken<ArrayList<WalletLever?>?>() {}.type))
+                    object : TypeToken<ArrayList<WalletLever?>?>() {}.type))
             }
         }
         callback.run()
@@ -286,34 +286,34 @@ object WalletApiServiceHelper {
         return if (context == null) {
             Observable.empty()
         } else ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWallet(type)
-                ?.flatMap { returnData: HttpRequestResultData<WalletConfig?>? ->
-                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        if (type == null || "3".equals(type, ignoreCase = true)) {
-                            val wallets: ArrayList<Wallet?>? = if (returnData.data == null) ArrayList() else returnData.data!!.userCoinAccountVO
-                            synchronized(walletCache) {
-                                val list: ArrayList<Wallet?>? = if (wallets == null) ArrayList() else gson.fromJson(gson.toJson(wallets),
-                                        object : TypeToken<ArrayList<Wallet?>?>() {}.type)
-                                list?.let {
-                                    walletCache.clear()
-                                    walletCache.addAll(list)
-                                }
-                            }
-                        }
-                        if (type == null || "4".equals(type, ignoreCase = true)) {
-                            val walletLevers: ArrayList<WalletLever?>? = if (returnData.data == null) ArrayList() else returnData.data!!.userCoinAccountLeverVO
-                            synchronized(walletLeverCache) {
-                                val list: ArrayList<WalletLever?>? = if (walletLevers == null) ArrayList() else gson.fromJson(gson.toJson(walletLevers),
-                                        object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
-                                list?.let {
-                                    walletLeverCache.clear()
-                                    walletLeverCache.addAll(list)
-                                }
+            ?.getWallet(type)
+            ?.flatMap { returnData: HttpRequestResultData<WalletConfig?>? ->
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    if (type == null || "3".equals(type, ignoreCase = true)) {
+                        val wallets: ArrayList<Wallet?>? = if (returnData.data == null) ArrayList() else returnData.data!!.userCoinAccountVO
+                        synchronized(walletCache) {
+                            val list: ArrayList<Wallet?>? = if (wallets == null) ArrayList() else gson.fromJson(gson.toJson(wallets),
+                                object : TypeToken<ArrayList<Wallet?>?>() {}.type)
+                            list?.let {
+                                walletCache.clear()
+                                walletCache.addAll(list)
                             }
                         }
                     }
-                    Observable.just(returnData)
+                    if (type == null || "4".equals(type, ignoreCase = true)) {
+                        val walletLevers: ArrayList<WalletLever?>? = if (returnData.data == null) ArrayList() else returnData.data!!.userCoinAccountLeverVO
+                        synchronized(walletLeverCache) {
+                            val list: ArrayList<WalletLever?>? = if (walletLevers == null) ArrayList() else gson.fromJson(gson.toJson(walletLevers),
+                                object : TypeToken<ArrayList<WalletLever?>?>() {}.type)
+                            list?.let {
+                                walletLeverCache.clear()
+                                walletLeverCache.addAll(list)
+                            }
+                        }
+                    }
                 }
+                Observable.just(returnData)
+            }
     }
 
     //现货资产提币 撤销
@@ -323,9 +323,9 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.cancelWithdraw(id)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.cancelWithdraw(id)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     private fun getCoinInfoFromCache(coinType: String?, callback: Callback<CoinInfoType?>?) {
@@ -368,8 +368,8 @@ object WalletApiServiceHelper {
         val lastGetTime = getLastGetTime(COIN_INFO)
         return if (coinInfoCache.isEmpty() || lastGetTime == null || System.currentTimeMillis() - lastGetTime > DATA_CACHE_OVER_TIME) {
             getCoinInfoConfigAndCache(context)
-                    ?.flatMap { Observable.just(getCoinInfoFromCache(coinType)) }
-                    ?.compose(RxJavaHelper.observeOnMainThread())
+                ?.flatMap { Observable.just(getCoinInfoFromCache(coinType)) }
+                ?.compose(RxJavaHelper.observeOnMainThread())
         } else {
             Observable.just(getCoinInfoFromCache(coinType))
         }
@@ -420,17 +420,17 @@ object WalletApiServiceHelper {
         return if (context == null) {
             Observable.empty()
         } else ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getCoins(null)
-                ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
-                    synchronized(coinInfoCache) {
-                        coinInfoCache.clear()
-                        if (resultConfig?.data != null && resultConfig.data!!.configs != null) {
-                            coinInfoCache.addAll(resultConfig.data!!.configs!!)
-                        }
+            ?.getCoins(null)
+            ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
+                synchronized(coinInfoCache) {
+                    coinInfoCache.clear()
+                    if (resultConfig?.data != null && resultConfig.data!!.configs != null) {
+                        coinInfoCache.addAll(resultConfig.data!!.configs!!)
                     }
-                    setLastGetTime(COIN_INFO, System.currentTimeMillis())
-                    Observable.just(coinInfoCache)
                 }
+                setLastGetTime(COIN_INFO, System.currentTimeMillis())
+                Observable.just(coinInfoCache)
+            }
     }
 
     fun getCoinInfoConfigAndCache(context: Context?, callback: Callback<ArrayList<CoinInfoType?>?>?) {
@@ -438,19 +438,19 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getCoins(null)
-                ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
-                    synchronized(coinInfoCache) {
-                        coinInfoCache.clear()
-                        if (resultConfig?.data != null && resultConfig.data!!.configs != null) {
-                            coinInfoCache.addAll(resultConfig.data!!.configs!!)
-                        }
+            ?.getCoins(null)
+            ?.flatMap { resultConfig: HttpRequestResultData<CoinInfoConfig?>? ->
+                synchronized(coinInfoCache) {
+                    coinInfoCache.clear()
+                    if (resultConfig?.data != null && resultConfig.data!!.configs != null) {
+                        coinInfoCache.addAll(resultConfig.data!!.configs!!)
                     }
-                    setLastGetTime(COIN_INFO, System.currentTimeMillis())
-                    Observable.just(coinInfoCache)
                 }
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, false, callback))
+                setLastGetTime(COIN_INFO, System.currentTimeMillis())
+                Observable.just(coinInfoCache)
+            }
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
     //综合账单类型配置
@@ -459,9 +459,9 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWalletBillType()
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.getWalletBillType()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     //综合账单列表
@@ -472,19 +472,19 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context).getService(WalletApiService::class.java)
-                ?.getWalletBill(page, pageSize, billType, coinType, from, to)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.getWalletBill(page, pageSize, billType, coinType, from, to)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
     //综合账单列表
-    fun getWalletBillFiex(context: Context?, isShowLoading: Boolean, coinType: String?,
-                      callback: Callback<HttpRequestResultData<PagingData<WalletBill?>?>?>?) {
+    fun getWalletBillFiex(context: Context?, isShowLoading: Boolean, coinType: String?,direction: String?,id:String?,
+                          callback: Callback<HttpRequestResultData<PagingData<WalletBill?>?>?>?) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-            ?.getWalletBillFiex(coinType)
+            ?.getWalletBillFiex(coinType,direction,id)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -497,9 +497,9 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getWalletAddressList(coinType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.getWalletAddressList(coinType)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     //添加地址
@@ -508,9 +508,9 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.addWalletAddress(coinType, name, address, memo, verifyCode)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, true, callback))
+            ?.addWalletAddress(coinType, name, address, memo, verifyCode)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
 
     //更新地址
@@ -541,9 +541,9 @@ object WalletApiServiceHelper {
             return
         }
         ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
-                ?.getWalletRecord(page, pageSize, total, type, coinType)
-                ?.compose(RxJavaHelper.observeOnMainThread())
-                ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+            ?.getWalletRecord(page, pageSize, total, type, coinType)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
     fun clearCache() {
@@ -552,4 +552,43 @@ object WalletApiServiceHelper {
     }
 
 
+    /*fun getDepositCreate(context: Context?, payVO: PayVO, callback: Callback<HttpRequestResultData<payOrder?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositCreate(payVO)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositConfirm(context: Context?, orderId: String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositConfirm(orderId)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositOrderCodeList(context: Context?, callback: Callback<HttpRequestResultData<Deposit<OrderCode?>?>?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositCodeList()
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun getDepositOrderList(context: Context?,isShowLoading: Boolean, orderType:String?, page: Int?,size : Int?, callback: Callback<HttpRequestResultData<PagingData<payOrder?>?>?>) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(WalletApiService::class.java)
+            ?.getDepositList(orderType,page,size)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }*/
 }

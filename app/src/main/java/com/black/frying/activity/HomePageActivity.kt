@@ -342,21 +342,23 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     }
 
     private fun checkUpdate(silent: Boolean) {
-        if (CommonUtil.isApkInDebug(this)) {
-            return
-        }
+        /* if (CommonUtil.isApkInDebug(this)) {
+             return
+         }*/
         CommonApiServiceHelper.checkUpdate(this, !silent, object : Callback<HttpRequestResultData<Update?>?>() {
             override fun error(type: Int, error: Any) {}
             override fun callback(returnData: HttpRequestResultData<Update?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     val update = returnData.data ?: return
-                    if (update.version != null && update.version != CommonUtil.getVersionName(mContext, null)) {
+                    if (update.version != null && update.version!![2] != CommonUtil.getVersionName(mContext,"1.2.0")[2]) {
                         //需要更新
-                        if ((update.force != null && true == update.force)
-                                || update.version != CookieUtil.getUpdateJumpVersion(mContext)) {
-                            FryingUtil.showUpdateDialog(mContext as Activity, update)
-                        }
-                    } else {
+                        update.force = true
+                        FryingUtil.showUpdateDialog(mContext as Activity, update)
+                    }
+                    else if (update.version!![2] == CommonUtil.getVersionName(mContext,"1.2.0")[2] && update.version!![4] != CommonUtil.getVersionName(mContext,"1.2.0")[4]){
+                        FryingUtil.showUpdateDialog(mContext as Activity, update)
+                    }
+                    else {
                         if (!silent) {
                             FryingUtil.showToast(mContext, getString(R.string.last_version))
                         }

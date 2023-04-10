@@ -11,38 +11,35 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.black.lib.refresh.QRefreshLayout
-            android:id="@+id/refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <com.black.base.widget.ObserveScrollView
-                android:id="@+id/scroll_view"
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B1"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:scrollbars="none">
+                android:background="@color/B2"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/B2"
-                    android:orientation="vertical">
-
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    style="@style/ButtonGray"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
                     <LinearLayout
-                        android:layout_width="382dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_size_5"
-                        style="@style/ButtonGray"
-                        android:layout_marginTop="@dimen/text_size_5"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                        android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -52,404 +49,403 @@
                             android:textColor="@color/T11"
                             android:textSize="@dimen/text_size_13" />
 
-                        </LinearLayout>
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/money_total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:layout_marginRight="@dimen/double_padding"
-                            android:textColor="@color/T1"
-                            android:textStyle="bold"
-                            android:text="--"
-                            android:textSize="@dimen/text_size_20" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/money_totalcny"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginLeft="@dimen/double_padding"
-                            android:layout_marginRight="@dimen/double_padding"
-                            android:layout_marginBottom="@dimen/text_size_20"
-                            android:textColor="@color/T11"
-                            android:textStyle="bold"
-                            android:text="--"
-                            android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
-                        <LinearLayout
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/money_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_5"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:layout_marginRight="@dimen/double_padding"
+                        android:textColor="@color/T1"
+                        android:textStyle="bold"
+                        android:text="--"
+                        android:textSize="@dimen/text_size_20" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/money_totalcny"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_5"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:layout_marginRight="@dimen/double_padding"
+                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:textColor="@color/T11"
+                        android:textStyle="bold"
+                        android:text="--"
+                        android:textSize="@dimen/text_size_12" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/recharge"
+                        style="@style/ButtonBlue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/rechange" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/line" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/extract"
+                        style="@style/ButtonReturn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/extract" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/line" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/exchange"
+                        style="@style/ButtonReturn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/exchange" />
+
+
+                </LinearLayout>
+
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/investment_portfolio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/investment_portfolio"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:textColor="@color/black_real"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B2"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/spot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/text_size_15"
+                            android:layout_height="match_parent" />
+
+                        <ImageView
+                            android:id="@+id/icon_coin"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:src="@drawable/home_tab_assets"></ImageView>
+
+                        <View
+                            android:layout_width="@dimen/text_size_10"
+                            android:layout_height="match_parent" />
+
+                        <com.black.base.widget.SpanTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_10"
-                            android:orientation="horizontal">
+                            android:text="@string/spot_account"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
 
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/recharge"
-                                style="@style/ButtonBlue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/text_size_10"
-                                android:layout_weight="1"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/rechange" />
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="@dimen/line" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/extract"
-                                style="@style/ButtonReturn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/extract" />
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="@dimen/line" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/exchange"
-                                style="@style/ButtonReturn"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/spot_usdt"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/text_size_10"
-                                android:layout_weight="1"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/exchange" />
+                                android:gravity="right"
+                                android:text="0.0USDT"
+                                android:textColor="@color/black_real"
+                                android:textSize="@dimen/text_size_16"
+                                android:textStyle="bold"/>
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/spot_cny"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/spot_usdt"
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:gravity="right"
+                                android:text="0.0CNY"
+                                android:textColor="@color/C3"
+                                android:textSize="@dimen/text_size_14" />
+
+                        </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/transaction"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:visibility="gone"
+                            android:src="@drawable/icon_tab_deal_pre">
+
+                        </ImageView>
 
 
-                        </LinearLayout>
-
-
-
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="20dp" />
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/investment_portfolio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/investment_portfolio"
-                        android:layout_marginLeft="@dimen/text_size_10"
-                        android:textColor="@color/black_real"
-                        android:textSize="@dimen/text_size_16"
-                        android:textStyle="bold" />
+                        android:layout_height="30dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B1"
+                    android:orientation="horizontal">
+
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp" />
+                        android:layout_width="@dimen/text_size_15"
+                        android:layout_height="match_parent" />
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/future"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/B2"
+                        android:background="@color/B1"
                         android:orientation="vertical">
 
-                        <LinearLayout
-                            android:id="@+id/spot"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/B1"
-                            android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:src="@drawable/home_tab_futures">
 
-                            <View
-                                android:layout_width="@dimen/text_size_15"
-                                android:layout_height="match_parent" />
+                        </ImageView>
+                    </LinearLayout>
 
-                            <ImageView
-                                android:id="@+id/icon_coin"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:src="@drawable/home_tab_assets"></ImageView>
+                    <View
+                        android:layout_width="@dimen/text_size_10"
+                        android:layout_height="match_parent" />
 
-                            <View
-                                android:layout_width="@dimen/text_size_10"
-                                android:layout_height="match_parent" />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:text="@string/contract_account"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
 
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:text="@string/spot_account"
-                                android:textColor="@color/T3"
-                                android:textSize="@dimen/text_size_14"
-                                android:textStyle="bold" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                              <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-
-
-                                  <com.black.base.widget.SpanTextView
-                                      android:id="@+id/spot_usdt"
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:layout_marginRight="@dimen/text_size_10"
-                                      android:gravity="right"
-                                      android:text="0.0USDT"
-                                      android:textColor="@color/black_real"
-                                      android:textSize="@dimen/text_size_16"
-                                      android:textStyle="bold"/>
-
-                                  <com.black.base.widget.SpanTextView
-                                      android:id="@+id/spot_cny"
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:layout_below="@+id/spot_usdt"
-                                      android:layout_marginRight="@dimen/text_size_10"
-                                      android:gravity="right"
-                                      android:text="0.0CNY"
-                                      android:textColor="@color/C3"
-                                      android:textSize="@dimen/text_size_14" />
-
-                            </RelativeLayout>
-                                <ImageView
-                                    android:id="@+id/transaction"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:visibility="gone"
-                                    android:src="@drawable/icon_tab_deal_pre">
-
-                                </ImageView>
-
-
-                        </LinearLayout>
-
-                        <View
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/future_usdt"
                             android:layout_width="match_parent"
-                            android:layout_height="30dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/B1"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="@dimen/text_size_15"
-                            android:layout_height="match_parent" />
-
-                        <LinearLayout
-                            android:id="@+id/future"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/B1"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:src="@drawable/home_tab_futures">
-
-                            </ImageView>
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="@dimen/text_size_10"
-                            android:layout_height="match_parent" />
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.0USDT"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold"/>
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/future_cny"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_10"
-                            android:text="@string/contract_account"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold" />
+                            android:layout_below="@+id/future_usdt"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.0CNY"
+                            android:textColor="@color/C3"
+                            android:textSize="@dimen/text_size_14" />
+                    </RelativeLayout>
+                </LinearLayout>
 
-                          <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
 
-                              <com.black.base.widget.SpanTextView
-                                  android:id="@+id/future_usdt"
-                                  android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:layout_marginRight="@dimen/text_size_10"
-                                  android:gravity="right"
-                                  android:text="0.0USDT"
-                                  android:textColor="@color/T1"
-                                  android:textSize="@dimen/text_size_16"
-                                  android:textStyle="bold"/>
-
-                              <com.black.base.widget.SpanTextView
-                                  android:id="@+id/future_cny"
-                                  android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:layout_below="@+id/future_usdt"
-                                  android:layout_marginRight="@dimen/text_size_10"
-                                  android:gravity="right"
-                                  android:text="0.0CNY"
-                                  android:textColor="@color/C3"
-                                  android:textSize="@dimen/text_size_14" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/capital"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B1"
+                    android:orientation="horizontal">
 
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp" />
+                        android:layout_width="@dimen/text_size_15"
+                        android:layout_height="match_parent" />
 
                     <LinearLayout
-                        android:id="@+id/capital"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/B1"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="@dimen/text_size_15"
-                            android:layout_height="match_parent" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/B1"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:src="@drawable/home_tab_transaction">
-
-                            </ImageView>
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="@dimen/text_size_10"
-                            android:layout_height="match_parent" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_10"
-                            android:text="@string/capital_account"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold" />
-
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/capital_usdt"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:gravity="right"
-                                android:text="0.00USDT"
-                                android:textColor="@color/black_real"
-                                android:textSize="@dimen/text_size_16"
-                                android:textStyle="bold" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/capital_cny"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/capital_usdt"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:gravity="right"
-                                android:text="0.00CNY"
-                                android:textColor="@color/C3"
-                                android:textSize="@dimen/text_size_14" />
-
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp" />
-
-                    <LinearLayout
-                        android:id="@+id/financial"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/B1"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <View
-                            android:layout_width="@dimen/text_size_15"
-                            android:layout_height="match_parent" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:src="@drawable/home_tab_transaction">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/B1"
-                            android:orientation="vertical">
+                        </ImageView>
+                    </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:src="@drawable/home_tab_qutation">
+                    <View
+                        android:layout_width="@dimen/text_size_10"
+                        android:layout_height="match_parent" />
 
-                            </ImageView>
-                        </LinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:text="@string/capital_account"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
 
-                        <View
-                            android:layout_width="@dimen/text_size_10"
-                            android:layout_height="match_parent" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/capital_usdt"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_10"
-                            android:text="@string/finance_account"
-                            android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_14"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.00USDT"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
 
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/financial_usdt"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:gravity="right"
-                                android:text="0.00USDT"
-                                android:textColor="@color/black_real"
-                                android:textSize="@dimen/text_size_16"
-                                android:textStyle="bold" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/financial_cny"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/financial_usdt"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:gravity="right"
-                                android:text="0.00CNY"
-                                android:textColor="@color/C3"
-                                android:textSize="@dimen/text_size_14" />
-
-                        </RelativeLayout>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_padding" />
-                        <com.black.base.view.EmptyRecyclerView
-                            android:id="@+id/recycler_view"
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/capital_cny"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fadingEdge="none"
-                            android:overScrollMode="never"
-                            android:scrollbars="none" />
+                            android:layout_below="@+id/capital_usdt"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.00CNY"
+                            android:textColor="@color/C3"
+                            android:textSize="@dimen/text_size_14" />
 
-
-                    </LinearLayout>
+                    </RelativeLayout>
                 </LinearLayout>
-            </com.black.base.widget.ObserveScrollView>
-        </com.black.lib.refresh.QRefreshLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
+                <LinearLayout
+                    android:id="@+id/financial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/B1"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/text_size_15"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/B1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:src="@drawable/home_tab_qutation">
+
+                        </ImageView>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/text_size_10"
+                        android:layout_height="match_parent" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:text="@string/finance_account"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/financial_usdt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.00USDT"
+                            android:textColor="@color/black_real"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/financial_cny"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/financial_usdt"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:text="0.00CNY"
+                            android:textColor="@color/C3"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding" />
+                    <com.black.base.view.EmptyRecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
     </LinearLayout>
 </layout>

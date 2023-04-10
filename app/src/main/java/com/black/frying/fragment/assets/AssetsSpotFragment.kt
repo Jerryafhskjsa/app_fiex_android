@@ -41,7 +41,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     private var isVisibility: Boolean = false
     private var searchKey: String? = null
     private var doSearch = true
-
+    private var wallet: Wallet? = null
     private var binding: FragmentWalletNormalBinding? = null
     private var layout: View? = null
 
@@ -108,15 +108,15 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         binding?.coinSearch?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
+                eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
         binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
-                eventListener?.setWalletCoinFilter(isChecked)
-                eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
-                doSearch = isChecked
+            eventListener?.setWalletCoinFilter(isChecked)
+            eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
+            doSearch = isChecked
         }
         return layout
     }
@@ -143,15 +143,17 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btn_exchange -> {
-                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
-                    .go(this)
+                val bundle = Bundle()
+                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+                bundle.putParcelable(ConstData.WALLET, wallet)
+                BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
             }
 
             R.id.btn_withdraw -> {
-                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
-                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
-                    .go(this)
+                val bundle = Bundle()
+                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+                bundle.putParcelable(ConstData.WALLET, wallet)
+                BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
             }
             R.id.exchange -> {
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
@@ -167,6 +169,12 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     }
 
     fun setData(data: ArrayList<Wallet?>?) {
+        for (h in data?.indices!!) {
+            if (data[h]?.coinType == "USDT")
+            {
+                wallet = data[h]
+            }
+        }
         binding?.refreshLayout?.setRefreshing(false)
         adapter?.data = data
         adapter?.notifyDataSetChanged()
@@ -234,7 +242,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
 
         fun getWalletCoinFilter(): Boolean? {
-             return false
+            return false
         }
 
         fun setWalletCoinFilter(checked: Boolean) {

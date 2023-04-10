@@ -22,7 +22,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityAboutUsBinding = DataBindingUtil.setContentView(this, R.layout.activity_about_us)
-        binding.currentVersion.setText(String.format("Fiex V%s", CommonUtil.getVersionName(this, "1.0.0")))
+        binding.currentVersion.setText(String.format("Hipiex V%s", CommonUtil.getVersionName(this, "1.0.0")))
         binding.checkUpdate.setOnClickListener(this)
     }
 
