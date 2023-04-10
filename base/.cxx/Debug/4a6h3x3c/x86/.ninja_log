@@ -21,3 +21,5 @@
 1	30	0	clean	ce6455fda8122547
 10	1599	702467416	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	d4a370debc85c73b
 1600	3335	702467418	../../../../src/main/jniLibs/x86/libfryingSecret.so	a397e082c23fa5f5
+1	445	702819647	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	d4a370debc85c73b
+446	1155	702819647	../../../../src/main/jniLibs/x86/libfryingSecret.so	a397e082c23fa5f5

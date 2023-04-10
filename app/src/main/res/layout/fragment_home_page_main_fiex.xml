@@ -107,13 +107,14 @@
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="10dp"
                                 >
+
                                 <TextView
                                     android:id="@+id/type_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textSize="16sp"
+                                    android:text="NFTs"
                                     android:textColor="#000000"
-                                    android:text="NFTs"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
                                     android:id="@+id/type_des"
@@ -121,7 +122,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/type_name"
                                     android:paddingTop="15dp"
-                                    android:text="Discover, buy, sell and even create NFTs in just a few cilcks"
+                                    android:text="@string/main_one"
                                     android:textColor="#99000000"
                                     android:textSize="13sp" />
 
@@ -179,11 +180,11 @@
                                     android:id="@+id/icon_support"
                                     style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_support" />
+
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_support"
-                                    android:text="@string/support"
-                                    />
+                                    android:text="@string/support" />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_futures"
@@ -194,11 +195,11 @@
                                     android:id="@+id/icon_futures"
                                     style="@style/HomeFeturesItemImage"
                                     android:src="@drawable/fiex_icon_futures" />
+
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"
                                     android:layout_below="@+id/icon_futures"
-                                    android:text="@string/home_tab_asset"
-                                    />
+                                    android:text="@string/home_tab_asset" />
                             </RelativeLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_more"
@@ -422,23 +423,25 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     app:cardElevation="2dp">
+
                                     <TextView
                                         android:id="@+id/tv_stkaing_title"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="15dp"
-                                        android:text="Staking"
+                                        android:text="@string/main_four"
                                         android:textColor="@color/B2"
                                         android:textSize="@dimen/text_size_16"
                                         android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/tv_stkaing_title"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="15dp"
-                                        android:text="New Coin Management Divides Earnings"
+                                        android:text="@string/main_two"
                                         android:textColor="@color/B3"
                                         android:textSize="@dimen/text_size_12" />
                                     <ImageView
@@ -469,23 +472,25 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     app:cardElevation="2dp">
+
                                     <TextView
                                         android:id="@+id/tv_buyc_title"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="15dp"
-                                        android:text="Buy Coin"
+                                        android:text="@string/buy_sell"
                                         android:textColor="@color/B2"
                                         android:textSize="@dimen/text_size_16"
                                         android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/tv_buyc_title"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="15dp"
-                                        android:text="Quickly complete your deposits and withdrawals"
+                                        android:text="@string/main_three"
                                         android:textColor="@color/B3"
                                         android:textSize="@dimen/text_size_12" />
                                     <ImageView

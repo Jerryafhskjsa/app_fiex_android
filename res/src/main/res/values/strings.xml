@@ -1079,6 +1079,10 @@
     <string name="hold_amount">Hold Amount</string>
     <string name="limit_price_entrust">Limit price entrust</string>
     <string name="plan_entrust">Plan entrust</string>
+    <string name="main_one">Discover, buy, sell and even create NFTs in just a few cilcks</string>
+    <string name="main_two">New Coin Management Divides Earnings</string>
+    <string name="main_three">Quickly complete your deposits and withdrawals</string>
+    <string name="main_four">Staking</string>
 
 
 </resources>

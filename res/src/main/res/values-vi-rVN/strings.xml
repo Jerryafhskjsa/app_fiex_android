@@ -104,7 +104,7 @@
     <string name="buy_quilk">Quy trình mua hàng nhanh</string>
     <string name="pay_seller">Người nhận tiền bên bán</string>
     <string name="get_method">Cách thức nhận tiền</string>
-<string name="what_seller">Thế nào là người nhận thanh toán bên bán</string>
+    <string name="what_seller">Thế nào là người nhận thanh toán bên bán</string>
     <string name="seller_advice">Cảnh báo rủi ro: với tư cách là người nhận thanh toán của người bán, điều đó có nghĩa là bạn uỷ quyền hoặc cho phép người bán sử dụng tài khoản tên thật của bạn để thanh toán. Nếu phát sinh rủi ro pháp lý trong quá trình sử dụng, bạn phải chịu các trách nhiệm trương tự</string>
 
     <string name="sale_quilk">Quy trình bán ra nhanh</string>
