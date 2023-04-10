@@ -57,13 +57,13 @@ class FuturesTransactionInfoFragment : Fragment() {
             FuturesTransactionInfoDisplayFragment.newInstance(),
             FuturesTransactionInfoDisplayFragment.TAG
         )
-        binding.futuresMultipleSettingView.apply {
-            getMuchBtn().setOnClickListener {
-                val settingDialog = FuturesMultipleSettingDialog(context)
-                settingDialog.setCancelable(true)
-                settingDialog.show()
-            }
-        }
+//        binding.futuresMultipleSettingView.apply {
+//            getMuchBtn().setOnClickListener {
+//                val settingDialog = FuturesMultipleSettingDialog(context)
+//                settingDialog.setCancelable(true)
+//                settingDialog.show()
+//            }
+//        }
 
         viewModel.userBalanceDto.observe(
             requireActivity()
