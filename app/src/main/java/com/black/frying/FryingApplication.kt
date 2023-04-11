@@ -109,9 +109,23 @@ class FryingApplication : BaseApplication() {
         WebView(applicationContext).destroy()
         //初始化腾讯i
         initTencentIM()
+        val local = applicationContext.resources.configuration.locale.country
         val languageCode = LanguageUtil.getLanguageSetting(this)?.languageCode
         if (languageCode == null || languageCode < 0){
-            LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
+            if (local == "VIETNAM") {
+                LanguageUtil.changeAppLanguage(
+                    this,
+                    FryingLanguage(Locale.KOREAN, 3, getString(R.string.language_vietnam)),
+                    true
+                )
+            }
+            else{
+                LanguageUtil.changeAppLanguage(
+                    this,
+                    FryingLanguage(Locale.ENGLISH, 0, getString(R.string.language_english)),
+                    true
+                )
+            }
         }
         else{
             initLanguageItems(applicationContext)
