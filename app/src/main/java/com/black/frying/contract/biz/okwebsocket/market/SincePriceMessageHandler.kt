@@ -1,9 +1,6 @@
-package com.black.frying.contract.biz.okwebsocket
+package com.black.frying.contract.biz.okwebsocket.market
 
 import com.black.base.model.socket.PairQuotation
-import com.black.base.util.UrlConfig
-import com.black.net.okhttp.OKWebSocketFactory
-import com.black.net.okhttp.OkWebSocket
 import com.black.net.okhttp.OkWebSocketHelper
 import com.google.gson.Gson
 import org.json.JSONObject

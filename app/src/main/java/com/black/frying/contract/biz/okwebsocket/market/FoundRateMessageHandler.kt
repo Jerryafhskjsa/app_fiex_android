@@ -1,4 +1,4 @@
-package com.black.frying.contract.biz.okwebsocket
+package com.black.frying.contract.biz.okwebsocket.market
 
 import com.black.base.model.future.FundRateBean
 import com.black.net.okhttp.OkWebSocketHelper

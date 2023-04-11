@@ -206,7 +206,7 @@ public class OkWebSocket extends WebSocketListener {
 
     public void connection() {
         OkHttpClient okHttpClient = createOkHttpClient()
-                .pingInterval(10, TimeUnit.SECONDS)
+//                .pingInterval(10, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .build();
         Request request = new Request.Builder()

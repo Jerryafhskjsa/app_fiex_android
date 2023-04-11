@@ -1,4 +1,4 @@
-package com.black.frying.contract.biz.okwebsocket
+package com.black.frying.contract.biz.okwebsocket.user
 
 import com.black.base.model.future.UserBalanceBean
 import com.black.net.okhttp.OkWebSocketHelper
