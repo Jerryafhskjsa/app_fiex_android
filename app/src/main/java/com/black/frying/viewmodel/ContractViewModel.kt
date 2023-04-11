@@ -772,7 +772,7 @@ class ContractViewModel(
             .subscribe()
     }
 
-    fun getCurrentPairOrderTypeList(): ArrayList<String?>? {
+    fun getCurrentPairOrderTypeList(): ArrayList<String?> {
         return currentPairStatus.getSupportOrderTypeList()
     }
 

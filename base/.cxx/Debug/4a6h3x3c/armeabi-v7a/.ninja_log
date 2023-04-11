@@ -1,3 +1,5 @@
 # ninja log v5
 1	1305	702795727	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	8730bf524300657d
 1341	2974	702795728	../../../../src/main/jniLibs/armeabi-v7a/libfryingSecret.so	2df655ea15ab2e48
+4	6529	702898783	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	8730bf524300657d
+6530	10588	702898787	../../../../src/main/jniLibs/armeabi-v7a/libfryingSecret.so	2df655ea15ab2e48

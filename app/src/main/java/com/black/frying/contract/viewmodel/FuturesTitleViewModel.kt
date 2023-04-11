@@ -102,7 +102,7 @@ class FuturesTitleViewModel : ViewModel() {
     }
 
     fun goToKlineDetail(act: Activity) {
-        val currentPair = CookieUtil.getCurrentFutureUPair(context)
+        val currentPair = CookieUtil.getCurrentFutureUPair(context)!!.uppercase()
         if (!TextUtils.isEmpty(currentPair)) {
             val bundle = Bundle()
             bundle.putString(ConstData.PAIR, currentPair)

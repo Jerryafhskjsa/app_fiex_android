@@ -365,13 +365,14 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_fiex.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.22" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures.xml" value="0.1470713980333476" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_order_create.xml" value="0.1470713980333476" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info.xml" value="0.1470713980333476" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info_display.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_order_create.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info_display.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_quotation_detail_deal.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_quotation_detail_description.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/futrues_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/app/src/main/res/layout/futures_layout_multiple_setting.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/home_page_tab_indicator.xml" value="0.10104166666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_choose_pair.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_contract_tab_plan.xml" value="0.22" />
