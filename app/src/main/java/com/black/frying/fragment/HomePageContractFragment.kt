@@ -1043,7 +1043,7 @@ class HomePageContractFragment : BaseFragment(),
                 )
             ) {
                 val bundle = Bundle()
-                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair())
+                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair()!!.uppercase())
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }
@@ -1713,9 +1713,9 @@ class HomePageContractFragment : BaseFragment(),
                 "/" + viewModel!!.getSetName().toString().uppercase()
             )
             header1View?.deepPriceP?.text =
-                getString(R.string.brackets, viewModel!!.getSetName())
+                getString(R.string.brackets, viewModel!!.getSetName().toString().uppercase())
             header1View?.deepAmountName?.text =
-                getString(R.string.brackets, viewModel!!.getCoinType())
+                getString(R.string.brackets, currentUnitType)
             if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
                 header1View?.btnHandle?.setText(getString(R.string.contract_buy_raise))
                 header1View?.btnHandle1?.setText(getString(R.string.contract_sell_fall))
