@@ -2,16 +2,33 @@ package com.black.frying.contract.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.UserBalanceBean
-import com.black.frying.contract.biz.okwebsocket.*
+import com.black.frying.contract.biz.okwebsocket.market.FoundRateMessageHandler
+import com.black.frying.contract.biz.okwebsocket.market.getUserOkWebSocket
+import com.black.frying.contract.biz.okwebsocket.market.sendCommandUserListenKey
+import com.black.frying.contract.biz.okwebsocket.user.UserWalletMessageHandler
+import com.black.frying.contract.utils.getBuyLeverageMultiple
+import com.black.frying.contract.utils.getSellLeverageMultiple
 import com.black.frying.contract.viewmodel.dto.UserBalanceDto
 import com.black.net.okhttp.OkWebSocketHelper
 import com.black.net.okhttp.OkWebSocketHelper.IMessageLifeCycle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FuturesTransactionInfoViewModel : ViewModel() {
 
     private val okWebSocketHelper: OkWebSocketHelper
+
+
+    // 开仓 杠杆倍数
+    val buyLeverageMultiple = MutableLiveData<Int>()
+    // 平仓 杠杆倍数
+    val sellLeverageMultiple = MutableLiveData<Int>()
+
+
+
 
 
     val userBalanceDto = MutableLiveData<UserBalanceDto>()
@@ -52,7 +69,19 @@ class FuturesTransactionInfoViewModel : ViewModel() {
                 }
 
             })
+
+        loadLeverageMultiple()
     }
+
+    private fun loadLeverageMultiple() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val buy = getBuyLeverageMultiple()
+            val sell = getSellLeverageMultiple()
+            buyLeverageMultiple.postValue(buy)
+            sellLeverageMultiple.postValue(sell)
+        }
+    }
+
 
     private fun updateUserBalanceInfo() {
         userBalanceDto.postValue(UserBalanceDto.copyFrom(_userBalanceBean,_foundRateBean))

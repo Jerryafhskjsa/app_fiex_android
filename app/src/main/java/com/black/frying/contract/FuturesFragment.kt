@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
+import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.util.ConstData
 import com.black.base.util.StyleChangeUtil
@@ -19,6 +20,7 @@ import com.black.frying.contract.viewmodel.FuturesViewModel
 import com.black.frying.fragment.ContractPlanTabFragment
 import com.black.frying.fragment.ContractPositionTabFragment
 import com.black.frying.fragment.ContractProfitTabFragment
+import com.black.lib.refresh.QRefreshLayout
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesBinding
@@ -64,6 +66,22 @@ class FuturesFragment : Fragment() {
         buildFuturesTitleBar()
         replaceTransactionFragment(R.id.futuresTransactionInfoLayout, transactionInfoFragment,FuturesTransactionInfoFragment.TAG)
         buildTransRecordView()
+        buildRefreshAction()
+    }
+
+    private fun buildRefreshAction() {
+        _binding.refreshLayout.apply {
+            setRefreshHolder(RefreshHolderFrying(requireActivity()))
+            setOnRefreshListener(object :QRefreshLayout.OnRefreshListener{
+                override fun onRefresh() {
+                    postDelayed(
+                        { setRefreshing(false) },
+                        300
+                    )
+                }
+            })
+            //notify item refresh
+        }
     }
 
     private fun buildTransRecordView() {

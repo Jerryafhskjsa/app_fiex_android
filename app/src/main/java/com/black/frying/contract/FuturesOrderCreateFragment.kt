@@ -29,6 +29,7 @@ class FuturesOrderCreateFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FuturesOrderCreateViewModel::class.java)
         // TODO: Use the ViewModel
+
     }
 
 }

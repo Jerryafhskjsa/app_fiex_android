@@ -6,11 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.black.frying.contract.biz.view.FuturesMultipleSettingDialog
 import com.black.frying.contract.utils.replaceTransactionFragment
 import com.black.frying.contract.viewmodel.FuturesTransactionInfoViewModel
-import com.black.frying.contract.viewmodel.dto.UserBalanceDto
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesTransactionInfoBinding
@@ -54,16 +52,16 @@ class FuturesTransactionInfoFragment : Fragment() {
         )
         replaceTransactionFragment(
             R.id.futureDisplayDeepGraph,
-            FuturesTransactionInfoDisplayFragment.newInstance(),
-            FuturesTransactionInfoDisplayFragment.TAG
+            FuturesDeepGraphFragment.newInstance(),
+            FuturesDeepGraphFragment.TAG
         )
-//        binding.futuresMultipleSettingView.apply {
-//            getMuchBtn().setOnClickListener {
-//                val settingDialog = FuturesMultipleSettingDialog(context)
-//                settingDialog.setCancelable(true)
-//                settingDialog.show()
-//            }
-//        }
+        binding.futuresMultipleSettingView.apply {
+            getMuchBtn().setOnClickListener {
+                val settingDialog = FuturesMultipleSettingDialog(context)
+                settingDialog.setCancelable(true)
+                settingDialog.show()
+            }
+        }
 
         viewModel.userBalanceDto.observe(
             requireActivity()

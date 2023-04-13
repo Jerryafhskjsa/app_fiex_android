@@ -3,10 +3,8 @@ package com.black.frying.contract.viewmodel
 import androidx.lifecycle.ViewModel
 import com.black.base.model.socket.PairQuotation
 import com.black.base.util.UrlConfig
-import com.black.frying.contract.biz.okwebsocket.SincePriceMessageHandler
-import com.black.frying.service.FutureService.symbol
+import com.black.frying.contract.biz.okwebsocket.market.SincePriceMessageHandler
 import com.black.net.okhttp.OKWebSocketFactory
-import com.black.net.okhttp.OkWebSocket
 import com.black.net.okhttp.OkWebSocketHelper
 import org.json.JSONObject
 
