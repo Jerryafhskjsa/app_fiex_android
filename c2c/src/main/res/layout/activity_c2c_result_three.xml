@@ -113,7 +113,7 @@
                             android:textSize="@dimen/text_size_14"
                             android:layout_marginLeft="@dimen/text_size_5"
                             android:layout_marginRight="@dimen/text_size_5"
-                            android:textColor="#FF5A4E"
+                            android:textColor="@color/T13"
                             android:text="审核未通过"
                             />
 

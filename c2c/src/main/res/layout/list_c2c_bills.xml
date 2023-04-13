@@ -156,7 +156,7 @@
                 android:id="@+id/copy"
                 android:layout_width="@dimen/text_size_18"
                 android:layout_height="@dimen/text_size_18"
-                android:background="@drawable/btn_bar_to"/>
+                android:background="@drawable/icon_copy_asset"/>
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/money"

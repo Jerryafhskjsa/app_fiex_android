@@ -2,14 +2,20 @@ package com.black.c2c.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.CountDownTimer
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
+import com.black.base.api.C2CApiServiceHelper
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.C2CBills
 import com.black.base.util.FryingUtil
 import com.black.base.util.TimeUtil
 import com.black.c2c.R
+import com.black.c2c.activity.C2CNewActivity
 import com.black.c2c.databinding.ListC2cBillsBinding
+import com.black.net.HttpRequestResult
 import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 import java.text.DateFormat
@@ -80,4 +86,5 @@ class C2CBillsAdapter(context: Context, variableId: Int, data: ArrayList<C2CBill
             }.start()
         }
     }
+
 }

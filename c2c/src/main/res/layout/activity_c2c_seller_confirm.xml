@@ -73,7 +73,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="@string/sell"
-                            android:textColor="#FF5A4E"
+                            android:textColor="@color/T13"
                             android:textSize="@dimen/text_size_18"
                             android:textStyle="bold" />
 
@@ -174,17 +174,9 @@
                             android:id="@+id/name1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginBottom="@dimen/text_size_5"
                             android:text=" 帅 "
                             android:textColor="@color/black" />
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginBottom="@dimen/text_size_5"
-                            android:text="@string/notice2"
-                            android:textColor="@color/C5" />
+
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -281,7 +273,7 @@
                             android:id="@+id/num3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -460,14 +452,15 @@
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="帅"
+                            android:text=""
                             android:textColor="@color/black" />
 
                         <ImageView
                             android:id="@+id/num1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -491,13 +484,14 @@
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="74777474747774"
+                            android:text=""
                             android:textColor="@color/black" />
                         <ImageView
                             android:id="@+id/num2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -522,7 +516,7 @@
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="中国农业银行"
+                            android:text=""
                             android:textColor="@color/black" />
 
                     </LinearLayout>
@@ -547,7 +541,7 @@
                         android:layout_marginLeft="@dimen/text_size_10"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="滨江支行"
+                        android:text=""
                         android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
@@ -600,14 +594,15 @@
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="帅"
+                                android:text=""
                                 android:textColor="@color/black" />
 
                             <ImageView
                                 android:id="@+id/num5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -631,13 +626,14 @@
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="74777474747774"
+                                android:text=""
                                 android:textColor="@color/black" />
                             <ImageView
                                 android:id="@+id/num4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -715,14 +711,15 @@
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="帅"
+                                android:text=""
                                 android:textColor="@color/black" />
 
                             <ImageView
                                 android:id="@+id/num6"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -746,13 +743,14 @@
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="74777474747774"
+                                android:text=""
                                 android:textColor="@color/black" />
                             <ImageView
                                 android:id="@+id/num7"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset"/>
                         </LinearLayout>
 
                         <LinearLayout

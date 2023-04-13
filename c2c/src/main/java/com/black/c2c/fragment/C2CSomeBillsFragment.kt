@@ -143,7 +143,7 @@ class C2CSomeBillsFragment: BaseFragment(), OnItemClickListener, QRefreshLayout.
 
 
     private fun getC2CADData(isShowLoading: Boolean) {
-        C2CApiServiceHelper.getC2COL(mContext, isShowLoading,null,null,null,null,null,null,null,status,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CBills?>?>?>(mContext!!) {
+        C2CApiServiceHelper.getC2COL(mContext, isShowLoading,null,null,null,null,null,currentPage,10,status,  object : NormalCallback<HttpRequestResultData<C2CADData<C2CBills?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
                 showData(null)

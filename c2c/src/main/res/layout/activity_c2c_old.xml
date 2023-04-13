@@ -27,6 +27,7 @@
                 android:elevation="12dp"
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
+
                 <FrameLayout
                     android:id="@id/header_layout"
                     android:layout_width="match_parent"
@@ -61,16 +62,17 @@
                                 android:id="@+id/area_choose"
                                 android:layout_width="wrap_content"
                                 android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginTop="15dp"
                                 android:layout_marginBottom="15dp"
-                                android:layout_gravity="center_vertical"
+                                android:drawableRight="@drawable/icon_deep"
                                 android:text="@string/shortcut_area"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_16"
-                                android:textStyle="bold"
-                                android:drawableRight="@drawable/icon_deep"/>
+                                android:textStyle="bold" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="28dp"
@@ -81,26 +83,27 @@
                                 android:id="@+id/rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="20dp"
-                                android:layout_marginTop="22dp"
-                                android:layout_marginBottom="15dp"
-                                android:layout_marginRight="@dimen/text_size_5"
                                 android:layout_gravity="center_vertical"
+                                android:layout_marginTop="22dp"
+                                android:layout_marginRight="@dimen/text_size_5"
+                                android:layout_marginBottom="15dp"
                                 android:text="CNY"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_16"
-                                android:textStyle="bold"
-                                />
+                                android:textStyle="bold" />
+
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="20dp"
                                 android:layout_marginTop="@dimen/text_size_10"
-                                android:background="@drawable/btn_exchange"/>
+                                android:background="@drawable/btn_exchange" />
+
                             <ImageView
                                 android:id="@+id/settings"
                                 android:layout_width="wrap_content"
                                 android:layout_height="15dp"
-                                android:layout_marginRight="@dimen/text_size_5"
                                 android:layout_marginTop="@dimen/text_size_14"
+                                android:layout_marginRight="@dimen/text_size_5"
                                 android:background="@drawable/c2c">
 
                             </ImageView>
@@ -109,6 +112,7 @@
                     </FrameLayout>
 
                 </FrameLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_padding"
@@ -130,21 +134,24 @@
                     android:fillViewport="true"
                     android:overScrollMode="never"
                     android:scrollbars="none">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/B2"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="28dp"
+                                android:layout_marginLeft="@dimen/text_size_20"
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:layout_marginBottom="@dimen/text_size_10"
-                                android:layout_marginLeft="@dimen/text_size_20"
                                 android:background="@drawable/bg_c2c_header"
                                 android:orientation="horizontal">
 
@@ -165,8 +172,8 @@
                                     android:layout_width="80dp"
                                     android:layout_height="match_parent"
                                     android:background="@drawable/bg_c2c_red"
-                                    android:gravity="center"
                                     android:checked="true"
+                                    android:gravity="center"
                                     android:maxLines="1"
                                     android:text="@string/my_sale"
                                     android:textColor="@color/btn_buy_check"
@@ -174,39 +181,44 @@
                                     android:textStyle="bold" />
 
                             </LinearLayout>
+
                             <ImageView
                                 android:id="@+id/person"
                                 android:layout_width="30dp"
                                 android:layout_height="35dp"
-                                android:layout_marginTop="7dp"
                                 android:layout_marginLeft="130dp"
+                                android:layout_marginTop="7dp"
                                 android:background="@drawable/btn_person">
+
                             </ImageView>
+
                             <ImageView
                                 android:id="@+id/bills"
                                 android:layout_width="30dp"
                                 android:layout_height="35dp"
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:background="@drawable/btn_c2c_bills">
+
                             </ImageView>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/text_size_20"
                             android:layout_marginLeft="@dimen/text_size_20"
                             android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_20"
                             android:orientation="horizontal">
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/one"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
-                                android:textColor="@color/tab_contranct_text"
                                 android:gravity="center"
-                                android:text="USDT" />
+                                android:text="USDT"
+                                android:textColor="@color/btn_sale_check" />
 
                             <View
                                 android:layout_width="5dp"
@@ -214,38 +226,41 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/two"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="@color/tab_contranct_text"
-                                android:text="BTC" />
+                                android:text="BTC"
+                                android:textColor="@color/btn_sale_check" />
+
                             <View
                                 android:layout_width="5dp"
                                 android:layout_height="@dimen/line" />
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/three"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="@color/tab_contranct_text"
-                                android:text="BUSD" />
+                                android:text="BUSD"
+                                android:textColor="@color/btn_sale_check" />
+
                             <View
                                 android:layout_width="5dp"
                                 android:layout_height="@dimen/line" />
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/four"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="@color/tab_contranct_text"
-                                android:text="BNB" />
+                                android:text="BNB"
+                                android:textColor="@color/btn_sale_check" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -255,24 +270,26 @@
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/five"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="@color/tab_contranct_text"
-                                android:text="DOGE" />
+                                android:text="DOGE"
+                                android:textColor="@color/btn_sale_check" />
+
                             <View
                                 android:layout_width="5dp"
                                 android:layout_height="@dimen/line" />
 
                             <com.black.base.widget.SpanCheckedTextView
                                 android:id="@+id/six"
-                                style="@style/ButtonGreenLight"
+                                style="@style/ButtonGray"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="@color/tab_contranct_text"
-                                android:text="ETH" />
+                                android:text="ETH"
+                                android:textColor="@color/btn_sale_check" />
+
                             <View
                                 android:layout_width="5dp"
                                 android:layout_height="@dimen/line" />
@@ -282,102 +299,110 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:textColor="#E622C177"
                                 android:padding="@dimen/middle_padding"
-                                android:text="@string/more" />
+                                android:text="@string/more"
+                                android:textColor="@color/T13" />
 
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/text_size_10"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginRight="@dimen/text_size_10"
                             android:layout_marginBottom="@dimen/text_size_10"
                             android:background="@drawable/bg_edittext_default"
-                            android:padding="0dp"
                             android:maxLines="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="0dp">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:orientation="horizontal">
+
                                 <LinearLayout
                                     android:layout_width="150dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/text_size_10"
                                     android:orientation="vertical">
+
                                     <com.black.base.widget.SpanCheckedTextView
                                         android:id="@+id/amount"
                                         android:layout_width="150dp"
                                         android:layout_height="wrap_content"
-                                        android:gravity="center"
                                         android:checked="true"
-                                        android:textSize="@dimen/text_size_13"
+                                        android:gravity="center"
+                                        android:text="@string/purchase_by_amount"
                                         android:textColor="@color/c2c_tab_buy"
-                                        android:textStyle="bold"
-                                        android:text="@string/purchase_by_amount"/>
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textStyle="bold" />
 
                                     <View
                                         android:id="@+id/bar_a"
-                                        android:layout_gravity="center"
-                                        android:layout_marginTop="@dimen/text_size_5"
                                         android:layout_width="40dp"
                                         android:layout_height="4dp"
-                                        android:background="#E622C177"
-                                        />
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/text_size_5"
+                                        android:background="@color/T13" />
                                 </LinearLayout>
+
                                 <View
                                     android:id="@+id/view1"
                                     android:layout_width="20dp"
-                                    android:layout_height="wrap_content"
-                                    />
+                                    android:layout_height="wrap_content" />
+
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/text_size_10"
                                     android:orientation="vertical">
+
                                     <com.black.base.widget.SpanCheckedTextView
                                         android:id="@+id/accont"
                                         android:layout_width="150dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
-                                        android:textSize="@dimen/text_size_13"
+                                        android:text="@string/purchase_by_account"
                                         android:textColor="@color/c2c_tab_buy"
-                                        android:textStyle="bold"
-                                        android:text="@string/purchase_by_account"/>
+                                        android:textSize="@dimen/text_size_13"
+                                        android:textStyle="bold" />
+
                                     <View
                                         android:id="@+id/bar_b"
                                         android:layout_width="40dp"
-                                        android:visibility="gone"
-                                        android:layout_marginTop="@dimen/text_size_5"
-                                        android:layout_gravity="center"
                                         android:layout_height="4dp"
-                                        android:background="#E622C177"
-                                        />
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="@dimen/text_size_5"
+                                        android:background="@color/T13"
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                             </LinearLayout>
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_marginLeft="@dimen/text_size_10"
-                                android:background="@color/C2"/>
+                                android:layout_marginRight="@dimen/text_size_10"
+                                android:background="@color/C2" />
+
                             <com.black.lib.view.InputLinearLayout
                                 android:id="@+id/money"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_marginBottom="@dimen/text_size_10"
                                 android:background="@drawable/bg_edittext_default"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/get_mail_code"
                                     style="@style/EditTextStyle"
@@ -385,33 +410,35 @@
                                     android:layout_height="wrap_content"
                                     android:text="￥"
                                     android:textColor="@color/T1"
-                                    android:textStyle="bold"
-                                    android:textSize="@dimen/text_size_16" />
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textStyle="bold" />
 
-                            <com.black.base.widget.SpanMaterialEditText
-                                android:id="@+id/put_money"
-                                style="@style/EditTextStyle"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:hint="@string/example"
-                                android:inputType="numberDecimal"
-                                android:maxLines="1"
-                                android:padding="0dp" />
+                                <com.black.base.widget.SpanMaterialEditText
+                                    android:id="@+id/put_money"
+                                    style="@style/EditTextStyle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@null"
+                                    android:hint="@string/example"
+                                    android:inputType="numberDecimal"
+                                    android:maxLines="1"
+                                    android:padding="0dp" />
 
                             </com.black.lib.view.InputLinearLayout>
+
                             <com.black.lib.view.InputLinearLayout
                                 android:id="@+id/money_account1"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_marginLeft="@dimen/text_size_10"
                                 android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginRight="@dimen/text_size_10"
                                 android:layout_marginBottom="@dimen/text_size_10"
-                                android:visibility="gone"
                                 android:background="@drawable/bg_edittext_default"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
                                 <com.black.base.widget.SpanMaterialEditText
                                     android:id="@+id/money_account"
                                     style="@style/EditTextStyle"
@@ -424,23 +451,24 @@
                                     android:maxLines="1"
                                     android:padding="0dp" />
                             </com.black.lib.view.InputLinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/money_amount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/text_size_20"
                                 android:layout_marginLeft="@dimen/text_size_20"
                                 android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginRight="@dimen/text_size_20"
                                 android:layout_marginBottom="@dimen/text_size_10"
                                 android:orientation="horizontal">
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/first"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="1x" />
 
                                 <View
@@ -449,59 +477,63 @@
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/second"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="5x" />
+
                                 <View
                                     android:layout_width="5dp"
                                     android:layout_height="@dimen/line" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/third"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="10x" />
+
                                 <View
                                     android:layout_width="5dp"
                                     android:layout_height="@dimen/line" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/fourth"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="20x" />
+
                                 <View
                                     android:layout_width="5dp"
                                     android:layout_height="@dimen/line" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/fifth"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="50x" />
+
                                 <View
                                     android:layout_width="5dp"
                                     android:layout_height="@dimen/line" />
 
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/sixth"
-                                    style="@style/ButtonGreenLight"
+                                    style="@style/ButtonGray"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:layout_weight="1"
+                                    android:gravity="center"
                                     android:text="100x" />
 
                             </LinearLayout>
@@ -510,279 +542,212 @@
                                 android:id="@+id/advice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_20"
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:layout_marginRight="@dimen/text_size_20"
-                                android:layout_marginLeft="@dimen/text_size_20"
                                 android:orientation="horizontal">
+
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:textSize="@dimen/text_size_12"
-                                    android:text="@string/reference_quotation" />
+                                    android:text="@string/reference_quotation"
+                                    android:textSize="@dimen/text_size_12" />
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/rate_2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/text_size_10"
                                     android:gravity="center"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:text="6.78 CNY/USDT"
                                     android:textColor="@color/black_real"
-                                    android:text="6.78 CNY/USDT" />
+                                    android:textSize="@dimen/text_size_12" />
+
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
                                     android:layout_weight="1"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:gravity="right"
+                                    android:text="@string/advice"
                                     android:textColor="@color/C5"
-                                    android:text="@string/advice" />
+                                    android:textSize="@dimen/text_size_12" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/advice_null"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="#FAF3DD"
-                                android:visibility="gone"
+                                android:layout_marginLeft="@dimen/text_size_20"
                                 android:layout_marginTop="@dimen/text_size_10"
                                 android:layout_marginRight="@dimen/text_size_20"
-                                android:layout_marginLeft="@dimen/text_size_20"
-                                android:orientation="horizontal">
-                               <ImageView
-                                   android:layout_width="wrap_content"
-                                   android:layout_height="wrap_content"
-                                   android:layout_marginTop="@dimen/text_size_5"
-                                   android:layout_marginLeft="@dimen/text_size_10"
-                                   android:layout_marginRight="@dimen/text_size_10"
-                                   android:background="@drawable/icon_secure_tip"/>
+                                android:background="#FAF3DD"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:layout_marginTop="@dimen/text_size_5"
+                                    android:layout_marginRight="@dimen/text_size_10"
+                                    android:background="@drawable/icon_secure_tip" />
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/advice_all"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/text_size_5"
                                     android:layout_marginBottom="@dimen/text_size_5"
-                                    android:textColor="@color/C5"
                                     android:layout_weight="1"
-                                    android:textSize="@dimen/text_size_12"
-                                    android:text="@string/advice_null" />
+                                    android:text="@string/advice_null"
+                                    android:textColor="@color/C5"
+                                    android:textSize="@dimen/text_size_12" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/pay_account"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/text_size_20"
-                                android:layout_marginRight="@dimen/text_size_20"
                                 android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginRight="@dimen/text_size_20"
                                 android:orientation="horizontal">
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/change"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:textSize="@dimen/text_size_12"
-                                    android:text="@string/number_of_transactions" />
+                                    android:text="@string/number_of_transactions"
+                                    android:textSize="@dimen/text_size_12" />
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/change_two"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:textSize="@dimen/text_size_12"
-                                    android:textColor="@color/black_real"
                                     android:layout_weight="1"
-                                    android:text="11" />
+                                    android:gravity="right"
+                                    android:text="11"
+                                    android:textColor="@color/black_real"
+                                    android:textSize="@dimen/text_size_12" />
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/coin_type"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:text="USDT"
                                     android:textColor="@color/black_real"
-                                    android:text="USDT" />
+                                    android:textSize="@dimen/text_size_12" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/payment_method"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/text_size_10"
                                 android:layout_marginLeft="@dimen/text_size_20"
+                                android:layout_marginTop="@dimen/text_size_10"
                                 android:layout_marginRight="@dimen/text_size_20"
                                 android:orientation="horizontal">
+
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
-                                    android:textSize="@dimen/text_size_12"
-                                    android:text="@string/payment_method" />
+                                    android:text="@string/payment_method"
+                                    android:textSize="@dimen/text_size_12" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/cards_layout"
+                                style="@style/ButtonGray"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_marginLeft="@dimen/text_size_20"
-                                android:layout_marginRight="@dimen/text_size_20"
-                                style="@style/ButtonGreenLight"
                                 android:layout_marginTop="@dimen/text_size_10"
+                                android:layout_marginRight="@dimen/text_size_20"
                                 android:orientation="horizontal">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/c2c_cards_color"
-                                    android:paddingBottom="@dimen/text_size_16"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/text_size_10"
-                                    />
+
                                 <com.black.base.widget.SpanTextView
                                     android:id="@+id/cards"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
                                     android:layout_marginLeft="@dimen/text_size_5"
-                                    android:layout_marginTop="6dp"
+                                    android:text="@string/cards"
                                     android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="@string/cards" />
+                                    android:textStyle="bold" />
+
                                 <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                   android:gravity="right">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/arrow_right"/>
-                            </LinearLayout>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:id="@+id/id_pay_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:visibility="gone"
-                                android:layout_marginLeft="@dimen/text_size_20"
-                                android:layout_marginRight="@dimen/text_size_20"
-                                style="@style/ButtonGreenLight"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:orientation="horizontal">
-                                <ImageView
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/ali_color"
-                                    android:layout_gravity="center_vertical"
-                                    android:paddingBottom="@dimen/text_size_16"
-                                    android:layout_marginLeft="@dimen/text_size_10"
-                                    />
-                                <com.black.base.widget.SpanTextView
-                                    android:id="@+id/ali"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="@dimen/text_size_5"
-                                    android:layout_marginTop="6dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="@string/id_pay" />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:gravity="right">
+
                                     <ImageView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginRight="@dimen/text_size_10"
                                         android:layout_gravity="center_vertical"
-                                        android:background="@drawable/arrow_right"/>
+                                        android:layout_marginRight="@dimen/text_size_10"
+                                        android:background="@drawable/arrow_right" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout
-                                android:id="@+id/wei_xin_layout"
-                                android:visibility="gone"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="@dimen/text_size_20"
-                                android:layout_marginRight="@dimen/text_size_20"
-                                style="@style/ButtonGreenLight"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/wei_xin_color"
-                                    android:paddingBottom="@dimen/text_size_16"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/text_size_10"
-                                    />
-                                <com.black.base.widget.SpanTextView
-                                    android:id="@+id/wei_xin"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="@dimen/text_size_5"
-                                    android:layout_marginTop="6dp"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="@string/wei_xin" />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="right">
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginRight="@dimen/text_size_10"
-                                        android:layout_gravity="center_vertical"
-                                        android:background="@drawable/arrow_right"/>
-                                </LinearLayout>
-                            </LinearLayout>
+
+
+
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/btn_confirm"
                                 style="@style/ButtonBlue"
                                 android:layout_width="300dp"
-                                android:layout_marginTop="@dimen/text_size_20"
-                                android:layout_marginBottom="@dimen/text_size_20"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:layout_marginBottom="@dimen/text_size_20"
+                                android:checked="true"
                                 android:padding="@dimen/middle_padding"
                                 android:text="@string/by_0_fee" />
+
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/btn_confirm_sale"
-                                style="@style/ButtonRed"
+                                style="@style/ButtonBlue"
                                 android:layout_width="300dp"
-                                android:layout_marginTop="@dimen/text_size_20"
-                                android:layout_marginBottom="@dimen/text_size_20"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                               android:visibility="gone"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:layout_marginBottom="@dimen/text_size_20"
                                 android:padding="@dimen/middle_padding"
-                                android:text="@string/sale_0_fee" />
+                                android:text="@string/sale_0_fee"
+                                android:visibility="gone" />
                         </LinearLayout>
+
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/quilk_point"
                             android:layout_width="350dp"
-                            android:layout_marginTop="@dimen/text_size_20"
-                            android:background="@drawable/bg_green_white"
                             android:layout_height="60dp"
                             android:layout_gravity="center"
-                            android:drawableLeft="@drawable/quilk_point"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:background="@drawable/bg_green_white"
                             android:drawableRight="@drawable/icon_setting_arrow_down"
                             android:padding="@dimen/text_size_15"
-                            android:textSize="@dimen/text_size_18"
+                            android:text="@string/buy_quilk"
                             android:textColor="@color/black"
-                            android:text="@string/buy_quilk" />
+                            android:textSize="@dimen/text_size_18" />
+
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/quilk_point_sale"
                             android:layout_width="350dp"
-                            android:layout_marginTop="@dimen/text_size_20"
-                            android:background="@drawable/bg_green_white"
                             android:layout_height="60dp"
                             android:layout_gravity="center"
-                            android:drawableLeft="@drawable/quilk_point"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:background="@drawable/bg_green_white"
                             android:drawableRight="@drawable/icon_setting_arrow_down"
-                            android:visibility="gone"
                             android:padding="@dimen/text_size_15"
-                            android:textSize="@dimen/text_size_18"
+                            android:text="@string/sale_quilk"
                             android:textColor="@color/black"
-                            android:text="@string/sale_quilk" />
+                            android:textSize="@dimen/text_size_18"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </com.black.base.widget.ObserveScrollView>
             </com.black.lib.refresh.QRefreshLayout>

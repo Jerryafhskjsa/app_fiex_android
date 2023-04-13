@@ -124,12 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_marginLeft="@dimen/text_size_15"
-                                android:layout_marginTop="@dimen/text_size_10"
-                                android:src="@drawable/quilk_point"/>
+
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -147,7 +142,7 @@
                                 android:padding="@dimen/text_size_15"
                                 android:textSize="@dimen/text_size_12"
                                 android:drawableRight="@drawable/arrow_right"
-                                android:textColor="#E622C177"
+                                android:textColor="@color/T13"
                                 android:text="@string/what_seller" />
                         </LinearLayout>
                         <com.black.base.widget.SpanTextView

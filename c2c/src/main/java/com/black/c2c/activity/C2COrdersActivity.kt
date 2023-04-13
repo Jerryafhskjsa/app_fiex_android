@@ -147,7 +147,8 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
             payChain = binding?.payName?.text.toString()
             extras.putString(ConstData.BUY_PRICE, id2)
             extras.putString(ConstData.USER_YES, payChain)
-            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
+            BlackRouter.getInstance().build(RouterConstData.C2C_PAY_FOR).with(extras).go(mContext)
+            finish()
         }
     }
     private fun checkClickable(){
@@ -217,7 +218,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                 getC2cCancel(id2)
             }
             else{
-                FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
+                FryingUtil.showToast(mContext,getString(R.string.queren_f))
             }
         }
     }

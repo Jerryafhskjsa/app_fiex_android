@@ -191,11 +191,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="none"
-                            android:paddingLeft="30dp"
+                            android:layout_marginLeft="@dimen/text_size_20"
                             android:paddingTop="@dimen/text_size_10"
                             android:singleLine="true"
                             android:text="@string/message"
-                            android:textColor="#E622C177"
+                            android:textColor="@color/T13"
                             android:textSize="@dimen/text_size_14"
                             android:textStyle="bold" />
 
@@ -213,7 +213,7 @@
                             android:layout_height="5dp"
                             android:layout_marginLeft="@dimen/text_size_20"
                             android:layout_marginRight="10dp"
-                            android:background="#E622C177" />
+                            android:background="@color/T13" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -312,11 +312,13 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
                                 android:layout_gravity="right"
-                                android:layout_marginRight="@dimen/text_size_20"
-                                android:src="@drawable/btn_tranfer_c2c"></ImageView>
+                                android:layout_marginRight="40dp"
+                                android:src="@drawable/icon_bill_filter">
+
+                            </ImageView>
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
@@ -327,7 +329,7 @@
                                 android:paddingTop="8dp"
                                 android:singleLine="true"
                                 android:text="@string/transfer"
-                                android:textColor="#E622C177"
+                                android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_16"
                                 android:textStyle="bold" />
                         </LinearLayout>

@@ -1,4 +1,5 @@
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -6,13 +7,9 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.AdapterView
-import android.widget.FrameLayout
-import android.widget.GridView
+import android.view.*
+import android.widget.*
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
@@ -38,6 +35,7 @@ import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
 import com.black.base.util.ConstData.CHOOSE_COIN_WITHDRAW
 import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
+import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.VerticalTextView
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.HomeMainRiseFallAdapter
@@ -261,10 +259,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 }
             else {
-                    BlackRouter.getInstance().build(RouterConstData.THREEPAYMENT)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        .go(mContext)
-                    //FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+                dialog()
                 }
             R.id.rel_deposit -> {
                 BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
@@ -308,6 +303,42 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
     }
 
+    private fun dialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_buy_sell, null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            params.dimAmount = 0.2f
+            //设置背景昏暗度
+            params.gravity = Gravity.BOTTOM
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            //设置dialog动画
+            window.setWindowAnimations(R.style.anim_bottom_in_out)
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.first_buy).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.THREEPAYMENT)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.two_c2c).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.C2C_NEW)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+    }
     override fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
         observable!!.subscribe { updatePairData ->
             CommonUtil.checkActivityAndRunOnUI(activity) {

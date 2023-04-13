@@ -22,7 +22,9 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.model.c2c.PayInfo
+import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
@@ -47,6 +49,7 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
     }
     private val selectTypes: MutableList<String?> = ArrayList(2)
     private var binding: ActivityC2cWeixinBinding? = null
+    private var userInfo: UserInfo? = null
     private val photoImageList: MutableList<PhotoImageItem> = ArrayList()
     internal inner class PhotoImageItem {
         var path: String? = null
@@ -77,6 +80,8 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_weixin)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.googleCodeCopy?.setOnClickListener(this)
+        userInfo = CookieUtil.getUserInfo(this)
+        binding?.name?.hint = userInfo?.realName
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.visibility = View.VISIBLE
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.setOnClickListener{
                 v ->
@@ -303,7 +308,7 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
                             imageStrings.append(",").append(imgUrlList)
                         }
                     }
-                    getReceipt()
+                    getReceipt(imageStrings.toString())
                 }
 
             }
@@ -328,11 +333,13 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
             })
         }
     }
-    private fun getReceipt(){
-        val  otcReceiptDTO: OtcReceiptModel? = null
-        otcReceiptDTO?.name = binding?.name?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
+    private fun getReceipt(image: String?){
+        var  otcReceiptDTO = OtcReceiptModel()
+        otcReceiptDTO.name = userInfo?.realName
+        otcReceiptDTO.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.receiptImage = image
+        otcReceiptDTO.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.type = 2
         C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -340,6 +347,8 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext, "SUCCESS")
+                    finish()
                 } else {
 
                     FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)

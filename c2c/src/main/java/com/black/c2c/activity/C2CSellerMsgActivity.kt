@@ -40,6 +40,7 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
     private var actionType = ConstData.TAB_EXCHANGE
     private var binding: ActivitySellerMsgBinding? = null
     private var merchantId: Int? = null
+    private var name: String? = null
     private var dataList:ArrayList<C2CMainAD?>? = ArrayList()
     private var sellList:ArrayList<C2CMainAD?>? = ArrayList()
     private var fragmentList: java.util.ArrayList<Fragment>? = null
@@ -52,7 +53,7 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
         binding?.msg?.setOnClickListener(this)
         binding?.ad?.setOnClickListener(this)
         TAB_TITLES[0] = "信息"
-        TAB_TITLES[1] = "广告"
+        TAB_TITLES[1] = "AD"
         getC2CAD(false)
         getSellerMsg()
         init()
@@ -136,6 +137,7 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
         fragmentList?.add(C2CSADFragment().also {
             val bundle = Bundle()
             bundle.putInt(ConstData.PAIR, merchantId!!)
+            bundle.putString(ConstData.BIRTH,name)
             it.arguments = bundle
             c2CSADFragment = it
         })
@@ -149,7 +151,8 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultData<C2CSMSG?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    binding?.name1?.setText(returnData.data?.name!![0].toString())
+                    name = returnData.data?.name
+                    binding?.name1?.setText(name!![0].toString())
                     binding?.name?.setText(returnData.data?.name)
                     if (returnData.data?.merchantAuthentication == true){
                         binding?.barTrue?.visibility = View.VISIBLE
@@ -208,7 +211,7 @@ class C2CSellerMsgActivity: BaseActionBarActivity(), View.OnClickListener {
                     val num1: Int? = dataList?.size
                     val num2: Int? = sellList?.size
                     val num3: Int = if (num1 == null && num2 == null) 0 else if (num1 == null && num2 != null) num2 else if (num1 != null && num2 == null) num1 else num1!! + num2!!
-                    binding?.ad?.text = "广告($num3)"
+                    binding?.ad?.text = getString(R.string.ad) + "($num3)"
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }

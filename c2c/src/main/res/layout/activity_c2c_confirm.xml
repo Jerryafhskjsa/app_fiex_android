@@ -370,7 +370,8 @@
                             android:id="@+id/num3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -540,7 +541,7 @@
                 android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:padding="@dimen/middle_padding"
-                android:text="申述" />
+                android:text="@string/state" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

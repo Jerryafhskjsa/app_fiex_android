@@ -172,7 +172,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                 getC2cCancel()
             }
             else{
-                FryingUtil.showToast(mContext,"请先确认是否付款给卖方")
+                FryingUtil.showToast(mContext,getString(R.string.queren_f))
             }
         }
         dialog.findViewById<SpanCheckedTextView>(R.id.range).setOnClickListener { v ->
@@ -211,9 +211,9 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
         else if (payChain == getString(R.string.id_pay))
         {
             val name = binding?.name5?.text?.toString() + "  " + binding?.name6?.text?.toString()
-            dialog.findViewById<View>(R.id.cards).visibility = View.VISIBLE
+            dialog.findViewById<View>(R.id.ali_pay).visibility = View.VISIBLE
             dialog.findViewById<View>(R.id.wei_xin).visibility = View.GONE
-            dialog.findViewById<View>(R.id.ali_pay).visibility = View.GONE
+            dialog.findViewById<View>(R.id.cards).visibility = View.GONE
             dialog.findViewById<TextView>(R.id.name).text = name
         }
         else {
@@ -242,7 +242,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultData<C2COrderDetails?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     receiptInfo = returnData.data?.receiptInfo
-                    binding?.name1?.setText(returnData.data?.realName)
+                    binding?.name1?.setText(String.format("%s", returnData.data?.realName))
                     binding?.money?.setText("￥ " + (returnData.data?.amount!! * returnData.data?.price!!).toString())
                     val time1 = returnData.data?.validTime?.time
                     val calendar: Calendar = Calendar.getInstance()
@@ -251,7 +251,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                     countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
                     override fun onFinish(){
                         binding?.time?.setText("00:00")
-                        FryingUtil.showToast(mContext,"订单已取消")
+                        FryingUtil.showToast(mContext,getString(R.string.canceled))
                         finish()
                     }
                         override fun onTick(millisUntilFinished: Long) {
@@ -277,7 +277,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     if (returnData.data == null) {
-                        FryingUtil.showToast(mContext, "卖家收款方式已修改")
+                        FryingUtil.showToast(mContext, getString(R.string.seller_g))
                         return
                     } else {
                         receiptId = returnData.data!![0]?.id
@@ -357,7 +357,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext,"取消订单成功")
+                    FryingUtil.showToast(mContext,getString(R.string.cancel_s))
                     val intent = Intent(this@C2CBuyerPayChooseActivity, C2CNewActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -395,6 +395,7 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
                     val extras = Bundle()
                     extras.putString(ConstData.BUY_PRICE, id2)
                     BlackRouter.getInstance().build(RouterConstData.C2C_BUYER_PAY).with(extras).go(mContext)
+                    finish()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -408,7 +409,6 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
-
 
             override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {

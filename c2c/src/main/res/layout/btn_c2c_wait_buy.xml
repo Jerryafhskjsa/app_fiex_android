@@ -27,18 +27,10 @@
                     android:baselineAligned="false" />
             </com.google.android.material.appbar.AppBarLayout>
 
-            <com.black.base.widget.ObserveScrollView
-                android:id="@+id/scroll_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -49,6 +41,11 @@
                         android:layout_marginRight="@dimen/text_size_20"
                         android:orientation="horizontal">
 
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/shenshu_time" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/time"
@@ -57,11 +54,6 @@
                             android:gravity="center"
                             android:textColor="#FFA030"
                             android:text="5:00" />
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="后对方还未放币可进行申诉" />
 
                     </LinearLayout>
 
@@ -79,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="@string/buy_02"
-                            android:textColor="#03CA89"
+                            android:textColor="@color/T13"
                             android:textSize="@dimen/text_size_18"
                             android:textStyle="bold" />
 
@@ -231,7 +223,8 @@
                                 android:id="@+id/num3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -272,7 +265,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="卖家昵称" />
+                                android:text="@string/sell_name" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name"
@@ -298,7 +291,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="接单总数" />
+                                android:text="@string/jiedan" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name_name"
@@ -354,7 +347,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="收款人" />
+                                android:text="@string/shou_kuan_ren" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/person"
@@ -379,7 +372,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="账号" />
+                                android:text="@string/account" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/ad"
@@ -405,8 +398,9 @@
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="收款码" />
+                                android:text="@string/payment_code" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -458,7 +452,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-            </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <LinearLayout
@@ -479,7 +472,7 @@
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:layout_weight="2"
                 android:padding="@dimen/middle_padding"
-                android:text="申述" />
+                android:text="@string/state" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_confirm"
@@ -492,7 +485,7 @@
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="已放币" />
+                android:text="@string/fang_bi" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

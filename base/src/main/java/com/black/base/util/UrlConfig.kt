@@ -17,7 +17,7 @@ object UrlConfig {
         when (apiType) {
             ApiType.URl_UC -> apiTypeDes = "/uc/"
             ApiType.URL_FIC -> apiTypeDes = "/api/"
-            ApiType.URL_API -> apiTypeDes = "/otc/api/"
+            ApiType.URL_API -> apiTypeDes = ""
             ApiType.URL_PRO -> apiTypeDes = "/pro/"
             ApiType.URL_FUT_F -> apiTypeDes = "/futures/fapi/"
             ApiType.URL_FUT_D -> apiTypeDes = "/futures/dapi/"
@@ -498,7 +498,7 @@ object UrlConfig {
         const val URL_WALLET_BILL_CONFIRM = "pay/order/confirm"
 
         //下单编码
-        const val URL_WALLET_BILL_CODE_LIST = "pay/order/code/list"
+        const val URL_WALLET_BILL_CODE_LIST = "pay/order/code/list/v1"
 
         //充值订单
         const val URL_WALLET_BILL_LIST = "pay/order/list"

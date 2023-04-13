@@ -47,7 +47,7 @@ class C2CBillsFragment: BaseFragment(), View.OnClickListener {
             TAB_TITLES[2] = TAB_EXCHANGE
         }
 
-        "申述中".also {
+        getString(R.string.statement).also {
             TAB_TOTAL = it
             TAB_TITLES[3] = TAB_TOTAL
         }

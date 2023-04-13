@@ -39,19 +39,19 @@ class C2CBills: BaseAdapterItem() {
         var statusText = context.getString(R.string.number_default)
         when(status) {
             -1 -> {
-                statusText = "取消"
+                statusText = context.getString(R.string.cancel1)
             }
             2 -> {
-                statusText = "待付款"
+                statusText = context.getString(R.string.pending_payment)
             }
             3 -> {
-                statusText = "已付款"
+                statusText = context.getString(R.string.paid)
             }
             4 -> {
-                statusText = "已放币"
+                statusText = context.getString(R.string.been_placed)
             }
             5 -> {
-                statusText = "卖单审核中"
+                statusText = context.getString(R.string.under_review)
             }
 
         }

@@ -72,14 +72,12 @@
                                 style="@style/ButtonGrayLight"
                                 android:orientation="horizontal">
 
-                                <com.black.base.widget.SpanMaterialEditText
+                                <com.black.base.widget.SpanTextView
                                     android:id="@+id/name"
                                     style="@style/EditTextStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Kinki"
                                     android:background="@null"
-                                    android:inputType="text"
                                     android:padding="@dimen/middle_padding"
                                     android:textSize="@dimen/text_size_16"
                                     app:useDelete="true" />
@@ -208,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="15dp"
                                 android:text="@string/paste"
-                                android:textColor="#03CA89"
+                                android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_14" />
                         </com.black.lib.view.InputLinearLayout>
 

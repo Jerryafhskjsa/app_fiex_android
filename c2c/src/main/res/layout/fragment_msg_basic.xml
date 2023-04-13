@@ -112,7 +112,7 @@
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="30日平均放行时间"
+                                    android:text="@string/fang_thirty"
                                     android:textColor="@color/black_real"
                                     android:textSize="@dimen/text_size_16" />
 
@@ -123,7 +123,7 @@
                                     android:layout_marginRight="@dimen/text_size_10"
                                     android:layout_weight="1"
                                     android:gravity="right"
-                                    android:text="0 分钟"
+                                    android:text="0 miu"
                                     android:textColor="@color/black_real"
                                     android:textSize="@dimen/text_size_16" />
 
@@ -141,7 +141,7 @@
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="30日平均付款"
+                                    android:text="@string/fu_thity"
                                     android:textColor="@color/black_real"
                                     android:textSize="@dimen/text_size_16" />
 
@@ -152,7 +152,7 @@
                                     android:layout_marginRight="@dimen/text_size_10"
                                     android:layout_weight="1"
                                     android:gravity="right"
-                                    android:text="0 分钟"
+                                    android:text="0 miu"
                                     android:textColor="@color/black_real"
                                     android:textSize="@dimen/text_size_16" />
 
@@ -181,7 +181,7 @@
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="首次交易至今"
+                            android:text="@string/shouci"
                             android:textSize="@dimen/text_size_16" />
 
                         <com.black.base.widget.SpanTextView
@@ -191,7 +191,7 @@
                             android:layout_marginRight="@dimen/text_size_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="0 次"
+                            android:text="0"
                             android:textColor="@color/black_real"
                             android:textSize="@dimen/text_size_16" />
 
@@ -204,7 +204,7 @@
                         android:layout_marginTop="@dimen/text_size_5"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="买 0 | 卖 0"
+                        android:text="Buy 0 | Sell 0"
                         android:textColor="@color/black_real"
                         android:textSize="@dimen/text_size_16" />
                     <LinearLayout
@@ -222,7 +222,7 @@
                             android:layout_marginTop="@dimen/text_size_10"
                             android:layout_width="300dp"
                             android:layout_height="40dp"
-                            android:text="拉黑"
+                            android:text="@string/block"
                             android:textSize="@dimen/text_size_16" />
 
                         <com.black.base.widget.SpanTextView
@@ -231,7 +231,7 @@
                             android:layout_marginTop="@dimen/text_size_20"
                             android:layout_marginBottom="@dimen/text_size_10"
                             android:gravity="center"
-                            android:text="为了降低您的交易风险，认证广告方已向平台缴纳保证金，请放心交易。"
+                            android:text="@string/tishi_jin"
                             android:textSize="@dimen/text_size_12" />
 
 

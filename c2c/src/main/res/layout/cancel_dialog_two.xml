@@ -25,13 +25,13 @@
                 android:padding="@dimen/middle_padding"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="转账确认" />
+                android:text="@string/queren_z" />
             <com.black.base.widget.SpanTextView
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/middle_padding"
-                android:text="请确认己向卖家转账，恶意点击将直接冻结账户" />
+                android:text="@string/queren_q" />
 
             <LinearLayout
                 android:id="@+id/cards"
@@ -148,7 +148,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textColor="@color/partTranslucent"
-                    android:text="暂未付款" />
+                    android:text="@string/cancel1" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -162,7 +162,7 @@
                     android:gravity="center"
                     android:textColor="#03CA89"
                     android:layout_weight="1"
-                    android:text="我已完成转账" />
+                    android:text="@string/confirm_1" />
 
             </LinearLayout>
 

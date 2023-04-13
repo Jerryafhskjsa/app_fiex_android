@@ -42,7 +42,7 @@ interface WalletApiService {
     fun getDepositConfirm(@Query("orderId") orderAmount: String?): Observable<HttpRequestResultString?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_BILL_CODE_LIST)
-    fun getDepositCodeList(): Observable<HttpRequestResultData<Deposit<OrderCode?>?>?>?
+    fun getDepositCodeList(): Observable<HttpRequestResultData<PagingData<Deposit?>?>?>?
 
     @GET(UrlConfig.Wallet.URL_WALLET_BILL_LIST)
     fun getDepositList(@Query("orderType") orderType: String?,@Query("page") page: Int?,@Query("size") size: Int?): Observable<HttpRequestResultData<PagingData<payOrder?>?>?>?

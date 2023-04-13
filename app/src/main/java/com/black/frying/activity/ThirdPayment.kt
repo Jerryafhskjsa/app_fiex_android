@@ -24,6 +24,7 @@ import com.black.util.Callback
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityThreePaymentBinding
+import kotlinx.android.synthetic.main.activity_three_payment.*
 
 
 @Route(value = [RouterConstData.THREEPAYMENT])
@@ -31,16 +32,23 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
     private var binding: ActivityThreePaymentBinding? = null
     private var type = "buy"
     private var bank: String? = null
+    private var desc: String? = null
     private var list: ArrayList<payOrder?>? = null
+    private var coinCode: OrderCoin? = null
     private var userBalanceList: ArrayList<UserBalance?>? = null
     private var orderCode: ArrayList<OrderCode>? = null
+    private var payCode: ArrayList<OrderCode>? = null
+    private var dataList: ArrayList<Deposit?>? = null
     private var list1: MutableList<String>? = null
     private var list2: MutableList<String>? = null
     private var list3: MutableList<String>? = null
     private var list4: MutableList<String>? = null
-    private var payChain1 = "ZAR"
-    private var payChain2 = "Sounth African online banking"
-    private var payChain3 = "United Bank of South Africa"
+    private var list5: MutableList<String>? = null
+    private var i: Int = 0
+    private var payChain1 = "-"
+    private var payChain2 = "-"
+    private var payChain3 = "-"
+    private var payChain4 = "-"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +57,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         binding?.chooseCoinLayout?.setOnClickListener(this)
         binding?.chooseChainLayout?.setOnClickListener(this)
         binding?.chooseLayout?.setOnClickListener(this)
+        binding?.country?.setOnClickListener(this)
         binding?.sell?.setOnClickListener(this)
         binding?.buy?.setOnClickListener(this)
         binding?.transferAmount?.setOnClickListener(this)
@@ -63,12 +72,12 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         list2?.add("USDT")
         list3 = ArrayList()
         list4 = ArrayList()
+        list5 = ArrayList()
         getUrl()
     }
 
     override fun onResume() {
         super.onResume()
-        refresh(type)
         getUserBalance(true)
     }
 
@@ -102,12 +111,29 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 }
             }
 
+            R.id.country -> {
+                DeepControllerWindow(mContext as Activity, getString(R.string.country_area), payChain4 , list5, object : DeepControllerWindow.OnReturnListener<String> {
+                    override fun onReturn(window: DeepControllerWindow<String>, item: String) {
+                        window.dismiss()
+                        payChain4 = item
+                        for (h in list5!!.indices){
+                            if (payChain4 == list5!![h])
+                                i = h
+                        }
+                        showData()
+                        binding?.country?.setText(item)
+
+                    }
+
+                }).show()
+            }
+
             R.id.choose_chain_layout -> {
                 DeepControllerWindow(mContext as Activity, getString(R.string.will_receive), payChain1 , list1, object : DeepControllerWindow.OnReturnListener<String> {
                     override fun onReturn(window: DeepControllerWindow<String>, item: String) {
                         window.dismiss()
-                            //payChain1 = item
-                           // binding?.currentCoin?.setText(item)
+                        //payChain1 = item
+                        // binding?.currentCoin?.setText(item)
 
                     }
 
@@ -189,7 +215,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 binding?.btnConfirm?.visibility = View.VISIBLE
                 binding?.btnCancel?.visibility = View.GONE
                 binding?.user?.visibility = View.GONE
-                binding?.currentCoin?.setText("ZAR")
+                binding?.currentCoin?.setText(dataList!![i]?.coinCode?.ccyNo!![0])
                 binding?.currentChain?.setText("USDT")
                 binding?.chooseChainLayout?.isEnabled = false
                 binding?.chooseCoinLayout?.isEnabled = true
@@ -208,36 +234,23 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 binding?.btnCancel?.visibility = View.VISIBLE
                 binding?.user?.visibility = View.VISIBLE
                 binding?.currentCoin?.setText("USDT")
-                binding?.currentChain?.setText("ZAR")
+                binding?.currentChain?.setText(dataList!![i]?.coinCode?.ccyNo!![0])
                 binding?.chooseChainLayout?.isEnabled = true
                 binding?.chooseCoinLayout?.isEnabled = false
             }
         }
     }
     private fun getUrl(){
-        WalletApiServiceHelper.getDepositOrderCodeList(mContext, object : NormalCallback<HttpRequestResultData<Deposit<OrderCode?>?>?>(mContext) {
+        WalletApiServiceHelper.getDepositOrderCodeList(mContext, object : NormalCallback<HttpRequestResultData<PagingData<Deposit?>?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
 
-            override fun callback(returnData: HttpRequestResultData<Deposit<OrderCode?>?>?) {
+            override fun callback(returnData: HttpRequestResultData<PagingData<Deposit?>?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    orderCode = returnData.data?.bankCode
-                    val payCode = returnData.data?.payCode
-                    val coinCode = returnData.data?.coinCode
-                    for (h in orderCode?.indices!!) {
-                    list4?.add(orderCode!![h].en!!)
-                    }
-                    for (h in payCode?.indices!!) {
-                        list3?.add(payCode[h].en!!)
-                    }
-                    for (h in coinCode?.indices!!)
-                    {
-                        list1?.add(coinCode[h].code!!)
-                    }
-                    payChain1 = list1!![0]
-                    payChain2 = list3!![0]
-                    payChain3 = list4!![0]
+                    dataList = returnData.data?.list
+                    showData()
+                    refresh(type)
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -245,25 +258,58 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         })
     }
 
+
+    private fun showData(){
+        list5?.clear()
+        list4?.clear()
+        list3?.clear()
+        list1?.clear()
+        orderCode = dataList!![i]?.bankCode
+        coinCode = dataList!![i]?.coinCode
+        payCode = dataList!![i]?.payCode
+        for (h in dataList!!.indices) {
+            list5?.add(dataList!![h]?.country!!)
+        }
+        for (h in orderCode?.indices!!) {
+            list4?.add(orderCode!![h].desc!!)
+        }
+        for (h in payCode?.indices!!) {
+            list3?.add(payCode!![h].desc!!)
+        }
+            list1?.add(coinCode?.ccyNo!![0])
+        payChain1 = list1!![0]
+        payChain2 = list3!![0]
+        payChain3 = list4!![0]
+        payChain4 = list5!![i]
+        binding?.extractAddress?.setText(payChain2)
+        binding?.country?.setText(payChain4)
+        binding?.chooseAddress?.setText(payChain3)
+    }
+
     private fun getDepositCreate(type: String?,account: String? , name: String? , amount: String?) {
         val payVO = PayVO()
-        bank = binding?.chooseAddress?.text?.trim { it <= ' ' }.toString()
-        for (h in orderCode?.indices!!) {
-            if (bank == orderCode!![h].en) {
-                payVO.bankCode = orderCode!![h].code
-            }
-        }
         payVO.accName = name
         payVO.accNo = account
         payVO.orderType = type
-        payVO.bankCode = binding?.chooseAddress?.text?.trim { it <= ' ' }.toString()
         payVO.orderAmount = amount
+        bank = binding?.chooseAddress?.text?.trim { it <= ' ' }.toString()
+        for (h in orderCode?.indices!!) {
+            if (bank == orderCode!![h].desc) {
+                payVO.bankCode = orderCode!![h].code
+            }
+        }
+        desc = binding?.extractAddress?.text?.trim { it <= ' ' }.toString()
+        for (h in payCode?.indices!!) {
+            if (desc == payCode!![h].desc) {
+                payVO.bankCode = orderCode!![h].code
+            }
+        }
         if (type == "B") {
-            payVO.ccyNo = "ZAR"
+            payVO.ccyNo = dataList!![i]?.coinCode?.ccyNo!![0]
             payVO.coin = "USDT" }
         else{
             payVO.ccyNo = "USDT"
-            payVO.coin = "ZAR"
+            payVO.coin = dataList!![i]?.coinCode?.ccyNo!![0]
         }
             WalletApiServiceHelper.getDepositCreate(
                 mContext,

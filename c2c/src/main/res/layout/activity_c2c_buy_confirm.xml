@@ -154,7 +154,7 @@
                                             android:paddingLeft="20dp"
                                             android:paddingTop="@dimen/text_size_10"
                                             android:singleLine="true"
-                                            android:text="已存入法币账户"
+                                            android:text="@string/cunru"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text_size_14" />
                                         <LinearLayout
@@ -206,7 +206,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="@string/buy_02"
-                            android:textColor="#03CA89"
+                            android:textColor="@color/T13"
                             android:textSize="@dimen/text_size_18"
                             android:textStyle="bold" />
 
@@ -358,7 +358,8 @@
                                 android:id="@+id/num3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -399,7 +400,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="卖家昵称" />
+                                android:text="@string/sell_name" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name"
@@ -425,7 +426,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="接单总数" />
+                                android:text="@string/jiedan" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/total_amount"

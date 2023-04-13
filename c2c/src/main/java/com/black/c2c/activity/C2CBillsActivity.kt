@@ -65,8 +65,8 @@ class C2CBillsActivity: BaseActionBarActivity(),View.OnClickListener{
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_bills)
         binding?.numWan?.setOnClickListener(this)
         binding?.numJin?.setOnClickListener(this)
-        TAB_TITLES[0] = "进行中"
-        TAB_TITLES[1] = "已完成"
+        TAB_TITLES[0] = getString(R.string.pending)
+        TAB_TITLES[1] = getString(R.string.complet)
         init()
         binding!!.viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -136,14 +136,10 @@ class C2CBillsActivity: BaseActionBarActivity(),View.OnClickListener{
         fragmentList?.clear()
         fragmentList?.add(C2CBillsFragment().also {
             val bundle = Bundle()
-            val direction = "进行中"
-            bundle.putString(ConstData.COIN_TYPE,direction)
             it.arguments = bundle
         })
         fragmentList?.add(C2CBillsJinFragment().also {
             val bundle = Bundle()
-            val direction = "已完成"
-            bundle.putString(ConstData.COIN_TYPE,direction)
             it.arguments = bundle
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)

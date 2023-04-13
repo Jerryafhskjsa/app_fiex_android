@@ -37,11 +37,11 @@ class C2CBillsJinFragment : BaseFragment(), View.OnClickListener {
             TAB_RECHARGE = it
             TAB_TITLES[0] = TAB_RECHARGE
         }
-       "已完成".also {
+       getString(R.string.confirm_1).also {
             TAB_EXTRACT = it
             TAB_TITLES[1] = TAB_EXTRACT
         }
-       "已取消".also {
+       getString(R.string.cancel1).also {
             TAB_EXCHANGE = it
             TAB_TITLES[2] = TAB_EXCHANGE
         }

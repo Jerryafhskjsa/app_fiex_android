@@ -33,7 +33,7 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
                 viewHolder?.btnHandle?.setText(getString(R.string.buy_02))
             } else  {
                 viewHolder?.btnHandle?.isEnabled = false
-                viewHolder?.btnHandle?.setText("当前用户不可下此广告的订单")
+                viewHolder?.btnHandle?.setText(getString(R.string.buy_02))
             }
         }
         else{
@@ -44,14 +44,14 @@ class C2CSellerBuyAdapter(context: Context, variableId: Int, data: ArrayList<C2C
                 viewHolder?.btnHandleSell?.isEnabled = true
             } else {
                 viewHolder?.btnHandleSell?.isEnabled = false
-                viewHolder?.btnHandleSell?.setText("当前用户不可下此广告的订单")
+                viewHolder?.btnHandleSell?.setText(getString(R.string.sell))
             }
         }
         viewHolder?.firstLetter?.setText(if (TextUtils.isEmpty(c2CSeller?.realName)) "?" else c2CSeller?.realName!![0].toString())
         viewHolder?.id?.setText(c2CSeller?.realName)
         viewHolder?.num2?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.totalAmount, 8, 2, 8)) + c2CSeller?.coinType)
         viewHolder?.num1?.setText(String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.priceParam, 8, 2, 8)))
-        viewHolder?.finish?.setText("成单量 " + c2CSeller?.completedOrders.toString() + " | 成单率" + String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.completion, 8, 2, 8)) + "%")
+        viewHolder?.finish?.setText(getString(R.string.amount) + c2CSeller?.completedOrders.toString() + " | Rate" + String.format("%s", NumberUtil.formatNumberDynamicScaleNoGroup(c2CSeller?.completion, 8, 2, 8)) + "%")
         val paymentTypeList = c2CSeller?.payMethods
         if (paymentTypeList != null && paymentTypeList == "[0]") {
             viewHolder?.cards?.visibility = View.VISIBLE

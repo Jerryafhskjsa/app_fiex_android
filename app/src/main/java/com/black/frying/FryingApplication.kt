@@ -110,9 +110,10 @@ class FryingApplication : BaseApplication() {
         //初始化腾讯i
         initTencentIM()
         val local = applicationContext.resources.configuration.locale.country
+        println(local)
         val languageCode = LanguageUtil.getLanguageSetting(this)?.languageCode
         if (languageCode == null || languageCode < 0){
-            if (local == "VIETNAM") {
+            if (local == "VI" || local == "VN") {
                 LanguageUtil.changeAppLanguage(
                     this,
                     FryingLanguage(Locale.KOREAN, 3, getString(R.string.language_vietnam)),

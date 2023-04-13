@@ -120,7 +120,7 @@ class C2CBillConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                         binding?.realName?.setText(returnData.data?.otherSideRealName)
                         binding?.realNameName?.setText(returnData.data?.payEeRealName)
                         val c1 = SkinCompatResources.getColor(context, R.color.T13)
-                        val t5 = SkinCompatResources.getColor(context, R.color.T5)
+                        val t5 = SkinCompatResources.getColor(context, R.color.T13)
                         if (returnData.data?.direction == "B")
                         {
                             binding?.orderAgain?.visibility = View.VISIBLE

@@ -22,7 +22,9 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.model.c2c.PayInfo
+import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.DeepControllerWindow
@@ -48,6 +50,7 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
     }
     private val selectTypes: MutableList<String?> = ArrayList(2)
     private var binding: ActivityC2cAliPayBinding? = null
+    private var userInfo: UserInfo? = null
     private val photoImageList: MutableList<PhotoImageItem> = ArrayList()
     internal inner class PhotoImageItem {
         var path: String? = null
@@ -81,7 +84,9 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
             selectTypes.add(CAMERA)
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_c2c_ali_pay)
+        userInfo = CookieUtil.getUserInfo(this)
         binding?.btnSubmit?.setOnClickListener(this)
+        binding?.name?.hint = userInfo?.realName
         binding?.googleCodeCopy?.setOnClickListener(this)
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.visibility = View.VISIBLE
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.setOnClickListener{
@@ -333,9 +338,10 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
     }
     private fun getReceipt(){
         val  otcReceiptDTO: OtcReceiptModel? = null
-        otcReceiptDTO?.name = binding?.name?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO?.name = userInfo?.realName
         otcReceiptDTO?.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO?.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO?.type = 1
         C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -343,6 +349,8 @@ class C2CALIPayActivity: BaseActionBarActivity(), View.OnClickListener  {
 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext, "SUCCESS")
+                    finish()
                 } else {
 
                     FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)

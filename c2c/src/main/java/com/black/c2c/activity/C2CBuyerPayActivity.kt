@@ -48,7 +48,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
         checkClickable()
     }
     override fun getTitleText(): String {
-        return "等待卖家确认收款并放币"
+        return getString(R.string.watting_get)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -61,6 +61,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
             val bundle = Bundle()
             bundle.putString(ConstData.BUY_PRICE , id2)
             BlackRouter.getInstance().build(RouterConstData.C2C_BUY_CONFRIM).with(bundle).go(mContext)
+            finish()
         }
         if (id == R.id.btn_cancel) {
             cancelDialog()
@@ -89,7 +90,7 @@ class C2CBuyerPayActivity: BaseActionBarActivity(), View.OnClickListener {
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
-            FryingUtil.showToast(mContext, "申述已发送")
+            FryingUtil.showToast(mContext, getString(R.string.shengsu_f))
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->

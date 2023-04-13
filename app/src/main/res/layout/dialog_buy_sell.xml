@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="walletNormalModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        style="@style/ButtonWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <com.black.base.widget.ObserveScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B1"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/B2"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_20"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="340dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/middle_padding"
+                        android:text="@string/buy"
+                        android:textColor="@color/T1"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="20dp"
+                        android:layout_height="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_15"
+                        android:background="@drawable/fiex_icon_main_pop_close"
+                        android:gravity="right">
+
+                    </ImageView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:background="@color/C2"/>
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_20"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:text="C2C"
+                    android:textStyle="bold"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_16" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/two_c2c"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="Legal currency transactions" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/four"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/middle_padding"
+                        android:textStyle="bold"
+                        android:text="Quick" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/first_buy"
+                        style="@style/ButtonGrayLight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:padding="@dimen/middle_padding"
+                        android:text="Third party payment" />
+
+
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+
+            </LinearLayout>
+        </com.black.base.widget.ObserveScrollView>
+    </LinearLayout>
+</layout>

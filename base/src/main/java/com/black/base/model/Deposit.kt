@@ -1,7 +1,8 @@
 package com.black.base.model
 
-class Deposit<T> {
+class Deposit{
     val bankCode: ArrayList<OrderCode>? = null
-    val coinCode: ArrayList<OrderCode>? = null
+    val coinCode:OrderCoin? = null
     val payCode: ArrayList<OrderCode>? = null
+    val country: String? = null
 }

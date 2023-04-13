@@ -31,14 +31,15 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
         viewHolder?.num1?.setText(c2COrder?.name)
         val paymentTypeList = c2COrder?.type
         viewHolder?.num2?.setText(c2COrder?.account)
-        if (paymentTypeList != null && paymentTypeList == 1) {
+        viewHolder?.num3?.setText(c2COrder?.depositBank)
+        if (paymentTypeList != null && paymentTypeList == 0) {
             viewHolder?.cards?.visibility = View.VISIBLE
             viewHolder?.bank?.visibility = View.VISIBLE
             viewHolder?.ali?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.GONE
             viewHolder?.ma?.visibility = View.GONE
         }
-        if (paymentTypeList != null && paymentTypeList== 0) {
+        if (paymentTypeList != null && paymentTypeList== 1) {
             viewHolder?.ali?.visibility = View.VISIBLE
             viewHolder?.ma?.visibility = View.VISIBLE
             viewHolder?.bank?.visibility = View.GONE
@@ -54,13 +55,13 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
         }
         viewHolder?.bianJi?.setOnClickListener{
             v ->
-            if (paymentTypeList != null && paymentTypeList == 1)
+            if (paymentTypeList != null && paymentTypeList == 0)
             {
                 val bundle = Bundle()
                 bundle.putParcelable(ConstData.COIN_TYPE, c2COrder)
                 BlackRouter.getInstance().build(RouterConstData.C2C_CARDS).go(context)
             }
-                if (paymentTypeList != null && paymentTypeList== 0)
+                if (paymentTypeList != null && paymentTypeList== 1)
                 {
                     val bundle = Bundle()
                     bundle.putParcelable(ConstData.COIN_TYPE, c2COrder)
@@ -83,7 +84,7 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
 
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        FryingUtil.showToast(context, "此收款方式已删除！")
+                        FryingUtil.showToast(context, returnData.msg)
                     } else {
 
                         FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)

@@ -234,7 +234,7 @@
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_handle_sell"
-                    style="@style/ButtonRed"
+                    style="@style/ButtonBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:gravity="center"

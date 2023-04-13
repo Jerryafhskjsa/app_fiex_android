@@ -140,7 +140,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/sf"
+                            android:text="-"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_13"
                             android:textStyle="bold" />
@@ -255,7 +255,7 @@
                                 android:id="@+id/current_coin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="ZAR"
+                                android:text="-"
                                 android:textColor="@color/T1"
                                 android:textSize="@dimen/text_size_13"
                                 android:textStyle="bold" />
@@ -342,7 +342,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="United Bank of South Africa"
+                            android:text="-"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_13"
                             android:textStyle="bold" />
@@ -379,7 +379,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Sounth African online banking"
+                            android:text="-"
                             android:textColor="@color/T1"
                             android:textSize="@dimen/text_size_13"
                             android:textStyle="bold" />

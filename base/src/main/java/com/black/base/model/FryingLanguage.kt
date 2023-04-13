@@ -15,7 +15,7 @@ class FryingLanguage(locale: Locale, languageCode: Int, languageText: String) {
     var locale: Locale?
     var languageCode //s1-中，2-繁，3-英，4-日，5-英_uk
             : Int
-    var languageText //s1-简体中文，2-繁体中文，3-英语，4-日本语，5-英_uk
+    var languageText //s1-简体中文，2-繁体中文，3-英语，4-y语，5-英_uk
             : String
 
     init {

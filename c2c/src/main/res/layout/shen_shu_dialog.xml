@@ -24,13 +24,13 @@
                 android:padding="@dimen/middle_padding"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="提交申诉" />
+                android:text="@string/tijiao_a" />
             <com.black.base.widget.SpanTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/middle_padding"
-                android:text="恶意申诉，扰乱平台正常运营秩序的将冻结账号" />
+                android:text="@string/jinggao" />
 
             <View
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textColor="@color/partTranslucent"
-                    android:text="我再想想" />
+                    android:text="@string/cancel1" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -64,7 +64,7 @@
                     android:gravity="center"
                     android:textColor="#03CA89"
                     android:layout_weight="1"
-                    android:text="提交" />
+                    android:text="@string/confirm_1" />
 
             </LinearLayout>
 

@@ -58,7 +58,7 @@
                             android:textSize="@dimen/text_size_20"
                             android:textColor="@color/black"
                             android:textStyle="bold"
-                            android:text="请向卖家付款" />
+                            android:text="@string/pay_for_seller" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -74,14 +74,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="付款剩余时间" />
+                            android:text="@string/last_time" />
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textColor="#FFA030"
-                            android:text="5:00" />
+                            android:text="" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -100,7 +100,7 @@
                             android:textSize="36dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
-                            android:text="￥ 3000" />
+                            android:text="" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -121,29 +121,13 @@
                             android:background="@drawable/icon_secure_tip" />
 
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginBottom="@dimen/text_size_5"
-                            android:layout_weight="1"
-                            android:text="请务必使用本人"
-                            android:textColor="@color/C5" />
-                        <com.black.base.widget.SpanTextView
                             android:id="@+id/name1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
                             android:layout_weight="1"
-                            android:text="陈小包"
-                            android:textColor="@color/black" />
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:layout_marginBottom="@dimen/text_size_5"
-                            android:layout_weight="1"
-                            android:text="的支付方式，向对方转账"
+                            android:text="@string/yourself"
                             android:textColor="@color/C5" />
                     </LinearLayout>
                     <LinearLayout
@@ -220,7 +204,7 @@
                             android:id="@+id/num1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to"
+                            android:background="@drawable/icon_copy_asset"
                              />
                     </LinearLayout>
 
@@ -251,7 +235,7 @@
                             android:id="@+id/num2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -282,7 +266,7 @@
                             android:id="@+id/num3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:background="@drawable/icon_copy_asset" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -312,7 +296,7 @@
                             android:id="@+id/num4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/btn_bar_to" />
+                            android:background="@drawable/icon_copy_asset" />
                     </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -387,7 +371,7 @@
                                 android:id="@+id/num5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -417,7 +401,7 @@
                                 android:id="@+id/num6"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/btn_bar_to" />
+                                android:background="@drawable/icon_copy_asset" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -433,7 +417,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="收款码" />
+                                android:text="@string/payment_code" />
 
                             <ImageView
                                 android:id="@+id/id_pay_ma"
@@ -517,7 +501,7 @@
                                     android:id="@+id/num7"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/btn_bar_to" />
+                                    android:background="@drawable/icon_copy_asset" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -547,7 +531,7 @@
                                     android:id="@+id/num8"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/btn_bar_to" />
+                                    android:background="@drawable/icon_copy_asset" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -563,7 +547,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="收款码" />
+                                    android:text="@string/payment_code" />
 
                                 <ImageView
                                     android:id="@+id/wei_xin_ma"
@@ -603,7 +587,7 @@
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
                             android:layout_weight="1"
-                            android:text="1.转账过程中，请勿备注任何信息2.您的汇款将直接进入卖家账户，交易过程中卖家出售的数字资产由平台托管3.请在规定时间内完成付款，并务必点击“我已完成转账”，卖家确认收款后，系统会将数字资产划转到您的账户4.为了保护资产安全，将会对买入资产实行T+1提币限制，到期后自动解锁。在此期间不影响交易等业务。" />
+                            android:text="@string/tips" />
                     </LinearLayout>
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
@@ -641,7 +625,7 @@
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="我已完成转账" />
+                android:text="@string/had_paid" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

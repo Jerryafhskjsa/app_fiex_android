@@ -40,15 +40,15 @@ import java.util.*
  class C2CNewActivity : BaseActionBarActivity(), View.OnClickListener{
     companion object {
         private val TAB_TITLES = arrayOfNulls<String>(2)
-        private val TAB_SELF = "自选区"
-        private val TAB_QUCILK = "快捷区"
+        private var TAB_SELF:String? = null
+        private var TAB_QUCILK: String? = null
 
     }
 
     private var binding: ActivityC2cMainBinding? = null
     private var userInfo: UserInfo? = null
     private var actionType = ConstData.TAB_EXCHANGE
-    private var tab = TAB_SELF
+    private var tab: String? = null
     private var fManager: FragmentManager? = null
     private var typeList: MutableList<String>? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
@@ -68,10 +68,13 @@ import java.util.*
         binding?.rate?.setOnClickListener(this)
          binding?.settings?.setOnClickListener(this)
         binding?.person?.setOnClickListener(this)
+        TAB_QUCILK = getString(R.string.shortcut_area)
+        TAB_SELF = getString(R.string.self_selection_area)
+        tab = TAB_SELF
         fManager = supportFragmentManager
         typeList = ArrayList()
-        typeList!!.add(TAB_SELF)
-        typeList!!.add(TAB_QUCILK)
+        typeList!!.add(TAB_SELF!!)
+        typeList!!.add(TAB_QUCILK!!)
         TAB_TITLES[0] = "B"
         TAB_TITLES[1] = "S"
         init()
@@ -139,6 +142,7 @@ import java.util.*
                             }
                             TAB_QUCILK -> {
                                 BlackRouter.getInstance().build(RouterConstData.C2C_QIULK).go(mContext)
+                                finish()
                             }
                         }
                     }
@@ -158,7 +162,7 @@ import java.util.*
     }
     private fun settingsDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.bills_dialog, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes

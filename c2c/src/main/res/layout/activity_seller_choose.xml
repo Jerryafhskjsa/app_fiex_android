@@ -46,47 +46,48 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/middle_padding"
-                        android:text="@string/get_method" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/cards"
-                        android:layout_width="380dp"
+                        android:layout_width="match_parent"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:layout_marginBottom="@dimen/text_size_20"
-                        android:layout_height="60dp"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_height="80dp"
                         android:layout_gravity="center"
                         android:background="@drawable/btn_id_pay"
                         android:drawableLeft="@drawable/btn_cards_c2c"
                         android:drawableRight="@drawable/arrow_right"
-                        android:padding="@dimen/text_size_20"
+                        android:padding="30dp"
                         android:text="@string/cards" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/id_pay"
                        android:background="@drawable/btn_cards"
-                        android:layout_width="380dp"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_marginRight="@dimen/text_size_20"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:layout_marginBottom="@dimen/text_size_20"
-                        android:layout_height="60dp"
+                        android:layout_height="80dp"
                         android:drawableLeft="@drawable/btn_id_pay_c2c"
                         android:layout_gravity="center"
                         android:drawableRight="@drawable/arrow_right"
-                        android:padding="20dp"
+                        android:padding="30dp"
                         android:text="@string/id_pay" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/wei_xin"
                         android:background="@drawable/btn_wei_xin"
-                        android:layout_width="380dp"
+                        android:layout_width="match_parent"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:layout_marginBottom="@dimen/text_size_20"
-                        android:layout_height="60dp"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:layout_height="80dp"
                         android:drawableRight="@drawable/arrow_right"
                         android:drawableLeft="@drawable/btn_wei_xin_c2c"
                         android:layout_gravity="center"
-                        android:padding="20dp"
+                        android:padding="30dp"
                         android:text="@string/wei_xin" />
                     <LinearLayout
                         android:id="@+id/advice_null"

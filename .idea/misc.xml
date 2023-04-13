@@ -342,6 +342,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/activity_three_payment.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/current_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/deposit_list.xml" value="0.3333333333333333" />
+        <entry key="..\:/fiex/app/src/main/res/layout/dialog_buy_sell.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/dialog_global_ad.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/five_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/four_dialog.xml" value="0.1470713980333476" />
@@ -420,7 +421,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single_tab.xml" value="0.1" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_window_new.xml" value="0.1" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/acticity_c2c_cards.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/actiivty_pay_for_seller.xml" value="0.16666666666666666" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/actiivty_pay_for_seller.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_ali_pay.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_bill_confirm.xml" value="0.16666666666666666" />
@@ -457,7 +458,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/btn_c2c_wait_buy.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/c2c_pay_methods_list.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog_two.xml" value="0.142368533561351" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog_two.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/dialog_c2c_buy_create.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />

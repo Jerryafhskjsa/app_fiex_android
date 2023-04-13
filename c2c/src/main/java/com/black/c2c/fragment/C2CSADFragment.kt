@@ -112,6 +112,7 @@ class C2CSADFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoad
 
     private fun getC2CAD(isShowLoading: Boolean) {
         val merchantId = arguments?.getInt(ConstData.PAIR)
+        val name = arguments?.getString(ConstData.BIRTH)
         C2CApiServiceHelper.getC2CSellerAD(mContext, isShowLoading, merchantId,  object : NormalCallback<HttpRequestResultData<SellerAD<C2CMainAD?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 onRefreshEnd()
@@ -126,6 +127,9 @@ class C2CSADFragment : BaseFragment(),  QRefreshLayout.OnRefreshListener, OnLoad
                     dataList = data?.buy
                     sellList = data?.sell
                     dataList = dataList?.plus(sellList!!) as ArrayList<C2CMainAD?>?
+                    /*for (i in 0..dataList!!.size){
+                        dataList!![i]?.realName = name
+                    }*/
                     showData(dataList)
                 } else {
                     showData(null)

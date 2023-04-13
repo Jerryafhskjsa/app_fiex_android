@@ -96,7 +96,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                     getC2COrder()
             }
             else{
-                FryingUtil.showToast(mContext, "请输入限额内的金额")
+                FryingUtil.showToast(mContext, "Please enter the amount within the limit")
             }
                     })
                 })
@@ -385,7 +385,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     }
     private fun getC2COrder(){
         if (binding?.methodsLayout?.text.toString() == ""){
-            FryingUtil.showToast(mContext,"请选择收款方式")
+            FryingUtil.showToast(mContext,"Please select the payment method")
             choosePayMethodWindowOld()
         }
         else {
@@ -409,6 +409,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                             extras.putString(ConstData.COIN_TYPE, id2)
                             BlackRouter.getInstance().build(RouterConstData.C2C_WAITE1).with(extras)
                                 .go(mContext)
+                            finish()
                         } else {
                             FryingUtil.showToast(
                                 mContext,

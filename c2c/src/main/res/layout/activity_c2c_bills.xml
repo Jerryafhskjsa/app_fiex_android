@@ -71,7 +71,7 @@
                                 android:background="@drawable/bg_c2c_tab_header"
                                 android:gravity="center"
                                 android:maxLines="1"
-                                android:text="进行中"
+                                android:text="@string/pending"
                                 android:textColor="@color/btn_buy_check"
                                 android:textSize="@dimen/text_size_14"
                                 android:textStyle="bold" />
@@ -84,7 +84,7 @@
                                 android:gravity="center"
                                 android:checked="true"
                                 android:maxLines="1"
-                                android:text="已完成"
+                                android:text="@string/complet"
                                 android:textColor="@color/btn_buy_check"
                                 android:textSize="@dimen/text_size_14"
                                 android:textStyle="bold" />

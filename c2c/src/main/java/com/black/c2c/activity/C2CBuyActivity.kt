@@ -394,6 +394,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         extras.putString(ConstData.USER_YES ,payChain)
                         extras.putString(ConstData.COIN_TYPE,id2)
                         BlackRouter.getInstance().build(RouterConstData.C2C_ORDERS).with(extras).go(mContext)
+                        finish()
                     } else {
                         FryingUtil.showToast(
                             mContext,

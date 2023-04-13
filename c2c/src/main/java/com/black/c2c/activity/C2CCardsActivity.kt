@@ -11,7 +11,9 @@ import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.model.c2c.OtcReceiptModel
 import com.black.base.model.c2c.PayInfo
+import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.c2c.R
@@ -24,17 +26,19 @@ import com.black.util.CommonUtil
 @Route(value = [RouterConstData.C2C_CARDS])
 class C2CCardsActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActicityC2cCardsBinding? = null
+    private var userInfo: UserInfo? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.acticity_c2c_cards)
+        userInfo = CookieUtil.getUserInfo(this)
         binding?.cards?.setOnClickListener(this)
-        binding?.name?.setOnClickListener(this)
         binding?.cardsCmy?.setOnClickListener(this)
         binding?.otherCmy?.setOnClickListener(this)
         binding?.btnSubmit?.setOnClickListener(this)
         binding?.notUse?.setOnClickListener(this)
         binding?.googleCode?.setOnClickListener(this)
         binding?.googleCodeCopy?.setOnClickListener(this)
+        binding?.name?.hint = userInfo?.realName
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.visibility = View.VISIBLE
         binding?.root?.findViewById<ImageButton>(R.id.img_action_bar_right)?.setOnClickListener{
             v ->
@@ -67,12 +71,13 @@ class C2CCardsActivity: BaseActionBarActivity(), View.OnClickListener {
     }
 
     private fun getReceipt(){
-        val  otcReceiptDTO: OtcReceiptModel? = null
-        otcReceiptDTO?.name = binding?.name?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.depositBank = binding?.cardsCmy?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO?.subbranch = binding?.otherCmy?.text?.trim{ it <= ' '}.toString()
+        val  otcReceiptDTO = OtcReceiptModel()
+        otcReceiptDTO.name = userInfo?.realName
+        otcReceiptDTO.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.depositBank = binding?.cardsCmy?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.subbranch = binding?.otherCmy?.text?.trim{ it <= ' '}.toString()
+        otcReceiptDTO.type = 0
         C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -80,6 +85,8 @@ class C2CCardsActivity: BaseActionBarActivity(), View.OnClickListener {
 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext, "SUCCESS")
+                    finish()
                 } else {
 
                     FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)

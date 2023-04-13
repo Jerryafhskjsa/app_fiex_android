@@ -2,7 +2,7 @@
     <string name="app_name">Fiex</string>
     <string name="edt_account_hint">Mobile phone number</string>
     <string name="get_check_code">Get verification code</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel1">Cancel</string>
     <string name="start_time">Start time</string>
     <string name="end_time">End time</string>
     <string name="red">Red Up and Green Down</string>
@@ -79,7 +79,7 @@
     <string name="reference_quotation">Reference quotation</string>
     <string name="quota">Quota</string>
     <string name="number_of_transactions">Number of transactions</string>
-    <string name="advice">For reference only, not the final transaction unit price.</string>
+    <string name="advice">For reference only</string>
     <string name="advice_null">There is no quotation for the time being. Please try other conditions and bind more collection/payment methods, or view all quotes</string>
     <string name="buy_quilk">Quick purchase process</string>
     <string name="pay_seller">Merchant payee</string>
@@ -98,7 +98,7 @@
     <string name="notice3">After the order is completed, if there is sufficient evidence to prove that the source of funds is illegal, an appeal can be filed before the end of the countdown</string>
     <string name="notice2"> </string>
     <string name="created_time">Created time</string>
-    <string name="cmy_account">Bank account/card number</string>
+    <string name="cmy_account">Bank account</string>
     <string name="cmy_name">Bank name</string>
     <string name="order_total">Order total</string>
     <string name="buyer">Buyer</string>
@@ -348,7 +348,7 @@
     <string name="canceled">canceled</string>
     <string name="china">China</string>
     <string name="america">America</string>
-    <string name="id_pay">Id pay</string>
+    <string name="id_pay">Ali Pay</string>
     <string name="null_bills">No orders currently exist</string>
     <string name="cards">Cards</string>
     <string name="wei_xin">Wei xin</string>
@@ -362,7 +362,7 @@
     <string name="seller_confirm_too">The other party has paid, please confirm receipt</string>
     <string name="wait2">payment received internally</string>
     <string name="waite">Waiting for buyer to pay</string>
-    <string name="waite_confirm">Please confirm receipt and deposit</string>
+    <string name="waite_confirm">Receipt and deposit</string>
     <string name="order_number">Order number</string>
     <string name="available_choose">Show only available transaction methods</string>
     <string name="available">(Available/</string>
@@ -722,7 +722,7 @@
     <string name="shortcut_area">Shortcut area</string>
     <string name="my_buy">My buy</string>
     <string name="my_sale">My sale</string>
-    <string name="my_bills">My bills</string>
+    <string name="my_bills">About My bills</string>
     <string name="my_bills_time">If the buyer fails to pay within the specified time, the order will be cancelled by the system. The seller cannot cancel the order. Your digital currency will be locked in the custody account until the order is completed or cancelled</string>
     <string name="payment_settings">Payment settings</string>
     <string name="biao_ji_price">The contract is marked with a price in real time. This marked price will be used to calculate unrealized gains and losses and margin, and may deviate from the latest transaction price of the contract to avoid price manipulation. The calculation of tag prices is based on index prices.</string>
@@ -1083,9 +1083,46 @@
     <string name="main_two">New Coin Management Divides Earnings</string>
     <string name="main_three">Quickly complete your deposits and withdrawals</string>
     <string name="main_four">Staking</string>
-
-
-
+    <string name="pending">Pending</string>
+    <string name="complet">Completed</string>
+    <string name="statement">Statement</string>
+    <string name="pending_payment">Pending payment</string>
+    <string name="paid">Paid</string>
+    <string name="been_placed">Been Placed</string>
+    <string name="under_review">Under review</string>
+    <string name="pay_for_seller">Please make payment to the seller.</string>
+    <string name="last_time">Payment remaining time</string>
+    <string name="yourself">Please be sure to use yourself %s payment method, transfer to the other party</string>
+    <string name="tips">1. During the transfer process, please do not note any information. 2. Your remittance will be directly transferred to the seller\'s account, and the digital assets sold by the seller during the transaction will be managed by the platform. 3. Please complete the payment within the specified time and make sure to click "I have completed the transfer". After the seller confirms the payment, the system will transfer the digital assets to your account. 4. To protect the security of the assets, a T+1 withdrawal limit will be implemented for the purchased assets, which will be automatically unlocked upon expiration. During this period, it will not affect transactions and other businesses.</string>
+    <string name="had_paid">I have paid</string>
+    <string name="miniute">Please make payment to the other party within </string>
+    <string name="sell_name">Seller Name</string>
+    <string name="jiedan">Total Orders</string>
+    <string name="cunru">Deposited into legal currency account</string>
+    <string name="shenshu_time">Appellable time</string>
+    <string name="watting_get">Waiting receiving coins</string>
+    <string name="fang_bi">Coins have been placed</string>
+    <string name="shou_kuan_ren">Payee </string>
+    <string name="payment_code">Payment code</string>
+    <string name="yigai">The seller payment method has been modified</string>
+    <string name="fangbi_s">Successfully released coins</string>
+    <string name="queren_s">Please confirm whether you have received the payment first</string>
+    <string name="queren_f">Please confirm whether to make payment to the seller first</string>
+    <string name="bond">Bond</string>
+    <string name="c_ad">Certified AD</string>
+    <string name="ad">AD</string>
+    <string name="fang_thirty">30 day average release time</string>
+    <string name="fu_thity">30 day average payment</string>
+    <string name="block">Block</string>
+    <string name="tishi_jin">In order to reduce your transaction risk, the certified advertising party has paid a deposit to the platform. Please rest assured of the transaction.</string>
+    <string name="shouci">First transaction to date</string>
+    <string name="cancel_s">Cancel Success</string>
+    <string name="seller_g">The seller payment method has been modified</string>
+    <string name="queren_z">Transfer confirmation</string>
+    <string name="queren_q">Please confirm that the transfer has been made to the seller. Malicious clicking will directly freeze the account</string>
+    <string name="tijiao_a"> Submit an appeal</string>
+    <string name="jinggao">Malicious appeals that disrupt the normal operation order of the platform will freeze the account</string>
+    <string name="shengsu_f">The statement has been sent</string>
 </resources>
 
 

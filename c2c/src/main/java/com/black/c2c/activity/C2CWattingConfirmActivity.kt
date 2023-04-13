@@ -106,7 +106,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
                 getConfirm()
             }
             else{
-                FryingUtil.showToast(mContext,"请先确认是否收到该笔款项")
+                FryingUtil.showToast(mContext,getString(R.string.queren_s))
             }
         }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
@@ -122,10 +122,11 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
 
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext,"放币成功")
+                    FryingUtil.showToast(mContext,getString(R.string.fangbi_s))
                     val extras = Bundle()
                     extras.putString(ConstData.BUY_PRICE,id)
                     BlackRouter.getInstance().build(RouterConstData.C2C_CONFRIM).with(extras).go(context)
+                    finish()
                 } else {
 
                     FryingUtil.showToast(context, if (returnData == null) "null" else returnData.msg)
@@ -204,7 +205,7 @@ class C2CWattingConfirmActivity: BaseActionBarActivity(), View.OnClickListener{
             override fun callback(returnData: HttpRequestResultDataList<PayInfo?>?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     if (returnData.data == null) {
-                        FryingUtil.showToast(mContext, "卖家收款方式已修改")
+                        FryingUtil.showToast(mContext, getString(R.string.yigai))
                         return
                     } else {
                         if ( paMethod== 1) {

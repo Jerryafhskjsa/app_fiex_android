@@ -68,7 +68,7 @@
                                 android:drawableRight="@drawable/btn_c2c_right"
                                 android:gravity="center_vertical"
                                 android:text="￥6.68"
-                                android:textColor="@color/C1" />
+                                android:textColor="@color/T13" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -159,7 +159,7 @@
                                         android:layout_height="4dp"
                                         android:layout_gravity="center"
                                         android:layout_marginTop="@dimen/text_size_5"
-                                        android:background="#E622C177" />
+                                        android:background="@color/T13" />
                                 </LinearLayout>
 
                                 <View
@@ -189,7 +189,7 @@
                                         android:layout_height="4dp"
                                         android:layout_gravity="center"
                                         android:layout_marginTop="@dimen/text_size_5"
-                                        android:background="#E622C177"
+                                        android:background="@color/T13"
                                         android:visibility="gone" />
                                 </LinearLayout>
 
@@ -245,7 +245,7 @@
                                     android:maxLines="1"
                                     android:padding="0dp"
                                     android:text="@string/all"
-                                    android:textColor="@color/C1" />
+                                    android:textColor="@color/T13" />
 
                             </com.black.lib.view.InputLinearLayout>
 
@@ -295,7 +295,7 @@
                                     android:maxLines="1"
                                     android:padding="0dp"
                                     android:text="@string/all"
-                                    android:textColor="@color/C1" />
+                                    android:textColor="@color/T13" />
 
                             </com.black.lib.view.InputLinearLayout>
 

@@ -36,6 +36,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/text_size_10"
             android:layout_marginRight="@dimen/text_size_10"
             android:orientation="horizontal">
@@ -81,12 +82,6 @@
 
             </LinearLayout>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_marginRight="@dimen/text_size_15"
-            android:layout_marginLeft="@dimen/text_size_15"
-            android:layout_height="1dp"
-            android:background="@color/C2"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
