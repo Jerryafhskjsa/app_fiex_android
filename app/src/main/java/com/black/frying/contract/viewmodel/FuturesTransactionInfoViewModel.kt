@@ -81,7 +81,18 @@ class FuturesTransactionInfoViewModel : ViewModel() {
             sellLeverageMultiple.postValue(sell)
         }
     }
-
+    fun setBuyLeverageMultiple(times :Int){
+        buyLeverageMultiple.value = times
+        viewModelScope.launch(Dispatchers.IO){
+            setBuyLeverageMultiple(times)
+        }
+    }
+    fun setSellLeverageMultiple(times :Int){
+        sellLeverageMultiple.value = times
+        viewModelScope.launch(Dispatchers.IO){
+            setSellLeverageMultiple(times)
+        }
+    }
 
     private fun updateUserBalanceInfo() {
         userBalanceDto.postValue(UserBalanceDto.copyFrom(_userBalanceBean,_foundRateBean))
