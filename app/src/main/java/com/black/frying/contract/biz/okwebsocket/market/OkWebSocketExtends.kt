@@ -20,19 +20,19 @@ fun OkWebSocketHelper.sendCommandUserListenKey() {
     webSocket.send(jsonObject.toString())
 }
 
-fun OkWebSocketHelper.sendCommandSymbol() {
+fun OkWebSocketHelper.sendCommandSymbol(coinPair:String="btc_usdt") {
     val webSocket = okWebSocket.webSocket
     val jsonObject = JSONObject()
     jsonObject.put("req", "sub_symbol")
-    jsonObject.put("symbol", "btc_usdt")
-//    webSocket.send(jsonObject.toString())
+    jsonObject.put("symbol", coinPair)
+    webSocket.send(jsonObject.toString())
 }
 
 fun OkWebSocketHelper.sendCommandUnSymbol() {
     val webSocket = okWebSocket.webSocket
     val jsonObject = JSONObject()
     jsonObject.put("req", "unsub_symbol")
-//    webSocket.send(jsonObject.toString())
+    webSocket.send(jsonObject.toString())
 }
 
 fun getMarketOkWebSocket(): OkWebSocket {

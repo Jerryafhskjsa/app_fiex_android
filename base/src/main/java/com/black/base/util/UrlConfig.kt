@@ -12,7 +12,7 @@ object UrlConfig {
     }
 
     //https://fiex.io/futures/fapi/market/v1/public/q/deal?symbol=btc_usdt&num=30
-    fun getFiexHost(context: Context, apiType: String?): String {
+    fun getFiexHost(apiType: String?): String {
         var apiTypeDes = "/uc/"
         when (apiType) {
             ApiType.URl_UC -> apiTypeDes = "/uc/"
@@ -45,12 +45,12 @@ object UrlConfig {
     /**
      * type->"user","market"
      */
-    fun getSocketHostSoeasyEx(context: Context?,type:String?):String{
+    fun getSocketHostSoeasyEx(type: String?):String{
         return SOCKET_HOSTS_SOEASTEX + type
     }
 
 
-    fun getSpotSocketHostSoeasyEx(context: Context?):String{
+    fun getSpotSocketHostSoeasyEx():String{
         return SPOT_SOCKET_HOSTS_SOEASTEX
     }
 
@@ -62,7 +62,7 @@ object UrlConfig {
     /***fiex***/
 
 
-    fun getSocketHost(context: Context): String {
+    fun getSocketHost(): String {
         return HOSTS
     }
 

@@ -5,7 +5,6 @@ import android.os.Handler
 import android.util.Log
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.util.*
 import com.black.net.HttpCookieUtil
@@ -84,7 +83,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
     }
 
     private fun initSocketManager(context: Context?) {
-        var socketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
+        var socketUrl = UrlConfig.getSocketHostSoeasyEx("market")
 
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
@@ -92,7 +91,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, socketSetting)
 
-        var socketUserUrl = UrlConfig.getSocketHostSoeasyEx(context,"user")
+        var socketUserUrl = UrlConfig.getSocketHostSoeasyEx("user")
         socketUserSetting = WebSocketSetting()
         socketUserSetting.connectUrl = socketUserUrl
         socketUserSetting.connectionLostTimeout = 60//心跳间隔时间

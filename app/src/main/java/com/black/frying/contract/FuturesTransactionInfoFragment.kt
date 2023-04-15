@@ -55,6 +55,13 @@ class FuturesTransactionInfoFragment : Fragment() {
             FuturesDeepGraphFragment.newInstance(),
             FuturesDeepGraphFragment.TAG
         )
+        binding.futuresAccountAndRate.let {
+            it.getAccountTotalProfitTitle().setOnClickListener {
+//                viewModel.testApi()
+                viewModel.testAPiSuspend()
+
+            }
+        }
         binding.futuresMultipleSettingView.apply {
             getMuchBtn().setOnClickListener {
                 val settingDialog = FuturesMultipleSettingDialog(context)

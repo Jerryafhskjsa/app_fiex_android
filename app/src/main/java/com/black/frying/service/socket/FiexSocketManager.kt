@@ -3,7 +3,6 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
-import com.airbnb.lottie.model.layer.NullLayer
 import com.black.base.api.UserApiServiceHelper
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.clutter.Kline
@@ -22,10 +21,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.Socket
 import java.util.*
 
 class FiexSocketManager(context: Context, handler: Handler) {
@@ -111,13 +108,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     private fun initSocketManager(context: Context?) {
-        val socketUrl = UrlConfig.getSpotSocketHostSoeasyEx(context)
+        val socketUrl = UrlConfig.getSpotSocketHostSoeasyEx()
         Log.d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
-        val futurSocketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
+        val futurSocketUrl = UrlConfig.getSocketHostSoeasyEx("market")
         Log.d("666666","futurSocketUrl = "+futurSocketUrl)
         futureSocketSetting = WebSocketSetting()
         futureSocketSetting.connectUrl = futurSocketUrl

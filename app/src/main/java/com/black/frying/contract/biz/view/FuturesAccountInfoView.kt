@@ -3,6 +3,7 @@ package com.black.frying.contract.biz.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.fbsex.exchange.databinding.FuturesLayoutAccountInfoBinding
@@ -23,6 +24,9 @@ class FuturesAccountInfoView @JvmOverloads constructor(
 
     fun getAccountTotalTv(): TextView {
         return accountInfoBinding.futuresAccountTotalProfit
+    }
+    fun getAccountTotalProfitTitle(): View {
+        return accountInfoBinding.futuresAccountTotalProfitTitle
     }
 
     fun getCoinRateTv(): TextView {

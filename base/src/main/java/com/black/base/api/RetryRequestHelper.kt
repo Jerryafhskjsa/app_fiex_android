@@ -199,12 +199,9 @@ object RetryRequestHelper {
                     val gson = Gson()
                     val adapter = gson.getAdapter(TypeToken.get(type)) as TypeAdapter<T>
                     val value = response.body()
-                    val jsonReader = gson.newJsonReader(response.body().charStream())
-                    var data: T? = null
-                    data = try {
+                    val jsonReader = gson.newJsonReader(response.body()?.charStream())
+                    val data: T? = value.use { _ ->
                         adapter.read(jsonReader)
-                    } finally {
-                        value.close()
                     }
                     Observable.just(data)
                 }

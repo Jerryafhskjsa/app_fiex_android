@@ -2,8 +2,6 @@ package com.black.frying.service.socket
 
 import android.content.Context
 import android.os.Handler
-import android.util.Log
-import com.black.base.util.SocketDataContainer
 import com.black.base.util.UrlConfig
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -66,7 +64,7 @@ class PushSocket(context: Context, handler: Handler) : FryingSocket(context, han
 
     @Throws(Exception::class)
     override fun initSocket(): Socket {
-        return IO.socket(UrlConfig.getSocketHost(context) + "/push", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost() + "/push", socketOptions)
     }
 
 
