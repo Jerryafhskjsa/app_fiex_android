@@ -5,7 +5,10 @@ import com.black.base.model.c2c.*
 import com.black.base.model.user.PaymentMethod
 import com.black.base.util.UrlConfig
 import io.reactivex.Observable
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
+import java.io.File
 import java.math.BigDecimal
 
 interface C2CApiService {
@@ -159,13 +162,13 @@ interface C2CApiService {
     fun getC2CUpdate(): Observable<HttpRequestResultString?>?
     //OTC聊天
     @POST(UrlConfig.C2C.URL_C2C_CREATE_IMG)
-    fun getC2CImage(@Query("id") id: String?): Observable<HttpRequestResultString?>?
+    fun getC2CImage(@Query("id") id: String?, @Part file: RequestBody?): Observable<HttpRequestResultData<C2CMessage?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CRATE_TXT)
-    fun getC2CText(@Query("id") id: String?,@Query("content") content: String?): Observable<HttpRequestResultString?>?
+    fun getC2CText(@Query("id") id: String?,@Query("content") content: String?): Observable<HttpRequestResultData<C2CMessage?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_REPLY_LIST)
-    fun getC2CList(@Query("id") id: String?): Observable<HttpRequestResultString?>?
+    fun getC2CList(@Query("id") id: String?): Observable<HttpRequestResultDataList<C2CMessage?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_REPLY_PULL)
     fun getC2CPull(@Query("id") id: String?,@Query("replyId") replyId: String?): Observable<HttpRequestResultString?>?
@@ -184,7 +187,7 @@ interface C2CApiService {
     fun getC2CCP(@Query("id") id: String?): Observable<HttpRequestResultString?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CREATE_V2)
-    fun getC2CCreateV2(@Query("advertisingId") advertisingId: String?,@Query("amount") amount: Double?,@Query("price") price: Double?): Observable<HttpRequestResultData<String?>?>?
+    fun getC2CCreateV2(@Query("advertisingId") advertisingId: String?,@Query("amount") amount: Double?,@Query("price") price: Double?, @Query("receiptId") receiptId: Int?): Observable<HttpRequestResultData<String?>?>?
 
     @GET(UrlConfig.C2C.URL_C2C_GP)
     fun getC2CGP(@Query("id") id: String?): Observable<HttpRequestResultDataList<PayInfo?>?>?

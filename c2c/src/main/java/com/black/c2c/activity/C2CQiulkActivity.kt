@@ -558,6 +558,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
             id,
             amount,
             price,
+            0,
             object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)

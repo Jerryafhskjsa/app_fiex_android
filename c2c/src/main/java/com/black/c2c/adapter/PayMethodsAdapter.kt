@@ -1,6 +1,7 @@
 package com.black.c2c.adapter
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import com.black.base.adapter.BaseRecycleDataBindAdapter
@@ -45,6 +46,10 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
             viewHolder?.bank?.visibility = View.GONE
             viewHolder?.cards?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.GONE
+            val image = c2COrder.receiptImage?.filterNot {it == '[' || it == ']' }
+            val imageBytes = image?.toByteArray()
+            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
+            viewHolder?.num6?.setImageBitmap(image2)
         }
         if (paymentTypeList != null && paymentTypeList== 2) {
             viewHolder?.weiXin?.visibility = View.VISIBLE
@@ -52,6 +57,10 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
             viewHolder?.bank?.visibility = View.GONE
             viewHolder?.ali?.visibility = View.GONE
             viewHolder?.cards?.visibility = View.GONE
+            val image = c2COrder.receiptImage?.filterNot {it == '[' || it == ']' }
+            val imageBytes = image?.toByteArray()
+            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
+            viewHolder?.num6?.setImageBitmap(image2)
         }
         viewHolder?.bianJi?.setOnClickListener{
             v ->

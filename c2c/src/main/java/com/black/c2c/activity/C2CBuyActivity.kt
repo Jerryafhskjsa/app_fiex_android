@@ -165,7 +165,6 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
                         window: ChooseWalletControllerWindow<String?>,
                         item: String?
                     ) {
-
                         val num1 = CommonUtil.parseDouble(binding?.one?.text.toString().trim { it <= ' ' })
                         val num2 = CommonUtil.parseDouble(binding?.unitPrice?.text.toString().trim { it <= ' ' })
                         val num3 = c2cList?.id
@@ -377,6 +376,7 @@ class C2CBuyActivity: BaseActionBarActivity(), View.OnClickListener {
             id,
             amount,
             price,
+            null,
             object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)

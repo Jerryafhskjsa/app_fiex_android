@@ -308,7 +308,7 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
                             imageStrings.append(",").append(imgUrlList)
                         }
                     }
-                    getReceipt(imageStrings.toString())
+                    getReceipt(result)
                 }
 
             }
@@ -334,10 +334,10 @@ class C2CWeiXinActivity: BaseActionBarActivity(), View.OnClickListener  {
         }
     }
     private fun getReceipt(image: String?){
-        var  otcReceiptDTO = OtcReceiptModel()
+        val  otcReceiptDTO = OtcReceiptModel()
         otcReceiptDTO.name = userInfo?.realName
         otcReceiptDTO.account = binding?.cards?.text?.trim{ it <= ' '}.toString()
-        otcReceiptDTO.receiptImage = image
+        otcReceiptDTO.receiptImage = image?.filterNot {it == '[' || it == ']' }
         otcReceiptDTO.googleCode = binding?.googleCode?.text?.trim{ it <= ' '}.toString()
         otcReceiptDTO.type = 2
         C2CApiServiceHelper.getReceipt(mContext, otcReceiptDTO , object : NormalCallback<HttpRequestResultString?>(mContext) {

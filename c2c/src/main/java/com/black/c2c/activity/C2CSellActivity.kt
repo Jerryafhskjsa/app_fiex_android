@@ -40,6 +40,9 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
     private var binding: ActivityC2cSellBinding? = null
     private var cointype = "USDT"
     private var payChain: String? = null
+    private var id2: Int? = null
+    private var id3: Int? = null
+    private var id4: Int? = null
     private var id: String? = null
     private var c2CHandleCheckHelper: C2CHandleCheckHelper? = null
     private var c2CUserInfo: C2CUserInfo? = null
@@ -384,7 +387,8 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
         })
     }
     private fun getC2COrder(){
-        if (binding?.methodsLayout?.text.toString() == ""){
+        val type: Int? = if (payChain == TAB_CARDS) id2 else if (payChain == TAB_WEIXIN) id4 else id3
+         if (binding?.methodsLayout?.text.toString() == ""){
             FryingUtil.showToast(mContext,"Please select the payment method")
             choosePayMethodWindowOld()
         }
@@ -397,6 +401,7 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                 id,
                 num1,
                 num2,
+                type,
                 object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {
                     override fun error(type: Int, error: Any?) {
                         super.error(type, error)
@@ -450,12 +455,15 @@ class C2CSellActivity: BaseActionBarActivity(), View.OnClickListener {
                 if (dataList[i]?.type!! == 1 && binding?.ali?.visibility == View.VISIBLE) {
                     TAB_IDPAY = TAB_IDPAY + "                         " + dataList[i]?.account
                     chainNames?.add(TAB_IDPAY)
+                    id3 = dataList[i]?.id
                 } else if (dataList[i]?.type!! == 0 && binding?.cards?.visibility == View.VISIBLE) {
                     TAB_CARDS = TAB_CARDS + "                         " + dataList[i]?.account
                     chainNames?.add(TAB_CARDS)
+                    id2 = dataList[i]?.id
                 } else if (dataList[i]?.type!! == 2 && binding?.weiXin?.visibility == View.VISIBLE) {
                     TAB_WEIXIN = TAB_WEIXIN + "                         " + dataList[i]?.account
                     chainNames?.add(TAB_WEIXIN)
+                    id4 = dataList[i]?.id
                 }
             }
         }

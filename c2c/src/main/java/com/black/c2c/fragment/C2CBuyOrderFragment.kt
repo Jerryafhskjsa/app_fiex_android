@@ -84,13 +84,11 @@ class C2CBuyOrderFragment : BaseFragment(),View.OnClickListener
         val id = v?.id
         if (id ==R.id.send){
             getC2CTime()
-            getC2cText()
             getC2CPull()
-            getC2cList()
         }
     }
 
-    private fun getC2CImage(){
+   /* private fun getC2CImage(){
         C2CApiServiceHelper.getC2CImage(mContext, id2 , object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -105,8 +103,8 @@ class C2CBuyOrderFragment : BaseFragment(),View.OnClickListener
             }
         })
     }
-
-    private fun getC2cText(){
+*/
+   /* private fun getC2cText(){
         val content = binding?.putMessage?.text.toString()
         C2CApiServiceHelper.getC2CText(mContext, id2 ,content, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
@@ -121,21 +119,8 @@ class C2CBuyOrderFragment : BaseFragment(),View.OnClickListener
             }
         })
     }
+*/
 
-    private fun getC2cList(){
-        C2CApiServiceHelper.getC2CList(mContext, id2 , object : NormalCallback<HttpRequestResultString?>(mContext!!) {
-            override fun error(type: Int, error: Any?) {
-                super.error(type, error)
-            }
-
-            override fun callback(returnData: HttpRequestResultString?) {
-                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                }
-            }
-        })
-    }
 
     private fun getC2CPull(){
         C2CApiServiceHelper.getC2CPull(mContext, id2 ,null, object : NormalCallback<HttpRequestResultString?>(mContext!!) {

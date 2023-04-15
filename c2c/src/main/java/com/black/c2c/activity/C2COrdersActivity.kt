@@ -74,6 +74,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         binding?.pay?.setOnClickListener(this)
         binding?.btnConfirm?.setOnClickListener(this)
         binding?.btnCancel?.setOnClickListener(this)
+        binding?.seller?.setOnClickListener(this)
         c2cList = intent.getParcelableExtra(ConstData.C2C_LIST)
         binding?.adId?.setText(id2)
         binding?.payName?.setText(payChain)
@@ -141,6 +142,13 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
         }
         else if (id == R.id.btn_confirm){
             cancelDialog()
+        }
+        else if (id == R.id.seller){
+            val extras = Bundle()
+            payChain = binding?.payName?.text.toString()
+            extras.putString(ConstData.BUY_PRICE, id2)
+            extras.putString(ConstData.USER_YES, payChain)
+            BlackRouter.getInstance().build(RouterConstData.C2C_BUYER).with(extras).go(mContext)
         }
         else if (id == R.id.btn_cancel) {
             val extras = Bundle()
@@ -273,8 +281,7 @@ class C2COrdersActivity: BaseActionBarActivity(), View.OnClickListener{
                         countDownTimer = object : CountDownTimer(totalTime,1000){//1000ms运行一次onTick里面的方法
                         override fun onFinish(){
                             binding?.time?.setText("00:00")
-                            FryingUtil.showToast(mContext,"订单已取消")
-                            finish()
+                            FryingUtil.showToast(mContext,getString(R.string.cancel1))
                         }
                             override fun onTick(millisUntilFinished: Long) {
                                 val minute = millisUntilFinished / 1000 / 60 % 60

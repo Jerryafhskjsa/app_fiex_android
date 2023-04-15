@@ -1130,4 +1130,6 @@
     <string name="tijiao_a"> Submit an appeal</string>
     <string name="jinggao">Malicious appeals that disrupt the normal operation order of the platform will freeze the account</string>
     <string name="shengsu_f">The statement has been sent</string>
+    <string name="put_cv">Enter your conversation</string>
+    <string name="sendd">Send</string>
 </resources>

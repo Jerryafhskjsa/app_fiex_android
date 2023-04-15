@@ -19,6 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center_vertical">
 
 
@@ -26,8 +27,18 @@
                 android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:drawablePadding="6dp"
                 android:gravity="right"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/time2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="6dp"
+                android:gravity="left"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_14" />
         </LinearLayout>
@@ -39,17 +50,90 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/sell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_size_5"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:background="@drawable/btn_black_image">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="1"
+                    android:textSize="@dimen/text_size_13" />
+
+            </LinearLayout>
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/message2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/text_size_5"
+                android:gravity="left"
+                android:textColor="@color/black_real"
+                android:textSize="@dimen/text_size_13" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="130"
+                android:layout_marginRight="@dimen/text_size_5"
+                android:layout_weight="1"
                 android:gravity="right"
                 android:textColor="@color/black_real"
                 android:textSize="@dimen/text_size_13" />
 
+            <LinearLayout
+                android:id="@+id/buy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_size_5"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:background="@drawable/btn_black_image">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="1"
+                    android:textSize="@dimen/text_size_13" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="6dp"
+                android:gravity="right"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="6dp"
+                android:gravity="left"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_14" />
         </LinearLayout>
 
-
     </LinearLayout>
+
 </layout>

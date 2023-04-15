@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,20 +9,161 @@
             type="Object" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:elevation="12dp"
+            android:theme="@style/AppTheme"
+            app:elevation="12dp">
+
+            <FrameLayout
+                android:id="@id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_alignParentTop="true">
+
+                        <ImageButton
+                            android:id="@+id/action_bar_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:onClick="onBackClick"
+                            android:contentDescription="@null"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/btn_back_faction" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_size_2"
+                                android:gravity="center"
+                                android:background="@drawable/btn_black_image"
+                                android:orientation="vertical">
+                                <com.black.base.widget.SpanCheckedTextView
+                                    android:id="@+id/seller_first"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="1"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_14"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/seller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:layout_marginLeft="@dimen/text_size_5"
+                                android:maxLines="1"
+                                android:text="11"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+                        <ImageView
+                            android:id="@+id/phone"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:src="@drawable/btn_c2c_phone"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </FrameLayout>
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_20"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_20"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/black"
+                        android:text="@string/pay_time" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:gravity="center"
+                        android:textColor="@color/C5"
+                        android:text="15:00" />
+
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_confirm"
+                    style="@style/ButtonBlue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_marginBottom="@dimen/text_size_20"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:padding="@dimen/middle_padding"
+                    android:text="@string/go_payment" />
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.black.lib.refresh.QRefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_marginTop="200dp"
+            android:layout_height="wrap_content">
 
             <com.black.base.widget.ObserveScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/B1"
                 android:fadingEdge="none"
                 android:fillViewport="true"
@@ -31,49 +173,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
                     android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_size_20"
-                        android:layout_marginTop="@dimen/text_size_10"
-                        android:layout_marginRight="@dimen/text_size_20"
-                        android:orientation="horizontal">
-
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="请在" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textColor="@color/C5"
-                            android:text="15:00" />
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="内付款给卖家" />
-
-                    </LinearLayout>
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/btn_confirm"
-                        style="@style/ButtonBlue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/text_size_20"
-                        android:layout_marginBottom="@dimen/text_size_20"
-                        android:layout_marginRight="@dimen/text_size_10"
-                        android:layout_marginLeft="@dimen/text_size_10"
-                        android:padding="@dimen/middle_padding"
-                        android:text="@string/go_payment" />
-
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -81,69 +182,80 @@
                         android:background="@color/B1"
                         android:descendantFocusability="blocksDescendants">
 
-                        <com.black.base.view.EmptyRecyclerView
-                            android:id="@+id/recycler_view"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fadingEdge="none"
-                            android:overScrollMode="never"
-                            android:scrollbars="none" />
-                        <LinearLayout
-                            android:id="@+id/id"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="@dimen/text_size_20"
-                            android:layout_marginTop="@dimen/text_size_5"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/add"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_marginLeft="@dimen/text_size_10"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/btn_add_message"/>
-                            <com.black.lib.view.InputLinearLayout
-                                android:layout_width="250dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="@dimen/text_size_10"
-                                android:background="@drawable/bg_edittext_default"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                            android:layout_height="match_parent"
+                            android:background="@color/B2"
+                            android:descendantFocusability="blocksDescendants">
+
+                            <com.black.base.view.EmptyRecyclerView
+                                android:id="@+id/recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fadingEdge="none"
+                                android:overScrollMode="never"
+                                android:scrollbars="none" />
 
 
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/put_message"
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@color/B1"
-                                    android:hint="在此输入你的对话"
-                                    android:inputType="number"
-                                    android:maxLines="1"
-                                    android:padding="0dp" />
+                        </RelativeLayout>
 
-                            </com.black.lib.view.InputLinearLayout>
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/send"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginRight="@dimen/text_size_10"
-                                android:gravity="center"
-                                android:layout_marginLeft="@dimen/text_size_10"
-                                android:text="@string/send"
-                                android:textColor="@color/C1" />
-                            <ImageView
-                                android:id="@+id/phone"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginRight="@dimen/text_size_20"
-                                android:src="@drawable/btn_c2c_phone"/>
-                        </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </com.black.lib.refresh.QRefreshLayout>
-    </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/text_size_5"
+            android:layout_marginTop="@dimen/text_size_5"
+            android:orientation="horizontal">
+            <com.black.lib.view.InputLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:background="@drawable/bg_edittext_default"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/add"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/btn_add_message"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:background="@color/line"/>
+
+                <com.black.base.widget.SpanMaterialEditText
+                    android:id="@+id/put_message"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/put_cv"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="0dp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:text="@string/sendd"
+                    android:textColor="@color/T13" />
+
+            </com.black.lib.view.InputLinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

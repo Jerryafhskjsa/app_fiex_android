@@ -20,6 +20,10 @@ import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import java.math.BigDecimal
 
 object C2CApiServiceHelper {
@@ -672,13 +676,14 @@ object C2CApiServiceHelper {
         advertisingId: String?,
         amount: Double?,
         price: Double?,
+        receiptId: Int?,
         callback: Callback<HttpRequestResultData<String?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CCreateV2(advertisingId, amount, price)
+            ?.getC2CCreateV2(advertisingId, amount, price,receiptId)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -896,13 +901,15 @@ object C2CApiServiceHelper {
     fun getC2CImage(
         context: Context?,
         id: String?,
-        callback: Callback<HttpRequestResultString?>?
+        file: File,
+        callback: Callback<HttpRequestResultData<C2CMessage?>?>?
     ) {
         if (context == null || callback == null) {
             return
         }
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CImage(id)
+            ?.getC2CImage(id,requestFile)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }
@@ -912,7 +919,7 @@ object C2CApiServiceHelper {
         context: Context?,
         id: String?,
         content: String?,
-        callback: Callback<HttpRequestResultString?>?
+        callback: Callback<HttpRequestResultData<C2CMessage?>?>?
     ) {
         if (context == null || callback == null) {
             return
@@ -927,7 +934,7 @@ object C2CApiServiceHelper {
     fun getC2CList(
         context: Context?,
         id: String?,
-        callback: Callback<HttpRequestResultString?>?
+        callback: Callback<HttpRequestResultDataList<C2CMessage?>?>?
     ) {
         if (context == null || callback == null) {
             return

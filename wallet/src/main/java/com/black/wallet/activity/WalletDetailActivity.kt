@@ -54,7 +54,8 @@ import java.util.*
 
 //现货币种详情
 @Route(value = [RouterConstData.WALLET_DETAIL])
-class WalletDetailActivity : BaseActivity(),
+class
+WalletDetailActivity : BaseActivity(),
     View.OnClickListener,
     QRefreshLayout.OnRefreshListener,
     QRefreshLayout.OnLoadListener,
