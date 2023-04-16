@@ -18,5 +18,5 @@ abstract class TickerMessageHandler : OkWebSocketHelper.IMessageHandler{
             consumeMessage(deepBean)
         }
     }
-    abstract fun consumeMessage(deepBean: TickerBean)
+    abstract fun consumeMessage(bean: TickerBean)
 }

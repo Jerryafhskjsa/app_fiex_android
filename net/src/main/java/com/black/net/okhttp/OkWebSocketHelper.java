@@ -81,21 +81,20 @@ public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
         if (mIMessageLifeCycle != null) {
             mIMessageLifeCycle.onMessage(msg);
         }
-        if (mImessageHandler != null) {
-            try {
-                final JSONObject json = new JSONObject(msg);
-                final String channel = json.optString("channel");
-                final Object data = json.opt("data");
+        try {
+            final JSONObject json = new JSONObject(msg);
+            final String channel = json.optString("channel");
+            final Object data = json.opt("data");
+            if (mImessageHandler != null ) {
                 final boolean observer = mImessageHandler.observerMessage(channel, data);
                 if (observer) {
                     mImessageHandler.processingMessage(data);
                 }
-                notifyMessageHandler(channel,data);
-            } catch (JSONException e) {
-                d("onMessage  =====> error message");
-                e.printStackTrace();
             }
-
+            notifyMessageHandler(channel,data);
+        } catch (JSONException e) {
+            d("onMessage  =====> error message");
+            e.printStackTrace();
         }
     }
 

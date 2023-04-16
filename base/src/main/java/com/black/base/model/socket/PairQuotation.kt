@@ -1,5 +1,8 @@
 package com.black.base.model.socket
 
+import com.black.util.NumberUtil
+import java.math.BigDecimal
+
 class PairQuotation {
     var s: String? = null//交易对
     var o: String? = null//open 开盘价
@@ -20,4 +23,7 @@ class PairQuotation {
     }
 
 
+    fun pricePercent(): BigDecimal {
+        return NumberUtil.toBigDecimal(r).multiply(BigDecimal.valueOf(100))
+    }
 }

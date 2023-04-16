@@ -7,7 +7,8 @@ public class OKWebSocketFactory {
     static Map<String, OkWebSocket> _cacheOkWebSocket = new ConcurrentHashMap<>();
 
 
-    public static OkWebSocket getOkWebSocket(String url) {
+    //todo 网络监听重新连接逻辑
+    public static synchronized OkWebSocket getOkWebSocket(String url) {
         OkWebSocket okWebSocket = _cacheOkWebSocket.get(url);
         if (okWebSocket != null) {
             boolean canUse = okWebSocket.canUse();

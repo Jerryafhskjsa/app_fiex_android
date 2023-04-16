@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.black.frying.contract.biz.view.FuturesMultipleSettingDialog
+import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.utils.replaceTransactionFragment
 import com.black.frying.contract.viewmodel.FuturesTransactionInfoViewModel
 import com.black.util.NumberUtil
@@ -31,6 +32,7 @@ class FuturesTransactionInfoFragment : Fragment() {
             FuturesTransactionInfoViewModel::class.java
         )
     }
+    private val globalViewModel: FutureGlobalStateViewModel by lazy { ViewModelProvider(requireActivity())[FutureGlobalStateViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +60,8 @@ class FuturesTransactionInfoFragment : Fragment() {
         binding.futuresAccountAndRate.let {
             it.getAccountTotalProfitTitle().setOnClickListener {
 //                viewModel.testApi()
-                viewModel.testAPiSuspend()
+//                viewModel.testAPiSuspend()
+                globalViewModel.printThis()
 
             }
         }

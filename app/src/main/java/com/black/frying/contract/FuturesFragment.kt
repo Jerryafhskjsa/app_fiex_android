@@ -3,6 +3,7 @@ package com.black.frying.contract
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,12 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.util.ConstData
 import com.black.base.util.StyleChangeUtil
+import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.utils.TransRecordFragmentPagerAdapter
 import com.black.frying.contract.utils.replaceTransactionFragment
 import com.black.frying.contract.viewmodel.FuturesTitleViewModel
 import com.black.frying.contract.viewmodel.FuturesViewModel
+import com.black.frying.contract.viewmodel.model.display
 import com.black.frying.fragment.ContractPlanTabFragment
 import com.black.frying.fragment.ContractPositionTabFragment
 import com.black.frying.fragment.ContractProfitTabFragment
@@ -36,7 +39,16 @@ class FuturesFragment : Fragment() {
     }
 
     private val viewModel: FuturesViewModel by lazy { ViewModelProvider(this)[FuturesViewModel::class.java] }
-    private val futuresTitleViewModel: FuturesTitleViewModel by lazy { ViewModelProvider(this)[FuturesTitleViewModel::class.java] }
+    private val globalViewModel: FutureGlobalStateViewModel by lazy {
+        ViewModelProvider(
+            requireActivity()
+        )[FutureGlobalStateViewModel::class.java]
+    }
+    private val futuresTitleViewModel: FuturesTitleViewModel by lazy {
+        ViewModelProvider(this)[FuturesTitleViewModel::class.java].apply {
+            globalStateViewModel = globalViewModel
+        }
+    }
     private val transactionInfoFragment = FuturesTransactionInfoFragment.newInstance()
 
     private var mTransRecordAdapter: TransRecordFragmentPagerAdapter? = null
@@ -56,7 +68,6 @@ class FuturesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
-        futuresTitleViewModel.lifecycleOwner = viewLifecycleOwner
         futuresTitleViewModel.loadCoinInfo()
 
     }
@@ -64,15 +75,20 @@ class FuturesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         buildFuturesTitleBar()
-        replaceTransactionFragment(R.id.futuresTransactionInfoLayout, transactionInfoFragment,FuturesTransactionInfoFragment.TAG)
+        replaceTransactionFragment(
+            R.id.futuresTransactionInfoLayout,
+            transactionInfoFragment,
+            FuturesTransactionInfoFragment.TAG
+        )
         buildTransRecordView()
         buildRefreshAction()
+        globalViewModel.printThis()
     }
 
     private fun buildRefreshAction() {
         _binding.refreshLayout.apply {
             setRefreshHolder(RefreshHolderFrying(requireActivity()))
-            setOnRefreshListener(object :QRefreshLayout.OnRefreshListener{
+            setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
                 override fun onRefresh() {
                     postDelayed(
                         { setRefreshing(false) },
@@ -89,8 +105,6 @@ class FuturesFragment : Fragment() {
         val positionsTab = futuresTabLayout.newTab().apply { text = "tab1" }
         val profitLossTab = futuresTabLayout.newTab().apply { text = "tab2" }
         val openOrderTab = futuresTabLayout.newTab().apply { text = "tab3" }
-
-
 
 
         val listOfFragment = mutableListOf<Fragment>()
@@ -129,9 +143,10 @@ class FuturesFragment : Fragment() {
         futuresTabLayout.addTab(profitLossTab)
         futuresTabLayout.addTab(openOrderTab)
 
-        _binding.futuresAppbarView.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+        _binding.futuresAppbarView.addOnOffsetChangedListener(object :
+            AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appbar: AppBarLayout?, verticalOffset: Int) {
-                _binding.refreshLayout.isEnabled = verticalOffset>=0
+                _binding.refreshLayout.isEnabled = verticalOffset >= 0
             }
 
         })
@@ -167,18 +182,18 @@ class FuturesFragment : Fragment() {
 //                viewModel.startConnect()
             }
         }
-        futuresTitleViewModel.coinInfo.observe(
-            viewLifecycleOwner
-        ) { coinInfo ->
-            coinInfo?.apply {
-                futureTitleBar.let { root ->
-                    run {
-                        root.futuresTitleBarTitle.text = coinName
-                        updatePriceSince(priceSincePercent, root.futuresTitleBarPriceSince)
-                        root.futuresCollectCoin.setImageResource(if (isCollect) R.drawable.btn_collect_dis else R.drawable.btn_collect_default)
-                    }
-                }
+        globalViewModel.pairQuotationLiveData.observe(viewLifecycleOwner) { pairQuotation ->
+            pairQuotation?.let { info ->
+                updatePriceSince(info.pricePercent(), futureTitleBar.futuresTitleBarPriceSince)
             }
+        }
+        globalViewModel.symbolBeanLiveData.observe(viewLifecycleOwner) { bean ->
+            futureTitleBar.let { root ->
+                root.futuresTitleBarTitle.text = bean?.display() ?: "--"
+            }
+        }
+        futuresTitleViewModel.isCollectLiveData.observe(viewLifecycleOwner){isCollect ->
+            futureTitleBar.futuresCollectCoin.setImageResource(if (isCollect) R.drawable.btn_collect_dis else R.drawable.btn_collect_default)
         }
     }
 

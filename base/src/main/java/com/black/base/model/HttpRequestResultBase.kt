@@ -14,4 +14,7 @@ open class HttpRequestResultBase : HttpRequestResult() {
     fun is403Error(): Boolean {
         return code == null && status == 403L
     }
+    fun isCodeOk(): Boolean {
+       return code == 0
+    }
 }
