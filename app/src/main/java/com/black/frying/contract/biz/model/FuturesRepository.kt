@@ -8,6 +8,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.future.PositionBean
 import com.black.base.model.future.SymbolBean
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
@@ -47,10 +48,46 @@ object FuturesRepository {
 
     suspend fun getSymbolList(): HttpRequestResultBean<ArrayList<SymbolBean>?>? {
         val context = FryingApplication.instance()
-        // TODO: 币本位修改  host method
-        return ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
-            .getService(FutureSuspendApiService::class.java)
-            ?.getSymbolList()
+        try {
+            // TODO: 币本位修改  host method
+            return ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.getSymbolList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+
+    }
+
+    suspend fun getPositionList(coinPair: String): ArrayList<PositionBean?>? {
+        val context = FryingApplication.instance()
+        try {
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.getPositionList(symbol = coinPair)
+            return if (response?.isOk() == true) {
+                response.result
+            } else {
+                null
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    suspend fun adjustLeverage(symbol:String,positionSide:String,leverage :Int):Boolean {
+       try {
+           val context = FryingApplication.instance()
+           val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+               .getService(FutureSuspendApiService::class.java)
+               ?.adjustLeverage(symbol, positionSide, leverage)
+           return response?.isOk() == true
+       }catch (e:Exception){
+           e.printStackTrace()
+           return false
+       }
     }
 
 }

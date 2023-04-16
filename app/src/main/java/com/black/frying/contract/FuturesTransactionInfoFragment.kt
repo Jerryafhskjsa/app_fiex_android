@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.black.base.model.future.Constants
 import com.black.frying.contract.biz.view.FuturesMultipleSettingDialog
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.utils.replaceTransactionFragment
@@ -65,11 +66,31 @@ class FuturesTransactionInfoFragment : Fragment() {
 
             }
         }
+        globalViewModel.isolatedPositionBeanLiveData.observe(viewLifecycleOwner){ bean ->
+            val positionSide = bean.positionSide?:Constants.ISOLATED
+            val leverage = bean.leverage?:10
+            binding.futuresMultipleSettingView.setMuchText( formatLeverage(positionSide,leverage))
+        }
+        globalViewModel.crossedPositionBeanLiveData.observe(viewLifecycleOwner){ bean ->
+            val positionSide = bean.positionSide?:Constants.ISOLATED
+            val leverage = bean.leverage?:10
+            binding.futuresMultipleSettingView.setLessText( formatLeverage(positionSide,leverage))
+
+        }
         binding.futuresMultipleSettingView.apply {
+            //开仓
             getMuchBtn().setOnClickListener {
-                val settingDialog = FuturesMultipleSettingDialog(context)
-                settingDialog.setCancelable(true)
-                settingDialog.show()
+                // TODO:  设置倍数
+//                val settingDialog = FuturesMultipleSettingDialog(context)
+//                settingDialog.setCancelable(true)
+//                settingDialog.show()
+            }
+            //平仓
+            getLessBtn().setOnClickListener {
+                // TODO:  设置倍数
+//                val settingDialog = FuturesMultipleSettingDialog(context)
+//                settingDialog.setCancelable(true)
+//                settingDialog.show()
             }
         }
 
@@ -81,6 +102,18 @@ class FuturesTransactionInfoFragment : Fragment() {
             binding.futuresAccountAndRate.getCoinRateTv().text = userBalanceDto.r
         }
 
+    }
+    private fun formatLeverage(positionSide :String,leverage :Int): String {
+        val des: String
+        val typeDes: String = if (positionSide == Constants.ISOLATED) {
+            getString(R.string.contract_fiexble_position)
+        } else {
+            getString(R.string.contract_all_position)
+        }
+        val multiDes: String = ""+leverage + "X"
+
+        des = "$typeDes $multiDes"
+        return des
     }
 
 }

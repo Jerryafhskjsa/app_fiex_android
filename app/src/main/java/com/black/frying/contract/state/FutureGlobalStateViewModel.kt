@@ -20,12 +20,21 @@ class FutureGlobalStateViewModel : ViewModel() {
 
     private val okWebSocketHelper: OkWebSocketHelper by lazy(mode = LazyThreadSafetyMode.PUBLICATION) {
         val okWebSocket = getMarketOkWebSocket()
-        return@lazy  OkWebSocketHelper(okWebSocket).apply {
+        return@lazy OkWebSocketHelper(okWebSocket).apply {
             start()
             addAllMessageHandlers(this)
         }
     }
     private val futuresCoinPair: FuturesCoinPair? by lazy { FuturesCoinPair.load() }
+
+    //杠杆倍数  逐仓
+    var isolatedPositionBean: PositionBean? = null
+    val isolatedPositionBeanLiveData = MutableLiveData<PositionBean>()
+
+    //全仓
+    var crossedPositionBean: PositionBean? = null
+    val crossedPositionBeanLiveData = MutableLiveData<PositionBean>()
+
 
     var symbolList: List<SymbolBean>? = null
     var symbolBean: SymbolBean? = null
@@ -80,14 +89,49 @@ class FutureGlobalStateViewModel : ViewModel() {
                     }
                     symbolBeanLiveData.postValue(symbolBean)
                     sendSymbolCommand()
+                    getCoinPositionList()
                 }
             }
         }
     }
 
-    fun refreshCoinPair(){
+    private fun getCoinPositionList() {
+        symbolBean?.let { symbol ->
+            viewModelScope.launch {
+                val positionList = FuturesRepository.getPositionList(symbol.symbol)
+                positionList?.let { list ->
+                    if (list.size != 2) {
+                        return@launch
+                    }
+                    val first = list.first()
+                    isolatedPositionBean = first
+                    isolatedPositionBeanLiveData.postValue(first)
+                    val last = list.last()
+                    crossedPositionBean = last
+                    crossedPositionBeanLiveData.postValue(last)
+                }
+            }
+        }
+    }
+
+    fun adjustLeverage(positionSide: String, leverage: Int) {
+        viewModelScope.launch {
+            isolatedPositionBean?.let {
+                it.leverage = leverage
+                it.positionSide = positionSide
+//                it.symbol = symbol
+                val isOk = FuturesRepository.adjustLeverage(
+                    it.symbol?:"", it.positionSide?:"", it.leverage?:0
+                )
+                isolatedPositionBeanLiveData.postValue(it)
+            } ?: return@launch
+        }
+    }
+
+    fun refreshCoinPair() {
 
     }
+
     private fun sendSymbolCommand() {
         symbolBean?.let {
 //            if (okWebSocketHelper == null){
@@ -102,7 +146,7 @@ class FutureGlobalStateViewModel : ViewModel() {
         }
     }
 
-    private fun addAllMessageHandlers(okWebSocketHelper:OkWebSocketHelper) {
+    private fun addAllMessageHandlers(okWebSocketHelper: OkWebSocketHelper) {
         okWebSocketHelper.addMessageHandler(object : SincePriceMessageHandler() {
             override fun consumeMessage(pairQuotation: PairQuotation) {
                 pairQuotationLiveData.postValue(pairQuotation)
