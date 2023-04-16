@@ -7,11 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairQuotation
 import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.util.TimeUtil
 import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.biz.okwebsocket.market.*
 import com.black.frying.contract.viewmodel.model.FuturesCoinPair
+import com.black.im.util.DateTimeUtil
 import com.black.net.okhttp.OkWebSocketHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 const val TAG = "FutureGlobalStateViewModel"
@@ -36,6 +39,9 @@ class FutureGlobalStateViewModel : ViewModel() {
     val crossedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
 
+    var balanceBean :BalanceDetailBean?=null
+    val balanceBeanLiveData = MutableLiveData<BalanceDetailBean>()
+
     var symbolList: List<SymbolBean>? = null
     var symbolBean: SymbolBean? = null
 
@@ -54,8 +60,10 @@ class FutureGlobalStateViewModel : ViewModel() {
     //深度
     val deepBeanLiveData = MutableLiveData<DeepBean>()
 
+
     //费率
-    val fundRateBeanLiveData = MutableLiveData<FundRateBean>()
+    var fundRateBean: FundingRateBean? = null
+    val fundRateBeanLiveData = MutableLiveData<FundRateBean?>()
 
     //价格百分比
     val indexPriceBeanLiveData = MutableLiveData<IndexPriceBean>()
@@ -90,6 +98,71 @@ class FutureGlobalStateViewModel : ViewModel() {
                     symbolBeanLiveData.postValue(symbolBean)
                     sendSymbolCommand()
                     getCoinPositionList()
+                    getCoinFundingRate()
+                    getAccountDetail()
+                }
+            }
+        }
+    }
+
+     fun getAccountDetail(){
+        viewModelScope.launch {
+            symbolBean?.let {bean ->
+                balanceBean = FuturesRepository.getBalanceDetailSuspend(bean.quoteCoin)
+                // TODO: 计算盈亏 根据持仓列表算
+                balanceBeanLiveData.postValue(balanceBean)
+            }
+
+        }
+    }
+    private fun getCoinFundingRate() {
+        viewModelScope.launch {
+            symbolBean?.let { symbolBean ->
+                viewModelScope.launch {
+                    fundRateBean = FuturesRepository.getFundingRate(symbolBean.symbol)
+                    fundRateBean?.apply {
+                        val time = nextCollectionTime
+                        if (time <= 0) {
+                            return@launch
+                        }
+                        val seconds = (time.minus(System.currentTimeMillis())).div(1000)
+                        nextCollectionTime = seconds
+                        fundRateBeanLiveData.postValue(
+                            FundRateBean(
+                                symbol,
+                                fundingRate,
+                                TimeUtil.formatSeconds(
+                                    seconds
+                                )
+                            )
+                        )
+                        timerTask()
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    private suspend fun timerTask() {
+        viewModelScope.launch {
+            fundRateBean?.let { bean ->
+                if (bean.nextCollectionTime <= 0) {
+                    return@launch
+                } else {
+                    delay(1000)
+                    val time = bean.nextCollectionTime - 1
+                    bean.nextCollectionTime = time
+                    fundRateBeanLiveData.postValue(
+                        FundRateBean(
+                            bean.symbol,
+                            bean.fundingRate,
+                            TimeUtil.formatSeconds(time)
+                        )
+                    )
+
+                    timerTask()
                 }
             }
         }
@@ -121,7 +194,7 @@ class FutureGlobalStateViewModel : ViewModel() {
                 it.positionSide = positionSide
 //                it.symbol = symbol
                 val isOk = FuturesRepository.adjustLeverage(
-                    it.symbol?:"", it.positionSide?:"", it.leverage?:0
+                    it.symbol ?: "", it.positionSide ?: "", it.leverage ?: 0
                 )
                 isolatedPositionBeanLiveData.postValue(it)
             } ?: return@launch

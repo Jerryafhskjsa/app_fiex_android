@@ -14,6 +14,7 @@ import com.black.frying.contract.viewmodel.FuturesTransactionInfoViewModel
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesTransactionInfoBinding
+import java.math.RoundingMode
 
 class FuturesTransactionInfoFragment : Fragment() {
     val binding: FragmentLayoutFuturesTransactionInfoBinding by lazy {
@@ -33,7 +34,11 @@ class FuturesTransactionInfoFragment : Fragment() {
             FuturesTransactionInfoViewModel::class.java
         )
     }
-    private val globalViewModel: FutureGlobalStateViewModel by lazy { ViewModelProvider(requireActivity())[FutureGlobalStateViewModel::class.java] }
+    private val globalViewModel: FutureGlobalStateViewModel by lazy {
+        ViewModelProvider(
+            requireActivity()
+        )[FutureGlobalStateViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,16 +71,32 @@ class FuturesTransactionInfoFragment : Fragment() {
 
             }
         }
-        globalViewModel.isolatedPositionBeanLiveData.observe(viewLifecycleOwner){ bean ->
-            val positionSide = bean.positionSide?:Constants.ISOLATED
-            val leverage = bean.leverage?:10
-            binding.futuresMultipleSettingView.setMuchText( formatLeverage(positionSide,leverage))
+        globalViewModel.isolatedPositionBeanLiveData.observe(viewLifecycleOwner) { bean ->
+            val positionSide = bean.positionSide ?: Constants.ISOLATED
+            val leverage = bean.leverage ?: 10
+            binding.futuresMultipleSettingView.setMuchText(formatLeverage(positionSide, leverage))
         }
-        globalViewModel.crossedPositionBeanLiveData.observe(viewLifecycleOwner){ bean ->
-            val positionSide = bean.positionSide?:Constants.ISOLATED
-            val leverage = bean.leverage?:10
-            binding.futuresMultipleSettingView.setLessText( formatLeverage(positionSide,leverage))
+        globalViewModel.crossedPositionBeanLiveData.observe(viewLifecycleOwner) { bean ->
+            val positionSide = bean.positionSide ?: Constants.ISOLATED
+            val leverage = bean.leverage ?: 10
+            binding.futuresMultipleSettingView.setLessText(formatLeverage(positionSide, leverage))
 
+        }
+        globalViewModel.balanceBeanLiveData.observe(viewLifecycleOwner){bean ->
+            binding.futuresAccountAndRate.getAccountTotalTv().text = bean.walletBalance
+        }
+        globalViewModel.fundRateBeanLiveData.observe(viewLifecycleOwner) { bean ->
+            if (bean == null) {
+                binding.futuresAccountAndRate.getCoinRateTv().text = "--/--"
+            } else {
+                val rate = NumberUtil.formatNumberNoGroup(
+                    bean.r.toFloat().times(100),
+                    RoundingMode.FLOOR,
+                    4,
+                    4
+                ) + "%"
+                binding.futuresAccountAndRate.getCoinRateTv().text = "$rate/${bean.t}"
+            }
         }
         binding.futuresMultipleSettingView.apply {
             //开仓
@@ -103,14 +124,15 @@ class FuturesTransactionInfoFragment : Fragment() {
         }
 
     }
-    private fun formatLeverage(positionSide :String,leverage :Int): String {
+
+    private fun formatLeverage(positionSide: String, leverage: Int): String {
         val des: String
         val typeDes: String = if (positionSide == Constants.ISOLATED) {
             getString(R.string.contract_fiexble_position)
         } else {
             getString(R.string.contract_all_position)
         }
-        val multiDes: String = ""+leverage + "X"
+        val multiDes: String = "" + leverage + "X"
 
         des = "$typeDes $multiDes"
         return des

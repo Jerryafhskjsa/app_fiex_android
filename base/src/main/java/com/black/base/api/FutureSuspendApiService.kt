@@ -155,15 +155,6 @@ interface FutureSuspendApiService {
     @GET(UrlConfig.Future.URL_LEVERAGE_BRACKET_DETAIL)
     suspend fun getLeverageBracketDetail(@Query("symbol") symbol: String?): HttpRequestResultBean<LeverageBracketBean?>?
 
-    /**
-     * 获取用户单币种资金
-     */
-    @GET(UrlConfig.Future.ULR_BALANCE_DETAIL)
-    suspend fun getBalanceDetail(
-        @Query("coin") coin: String?,
-        @Query("underlyingType") underlyingType: String?
-    )
-            : HttpRequestResultBean<BalanceDetailBean?>?
 
     @GET(UrlConfig.Future.ULR_BALANCE_DETAIL)
     suspend fun getBalanceDetailSuspend(

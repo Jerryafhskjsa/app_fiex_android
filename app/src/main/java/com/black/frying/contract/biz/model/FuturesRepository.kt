@@ -8,8 +8,7 @@ import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
-import com.black.base.model.future.PositionBean
-import com.black.base.model.future.SymbolBean
+import com.black.base.model.future.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.SharedPreferenceUtils
@@ -88,6 +87,41 @@ object FuturesRepository {
            e.printStackTrace()
            return false
        }
+    }
+
+    suspend fun getFundingRate(coinPair:String): FundingRateBean? {
+
+        val context = FryingApplication.instance()
+        return try {
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.getFundingRate(symbol = coinPair)
+            if (response?.isOk() == true) {
+                response.result
+            } else {
+                null
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun getBalanceDetailSuspend(coin:String, underlyingType: String = Constants.U_BASED): BalanceDetailBean? {
+        val context = FryingApplication.instance()
+        return try {
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.getBalanceDetailSuspend(coin = null,underlyingType = underlyingType)
+            if (response?.isOk() == true) {
+                response.result
+            } else {
+                null
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
     }
 
 }

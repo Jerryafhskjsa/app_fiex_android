@@ -1,5 +1,6 @@
 package com.black.frying.contract.viewmodel.model
 
+import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.SymbolBean
 import com.black.base.util.CookieUtil
 import com.black.base.util.LanguageUtil
