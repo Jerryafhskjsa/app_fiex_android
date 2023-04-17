@@ -162,7 +162,8 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                 ConstData.CROP_PICTURE -> {
                 }
             }
-            path?.let { getImage(it) }
+            path?.let { getImage(it)
+            getC2cImage(it)}
         }
     }
     private val currentImageFileName: String?
@@ -209,7 +210,6 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                 thisItem?.show(thisItem?.parent)
 
             }
-            submitRealNameAuthenticate()
 
         } catch (e: IOException) {
             CommonUtil.printError(applicationContext, e)
@@ -300,7 +300,6 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
             for (path in pathList) { //先上传图片，根据返回的路径，进行验证
                 val fileParams: MutableMap<String, File> = HashMap()
                 fileParams["file"] = File(path)
-                getC2cImage(File(path))
                 UserApiServiceHelper.upload(mContext, "file", File(path), object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                     override fun callback(returnData: HttpRequestResultString?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) { //上传成功
@@ -337,8 +336,10 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
 
     }
     //回复图片
-    private fun getC2cImage(file: File){
-        C2CApiServiceHelper.getC2CImage(mContext, id2 ,file, object : NormalCallback<HttpRequestResultData<C2CMessage?>?>(mContext) {
+    private fun getC2cImage(path: String){
+            val fileParams: MutableMap<String, File> = HashMap()
+            fileParams["file"] = File(path)
+        C2CApiServiceHelper.getC2CImage(mContext, id2 ,"file", File(path), object : NormalCallback<HttpRequestResultData<C2CMessage?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
@@ -351,6 +352,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                 }
             }
         })
+
     }
 
     //回复文本

@@ -901,6 +901,7 @@ object C2CApiServiceHelper {
     fun getC2CImage(
         context: Context?,
         id: String?,
+        key: String,
         file: File,
         callback: Callback<HttpRequestResultData<C2CMessage?>?>?
     ) {
@@ -908,8 +909,10 @@ object C2CApiServiceHelper {
             return
         }
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val body = MultipartBody.Part.createFormData(key, file.name, requestFile)
+        val description = RequestBody.create(MediaType.parse("multipart/form-data"), key)
         ApiManager.build(context,false,UrlConfig.ApiType.URL_API).getService(C2CApiService::class.java)
-            ?.getC2CImage(id,requestFile)
+            ?.getC2CImage(id,description,body)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

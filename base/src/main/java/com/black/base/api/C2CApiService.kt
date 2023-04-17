@@ -162,7 +162,7 @@ interface C2CApiService {
     fun getC2CUpdate(): Observable<HttpRequestResultString?>?
     //OTC聊天
     @POST(UrlConfig.C2C.URL_C2C_CREATE_IMG)
-    fun getC2CImage(@Query("id") id: String?, @Part file: RequestBody?): Observable<HttpRequestResultData<C2CMessage?>?>?
+    fun getC2CImage(@Query("id") id: String?, @Part("description") description: RequestBody?, @Part file: MultipartBody.Part?): Observable<HttpRequestResultData<C2CMessage?>?>?
 
     @POST(UrlConfig.C2C.URL_C2C_CRATE_TXT)
     fun getC2CText(@Query("id") id: String?,@Query("content") content: String?): Observable<HttpRequestResultData<C2CMessage?>?>?

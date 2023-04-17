@@ -27,9 +27,9 @@ class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder
         super.onBindViewHolder(holder, position)
         val walletBill = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(if (walletBill?.orderType == "B") "Buy" else "Sell")
+        viewHolder?.action?.setText(if (walletBill?.orderType == "B") getString(R.string.buy_02) else getString(R.string.sell))
         viewHolder?.action?.setTextColor(if (walletBill?.orderType == "B") c1 else t5)
-        viewHolder?.direction?.setText(if (walletBill?.payStatus == -1) "Fail" else if (walletBill?.payStatus == 0) "Success" else if (walletBill?.payStatus == 2) "Confirming" else "Submit")
+        viewHolder?.direction?.setText(if (walletBill?.payStatus == -1) "Failed" else if (walletBill?.payStatus == -2) "Audit failed" else if (walletBill?.payStatus == 0) "Success" else if (walletBill?.payStatus == 2) "Confirming" else if (walletBill?.payStatus == 3) "Status wait pass" else if (walletBill?.payStatus == 4) "Status Pass"  else "Submit")
         viewHolder?.amount?.setText(walletBill?.amount.toString() + walletBill?.coin)
         viewHolder?.accountType?.setText(walletBill?.orderAmount.toString() + walletBill?.ccyNo)
         viewHolder?.id?.setText(walletBill?.id)

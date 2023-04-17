@@ -542,6 +542,7 @@ class C2CQiulkActivity: BaseActionBarActivity(), View.OnClickListener {
                 binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     c2cList = returnData.data
+                    val id = c2cList?.payMethods
                     getOrder(c2cList?.id , gteAmount , c2cList?.currentPrice)
 
                 } else {
