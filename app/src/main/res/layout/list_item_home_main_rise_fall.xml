@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/bg_tab_corner">
+        >
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -24,42 +24,61 @@
                     android:id="@+id/pair_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="USDT_BTC"
+                    android:text="USDT"
                     android:textColor="@color/T1"
                     android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/set_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_2"
+                    android:layout_toRightOf="@+id/pair_name"
+                    android:text="/BTC"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/text_size_12"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/icon_hot"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:visibility="gone"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/pair_name"
                     android:src="@drawable/icon_hot" />
+          <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/pair_name"
+             android:orientation="horizontal">
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/pair_name"
                     android:layout_marginTop="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="1dp"
+                    android:paddingRight="10dp"
                     android:paddingBottom="1dp"
-                    android:background="@drawable/bg_red_corner"
-                    android:text="3L"/>
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="#9B9DA1"
+                    android:text="24H 成交量" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/volume_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/pair_name"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="1dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="1dp"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="#9B9DA1"
+                    android:text="3L" />
+</LinearLayout>
             </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-            <com.black.base.view.LineChartView
-                android:id="@+id/line_cart_tab"
-                android:layout_width="140dp"
-                android:layout_height="80dp">
-            </com.black.base.view.LineChartView>
-        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -78,16 +97,31 @@
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
                 <com.black.base.widget.SpanTextView
-                    android:id="@+id/since"
+                    android:id="@+id/cny"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:textColor="@color/T10"
-                    android:paddingTop="3dp"
-                    android:textSize="@dimen/text_size_14"
-                    android:text="-55.55%"
+                    android:textColor="@color/zhiti"
+                    android:text="500000"
+                    android:textSize="@dimen/text_size_10"
                     android:textStyle="bold" />
             </LinearLayout>
+        <LinearLayout
+            android:id="@+id/since_color"
+            android:layout_width="78dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/since"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:paddingTop="3dp"
+                android:textSize="@dimen/text_size_14"
+                android:text="-55.55%"
+                android:textStyle="bold" />
+        </LinearLayout>
         </LinearLayout>
 </layout>

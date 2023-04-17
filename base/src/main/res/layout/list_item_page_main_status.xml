@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_home_hot_corner"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="5dp"
@@ -24,20 +23,21 @@
                 android:id="@+id/pair_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="3dp"
                 android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="BTC/USDT"
                 android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_14"
+                android:textSize="@dimen/text_size_12"
                 android:textStyle="bold" />
                 <RelativeLayout
                     android:id="@+id/raise_down_bg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/pair_name"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/hot_item_bg_corner_default">
+                   >
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/pair_since"
@@ -59,14 +59,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp">
-            <View
-                android:id="@+id/grid_indicator"
-                android:layout_width="4dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:background="@color/T9"/>
+            android:layout_marginTop="5dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -82,8 +75,8 @@
                     android:includeFontPadding="true"
                     android:maxLines="1"
                     android:text="444555"
-                    android:textSize="@dimen/text_size_14"
                     android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
 
                 <com.black.base.widget.SpanTextView
@@ -94,12 +87,13 @@
                     android:includeFontPadding="true"
                     android:text="≈ 500000"
                     android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12" />
+                    android:textSize="@dimen/text_size_10" />
             </RelativeLayout>
         </LinearLayout>
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/line_cart"
             android:paddingLeft="5dp"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             />

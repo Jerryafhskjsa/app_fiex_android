@@ -38,15 +38,19 @@ class HomeMainRiseFallAdapter(context: Context,type:Int?, data: ArrayList<PairSt
         var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
         if (styleChange == 1){
         val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) bgWin!! else bgLose!!
-            viewHolder?.since?.setTextColor(color)
+            viewHolder?.sinceColor?.setBackgroundColor(color)
+            viewHolder?.price?.setTextColor(color)
         }
         if (styleChange == 0){
             val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) bgWin!! else bgLose!!
-            viewHolder?.since?.setTextColor(color)
+            viewHolder?.sinceColor?.setBackgroundColor(color)
+            viewHolder?.price?.setTextColor(color)
         }
         val bg = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0) bgWin!! else bgLose!!
-        viewHolder?.pairName?.setText(pairStatus?.pair)
-        if(type == ConstData.HOME_TAB_HOT){
+        viewHolder?.pairName?.setText(pairStatus?.name)
+        viewHolder?.setName?.setText("/" + pairStatus?.setName)
+        viewHolder?.volume24?.setText(pairStatus?.tradeAmountFormat?: "0.00")
+       /* if(type == ConstData.HOME_TAB_HOT){
             var hotIconShow: Int? = if(pairStatus?.isHot == true){
                 View.VISIBLE
             }else{
@@ -57,10 +61,10 @@ class HomeMainRiseFallAdapter(context: Context,type:Int?, data: ArrayList<PairSt
             }
         }else{
             viewHolder?.iconHot?.visibility = View.GONE
-        }
+        }*/
 //        viewHolder?.setName?.setText(pairStatus?.setName)
         viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
-//        viewHolder?.priceCny?.setText("¥ " + pairStatus?.currentPriceCNYFormat)
+       viewHolder?.cny?.setText("¥ " + pairStatus?.currentPriceCNYFormat)
         viewHolder?.since?.setText(pairStatus?.priceChangeSinceTodayFormat)
 //        viewHolder?.since?.background = bg
         //折线图假数据

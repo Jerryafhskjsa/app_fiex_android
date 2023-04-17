@@ -161,12 +161,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         }
 
         binding!!.btnNoticeMore.setOnClickListener(this)
-        binding!!.c2c.setOnClickListener(this)
+       // binding!!.c2c.setOnClickListener(this)
         binding!!.btnUserinfo.setOnClickListener(this)
-        binding!!.cvStaking.setOnClickListener(this)
+        //binding!!.cvStaking.setOnClickListener(this)
         binding!!.btnSearchMenu.setOnClickListener(this)
-        binding!!.btnScanMenu.setOnClickListener(this)
-        binding!!.btnMoreMenu.setOnClickListener(this)
+      //  binding!!.btnScanMenu.setOnClickListener(this)
+       // binding!!.btnMoreMenu.setOnClickListener(this)
         binding!!.relDeposit.setOnClickListener(this)
         binding!!.relFutures.setOnClickListener(this)
         binding!!.relSupport.setOnClickListener(this)
@@ -254,43 +254,46 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
-            R.id.c2c ->
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+           /* R.id.c2c ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))*/
             R.id.rel_deposit -> {
                 BlackRouter.getInstance().build(RouterConstData.HOME_ASSET)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
         }
             R.id.rel_support -> {
-                getSupportUrl()
-            }
-            R.id.rel_futures ->
                 BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
+               // getSupportUrl()
+            }
+            R.id.rel_futures ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
             R.id.rel_more ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-            R.id.rel_referral ->
-                BlackRouter.getInstance().build(RouterConstData.RECOMMEND).go(mContext)
+            R.id.rel_referral ->{
+                BlackRouter.getInstance().build(RouterConstData.HOME_ASSET)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)}
                /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
             }*/
-            R.id.cv_staking -> {
+            /*R.id.cv_staking -> {
                 val bundle = Bundle()
                 bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
                 bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
                 BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
-            }
+            }*/
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
-            R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)
+         /*  R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)
                 .withRequestCode(ConstData.SCANNIN_GREQUEST_CODE)
                 .go(mContext)
             R.id.btn_more_menu -> mContext?.let {
                 MainMorePopup(it).setOnMainMoreClickListener(this).show(v)
-            }
+            }*/
         }
     }
 
@@ -492,7 +495,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
-        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" }
+        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT"}
         val viewList: MutableList<View> = ArrayList()
         if (ticketData != null) {
             val pairCount = ticketData.size
@@ -736,8 +739,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                         R.drawable.hot_item_bg_corner_down
                     )
                 pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                binding?.gridIndicator?.setBackgroundColor(color)
-                binding?.raiseDownBg?.background = bgWinLose
+                //binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.pairSince?.setTextColor(color)
                 binding?.pairName?.text =
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
@@ -747,11 +750,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                        String.format("≈ ￥%s", pairStatus.currentPriceCNYFormat)
                 } else {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s USD", pairStatus.currentPriceFormat)
+                        String.format("≈ $%s", pairStatus.currentPriceFormat)
                 }
                 val kLineData = pairStatus.kLineData
                 if (kLineData != null) {
@@ -770,8 +773,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                         R.drawable.hot_item_bg_corner_down
                     )
                 pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                binding?.gridIndicator?.setBackgroundColor(color)
-                binding?.raiseDownBg?.background = bgWinLose
+                //binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.pairSince?.setTextColor(color)
                 binding?.pairName?.text =
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
@@ -782,11 +785,11 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                        String.format("≈ ￥%s", pairStatus.currentPriceCNYFormat)
                 } else {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s USD", pairStatus.currentPriceFormat)
+                        String.format("≈ $%s", pairStatus.currentPriceFormat)
                 }
                 val kLineData = pairStatus.kLineData
                 if (kLineData != null) {

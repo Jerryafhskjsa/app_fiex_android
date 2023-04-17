@@ -488,13 +488,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in walletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 0) {
                             showData?.add(wallet)
                         }
                     }
                 } else {
                     for (wallet in walletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 0 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                             showData?.add(wallet)
                         }
                     }
@@ -519,13 +519,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in tigerWalletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10){
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 0){
                             showData?.add(wallet)
                         }
                     }
                 } else {
                     for (wallet in tigerWalletList!!) {
-                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                        if (wallet?.estimatedAvailableAmountCny != null && wallet.estimatedAvailableAmountCny!! >= 0 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                             showData?.add(wallet)
                         }
                     }
@@ -551,13 +551,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if (walletCoinFilter!!) {
                 if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                     for (wallet in walletLeverList!!) {
-                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10) {
+                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 0) {
                             showData?.add(wallet)
                         }
                     }
                 } else {
                     for (wallet in walletLeverList!!) {
-                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                        if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 0 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                             showData?.add(wallet)
                         }
                     }
@@ -585,13 +585,13 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 if (walletCoinFilter!!) {
                     if (searchKey == null || searchKey!!.trim { it <= ' ' }.isEmpty()) {
                         for (wallet in walletList) {
-                            if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10) {
+                            if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 0) {
                                 showData.add(wallet)
                             }
                         }
                     } else {
                         for (wallet in walletList) {
-                            if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 10 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
+                            if (wallet?.totalAmountCny != null && wallet.totalAmountCny!! >= 0 && wallet.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault()))) {
                                 showData.add(wallet)
                             }
                         }

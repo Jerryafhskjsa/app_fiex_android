@@ -287,7 +287,7 @@
         <item name="android:textColor">@color/tab_contranct_text</item>
     </style>
     <style name="MainTabStyle">
-        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textStyle">bold</item>
     </style>
     <style name="SettingIconStyle">
@@ -300,7 +300,7 @@
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">#F3F4F6</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
     <style name="HomeFeturesItem">
@@ -467,6 +467,18 @@
         <item name="android:adjustViewBounds">true</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:src">@drawable/icon_selector_down</item>
+    </style>
+
+    <style name="Sousuo">
+        <item name="android:layout_width">268dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:src">@drawable/suo_suo</item>
+    </style>
+
+    <style name="wangluo">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:src">@drawable/xianlu</item>
     </style>
 
 </resources>

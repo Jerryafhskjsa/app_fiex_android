@@ -366,7 +366,7 @@
     <string name="purchase_by_amount">按金额</string>
     <string name="purchase_by_account">按数量</string>
     <string name="rechange">充值</string>
-    <string name="extract">提现</string>
+    <string name="extract">提现/转账</string>
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
     <string name="current_delegation">当前委托</string>
@@ -832,7 +832,7 @@
     <string name="flash_exchange">闪兑</string>
     <string name="information">资讯</string>
 
-    <string name="deposit">充值</string>
+    <string name="deposit">充值/收款</string>
     <string name="referral">邀请返佣</string>
     <string name="support">客服</string>
     <string name="futures">合约</string>
@@ -842,7 +842,7 @@
     <string name="losers">跌幅榜</string>
     <string name="etf">持仓</string>
     <string name="index">指数</string>
-    <string name="vol">24h 变化</string>
+    <string name="vol">24h变化</string>
     <string name="spot">现货</string>
     <string name="zone">范围</string>
     <string name="coin_volume">交易量</string>
@@ -1059,6 +1059,7 @@
     <string name="hold_amount">持仓</string>
     <string name="limit_price_entrust">限价委托</string>
     <string name="plan_entrust">计划委托</string>
+    <string name="buy_coin">买币</string>
 
 
 </resources>
