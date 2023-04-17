@@ -124,4 +124,21 @@ object FuturesRepository {
         }
     }
 
+    suspend fun getDeepGraph(coinPair: String,level:Int = 30): DepthBean? {
+        val context = FryingApplication.instance()
+        return try {
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.getDepth(symbol = coinPair,level = level)
+            if (response?.isOk() == true) {
+                response.result
+            } else {
+                null
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+    }
+
 }

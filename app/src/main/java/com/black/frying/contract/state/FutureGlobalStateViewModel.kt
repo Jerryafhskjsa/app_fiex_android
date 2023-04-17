@@ -100,12 +100,24 @@ class FutureGlobalStateViewModel : ViewModel() {
                     getCoinPositionList()
                     getCoinFundingRate()
                     getAccountDetail()
+                    getDeepBeanInfo()
                 }
             }
         }
     }
 
-     fun getAccountDetail(){
+    private fun getDeepBeanInfo() {
+        viewModelScope.launch {
+            symbolBean?.let {
+                val deepGraph = FuturesRepository.getDeepGraph(it.symbol)
+
+
+//                deepBeanLiveData.postValue()
+            }
+        }
+    }
+
+    fun getAccountDetail(){
         viewModelScope.launch {
             symbolBean?.let {bean ->
                 balanceBean = FuturesRepository.getBalanceDetailSuspend(bean.quoteCoin)

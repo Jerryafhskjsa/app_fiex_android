@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.viewmodel.FuturesTransactionInfoDisplayViewModel
-import com.fbsex.exchange.databinding.FragmentLayoutFuturesTransactionInfoDisplayBinding
+import com.fbsex.exchange.databinding.FragmentLayoutFuturesDeepGraphDisplayBinding
 
 class FuturesDeepGraphFragment : Fragment() {
 
@@ -20,8 +20,8 @@ class FuturesDeepGraphFragment : Fragment() {
     private lateinit var viewModel: FuturesTransactionInfoDisplayViewModel
     private val globalViewModel: FutureGlobalStateViewModel by lazy { ViewModelProvider(requireActivity())[FutureGlobalStateViewModel::class.java] }
 
-    private val binding: FragmentLayoutFuturesTransactionInfoDisplayBinding by lazy {
-        FragmentLayoutFuturesTransactionInfoDisplayBinding.inflate(
+    private val binding: FragmentLayoutFuturesDeepGraphDisplayBinding by lazy {
+        FragmentLayoutFuturesDeepGraphDisplayBinding.inflate(
             layoutInflater
         )
     }

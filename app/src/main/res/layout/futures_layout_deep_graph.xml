@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.black.frying.contract.FuturesDeepGraphFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Future info display" />
-
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout style="@style/ContractHeaderNewRight">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.black.base.widget.SpanTextView
+            <TextView
                 android:id="@+id/deep_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:includeFontPadding="false"
                 android:maxLines="1"
                 android:text="@string/price"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
 
-            <com.black.base.widget.SpanTextView
+            <TextView
                 android:id="@+id/deep_price_p"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,18 +32,18 @@
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
 
-            <com.black.base.widget.SpanTextView
+            <TextView
                 android:id="@+id/deep_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:includeFontPadding="false"
                 android:maxLines="1"
                 android:text="@string/amount"
                 android:textColor="@color/T2"
                 android:textSize="@dimen/text_size_12" />
 
-            <com.black.base.widget.SpanTextView
+            <TextView
                 android:id="@+id/deep_amount_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,11 +71,11 @@
                 android:id="@+id/handicap_sale_layout_10"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_10"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_10"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -97,11 +84,11 @@
                 android:id="@+id/handicap_sale_layout_09"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_09"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_09"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -110,11 +97,11 @@
                 android:id="@+id/handicap_sale_layout_08"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_08"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_08"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -123,11 +110,11 @@
                 android:id="@+id/handicap_sale_layout_07"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_07"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_07"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -136,11 +123,11 @@
                 android:id="@+id/handicap_sale_layout_06"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_06"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_06"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -149,11 +136,11 @@
                 android:id="@+id/handicap_sale_layout_05"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_05"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_05"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -162,11 +149,11 @@
                 android:id="@+id/handicap_sale_layout_04"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_04"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_04"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -175,11 +162,11 @@
                 android:id="@+id/handicap_sale_layout_03"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_03"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_03"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -188,11 +175,11 @@
                 android:id="@+id/handicap_sale_layout_02"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_02"
                     style="@style/ContractDeepItemTextLeft" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_02"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -201,10 +188,10 @@
                 android:id="@+id/handicap_sale_layout_01"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_sale_01"
                     style="@style/ContractDeepItemTextLeft" />
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_sale_01"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -222,7 +209,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <com.black.base.widget.SpanTextView
+                    <TextView
                         android:id="@+id/current_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -233,7 +220,7 @@
                         android:textSize="@dimen/text_size_16"
                         android:textStyle="bold" />
 
-                    <com.black.base.widget.SpanTextView
+                    <TextView
                         android:id="@+id/current_price_cny"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -255,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <com.black.base.widget.SpanTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/contract_tag_price"
@@ -267,7 +254,7 @@
                                 android:layout_height="1dp" />
                         </LinearLayout>
 
-                        <com.black.base.widget.SpanTextView
+                        <TextView
                             android:id="@+id/tag_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -287,7 +274,7 @@
                             android:visibility="gone"
                             android:orientation="vertical">
 
-                            <com.black.base.widget.SpanTextView
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="@string/contract_index_price"
@@ -299,7 +286,7 @@
                                 android:layout_height="1dp" />
                         </LinearLayout>
 
-                        <com.black.base.widget.SpanTextView
+                        <TextView
                             android:id="@+id/index_price"
                             android:visibility="gone"
                             android:layout_width="wrap_content"
@@ -315,11 +302,11 @@
                 android:id="@+id/handicap_buy_layout_01"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_01"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_01"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -328,11 +315,11 @@
                 android:id="@+id/handicap_buy_layout_02"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_02"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_02"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -341,11 +328,11 @@
                 android:id="@+id/handicap_buy_layout_03"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_03"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_03"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -354,11 +341,11 @@
                 android:id="@+id/handicap_buy_layout_04"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_04"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_04"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -367,11 +354,11 @@
                 android:id="@+id/handicap_buy_layout_05"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_05"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_05"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -380,11 +367,11 @@
                 android:id="@+id/handicap_buy_layout_06"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_06"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_06"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -393,11 +380,11 @@
                 android:id="@+id/handicap_buy_layout_07"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_07"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_07"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -406,11 +393,11 @@
                 android:id="@+id/handicap_buy_layout_08"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_08"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_08"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -419,11 +406,11 @@
                 android:id="@+id/handicap_buy_layout_09"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_09"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_09"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -432,11 +419,11 @@
                 android:id="@+id/handicap_buy_layout_10"
                 style="@style/ContractDeepItemRel">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/price_buy_10"
                     style="@style/ContractDeepItemTextLeft1" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/count_buy_10"
                     style="@style/ContractDeepItemTextRight" />
             </RelativeLayout>
@@ -452,7 +439,7 @@
             android:layout_gravity="right|center_vertical"
             android:visibility="visible">
 
-            <com.black.base.widget.SpanTextView
+            <TextView
                 android:id="@+id/deep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -479,6 +466,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:background="@drawable/bg_transaction_input"
@@ -492,7 +480,7 @@
                 android:layout_weight="49"
                 android:orientation="vertical">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/deep_position"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -503,7 +491,7 @@
                     android:textSize="@dimen/text_size_10"
                     android:textStyle="bold" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/deep_position_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -528,7 +516,7 @@
                 android:layout_weight="49"
                 android:orientation="vertical">
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/deep_depth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -539,7 +527,7 @@
                     android:textSize="@dimen/text_size_10"
                     android:textStyle="bold" />
 
-                <com.black.base.widget.SpanTextView
+                <TextView
                     android:id="@+id/deep_depth_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -551,5 +539,5 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    </LinearLayout>
+
 </FrameLayout>
