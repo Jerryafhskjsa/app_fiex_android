@@ -207,7 +207,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                 FryingUtil.showToast(mContext, getString(R.string.alert_c2c_create_amount_error, ""))
                 return@OnClickListener
             }
-            MoneyApiServiceHelper.rushPromotions(mContext, promotions.id.toString(), amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+            MoneyApiServiceHelper.rushPromotionsNew(mContext, promotions.id.toString(), amountText, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.rush_success))
@@ -255,7 +255,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                     }
                     if (statusCode == 0) {
                         //未开始判断开始时间和当前时间
-                        val startTime = promotions.startTime ?: 0
+                        val startTime = promotions.startTime?.time ?: 0
                         val thisTime = (promotions.thisTime ?: 0) + (adapter?.getLoseTime()
                                 ?: 0)
                         if (startTime > thisTime) {
@@ -265,7 +265,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                     }
                     if (statusCode == 1) {
                         //未开始判断开始时间和当前时间
-                        val endTime = promotions.endTime ?: 0
+                        val endTime = promotions.endTime?.time ?: 0
                         val thisTime = (promotions.thisTime ?: 0) + (adapter?.getLoseTime()
                                 ?: 0)
                         if (endTime > thisTime) {
@@ -294,7 +294,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                     updatePositions.add(i)
                     if (statusCode == 0) {
                         //未开始判断开始时间和当前时间
-                        val startTime = promotions.startTime ?: 0
+                        val startTime = promotions.startTime?.time ?: 0
                         val thisTime = (promotions.thisTime ?: 0) + (adapter?.getLoseTime()
                                 ?: 0)
                         if (startTime <= thisTime) {
@@ -304,7 +304,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
                     }
                     if (statusCode == 1) {
                         //未开始判断开始时间和当前时间
-                        val endTime = promotions.endTime ?: 0
+                        val endTime = promotions.endTime?.time ?: 0
                         val thisTime = (promotions.thisTime ?: 0) + (adapter?.getLoseTime()
                                 ?: 0)
                         if (endTime <= thisTime) {

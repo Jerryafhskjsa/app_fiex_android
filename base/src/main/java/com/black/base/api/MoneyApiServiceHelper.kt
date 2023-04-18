@@ -13,6 +13,7 @@ import com.black.base.util.GeeTestHelper.GeeTestApi1Callback
 import com.black.base.util.GeeTestHelper.GeeTestApi2Callback
 import com.black.base.util.GeeTestInterface
 import com.black.base.util.RxJavaHelper
+import com.black.base.util.UrlConfig
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.RSAUtil
@@ -28,13 +29,34 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsList()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
     //抢购币 {foundationId:"",amount:"",geetest:""}
+
+    fun rushPromotionsNew(context: Context?, promotionId: String?, amount: String?, callback: Callback<HttpRequestResultString?>?) {
+        if (context == null || callback == null) {
+            return
+        }
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("foundationId", promotionId)
+        jsonObject.addProperty("amount", amount)
+        //jsonObject.addProperty("geetest", null)
+        val list = JsonArray()
+        val time = System.currentTimeMillis()
+        list.add(time)
+        jsonObject.add("list", list)
+        val rsaParam = "$jsonObject#$time"
+        val rsa = RSAUtil.encryptDataByPublicKey(rsaParam)
+        ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
+            ?.rushPromotions(rsa)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, true, callback))
+
+    }
     fun rushPromotions(context: Context?, promotionId: String?, amount: String?, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
@@ -97,7 +119,7 @@ object MoneyApiServiceHelper {
                     jsonObject.add("list", list)
                     val rsaParam = "$jsonObject#$time"
                     val rsa = RSAUtil.encryptDataByPublicKey(rsaParam)
-                    ApiManager.build(context).getService(MoneyApiService::class.java)
+                    ApiManager.build(context, UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                             ?.rushPromotions(rsa)
                             ?.compose(RxJavaHelper.observeOnMainThread())
                             ?.subscribe(HttpCallbackSimple(context, true, addCallback))
@@ -113,7 +135,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -124,7 +146,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuy(language, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -134,7 +156,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyDetail(purchaseId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -144,7 +166,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyUserInfo(purchaseId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -154,7 +176,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.promotionsBuyCreate(amount, coinType, purchaseId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -165,7 +187,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyRecord(purchaseId, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -176,7 +198,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyFive(language, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -187,7 +209,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyFiveDetail(purchaseId, 1)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -198,7 +220,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.promotionsBuyFiveCreate(amount, coinType, purchaseId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -209,7 +231,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getPromotionsBuyFiveRecord(purchaseId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -220,7 +242,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getDemandConfig()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -231,7 +253,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.postDemandChangeIn(amount, coinType)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -242,7 +264,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getDemandRewardRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -253,7 +275,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getDemandLockRecord(coinType, type, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -264,7 +286,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.postDemandChangeOut(lockId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -275,7 +297,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.postDemandChangeOutBatch(coinType, all, lockIds)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -286,7 +308,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getRegularConfig()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -297,7 +319,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getRegularLockRecord(regularId, coinType, type, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -308,7 +330,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getRegularLockHistory(coinType, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -319,7 +341,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.postRegularChangeIn(amount, regularId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -330,7 +352,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.postRegularChangeOut(regularLockId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -341,7 +363,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getLoanConfig()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -352,7 +374,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.createLoan(mortgageCoinType, loanCoinType, mortgageAmount, loanAmount, days)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -363,7 +385,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getLoanRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -374,7 +396,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.addLoanDeposit(loanId, mortgageAmount)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -385,7 +407,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.backLoan(loanId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -396,7 +418,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getMoneyHomeConfig()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -407,7 +429,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getLoanAddDepositRecord(loanId, page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -418,7 +440,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getLoanRecordDetail(loanRecordId)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -429,7 +451,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerConfig()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -440,7 +462,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.buyCloudPower(cloudPowerId, amount)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, true, callback))
@@ -451,7 +473,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerHoldRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -462,7 +484,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerBuyRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -473,7 +495,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerRewardRecord(page, pageSize)
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -484,7 +506,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerBtcIncome()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))
@@ -495,7 +517,7 @@ object MoneyApiServiceHelper {
         if (context == null || callback == null) {
             return
         }
-        ApiManager.build(context).getService(MoneyApiService::class.java)
+        ApiManager.build(context,UrlConfig.ApiType.URL_PRO).getService(MoneyApiService::class.java)
                 ?.getCloudPowerPersonHold()
                 ?.compose(RxJavaHelper.observeOnMainThread())
                 ?.subscribe(HttpCallbackSimple(context, false, callback))

@@ -2,6 +2,7 @@ package com.black.c2c.adapter
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.black.base.adapter.BaseRecycleDataBindAdapter
@@ -15,10 +16,12 @@ import com.black.base.model.c2c.PayInfo
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.util.UrlConfig
 import com.black.c2c.R
 import com.black.c2c.databinding.C2cPayMethodsListBinding
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
+import com.bumptech.glide.Glide
 
 class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayInfo?>?) : BaseRecycleDataBindAdapter<PayInfo?, C2cPayMethodsListBinding>(context, variableId, data) {
     override fun getResourceId(): Int {
@@ -47,9 +50,12 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
             viewHolder?.cards?.visibility = View.GONE
             viewHolder?.weiXin?.visibility = View.GONE
             val image = c2COrder.receiptImage?.filterNot {it == '[' || it == ']' }
-            val imageBytes = image?.toByteArray()
-            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
-            viewHolder?.num6?.setImageBitmap(image2)
+            viewHolder?.num6?.let {
+                Glide.with(context)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
+            }
         }
         if (paymentTypeList != null && paymentTypeList== 2) {
             viewHolder?.weiXin?.visibility = View.VISIBLE
@@ -58,9 +64,12 @@ class PayMethodsAdapter(context: Context, variableId: Int, data: ArrayList<PayIn
             viewHolder?.ali?.visibility = View.GONE
             viewHolder?.cards?.visibility = View.GONE
             val image = c2COrder.receiptImage?.filterNot {it == '[' || it == ']' }
-            val imageBytes = image?.toByteArray()
-            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
-            viewHolder?.num6?.setImageBitmap(image2)
+            viewHolder?.num6?.let {
+                Glide.with(context)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
+            }
         }
         viewHolder?.bianJi?.setOnClickListener{
             v ->

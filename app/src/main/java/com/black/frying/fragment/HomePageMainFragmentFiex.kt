@@ -283,10 +283,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
             }*/
             R.id.cv_staking -> {
-                val bundle = Bundle()
-                bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
-                bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
-                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+                BlackRouter.getInstance().build(RouterConstData.PROMOTIONS)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
             }
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)

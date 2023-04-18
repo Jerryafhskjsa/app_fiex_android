@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.Comparator
 @Parcelize
+
 class C2CMainAD  : BaseAdapterItem() ,Parcelable {
     var canCreateOrderForQueryUser: Boolean? = null	//当前用户是否可下此广告的订单
     var coinType: String? = null	//币种

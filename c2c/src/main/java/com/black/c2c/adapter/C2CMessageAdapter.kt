@@ -3,6 +3,7 @@ package com.black.c2c.adapter
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.text.TextUtils
 import android.view.View
 import com.black.base.adapter.BaseRecycleDataBindAdapter
@@ -20,6 +21,7 @@ import com.black.c2c.R
 import com.black.c2c.databinding.ListC2cMessageBinding
 import com.black.net.HttpRequestResult
 import com.black.util.CommonUtil
+import com.bumptech.glide.Glide
 import com.google.zxing.WriterException
 import skin.support.content.res.SkinCompatResources
 import java.lang.Byte.decode
@@ -65,18 +67,24 @@ class C2CMessageAdapter(context: Context, variableId: Int, data: ArrayList<C2CMe
             getC2COIV2(c2COrder.orderId)
             viewHolder?.time?.setText(TimeUtil.getTime(c2COrder.createTime))
             val image = c2COrder.note
-            val imageBytes = image?.toByteArray()
-            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
-            viewHolder?.image?.setImageBitmap(image2)
+            viewHolder?.image?.let {
+                Glide.with(context)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
+            }
         }
         else if (c2COrder.source == -1 && c2COrder.type == 2){
             viewHolder?.sell?.visibility = View.GONE
             viewHolder?.buy?.visibility = View.GONE
             viewHolder?.time?.setText(TimeUtil.getTime(c2COrder.createTime))
             val image = c2COrder.note
-            val imageBytes = image?.toByteArray()
-            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
-            viewHolder?.image?.setImageBitmap(image2)
+            viewHolder?.image?.let {
+                Glide.with(context)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
+            }
         }
         else if (c2COrder.source == 0 && c2COrder.type == 1){
             viewHolder?.sell?.visibility = View.GONE
@@ -89,11 +97,13 @@ class C2CMessageAdapter(context: Context, variableId: Int, data: ArrayList<C2CMe
             viewHolder?.time2?.setText(TimeUtil.getTime(c2COrder.createTime))
             viewHolder?.name?.setText(userInfo?.realName!![0].toString())
             val image = c2COrder.note
-            val imageBytes = image?.toByteArray()
-            val image2 = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
-                viewHolder?.image2?.setImageBitmap(image2)
+            viewHolder?.image2?.let {
+                Glide.with(context)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
             }
-
+        }
     }
        private fun getC2COIV2(id: String?) {
             C2CApiServiceHelper.getC2CDetails(

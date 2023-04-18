@@ -329,6 +329,7 @@
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_spot_account.xml" value="0.20208333333333334" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_choose_coin.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/app_fiex_android_1/wallet/src/main/res/layout/list_item_wallet_withdraw_address.xml" value="0.264" />
+        <entry key="..\:/fiex/UdeskSDKUI/src/main/res/drawable/udesk_record_button_normal.xml" value="0.128" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_buy_sell_bill.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_choose_details.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/activity_choose_payment.xml" value="0.1470713980333476" />
@@ -342,7 +343,6 @@
         <entry key="..\:/fiex/app/src/main/res/layout/activity_three_payment.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/current_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/deposit_list.xml" value="0.3333333333333333" />
-        <entry key="..\:/fiex/app/src/main/res/layout/dialog_buy_sell.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/app/src/main/res/layout/dialog_global_ad.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/five_dialog.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/four_dialog.xml" value="0.1470713980333476" />
@@ -356,7 +356,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_header2.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_contract_main.xml" value="0.1537037037037037" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main.xml" value="0.16354166666666667" />
-        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.16354166666666667" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_main_fiex.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_mine.xml" value="0.13072916666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_money.xml" value="0.3333333333333333" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_quotation.xml" value="0.17447916666666666" />
@@ -366,12 +366,18 @@
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_fiex.xml" value="0.14666666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header1.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_home_page_transaction_header2.xml" value="0.22" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_order_create.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info.xml" value="0.13424540401881147" />
+        <entry key="..\:/fiex/app/src/main/res/layout/fragment_layout_futures_transaction_info_display.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_quotation_detail_deal.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/fragment_quotation_detail_description.xml" value="0.22" />
         <entry key="..\:/fiex/app/src/main/res/layout/futrues_dialog.xml" value="0.22" />
+        <entry key="..\:/fiex/app/src/main/res/layout/futures_layout_multiple_setting.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/home_page_tab_indicator.xml" value="0.10104166666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_choose_pair.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_contract_tab_plan.xml" value="0.22" />
+        <entry key="..\:/fiex/app/src/main/res/layout/list_item_home_main_rise_fall.xml" value="0.3333333333333333" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_home_quotation_detail.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_search_pair.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/list_item_search_pair_delete.xml" value="0.3333333333333333" />
@@ -382,6 +388,7 @@
         <entry key="..\:/fiex/app/src/main/res/layout/view_home_quotation_tab.xml" value="0.11354166666666667" />
         <entry key="..\:/fiex/app/src/main/res/layout/view_main_more.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/app/src/main/res/layout/view_transaction_more.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/base/src/main/res/layout/action_bar_cloud_power_project.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/action_bar_left_back.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/action_bar_left_back_text.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/action_bar_transaction.xml" value="0.17447916666666666" />
@@ -392,6 +399,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/dialog_update.xml" value="0.22" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_item_choose_country_code_popup2.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_item_deep_choose.xml" value="0.12552083333333333" />
+        <entry key="..\:/fiex/base/src/main/res/layout/list_item_page_main_status.xml" value="0.22" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_item_wallet_choose.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_view_empty.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/base/src/main/res/layout/list_view_empty_long.xml" value="0.17447916666666666" />
@@ -421,7 +429,7 @@
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_single_tab.xml" value="0.1" />
         <entry key="..\:/fiex/base/src/main/res/layout/view_verify_window_new.xml" value="0.1" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/acticity_c2c_cards.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/actiivty_pay_for_seller.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/actiivty_pay_for_seller.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_ali_pay.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_bill_confirm.xml" value="0.16666666666666666" />
@@ -429,7 +437,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_bills_cancel.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buy.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buy_confirm.xml" value="0.16666666666666666" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buyer_oder.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buyer_oder.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_buyer_oder_activity.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_confirm.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/activity_c2c_id_cards_one.xml" value="0.22" />
@@ -458,7 +466,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/btn_c2c_wait_buy.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/c2c_pay_methods_list.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog_two.xml" value="0.22" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/cancel_dialog_two.xml" value="0.142368533561351" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/confirm_dialog.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/dialog_c2c_buy_create.xml" value="0.22" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/filter_dialog.xml" value="0.16666666666666666" />
@@ -476,7 +484,7 @@
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_empty_c2c.xml" value="0.17916666666666667" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/fragment_msg_basic.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_c2c_bills.xml" value="0.22" />
-        <entry key="..\:/fiex/c2c/src/main/res/layout/list_c2c_message.xml" value="0.14666666666666667" />
+        <entry key="..\:/fiex/c2c/src/main/res/layout/list_c2c_message.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_c_left.xml" value="0.14322359982898675" />
         <entry key="..\:/fiex/c2c/src/main/res/layout/list_item_c2c_order_detail_c_right.xml" value="0.14322359982898675" />
@@ -506,7 +514,22 @@
         <entry key="..\:/fiex/community/src/main/res/layout/activity_faction_detail.xml" value="0.1115861479264643" />
         <entry key="..\:/fiex/community/src/main/res/layout/activity_red_packet_detail.xml" value="0.14520894892359645" />
         <entry key="..\:/fiex/community/src/main/res/layout/list_item_faction_list.xml" value="0.17447916666666666" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_cloud_power_project.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_cloud_power_record.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_demand_detail.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_demand_home.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_loan_back.xml" value="0.22" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_buy.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_buy_detail.xml" value="0.22" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_buy_five.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_buy_five_detail.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_list.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_promotions_record.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/activity_regular_home.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/dialog_promotions_buy.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/dialog_promotions_buy_five.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/dialog_promotions_rush.xml" value="0.1470713980333476" />
+        <entry key="..\:/fiex/money/src/main/res/layout/list_item_promotions_rush.xml" value="0.16666666666666666" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_asset_coin_corner.xml" value="0.106" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_assets_header.xml" value="0.108" />
         <entry key="..\:/fiex/res/src/main/res/drawable/bg_b1_corner_2.xml" value="0.1295" />
@@ -569,8 +592,12 @@
         <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_off.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_on.xml" value="0.1265" />
         <entry key="..\:/fiex/res/src/main/res/drawable/icon_switch_thumb.xml" value="0.1265" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/icon_transaction_count_buy.xml" value="0.128" />
         <entry key="..\:/fiex/res/src/main/res/drawable/splash.xml" value="0.121" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/suo_suo.xml" value="0.128" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/tabs_rounded_line_indicator.xml" value="0.128" />
         <entry key="..\:/fiex/res/src/main/res/drawable/trans_default_bg_corner.xml" value="0.1265" />
+        <entry key="..\:/fiex/res/src/main/res/drawable/xianlu.xml" value="0.128" />
         <entry key="..\:/fiex/res/src/main/res/xml/network_security_config.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_account_manager.xml" value="0.1470713980333476" />
         <entry key="..\:/fiex/user/src/main/res/layout/activity_change_password.xml" value="0.22" />

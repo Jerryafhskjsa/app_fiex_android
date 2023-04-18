@@ -1,16 +1,23 @@
 package com.black.money.adpter
 
 import android.content.Context
+import android.net.Uri
 import android.view.View
+import android.widget.ImageView
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.model.money.PromotionsRush
 import com.black.base.util.ImageLoader
+import com.black.base.util.TimeUtil
 import com.black.base.util.UrlConfig
 import com.black.money.R
 import com.black.money.databinding.ListItemPromotionsRushBinding
 import com.black.util.CommonUtil
+import com.black.util.ImageUtil
 import com.black.util.NumberUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import skin.support.content.res.SkinCompatResources
 
 class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<PromotionsRush?>?) : BaseRecycleDataBindAdapter<PromotionsRush?, ListItemPromotionsRushBinding>(context, variableId, data) {
@@ -55,8 +62,8 @@ class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<P
                 val color = if (status == 1) t5 else if (status == 2) c1 else if (status == 3) c2 else c5
                 viewHolder?.status?.setBackgroundColor(color)
                 viewHolder?.status?.setText(promotions?.getStatusDisplay(context))
-                val startTime = promotions?.startTime ?: 0
-                val endTime = promotions?.endTime ?: 0
+                val startTime = promotions?.startTime?.time ?: 0
+                val endTime = promotions?.endTime?.time ?: 0
                 val thisTime = (promotions?.thisTime ?: 0) + getLoseTime()
                 when (status) {
                     1 -> {
@@ -90,7 +97,13 @@ class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<P
         super.onBindViewHolder(holder, position)
         val promotions = getItem(position)
         val viewHolder = holder.dataBing
-        imageLoader?.loadImage(viewHolder?.icon, UrlConfig.getHost(context) + promotions!!.imageUrl)
+        viewHolder?.icon?.let {
+            Glide.with(context)
+                .load(Uri.parse(UrlConfig.getHost(context) + promotions?.imageUrl))
+                //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                .into(it)
+        }
+        // imageLoader?.loadImage(viewHolder?.icon, UrlConfig.getHost(context) + promotions!!.imageUrl )
         val status = promotions?.statusCode
         val color = if (status == 1) t5 else if (status == 2) c1 else if (status == 3) c2 else c5
         viewHolder?.status?.setBackgroundColor(color)
@@ -104,8 +117,8 @@ class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<P
                 + NumberUtil.formatNumberDynamicScaleNoGroup(if (promotions?.price == null) 0 else promotions.price, 6, 4, 4)
                 + if (promotions?.coinType == null) "" else promotions.coinType)
         viewHolder?.price?.setText(price)
-        viewHolder?.startDate?.setText(if (promotions?.startTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", promotions.startTime!!))
-        viewHolder?.endDate?.setText(if (promotions?.endTime == null) nullAmount else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", promotions.endTime!!))
+        viewHolder?.startDate?.setText(if (promotions?.startTime == null) nullAmount else TimeUtil.getTime(promotions.startTime))
+        viewHolder?.endDate?.setText(if (promotions?.endTime == null) nullAmount else TimeUtil.getTime(promotions.endTime))
         /*
             userAmount：//用户可抢额度
     userFinancingAmount：//用户已抢购额度
@@ -120,8 +133,8 @@ class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<P
             onPromotionsRushListener?.onRush(promotions)
         }
 
-        val startTime = promotions?.startTime ?: 0
-        val endTime = promotions?.endTime ?: 0
+        val startTime = promotions?.startTime?.time ?: 0
+        val endTime = promotions?.endTime?.time ?: 0
         val thisTime = (promotions?.thisTime ?: 0) + getLoseTime()
         when (status) {
             1 -> {

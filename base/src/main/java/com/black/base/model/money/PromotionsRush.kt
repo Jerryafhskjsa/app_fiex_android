@@ -2,6 +2,7 @@ package com.black.base.model.money
 
 import android.content.Context
 import com.black.base.R
+import java.util.*
 
 //发售促销
 class PromotionsRush {
@@ -10,14 +11,14 @@ class PromotionsRush {
     var coinType: String? = null
     var totalFinancing: Double? = null
     var nowFinancing: Double? = null
-    var startTime: Long? = null
-    var endTime: Long? = null
+    var startTime: Date? = null
+    var endTime: Date? = null
     var imageUrl: String? = null
     var introduction: String? = null
-    var userOrderCount: Int? = null
+    var userOrderCount: Long? = null
     var userFinancingAmount: Double? = null
-    var balance: String? = null
-    var progress: String? = null
+    var balance: Double? = null
+    var progress: Double? = null
     var status //3 结束 2 完成 1 正在进行 0 未开始
             : Int? = null
     var distributionCoinType: String? = null

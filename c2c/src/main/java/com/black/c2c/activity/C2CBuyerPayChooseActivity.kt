@@ -35,6 +35,7 @@ import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.CommonUtil
+import com.bumptech.glide.Glide
 import com.google.zxing.WriterException
 import java.util.*
 
@@ -134,19 +135,13 @@ class C2CBuyerPayChooseActivity: BaseActionBarActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, "保存成功")
             dialog.dismiss()
         }
-        if (!TextUtils.isEmpty(image)) { //显示密钥，并进行下一步
-            var qrcodeBitmap: Bitmap? = null
-            try {
-                qrcodeBitmap = CommonUtil.createQRCode(
-                    image,
-                    400,
-                    0
-                )
-            } catch (e: WriterException) {
-                CommonUtil.printError(mContext, e)
+            dialog.findViewById<ImageView>(R.id.two_ma).let {
+                Glide.with(mContext)
+                    .load(Uri.parse(image))
+                    //.apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                    .into(it)
             }
-            dialog.findViewById<ImageView>(R.id.two_ma).setImageBitmap(qrcodeBitmap)
-        }
+
     }
     private fun cancelDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.cancel_dialog, null)

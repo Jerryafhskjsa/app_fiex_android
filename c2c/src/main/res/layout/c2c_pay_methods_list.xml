@@ -141,7 +141,7 @@
                     android:id="@+id/ma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                   android:visibility="gone"
                     android:layout_marginTop="@dimen/text_size_10"
                     android:orientation="horizontal">
 
@@ -153,7 +153,7 @@
                         android:textSize="12dp" />
                     <ImageView
                         android:id="@+id/num6"
-                        android:layout_width="@dimen/text_size_15"
+                        android:layout_width="@dimen/text_size_20"
                         android:layout_height="@dimen/text_size_15"
                         android:layout_marginLeft="@dimen/text_size_20"
                         />
