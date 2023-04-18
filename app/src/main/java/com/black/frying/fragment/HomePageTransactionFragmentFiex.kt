@@ -1206,6 +1206,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun refreshAsstes(){
+        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
+            binding!!.unable.setText("0.0")
+            binding!!.usable2.setText("0.0")
+        }
+        else {
             if (currentBalanceSell != null) {
                 binding!!.unable.setText(
                     NumberUtil.formatNumberNoGroup(
@@ -1230,57 +1235,64 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             } else {
                 binding!!.usable2.setText("0.0")
             }
-
+        }
     }
     private fun refreshUsable() {
-        activity?.runOnUiThread {
-            //买入
-            if (transactionType == 1) {
-                if (currentBalanceSell != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceSell?.availableBalance?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            4,
-                            4
+        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
+            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
+
+        } else {
+            activity?.runOnUiThread {
+                //买入
+                if (transactionType == 1) {
+                    if (currentBalanceSell != null) {
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText(
+                            NumberUtil.formatNumberNoGroup(
+                                currentBalanceSell?.availableBalance?.toDoubleOrNull(),
+                                RoundingMode.FLOOR,
+                                4,
+                                4
+                            )
                         )
-                    )
-                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceSell?.freeze?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            4,
-                            4
+                        binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
+                            NumberUtil.formatNumberNoGroup(
+                                currentBalanceSell?.freeze?.toDoubleOrNull(),
+                                RoundingMode.FLOOR,
+                                4,
+                                4
+                            )
                         )
-                    )
-                } else {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                    } else {
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                    }
+                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
+                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                } else if (transactionType == 2) {
+                    if (currentBalanceBuy != null) {
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText(
+                            NumberUtil.formatNumberNoGroup(
+                                currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
+                                RoundingMode.FLOOR,
+                                4,
+                                4
+                            )
+                        )
+                        binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
+                            NumberUtil.formatNumberNoGroup(
+                                currentBalanceBuy?.freeze?.toDoubleOrNull(),
+                                RoundingMode.FLOOR,
+                                4,
+                                4
+                            )
+                        )
+                    } else {
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                    }
+                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
                 }
-                binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-            } else if (transactionType == 2) {
-                if (currentBalanceBuy != null) {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            4,
-                            4
-                        )
-                    )
-                    binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceBuy?.freeze?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            4,
-                            4
-                        )
-                    )
-                } else {
-                    binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
-                }
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
             }
         }
     }
@@ -1523,6 +1535,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             getTradeOrderCurrent()
             refreshUserBalance()
+            refreshUsable()
+            refreshAsstes()
             refreshCurrentWallet()
         }
     }
