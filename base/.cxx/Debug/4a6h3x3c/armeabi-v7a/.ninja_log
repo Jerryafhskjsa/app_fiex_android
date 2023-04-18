@@ -13,3 +13,5 @@
 4843	8044	703060578	../../../../src/main/jniLibs/armeabi-v7a/libfryingSecret.so	2df655ea15ab2e48
 1	88	0	clean	ce6455fda8122547
 1	3131	0	clean	ce6455fda8122547
+16	2342	703513707	src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o	8730bf524300657d
+2343	5795	703513711	../../../../src/main/jniLibs/armeabi-v7a/libfryingSecret.so	2df655ea15ab2e48

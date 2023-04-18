@@ -176,7 +176,7 @@ class PromotionsListAdapter(context: Context, variableId: Int, data: ArrayList<P
             rangeTime %= (24 * 3600)
             val sb = StringBuilder()
             if (d > 0) {
-                sb.append(d).append(" ")
+                sb.append(d).append("Day ")
             }
             val h = (rangeTime / 3600).toInt()
             rangeTime %= 3600

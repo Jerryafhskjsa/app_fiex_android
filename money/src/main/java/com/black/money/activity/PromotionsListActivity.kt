@@ -180,7 +180,7 @@ class PromotionsListActivity : BaseActivity(), View.OnClickListener, QRefreshLay
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.setContentView(contentView, layoutParams)
         val titleView = contentView.findViewById<TextView>(R.id.rush_buy_title)
-        titleView.text = String.format("抢购 %s", if (promotions.distributionCoinType == null) nullAmount else promotions.distributionCoinType)
+        titleView.text = String.format("Panic Buying  %s", if (promotions.distributionCoinType == null) nullAmount else promotions.distributionCoinType)
         val priceView = contentView.findViewById<TextView>(R.id.price)
         val price = (1.toString() + (if (promotions.distributionCoinType == null) "" else promotions.distributionCoinType)
                 + " = "

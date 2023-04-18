@@ -12,7 +12,6 @@ import com.black.base.api.WalletApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.*
-import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.frying.adapter.ThirdAdapters

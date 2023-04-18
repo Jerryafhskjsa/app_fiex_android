@@ -142,7 +142,7 @@
             android:background="@drawable/btn_gray"
             android:gravity="center"
             android:padding="13dp"
-            android:text="@string/cancel"
+            android:text="@string/cancel1"
             android:textColor="@color/T8"
             android:textSize="@dimen/text_size_16" />
 

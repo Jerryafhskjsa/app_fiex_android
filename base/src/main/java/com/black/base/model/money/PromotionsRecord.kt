@@ -2,6 +2,7 @@ package com.black.base.model.money
 
 import android.content.Context
 import com.black.base.R
+import java.util.*
 
 class PromotionsRecord {
     var amount: Double? = null
@@ -9,7 +10,7 @@ class PromotionsRecord {
     var coinType: String? = null
     var distributionCoinType: String? = null
     var id: String? = null
-    var createdTime: Long? = null
+    var createdTime: Date? = null
     var distributionAmount: Double? = null
     var status: Int? = null
     fun getStatusText(context: Context): String {

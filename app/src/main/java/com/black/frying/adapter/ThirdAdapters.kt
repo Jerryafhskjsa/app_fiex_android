@@ -30,8 +30,8 @@ class ThirdAdapters (context: Context, variableId: Int, data: ArrayList<payOrder
         viewHolder?.action?.setText(if (walletBill?.orderType == "B") getString(R.string.buy_02) else getString(R.string.sell))
         viewHolder?.action?.setTextColor(if (walletBill?.orderType == "B") c1 else t5)
         viewHolder?.direction?.setText(if (walletBill?.payStatus == -1) "Failed" else if (walletBill?.payStatus == -2) "Audit failed" else if (walletBill?.payStatus == 0) "Success" else if (walletBill?.payStatus == 2) "Confirming" else if (walletBill?.payStatus == 3) "Status wait pass" else if (walletBill?.payStatus == 4) "Status Pass"  else "Submit")
-        viewHolder?.amount?.setText(walletBill?.amount.toString() + walletBill?.coin)
-        viewHolder?.accountType?.setText(walletBill?.orderAmount.toString() + walletBill?.ccyNo)
+        viewHolder?.amount?.setText(if (walletBill?.orderType == "B") walletBill.amount.toString() + walletBill.coin else walletBill?.amount.toString() + walletBill?.ccyNo)
+        viewHolder?.accountType?.setText(if (walletBill?.orderType == "B") walletBill.orderAmount.toString() + walletBill.ccyNo else walletBill?.orderAmount.toString() + walletBill?.coin)
         viewHolder?.id?.setText(walletBill?.id)
         viewHolder?.date?.setText(if(walletBill?.createTime == null) null else CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", walletBill.createTime!!))
     }
