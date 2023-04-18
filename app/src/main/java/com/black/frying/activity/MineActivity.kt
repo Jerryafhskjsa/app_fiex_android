@@ -118,7 +118,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
         //initServiceApi()
-        //getNetworkLines(false)
+        getNetworkLines(false)
     }
 
     override fun isStatusBarDark(): Boolean {

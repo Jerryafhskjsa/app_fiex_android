@@ -481,4 +481,16 @@
         <item name="android:src">@drawable/xianlu</item>
     </style>
 
+
+    <style name="Yinying">
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:shadowColor">#fff1f1f1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:background">@drawable/yin_ying</item>
+    </style>
 </resources>

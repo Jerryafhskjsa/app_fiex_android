@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:orientation="vertical">
         <RelativeLayout
@@ -23,10 +22,10 @@
                 android:id="@+id/pair_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="3dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/text_size_5"
                 android:gravity="center"
                 android:includeFontPadding="false"
+                android:paddingTop="3dp"
                 android:text="BTC/USDT"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_12"
@@ -36,7 +35,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/pair_name"
-                    android:layout_marginRight="5dp"
                    >
 
                     <com.black.base.widget.SpanTextView
@@ -46,12 +44,9 @@
                         android:layout_centerInParent="true"
                         android:gravity="center"
                         android:includeFontPadding="false"
-                        android:paddingLeft="8dp"
                         android:paddingTop="3dp"
-                        android:paddingRight="8dp"
                         android:paddingBottom="3dp"
                         android:text="0.00%"
-                        android:textColor="@color/T8"
                         android:textSize="@dimen/text_size_12" />
                 </RelativeLayout>
         </RelativeLayout>

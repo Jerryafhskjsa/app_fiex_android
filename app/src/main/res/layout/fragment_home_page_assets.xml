@@ -26,12 +26,14 @@
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     style="@style/CollapsingToolbarStyle"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_assets_header"
                     app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
                     app:titleEnabled="true">
                     <RelativeLayout
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         app:layout_collapseMode="pin">
                         <LinearLayout

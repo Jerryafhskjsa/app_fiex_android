@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_weight="1">
+                >
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/pair_name"
@@ -58,7 +58,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:paddingTop="1dp"
-                    android:paddingRight="10dp"
                     android:paddingBottom="1dp"
                     android:textSize="@dimen/text_size_10"
                     android:textColor="#9B9DA1"
@@ -76,7 +75,7 @@
                     android:textSize="@dimen/text_size_10"
                     android:textColor="#9B9DA1"
                     android:text="3L" />
-</LinearLayout>
+             </LinearLayout>
             </RelativeLayout>
 
 
@@ -110,7 +109,6 @@
             android:layout_width="78dp"
             android:layout_height="36dp"
             android:gravity="center"
-            android:layout_weight="1"
             >
             <com.black.base.widget.SpanTextView
                 android:id="@+id/since"

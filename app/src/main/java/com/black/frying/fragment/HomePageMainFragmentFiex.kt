@@ -73,7 +73,7 @@ import kotlin.collections.HashMap
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener, OnMainMoreClickListener {
     companion object {
-        private const val STATUS_PAGE_COUNT = 2
+        private const val STATUS_PAGE_COUNT = 3
         private var TAG = HomePageMainFragment::class.java.simpleName
     }
 
@@ -119,7 +119,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
 //                viewModel!!.getHomeTicker()
 //                viewModel!!.getHomeKline()
                 binding!!.refreshLayout.postDelayed(
-                    { binding!!.refreshLayout.setRefreshing(false) },
+                    { binding!!.refreshLayout.setRefreshing(false)},
                     300
                 )
             }
@@ -495,14 +495,14 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
-        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT"}
+        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" || it?.pair == "BNB_USDT"}
         val viewList: MutableList<View> = ArrayList()
         if (ticketData != null) {
             val pairCount = ticketData.size
             if (pairCount > 0) {
                 var pageCount = pairCount / STATUS_PAGE_COUNT
 //                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
-                pageCount = 1//暂时取1，如果有更多的交易对需要展示，在修改该值
+                pageCount = 2//暂时取1，如果有更多的交易对需要展示，在修改该值
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
@@ -745,7 +745,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
                 binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+                //binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
                 val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
                 if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
@@ -779,7 +779,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
                 binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+               // binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
                 binding?.pairPrice?.text = pairStatus.currentPriceFormat
                 val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
                 if (exChangeRates == 0) {

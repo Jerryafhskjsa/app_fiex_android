@@ -13,6 +13,6 @@
         <bitmap android:src="@drawable/icon_tab_futures_pre" />
     </item>
     <item>
-        <bitmap android:src="@drawable/icon_tab_futures_nor" />
+        <bitmap android:src="@drawable/heyue_one" />
     </item>
 </selector>

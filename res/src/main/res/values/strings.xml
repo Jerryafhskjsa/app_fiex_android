@@ -912,7 +912,7 @@
     <string name="to">到</string>
     <string name="total_assets">现货总资产(USDT)</string>
     <string name="profit_loss">今日盈亏</string>
-    <string name="investment_portfolio">投资组合</string>
+    <string name="investment_portfolio">资产组合</string>
     <string name="quick_recharged">快速充值</string>
     <string name="quick_extract">快速提现</string>
     <string name="spot_account">现货</string>

@@ -14,6 +14,6 @@
         <bitmap android:src="@drawable/icon_tab_market_pre" />
     </item>
     <item>
-        <bitmap android:src="@drawable/icon_tab_market_nor" />
+        <bitmap android:src="@drawable/hangqing" />
     </item>
 </selector>

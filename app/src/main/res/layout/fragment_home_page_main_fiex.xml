@@ -32,7 +32,7 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/gerenzhongxin" />
                 <RelativeLayout
-                    style="@style/Sousuo"
+                    style="@style/ButtonGray"
                     android:layout_toRightOf="@+id/btn_userinfo"
                     android:id="@+id/btn_search_menu"
                     android:layout_width="268dp"
@@ -64,7 +64,7 @@
 
                 </RelativeLayout>
                 <LinearLayout
-                    style="@style/wangluo"
+                    style="@style/ButtonGray"
                     android:layout_alignParentRight="true"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
@@ -103,8 +103,8 @@
                         android:orientation="vertical">
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_marginRight="@dimen/text_size_10"
-                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginRight="15sp"
+                            android:layout_marginLeft="17sp"
                             android:layout_marginTop="@dimen/text_size_20"
                             android:layout_height="200dp"
                             >
@@ -196,7 +196,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="25dp"
-                            android:layout_marginLeft="@dimen/text_size_10"
                             android:paddingBottom="15dp"
                             android:orientation="horizontal"
                             >
@@ -470,7 +469,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="15"
+                            android:layout_weight="4"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -531,7 +530,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="25"
+                            android:layout_weight="3"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -561,7 +560,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="25"
+                            android:layout_weight="2"
                             android:gravity="center_vertical|right"
                             android:orientation="horizontal">
 
