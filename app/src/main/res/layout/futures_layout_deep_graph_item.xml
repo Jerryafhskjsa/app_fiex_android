@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:id="@+id/handicap_buy_layout_01"
+        style="@style/ContractDeepItemRel2">
+
+        <TextView
+            android:id="@+id/price_buy_01"
+            tools:text="2914"
+            style="@style/ContractDeepItemTextLeft1" />
+
+        <TextView
+            android:id="@+id/count_buy_01"
+            tools:text="1.992"
+            style="@style/ContractDeepItemTextRight" />
+    </RelativeLayout>
+
+</FrameLayout>
