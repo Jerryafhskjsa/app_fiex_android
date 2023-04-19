@@ -101,14 +101,13 @@ class C2CBillsJinFragment : BaseFragment(), View.OnClickListener {
         fragmentList?.clear()
         fragmentList?.add(C2CSomeBillsFragment().also {
             val bundle = Bundle()
-            bundle.putInt(ConstData.COIN_TYPE,3)
             it.arguments = bundle
 
 
         })
         fragmentList?.add(C2CSomeBillsFragment().also {
             val bundle = Bundle()
-            bundle.putInt(ConstData.COIN_TYPE,3)
+            bundle.putInt(ConstData.COIN_TYPE,2)
             it.arguments = bundle
 
         })

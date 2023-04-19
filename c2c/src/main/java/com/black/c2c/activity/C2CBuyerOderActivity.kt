@@ -162,7 +162,8 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
                 ConstData.CROP_PICTURE -> {
                 }
             }
-            path?.let { getImage(it) }
+            path?.let { getImage(it)
+                submitRealNameAuthenticate()}
         }
     }
     private val currentImageFileName: String?
@@ -266,6 +267,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
         for (item in photoImageList) {
             if (item.path != null) {
                 pathList.add(item.path)
+                getC2cImage(item.path!!)
             }
         }
 
@@ -328,8 +330,7 @@ class C2CBuyerOderActivity: BaseActionBarActivity(), View.OnClickListener {
             val imageLayout = findViewById<View>(R.id.add)
             item.imageLayout = imageLayout
             photoImageList.add(item)
-            getC2cImage(item.path!!)
-           //showSelectPhoto(item)
+            showSelectPhoto(item)
         }
     }
     private fun checkClickable(){

@@ -1206,11 +1206,15 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun refreshAsstes(){
-        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
+        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null){
+            currentBalanceBuy = null
+            currentBalanceSell = null
             binding!!.unable.setText("0.0")
             binding!!.usable2.setText("0.0")
-        }
-        else {
+            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
+            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+        }else {
             if (currentBalanceSell != null) {
                 binding!!.unable.setText(
                     NumberUtil.formatNumberNoGroup(
@@ -1238,12 +1242,15 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         }
     }
     private fun refreshUsable() {
-        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
+        if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null){
+            currentBalanceBuy = null
+            currentBalanceSell = null
+            binding!!.unable.setText("0.0")
+            binding!!.usable2.setText("0.0")
+            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
             binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
             binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
-
-        } else {
+        }else {
             activity?.runOnUiThread {
                 //买入
                 if (transactionType == 1) {
