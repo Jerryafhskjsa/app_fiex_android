@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout style="@style/ContractHeaderNewRight">
 
@@ -72,7 +72,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_up_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 tools:itemCount="4"
                 tools:listitem="@layout/futures_layout_deep_graph_item" />
 
@@ -181,7 +182,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_btm_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 tools:itemCount="4"
                 tools:listitem="@layout/futures_layout_deep_graph_item" />
         </LinearLayout>
