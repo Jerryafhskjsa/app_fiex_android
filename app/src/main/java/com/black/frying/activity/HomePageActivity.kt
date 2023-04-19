@@ -82,7 +82,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             //            Drawable drawable = SkinCompatResources.getDrawable(this, tab.topIconId);
 //
 //            tv_indicator.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            tvIndicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.home_tab_text_color))
+            tvIndicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.host_color))
             tvIndicator.text = tab.tabName
             tab.setIndicatorTextView(tvIndicator)
             val tabSpec = tabHost?.newTabSpec(tab.tabName)?.setIndicator(indicator)

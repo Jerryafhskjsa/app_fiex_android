@@ -40,7 +40,7 @@
             android:layout_height="match_parent">
             <ImageButton
                 android:id="@+id/action_bar_back"
-                android:layout_width="9dp"
+                android:layout_width="22dp"
                 android:layout_height="16dp"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
@@ -49,7 +49,7 @@
                 android:contentDescription="@null"
                 android:onClick="onBackClick"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_back" />
+                android:src="@drawable/fanhui" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@id/action_bar_title"
@@ -70,7 +70,7 @@
                 android:contentDescription="@null"
                 android:scaleType="centerInside"
                 android:visibility="gone"
-                android:src="@drawable/icon_asset_record" />
+                android:src="@drawable/liushui" />
         </FrameLayout>
 
     </androidx.appcompat.widget.Toolbar>

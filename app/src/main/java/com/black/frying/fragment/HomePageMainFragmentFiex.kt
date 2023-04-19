@@ -167,6 +167,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         binding!!.btnSearchMenu.setOnClickListener(this)
       //  binding!!.btnScanMenu.setOnClickListener(this)
        // binding!!.btnMoreMenu.setOnClickListener(this)
+        binding!!.xianlu.setOnClickListener(this)
         binding!!.relDeposit.setOnClickListener(this)
         binding!!.relFutures.setOnClickListener(this)
         binding!!.relSupport.setOnClickListener(this)
@@ -267,6 +268,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     .go(mContext)
                // getSupportUrl()
             }
+            R.id.xianlu ->
+                BlackRouter.getInstance().build(RouterConstData.XIANLU)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
             R.id.rel_futures ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
             R.id.rel_more ->

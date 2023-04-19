@@ -16,6 +16,7 @@ object RouterConstData {
     const val NOTICE_CENTER = "fiex://noticeCenter"
     const val NOTICE_DETAIL = "fiex://noticeDetail"
     const val ABOUT = "fiex://about"
+    const val XIANLU = "fiex://xianlu"
     const val ACCOUNT_PROTECT = "fiex://accountProtect"
     const val ENTRUST_RECORDS = "fiex://entrustRecords"
     const val ENTRUST_RECORDS_NEW = "fiex://tradeorder"

@@ -94,7 +94,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.notifications?.setOnClickListener(this)
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
-       // binding?.moreLanguage?.setOnClickListener(this)
+        binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
         binding?.version?.setText(String.format("V%s" ,CommonUtil.getVersionName(this, "1.0.0")))
         val currentLanguage = LanguageUtil.getLanguageSetting(mContext)?.languageCode

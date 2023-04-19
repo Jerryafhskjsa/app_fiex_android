@@ -13,43 +13,52 @@
         android:layout_height="match_parent"
         android:background="@color/B2"
         android:orientation="vertical">
-
-        <LinearLayout
+        <RelativeLayout
+            android:layout_toRightOf="@+id/btn_userinfo"
+            android:id="@+id/btn_search_menu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/middle_padding">
+            android:layout_height="36dp"
+            android:layout_marginLeft="@dimen/text_size_14"
+            android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_search" />
+            <com.black.lib.view.InputLinearLayout
+                style="@style/ButtonGray"
+                android:layout_width="311dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <com.black.base.widget.SpanMaterialEditText
-                android:id="@+id/coin_edit"
-                style="@style/NormalEditTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="@string/search_coin"
-                android:imeOptions="actionSearch"
-                android:maxLines="1"
-                android:padding="0dp"
-                android:textSize="@dimen/text_size_15" />
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/sousuo" />
 
+                <com.black.base.widget.SpanMaterialEditText
+                    android:id="@+id/coin_edit"
+                    style="@style/NormalEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:hint="请搜索你想查询的币种"
+                    android:textColor="#5F616D"
+                    android:textSize="@dimen/text_size_12" />
+            </com.black.lib.view.InputLinearLayout>
             <TextView
                 android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:paddingLeft="4dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginRight="16dp"
                 android:text="@string/cancel"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_12" />
-        </LinearLayout>
+        </RelativeLayout>
+
+
 
         <View
             android:layout_width="match_parent"

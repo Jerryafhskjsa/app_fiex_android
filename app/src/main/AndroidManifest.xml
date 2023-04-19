@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fbsex.exchange">
-Fiex
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -137,6 +137,14 @@ Fiex
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
             android:name="com.black.user.activity.SafeCenterActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.black.clutter.activity.XianLuActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/app_name"
