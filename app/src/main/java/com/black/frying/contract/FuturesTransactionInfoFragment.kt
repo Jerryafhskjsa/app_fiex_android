@@ -83,7 +83,7 @@ class FuturesTransactionInfoFragment : Fragment() {
 
         }
         globalViewModel.balanceBeanLiveData.observe(viewLifecycleOwner){bean ->
-            binding.futuresAccountAndRate.getAccountTotalTv().text = bean.walletBalance
+            binding.futuresAccountAndRate.getAccountTotalTv().text = bean?.walletBalance
         }
         globalViewModel.fundRateBeanLiveData.observe(viewLifecycleOwner) { bean ->
             if (bean == null) {
