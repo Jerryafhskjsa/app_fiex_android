@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout style="@style/ContractHeaderNewRight">
 
@@ -72,116 +72,20 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_up_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 tools:itemCount="4"
                 tools:listitem="@layout/futures_layout_deep_graph_item" />
 
-            <LinearLayout
-                android:id="@+id/current_price_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/current_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:maxLines="1"
-                        android:text="@string/number_default"
-                        android:textColor="@color/black_real"
-                        android:textSize="@dimen/text_size_16"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/current_price_cny"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:includeFontPadding="false"
-                        android:maxLines="1"
-                        android:text="@string/number_default"
-                        android:textColor="@color/black_real"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/half_default_padding">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/contract_tag_price"
-                                android:textColor="@color/T14"
-                                android:textSize="@dimen/text_size_10" />
-
-                            <com.black.base.widget.DashLineView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tag_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/half_default_padding"
-                            android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_10" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/half_default_padding">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="@string/contract_index_price"
-                                android:textColor="@color/T14"
-                                android:textSize="@dimen/text_size_10" />
-
-                            <com.black.base.widget.DashLineView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/index_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/half_default_padding"
-                            android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_10"
-                            android:visibility="gone" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+            <include
+                android:id="@+id/include_mid"
+                layout="@layout/futures_layout_deep_graph_center" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_btm_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 tools:itemCount="4"
                 tools:listitem="@layout/futures_layout_deep_graph_item" />
         </LinearLayout>

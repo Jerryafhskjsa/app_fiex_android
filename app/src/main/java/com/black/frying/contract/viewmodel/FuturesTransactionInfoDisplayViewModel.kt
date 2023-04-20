@@ -1,28 +1,104 @@
 package com.black.frying.contract.viewmodel
 
+import android.content.Context
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.black.base.model.socket.Deep
+import com.black.base.model.socket.PairStatus
+import com.black.base.model.socket.TradeOrder
+import com.black.base.util.ConstData
+import com.black.base.util.CookieUtil
+import com.black.base.util.SocketDataContainer
 import com.black.frying.contract.FuturesDeepGraphFragment
+import com.black.util.CommonUtil
 
 class FuturesTransactionInfoDisplayViewModel : ViewModel() {
+    lateinit var mContext: Context
+
+    val precisionLData = MutableLiveData<Int>()
+
+    fun init(context: Context) {
+        mContext = context
+        initPairStatus()
+    }
+
     fun clickShowMode() {
         val maxIndex = FuturesDeepGraphFragment.ShowMode.values().size - 1
         var ordinal = showMode.value!!.ordinal
-        if(ordinal>=maxIndex){
-            ordinal=0
-        }else{
-            ordinal+=1
+        if (ordinal >= maxIndex) {
+            ordinal = 0
+        } else {
+            ordinal += 1
         }
-        val nV =  Math.min(maxIndex,ordinal)
+        val nV = Math.min(maxIndex, ordinal)
         showMode.postValue(FuturesDeepGraphFragment.ShowMode.values()[nV])
     }
 
-    val showMode = MutableLiveData<FuturesDeepGraphFragment.ShowMode>(FuturesDeepGraphFragment.ShowMode.DEFAULT)
+    val showMode =
+        MutableLiveData(FuturesDeepGraphFragment.ShowMode.DEFAULT)
 
-    val sellList: ArrayList<Array<String?>?> = ArrayList<Array<String?>?>()
-    val buyList: ArrayList<Array<String?>?> = ArrayList<Array<String?>?>()
+    val sellList: ArrayList<TradeOrder?> = ArrayList()
+    val buyList: ArrayList<TradeOrder?> = ArrayList()
+    var currentPairStatus = PairStatus()
+
+    private fun initPairStatus() {
+        val currentPair = getLastPair()
+        if (!TextUtils.equals(currentPair, currentPairStatus.pair)) {
+            val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(
+                mContext,
+                ConstData.PairStatusType.FUTURE_ALL,
+                currentPair
+            )
+            if (pairStatus != null) {
+                currentPairStatus = pairStatus
+                precisionLData.postValue(currentPairStatus.precision)
+            }
+        }
+    }
 
 
+    private fun getLastPair(): String? {
+        var pair = CookieUtil.getCurrentFutureUPair(mContext)
+        if (pair == null) {
+            val allPair =
+                SocketDataContainer.getAllPair(mContext, ConstData.PairStatusType.FUTURE_U)
+            if (allPair != null) {
+                pair = CommonUtil.getItemFromList(allPair, 0)
+            }
+        }
+        return pair
+    }
+
+
+    fun getPrecisionDeep(precision: Int?): Deep? {
+        var deepList = currentPairStatus.supportingPrecisionList
+        if (deepList != null) {
+            for (deep in deepList) {
+                if (precision == deep.precision) {
+                    return deep
+                }
+            }
+        }
+        return null
+    }
+
+    fun getPrecisionList(): ArrayList<Deep>? {
+        return currentPairStatus.supportingPrecisionList
+    }
+
+    fun getAmountLength(): Int {
+        return currentPairStatus.amountPrecision ?: 4
+    }
+
+    fun setPrecision(precision: Int) {
+        currentPairStatus.precision = precision
+        precisionLData.postValue(precision)
+    }
+
+    fun getPrecision(): Int? {
+        return currentPairStatus.precision
+    }
 }
 
 

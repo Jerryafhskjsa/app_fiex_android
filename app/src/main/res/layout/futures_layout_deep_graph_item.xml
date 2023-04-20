@@ -2,18 +2,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
     xmlns:tools="http://schemas.android.com/tools">
     <RelativeLayout
-        android:id="@+id/handicap_buy_layout_01"
+        android:id="@+id/rl_bg"
         style="@style/ContractDeepItemRel2">
 
         <TextView
-            android:id="@+id/price_buy_01"
+            android:id="@+id/tv_price"
             tools:text="2914"
             style="@style/ContractDeepItemTextLeft1" />
 
         <TextView
-            android:id="@+id/count_buy_01"
+            android:id="@+id/tv_amount"
             tools:text="1.992"
             style="@style/ContractDeepItemTextRight" />
     </RelativeLayout>
