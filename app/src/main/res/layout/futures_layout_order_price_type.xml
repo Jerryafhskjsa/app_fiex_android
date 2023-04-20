@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/lin_order_type"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:background="@drawable/bg_transaction_input"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_padding"
+            android:maxLines="1"
+            android:text="@string/order_type_limit"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/order_type_arrow"
+            style="@style/ContractSmallArrow"
+            android:layout_margin="@dimen/default_padding" />
+
+    </LinearLayout>
+
+</FrameLayout>

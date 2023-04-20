@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.black.frying.contract.FuturesOrderCreateFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="transactionInfo" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_transaction_input"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <skin.support.widget.SkinCompatCheckedTextView
+                android:id="@+id/btn_buy"
+                style="@style/ContractHeader1BuyBtn"
+                android:layout_margin="2dp"
+                android:background="@drawable/bg_transaction_buy"
+                android:checked="true"
+                android:text="@string/contract_buy"
+                android:textColor="@color/btn_sale_check" />
+
+            <skin.support.widget.SkinCompatCheckedTextView
+                android:id="@+id/btn_sale"
+                style="@style/ContractHeader1BuyBtn"
+                android:layout_margin="2dp"
+                android:background="@drawable/bg_transaction_sale"
+                android:text="@string/contract_sell"
+                android:textColor="@color/btn_sale_check" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <com.black.frying.contract.biz.view.FuturesOrderPriceTypeView
+            android:id="@+id/futurePriceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
 
 </FrameLayout>

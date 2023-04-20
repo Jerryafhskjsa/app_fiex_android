@@ -19,7 +19,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.SocketDataContainer
 import com.black.base.view.DeepControllerWindow
 import com.black.frying.contract.state.FutureGlobalStateViewModel
-import com.black.frying.contract.viewmodel.FuturesTransactionInfoDisplayViewModel
+import com.black.frying.contract.viewmodel.FuturesDeepGraphViewModel
 import com.black.lib.view.ProgressDrawable
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
@@ -27,7 +27,6 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FuturesLayoutDeepGraphBinding
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import kotlinx.coroutines.flow.SharedFlow
 import skin.support.content.res.SkinCompatResources
 
 class FuturesDeepGraphFragment : Fragment() {
@@ -51,8 +50,8 @@ class FuturesDeepGraphFragment : Fragment() {
         fun newInstance() = FuturesDeepGraphFragment()
     }
 
-    private val viewModel: FuturesTransactionInfoDisplayViewModel by lazy {
-        ViewModelProvider(this).get(FuturesTransactionInfoDisplayViewModel::class.java)
+    private val viewModel: FuturesDeepGraphViewModel by lazy {
+        ViewModelProvider(this).get(FuturesDeepGraphViewModel::class.java)
     }
     private val globalViewModel: FutureGlobalStateViewModel by lazy {
         ViewModelProvider(

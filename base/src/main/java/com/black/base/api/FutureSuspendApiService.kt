@@ -232,11 +232,11 @@ interface FutureSuspendApiService {
     suspend fun orderCreate(
         @Field("orderSide") orderSide: String?,
         @Field("symbol") symbol: String?,
-        @Field("price") price: Double?,
+        @Field("price") price: Number?,
         @Field("timeInForce") timeInForce: String?,
         @Field("orderType") orderType: String?,
         @Field("positionSide") positionSide: String?,
-        @Field("origQty") origQty: Int?,
+        @Field("origQty") origQty: Number?,
         @Field("triggerProfitPrice") triggerProfitPrice: Number?,
         @Field("triggerStopPrice") triggerStopPrice: Number?,
         @Field("reduceOnly") reduceOnly: Boolean?

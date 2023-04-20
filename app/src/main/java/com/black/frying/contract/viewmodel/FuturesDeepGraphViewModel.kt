@@ -13,7 +13,7 @@ import com.black.base.util.SocketDataContainer
 import com.black.frying.contract.FuturesDeepGraphFragment
 import com.black.util.CommonUtil
 
-class FuturesTransactionInfoDisplayViewModel : ViewModel() {
+class FuturesDeepGraphViewModel : ViewModel() {
     lateinit var mContext: Context
 
     val precisionLData = MutableLiveData<Int>()

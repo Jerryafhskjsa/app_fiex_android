@@ -112,6 +112,8 @@ class FuturesTransactionInfoFragment : Fragment() {
 //                val settingDialog = FuturesMultipleSettingDialog(context)
 //                settingDialog.setCancelable(true)
 //                settingDialog.show()
+                viewModel.testApi()
+                viewModel.testAPiSuspend()
             }
         }
 

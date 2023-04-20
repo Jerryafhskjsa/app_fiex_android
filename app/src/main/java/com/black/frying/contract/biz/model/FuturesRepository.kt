@@ -70,26 +70,26 @@ object FuturesRepository {
             } else {
                 null
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             return null
         }
     }
 
-    suspend fun adjustLeverage(symbol:String,positionSide:String,leverage :Int):Boolean {
-       try {
-           val context = FryingApplication.instance()
-           val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
-               .getService(FutureSuspendApiService::class.java)
-               ?.adjustLeverage(symbol, positionSide, leverage)
-           return response?.isOk() == true
-       }catch (e:Exception){
-           e.printStackTrace()
-           return false
-       }
+    suspend fun adjustLeverage(symbol: String, positionSide: String, leverage: Int): Boolean {
+        try {
+            val context = FryingApplication.instance()
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.adjustLeverage(symbol, positionSide, leverage)
+            return response?.isOk() == true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
     }
 
-    suspend fun getFundingRate(coinPair:String): FundingRateBean? {
+    suspend fun getFundingRate(coinPair: String): FundingRateBean? {
 
         val context = FryingApplication.instance()
         return try {
@@ -101,44 +101,88 @@ object FuturesRepository {
             } else {
                 null
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
-    suspend fun getBalanceDetailSuspend(coin:String, underlyingType: String = Constants.U_BASED): BalanceDetailBean? {
+    suspend fun getBalanceDetailSuspend(
+        coin: String,
+        underlyingType: String = Constants.U_BASED
+    ): BalanceDetailBean? {
         val context = FryingApplication.instance()
         return try {
             val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
                 .getService(FutureSuspendApiService::class.java)
-                ?.getBalanceDetailSuspend(coin = null,underlyingType = underlyingType)
+                ?.getBalanceDetailSuspend(coin = coin, underlyingType = underlyingType)
             if (response?.isOk() == true) {
                 response.result
             } else {
                 null
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
-    suspend fun getDeepGraph(coinPair: String,level:Int = 30): DepthBean? {
+    suspend fun getDeepGraph(coinPair: String, level: Int = 30): DepthBean? {
         val context = FryingApplication.instance()
         return try {
             val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
                 .getService(FutureSuspendApiService::class.java)
-                ?.getDepth(symbol = coinPair,level = level)
+                ?.getDepth(symbol = coinPair, level = level)
             if (response?.isOk() == true) {
                 response.result
             } else {
                 null
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
+    }
+
+    //symbol=btc_usdt&origQty=14792&orderType=LIMIT&price=30360.68&timeInForce=GTC&orderSide=BUY&positionSide=LONG
+    suspend fun createOrder(
+        symbol: String,
+        origQty: Number,
+        orderType: String,
+        price: Number,
+        timeInForce: String,
+        orderSide: String,
+        positionSide: String,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        reduceOnly:Boolean?
+    ): String? {
+        val context = FryingApplication.instance()
+        return try {
+            val response = ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+                .getService(FutureSuspendApiService::class.java)
+                ?.orderCreate(
+                    symbol = symbol,
+                    orderSide = orderSide,
+                    price = price,
+                    timeInForce = timeInForce,
+                    orderType = orderType,
+                    origQty = origQty,
+                    positionSide = positionSide,
+                    triggerProfitPrice = triggerProfitPrice,
+                    triggerStopPrice = triggerStopPrice,
+                    reduceOnly = reduceOnly
+                )
+            if (response?.isOk() == true) {
+                response.result
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+
     }
 
 }
