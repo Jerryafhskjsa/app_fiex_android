@@ -35,8 +35,8 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
-        var rates = C2CApiServiceHelper.coinUsdtPrice?.usdt ?:0.0
-        var rate = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd ?:0.0
+        var rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
+        var rate = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
         val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
 
             viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
@@ -60,15 +60,18 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                 )
                 viewHolder?.totalCny?.setText(
                     if (exChange == 0) "≈ ￥ " + {
+                        if (wallet?.totalAmount == null) 0.0
+                        else
                         NumberUtil.formatNumberDynamicScaleNoGroup(
-                            wallet?.totalAmount!! * rates,
+                            wallet.totalAmount * rates!!,
                             8,
                             2,
                             2
                         )
-                    } else{"≈ $ " +
+                    } else{"≈ $ " +  if (wallet?.totalAmount == null) 0.0
+                    else
                         NumberUtil.formatNumberDynamicScaleNoGroup(
-                            wallet?.totalAmount!! * rate,
+                            wallet.totalAmount * rate!!,
                             8,
                             2,
                             2

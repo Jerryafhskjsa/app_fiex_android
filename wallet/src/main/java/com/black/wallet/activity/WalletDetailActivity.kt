@@ -92,8 +92,8 @@ class WalletDetailActivity : BaseActivity(),
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
+        binding?.exchange?.setOnClickListener(this)
 
-        binding?.appBarLayout?.findViewById<SpanTextView>(R.id.action_bar_title_big)?.text = wallet?.coinType
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -133,8 +133,9 @@ class WalletDetailActivity : BaseActivity(),
         return !super.isStatusBarDark()
     }
 
-    override fun getTitleText(): String? {
-        return if (wallet != null) if (wallet?.coinType == null) "" else wallet?.coinType else (if (coinType == null) "" else coinType)
+    override fun getTitleText(): String {
+        return "资产详情"
+        //return if (wallet != null) if (wallet?.coinType == null) "" else wallet?.coinType else (if (coinType == null) "" else coinType)
     }
 
     override fun onClick(v: View) {
@@ -151,6 +152,10 @@ class WalletDetailActivity : BaseActivity(),
                 bundle.putParcelable(ConstData.WALLET, wallet)
                 BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
             }
+
+            R.id.exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            }
             R.id.transaction -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -162,22 +167,17 @@ class WalletDetailActivity : BaseActivity(),
     private fun refreshWallet() {
 
 
-        val totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
-        totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
-
-        val totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
-        totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+         binding?.usable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
+         binding?.totalCny?.setText(if (wallet == null) nullAmount else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
             rate!! * (wallet?.estimatedAvailableAmountCny!!),
             10,
             2,
             2
-        ) + "USD")
+        ) )
 
-        val able =  binding?.root?.findViewById<SpanTextView>(R.id.able)
-        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
+        binding?.able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
 
-        val unable =  binding?.root?.findViewById<SpanTextView>(R.id.unable)
-        unable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
+        binding?.freez?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
             wallet?.coinFroze,
             10,
             2,

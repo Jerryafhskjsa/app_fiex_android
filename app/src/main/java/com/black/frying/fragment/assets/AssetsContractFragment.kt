@@ -24,6 +24,7 @@ import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.Money
 import com.black.base.model.future.AccountInfoBean
 import com.black.base.model.wallet.TigerWallet
+import com.black.base.util.ConstData
 import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -134,9 +135,11 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .go(mContext)
+        val wallet = adapter?.getItem(position)
+        //点击账户详情
+        val extras = Bundle()
+        extras.putParcelable(ConstData.WALLET, wallet)
+        BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras).go(this)
     }
 
 

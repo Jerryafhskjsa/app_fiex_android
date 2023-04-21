@@ -58,7 +58,7 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recharge)
 
-        var actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
+        val actionBarRecord: ImageButton? = binding?.root?.findViewById(R.id.img_action_bar_right)
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
 
@@ -80,7 +80,7 @@ open class RechargeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun getTitleText(): String? {
-        return getString(R.string.rechange)
+        return getString(R.string.rechange) + coinType
     }
 
     override fun onClick(view: View) {

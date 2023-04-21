@@ -1,5 +1,6 @@
 package com.black.frying.fragment.assets
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,9 +27,11 @@ import com.black.base.model.wallet.TigerWallet
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.ExchangeRatesUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
+import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.black.wallet.BR
 import com.black.wallet.R
@@ -140,6 +143,48 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras).go(this)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN_RECHARGE -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.CHOOSE_COIN_WITHDRAW -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.LEVER_PAIR_CHOOSE -> {
+                    val pair = data?.getStringExtra(ConstData.PAIR)
+                    if (pair != null) {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.PAIR, pair)
+                            BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
+                        })
+                    }
+                }
+            }
+        }
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btn_exchange -> {
@@ -195,17 +240,17 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
-                var usd = String.format("≈ %s USD", nullAmount)
-                var cny = String.format("≈ %S CNY", nullAmount)
+                var usd = String.format("≈ %s $", nullAmount)
+                var cny = String.format("≈ %S ￥", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 if (total != null && exChange == 0) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
+                    cny = String.format("≈ %S ￥", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
                 }
                 if (total != null && exChange == 1) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
+                    usd = String.format("≈ %S $", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
                 }
                 binding?.profitLoss?.setText(": 0.0 USDT")
                 if (exChange == 0){

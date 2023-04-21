@@ -973,8 +973,8 @@
     <string name="person_checking">Authentication in Progress</string>
     <string name="withdraw_amount">Withdrawal quantity</string>
     <string name="usable_coin_amount">Available %1$s %1$s</string>
-    <string name="actual_receive_amount">Actual receipt of %1$s</string>
-    <string name="fee_amount">Service charge %1$s</string>
+    <string name="actual_receive_amount">Actual receipt </string>
+    <string name="fee_amount">Service charge: %1$s</string>
     <string name="withdraw_amount_limit">24-hour withdrawal limit of %1$s</string>
     <string name="addr_remark">Please enter an alias (optional)</string>
     <string name="addr_remark_des">Address alias</string>
@@ -1060,6 +1060,9 @@
     <string name="limit_price_entrust">Limit price entrust</string>
     <string name="plan_entrust">Plan entrust</string>
     <string name="buy_coin">Buy coin</string>
+    <string name="sell_coin">Sell coin</string>
+    <string name="hour">24H 提现额度%1$s%1$s</string>
+    <string name="tixian_amount">%1$s</string>
 
 
 </resources>

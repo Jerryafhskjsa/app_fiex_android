@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,7 @@ import kotlin.math.abs
 import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
 import com.black.frying.fragment.assets.AssetsWalletFragment
 import com.black.router.annotation.Route
+import com.black.wallet.databinding.FragmentCapitalBinding
 
 @Route(
     value = [RouterConstData.HOME_ASSET],
@@ -57,7 +59,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     companion object {
         private const val TYPE_CNY = "CNY"
         private const val TYPE_BTC = "BTC"
-        private val TAB_TITLES = arrayOfNulls<String>(5) //标题
+        private val TAB_TITLES = arrayOfNulls<String>(4) //标题
         private var TAB_NORMAL: String? = null
         private var TAB_CONTRACT: String? = null
         private var TAB_FINANCE: String? = null
@@ -67,6 +69,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var bgDefault: Int? = null
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
+    private var actionType: String? = null
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
@@ -85,7 +88,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var walletFragment: AssetsWalletFragment? = null
     private var contractFragment: AssetsContractFragment? = null
     private var assetsContractFragment: EmptyFragment? = null
-    private var assetsFinanceFragment: EmptyFragment? = null
+    private var assetsFinanceFragment: AssetsFinanceFragment? = null
     private var assetsWalletFragment: EmptyFragment? = null
 //    private var assetsContractFragment: AssetsContractFragment? = null
 //    private var assetsFinanceFragment: AssetsFinanceFragment? = null
@@ -141,19 +144,21 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             TAB_TITLES[2] = TAB_CONTRACT
         }
 
-        getString(R.string.finance_account).also {
+      /*  getString(R.string.finance_account).also {
             TAB_FINANCE = it
             TAB_TITLES[3] = TAB_FINANCE
         }
+
+       */
         getString(R.string.capital_account).also {
             TAB_FINANCE = it
-            TAB_TITLES[4] = TAB_FINANCE
+            TAB_TITLES[3] = TAB_FINANCE
         }
 
 
         binding?.tabLayout?.setSelectedTabIndicatorHeight(0)
         binding?.tabLayout?.tabMode = TabLayout.MODE_SCROLLABLE
-
+        actionType = TAB_NORMAL
         initFragmentList()
 
         binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(mContext!!.supportFragmentManager) {
@@ -183,6 +188,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     if (tab.customView != null) {
                         val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
                         textView.text = TAB_TITLES[i]
+                        //textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, R.dimen.text_size_20.toFloat())
                     }
                 }
             } catch (throwable: Throwable) {
@@ -311,7 +317,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             contractFragment = it
             contractFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyFragment().also {
+        fragmentList?.add(AssetsFinanceFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
@@ -320,7 +326,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
-        fragmentList?.add(EmptyFragment().also {
+        /*fragmentList?.add(EmptyFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
             bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
@@ -329,6 +335,8 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
+
+         */
 
     }
     fun setMoney(total: Money?){
@@ -435,7 +443,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             assetsFinanceFragment?.run {
                 observable?.subscribe {
-//                    setData(it)
+                    setData(it)
                 }
             }
             assetsWalletFragment?.run {

@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/B2"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/default_padding"
+                    android:paddingLeft="@dimen/text_size_20"
                     android:paddingRight="@dimen/default_padding">
 
                     <com.black.base.widget.SpanTextView
@@ -54,14 +54,14 @@
                         android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:text="@string/select_coin"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14" />
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12" />
 
                     <LinearLayout
                         android:id="@+id/choose_coin_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:background="@drawable/bg_transfer_corner"
+                        style="@style/ButtonGray"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
@@ -81,22 +81,62 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
-                            android:src="@drawable/icon_down" />
+                            android:src="@drawable/xiala" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/text_size_10"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/tixian"
+                            android:layout_width="140dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="@dimen/default_padding"
+                            android:background="@drawable/neibu_zhuan"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="@string/extract_address_help"
+                            android:textColor="@color/btn_sale_check"
+                            android:textSize="@dimen/text_size_14"
+                            />
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/neibu_zhuan"
+                            android:layout_width="140dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="@dimen/default_padding"
+                            android:background="@drawable/neibu_zhuan"
+                            android:layout_weight="1"
+                            android:checked="false"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="内部转账"
+                            android:textColor="@color/btn_sale_check"
+                            android:textSize="@dimen/text_size_14"
+                            />
+
+                    </LinearLayout>
+
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:text="@string/withdraw_chain"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14"></com.black.base.widget.SpanTextView>
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12">
+
+                    </com.black.base.widget.SpanTextView>
 
                     <LinearLayout
                         android:id="@+id/choose_chain_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:background="@drawable/bg_transfer_corner"
+                        style="@style/ButtonGray"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
@@ -116,22 +156,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
-                            android:src="@drawable/icon_down" />
+                            android:src="@drawable/xiala" />
                     </LinearLayout>
+
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:text="@string/extract_address_help"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14"></com.black.base.widget.SpanTextView>
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12">
+
+                    </com.black.base.widget.SpanTextView>
 
                     <LinearLayout
                         android:id="@+id/withdraw_addr_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:background="@drawable/bg_transfer_corner"
+                        style="@style/ButtonGray"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
@@ -151,13 +194,39 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
-                            android:src="@drawable/icon_down" />
+                            android:src="@drawable/xiala" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:gravity="right">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:text="目标地址(UID):"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12"/>
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/uid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="300312"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/withdraw_memo_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:orientation="vertical">
 
                         <com.black.base.widget.SpanTextView
@@ -166,7 +235,9 @@
                             android:gravity="center_vertical"
                             android:text="@string/wallet_target"
                             android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_14"></com.black.base.widget.SpanTextView>
+                            android:textSize="@dimen/text_size_14">
+
+                        </com.black.base.widget.SpanTextView>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -204,14 +275,14 @@
                         android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:text="@string/withdraw_amount"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14" />
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12" />
 
                     <LinearLayout
                         android:id="@+id/withdraw_amount_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:background="@drawable/bg_transfer_corner"
+                        style="@style/ButtonGray"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
@@ -225,7 +296,7 @@
                             android:background="@null"
                             android:inputType="numberDecimal"
                             android:hint="最小提币数量0.1usdt"
-                            android:textColor="@color/T1"
+                            android:textColor="@color/T3"
                             android:textSize="@dimen/text_size_13"
                             android:textStyle="bold"
                             app:use_delete="false"/>
@@ -235,55 +306,52 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/total"
-                            android:textColor="@color/T13"
+                            android:textColor="#FF5600"
                             android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="@dimen/default_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/withdraw_quota"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/default_padding"
+                            android:text="@string/withdraw_amount_limit"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:gravity="right|center_vertical"
                         android:orientation="horizontal">
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/available"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/black"
                             android:text="@string/usable_coin_amount" />
 
-                        <com.black.base.widget.SpanTextView
+                        <ImageView
                             android:id="@+id/tv_transfer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/text_size_20"
+                            android:layout_height="@dimen/text_size_20"
                             android:layout_marginLeft="@dimen/default_padding"
-                            android:text="@string/transfer"
-                            android:textColor="@color/T13" />
+                            android:background="@drawable/huazhuan3" />
+                    </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/arrive_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/actual_receive_amount" />
-
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/poundage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/default_padding"
-                            android:text="@string/fee_amount" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:visibility="gone"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -292,14 +360,6 @@
                             android:layout_height="16dp"
                             android:src="@drawable/icon_secure_tip" />
 
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/withdraw_quota"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/default_padding"
-                            android:text="@string/withdraw_amount_limit"
-                            android:textColor="@color/T15"
-                            android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
 
                     <com.black.base.widget.SpanTextView
@@ -308,16 +368,19 @@
                         android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:text="@string/warm_notice"
-                        android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_14"/>
+                        android:textColor="@color/T3"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12"/>
 
                     <com.black.base.widget.SpanTextView
+                        style="@style/ButtonGray"
                         android:id="@+id/warm_notic_des"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/text_size_10"
                         android:gravity="center_vertical"
                         android:text="@string/warm_notice_des"
-                        android:textColor="@color/T14"
+                        android:textColor="@color/T3"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
@@ -328,22 +391,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="@dimen/double_padding">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_10"
+                android:textStyle="bold"
+                android:text="@string/actual_receive_amount" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/arrive_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16"
+                android:text="@string/tixian_amount" />
 
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/poundage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/T3"
+        android:textSize="@dimen/text_size_10"
+        android:text="@string/fee_amount" />
+</LinearLayout>
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_confirm"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_width="140dp"
+                android:layout_height="36dp"
                 android:layout_margin="@dimen/default_padding"
-                android:background="@drawable/btn_t8"
+                android:background="@drawable/anniu"
                 android:checked="false"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/extract_submit"
                 android:textColor="@color/T8"
                 android:textSize="@dimen/text_size_14"
-                android:textStyle="bold" />
+                 />
         </LinearLayout>
     </RelativeLayout>
 </layout>

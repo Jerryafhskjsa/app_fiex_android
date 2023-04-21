@@ -40,8 +40,8 @@
             android:layout_height="match_parent">
             <ImageButton
                 android:id="@+id/action_bar_back"
-                android:layout_width="22dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"

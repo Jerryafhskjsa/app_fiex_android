@@ -209,7 +209,7 @@
                                     style="@style/HomeFeturesItemImage"
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    android:src="@drawable/chongzhi" />
+                                    android:src="@drawable/chongzhi3" />
 
                                 <CheckedTextView
                                     style="@style/HomeFeturesItemText"

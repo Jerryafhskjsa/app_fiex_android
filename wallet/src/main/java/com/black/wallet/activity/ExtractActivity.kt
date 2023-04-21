@@ -27,6 +27,7 @@ import com.black.base.model.wallet.*
 import com.black.base.net.NormalObserver
 import com.black.base.util.*
 import com.black.base.view.ChooseWalletControllerWindow
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -326,6 +327,70 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
     }
 
+    private fun successDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_succcess, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog?.findViewById<SpanTextView>(R.id.amount)?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount!! < coinInfoReal?.withdrawFee!!) getString(R.string.tixian_amount,"0.0")  else getString(R.string.tixian_amount,NumberUtil.formatNumberNoGroup(amount!! - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount!!))
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
+
+    private fun failedDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_failed, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog?.findViewById<SpanTextView>(R.id.amount)?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount!! < coinInfoReal?.withdrawFee!!) getString(R.string.tixian_amount,"0.0")  else getString(R.string.tixian_amount,NumberUtil.formatNumberNoGroup(amount!! - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount!!))
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            val bundle = Bundle()
+           /* bundle.putString(ConstData.TITLE, getString(R.string.finance_account))
+            bundle.putString(ConstData.URL, UrlConfig.getSupportsUrl(mContext!!))
+            BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+
+            */
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
     private fun getDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.withdraw_dialog, null)
         val dialog = Dialog(mContext, R.style.AlertDialog)
@@ -643,10 +708,11 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            FryingUtil.showToast(mContext, getString(R.string.withdraw_success))
                             verifyWindow.dismiss()
+                            successDialog()
                         } else {
-                            FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
+                            //FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
+                            failedDialog()
                         }
                     }
 

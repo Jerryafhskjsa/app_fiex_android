@@ -66,18 +66,17 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     override fun onClick(v: View) {
         when(v.id){
             R.id.recharge -> {
-                val bundle = Bundle()
-                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
-                bundle.putParcelable(ConstData.WALLET, wallet)
-                BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .go(this)
             }
 
 
             R.id.extract -> {
-                val bundle = Bundle()
-                bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
-                bundle.putParcelable(ConstData.WALLET, wallet)
-                BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
+                val extras = Bundle()
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                    .go(this)
             }
             R.id.transaction -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
