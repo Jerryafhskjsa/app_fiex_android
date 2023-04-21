@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B2"
+                android:background="@color/B1"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -32,12 +32,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_size_10"
                     android:layout_marginRight="@dimen/text_size_10"
-                    style="@style/ButtonGray"
-                    android:layout_marginTop="@dimen/text_size_5"
+                    android:background="@drawable/zongzichan"
+                    android:layout_marginTop="@dimen/text_size_16"
                     android:orientation="vertical"
-                    android:gravity="center_vertical">
+                    >
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
@@ -46,23 +55,29 @@
                             android:layout_marginLeft="@dimen/double_padding"
                             android:layout_marginTop="@dimen/text_size_15"
                             android:text="@string/wallet_total_usdt"
-                            android:textColor="@color/T11"
-                            android:textSize="@dimen/text_size_13" />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:textColor="@color/T3"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_12" />
+                        <com.black.base.widget.SpanCheckBox
+                            android:id="@+id/xianshi"
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
+                            android:layout_marginLeft="@dimen/text_size_16"
                             android:layout_marginTop="@dimen/text_size_16"
-                            android:background="@drawable/xianshi"/>
+                            android:button="@drawable/xianshi1"/>
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/money_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/text_size_5"
                         android:layout_marginLeft="@dimen/double_padding"
-                        android:layout_marginRight="@dimen/double_padding"
+                        android:layout_marginRight="5dp"
                         android:textColor="@color/T1"
                         android:textStyle="bold"
                         android:text="--"
@@ -72,7 +87,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/text_size_5"
-                        android:layout_marginLeft="@dimen/double_padding"
                         android:layout_marginRight="@dimen/double_padding"
                         android:layout_marginBottom="@dimen/text_size_20"
                         android:textColor="@color/T11"
@@ -80,49 +94,58 @@
                         android:text="--"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_size_10"
-                    android:orientation="horizontal">
+                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="52dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="@dimen/text_size_16"
+                            android:layout_marginRight="24dp"
+                            android:background="@drawable/jiantou"/>
+                    </LinearLayout>
 
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/recharge"
-                        style="@style/ButtonBlue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_size_10"
-                        android:layout_weight="1"
-                        android:padding="@dimen/middle_padding"
-                        android:text="@string/rechange" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="@dimen/line" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/exchange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_weight="1"
+                            android:padding="@dimen/middle_padding"
+                            />
 
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/extract"
-                        style="@style/ButtonReturn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="@dimen/middle_padding"
-                        android:text="@string/extract" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="@dimen/line" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/line" />
 
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/exchange"
-                        style="@style/ButtonReturn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/text_size_10"
-                        android:layout_weight="1"
-                        android:padding="@dimen/middle_padding"
-                        android:text="@string/exchange" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/extract"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/middle_padding"
+                            />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/line" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/recharge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:layout_weight="1"
+                            android:padding="@dimen/middle_padding"
+                            />
 
 
+                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -134,6 +157,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/B2">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_10"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="@dimen/text_size_16"
@@ -157,44 +186,45 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/B2"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        style="@style/Yinying"
                         android:id="@+id/spot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_width="380dp"
+                        android:layout_height="92dp"
+                        android:background="@drawable/xianhuo"
                         android:orientation="horizontal">
 
-                        <View
-                            android:layout_width="@dimen/text_size_15"
-                            android:layout_height="match_parent" />
 
-                        <ImageView
-                            android:id="@+id/icon_coin"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_10"
-                            android:src="@drawable/home_tab_assets">
-
-                        </ImageView>
-
-                        <View
-                            android:layout_width="@dimen/text_size_10"
-                            android:layout_height="match_parent" />
-
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:orientation="vertical">
                         <com.black.base.widget.SpanTextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_10"
                             android:text="@string/spot_account"
                             android:textColor="@color/T3"
-                            android:textSize="@dimen/text_size_14"
+                            android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/spot_bili"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/T3"
+                                android:textSize="@dimen/text_size_12"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginRight="@dimen/text_size_10"
                             android:layout_height="wrap_content">
 
 
@@ -217,8 +247,8 @@
                                 android:layout_marginRight="@dimen/text_size_10"
                                 android:gravity="right"
                                 android:text="0.0CNY"
-                                android:textColor="@color/C3"
-                                android:textSize="@dimen/text_size_14" />
+                                android:textColor="@color/T3"
+                                android:textSize="@dimen/text_size_12" />
 
                         </RelativeLayout>
                         <ImageView
@@ -233,53 +263,50 @@
 
                     </LinearLayout>
 
+
+
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="30dp" />
+                        android:layout_height="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     style="@style/Yinying"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
+                    android:id="@+id/future"
+                    android:layout_gravity="center"
+                    android:layout_width="380dp"
+                    android:layout_height="92dp"
+                    android:background="@drawable/xianhuo"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="@dimen/text_size_15"
-                        android:layout_height="match_parent" />
 
                     <LinearLayout
-                        android:id="@+id/future"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_10"
-                            android:src="@drawable/home_tab_futures">
-
-                        </ImageView>
+                            android:text="@string/contract_account"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/future_bili"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12"
+                            android:textStyle="bold" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/text_size_10"
-                        android:layout_height="match_parent" />
-
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/text_size_10"
-                        android:text="@string/contract_account"
-                        android:textColor="@color/T3"
-                        android:textSize="@dimen/text_size_14"
-                        android:textStyle="bold" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
                         android:layout_height="wrap_content">
+
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/future_usdt"
@@ -288,9 +315,9 @@
                             android:layout_marginRight="@dimen/text_size_10"
                             android:gravity="right"
                             android:text="0.0USDT"
-                            android:textColor="@color/T1"
+                            android:textColor="@color/black_real"
                             android:textSize="@dimen/text_size_16"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/future_cny"
@@ -300,56 +327,53 @@
                             android:layout_marginRight="@dimen/text_size_10"
                             android:gravity="right"
                             android:text="0.0CNY"
-                            android:textColor="@color/C3"
-                            android:textSize="@dimen/text_size_14" />
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12" />
+
                     </RelativeLayout>
+
+
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:layout_height="10dp" />
 
                 <LinearLayout
-                    android:id="@+id/capital"
                     style="@style/Yinying"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/capital"
+                    android:layout_gravity="center"
+                    android:layout_width="380dp"
+                    android:layout_height="92dp"
+                    android:background="@drawable/xianhuo"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="@dimen/text_size_15"
-                        android:layout_height="match_parent" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_size_10"
-                            android:src="@drawable/home_tab_transaction">
-
-                        </ImageView>
+                            android:text="@string/capital_account"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/capital_bili"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12"
+                            android:textStyle="bold" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/text_size_10"
-                        android:layout_height="match_parent" />
-
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/text_size_10"
-                        android:text="@string/capital_account"
-                        android:textColor="@color/T3"
-                        android:textSize="@dimen/text_size_14"
-                        android:textStyle="bold" />
-
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/text_size_10"
                         android:layout_height="wrap_content">
 
 
@@ -359,7 +383,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/text_size_10"
                             android:gravity="right"
-                            android:text="0.00USDT"
+                            android:text="0.0USDT"
                             android:textColor="@color/black_real"
                             android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
@@ -371,20 +395,23 @@
                             android:layout_below="@+id/capital_usdt"
                             android:layout_marginRight="@dimen/text_size_10"
                             android:gravity="right"
-                            android:text="0.00CNY"
-                            android:textColor="@color/C3"
-                            android:textSize="@dimen/text_size_14" />
+                            android:text="0.0CNY"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_12" />
 
                     </RelativeLayout>
+
+
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:layout_height="300dp" />
 
                 <LinearLayout
                     style="@style/Yinying"
                     android:id="@+id/financial"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -460,7 +487,7 @@
                         android:overScrollMode="never"
                         android:scrollbars="none" />
 
-
+                </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.black.base.widget.ObserveScrollView>

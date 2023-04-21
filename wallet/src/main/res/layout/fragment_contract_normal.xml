@@ -26,19 +26,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/B2"
+                    android:background="@color/B1"
                     android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="382dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_size_5"
                     android:layout_marginTop="@dimen/text_size_5"
-                    style="@style/ButtonGray"
+                    android:background="@drawable/xianhuo"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="@dimen/text_size_10"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:orientation="horizontal">
                         <LinearLayout
@@ -120,6 +121,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginTop="@dimen/text_size_20"
                             android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
@@ -127,13 +130,22 @@
                             android:layout_marginLeft="@dimen/double_padding"
                             android:layout_marginTop="@dimen/text_size_10"
                             android:text="@string/total_contract"
-                            android:textColor="@color/T11"
-                            android:textSize="@dimen/text_size_13" />
+                            android:textColor="@color/T3"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_12" />
+                            <com.black.base.widget.SpanCheckBox
+                                android:id="@+id/xianshi"
+                                android:layout_width="@dimen/text_size_16"
+                                android:layout_height="@dimen/text_size_16"
+                                android:layout_marginLeft="@dimen/text_size_16"
+                                android:layout_marginTop="@dimen/text_size_12"
+                                android:button="@drawable/xianshi1"/>
 
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_marginTop="@dimen/text_size_10"
                             android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
@@ -144,16 +156,16 @@
                             android:layout_marginRight="10dp"
                             android:textColor="@color/T1"
                             android:textStyle="bold"
-                            android:text="1000000"
+                            android:text="0.00"
                             android:textSize="@dimen/text_size_20" />
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/money_total_cny"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/T11"
-                                android:text="1000000"
+                                android:text="0.00"
                                 android:textStyle="bold"
-                                android:textSize="@dimen/text_size_13" />
+                                android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -162,61 +174,12 @@
                         android:layout_marginTop="@dimen/text_size_10"
                         android:layout_marginBottom="@dimen/text_size_20"
                         android:orientation="vertical">
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/B1"/>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="69dp"
+                            android:layout_marginLeft="@dimen/text_size_10"
                              android:orientation="horizontal">
-                            <LinearLayout
-                                android:layout_width="190dp"
-                                android:layout_height="69dp"
-                                android:orientation="vertical">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_vertical">
-                                    <com.black.base.widget.SpanTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/double_padding"
-                                        android:layout_marginTop="@dimen/text_size_5"
-                                        android:text="@string/margin"
-                                        android:textColor="@color/T11"
-                                        android:textSize="@dimen/text_size_13" />
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical">
-                                        <com.black.base.widget.SpanTextView
-                                            android:id="@+id/margin"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/double_padding"
-                                            android:layout_marginRight="10dp"
-                                            android:textColor="@color/T1"
-                                            android:textStyle="bold"
-                                            android:text="1000000"
-                                            android:textSize="@dimen/text_size_16" />
-                                        <com.black.base.widget.SpanTextView
-                                            android:id="@+id/margin_cny"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/double_padding"
-                                            android:textColor="@color/T11"
-                                            android:textStyle="bold"
-                                            android:text="1000000"
-                                            android:textSize="@dimen/text_size_13" />
-                                    </LinearLayout>
-                                </LinearLayout>
-                            </LinearLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/B1"/>
                             <LinearLayout
                                 android:layout_width="191dp"
                                 android:layout_height="69dp"
@@ -232,8 +195,8 @@
                                         android:layout_marginLeft="@dimen/double_padding"
                                         android:layout_marginTop="@dimen/text_size_5"
                                         android:text="@string/money_total"
-                                        android:textColor="@color/C3"
-                                        android:textSize="@dimen/text_size_13" />
+                                        android:textColor="@color/T3"
+                                        android:textSize="@dimen/text_size_12" />
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -245,14 +208,59 @@
                                             android:layout_marginLeft="@dimen/double_padding"
                                             android:layout_marginRight="10dp"
                                             android:textColor="@color/T1"
-                                            android:textStyle="bold"
-                                            android:text="1000000"
-                                            android:textSize="@dimen/text_size_16" />
+                                            android:layout_marginTop="@dimen/text_size_10"
+                                            android:text="0.00"
+                                            android:textSize="@dimen/text_size_12" />
                                         <com.black.base.widget.SpanTextView
                                             android:id="@+id/money_cny"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="@dimen/double_padding"
+                                            android:textColor="@color/T11"
+                                            android:textStyle="bold"
+                                            android:visibility="gone"
+                                            android:text="1000000"
+                                            android:textSize="@dimen/text_size_13" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="190dp"
+                                android:layout_height="69dp"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_vertical">
+                                    <com.black.base.widget.SpanTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/double_padding"
+                                        android:layout_marginTop="@dimen/text_size_5"
+                                        android:text="@string/margin"
+                                        android:textColor="@color/T3"
+                                        android:textSize="@dimen/text_size_12" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+                                        <com.black.base.widget.SpanTextView
+                                            android:id="@+id/margin"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/double_padding"
+                                            android:layout_marginTop="@dimen/text_size_10"
+                                            android:layout_marginRight="10dp"
+                                            android:textColor="@color/T1"
+                                            android:text="0.00"
+                                            android:textSize="@dimen/text_size_12" />
+                                        <com.black.base.widget.SpanTextView
+                                            android:id="@+id/margin_cny"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/double_padding"
+                                            android:visibility="gone"
                                             android:textColor="@color/T11"
                                             android:textStyle="bold"
                                             android:text="1000000"
@@ -268,6 +276,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="69dp"
+                            android:layout_marginLeft="@dimen/text_size_10"
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="190dp"
@@ -284,8 +293,8 @@
                                         android:layout_marginLeft="@dimen/double_padding"
                                         android:layout_marginTop="@dimen/text_size_5"
                                         android:text="@string/profit"
-                                        android:textColor="@color/T11"
-                                        android:textSize="@dimen/text_size_13" />
+                                        android:textColor="@color/T3"
+                                        android:textSize="@dimen/text_size_12" />
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -296,10 +305,10 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="@dimen/double_padding"
                                             android:layout_marginRight="10dp"
+                                            android:layout_marginTop="@dimen/text_size_10"
                                             android:textColor="@color/T1"
-                                            android:textStyle="bold"
-                                            android:text="1000000"
-                                            android:textSize="@dimen/text_size_16" />
+                                            android:text="0.00"
+                                            android:textSize="@dimen/text_size_12" />
                                         <com.black.base.widget.SpanTextView
                                             android:id="@+id/profit_cny"
                                             android:layout_width="wrap_content"
@@ -307,61 +316,58 @@
                                             android:layout_marginLeft="@dimen/double_padding"
                                             android:textColor="@color/T11"
                                             android:textStyle="bold"
+                                            android:visibility="gone"
                                             android:text="1000000"
                                             android:textSize="@dimen/text_size_13" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/B1"/>
+
                             <LinearLayout
                                 android:layout_width="191dp"
                                 android:layout_height="69dp"
                                 android:orientation="vertical">
                             </LinearLayout>
                         </LinearLayout>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/B1"/>
+
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/text_size_10"
-                        android:layout_marginBottom="@dimen/text_size_20"
+                        android:layout_marginBottom="40dp"
                         android:orientation="horizontal">
                         <LinearLayout
                             android:id="@+id/exchange"
-                            style="@style/ButtonBlue"
-                            android:layout_width="150dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="35dp"
+                            style="@style/ButtonGray"
+                            android:gravity="center"
+                            android:layout_width="158dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="26dp"
                             >
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/exchange"
-                                android:textColor="@color/B1"
-                                android:textSize="@dimen/text_size_20"
+                                android:textColor="@color/black_real"
+                                android:textSize="@dimen/text_size_14"
                                />
 
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/transaction"
-                            android:layout_width="150dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="25dp"
-                            style="@style/ButtonReturn">
+                            android:layout_width="158dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:layout_marginRight="26dp"
+                            android:gravity="center"
+                           android:background="@drawable/anniu">
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:textColor="@color/T13"
+                                android:textColor="@color/white"
                                 android:text="@string/home_tab_transaction"
-                                android:textSize="@dimen/text_size_20" />
+                                android:textSize="@dimen/text_size_14" />
 
                         </LinearLayout>
 
@@ -376,7 +382,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_padding" />
+                            android:layout_height="@dimen/text_size_20" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -390,43 +396,59 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
-                                <com.black.base.widget.SpanCheckBox
-                                    android:id="@+id/btn_wallet_filter"
+                                <LinearLayout
+                                    style="@style/ButtonGrayLight"
+                                    android:layout_width="158dp"
+                                    android:layout_height="36dp"
+                                    android:layout_marginLeft="@dimen/text_size_14"
+                                    android:gravity="center_vertical">
+
+                                    <com.black.lib.view.InputLinearLayout
+                                        android:layout_width="158dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:layout_marginRight="10dp"
+                                            android:adjustViewBounds="true"
+                                            android:scaleType="centerInside"
+                                            android:src="@drawable/sousuo" />
+
+                                        <com.black.base.widget.SpanMaterialEditText
+                                            android:id="@+id/coin_search"
+                                            style="@style/NormalEditTextStyle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center_vertical"
+                                            android:hint="请输入币种名称"
+                                            android:textColor="#5F616D"
+                                            android:textSize="@dimen/text_size_12" />
+                                    </com.black.lib.view.InputLinearLayout>
+                                </LinearLayout>
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="right"
-                                    android:layout_marginLeft="3dp"
-                                    android:background="@null"
-                                    android:button="@drawable/btn_wallet_filter"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:focusableInTouchMode="true"
-                                    android:gravity="center"
-                                    android:paddingLeft="10dp"
-                                    android:text="@string/wallet_coin_filter"
-                                    android:textColor="@color/T2"
-                                    android:textSize="@dimen/text_size_14" />
-                                <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/coin_search"
-                                    style="@style/NormalEditTextStyle"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_weight="1"
-                                    android:background="@null"
-                                    android:hint="@string/search_coin"
-                                    android:imeOptions="actionSearch"
-                                    android:inputType="text"
-                                    android:maxLines="1"
-                                    app:useDelete="false"
-                                    android:padding="0dp"
-                                    android:textColor="@color/T1"
-                                    android:textColorHint="@color/T3"
-                                    android:textSize="@dimen/text_size_16" />
-                                <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:src="@drawable/icon_search_wallet" />
+                                    android:gravity="right"
+                                    android:layout_marginRight="@dimen/text_size_16"
+                                    android:layout_weight="1">
+                                    <com.black.base.widget.SpanCheckBox
+                                        android:id="@+id/btn_wallet_filter"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="3dp"
+                                        android:background="@null"
+                                        android:button="@drawable/btn_wallet_filter"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:focusableInTouchMode="true"
+                                        android:paddingLeft="10dp"
+                                        android:text="@string/wallet_coin_filter"
+                                        android:textColor="@color/T3"
+                                        android:textSize="@dimen/text_size_12" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <View

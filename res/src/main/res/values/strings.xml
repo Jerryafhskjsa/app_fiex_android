@@ -267,7 +267,7 @@
     <string name="welcome_fbsex">欢迎来到SoeasyEx</string>
     <string name="alert_server_error">服务器异常！</string>
     <string name="wallet_coin_filter">隐藏小额币种</string>
-    <string name="total_contract">合约总资产(USD)</string>
+    <string name="total_contract">合约总资产(USDT)</string>
     <string name="bond_money_total">保证金金额</string>
     <string name="wallet_money_total">钱包余额</string>
     <string name="break_even_total">未实现盈亏</string>
@@ -915,8 +915,8 @@
     <string name="investment_portfolio">资产组合</string>
     <string name="quick_recharged">快速充值</string>
     <string name="quick_extract">快速提现</string>
-    <string name="spot_account">现货</string>
-    <string name="contract_account">合约</string>
+    <string name="spot_account">现货账户</string>
+    <string name="contract_account">合约账户</string>
     <string name="otc_account">OTC账户</string>
     <string name="finance_account">理财</string>
     <string name="capital_account">资金账户</string>
@@ -988,9 +988,9 @@
     <string name="usdt_base">U本位</string>
     <string name="usdt_base_contract">U本位</string>
     <string name="coin_base_contract">币本位</string>
-    <string name="money_total">账户权益(USD)</string>
-    <string name="profit">全部未实现盈亏(USD)</string>
-    <string name="margin">保证金余额(USD)</string>
+    <string name="money_total">可用(USDT)</string>
+    <string name="profit">全部未实现盈亏(USDT)</string>
+    <string name="margin">占用保证金(USDT)</string>
     <string name="estimatedAvailableAmount">净资产余额</string>
     <string name="experience_gold">体验金</string>
     <string name="deduction">抵扣金</string>

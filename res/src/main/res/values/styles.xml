@@ -241,7 +241,7 @@
     </style>
 
     <style name="ButtonGrayLight">
-        <item name="android:background">@drawable/btn_light_gray</item>
+        <item name="android:background">@drawable/btn_gray_light_one</item>
         <item name="android:gravity">left</item>
         <item name="android:textColor">@color/T1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
