@@ -66,6 +66,15 @@ class FuturesOrderCreateFragment : Fragment() {
             it.futurePriceType.setOnClickListener {
                 viewModel.performClickChangePriceType(requireActivity())
             }
+
+        }
+
+        globalViewModel.pricePrecision.observe(viewLifecycleOwner){pricePrecision ->
+            binding?.futurePriceInput?.precision = pricePrecision
+        }
+        globalViewModel.amountPrecision.observe(viewLifecycleOwner){pricePrecision ->
+            binding?.futurePriceAmountInput?.precision = pricePrecision
+            binding?.futurePriceAmountInput?.setHint(context!!.getString(R.string.amount))
         }
         viewModel.buyOrSell.observe(viewLifecycleOwner) { isBuy ->
             binding?.btnBuy?.isChecked = isBuy

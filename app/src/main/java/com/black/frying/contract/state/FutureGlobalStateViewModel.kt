@@ -78,6 +78,12 @@ class FutureGlobalStateViewModel : ViewModel() {
     val tickerBeanLiveData = MutableLiveData<TickerBean>()
 
 
+    //价格精度
+    val pricePrecision = MutableLiveData<Int>()
+
+    //数量精度
+    val amountPrecision = MutableLiveData<Int>()
+
     init {
         initCoinPair()
     }
@@ -96,6 +102,8 @@ class FutureGlobalStateViewModel : ViewModel() {
                         symbolLists.first { bean -> source == bean.symbol }
                     }
                     symbolBeanLiveData.postValue(symbolBean)
+                    pricePrecision.postValue(symbolBean?.pricePrecision?:0)
+                    amountPrecision.postValue(symbolBean?.quantityPrecision?:0)
                     sendSymbolCommand()
                     getCoinPositionList()
                     getCoinFundingRate()
