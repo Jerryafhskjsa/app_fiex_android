@@ -41,7 +41,7 @@ import com.black.wallet.viewmodel.WalletViewModel
 
 class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var walletList: ArrayList<TigerWallet?>? = null
-    private var isVisibility: Boolean = false
+    private var isVisibility: Boolean = true
     private var searchKey: String? = null
     private var doSearch = true
     private var type: Int = 0
@@ -50,6 +50,9 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var adapter: ContractAdapter? = null
     private var eventListener:ContractEventResponseListener? = null
+    private var normalFragment: AssetsSpotFragment? = null
+    private var financeFragment: AssetsFinanceFragment? = null
+    private var walletFragment: AssetsWalletFragment? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -64,7 +67,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
             return layout
         }
 //        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contract_normal, container, false)
@@ -121,6 +124,10 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
                 eventListener?.setWalletCoinFilter(isChecked)
                 eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_CONTRACT)
                 doSearch = isChecked
+        }
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
         }
         return layout
     }
@@ -378,10 +385,11 @@ private fun refresh(type: Int){
         }
     }
 
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
-        refreshMoneyDisplay()
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
         adapter?.setVisibility(isVisibility)
+        binding?.xianshi?.isChecked = isChecked
+        refreshMoneyDisplay()
     }
 
     fun setWalletCoinFilter(isChecked: Boolean) {
@@ -401,6 +409,8 @@ private fun refresh(type: Int){
 
         fun getContractWalletCoinFilter(): Boolean? {
             return false
+        }
+        fun setWalletziCanFilter(checked: Boolean) {
         }
 
         fun setWalletCoinFilter(checked: Boolean) {

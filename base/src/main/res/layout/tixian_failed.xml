@@ -19,6 +19,7 @@
         android:textSize="@dimen/text_size_18" />
 
     <com.black.base.widget.SpanTextView
+        android:id="@+id/failed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -908,7 +908,7 @@
     <string name="version">V1.0.0</string>
     <string name="view_more">更多信息</string>
     <string name="asset_transfer">资产转移</string>
-    <string name="from">来自</string>
+    <string name="from">从</string>
     <string name="to">到</string>
     <string name="total_assets">现货总资产(USDT)</string>
     <string name="profit_loss">今日盈亏</string>

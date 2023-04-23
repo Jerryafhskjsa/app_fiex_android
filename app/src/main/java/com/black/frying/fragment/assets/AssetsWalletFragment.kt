@@ -1,5 +1,6 @@
 package com.black.frying.fragment.assets
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,10 +20,12 @@ import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.ExchangeRatesUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.frying.fragment.HomePageAssetsFragment
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
+import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.FragmentAssetsWalletBinding
@@ -31,13 +34,13 @@ import java.math.RoundingMode
 
 class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     private var layout: View? = null
-    private var isVisibility: Boolean = false
+    private var isVisibility: Boolean = true
     private var binding: FragmentAssetsWalletBinding? = null
     private var eventListener:WalletEventResponseListener? = null
     private var wallet: Wallet? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var normalFragment: AssetsSpotFragment? = null
-    private var walletFragment: AssetsWalletFragment? = null
+    private var financeFragment: AssetsFinanceFragment? = null
     private var contractFragment: AssetsContractFragment? = null
     fun setEventListener(listener: WalletEventResponseListener){
         this.eventListener = listener
@@ -48,7 +51,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         if (layout != null) {
             return layout
         }
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_assets_wallet, container, false)
         layout = binding?.root
         binding?.recharge?.setOnClickListener(this)
@@ -58,6 +61,10 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         binding?.capital?.setOnClickListener(this)
         binding?.exchange?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
+        }
         return layout
     }
 
@@ -88,6 +95,47 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
             R.id.financial -> {}
             R.id.exchange -> { BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)}
 
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN_RECHARGE -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.CHOOSE_COIN_WITHDRAW -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.LEVER_PAIR_CHOOSE -> {
+                    val pair = data?.getStringExtra(ConstData.PAIR)
+                    if (pair != null) {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.PAIR, pair)
+                            BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
+                        })
+                    }
+                }
+            }
         }
     }
 
@@ -297,8 +345,9 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         }
     }
 
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
+        binding?.xianshi?.isChecked = isChecked
         refreshMoneyDisplay()
     }
 
@@ -314,6 +363,8 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         fun setAssetWalletCoinFilter(checked: Boolean) {
         }
 
+        fun setWalletziCanFilter(checked: Boolean) {
+        }
         fun assetWalletSearch(searchKey: String, walletType: Int) {
         }
     }

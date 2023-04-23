@@ -139,6 +139,10 @@
                                 android:layout_height="@dimen/text_size_16"
                                 android:layout_marginLeft="@dimen/text_size_16"
                                 android:layout_marginTop="@dimen/text_size_12"
+                                android:checked="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:button="@drawable/xianshi1"/>
 
                         </LinearLayout>

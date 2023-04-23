@@ -104,7 +104,7 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
         WalletApiServiceHelper.getUserBalanceReal(this,false,object :Callback<UserBalanceWarpper?>(){
             override fun callback(returnData: UserBalanceWarpper?) {
                 if(returnData != null){
-                    userSoptBanlace = returnData?.spotBalance
+                    userSoptBanlace = returnData.spotBalance
                     getWalletData()
                     if (walletList != null) {
                         Collections.sort(walletList, Wallet.COMPARATOR_CHOOSE_COIN)
@@ -159,6 +159,7 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         val wallet = adapter?.getItem(position)
+        CookieUtil.addPairSearchHistory(mContext,wallet?.coinType)
         saveSearchHistory(wallet?.coinType)
         val resultData = Intent()
         resultData.putExtra(ConstData.WALLET, wallet)

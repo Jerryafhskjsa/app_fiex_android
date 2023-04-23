@@ -32,7 +32,7 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/gerenzhongxin" />
                 <RelativeLayout
-                    style="@style/ButtonGray"
+                    style="@style/ButtonGrayLight"
                     android:layout_toRightOf="@+id/btn_userinfo"
                     android:id="@+id/btn_search_menu"
                     android:layout_width="268dp"
@@ -64,7 +64,7 @@
 
                 </RelativeLayout>
                 <LinearLayout
-                    style="@style/ButtonGray"
+                    style="@style/ButtonGrayLight"
                     android:layout_alignParentRight="true"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
@@ -148,11 +148,6 @@
                                 android:src="@drawable/icon_home_notice_more"/>
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/text_size_10"
-                            android:background="@color/B1">
-                        </View>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="85dp"
@@ -192,116 +187,136 @@
                             android:background="@color/B1">
                         </View>
 
-                        <LinearLayout
+                        <android.widget.HorizontalScrollView
+                            android:id="@+id/horizontal_scroll"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="25dp"
-                            android:paddingBottom="15dp"
-                            android:orientation="horizontal"
-                            >
-                            <RelativeLayout
-                                android:id="@+id/rel_deposit"
-                                style="@style/HomeFeturesItem"
-                                android:layout_width="90dp">
+                            android:background="@color/B2"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:scrollbars="none">
 
-                                <ImageView
-                                    android:id="@+id/icon_deposit"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/chongzhi3" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="25dp"
+                                android:paddingBottom="15dp">
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_deposit"
-                                    android:text="@string/deposit" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:id="@+id/rel_referral"
-                                style="@style/HomeFeturesItem"
-                               android:layout_width="90dp">
+                                <RelativeLayout
+                                    android:id="@+id/rel_deposit"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
 
-                                <ImageView
-                                    android:id="@+id/icon_referral"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/tixian" />
+                                    <ImageView
+                                        android:id="@+id/icon_deposit"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/chongzhi3" />
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_referral"
-                                    android:text="@string/extract" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:id="@+id/rel_support"
-                                style="@style/HomeFeturesItem"
-                                android:layout_width="90dp">
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_deposit"
+                                        android:text="@string/deposit" />
+                                </RelativeLayout>
 
-                                <ImageView
-                                    android:id="@+id/icon_support"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/heyue" />
+                                <RelativeLayout
+                                    android:id="@+id/rel_referral"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_support"
-                                    android:text="@string/futures" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:id="@+id/rel_futures"
-                                style="@style/HomeFeturesItem"
-                                android:layout_width="90dp">
+                                    <ImageView
+                                        android:id="@+id/icon_referral"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/tixian" />
 
-                                <ImageView
-                                    android:id="@+id/icon_futures"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/maibi" />
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_referral"
+                                        android:text="@string/extract" />
+                                </RelativeLayout>
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_futures"
-                                    android:text="@string/buy_coin" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:id="@+id/rel_more"
-                                style="@style/HomeFeturesItem"
-                                android:layout_width="90dp">
+                                <RelativeLayout
+                                    android:id="@+id/rel_support"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
 
-                                <ImageView
-                                    android:id="@+id/icon_more"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/yaoqing" />
+                                    <ImageView
+                                        android:id="@+id/icon_support"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/heyue" />
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_more"
-                                    android:text="@string/referral" />
-                            </RelativeLayout>
-                            <RelativeLayout
-                                android:id="@+id/rel_spot"
-                                style="@style/HomeFeturesItem"
-                                android:layout_width="90dp">
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_support"
+                                        android:text="@string/futures" />
+                                </RelativeLayout>
 
-                                <ImageView
-                                    android:id="@+id/icon_spot"
-                                    style="@style/HomeFeturesItemImage"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:src="@drawable/yaoqing" />
+                                <RelativeLayout
+                                    android:id="@+id/rel_futures"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
 
-                                <CheckedTextView
-                                    style="@style/HomeFeturesItemText"
-                                    android:layout_below="@+id/icon_spot"
-                                    android:text="@string/referral" />
-                            </RelativeLayout>
-                        </LinearLayout>
+                                    <ImageView
+                                        android:id="@+id/icon_futures"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/maibi" />
+
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_futures"
+                                        android:text="@string/buy_coin" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rel_more"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
+
+                                    <ImageView
+                                        android:id="@+id/icon_more"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/yaoqing" />
+
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_more"
+                                        android:text="@string/referral" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rel_spot"
+                                    style="@style/HomeFeturesItem"
+                                    android:layout_width="90dp">
+
+                                    <ImageView
+                                        android:id="@+id/icon_spot"
+                                        style="@style/HomeFeturesItemImage"
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/kefu" />
+
+                                    <CheckedTextView
+                                        style="@style/HomeFeturesItemText"
+                                        android:layout_below="@+id/icon_spot"
+                                        android:text="@string/support" />
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </android.widget.HorizontalScrollView>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/text_size_10"
+                            android:background="@color/B1">
+                        </View>
                         <FrameLayout
                             android:visibility="gone"
                             android:layout_width="match_parent"
@@ -441,6 +456,7 @@
                             android:fadingEdge="none"
                             android:overScrollMode="never"
                             android:scrollbars="none"
+                            app:tabIndicator="@drawable/tabs_rounded_line_indicator"
                             app:tabIndicatorFullWidth="false"
                             app:tabIndicatorHeight="3dp"
                             app:tabIndicatorColor="@color/T13"

@@ -8,9 +8,10 @@
     <com.black.base.widget.SpanTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/history_record"
+        android:text="历史记录"
         android:layout_weight="1"
         android:textColor="@color/black_real"
+        android:textStyle="bold"
         android:textSize="@dimen/text_size_16" />
     <ImageView
         android:id="@+id/btn_action"

@@ -70,6 +70,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
     private var actionType: String? = null
+    private var isVisibility: Boolean = false
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
@@ -280,10 +281,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         refreshMoneyDisplay()
-        normalFragment?.setVisibility(isChecked)
+       /* normalFragment?.setVisibility(isChecked)
         walletFragment?.setVisibility(isChecked)
         contractFragment?.setVisibility(isChecked)
         leverFragment?.setVisibility(isChecked)
+
+        */
     }
 
     private fun initFragmentList() {
@@ -294,7 +297,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsWalletFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             it.arguments = bundle
             walletFragment = it
             walletFragment?.setEventListener(this)
@@ -302,7 +305,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsSpotFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
             normalFragment = it
@@ -311,7 +314,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsContractFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
             contractFragment = it
@@ -320,7 +323,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsFinanceFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
 //            assetsWalletFragment = it
@@ -495,6 +498,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     setTotal(it)
                 }
             }
+
+            assetsFinanceFragment?.run {
+                observable?.subscribe {
+                    setTotal(it)
+                }
+            }
         }
     }
 
@@ -559,7 +568,15 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         viewModel!!.setWalletCoinFilter(checked)
         normalFragment?.setWalletCoinFilter(checked)
         contractFragment?.setWalletCoinFilter(checked)
-        leverFragment?.setWalletCoinFilter(checked)
+        assetsFinanceFragment?.setWalletCoinFilter(checked)
+    }
+
+    override fun setWalletziCanFilter(checked: Boolean) {
+        normalFragment?.setVisibility(checked)
+        contractFragment?.setVisibility(checked)
+        assetsFinanceFragment?.setVisibility(checked)
+        walletFragment?.setVisibility(checked)
+
     }
 
     override fun search(searchKey: String, walletType: Int) {

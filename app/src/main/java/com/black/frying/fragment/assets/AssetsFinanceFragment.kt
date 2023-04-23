@@ -37,11 +37,13 @@ import com.black.wallet.viewmodel.WalletViewModel
 
 class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var walletList: ArrayList<Wallet?>? = null
-    private var isVisibility: Boolean = false
+    private var isVisibility: Boolean = true
     private var searchKey: String? = null
     private var wallet: Wallet? = null
     private var doSearch = true
-
+    private var walletFragment: AssetsWalletFragment? = null
+    private var normalFragment: AssetsSpotFragment? = null
+    private var contractFragment: AssetsContractFragment? = null
     private var binding: FragmentCapitalBinding? = null
     private var layout: View? = null
 
@@ -60,8 +62,8 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         if (layout != null) {
             return layout
         }
-//        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
+       // isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_capital, container, false)
@@ -73,6 +75,7 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         binding?.exchange?.setOnClickListener(this)
         binding?.withdraw?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
+        binding?.xianshi?.setOnClickListener(this)
         binding?.recyclerView?.layoutManager = layoutManager
         adapter = WalletAdapter(mContext!!, BR.listItemSpotAccountModel, walletList)
         adapter?.setVisibility(isVisibility)
@@ -121,13 +124,17 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
             }
             doSearch = true
         }
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
+        }
         return layout
     }
 
     override fun onResume() {
         super.onResume()
         doSearch = false
-//        binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getContractWalletCoinFilter() == null) false else walletActivity?.getContractWalletCoinFilter()!!)
+       //binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getContractWalletCoinFilter() == null) false else walletActivity?.getContractWalletCoinFilter()!!)
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -208,10 +215,11 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         adapter?.notifyDataSetChanged()
 
     }
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
-        refreshMoneyDisplay()
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
         adapter?.setVisibility(isVisibility)
+        binding?.xianshi?.isChecked = isChecked
+        refreshMoneyDisplay()
     }
 
     fun setWalletCoinFilter(isChecked: Boolean) {
@@ -235,6 +243,8 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         fun setFinanceWalletCoinFilter(checked: Boolean) {
         }
 
+        fun setWalletziCanFilter(checked: Boolean) {
+        }
         fun financeSearch(searchKey: String, walletType: Int) {
         }
     }

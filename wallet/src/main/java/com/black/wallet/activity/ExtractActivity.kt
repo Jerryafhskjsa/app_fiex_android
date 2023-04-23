@@ -386,7 +386,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             */
             dialog.dismiss()
         }
-        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
             finish()
             dialog.dismiss()
         }

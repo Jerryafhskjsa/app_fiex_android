@@ -58,26 +58,35 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                         2
                     )
                 )
-                viewHolder?.totalCny?.setText(
-                    if (exChange == 0) "≈ ￥ " + {
-                        if (wallet?.totalAmount == null) 0.0
-                        else
-                        NumberUtil.formatNumberDynamicScaleNoGroup(
-                            wallet.totalAmount * rates!!,
-                            8,
-                            2,
-                            2
-                        )
-                    } else{"≈ $ " +  if (wallet?.totalAmount == null) 0.0
-                    else
-                        NumberUtil.formatNumberDynamicScaleNoGroup(
-                            wallet.totalAmount * rate!!,
-                            8,
-                            2,
-                            2
-                        )
-                    }
+                viewHolder?.totalCny?.setText(if (exChange == 0){ "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet?.totalAmount!! * rates!!,
+                    8,
+                    2,
+                    2
+                )} else {"≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet?.totalAmount!! * rate!!,
+                    8,
+                    2,
+                    2
                 )
+                })
+                    /*if (exChange == 0) "≈ ￥ " + {
+                            NumberUtil.formatNumberNoGroup(
+                            wallet?.totalAmount!! * rates!!,
+                                RoundingMode.FLOOR,
+                            2,
+                            8
+                        )
+                    } else{"≈ $ " + NumberUtil.formatNumberNoGroup(
+                            wallet?.totalAmount!! * rate!!,
+                            RoundingMode.FLOOR,
+                            2,
+                            8
+                        )
+                    })
+
+                     */
+
                 viewHolder?.profit?.setText(
                     NumberUtil.formatNumberNoGroup(
                         wallet?.profit,
@@ -130,7 +139,7 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
             }
             if (wallet?.coinIconUrl != null) {
                 Glide.with(context)
-                    .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet?.coinIconUrl)))
+                    .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet.coinIconUrl)))
                     .apply(RequestOptions().error(R.drawable.icon_coin_default))
                     .into(viewHolder?.iconCoin!!)
             }

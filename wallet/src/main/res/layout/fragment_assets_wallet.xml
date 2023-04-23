@@ -64,6 +64,9 @@
                             android:layout_height="@dimen/text_size_16"
                             android:layout_marginLeft="@dimen/text_size_16"
                             android:layout_marginTop="@dimen/text_size_16"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:button="@drawable/xianshi1"/>
 
                     </LinearLayout>
@@ -107,17 +110,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_marginTop="@dimen/text_size_20"
                         android:orientation="horizontal">
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/exchange"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/ButtonGray"
+                            android:layout_width="104dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
                             android:layout_marginLeft="@dimen/text_size_10"
-                            android:layout_weight="1"
-                            android:padding="@dimen/middle_padding"
+                            android:text="@string/exchange"
+                            android:textColor="@color/black_real"
                             />
 
                         <View
@@ -126,10 +130,13 @@
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/extract"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="@dimen/middle_padding"
+                            style="@style/ButtonGray"
+                            android:layout_width="104dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="@string/extract"
+                            android:textColor="@color/black_real"
                             />
                         <View
                             android:layout_width="1dp"
@@ -137,11 +144,13 @@
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/recharge"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/text_size_10"
-                            android:layout_weight="1"
-                            android:padding="@dimen/middle_padding"
+                            android:layout_width="104dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:text="@string/rechange"
+                            android:textColor="@color/white"
+                            android:background="@drawable/anniu"
                             />
 
 

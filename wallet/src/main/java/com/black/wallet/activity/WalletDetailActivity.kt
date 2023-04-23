@@ -165,8 +165,14 @@ class WalletDetailActivity : BaseActivity(),
     }
 
     private fun refreshWallet() {
-
-
+        binding?.coinType?.setText(wallet?.coinType)
+        binding?.coinTypeDes?.setText(wallet?.coinTypeDes)
+        val requestOptions = RequestOptions
+            .bitmapTransform(RoundedCorners(DipPx.dip2px(mContext, 15f)))
+        Glide.with(mContext)
+            .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext, wallet?.coinIconUrl)))
+            .apply(requestOptions)
+            .into(binding?.iconCoin!!)
          binding?.usable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
          binding?.totalCny?.setText(if (wallet == null) nullAmount else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
             rate!! * (wallet?.estimatedAvailableAmountCny!!),

@@ -68,11 +68,11 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        pairSearchHistory
     }
 
     override fun onResume() {
         super.onResume()
+        pairSearchHistory
         searchPair("")
     }
 

@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,14 +41,16 @@ import com.black.wallet.databinding.FragmentWalletNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
 import java.math.BigDecimal
 
-class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
-    private var isVisibility: Boolean = false
+class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener{
+    private var isVisibility: Boolean = true
     private var searchKey: String? = null
     private var doSearch = true
     private var wallet: Wallet? = null
     private var binding: FragmentWalletNormalBinding? = null
     private var layout: View? = null
-
+    private var walletFragment: AssetsWalletFragment? = null
+    private var financeFragment: AssetsFinanceFragment? = null
+    private var contractFragment: AssetsContractFragment? = null
     private var adapter: WalletAdapter? = null
     private var eventListener:EventResponseListener? = null
 
@@ -63,9 +66,9 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         if (layout != null) {
             return layout
         }
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
-
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_normal, container, false)
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
@@ -120,6 +123,10 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
             eventListener?.setWalletCoinFilter(isChecked)
             eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
             doSearch = isChecked
+        }
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
         }
         return layout
     }
@@ -265,10 +272,11 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
     }
 
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
-        refreshMoneyDisplay()
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
         adapter?.setVisibility(isVisibility)
+        binding?.xianshi?.isChecked = isChecked
+        refreshMoneyDisplay()
     }
 
     fun setWalletCoinFilter(isChecked: Boolean) {
@@ -291,6 +299,9 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
 
         fun setWalletCoinFilter(checked: Boolean) {
+        }
+
+        fun setWalletziCanFilter(checked: Boolean) {
         }
 
         fun search(searchKey: String, walletType: Int) {
