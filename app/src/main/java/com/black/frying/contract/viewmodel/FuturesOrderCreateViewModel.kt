@@ -32,14 +32,14 @@ class FuturesOrderCreateViewModel : ViewModel() {
     // 界面计算逻辑
 
     //止盈止损
-    val showLimitPrice = MutableLiveData<Boolean>()
+    val showLimitPrice = MutableLiveData<Boolean>(false)
 
 
     fun start() {
 
     }
 
-    fun refreshOrderType(){
+    fun refreshOrderType() {
         val typeList = getCurrentPairOrderTypeList()
         if (typeList.isNotEmpty()) {
             orderType.value = typeList.first()
@@ -95,5 +95,9 @@ class FuturesOrderCreateViewModel : ViewModel() {
             val split = supportOrderType.split(",")
             return@let split.toList()
         } ?: emptyList()
+    }
+
+    fun performClickShowLimitInput(checked: Boolean) {
+        showLimitPrice.value = checked
     }
 }

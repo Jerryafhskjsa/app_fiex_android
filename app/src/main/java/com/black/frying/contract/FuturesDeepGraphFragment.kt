@@ -208,10 +208,12 @@ class FuturesDeepGraphFragment : Fragment() {
             if (C2CApiServiceHelper?.coinUsdtPrice?.usdt == null) {
                 return
             }
-            binding.includeMid?.currentPriceCny.text = ("≈" + NumberUtil.formatNumberNoGroup(
-                rates!! * price.toDouble(),
-                4,
-                4
+            val d = (rates?:1.0) * price.toDouble()
+            val value = globalViewModel.pricePrecision.value?:0
+            binding.includeMid.currentPriceCny.text = ("≈" + NumberUtil.formatNumberNoGroup(
+                d,
+                value,
+                value
             ) + if (exchanged == 0) "CNY" else "USD")
         } else {
             binding.includeMid?.currentPriceCny.text = ("≈" + NumberUtil.formatNumberNoGroup(

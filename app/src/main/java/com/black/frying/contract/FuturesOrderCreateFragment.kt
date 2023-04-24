@@ -1,20 +1,20 @@
 package com.black.frying.contract
 
-import android.app.Activity
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.black.base.view.DeepControllerWindow
+import androidx.lifecycle.ViewModelProvider
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_LIMIT
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_MARKET
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesOrderCreateBinding
+import java.util.*
 
 class FuturesOrderCreateFragment : Fragment() {
 
@@ -66,13 +66,18 @@ class FuturesOrderCreateFragment : Fragment() {
             it.futurePriceType.setOnClickListener {
                 viewModel.performClickChangePriceType(requireActivity())
             }
-
+            it.linLimitType.setOnClickListener {
+                //show spanner  change
+            }
+            it.contractWithLimit.setOnCheckedChangeListener { buttonView, isChecked ->
+                viewModel.performClickShowLimitInput(isChecked)
+            }
         }
 
-        globalViewModel.pricePrecision.observe(viewLifecycleOwner){pricePrecision ->
+        globalViewModel.pricePrecision.observe(viewLifecycleOwner) { pricePrecision ->
             binding?.futurePriceInput?.precision = pricePrecision
         }
-        globalViewModel.amountPrecision.observe(viewLifecycleOwner){pricePrecision ->
+        globalViewModel.amountPrecision.observe(viewLifecycleOwner) { pricePrecision ->
             binding?.futurePriceAmountInput?.precision = pricePrecision
             binding?.futurePriceAmountInput?.setHint(context!!.getString(R.string.amount))
         }
@@ -81,13 +86,24 @@ class FuturesOrderCreateFragment : Fragment() {
             binding?.btnSale?.isChecked = !isBuy
         }
         viewModel.orderType.observe(viewLifecycleOwner) { priceType ->
-            binding?.futurePriceType?.changeDisplay(if(priceType == ORDER_TYPE_LIMIT){
-                getString(R.string.order_type_limit)
-            }else if(priceType == ORDER_TYPE_MARKET){
-                getString(R.string.order_type_market)
-            }else{
-                priceType
-            })
+            binding?.futurePriceType?.changeDisplay(
+                if (priceType == ORDER_TYPE_LIMIT) {
+                    getString(R.string.order_type_limit)
+                } else if (priceType == ORDER_TYPE_MARKET) {
+                    getString(R.string.order_type_market)
+                } else {
+                    priceType
+                }
+            )
+        }
+
+        viewModel.showLimitPrice.observe(viewLifecycleOwner) { show ->
+            binding?.contractWithLimit?.isChecked = show
+            if (show) {
+                binding?.linStopValue?.visibility = View.VISIBLE
+            } else {
+                binding?.linStopValue?.visibility = View.GONE
+            }
         }
     }
 
