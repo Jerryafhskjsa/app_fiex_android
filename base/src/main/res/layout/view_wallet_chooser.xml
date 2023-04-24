@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_asset_coin_corner"
+    android:paddingBottom="30dp"
     android:gravity="bottom"
     android:orientation="vertical">
     <RelativeLayout
@@ -33,12 +34,11 @@
     <com.black.base.widget.SpanTextView
         android:id="@+id/tips"
         android:paddingLeft="@dimen/middle_padding"
-        android:paddingTop="@dimen/default_padding"
         android:paddingBottom="@dimen/default_padding"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_12"
-        android:visibility="gone">
+        >
     </com.black.base.widget.SpanTextView>
 
     <ListView

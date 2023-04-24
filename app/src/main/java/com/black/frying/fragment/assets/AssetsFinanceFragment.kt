@@ -133,9 +133,8 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
 
     override fun onResume() {
         super.onResume()
-        doSearch = false
-       //binding?.btnWalletFilter?.isChecked = (if (walletActivity?.getContractWalletCoinFilter() == null) false else walletActivity?.getContractWalletCoinFilter()!!)
-    }
+        doSearch = (if (eventListener?.getFinanceWalletCoinFilter() == null) true else eventListener?.getFinanceWalletCoinFilter()!!)
+        binding?.btnWalletFilter?.isChecked = true  }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
         val wallet = adapter?.getItem(position)
@@ -172,6 +171,7 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         mContext?.runOnUiThread {
             if (!isVisibility) {
                 binding?.moneyTotal?.text = "****"
+                binding?.moneyTotalcny?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
@@ -191,13 +191,15 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
                 val holeAmountString = usdt + cny
                 val holdSpan = SpannableStringBuilder(holeAmountString)
                 holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                binding?.moneyTotal?.setText(holdSpan)
+                binding?.moneyTotal?.setText("0.0")
+                    binding?.moneyTotalcny?.setText("0.0")
                 }
                 if (exChange == 1){
                     val holeAmountString = usdt + usd
                     val holdSpan = SpannableStringBuilder(holeAmountString)
                     holdSpan.setSpan(AbsoluteSizeSpan(14, true), usdt.length, holeAmountString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    binding?.moneyTotal?.setText(holdSpan)
+                    binding?.moneyTotal?.setText("0.0")
+                    binding?.moneyTotalcny?.setText("0.0")
                 }
             }
         }

@@ -172,6 +172,7 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
                 binding?.capitalCny?.text = "****"
                 binding?.spotBili?.text = "****"
                 binding?.futureBili?.text = "****"
+                binding?.capitalBili?.text = "****"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 val total2: Money? = binding?.futureUsdt?.tag as Money?

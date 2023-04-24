@@ -326,6 +326,8 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
+            assetsFinanceFragment = it
+            assetsFinanceFragment?.setEventListener(this)
 //            assetsWalletFragment = it
 //            assetsWalletFragment?.setEventListener(this)
         })
@@ -576,7 +578,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         contractFragment?.setVisibility(checked)
         assetsFinanceFragment?.setVisibility(checked)
         walletFragment?.setVisibility(checked)
-
     }
 
     override fun search(searchKey: String, walletType: Int) {
