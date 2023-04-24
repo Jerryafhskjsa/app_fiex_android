@@ -9,30 +9,26 @@ import com.black.net.okhttp.OkWebSocketHelper
 import org.json.JSONObject
 
 fun OkWebSocketHelper.sendCommandUserListenKey() {
-    val webSocket = okWebSocket.webSocket
-
     val jsonObject = JSONObject()
     val listenKey = HttpCookieUtil.getListenKey(FryingApplication.instance())
         ?: //更新key
         return
     jsonObject.put("req", "sub_user")
     jsonObject.put("listenKey", listenKey)
-    webSocket.send(jsonObject.toString())
+    okWebSocket.sendMsg(jsonObject.toString())
 }
 
 fun OkWebSocketHelper.sendCommandSymbol(coinPair:String="btc_usdt") {
-    val webSocket = okWebSocket.webSocket
     val jsonObject = JSONObject()
     jsonObject.put("req", "sub_symbol")
     jsonObject.put("symbol", coinPair)
-    webSocket.send(jsonObject.toString())
+    okWebSocket.sendMsg(jsonObject.toString())
 }
 
 fun OkWebSocketHelper.sendCommandUnSymbol() {
-    val webSocket = okWebSocket.webSocket
     val jsonObject = JSONObject()
     jsonObject.put("req", "unsub_symbol")
-    webSocket.send(jsonObject.toString())
+    okWebSocket.sendMsg(jsonObject.toString())
 }
 
 fun getMarketOkWebSocket(): OkWebSocket {

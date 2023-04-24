@@ -107,10 +107,13 @@ public class OkWebSocket extends WebSocketListener {
     private final String mTargetUrl;
     private WebSocket mWebSocket;
 
-    public WebSocket getWebSocket() {
-        return mWebSocket;
+    public boolean sendMsg(String msg){
+        d("sendMsg() called with: webSocket = [" + mWebSocket + "], msg = [" + msg + "]");
+        if(mWebSocket!=null){
+            return mWebSocket.send(msg);
+        }
+        return false;
     }
-
 
     public void addObserver(IOkWebSocketMessage observer) {
         if (!mObserverList.contains(observer)) {
