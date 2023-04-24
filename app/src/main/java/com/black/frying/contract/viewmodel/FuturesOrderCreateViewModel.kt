@@ -4,9 +4,12 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.black.base.view.DeepControllerWindow
+import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.fbsex.exchange.R
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class FuturesOrderCreateViewModel : ViewModel() {
@@ -21,13 +24,15 @@ class FuturesOrderCreateViewModel : ViewModel() {
     val buyOrSell = MutableLiveData<Boolean>(true)
 
     // 订单类型 市价委托 ｜ 限价委托
-    val orderType = MutableLiveData<String>()
+    val orderType = MutableLiveData<String>(ORDER_TYPE_LIMIT)
 
     //订单价格
     val orderPrice = MutableLiveData<BigDecimal>()
 
     //订单数量
     val orderNum = MutableLiveData<BigDecimal>()
+
+    val timeInForce = MutableLiveData<String>("GTC")
 
     // 界面计算逻辑
 
@@ -45,6 +50,51 @@ class FuturesOrderCreateViewModel : ViewModel() {
             orderType.value = typeList.first()
         }
     }
+    fun openPosition(){
+        startPosition()
+    }
+    fun startPosition() {
+        val openOption = buyOrSell.value
+        //开仓
+        val (orderSide, positionSide) = if (openOption == true) {
+            Pair("BUY", "LONG")
+        } else {
+            Pair("SELL", "SHORT")
+        }
+        //limit market
+        val orderType = orderType.value
+        if (orderType.isNullOrEmpty()){
+            return
+        }
+        val reduceOnly = false
+        val timeInForce = "GTC"//select
+        //reduceOnly
+        val origQty = getContractCount()//计算 合约张数
+
+        val showLimit = showLimitPrice.value
+        val (triggerProfitPrice, triggerStopPrice) = if (showLimit == true) {
+            //收集 价格
+            Pair(BigDecimal.ZERO, BigDecimal.ZERO)
+        } else {
+            Pair(BigDecimal.ZERO, BigDecimal.ZERO)
+        }
+
+        _orderCreate(
+            orderSide,
+            orderType,
+            positionSide,
+            origQty,
+            reduceOnly,
+            timeInForce,
+            triggerProfitPrice,
+            triggerStopPrice
+        )
+    }
+
+
+    fun closePosition() {
+        startPosition()
+    }
 
     /**
      * 下单接口
@@ -59,9 +109,46 @@ class FuturesOrderCreateViewModel : ViewModel() {
      * 仓位方向->positionSide:LONG(平仓卖｜开仓买),SHORT（平仓买 ｜开仓卖）
      *
      */
-    fun _orderCreate() {
+    private fun _orderCreate(
+        orderSide: String,
+        orderType: String,
+        positionSide: String,
+        origQty: BigDecimal,
+        reduceOnly: Boolean,
+        timeInForce: String,
+        triggerProfitPrice: BigDecimal?,
+        triggerStopPrice: BigDecimal
+    ) {
+        globalStateViewModel?.symbolBean?.let { symbolBean ->
+            val symbol = symbolBean.symbol
+            viewModelScope.launch {
+                //确认订单信息后提交
+                //
+                val price = getCurrentPrice()//获取限价 或者 买一卖一价
+                val createOrder = FuturesRepository.createOrder(
+                    symbol,
+                    origQty,
+                    orderType,
+                    price,
+                    timeInForce,
+                    orderSide,
+                    positionSide,
+                    triggerProfitPrice,
+                    triggerStopPrice,
+                    reduceOnly
+                )
+                Log.e(TAG, "_orderCreate: createOrder :$createOrder")
+            }
+        }
 
-//        FuturesRepository.createOrder()
+
+    }
+
+    private fun getContractCount(): BigDecimal {
+        return BigDecimal.ZERO
+    }
+    fun getCurrentPrice(): BigDecimal {
+        return BigDecimal.ZERO
     }
 
     fun changeOrderType(buy: Boolean) {
@@ -87,6 +174,15 @@ class FuturesOrderCreateViewModel : ViewModel() {
 
     }
 
+     fun getTimeInForceList(): List<String> {
+        return globalStateViewModel?.symbolBean?.let {
+            val timeInfoFore = it.supportTimeInForce
+            Log.d(TAG, "getTimeInForceList() called  timeInfoFore:$timeInfoFore")
+            val split = timeInfoFore.split(",")
+            return@let split.toList()
+        } ?: emptyList()
+    }
+
 
     private fun getCurrentPairOrderTypeList(): List<String> {
         return globalStateViewModel?.symbolBean?.let {
@@ -99,5 +195,9 @@ class FuturesOrderCreateViewModel : ViewModel() {
 
     fun performClickShowLimitInput(checked: Boolean) {
         showLimitPrice.value = checked
+    }
+
+    fun selectTimeInForce(item: String) {
+        timeInForce.value = item
     }
 }
