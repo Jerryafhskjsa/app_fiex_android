@@ -301,7 +301,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         desc = binding?.extractAddress?.text?.trim { it <= ' ' }.toString()
         for (h in payCode?.indices!!) {
             if (desc == payCode!![h].desc) {
-                payVO.bankCode = orderCode!![h].code
+                payVO.busiCode = payCode!![h].code
             }
         }
         if (type == "B") {

@@ -44,11 +44,11 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                     NumberUtil.formatNumberDynamicScaleNoGroup(order?.fee, 8, 4, 2)
                 ) + order?.coin
             )
-            binding?.choose?.setText(order?.bankCode)
+            binding?.choose?.setText(bank)
             binding?.amount?.setText(
                 "1.0000" + order?.ccyNo + String.format(
                     " ≈ %S ",
-                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 4, 2)
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 8, 2)
                 ) + order?.coin
             )
             binding?.type?.setText(
@@ -76,7 +76,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
             binding?.amount?.setText(
                 "1.0000" + order?.coin + String.format(
                     " ≈ %S ",
-                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 4, 2)
+                    NumberUtil.formatNumberDynamicScaleNoGroup(order?.price, 8, 8, 2)
                 ) + order?.ccyNo
             )
             binding?.type?.setText(

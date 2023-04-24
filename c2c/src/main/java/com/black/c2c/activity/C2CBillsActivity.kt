@@ -113,6 +113,7 @@ class C2CBillsActivity: BaseActionBarActivity(),View.OnClickListener{
                 refreshCurrentType(actionType)
                 changeFragment(1)
             }
+
         }
     }
     private fun refreshCurrentType(type: Int) {

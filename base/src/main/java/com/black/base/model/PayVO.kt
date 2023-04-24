@@ -10,7 +10,7 @@ class PayVO() : Parcelable {
     var accNo: String? = null
     var accName: String? = null
     var ccyNo: String? = "ZAR"
-    var busiCode: String? = "100901"
+    var busiCode: String? = "100101"
     var bankCode: String? = "ABSA"
     var coin: String? = "USDT"
 

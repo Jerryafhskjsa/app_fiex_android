@@ -6,7 +6,7 @@ repositories {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk 31
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
