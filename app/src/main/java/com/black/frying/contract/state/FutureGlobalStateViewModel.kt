@@ -35,11 +35,13 @@ class FutureGlobalStateViewModel : ViewModel() {
     }
     private val futuresCoinPair: FuturesCoinPair? by lazy { FuturesCoinPair.load() }
 
-    //杠杆倍数  逐仓
+    //杠杆倍数  逐仓 多
     var isolatedPositionBean: PositionBean? = null
     val isolatedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
-    //全仓
+    val positionListAll = mutableListOf<PositionBean?>()
+
+    //全仓  空
     var crossedPositionBean: PositionBean? = null
     val crossedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
@@ -96,6 +98,9 @@ class FutureGlobalStateViewModel : ViewModel() {
         initCoinPair()
     }
 
+    fun refresh(){
+        initCoinPair()
+    }
     private fun initCoinPair() {
         viewModelScope.launch(Dispatchers.IO) {
             val response = FuturesRepository.getSymbolList() ?: return@launch
@@ -242,15 +247,18 @@ class FutureGlobalStateViewModel : ViewModel() {
             viewModelScope.launch {
                 val positionList = FuturesRepository.getPositionList(symbol.symbol)
                 positionList?.let { list ->
-                    if (list.size != 2) {
-                        return@launch
+                    positionListAll.clear()
+                    val toMutableList = list.toMutableList()
+                    positionListAll.addAll(toMutableList)
+                    list.forEach {
+                        if (it?.positionType == "ISOLATED") {
+                            isolatedPositionBean = it
+                            isolatedPositionBeanLiveData.postValue(it)
+                        }else if ("CROSSED" == it?.positionType){
+                            crossedPositionBean = it
+                            crossedPositionBeanLiveData.postValue(it)
+                        }
                     }
-                    val first = list.first()
-                    isolatedPositionBean = first
-                    isolatedPositionBeanLiveData.postValue(first)
-                    val last = list.last()
-                    crossedPositionBean = last
-                    crossedPositionBeanLiveData.postValue(last)
                 }
             }
         }

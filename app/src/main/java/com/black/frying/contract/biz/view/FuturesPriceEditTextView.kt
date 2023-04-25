@@ -29,8 +29,11 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
                 return@setOnClickListener
             }
             // add
-            val text = binding.price.text
-            val s = if (text.isNullOrEmpty()) {
+            var text = binding.price.text.toString()
+            if (text.contains("%")){
+                text = ""
+            }
+            val s = if (text.isEmpty()) {
                 NumberUtils.formatRoundDown(getUnitPrice(), 2, precision).toString()
             } else {
                 NumberUtils.toBigDecimal(text.toString()).add(getUnitPrice()).toString()
@@ -43,8 +46,11 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
                 return@setOnClickListener
             }
             //subtraction
-            val text = binding.price.text
-            val s = if (text.isNullOrEmpty()) {
+            var text = binding.price.text.toString()
+            if (text.contains("%")){
+                text = ""
+            }
+            val s = if (text.isEmpty()) {
                 NumberUtils.formatRoundDown(getUnitPrice(), 2, precision).toString()
             } else {
                 var subtract = NumberUtils.toBigDecimal(text.toString()).subtract(getUnitPrice())
@@ -79,6 +85,9 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
         binding.price.hint = hint
     }
 
+    fun setText( text:String){
+        binding.price.setText(text)
+    }
     fun setEnable(enable: Boolean) {
         binding.price.isEnabled = enable
     }

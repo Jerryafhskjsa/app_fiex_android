@@ -97,6 +97,7 @@ class FuturesFragment : Fragment() {
             setRefreshHolder(RefreshHolderFrying(requireActivity()))
             setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
                 override fun onRefresh() {
+                    globalViewModel.refresh()
                     postDelayed(
                         { setRefreshing(false) },
                         300

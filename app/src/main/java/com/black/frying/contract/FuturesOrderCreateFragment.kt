@@ -1,6 +1,7 @@
 package com.black.frying.contract
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.black.base.view.DeepControllerWindow
+import com.black.frying.contract.biz.view.OnInputChange
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_LIMIT
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_MARKET
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesOrderCreateBinding
+import com.warkiz.tickseekbar.OnSeekChangeListener
+import com.warkiz.tickseekbar.SeekParams
+import com.warkiz.tickseekbar.TickSeekBar
 
 class FuturesOrderCreateFragment : Fragment() {
 
@@ -78,6 +83,44 @@ class FuturesOrderCreateFragment : Fragment() {
             it.btnActionSell.setOnClickListener {
                 viewModel.openPosition()
             }
+            it.futurePriceInput.onInputChange= object : OnInputChange{
+                override fun onAdd(price: String) {
+                }
+                override fun onSub(price: String) {
+                }
+
+                override fun onInput(price: String) {
+                    viewModel.calculateFuturesInfo(price)
+                }
+
+            }
+            it.futurePriceAmountInput.onInputChange = object :OnInputChange{
+                override fun onAdd(number: String) {
+
+                }
+
+                override fun onSub(number: String) {
+                }
+
+                override fun onInput(number: String) {
+                    viewModel.performInputNumber(number)
+                }
+            }
+            it.futureNumberSeekbar.onSeekChangeListener = object :OnSeekChangeListener{
+                override fun onSeeking(seekParams: SeekParams?) {
+                    seekParams?.let {params ->
+                        Log.d(TAG, "onSeeking() called ${params.progress}")
+                        viewModel.performInputNumberPercent(params.progress)
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: TickSeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: TickSeekBar?) {
+                }
+
+            }
         }
 
         globalViewModel.pricePrecision.observe(viewLifecycleOwner) { pricePrecision ->
@@ -91,13 +134,17 @@ class FuturesOrderCreateFragment : Fragment() {
             binding?.btnBuy?.isChecked = isBuy
             binding?.btnSell?.isChecked = !isBuy
         }
+
         viewModel.orderType.observe(viewLifecycleOwner) { priceType ->
             val isLimit = priceType == ORDER_TYPE_LIMIT
             val isMarket = priceType == ORDER_TYPE_MARKET
             if(isLimit){
                 binding?.futurePriceInput?.setEnable(true)
+                val currentPrice = globalViewModel.pairQuotationLiveData.value
+                binding?.futurePriceInput?.setText(currentPrice?.c?:"")
             }
             if (isMarket){
+                binding?.futurePriceInput?.setText("")
                 binding?.futurePriceInput?.setEnable(false)
             }
             binding?.futurePriceType?.changeDisplay(
@@ -123,6 +170,9 @@ class FuturesOrderCreateFragment : Fragment() {
         }
         viewModel.timeInForce.observe(viewLifecycleOwner) { timeInForce ->
             binding?.withLinCbWithLimitType?.text = timeInForce
+        }
+        viewModel.futureAmountPercent.observe(viewLifecycleOwner){percent ->
+            binding?.futurePriceAmountInput?.setText("$percent%");
         }
     }
 

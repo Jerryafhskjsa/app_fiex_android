@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.black.base.view.DeepControllerWindow
 import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.state.FutureGlobalStateViewModel
+import com.black.frying.service.FutureService
+import com.black.util.NumberUtils
 import com.fbsex.exchange.R
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlin.math.log
 
 class FuturesOrderCreateViewModel : ViewModel() {
     companion object {
@@ -39,6 +42,9 @@ class FuturesOrderCreateViewModel : ViewModel() {
     //止盈止损
     val showLimitPrice = MutableLiveData<Boolean>(false)
 
+    val futureAmount = MutableLiveData<BigDecimal>()
+    val futureAmountPercent = MutableLiveData<Int>()
+    val futurePrice = MutableLiveData<BigDecimal>()
 
     fun start() {
 
@@ -50,9 +56,11 @@ class FuturesOrderCreateViewModel : ViewModel() {
             orderType.value = typeList.first()
         }
     }
-    fun openPosition(){
+
+    fun openPosition() {
         startPosition()
     }
+
     fun startPosition() {
         val openOption = buyOrSell.value
         //开仓
@@ -63,7 +71,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
         }
         //limit market
         val orderType = orderType.value
-        if (orderType.isNullOrEmpty()){
+        if (orderType.isNullOrEmpty()) {
             return
         }
         val reduceOnly = false
@@ -147,6 +155,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
     private fun getContractCount(): BigDecimal {
         return BigDecimal.ZERO
     }
+
     fun getCurrentPrice(): BigDecimal {
         return BigDecimal.ZERO
     }
@@ -174,7 +183,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
 
     }
 
-     fun getTimeInForceList(): List<String> {
+    fun getTimeInForceList(): List<String> {
         return globalStateViewModel?.symbolBean?.let {
             val timeInfoFore = it.supportTimeInForce
             Log.d(TAG, "getTimeInForceList() called  timeInfoFore:$timeInfoFore")
@@ -199,5 +208,36 @@ class FuturesOrderCreateViewModel : ViewModel() {
 
     fun selectTimeInForce(item: String) {
         timeInForce.value = item
+    }
+
+    fun calculateFuturesInfo(price: String) {
+        val price = NumberUtils.toBigDecimal(price)
+        if (price <= BigDecimal.ZERO) {
+            Log.d(TAG, "calculateFuturesInfo() called with: price = zero  break")
+            return
+        }
+        futurePrice.value = price
+        //多
+        val isolated = globalStateViewModel?.isolatedPositionBeanLiveData?.value
+        //空
+        val crossed = globalStateViewModel?.crossedPositionBeanLiveData?.value
+        val availableOpenData = FutureService.getAvailableOpenData(
+            price,
+            isolated?.leverage ?: 20,
+            crossed?.leverage ?: 20,
+            futureAmount.value ?: BigDecimal.ZERO,
+            futureAmountPercent.value?.toBigDecimal() ?: BigDecimal.ZERO
+        )
+        Log.d(TAG, "calculateFuturesInfo() called with: price = $availableOpenData")
+    }
+
+    fun performInputNumber(number: String) {
+        val amount = NumberUtils.toBigDecimal(number)
+        futureAmount.value = amount
+    }
+
+    fun performInputNumberPercent(percent: Int) {
+        futureAmountPercent.value = percent
+        calculateFuturesInfo(futurePrice.value.toString())
     }
 }

@@ -392,7 +392,7 @@ object FutureService {
     空仓平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (维持保证金 - 仓位保证金))
      *
      */
-    fun getCurrentPosition(context: Context?) {
+    fun getCurrentPosition() {
         for (positionBean in positionList!!) {
             if (positionBean?.positionSize.equals("0")) {
                 return
