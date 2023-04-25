@@ -204,7 +204,7 @@
             android:visibility="visible">
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_buy"
+                android:id="@+id/btn_action_buy"
                 style="@style/ContractBuyBtnStyle"
                 android:background="@drawable/btn_t7"
                 android:checked="true"
@@ -302,7 +302,7 @@
 
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_sell"
+                android:id="@+id/btn_action_sell"
                 style="@style/ContractBuyBtnStyle"
                 android:background="@drawable/btn_t5"
                 android:checked="true"
