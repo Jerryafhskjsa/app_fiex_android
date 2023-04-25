@@ -28,7 +28,7 @@
                 android:textColor="@color/btn_sale_check" />
 
             <skin.support.widget.SkinCompatCheckedTextView
-                android:id="@+id/btn_sale"
+                android:id="@+id/btn_sell"
                 style="@style/ContractHeader1BuyBtn"
                 android:layout_margin="2dp"
                 android:background="@drawable/bg_transaction_sale"
@@ -76,49 +76,26 @@
             android:layout_width="match_parent"
             android:layout_height="4dp" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+
+        <com.black.frying.contract.biz.view.FuturesPriceEditTextView
+            android:id="@+id/futurePriceAmountInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content" />
 
-            <com.black.frying.contract.biz.view.FuturesPriceEditTextView
-                android:id="@+id/futurePriceAmountInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:id="@+id/lin_limit_type"
-                android:layout_width="70dp"
-                android:layout_height="26dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="2dp"
-                android:background="@drawable/bg_transaction_input"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.black.base.widget.SpanCheckedTextView
-                    android:id="@+id/with_limit_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="GTC"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/with_limit_arrow"
-                    style="@style/ContractSmallArrow"
-                    android:layout_marginLeft="@dimen/default_padding" />
-            </LinearLayout>
-        </androidx.appcompat.widget.LinearLayoutCompat>
         <View
             android:layout_width="match_parent"
             android:layout_height="8dp" />
+
         <com.warkiz.tickseekbar.TickSeekBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:tsb_seek_smoothly="true"
+            app:tsb_show_tick_texts="below"
+            app:tsb_tick_texts_color="@color/T1"
+            app:tsb_show_tick_marks_type="oval"
+            app:tsb_tick_marks_color="@color/colorAccent"
+            app:tsb_ticks_count="5"
+            />
 
         <!--    添加seek process-->
         <View
@@ -128,8 +105,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <com.black.base.widget.SpanCheckBox
                 android:id="@+id/contract_with_limit"
@@ -150,7 +127,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/lin_cb_limit__type"
+                    android:id="@+id/with_lin_cb_limit__type"
                     android:layout_width="70dp"
                     android:layout_height="26dp"
                     android:background="@drawable/bg_transaction_input"
@@ -158,7 +135,7 @@
                     android:orientation="horizontal">
 
                     <com.black.base.widget.SpanCheckedTextView
-                        android:id="@+id/lin_cb_with_limit_type"
+                        android:id="@+id/with_lin_cb_with_limit_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -168,7 +145,7 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        android:id="@+id/lin_cb_with_limit_arrow"
+                        android:id="@+id/with_lin_cb_with_limit_arrow"
                         style="@style/ContractSmallArrow"
                         android:layout_marginLeft="@dimen/default_padding" />
                 </LinearLayout>
@@ -212,87 +189,12 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="8dp" />
-        <LinearLayout
-            android:id="@+id/not_login_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="40dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/action_buy_freez_1"
-                    style="@style/ContractBondTextLeft"
-                    android:layout_height="match_parent"
-                    android:text="@string/contract_bond_empty" />
-
-                <LinearLayout style="@style/ContractBondTextRightLin">
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/useable_freez_unit_1"
-                        style="@style/ContractBondTextRightText"
-                        android:text="0" />
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/freez_amount_1"
-                        style="@style/ContractBondTextRightText"
-                        android:paddingLeft="8dp"
-                        android:text="USDT" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/action_buy_type_1"
-                    style="@style/ContractBondTextLeft"
-                    android:text="@string/contract_buy_in" />
-
-                <LinearLayout style="@style/ContractBondTextRightLin">
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/useable_buy_unit_1"
-                        style="@style/ContractBondTextRightText"
-                        android:text="0" />
-
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/useable_buy_1"
-                        style="@style/ContractBondTextRightText"
-                        android:paddingLeft="8dp"
-                        android:text="USDT" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="24dp" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/not_login_btn"
-                style="@style/ContractBuyBtnStyle"
-                android:background="@drawable/btn_t7"
-                android:checked="true"
-                android:text="@string/login_title" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="80dp" />
-        </LinearLayout>
+        <!--       not_login_layout-->
 
         <LinearLayout
             android:id="@+id/login_status"
@@ -302,7 +204,7 @@
             android:visibility="visible">
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_handle"
+                android:id="@+id/btn_buy"
                 style="@style/ContractBuyBtnStyle"
                 android:background="@drawable/btn_t7"
                 android:checked="true"
@@ -400,7 +302,7 @@
 
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_handle_1"
+                android:id="@+id/btn_sell"
                 style="@style/ContractBuyBtnStyle"
                 android:background="@drawable/btn_t5"
                 android:checked="true"

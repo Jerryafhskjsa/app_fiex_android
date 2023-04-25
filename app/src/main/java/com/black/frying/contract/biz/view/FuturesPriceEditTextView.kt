@@ -25,6 +25,9 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
             FuturesLayoutPriceEditTextBinding.inflate(LayoutInflater.from(context), this, true)
 
         binding.priceAdd.setOnClickListener {
+            if (!binding.price.isEnabled){
+                return@setOnClickListener
+            }
             // add
             val text = binding.price.text
             val s = if (text.isNullOrEmpty()) {
@@ -36,6 +39,9 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
             onInputChange?.onAdd(s)
         }
         binding.priceSub.setOnClickListener {
+            if (!binding.price.isEnabled){
+                return@setOnClickListener
+            }
             //subtraction
             val text = binding.price.text
             val s = if (text.isNullOrEmpty()) {
@@ -71,6 +77,10 @@ class FuturesPriceEditTextView @JvmOverloads constructor(
 
     fun setHint(hint :String){
         binding.price.hint = hint
+    }
+
+    fun setEnable(enable: Boolean) {
+        binding.price.isEnabled = enable
     }
 }
 

@@ -14,6 +14,7 @@ import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.util.ConstData
 import com.black.base.util.StyleChangeUtil
+import com.black.frying.FryingApplication
 import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.utils.TransRecordFragmentPagerAdapter
 import com.black.frying.contract.utils.replaceTransactionFragment
@@ -24,6 +25,7 @@ import com.black.frying.fragment.ContractPlanTabFragment
 import com.black.frying.fragment.ContractPositionTabFragment
 import com.black.frying.fragment.ContractProfitTabFragment
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.okhttp.NetWorkChangeHelper
 import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesBinding
@@ -67,11 +69,16 @@ class FuturesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        NetWorkChangeHelper.re(FryingApplication.instance())
         // TODO: Use the ViewModel
         futuresTitleViewModel.loadCoinInfo()
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        NetWorkChangeHelper.unre(FryingApplication.instance())
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         buildFuturesTitleBar()

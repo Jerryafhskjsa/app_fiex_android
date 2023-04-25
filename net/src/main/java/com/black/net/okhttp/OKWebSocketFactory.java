@@ -18,6 +18,21 @@ public class OKWebSocketFactory {
             return okWebSocket;
         } else {
             okWebSocket = OkWebSocket.createOkWebSocket(url);
+            OkWebSocket finalOkWebSocket = okWebSocket;
+            NetWorkChangeHelper.INSTANCE.reListener(new MyNetWorkReceiver.INetWorkChangeListener() {
+                @Override
+                public void onNone() {
+                }
+
+                @Override
+                public void onWifi() {
+                    finalOkWebSocket.ensureOk();
+                }
+                @Override
+                public void onMobile() {
+                    finalOkWebSocket.ensureOk();
+                }
+            });
         }
         return okWebSocket;
     }

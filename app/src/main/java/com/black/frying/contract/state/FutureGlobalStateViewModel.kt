@@ -8,11 +8,14 @@ import com.black.base.model.future.*
 import com.black.base.model.socket.PairQuotation
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.util.TimeUtil
+import com.black.frying.FryingApplication
 import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.biz.okwebsocket.market.*
 import com.black.frying.contract.viewmodel.model.FuturesCoinPair
 import com.black.im.util.DateTimeUtil
+import com.black.net.okhttp.NetWorkChangeHelper
 import com.black.net.okhttp.OkWebSocketHelper
+import com.black.net.okhttp.OkWebSocketHelper.IMessageLifeCycle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,7 +42,7 @@ class FutureGlobalStateViewModel : ViewModel() {
     val crossedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
 
-    var balanceBean :BalanceDetailBean?=null
+    var balanceBean: BalanceDetailBean? = null
     val balanceBeanLiveData = MutableLiveData<BalanceDetailBean>()
 
     var symbolList: List<SymbolBean>? = null
@@ -102,8 +105,8 @@ class FutureGlobalStateViewModel : ViewModel() {
                         symbolLists.first { bean -> source == bean.symbol }
                     }
                     symbolBeanLiveData.postValue(symbolBean)
-                    pricePrecision.postValue(symbolBean?.pricePrecision?:0)
-                    amountPrecision.postValue(symbolBean?.quantityPrecision?:0)
+                    pricePrecision.postValue(symbolBean?.pricePrecision ?: 0)
+                    amountPrecision.postValue(symbolBean?.quantityPrecision ?: 0)
                     sendSymbolCommand()
                     getCoinPositionList()
                     getCoinFundingRate()
@@ -125,9 +128,9 @@ class FutureGlobalStateViewModel : ViewModel() {
         }
     }
 
-    fun getAccountDetail(){
+    fun getAccountDetail() {
         viewModelScope.launch {
-            symbolBean?.let {bean ->
+            symbolBean?.let { bean ->
                 balanceBean = FuturesRepository.getBalanceDetailSuspend(bean.quoteCoin)
                 // TODO: 计算盈亏 根据持仓列表算
                 balanceBeanLiveData.postValue(balanceBean)
@@ -135,6 +138,7 @@ class FutureGlobalStateViewModel : ViewModel() {
 
         }
     }
+
     private fun getCoinFundingRate() {
         viewModelScope.launch {
             symbolBean?.let { symbolBean ->
@@ -227,15 +231,28 @@ class FutureGlobalStateViewModel : ViewModel() {
 
     private fun sendSymbolCommand() {
         symbolBean?.let {
-//            if (okWebSocketHelper == null){
-//                val okWebSocket = getMarketOkWebSocket()
-//                okWebSocketHelper = OkWebSocketHelper(okWebSocket).apply {
-//                    start()
-//                    addAllMessageHandlers()
-//                }
-//
-//            }
-            okWebSocketHelper.sendCommandSymbol(it.symbol)
+            viewModelScope.launch {
+                okWebSocketHelper.apply {
+                    setIMessageLifeCycle(object : IMessageLifeCycle {
+                        override fun onOpen() {
+                            sendCommandSymbol(it.symbol)
+                        }
+
+                        override fun onMessage(msg: String?) {
+                        }
+
+                        override fun onClosing(code: Int, reason: String?) {
+                        }
+
+                        override fun onClosed(code: Int, reason: String?) {
+                        }
+
+                        override fun onError(throwable: Throwable?) {
+                        }
+                    })
+                    sendCommandSymbol(it.symbol)
+                }
+            }
         }
     }
 

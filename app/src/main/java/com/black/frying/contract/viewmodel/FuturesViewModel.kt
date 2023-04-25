@@ -32,11 +32,10 @@ class FuturesViewModel : ViewModel() {
 
     fun testSend() {
         okWebSocketHelper?.apply {
-            val webSocket = okWebSocket.webSocket
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_symbol")
             jsonObject.put("symbol", "btc_usdt")
-            webSocket.send(jsonObject.toString())
+            okWebSocket.sendMsg(jsonObject.toString())
         }
 //        okWebSocketHelper?.testSend();
     }
