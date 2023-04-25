@@ -105,17 +105,19 @@
                             android:layout_width="match_parent"
                             android:layout_marginRight="15sp"
                             android:layout_marginLeft="17sp"
-                            android:layout_marginTop="@dimen/text_size_20"
+
                             android:layout_height="200dp"
                             >
 
-                            <ImageView
-                                android:id="@+id/rel_name_type"
-                                android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:src="@drawable/shouye1" />
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/shouye1">
+                                    </ImageView>
 
-                        </RelativeLayout>
+
+                    </RelativeLayout>
 
                         <LinearLayout
                             android:id="@+id/notice_layout"
@@ -126,6 +128,7 @@
                             android:orientation="horizontal"
                             android:paddingTop="13dp"
                             android:paddingBottom="13dp">
+
                             <ImageView
                                 android:layout_width="16dp"
                                 android:layout_height="13dp"

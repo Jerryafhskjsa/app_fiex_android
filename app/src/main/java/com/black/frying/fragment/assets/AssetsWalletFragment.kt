@@ -69,6 +69,11 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        isVisibility =
+            (if (eventListener?.getWalletziCanFilter() == null) true else eventListener?.getWalletziCanFilter()!!)
+    }
 
     override fun onClick(v: View) {
         when(v.id){
@@ -365,6 +370,9 @@ class AssetsWalletFragment : BaseFragment(),  View.OnClickListener {
         }
 
         fun setWalletziCanFilter(checked: Boolean) {
+        }
+        fun getWalletziCanFilter(): Boolean? {
+            return false
         }
         fun assetWalletSearch(searchKey: String, walletType: Int) {
         }

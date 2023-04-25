@@ -16,7 +16,7 @@
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/B1"
+            android:background="@color/B2"
             android:fadingEdge="none"
             android:overScrollMode="never"
             android:scrollbars="none">
@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
+                android:background="@color/B2"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -32,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_size_10"
                     android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginBottom="@dimen/text_size_20"
                     android:background="@drawable/zongzichan"
                     android:layout_marginTop="@dimen/text_size_16"
                     android:orientation="vertical"
@@ -163,7 +164,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:layout_height="20dp"
+                    android:background="@color/B1"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

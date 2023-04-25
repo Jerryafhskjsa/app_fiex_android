@@ -134,6 +134,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     override fun onResume() {
         super.onResume()
         doSearch = (if (eventListener?.getWalletCoinFilter() == null) false else eventListener?.getWalletCoinFilter()!!)
+        isVisibility = (if (eventListener?.getWalletziCanFilter() == null) true else eventListener?.getWalletziCanFilter()!!)
         binding?.btnWalletFilter?.isChecked = doSearch
     }
 
@@ -304,6 +305,9 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         fun setWalletziCanFilter(checked: Boolean) {
         }
 
+        fun getWalletziCanFilter(): Boolean? {
+            return false
+        }
         fun search(searchKey: String, walletType: Int) {
         }
     }

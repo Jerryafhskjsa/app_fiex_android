@@ -44,7 +44,7 @@ import kotlin.math.abs
 import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
 import com.black.frying.fragment.assets.AssetsWalletFragment
 import com.black.router.annotation.Route
-import com.black.wallet.databinding.FragmentCapitalBinding
+
 
 @Route(
     value = [RouterConstData.HOME_ASSET],
@@ -70,11 +70,11 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
     private var actionType: String? = null
-    private var isVisibility: Boolean = false
+    private var isVisibility: Boolean = true
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
-
+    private var currentTabPosition:Int = 0
     private var appBarLayout: AppBarLayout? = null
 
     private var otherMoneyType = TYPE_CNY
@@ -98,6 +98,10 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var leverFragment: WalletLeverFragment? = null
 
 
+    override fun onStop() {
+        super.onStop()
+        currentTabPosition = binding?.tabLayout?.selectedTabPosition!!
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
             return layout
@@ -173,6 +177,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
             override fun getPageTitle(position: Int): CharSequence? {
                 return TAB_TITLES[position]
+
             }
 
             override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
@@ -189,13 +194,33 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                     if (tab.customView != null) {
                         val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
                         textView.text = TAB_TITLES[i]
-                        //textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, R.dimen.text_size_20.toFloat())
                     }
                 }
             } catch (throwable: Throwable) {
                 FryingUtil.printError(throwable)
             }
         }
+        binding?.viewPager?.currentItem = currentTabPosition
+        val textView = binding?.tabLayout?.getTabAt(currentTabPosition)?.customView?.findViewById<View>(android.R.id.text1) as TextView
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+        binding?.tabLayout?.getTabAt(currentTabPosition)?.select()
+        binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
+            var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = if (view == null) return else view.findViewById<View>(android.R.id.text1) as TextView
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
         return binding?.root
     }
 
@@ -574,10 +599,15 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun setWalletziCanFilter(checked: Boolean) {
+        isVisibility = checked
         normalFragment?.setVisibility(checked)
         contractFragment?.setVisibility(checked)
         assetsFinanceFragment?.setVisibility(checked)
         walletFragment?.setVisibility(checked)
+    }
+
+    override fun getWalletziCanFilter(): Boolean {
+        return isVisibility
     }
 
     override fun search(searchKey: String, walletType: Int) {
@@ -601,8 +631,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     override fun getAssetAllWallet(isShowLoading: Boolean) {
         viewModel!!.getAllWallet(isShowLoading)
     }
-
-
 
 
 

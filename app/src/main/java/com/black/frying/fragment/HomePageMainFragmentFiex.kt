@@ -1,4 +1,5 @@
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -6,10 +7,12 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.GridView
@@ -23,6 +26,7 @@ import com.black.base.api.WalletApiService
 import com.black.base.api.WalletApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.banner.FryingUrlImageNormalBanner
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
@@ -38,6 +42,7 @@ import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
 import com.black.base.util.ConstData.CHOOSE_COIN_WITHDRAW
 import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
+import com.black.base.widget.SpanTextView
 import com.black.base.widget.VerticalTextView
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.HomeMainRiseFallAdapter
@@ -46,6 +51,7 @@ import com.black.frying.view.MainMorePopup
 import com.black.frying.view.MainMorePopup.OnMainMoreClickListener
 import com.black.frying.viewmodel.MainViewModel
 import com.black.im.util.IMHelper
+import com.black.lib.banner.BannerContainer
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
@@ -82,7 +88,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     private var chooseWallet: Wallet? = null
     private val hotPairMap = HashMap<String?, PairStatus?>()
     private val hardGridViewMap = HashMap<String?, GridView?>()
-
+    var imageBanner: FryingUrlImageNormalBanner? = null
     private var statusAdapter: BaseViewPagerAdapter? = null
     private var chatFloatAdView: FloatAdView? = null
 
@@ -258,9 +264,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
            /* R.id.c2c ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))*/
             R.id.rel_deposit -> {
-                BlackRouter.getInstance().build(RouterConstData.HOME_ASSET)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .go(this)
         }
             R.id.rel_support -> {
                 BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
@@ -275,11 +281,12 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             R.id.rel_futures ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
             R.id.rel_more ->
-                FryingUtil.showToast(mContext, getString(R.string.please_waiting))
+                dialog()
             R.id.rel_referral ->{
-                BlackRouter.getInstance().build(RouterConstData.HOME_ASSET)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)}
+                val extras = Bundle()
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                    .go(this)}
                /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
@@ -497,6 +504,34 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                 }
             }
         })
+    }
+
+    private fun dialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.yaoqingfanyong, null)
+        val dialog = Dialog(mContext, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+
     }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
