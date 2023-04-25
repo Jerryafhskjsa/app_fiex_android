@@ -8,7 +8,7 @@ import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyNetWorkReceiver : BroadcastReceiver() {
+class FutureNetWorkReceiver : BroadcastReceiver() {
     private val listenerList: MutableList<INetWorkChangeListener> = arrayListOf()
     fun addListener(lis: INetWorkChangeListener) {
         listenerList.add(lis)
@@ -63,7 +63,7 @@ class MyNetWorkReceiver : BroadcastReceiver() {
         private var ETHERNET_TIME: Long = 0
         private var NONE_TIME: Long = 0
         private var LAST_TYPE = -3
-        private val TAG = MyNetWorkReceiver::class.java.simpleName.toString()
+        private val TAG = FutureNetWorkReceiver::class.java.simpleName.toString()
         private const val NETWORK_NONE = -1 //无网络连接
         private const val NETWORK_WIFI = 0 //wifi
         private const val NETWORK_MOBILE = 1 //数据网络

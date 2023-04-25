@@ -6,14 +6,14 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 
 object NetWorkChangeHelper {
-    private var netWorkReceiver: MyNetWorkReceiver? = null
+    private var netWorkReceiver: FutureNetWorkReceiver? = null
 
-    fun reListener(lis: MyNetWorkReceiver.INetWorkChangeListener){
+    fun reListener(lis: FutureNetWorkReceiver.INetWorkChangeListener){
         netWorkReceiver?.addListener(lis)
     }
 
     fun re(context: Context) {
-        netWorkReceiver = MyNetWorkReceiver();
+        netWorkReceiver = FutureNetWorkReceiver();
         val filter = IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
