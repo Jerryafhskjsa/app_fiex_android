@@ -59,7 +59,7 @@ class FuturesOrderCreateFragment : Fragment() {
             it.btnBuy.setOnClickListener {
                 viewModel.changeOrderType(true)
             }
-            it.btnSale.setOnClickListener {
+            it.btnSell.setOnClickListener {
                 viewModel.changeOrderType(false)
             }
             it.futurePriceType.setOnClickListener {
@@ -72,10 +72,10 @@ class FuturesOrderCreateFragment : Fragment() {
             it.contractWithLimit.setOnCheckedChangeListener { buttonView, isChecked ->
                 viewModel.performClickShowLimitInput(isChecked)
             }
-            it.btnBuy.setOnClickListener {
+            it.btnActionBuy.setOnClickListener {
                 viewModel.closePosition()
             }
-            it.btnSell.setOnClickListener {
+            it.btnActionSell.setOnClickListener {
                 viewModel.openPosition()
             }
         }
@@ -89,7 +89,7 @@ class FuturesOrderCreateFragment : Fragment() {
         }
         viewModel.buyOrSell.observe(viewLifecycleOwner) { isBuy ->
             binding?.btnBuy?.isChecked = isBuy
-            binding?.btnSale?.isChecked = !isBuy
+            binding?.btnSell?.isChecked = !isBuy
         }
         viewModel.orderType.observe(viewLifecycleOwner) { priceType ->
             val isLimit = priceType == ORDER_TYPE_LIMIT
