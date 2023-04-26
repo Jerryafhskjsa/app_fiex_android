@@ -14,6 +14,7 @@ import com.black.frying.contract.state.FutureGlobalStateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_LIMIT
 import com.black.frying.contract.viewmodel.FuturesOrderCreateViewModel.Companion.ORDER_TYPE_MARKET
+import com.black.util.NumberUtils
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentLayoutFuturesOrderCreateBinding
 import com.warkiz.tickseekbar.OnSeekChangeListener
@@ -173,6 +174,20 @@ class FuturesOrderCreateFragment : Fragment() {
         }
         viewModel.futureAmountPercent.observe(viewLifecycleOwner){percent ->
             binding?.futurePriceAmountInput?.setText("$percent%");
+        }
+        viewModel.futureAvailableOpenData.observe(viewLifecycleOwner){availableOpenInfo ->
+
+            val pricePrecision = globalViewModel.pricePrecision.value?:0
+            binding?.useable?.text =  NumberUtils.formatRoundDown(availableOpenInfo?.longMaxOpen,0,pricePrecision)
+            binding?.useableUnit?.text = "USDT"
+            binding?.marginAmount?.text = NumberUtils.formatRoundDown(availableOpenInfo?.longMargin,0,pricePrecision)
+            binding?.marginUnit?.text = "USDT"
+
+
+            binding?.sellUseable?.text = NumberUtils.formatRoundDown(availableOpenInfo?.shortMaxOpen,0,pricePrecision)
+            binding?.sellUseableUnit?.text = "USDT"
+            binding?.sellBond?.text = NumberUtils.formatRoundDown(availableOpenInfo?.shortMargin,0,pricePrecision)
+            binding?.sellBondUnit?.text = "USDT"
         }
     }
 
