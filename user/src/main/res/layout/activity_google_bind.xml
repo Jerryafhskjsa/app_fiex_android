@@ -137,6 +137,7 @@
                                 android:layout_marginRight="15dp"
                                 android:text="@string/send_code"
                                 android:textColor="@color/T13"
+
                                 android:textSize="@dimen/text_size_12" />
                         </com.black.lib.view.InputLinearLayout>
 
