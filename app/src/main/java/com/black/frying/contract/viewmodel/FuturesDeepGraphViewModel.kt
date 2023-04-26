@@ -9,12 +9,10 @@ import com.black.frying.contract.FuturesDeepGraphFragment
 
 class FuturesDeepGraphViewModel : ViewModel() {
     lateinit var mContext: Context
-
-    val pPrecisionLData:MutableLiveData<Int> = MutableLiveData<Int>(1)
-
     fun init(context: Context) {
         mContext = context
     }
+    val pPrecisionLData:MutableLiveData<Int> = MutableLiveData<Int>(1)
 
     fun clickShowMode() {
         val maxIndex = FuturesDeepGraphFragment.ShowMode.values().size - 1
