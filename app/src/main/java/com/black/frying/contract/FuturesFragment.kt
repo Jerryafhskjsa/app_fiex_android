@@ -135,7 +135,7 @@ class FuturesFragment : Fragment() {
         list.add(positionsTabBean)
         list.add(profitLossTabBean)
         list.add(openOrderTabBean)
-        listOfFragment.add(ContractPositionTabFragment.newInstance(positionsTabBean))
+        listOfFragment.add(FuturePositionTabFragment.newInstance(positionsTabBean))
         listOfFragment.add(ContractProfitTabFragment.newInstance(profitLossTabBean))
         listOfFragment.add(ContractPlanTabFragment.newInstance(openOrderTabBean))
         val pagerAdapter = TransRecordFragmentPagerAdapter(listOfFragment, childFragmentManager)

@@ -42,7 +42,7 @@ class ContractPositionTabFragment : BaseFragment(),
 
     private var viewModel: ContractPositionViewModel? = null
     private var adapter: ContractPositionTabAdapter? = null
-    private var dataList: ArrayList<PositionBean?>? = ArrayList()
+    private var dataList: ArrayList<PositionBean?> = ArrayList()
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null

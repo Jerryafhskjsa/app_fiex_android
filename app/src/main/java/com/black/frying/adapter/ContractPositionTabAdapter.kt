@@ -13,7 +13,7 @@ import com.fbsex.exchange.databinding.ListItemContractTabPositionBinding
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 
-class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>?) :
+class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>) :
     BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
     private var bgWin: Int? = null
     private var bgLose: Int? = null

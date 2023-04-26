@@ -48,8 +48,8 @@ class FutureGlobalStateViewModel : ViewModel() {
 
     var balanceBean: BalanceDetailBean? = null
     val balanceBeanLiveData = MutableLiveData<BalanceDetailBean>()
-
     var symbolList: List<SymbolBean>? = null
+    @Deprecated("少用，用symbolBeanLiveData代替",)
     var symbolBean: SymbolBean? = null
 
     //当前币种
