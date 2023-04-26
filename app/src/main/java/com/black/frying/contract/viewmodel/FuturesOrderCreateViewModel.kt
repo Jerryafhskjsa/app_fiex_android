@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.black.base.model.future.AvailableOpenData
 import com.black.base.view.DeepControllerWindow
 import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.state.FutureGlobalStateViewModel
@@ -45,6 +46,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
     val futureAmount = MutableLiveData<BigDecimal>()
     val futureAmountPercent = MutableLiveData<Int>()
     val futurePrice = MutableLiveData<BigDecimal>()
+    val futureAvailableOpenData = MutableLiveData<AvailableOpenData>()
 
     fun start() {
 
@@ -228,6 +230,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
             futureAmount.value ?: BigDecimal.ZERO,
             futureAmountPercent.value?.toBigDecimal() ?: BigDecimal.ZERO
         )
+        futureAvailableOpenData.value = availableOpenData
         Log.d(TAG, "calculateFuturesInfo() called with: price = $availableOpenData")
     }
 
