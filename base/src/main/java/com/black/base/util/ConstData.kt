@@ -51,6 +51,7 @@ object ConstData {
     const val TAB_ASSET = 4
     //交易对默认精度
     const val DEFAULT_PRECISION = 6
+    const val DEFAULT_AMOUNT_PRECISION = 4
 
     const val DEFAULT_PSW_LEN = 8
     const val FRYING_PASSWORD = "frying" //不可修改

@@ -1,5 +1,8 @@
 package com.black.base.model.future
 
+import com.black.base.util.ConstData.DEFAULT_AMOUNT_PRECISION
+import com.black.base.util.ConstData.DEFAULT_PRECISION
+
 data class SymbolBean(
     val baseCoin: String,//标的资产
     val baseCoinDisplayPrecision: Int,//标的币种显示精度
@@ -25,8 +28,8 @@ data class SymbolBean(
     val multiplierDown: String,//限价卖单下限百分比
     val multiplierUp: String,//限价买单价格上限百分比
     val onboardDate: Long,//上线时间
-    val pricePrecision: Int,//价格精度
-    val quantityPrecision: Int,//数量精度
+    val pricePrecision: Int = DEFAULT_PRECISION,//价格精度
+    val quantityPrecision: Int = DEFAULT_AMOUNT_PRECISION,//数量精度
     val quoteCoin: String,//报价资产
     val quoteCoinDisplayPrecision: Int,//报价币种显示精度
     val quoteCoinPrecision: Int,//报价币种精度

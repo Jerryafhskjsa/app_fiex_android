@@ -5,20 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.black.base.model.future.*
+import com.black.base.model.socket.Deep
 import com.black.base.model.socket.PairQuotation
 import com.black.base.model.trade.TradeOrderDepth
+import com.black.base.util.ConstData
 import com.black.base.util.TimeUtil
-import com.black.frying.FryingApplication
 import com.black.frying.contract.biz.model.FuturesRepository
 import com.black.frying.contract.biz.okwebsocket.market.*
 import com.black.frying.contract.viewmodel.model.FuturesCoinPair
-import com.black.im.util.DateTimeUtil
-import com.black.net.okhttp.NetWorkChangeHelper
 import com.black.net.okhttp.OkWebSocketHelper
 import com.black.net.okhttp.OkWebSocketHelper.IMessageLifeCycle
+import com.black.util.NumberUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.abs
+import kotlin.math.pow
 
 const val TAG = "FutureGlobalStateViewModel"
 
@@ -33,11 +35,13 @@ class FutureGlobalStateViewModel : ViewModel() {
     }
     private val futuresCoinPair: FuturesCoinPair? by lazy { FuturesCoinPair.load() }
 
-    //杠杆倍数  逐仓
+    //杠杆倍数  逐仓 多
     var isolatedPositionBean: PositionBean? = null
     val isolatedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
-    //全仓
+    val positionListAll = mutableListOf<PositionBean?>()
+
+    //全仓  空
     var crossedPositionBean: PositionBean? = null
     val crossedPositionBeanLiveData = MutableLiveData<PositionBean>()
 
@@ -57,12 +61,14 @@ class FutureGlobalStateViewModel : ViewModel() {
     //指数价格
     val dealBeanLiveData = MutableLiveData<DealBean>()
 
-    //全部深度
+    //全部深度数据
     val tradeOrderDepthLiveData = MutableLiveData<TradeOrderDepth>()
 
     //深度
     val deepBeanLiveData = MutableLiveData<DeepBean>()
 
+    var supportingPrecisionList //支持深度
+            : ArrayList<Deep>? = null
 
     //费率
     var fundRateBean: FundingRateBean? = null
@@ -82,31 +88,34 @@ class FutureGlobalStateViewModel : ViewModel() {
 
 
     //价格精度
-    val pricePrecision = MutableLiveData<Int>()
+    val pricePrecision = MutableLiveData<Int>(ConstData.DEFAULT_PRECISION)
 
     //数量精度
-    val amountPrecision = MutableLiveData<Int>()
+    val amountPrecision = MutableLiveData<Int>(ConstData.DEFAULT_AMOUNT_PRECISION)
+
 
     init {
         initCoinPair()
     }
 
+    fun refresh(){
+        initCoinPair()
+    }
     private fun initCoinPair() {
         viewModelScope.launch(Dispatchers.IO) {
             val response = FuturesRepository.getSymbolList() ?: return@launch
             if (response.isOk()) {
                 val symbolLists = response.result
-                if (symbolLists?.isNotEmpty() == true) {
+                if (!symbolLists.isNullOrEmpty()) {
                     symbolList = symbolLists
                     val source = futuresCoinPair?.source()
-                    symbolBean = if (source == null) {
+                    val tempSymbolBean = if (source == null) {
                         symbolLists.first()
                     } else {
                         symbolLists.first { bean -> source == bean.symbol }
                     }
-                    symbolBeanLiveData.postValue(symbolBean)
-                    pricePrecision.postValue(symbolBean?.pricePrecision ?: 0)
-                    amountPrecision.postValue(symbolBean?.quantityPrecision ?: 0)
+                    symbolBeanLiveData.postValue(tempSymbolBean)
+                    handlePrecisionData(tempSymbolBean)
                     sendSymbolCommand()
                     getCoinPositionList()
                     getCoinFundingRate()
@@ -115,6 +124,47 @@ class FutureGlobalStateViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private fun handlePrecisionData(bean: SymbolBean) {
+        symbolBean = bean
+        var maxPrecision = (bean.pricePrecision)
+        if (maxPrecision == 0) maxPrecision = ConstData.DEFAULT_PRECISION
+        pricePrecision.postValue(maxPrecision)
+
+        var maxAPrecision = (bean.quantityPrecision)
+        if (maxAPrecision == 0) maxAPrecision = ConstData.DEFAULT_AMOUNT_PRECISION
+        amountPrecision.postValue(maxAPrecision)
+
+        supportingPrecisionList =
+            setMaxSupportPrecisionList(maxPrecision.toString(), bean.depthPrecisionMerge)
+    }
+
+    fun setMaxSupportPrecisionList(
+        pricePrecision: String?,
+        depthPrecisionMerge: Int?
+    ): ArrayList<Deep> {
+        var depth = depthPrecisionMerge
+        var pricePrecision = pricePrecision
+        var deepList = ArrayList<Deep>()
+        for (index in 0..(depth?.minus(1) ?: 0)) {
+            var deep = Deep()
+            var d = pricePrecision?.toInt()?.minus(index)
+            if (d != null) {
+                var p = if (d < 0) {
+                    10.0.pow(abs(d).toDouble())
+                } else if (d > 0) {
+                    pricePrecision?.toInt()
+                        ?.let { NumberUtil.formatNumberNoGroup(1 / 10.0.pow(d!!.toDouble()), it) }
+                } else {
+                    1.0
+                }
+                deep.precision = d
+                deep.deep = p.toString()
+                deepList.add(deep)
+            }
+        }
+        return deepList
     }
 
     private fun getDeepBeanInfo() {
@@ -197,15 +247,18 @@ class FutureGlobalStateViewModel : ViewModel() {
             viewModelScope.launch {
                 val positionList = FuturesRepository.getPositionList(symbol.symbol)
                 positionList?.let { list ->
-                    if (list.size != 2) {
-                        return@launch
+                    positionListAll.clear()
+                    val toMutableList = list.toMutableList()
+                    positionListAll.addAll(toMutableList)
+                    list.forEach {
+                        if (it?.positionType == "ISOLATED") {
+                            isolatedPositionBean = it
+                            isolatedPositionBeanLiveData.postValue(it)
+                        }else if ("CROSSED" == it?.positionType){
+                            crossedPositionBean = it
+                            crossedPositionBeanLiveData.postValue(it)
+                        }
                     }
-                    val first = list.first()
-                    isolatedPositionBean = first
-                    isolatedPositionBeanLiveData.postValue(first)
-                    val last = list.last()
-                    crossedPositionBean = last
-                    crossedPositionBeanLiveData.postValue(last)
                 }
             }
         }

@@ -178,11 +178,12 @@ class FuturesDeepGraphFragment : Fragment() {
             }
 
             deep.setOnClickListener {
-                if (!viewModel.getPrecisionList().isNullOrEmpty()) {
+                val supportingPrecisionList = globalViewModel.supportingPrecisionList
+                if (!supportingPrecisionList.isNullOrEmpty()) {
                     DeepControllerWindow<Deep>(requireActivity(),
                         null,
-                        viewModel.getPrecisionDeep(viewModel.getPrecision()),
-                        viewModel.getPrecisionList() as List<Deep>,
+                        viewModel.getPrecisionDeep(supportingPrecisionList),
+                        supportingPrecisionList,
                         object : DeepControllerWindow.OnReturnListener<Deep> {
                             override fun onReturn(window: DeepControllerWindow<Deep>, item: Deep) {
                                 item.precision?.let { viewModel.setPrecision(it) }
@@ -194,7 +195,8 @@ class FuturesDeepGraphFragment : Fragment() {
     }
 
     private fun refreshDeepView() {
-        var deep = viewModel.getPrecisionDeep(viewModel.getPrecision())
+        val supportingPrecisionList = globalViewModel.supportingPrecisionList?:return
+        var deep = viewModel.getPrecisionDeep(supportingPrecisionList)
         binding.deep.text = getString(
             R.string.point_count,
             deep?.deep ?: ""
@@ -225,13 +227,18 @@ class FuturesDeepGraphFragment : Fragment() {
     }
     private fun setupBindData() {
         globalViewModel.apply {
+            symbolBeanLiveData.observe(viewLifecycleOwner) { bean ->
+                viewModel.pPrecisionLData.postValue(bean.pricePrecision)
+                binding.rvBtmList?.adapter?.notifyDataSetChanged()
+                binding.rvUpList?.adapter?.notifyDataSetChanged()
+            }
             pairQuotationLiveData.observe(viewLifecycleOwner) {
                 CommonUtil.checkActivityAndRunOnUI(context) {
                     updateCurrentPairPrice(it.c)
                 }
                 markPriceBeanLiveData.observe(viewLifecycleOwner) {
                     CommonUtil.checkActivityAndRunOnUI(context) {
-                        binding.includeMid?.tagPrice?.text = it?.p
+                        binding.includeMid.tagPrice.text = it?.p
                     }
                 }
             }
@@ -240,7 +247,7 @@ class FuturesDeepGraphFragment : Fragment() {
                 handleTradeOrderDepthChange(it)
             }
             viewModel.apply {
-                precisionLData.observe(viewLifecycleOwner) {
+                pPrecisionLData.observe(viewLifecycleOwner) {
                     refreshDeepView()
                 }
             }
@@ -344,16 +351,16 @@ class FuturesDeepGraphFragment : Fragment() {
             it?.formattedPrice =
                 if (it == null) nullAmount else NumberUtil.formatNumberNoGroup(
                     it.price,
-                    viewModel.currentPairStatus.precision,
-                    viewModel.currentPairStatus.precision
+                    viewModel.pPrecisionLData.value!!,
+                    viewModel.pPrecisionLData.value!!
                 )
             it?.exchangeAmountFormat =
                 if (it == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
                     it.exchangeAmount,
                     10,
-                    viewModel.getAmountLength(),
-                    viewModel.getAmountLength()
-                )
+                    globalViewModel.amountPrecision.value!!,
+                    globalViewModel.amountPrecision.value!!,
+                    )
         }
     }
 
