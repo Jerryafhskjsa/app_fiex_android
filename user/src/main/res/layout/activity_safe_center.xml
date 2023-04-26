@@ -34,7 +34,7 @@
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
+                android:background="@color/B2"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -45,6 +45,58 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/anquanjibie"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/jibie"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:text="@string/level_low"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_12" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:orientation="horizontal">
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="8dp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:background="@drawable/btn_level"/>
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/bar_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="8dp"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_level"/>
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/bar_b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="8dp"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_level"/>
+                </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -52,11 +104,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <RelativeLayout
-                                style="@style/MenuListItem"
-                                android:layout_width="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:visibility="gone"
+                                android:layout_weight="1"
+                                android:background="@drawable/xianhuo">
 
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
@@ -80,7 +135,8 @@
                             </RelativeLayout>
                         </LinearLayout>
 
-                        <RelativeLayout style="@style/MenuListItem">
+                        <RelativeLayout style="@style/MenuListItem"
+                            android:visibility="gone">
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
@@ -143,31 +199,6 @@
                         android:orientation="vertical">
 
                         <RelativeLayout
-                            android:id="@+id/change_password"
-                            style="@style/MenuListItem">
-
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/long_password"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:drawableRight="@drawable/icon_left"
-                                android:drawablePadding="6dp"
-                                android:gravity="center"
-                                android:textColor="@color/T2"
-                                android:textSize="@dimen/text_size_14" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
                             android:id="@+id/money_password_layout"
                             style="@style/MenuListItem"
                             android:visibility="gone"
@@ -226,27 +257,62 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="102dp"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginRight="@dimen/text_size_16"
+                        android:layout_marginTop="@dimen/text_size_20"
                         android:background="@color/B2"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <RelativeLayout
                             android:id="@+id/safe_google_layout"
-                            style="@style/MenuListItem">
-
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/xianhuo">
+                            
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/text_size_20"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/gugeyanzheng"/>
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
                                 android:text="@string/verify_google_02"
                                 android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <androidx.appcompat.widget.SwitchCompat
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_14" />
+</LinearLayout>
+                            <LinearLayout
                                 android:id="@+id/safe_google_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:orientation="horizontal">
+                               <com.black.base.widget.SpanCheckedTextView
+                                   android:id="@+id/one"
+                                   android:layout_width="@dimen/text_size_16"
+                                   android:layout_height="@dimen/text_size_16"
+                                   android:background="@drawable/btn_renzheng"/>
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/qianwnag" />
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:visibility="gone"
                                 android:layout_centerVertical="true"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -256,76 +322,172 @@
                         </RelativeLayout>
 
                         <RelativeLayout
-                            android:id="@+id/safe_phone_layout"
-                            style="@style/MenuListItem">
-
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/verify_phone_02"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/safe_phone_status"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toLeftOf="@+id/safe_phone_status_icon"
-                                android:gravity="right"
-                                android:text="@string/status_closed"
-                                android:textColor="@color/T2"
-                                android:textSize="@dimen/text_size_14" />
-
-                            <ImageView
-                                android:id="@+id/safe_phone_status_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="6dp"
-                                android:src="@drawable/icon_left" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
                             android:id="@+id/safe_mail_layout"
-                            style="@style/MenuListItem">
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/xianhuo">
 
-                            <com.black.base.widget.SpanTextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:text="@string/verify_mail_02"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
-
-                            <com.black.base.widget.SpanTextView
+                                android:layout_marginLeft="@dimen/text_size_20"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/youxiang"/>
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/verify_mail_02"
+                                    android:textColor="@color/T1"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:id="@+id/safe_mail_status"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toLeftOf="@+id/safe_mail_status_icon"
-                                android:gravity="right"
-                                android:text="@string/status_closed"
-                                android:textColor="@color/T2"
-                                android:textSize="@dimen/text_size_14" />
-
-                            <ImageView
-                                android:id="@+id/safe_mail_status_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/text_size_20"
+                                android:layout_marginTop="@dimen/text_size_20"
+                                android:orientation="horizontal">
+                                <com.black.base.widget.SpanCheckedTextView
+                                    android:id="@+id/two"
+                                    android:layout_width="@dimen/text_size_16"
+                                    android:layout_height="@dimen/text_size_16"
+
+                                    android:background="@drawable/btn_renzheng"/>
+                                <ImageView
+                                    android:id="@+id/safe_mail_status_icon"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/qianwnag" />
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:visibility="gone"
                                 android:layout_centerVertical="true"
-                                android:layout_marginLeft="6dp"
-                                android:src="@drawable/icon_left" />
-
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:thumb="@drawable/icon_switch_thumb"
+                                android:track="@drawable/bg_switch_track"
+                                app:track="@drawable/bg_switch_track" />
                         </RelativeLayout>
-
-
 
                     </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="102dp"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:background="@color/B2"
+                    android:orientation="horizontal">
+                    <RelativeLayout
+                        android:id="@+id/safe_phone_layout"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/xianhuo">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:src="@drawable/shouji"/>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/verify_phone_02"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/safe_phone_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:orientation="horizontal">
+                            <com.black.base.widget.SpanCheckedTextView
+                                android:id="@+id/three"
+                                android:layout_width="@dimen/text_size_16"
+                                android:layout_height="@dimen/text_size_16"
+                                android:background="@drawable/btn_renzheng"/>
+                            <ImageView
+                                android:id="@+id/safe_phone_status_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/qianwnag" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:visibility="gone"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:thumb="@drawable/icon_switch_thumb"
+                            android:track="@drawable/bg_switch_track"
+                            app:track="@drawable/bg_switch_track" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="@color/B1"/>
+                    <RelativeLayout
+                        android:id="@+id/change_password"
+                        style="@style/MenuListItem">
+                        <ImageView
+                            android:id="@+id/mima"
+                            android:layout_width="@dimen/text_size_14"
+                            android:layout_height="@dimen/text_size_16"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/mima2"/>
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/long_password"
+                            android:layout_marginLeft="30dp"
+                            android:textColor="@color/T1"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/qianwnag"
+                            android:drawablePadding="6dp"
+                            android:gravity="center"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>

@@ -467,7 +467,7 @@ object UserApiServiceHelper {
             return
         }
         ApiManager.build(context, UrlConfig.ApiType.URl_UC).getService(UserApiService::class.java)
-            ?.phoneSecurity(telCountryCode, phone, phoneCode,newPhoneCode,  emailCode, googleCode)
+            ?.phoneSecurity(telCountryCode, phone, phoneCode,newPhoneCode,emailCode, googleCode)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, true, callback))
     }

@@ -483,7 +483,7 @@
     <style name="wangluo">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
-        <item name="android:src">@drawable/xianlu</item>
+        <item name="android:src">@drawable/xianlu2</item>
     </style>
 
 

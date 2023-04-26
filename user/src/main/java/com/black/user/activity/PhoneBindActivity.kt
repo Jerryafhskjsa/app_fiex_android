@@ -1,13 +1,18 @@
 package com.black.user.activity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
@@ -22,6 +27,7 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -29,6 +35,7 @@ import com.black.user.R
 import com.black.user.databinding.ActivityPhoneBindBinding
 import com.black.util.Callback
 import com.black.util.CommonUtil
+import com.black.util.NumberUtil
 
 //手机验证绑定
 @Route(value = [RouterConstData.PHONE_BIND], beforePath = RouterConstData.LOGIN)
@@ -61,10 +68,11 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         binding?.countryCode?.isFocusable = false
         binding?.countryCode?.isFocusableInTouchMode = false
         binding?.countryCode?.tag = "86"
-        binding?.countryCode?.setOnClickListener(this)
+        binding?.country?.setOnClickListener(this)
         binding?.phoneAccount?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
         binding?.getPhoneCode?.setOnClickListener(this)
+        binding?.btnSubmit?.setOnClickListener(this)
         binding?.phoneCodeVieify?.addTextChangedListener(watcher)
         binding?.getPhoneCodeVerify?.setOnClickListener(this)
         binding?.mailCode?.addTextChangedListener(watcher)
@@ -124,7 +132,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.country_code -> {
+            R.id.country -> {
                 //切换国家区号
                 chooseCountryCode()
             }
@@ -167,8 +175,8 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
 
     private fun checkClickable() {
         if (TextUtils.isEmpty(binding?.phoneAccount?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.phoneCode?.text.toString().trim { it <= ' ' })
-                || TextUtils.isEmpty(binding?.phoneCodeVieify?.text.toString().trim { it <= ' ' })) {
+                || TextUtils.isEmpty(binding?.phoneCodeVieify?.text.toString().trim { it <= ' ' })
+                ) {
             binding?.btnSubmit?.isEnabled = false
         }
 
@@ -201,23 +209,23 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
                 FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
                 return
             }
-            countDownTimer = object : CountDownTimer(totalTime,1000) {
-                //1000ms运行一次onTick里面的方法
-                override fun onFinish() {
-                    binding?.getPhoneCodeVerify?.isEnabled = true
-                    binding?.getPhoneCodeVerify?.setText(R.string.sent)
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-                    val minute = millisUntilFinished / 1000 / 60 % 60
-                    val second = millisUntilFinished / 1000 % 60
-                    binding?.getPhoneCodeVerify?.isEnabled = false
-                    binding?.getPhoneCodeVerify?.setText("$second")
-                }
-            }.start()
             UserApiServiceHelper.getSendVerifyCode(this, userName, telCountryCode, object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                        countDownTimer = object : CountDownTimer(totalTime,1000) {
+                            //1000ms运行一次onTick里面的方法
+                            override fun onFinish() {
+                                binding?.getPhoneCodeVerify?.isEnabled = true
+                                binding?.getPhoneCodeVerify?.setText(R.string.sent)
+                            }
+
+                            override fun onTick(millisUntilFinished: Long) {
+                                val minute = millisUntilFinished / 1000 / 60 % 60
+                                val second = millisUntilFinished / 1000 % 60
+                                binding?.getPhoneCodeVerify?.isEnabled = false
+                                binding?.getPhoneCodeVerify?.setText("$second")
+                            }
+                        }.start()
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
                         //锁定发送按钮
                     } else {
@@ -230,24 +238,24 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
     //获取当前手机验证码
     private val phoneVerifyCode: Unit
         get() {
-            countDownTimer = object : CountDownTimer(totalTime,1000) {
-                //1000ms运行一次onTick里面的方法
-                override fun onFinish() {
-                    binding?.getPhoneCode?.isEnabled = true
-                    binding?.getPhoneCode?.setText(R.string.sent)
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-                    val minute = millisUntilFinished / 1000 / 60 % 60
-                    val second = millisUntilFinished / 1000 % 60
-                    binding?.getPhoneCode?.setText("$second")
-                    binding?.getPhoneCode?.isEnabled = false
-                }
-            }.start()
             UserApiServiceHelper.getSendVerifyCode(this, userInfo!!.tel , userInfo!!.telCountryCode , object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
+                        countDownTimer = object : CountDownTimer(totalTime,1000) {
+                            //1000ms运行一次onTick里面的方法
+                            override fun onFinish() {
+                                binding?.getPhoneCode?.isEnabled = true
+                                binding?.getPhoneCode?.setText(R.string.sent)
+                            }
+
+                            override fun onTick(millisUntilFinished: Long) {
+                                val minute = millisUntilFinished / 1000 / 60 % 60
+                                val second = millisUntilFinished / 1000 % 60
+                                binding?.getPhoneCode?.setText("$second")
+                                binding?.getPhoneCode?.isEnabled = false
+                            }
+                        }.start()
                         //锁定发送按钮
                     } else {
                         FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
@@ -292,11 +300,13 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
             return
         }
-        val phoneCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
-        if (TextUtils.isEmpty(phoneCode)) {
-            FryingUtil.showToast(mContext, getString(R.string.alert_input_phone_code))
-            return
-        }
+      val phoneCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
+        /* if (TextUtils.isEmpty(phoneCode)) {
+           FryingUtil.showToast(mContext, getString(R.string.alert_input_phone_code))
+           return
+       }
+
+       */
         val newPhoneCode = binding?.phoneCodeVieify?.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(newPhoneCode)){
             FryingUtil.showToast(mContext, getString(R.string.input_phone_code_veifily))
@@ -327,7 +337,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         UserApiServiceHelper.phoneSecurity(mContext, telCountryCode, newPhone , phoneCode , newPhoneCode,  mailCode, googleCode, object : NormalCallback<HttpRequestResultString?>(mContext) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    onBindSuccess()
+                    dialog()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
@@ -335,6 +345,30 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
+    private fun dialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.phone_bind_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            onBindSuccess()
+            dialog.dismiss()
+        }
+    }
     private fun onBindSuccess() {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {

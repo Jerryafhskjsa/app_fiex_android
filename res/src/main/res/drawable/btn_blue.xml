@@ -4,5 +4,5 @@
     <item android:drawable="@drawable/btn_blue_pressed" android:state_focused="true" />
     <item android:drawable="@drawable/btn_blue_pressed" android:state_checked="true" />
     <item android:drawable="@drawable/btn_blue_disable" android:state_enabled="false" />
-    <item android:drawable="@drawable/btn_blue_ss" />
+    <item android:drawable="@drawable/anniu" />
 </selector>

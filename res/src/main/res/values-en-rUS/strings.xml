@@ -1063,7 +1063,17 @@
     <string name="sell_coin">Sell coin</string>
     <string name="hour">24H 提现额度%1$s%1$s</string>
     <string name="tixian_amount">%1$s</string>
-
+    <string name="tongyong">通用设置</string>
+    <string name="bangzu">帮助中心</string>
+    <string name="fenxiang">分享APP</string>
+    <string name="xianlu">线路切换</string>
+    <string name="yijian">意见反馈</string>
+    <string name="zhonghyao">重要提示：请不要透露密码、短信和谷歌验证码给任何人，包括客服和其他工作人员</string>
+    <string name="denglutishi">登陆后解锁更多功能</string>
+    <string name="anquanjibie">安全级别</string>
+    <string name="bangding">绑定成功</string>
+    <string name="bangding_success">您已成功绑定手机</string>
+    <string name="bangding_google">绑定谷歌身份验证器</string>
 
 </resources>
 

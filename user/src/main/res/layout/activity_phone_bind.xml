@@ -30,6 +30,10 @@
 
                 <include layout="@layout/tool_bar_left_back" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding" />
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.base.widget.ObserveScrollView
@@ -46,10 +50,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -60,16 +60,20 @@
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/input_new_phone_number"></com.black.base.widget.SpanTextView>
+                            android:text="@string/input_new_phone_number"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_12">
+                        </com.black.base.widget.SpanTextView>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="10dp" />
 
                         <RelativeLayout
+                            style="@style/ButtonGray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default">
+                           >
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -77,31 +81,42 @@
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:id="@+id/country"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
                                 <com.black.base.widget.SpanMaterialEditText
-                                    android:id="@+id/country_code"
+                                    android:id="@id/country_code"
                                     style="@style/EditTextStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="+61"
-                                    android:textSize="@dimen/text_size_16" />
+                                    android:text="+86"
+                                    android:textColor="#5F616D"
+                                    android:textSize="@dimen/text_size_14" />
 
                                 <ImageView
                                     android:layout_width="8dp"
                                     android:layout_height="16dp"
                                     android:layout_marginLeft="5dp"
-                                    android:src="@drawable/icon_setting_arrow_down"></ImageView>
+                                    android:src="@drawable/xiala">
 
+                                </ImageView>
+                            </LinearLayout>
                                 <com.black.base.widget.SpanMaterialEditText
                                     android:id="@+id/phone_account"
                                     style="@style/EditTextStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/default_padding"
+                                    android:layout_marginRight="@dimen/text_size_10"
                                     android:hint="@string/edt_account_hint"
                                     android:inputType="text"
                                     android:maxLines="1"
                                     android:padding="@dimen/middle_padding"
-                                    android:textSize="@dimen/text_size_16"
+                                    android:textSize="@dimen/text_size_14"
                                     app:useDelete="true" />
                             </LinearLayout>
                         </RelativeLayout>
@@ -113,8 +128,10 @@
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/phone_old"
+                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_12"
                             android:text="@string/input_phone_now_code">
                         </com.black.base.widget.SpanTextView>
 
@@ -124,9 +141,10 @@
 
                         <com.black.lib.view.InputLinearLayout
                             android:id="@+id/phone_layout"
+                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default"
+                            style="@style/ButtonGray"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -142,10 +160,6 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="21dp"
-                                android:background="@color/T11_ALPHA5"></View>
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/get_phone_code"
@@ -164,8 +178,11 @@
                             android:layout_height="10dp" />
 
                         <com.black.base.widget.SpanTextView
+                            android:id="@+id/phone_old2"
+                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_12"
                             android:text="@string/input_new_phone_code_verify">
 
                         </com.black.base.widget.SpanTextView>
@@ -178,7 +195,7 @@
                             android:id="@+id/phone_layout_verify"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default"
+                            style="@style/ButtonGray"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -194,10 +211,6 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="21dp"
-                                android:background="@color/T11_ALPHA5"></View>
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/get_phone_code_verify"
@@ -218,9 +231,13 @@
                             android:layout_height="10dp" />
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/mail_account"
+                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/input_mail_code"></com.black.base.widget.SpanTextView>
+                            android:textSize="@dimen/text_size_12"
+                            android:text="@string/input_mail_code">
+
+                        </com.black.base.widget.SpanTextView>
 
                         <View
                             android:layout_width="match_parent"
@@ -230,7 +247,7 @@
                             android:id="@+id/mail_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default"
+                            style="@style/ButtonGray"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -246,11 +263,6 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="21dp"
-                                android:background="@color/T11_ALPHA5"></View>
-
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/get_mail_code"
                                 style="@style/EditTextStyle"
@@ -264,9 +276,13 @@
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/google_window"
+                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/google_code_input_hint"></com.black.base.widget.SpanTextView>
+                            android:textSize="@dimen/text_size_12"
+                            android:text="@string/google_code_input_hint">
+
+                        </com.black.base.widget.SpanTextView>
 
                         <View
                             android:layout_width="match_parent"
@@ -276,7 +292,7 @@
                             android:id="@+id/google_code_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_edittext_default"
+                            style="@style/ButtonGray"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -292,10 +308,6 @@
                                 android:maxLines="1"
                                 android:padding="0dp" />
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="21dp"
-                                android:background="@color/T11_ALPHA5"></View>
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/google_code_copy"
@@ -311,6 +323,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             android:layout_marginTop="15dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
@@ -318,7 +331,9 @@
                             <ImageView
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
-                                android:src="@drawable/icon_tips_change_psw"></ImageView>
+                                android:src="@drawable/icon_tips_change_psw">
+
+                            </ImageView>
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
@@ -329,25 +344,27 @@
                                 android:textSize="@dimen/text_size_12" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/bottom_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:orientation="vertical"
-                            android:padding="@dimen/double_padding">
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/btn_submit"
-                                style="@style/ButtonBlue"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/middle_padding"
-                                android:text="@string/submit" />
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:padding="@dimen/double_padding">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_submit"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/submit" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

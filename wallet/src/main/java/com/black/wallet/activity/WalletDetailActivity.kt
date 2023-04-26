@@ -181,7 +181,10 @@ class WalletDetailActivity : BaseActivity(),
             2
         ) )
 
-        binding?.able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
+        binding?.
+
+
+        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(wallet?.estimatedAvailableAmountCny , 10, 2, 2) + "USDT")
 
         binding?.freez?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
             wallet?.coinFroze,

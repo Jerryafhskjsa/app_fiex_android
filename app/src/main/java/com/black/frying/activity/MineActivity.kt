@@ -55,6 +55,11 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mine);
+        binding?.bangzu?.setOnClickListener(this)
+        binding?.tongyong?.setOnClickListener(this)
+        binding?.fenxiang?.setOnClickListener(this)
+        binding?.xianlu?.setOnClickListener(this)
+        binding?.yijian?.setOnClickListener(this)
         imageLoader = ImageLoader(this)
         binding?.imgBack?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
@@ -111,7 +116,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.currentExchangeRates?.setText(R.string.language_cny)
         }
         if (CommonUtil.isApkInDebug(applicationContext)) {
-            binding?.serverSetting?.visibility = View.VISIBLE
+            binding?.serverSetting?.visibility = View.GONE
         } else {
             binding?.serverSetting?.visibility = View.GONE
         }
@@ -292,7 +297,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 UdeskUtil.start(applicationContext)
             R.id.safe_center -> BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
                 .go(mContext)
-            R.id.help_center -> {
+            R.id.bangzu -> {
                 //帮助中心
 //                BlackRouter.getInstance().build(RouterConstData.PROMOTIONS).go(mContext);
                 val bundle = Bundle()
@@ -344,6 +349,18 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                             })
                     })
                 }
+            }
+            R.id.tongyong -> {
+
+            }
+            R.id.fenxiang -> {
+
+            }
+            R.id.xianlu -> {
+
+            }
+            R.id.yijian -> {
+
             }
         }
     }
@@ -523,13 +540,13 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     //刷新用户信息
     private fun refreshUserViews() {
-        binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
+        //binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
         if (userInfo != null) {
             if(userInfo?.headPortrait != null){
                 binding?.iconAvatar?.let {
                     Glide.with(mContext)
                         .load(Uri.parse(userInfo?.headPortrait!!))
-                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.gerenzhongxin))
                         .into(it)
                 }
             }
@@ -569,7 +586,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
             binding?.uuid?.visibility = View.VISIBLE
             binding?.uuid?.text = "UID:" + if (userInfo!!.id == null) "" else userInfo!!.id
-            if (TextUtils.equals("email", userInfo!!.registerFrom)) {
+            /*if (TextUtils.equals("email", userInfo!!.registerFrom)) {
                 if (TextUtils.equals(userInfo!!.phoneSecurityStatus, "1") && TextUtils.equals(
                         userInfo!!.emailSecurityStatus,
                         "1"
@@ -602,18 +619,18 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 } else {
                     binding?.safeLevel?.setText(R.string.level_low)
                 }
-            }
+            }*/
             binding?.btnLoginOut?.visibility = View.VISIBLE
             binding?.loginStatus?.visibility = View.VISIBLE
             binding?.btnLogin?.visibility = View.GONE
         } else {
             binding?.name?.setText(R.string.please_login)
-            binding?.uuid?.visibility = View.GONE
-            binding?.uuid?.setText(R.string.welcome_fbsex)
-            binding?.safeLevel?.text = ""
+            binding?.uid?.visibility = View.GONE
+            binding?.uuid?.setText(R.string.denglutishi)
+           // binding?.safeLevel?.text = ""
             binding?.btnLoginOut?.visibility = View.GONE
             binding?.loginStatus?.visibility = View.GONE
-            binding?.btnLogin?.visibility = View.VISIBLE
+            binding?.btnLogin?.visibility = View.GONE
         }
     }
 

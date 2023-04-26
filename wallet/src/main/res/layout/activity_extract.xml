@@ -95,15 +95,15 @@
                             android:layout_width="140dp"
                             android:layout_height="36dp"
                             android:layout_margin="@dimen/default_padding"
-                            android:background="@drawable/neibu_zhuan"
                             android:layout_weight="1"
+                            android:background="@drawable/neibu_zhuan"
                             android:checked="true"
                             android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="@string/extract_address_help"
                             android:textColor="@color/btn_sale_check"
-                            android:textSize="@dimen/text_size_14"
-                            />
+                            android:textSize="@dimen/text_size_14" />
+
                         <com.black.base.widget.SpanCheckedTextView
                             android:id="@+id/neibu_zhuan"
                             android:layout_width="140dp"
