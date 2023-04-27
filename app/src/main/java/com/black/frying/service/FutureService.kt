@@ -220,7 +220,7 @@ object FutureService {
      * 获取交易对的合约面值
      */
     fun getContractSize(symbol: String?): BigDecimal? {
-        if(symbolList == null){
+        if (symbolList == null) {
             return BigDecimal(0)
         }
         for (symbolItem in symbolList!!) {
@@ -236,12 +236,16 @@ object FutureService {
      * 获取限价委托订单列表
      */
     fun initOrderList(context: Context?) {
-        var pairStatus = SocketDataContainer.getPairStatusSync(context,ConstData.PairStatusType.FUTURE_U,CookieUtil.getCurrentFutureUPair(context!!))
-        var symbol:String? = pairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
+        var pairStatus = SocketDataContainer.getPairStatusSync(
+            context,
+            ConstData.PairStatusType.FUTURE_U,
+            CookieUtil.getCurrentFutureUPair(context!!)
+        )
+        var symbol: String? = pairStatus?.pair
+        if (SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED, true) as Boolean) {
             symbol = null
         }
-        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
+        FutureApiServiceHelper.getOrderList(1, 10, symbol, Constants.UNFINISHED, context, false,
             object : Callback<HttpRequestResultBean<OrderBean>>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->initOrderList--error", error.toString())
@@ -914,11 +918,11 @@ object FutureService {
     ): AvailableOpenData {
 
 
-        Log.d("ttt---->1", inputPrice.toString())
-        Log.d("ttt---->2", longLeverage.toString())
-        Log.d("ttt---->3", shortLeverage.toString())
-        Log.d("ttt---->4", amount.toString())
-        Log.d("ttt---->5", amountPercent.toString())
+        Log.d("ttt---->1inputPrice", inputPrice.toString())
+        Log.d("ttt---->2longLeverage", longLeverage.toString())
+        Log.d("ttt---->3shortLeverage", shortLeverage.toString())
+        Log.d("ttt---->4amount", amount.toString())
+        Log.d("ttt---->5amountPercent", amountPercent.toString())
 
         var symbolBean = getSymbolConfig(symbol)
         var precision = symbolBean?.quoteCoinPrecision
@@ -944,7 +948,7 @@ object FutureService {
         longSheetAmount = if (longInputSheetAmount.compareTo(BigDecimal(0)) == 1) {
             longInputSheetAmount.setScale(0, RoundingMode.DOWN)
         } else {
-            longMaxOpen.multiply(
+            val amount = longMaxOpen.multiply(
                 amountPercent.divide(
                     BigDecimal(100),
                     precision,
@@ -952,6 +956,7 @@ object FutureService {
                 )
             )
                 .setScale(0, RoundingMode.DOWN)
+            currentUnit2Sheet(amount, buyPrice)
         }
 //        Log.d("ttttttt-->longSheetAmount--", longSheetAmount.toString())
 
@@ -973,7 +978,7 @@ object FutureService {
         shortSheetAmount = if (shortInputSheetAmount.compareTo(BigDecimal(0)) == 1) {
             shortInputSheetAmount.setScale(0, RoundingMode.DOWN)
         } else {
-            shortMaxOpen.multiply(
+            val amount =  shortMaxOpen.multiply(
                 amountPercent.divide(
                     BigDecimal(100),
                     precision,
@@ -981,6 +986,7 @@ object FutureService {
                 )
             )
                 .setScale(0, RoundingMode.DOWN)
+            currentUnit2Sheet(amount, buyPrice)
         }
 //        Log.d("ttttttt-->shortSheetAmount---", shortSheetAmount.toString())
         Log.d("ttttttt-->shortMaxOpen--", shortMaxOpen.toString())
@@ -1006,7 +1012,7 @@ object FutureService {
     private fun getLongMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
         var positonValue =
             getValue(price.toString(), amount.toString(), contractSize.toString()).toBigDecimal()
-        if(userStepRate == null){
+        if (userStepRate == null) {
             return BigDecimal(0)
         }
         var result =
@@ -1037,7 +1043,7 @@ object FutureService {
      */
     private fun getShortMargin(price: BigDecimal, amount: BigDecimal, leverage: Int): BigDecimal {
 
-        if(userStepRate == null){
+        if (userStepRate == null) {
             return BigDecimal(0)
         }
         //维持保证金率
@@ -1096,7 +1102,8 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.SHORT)
 
-        var positionBean: PositionBean? = currentSymbolPositionValue(Constants.SHORT) ?: return BigDecimal.ZERO
+        var positionBean: PositionBean? =
+            currentSymbolPositionValue(Constants.SHORT) ?: return BigDecimal.ZERO
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
@@ -1115,7 +1122,7 @@ object FutureService {
      * 2. 维持保证金率 = 杠杆所处的最大档位的维持保证金率
      */
     private fun getBalanceShortMaxOpen(price: BigDecimal, leverage: Int): BigDecimal {
-        if(balanceDetail == null){
+        if (balanceDetail == null) {
             return BigDecimal(0)
         }
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
@@ -1150,7 +1157,8 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
 
-        var positionBean: PositionBean? = currentSymbolPositionValue(Constants.LONG) ?: return BigDecimal.ZERO
+        var positionBean: PositionBean? =
+            currentSymbolPositionValue(Constants.LONG) ?: return BigDecimal.ZERO
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
