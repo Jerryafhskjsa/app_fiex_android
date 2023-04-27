@@ -19,6 +19,6 @@
         android:id="@+id/display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:layout_marginLeft="@dimen/text_size_10"
         android:textSize="@dimen/text_size_16" />
 </LinearLayout>

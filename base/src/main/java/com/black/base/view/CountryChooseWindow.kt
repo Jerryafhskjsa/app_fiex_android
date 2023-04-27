@@ -189,7 +189,7 @@ class CountryChooseWindow(private val activity: Activity, private val type: Int,
 
         init {
             textDefault = SkinCompatResources.getColor(context, R.color.T2)
-            textSelect = SkinCompatResources.getColor(context, R.color.C1)
+            textSelect = SkinCompatResources.getColor(context, R.color.T13)
         }
     }
 

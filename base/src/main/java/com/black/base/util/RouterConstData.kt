@@ -61,6 +61,7 @@ object RouterConstData {
     const val RECOMMEND_PEOPLE = "fiex://recommendPeople"
     const val RECOMMEND_REWARD_RECORD = "fiex://recommendRewardRecord"
     const val REAL_NAME_MENU = "fiex://realNameMenu"
+    const val REAL_NAME_RESULT = "fiex://realNameResult"
     const val REAL_NAME_INFO = "fiex://realNameInfo"
     const val REAL_NAME_AUTHENTICATE = "fiex://realNameAuthenticate"
     const val REAL_NAME_AUTHENTICATE_FIRST = "fiex://realNameAuthenticateFirst"

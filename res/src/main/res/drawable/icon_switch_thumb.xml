@@ -7,7 +7,7 @@
     android:viewportHeight="28">
 
     <path
-        android:fillColor="@color/T4"
+        android:fillColor="@color/T13"
         android:pathData="M14 4 A 10,10 0 1 1 13,4 M14 4 L 13,4"
         android:strokeLineCap="round"
         tools:ignore="VectorRaster" />

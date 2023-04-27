@@ -480,12 +480,12 @@
         <item name="android:src">@drawable/suo_suo</item>
     </style>
 
+
     <style name="wangluo">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
         <item name="android:src">@drawable/xianlu2</item>
     </style>
-
 
     <style name="Yinying">
         <item name="android:paddingBottom">10dp</item>
@@ -497,5 +497,22 @@
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">2</item>
         <item name="android:background">@drawable/yin_ying</item>
+    </style>
+
+    <style name="wanshang">
+        <item name="android:background">@drawable/white_white</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ButtonBlack">
+        <item name="android:background">@drawable/black_reduis</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/T1</item>
+    </style>
+
+    <style name="shenfen">
+        <item name="android:background">@drawable/white_raduis</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

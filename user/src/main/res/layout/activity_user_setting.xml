@@ -44,6 +44,97 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/more_language"
+                        style="@style/MenuListItem"
+                        android:orientation="horizontal"
+                       >
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="@string/language"
+                                android:textStyle="bold"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_14" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/current_language"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:paddingRight="6dp"
+                                android:text="@string/language_chinese"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/icon_left" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/jijia_setting"
+                        style="@style/MenuListItem">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/jijia"
+                            android:textColor="@color/T1"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/rate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/icon_left"
+                            android:drawablePadding="6dp"
+                            android:gravity="center"
+                            android:text="CNY"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_12" />
+
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/heyue_setting"
+                        style="@style/MenuListItem">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/heyue_confirm"
+                            android:textColor="@color/T1"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:thumb="@drawable/icon_switch_thumb"
+                            android:track="@drawable/bg_switch_track"
+                            app:track="@drawable/bg_switch_track" />
+
+                    </RelativeLayout>
                     <RelativeLayout
                         android:id="@+id/style_setting"
                         style="@style/MenuListItem">
@@ -51,9 +142,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="@string/style_setting"
+                            android:text="@string/rate_exchange"
                             android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_16" />
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_14" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/red_down"
@@ -66,11 +158,13 @@
                             android:gravity="center"
                             android:text="@string/red_down"
                             android:textColor="@color/T2"
-                            android:textSize="@dimen/text_size_14" />
+                            android:textSize="@dimen/text_size_12" />
+
 
                     </RelativeLayout>
                     <RelativeLayout
                         android:id="@+id/about_us"
+                        android:visibility="gone"
                         style="@style/MenuListItem">
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"

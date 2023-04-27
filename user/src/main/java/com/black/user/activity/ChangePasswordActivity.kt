@@ -1,12 +1,17 @@
 package com.black.user.activity
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
@@ -16,7 +21,9 @@ import com.black.base.model.user.UserInfo
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
+import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityChangePasswordBinding
@@ -124,7 +131,7 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
                 mailVerifyCode
             }
             R.id.btn_confirm -> {
-                changePassword()
+                passwordDialog()
             }
         }
     }
@@ -266,7 +273,32 @@ class ChangePasswordActivity : BaseActivity(), View.OnClickListener {
             }
         })
     }
-
+    private fun passwordDialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.change_password_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+           changePassword()
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+    }
     private fun onGetTokenSuccess() {
 
         getUserInfo(object : Callback<UserInfo?>() {

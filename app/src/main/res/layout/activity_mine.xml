@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:layout_weight="2"
-                android:text="@string/notification"
+                android:text="@string/personal_center"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_16" />
 
@@ -82,6 +82,7 @@
                         android:id="@+id/btn_login"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
+                        android:visibility="gone"
                         android:background="@drawable/anniu"
                         android:checked="false"
                         android:includeFontPadding="false"
@@ -104,7 +105,10 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="@dimen/double_padding">
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginBottom="@dimen/text_size_20"
+                            >
                             <ImageView
                                 android:id="@+id/icon_avatar"
                                 android:layout_width="60dp"
@@ -162,9 +166,11 @@
                             </LinearLayout>
                             <RelativeLayout
                                 android:id="@+id/rel_verify_status"
+                                android:layout_gravity="center"
+                                style="@style/shenfen"
                                 android:layout_width="86dp"
                                 android:layout_height="28dp"
-                                android:background="@drawable/bg_user_verify_corner">
+                                >
 
                                 <ImageView
                                     android:id="@+id/icon_verify"
@@ -182,7 +188,7 @@
                                     android:layout_toRightOf="@+id/icon_verify"
                                     android:paddingLeft="5dp"
                                     android:paddingRight="@dimen/default_padding"
-                                    android:text="@string/primary"
+                                    android:text="@string/shenfen"
                                     android:textColor="@color/T4"
                                     android:textSize="@dimen/text_size_10" />
                             </RelativeLayout>

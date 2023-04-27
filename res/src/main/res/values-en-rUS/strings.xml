@@ -1074,6 +1074,24 @@
     <string name="bangding">绑定成功</string>
     <string name="bangding_success">您已成功绑定手机</string>
     <string name="bangding_google">绑定谷歌身份验证器</string>
+    <string name="mail_success">您已成功绑定邮箱</string>
+    <string name="google_success">您已成功绑定谷歌</string>
+    <string name="jijia">计价方式</string>
+    <string name="heyue_confirm">合约二次确认</string>
+    <string name="rate_exchange">涨跌颜色</string>
+    <string name="jichu">基础认证</string>
+    <string name="weitongguo">未通过</string>
+    <string name="liyou">未通过理由:</string>
+    <string name="qingshang">请上传您的身份证正面和背面、手持身份证正面照片。</string>
+    <string name="shenhezhong">审核中</string>
+    <string name="renzhenghou">认证后可以支持提现，C2C交易等业务。</string>
+    <string name="shenheshijian">审核时间1-3天，请耐心等待。</string>
+    <string name="geren">个人信息</string>
+    <string name="shenfen">身份证认证</string>
+    <string name="tonguo">已通过</string>
+    <string name="shenfenzheng">身份证</string>
+    <string name="zhengjian_num">证件号码</string>
+    <string name="guojia">国家列表</string>
 
 </resources>
 

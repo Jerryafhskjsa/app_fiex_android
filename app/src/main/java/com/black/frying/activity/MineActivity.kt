@@ -34,6 +34,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityMineBinding
+import kotlinx.android.synthetic.main.activity_mine.fenxiang
 import skin.support.SkinCompatManager
 import skin.support.SkinCompatManager.SkinLoaderListener
 import skin.support.content.res.SkinCompatResources
@@ -58,6 +59,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.bangzu?.setOnClickListener(this)
         binding?.tongyong?.setOnClickListener(this)
         binding?.fenxiang?.setOnClickListener(this)
+        binding?.relVerifyStatus?.setOnClickListener(this)
         binding?.xianlu?.setOnClickListener(this)
         binding?.yijian?.setOnClickListener(this)
         imageLoader = ImageLoader(this)
@@ -123,6 +125,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
         //initServiceApi()
+        refreshUserViews()
         getNetworkLines(false)
     }
 
@@ -351,12 +354,22 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 }
             }
             R.id.tongyong -> {
-
+                BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
             }
             R.id.fenxiang -> {
-
+                fenxiangdialog()
             }
             R.id.xianlu -> {
+                BlackRouter.getInstance().build(RouterConstData.XIANLU)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
+            }
+            R.id.rel_verify_status -> {
+                if (userInfo?.idNoStatus.equals("0"))
+                    BlackRouter.getInstance().build(RouterConstData.REAL_NAME_AUTHENTICATE_FIRST).go(mContext)
+                else{
+                    BlackRouter.getInstance().build(RouterConstData.REAL_NAME_RESULT).go(mContext)
+                }
 
             }
             R.id.yijian -> {
@@ -463,7 +476,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         alertDialog.show()
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
         if(userInfo != null){
@@ -552,11 +565,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             }
             val userName = if (userInfo!!.username == null) "" else userInfo!!.username
             binding?.name?.text = String.format("%s", userName)
-
             var relVerifyBg: Drawable? = null
             var tvVerifyColor: Int? = null
             var tvVerifyText: String? = null
-            when (userInfo?.idNoStatus) {
+           /* when (userInfo?.idNoStatus) {
                 ConstData.USER_VERIFY_NO -> {
                     relVerifyBg = getDrawable(R.drawable.bg_user_unverify_corner)
                     tvVerifyColor = getColor(R.color.T8)
@@ -578,11 +590,15 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     tvVerifyText = getString(R.string.purchase_failed)
                 }
             }
-            binding?.relVerifyStatus?.background = relVerifyBg
+
+            */
+           /* binding?.relVerifyStatus?.background = relVerifyBg
             binding?.tvVerify?.text = tvVerifyText
             if (tvVerifyColor != null) {
                 binding?.tvVerify?.setTextColor(tvVerifyColor)
             }
+            
+            */
 
             binding?.uuid?.visibility = View.VISIBLE
             binding?.uuid?.text = "UID:" + if (userInfo!!.id == null) "" else userInfo!!.id
@@ -625,11 +641,9 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.btnLogin?.visibility = View.GONE
         } else {
             binding?.name?.setText(R.string.please_login)
-            binding?.uid?.visibility = View.GONE
             binding?.uuid?.setText(R.string.denglutishi)
            // binding?.safeLevel?.text = ""
             binding?.btnLoginOut?.visibility = View.GONE
-            binding?.loginStatus?.visibility = View.GONE
             binding?.btnLogin?.visibility = View.GONE
         }
     }
@@ -660,6 +674,34 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     }
                 }
             })
+    }
+
+    private fun fenxiangdialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.haibao_dialog, null)
+        val dialog = Dialog(mContext, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+
     }
 
 

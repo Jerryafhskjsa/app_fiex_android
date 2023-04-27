@@ -354,7 +354,7 @@ class PhoneBindActivity : BaseActivity(), View.OnClickListener {
             //设置背景昏暗度
             params.dimAmount = 0.2f
             params.gravity = Gravity.CENTER
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT
             params.height = WindowManager.LayoutParams.WRAP_CONTENT
             window.attributes = params
         }

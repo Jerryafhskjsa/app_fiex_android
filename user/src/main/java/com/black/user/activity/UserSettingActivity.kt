@@ -9,32 +9,52 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.model.FryingStyleChange
+import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.FryingUtil
+import com.black.base.util.LanguageUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.StyleChangeUtil
+import com.black.base.widget.SpanCheckedTextView
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityUserSettingBinding
 import com.black.util.CommonUtil
+import org.intellij.lang.annotations.Language
 
 @Route(value = [RouterConstData.USER_SETTING], beforePath = RouterConstData.LOGIN)
 class UserSettingActivity : BaseActivity(), View.OnClickListener {
     private var application: BaseApplication? = null
+    private var style: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityUserSettingBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_setting)
         binding.push.setOnClickListener(this)
         binding.changeUser.setOnClickListener(this)
         binding.aboutUs.setOnClickListener(this)
+        binding.moreLanguage.setOnClickListener(this)
+        binding.jijiaSetting.setOnClickListener(this)
         binding.styleSetting.setOnClickListener(this)
         binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,"1.0.0")))
         application = getApplication() as BaseApplication
-        val style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+
+        style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+        val language = LanguageUtil.getLanguageSetting(mContext)?.languageCode
+        val rate = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
         if (style == null || style == 0) {
             binding.redDown.setText(R.string.red_down)
         } else {
             binding.redDown.setText(getString(R.string.red_up))
+        }
+        if (language == null || language == 2) {
+            binding.currentLanguage.setText(R.string.language_chinese)
+        } else {
+            binding.currentLanguage.setText(getString(R.string.language_english))
+        }
+        if (rate == null || rate == 0) {
+            binding.rate.setText(R.string.cny)
+        } else {
+            binding.rate.setText(getString(R.string.usd))
         }
     }
 
@@ -61,6 +81,12 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             R.id.style_setting ->{
                 showChangeDialog()
             }
+            R.id.more_language ->{
+                BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(this)
+            }
+            R.id.jijia_setting ->{
+                BlackRouter.getInstance().build(RouterConstData.EXCHANGE_RATES).go(this)
+            }
         }
     }
     private fun showChangeDialog(){
@@ -82,13 +108,28 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         val display = resources.displayMetrics
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.setContentView(contentView, layoutParams)
+        if (style == null || style == 0) {
+            contentView.findViewById<SpanCheckedTextView>(R.id.green_up).isChecked = false
+            contentView.findViewById<View>(R.id.bar_a).visibility = View.VISIBLE
+            contentView.findViewById<View>(R.id.bar_b).visibility = View.GONE
+        } else {
+            contentView.findViewById<SpanCheckedTextView>(R.id.red_up).isChecked = false
+            contentView.findViewById<View>(R.id.bar_a).visibility = View.GONE
+            contentView.findViewById<View>(R.id.bar_b).visibility = View.VISIBLE
+        }
         contentView.findViewById<View>(R.id.green_up).setOnClickListener { v ->
             v.tag = application!!.getStyleChange(FryingStyleChange.greenUp)
+            contentView.findViewById<SpanCheckedTextView>(R.id.green_up).isChecked = false
+            contentView.findViewById<View>(R.id.bar_a).visibility = View.VISIBLE
+            contentView.findViewById<View>(R.id.bar_b).visibility = View.GONE
             alertDialog.dismiss()
             change(v.tag as FryingStyleChange)
             finish()
         }
         contentView.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            contentView.findViewById<SpanCheckedTextView>(R.id.red_up).isChecked = false
+            contentView.findViewById<View>(R.id.bar_a).visibility = View.GONE
+            contentView.findViewById<View>(R.id.bar_b).visibility = View.VISIBLE
             alertDialog.dismiss()
             v.tag = application!!.getStyleChange(FryingStyleChange.redUp)
             change(v.tag as FryingStyleChange)

@@ -130,6 +130,7 @@ class RealNameAuthenticateFirstActivity : BaseActivity(), View.OnClickListener {
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         val datePickerDialog: DatePicker = dialog.findViewById<DatePicker>(R.id.data_picker)
+
             dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
                 year = datePickerDialog.year
                 month = datePickerDialog.month + 1
