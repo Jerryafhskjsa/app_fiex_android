@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
@@ -42,6 +43,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     private var countDownTimer: CountDownTimer? = null
     private var totalTime: Long = 60 * 1000
     private var thisCountry: CountryCode? = null
+    private var msType: Int? = 0
     private var chooseWindow: CountryChooseWindow? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
@@ -334,10 +336,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         UserApiServiceHelper.register(this, userName, password, telCountryCode, verifyCode, null, inviteCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext, getString(R.string.alert_registrer_success))
-                    onRegisterSuccess(userName)
+                    msType = 0
+                   dialog(msType)
                 } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                    msType = 1
+                    dialog(msType)
                 }
             }
         })
@@ -385,10 +388,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         UserApiServiceHelper.register(this, userName, password, null, verifyCode, null, inviteCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext, getString(R.string.alert_registrer_success))
-                    onRegisterSuccess(userName)
+                    msType = 0
+                    dialog(msType)
                 } else {
-                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
+                    msType = 1
+                    dialog(msType)
                 }
             }
         })
@@ -421,6 +425,32 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             dialog.dismiss()
         }
+    }
+
+    private fun dialog(msType: Int?) {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.zhuce_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.gravity = Gravity.TOP
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        if (msType == 0) {
+            dialog.findViewById<TextView>(R.id.title).text = getString(R.string.zuche_success)
+        }
+        val userName = binding?.phoneAccount?.text.toString().trim { it <= ' ' }
+        onRegisterSuccess(userName)
+
     }
 
     private fun getUrl(){

@@ -298,6 +298,69 @@
                         </LinearLayout>
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/weirenzheng"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xianhuo"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:orientation="vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="@string/jichu"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_14" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/weirenzheng"
+                                    android:textColor="#FF0F0F"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="30dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/renzheng_next"
+                                    android:textColor="@color/T2"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

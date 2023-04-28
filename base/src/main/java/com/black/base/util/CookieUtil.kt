@@ -312,6 +312,14 @@ object CookieUtil {
         return getSharedPreferences(context).getBoolean(ConstData.WALLET_COIN_FILTER, false)
     }
 
+    fun setWalletziCanFilter(context: Context, isFilter: Boolean) {
+        getSharedPreferences(context).edit().putBoolean(ConstData.WALLET_ZI_CAN, isFilter).apply()
+    }
+
+    fun getWalletziCanFilter(context: Context): Boolean {
+        return getSharedPreferences(context).getBoolean(ConstData.WALLET_ZI_CAN, false)
+    }
+
     fun setUpdateJumpVersion(context: Context, version: String?) {
         getSharedPreferences(context).edit().putString(ConstData.UPDATE_VERSION, version).apply()
     }

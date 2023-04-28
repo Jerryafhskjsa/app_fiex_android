@@ -149,7 +149,7 @@
     <string name="friend">Circle of Friends</string>
     <string name="list_view_empty_default">No record at present</string>
     <string name="list_view_empty_pay">No collection record</string>
-    <string name="invite_code_hint">Invitation code (Required)</string>
+    <string name="invite_code_hint">Invitation code</string>
     <string name="safe_mail_check">Enable mailbox authentication</string>
     <string name="safe_bind_check">Enable security authentication</string>
     <string name="jump">Skip</string>
@@ -1092,7 +1092,19 @@
     <string name="shenfenzheng">身份证</string>
     <string name="zhengjian_num">证件号码</string>
     <string name="guojia">国家列表</string>
-
+    <string name="tijiao_success">提交成功</string>
+    <string name="weirenzheng">未认证</string>
+    <string name="renzheng_next">认证后可支持提现、C2C交易等业务。</string>
+    <string name="zhuti">主题和意见</string>
+    <string name="ganxie">请输入您反馈的问题和意见，感谢支持！</string>
+    <string name="miaoshu">描述</string>
+    <string name="zhuming">请注明您的设备型号和APP版本</string>
+    <string name="jietu">问题截图（选填）</string>
+    <string name="lianxi">未联系方式（选填）</string>
+    <string name="liuge">留个联系方式，更可能解决问题~</string>
+    <string name="tijiao">提交</string>
+    <string name="zuche_success">注册成功</string>
+    <string name="zuche_failed">验证码错误</string>
 </resources>
 
 

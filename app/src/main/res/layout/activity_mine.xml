@@ -159,6 +159,7 @@
                                         android:id="@+id/uid"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
+                                        android:visibility="gone"
                                         android:layout_marginLeft="10dp"
                                         android:src="@drawable/fuzhi4">
                                     </ImageView>
@@ -167,6 +168,7 @@
                             <RelativeLayout
                                 android:id="@+id/rel_verify_status"
                                 android:layout_gravity="center"
+                                android:visibility="gone"
                                 style="@style/shenfen"
                                 android:layout_width="86dp"
                                 android:layout_height="28dp"

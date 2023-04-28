@@ -365,15 +365,10 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     .go(mContext)
             }
             R.id.rel_verify_status -> {
-                if (userInfo?.idNoStatus.equals("0"))
-                    BlackRouter.getInstance().build(RouterConstData.REAL_NAME_AUTHENTICATE_FIRST).go(mContext)
-                else{
                     BlackRouter.getInstance().build(RouterConstData.REAL_NAME_RESULT).go(mContext)
-                }
-
             }
             R.id.yijian -> {
-
+                BlackRouter.getInstance().build(RouterConstData.QUESTION_ACTIVITY).go(mContext)
             }
         }
     }
@@ -601,6 +596,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             */
 
             binding?.uuid?.visibility = View.VISIBLE
+            binding?.relVerifyStatus?.visibility = View.VISIBLE
             binding?.uuid?.text = "UID:" + if (userInfo!!.id == null) "" else userInfo!!.id
             /*if (TextUtils.equals("email", userInfo!!.registerFrom)) {
                 if (TextUtils.equals(userInfo!!.phoneSecurityStatus, "1") && TextUtils.equals(

@@ -42,6 +42,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var walletLeverList: ArrayList<WalletLever?>? = null
     private var searchKey: String? = null
     private var walletCoinFilter: Boolean? = false
+    private var isVisibility: Boolean? = true
 
     private var symbolList:ArrayList<PairStatus?>? = null
     private var coinList:ArrayList<CoinInfo?>? = ArrayList()
@@ -137,6 +138,14 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     fun getWalletCoinFilter(): Boolean? {
         return walletCoinFilter
+    }
+
+    fun setWalletziCanFilter(walletCoinFilter: Boolean) {
+        CookieUtil.setWalletziCanFilter(context, walletCoinFilter)
+        this.isVisibility = walletCoinFilter
+    }
+    fun getWalletziCanFilter(): Boolean? {
+        return isVisibility
     }
 
     fun getWalletList(): ArrayList<Wallet?>? {

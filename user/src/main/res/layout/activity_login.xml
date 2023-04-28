@@ -57,7 +57,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="4dp"
+                            android:layout_height="2dp"
                             android:layout_gravity="bottom"
                             android:background="@drawable/bg_login_devide_bar" />
 
@@ -78,12 +78,14 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/phone"
                                     android:textColor="@color/T14"
-                                    android:textSize="@dimen/text_size_13"></com.black.base.widget.SpanTextView>
+                                    android:textSize="@dimen/text_size_13">
+
+                                </com.black.base.widget.SpanTextView>
 
                                 <View
                                     android:id="@+id/phone_bar_b"
                                     android:layout_width="match_parent"
-                                    android:layout_height="4dp"
+                                    android:layout_height="2dp"
                                     android:layout_marginTop="8dp"
                                     android:background="@color/T13" />
                             </LinearLayout>
@@ -100,12 +102,14 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/email"
                                     android:textColor="@color/T14"
-                                    android:textSize="@dimen/text_size_13"></com.black.base.widget.SpanTextView>
+                                    android:textSize="@dimen/text_size_13">
+
+                                </com.black.base.widget.SpanTextView>
 
                                 <View
                                     android:id="@+id/mail_bar_b"
                                     android:layout_width="match_parent"
-                                    android:layout_height="4dp"
+                                    android:layout_height="2dp"
                                     android:layout_marginTop="8dp"
                                     android:background="@color/T13"
                                     android:visibility="gone" />
@@ -149,7 +153,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/default_padding"
-                            android:text="+61"
+                            android:text="+86"
                             android:textColor="@color/T14"
                             android:textSize="@dimen/text_size_14" />
 
@@ -159,9 +163,9 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/country_code"
-                            android:paddingLeft="20dp"
+                            android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:src="@drawable/icon_country_code" />
+                            android:src="@drawable/xiala" />
 
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/phone_account"
@@ -212,12 +216,13 @@
                         android:textColor="@color/T13"
                         android:textSize="@dimen/text_size_12" />
 
-                    <com.black.base.widget.SpanTextView
+                    <com.black.base.widget.SpanCheckedTextView
                         android:id="@+id/btn_login"
                         style="@style/ButtonBlue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
+                        android:textColor="@color/btn_buy_check"
                         android:padding="@dimen/middle_padding"
                         android:text="@string/login_title" />
 

@@ -599,15 +599,15 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     }
 
     override fun setWalletziCanFilter(checked: Boolean) {
-        isVisibility = checked
+        viewModel!!.setWalletziCanFilter(checked)
         normalFragment?.setVisibility(checked)
         contractFragment?.setVisibility(checked)
         assetsFinanceFragment?.setVisibility(checked)
         walletFragment?.setVisibility(checked)
     }
 
-    override fun getWalletziCanFilter(): Boolean {
-        return isVisibility
+    override fun getWalletziCanFilter(): Boolean? {
+        return viewModel!!.getWalletziCanFilter()
     }
 
     override fun search(searchKey: String, walletType: Int) {

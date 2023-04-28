@@ -119,7 +119,7 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
         })
         binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
             if (doSearch) {
-                eventListener?.setFinanceWalletCoinFilter(isChecked)
+                eventListener?.setWalletCoinFilter(isChecked)
                 eventListener?.financeSearch(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
             }
             doSearch = true
@@ -243,8 +243,9 @@ class AssetsFinanceFragment : BaseFragment(), OnItemClickListener, View.OnClickL
             return false
         }
 
-        fun setFinanceWalletCoinFilter(checked: Boolean) {
+        fun setWalletCoinFilter(checked: Boolean) {
         }
+
 
         fun setWalletziCanFilter(checked: Boolean) {
         }

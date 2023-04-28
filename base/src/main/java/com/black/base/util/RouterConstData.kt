@@ -92,6 +92,7 @@ object RouterConstData {
     const val WALLET_DETAIL = "fiex://coinbill"
     const val RECHARGE = "fiex://recharge"
     const val PUSH_SETTING = "fiex://push_setting"
+    const val QUESTION_ACTIVITY = "fiex://question_activity"
     const val WALLET_TRANSFER = "fiex://walletTransfer"
     const val LEVER_PAIR_CHOOSE = "fiex://leverPairChoose"
     const val ASSET_TRANSFER = "fiex://assetTransfer"

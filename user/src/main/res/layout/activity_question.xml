@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="registerModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+                <include layout="@layout/tool_bar_left_back" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B2" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/default_padding"
+                    android:layout_marginRight="@dimen/default_padding"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/login_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:text="@string/zhuti"
+                        android:textColor="@color/T2"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12" />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:text="*"
+                        android:textColor="#FF5600"
+                        android:textSize="@dimen/text_size_12" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rel_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_login_editbox">
+
+
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/phone_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:background="@null"
+                            android:gravity="center_vertical"
+                            android:hint="@string/ganxie"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingLeft="30dp"
+                            android:paddingRight="0dp"
+                            android:textSize="@dimen/text_size_14"
+                            app:useDelete="true" />
+                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/miaoshu"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:textColor="@color/T2"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/default_padding"
+                    android:paddingBottom="@dimen/default_padding"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:text="*"
+                    android:textColor="#FF5600"
+                    android:textSize="@dimen/text_size_12" />
+                </LinearLayout>
+
+                    <com.black.lib.view.InputLinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_login_editbox"
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp">
+
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/miaoshu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:paddingLeft="5dp"
+                            android:textSize="@dimen/text_size_12"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:padding="0dp" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/text_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0/400"
+                            android:gravity="right"
+                            android:textColor="@color/T2"
+                            android:paddingRight="5dp"
+                            android:textSize="@dimen/text_size_12" />
+                    </com.black.lib.view.InputLinearLayout>
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/zhuming"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/jietu"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:textColor="@color/T2"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12"
+                        />
+                    <LinearLayout
+                        android:id="@+id/phone_layout"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/bg_login_editbox"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/zhaoxiangji"/>
+
+                    </LinearLayout>
+
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lianxi"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:textColor="@color/T2"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12"
+                        />
+
+                    <com.black.base.widget.SpanMaterialEditText
+                        android:id="@+id/phone_invite_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:background="@drawable/bg_login_editbox"
+                        android:gravity="center_vertical"
+                        android:hint="@string/liuge"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/text_size_14"
+                        />
+
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:orientation="vertical">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_register"
+            style="@style/ButtonBlue"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:layout_marginTop="32dp"
+            android:text="@string/tijiao" />
+
+            <View
+                android:layout_width="140dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="30dp"
+                style="@style/ButtonBlack"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

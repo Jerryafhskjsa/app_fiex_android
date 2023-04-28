@@ -159,6 +159,7 @@ object ConstData {
     const val MAIN_EYE = "main_eye"
     const val SHOW_TRADE_WARNING = "show_trade_warning"
     const val WALLET_COIN_FILTER = "wallet_coin_filter"
+    const val WALLET_ZI_CAN = "wallet_zi_can"
     const val UPDATE_PAIRS = "update_pairs"
     const val UPDATE_VERSION = "update_version"
     const val NIGHT_MODE = "night_mode"

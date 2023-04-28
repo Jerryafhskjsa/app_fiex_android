@@ -149,7 +149,7 @@
     <string name="friend">朋友圈</string>
     <string name="list_view_empty_default">暂无记录</string>
     <string name="list_view_empty_pay">暂无收款记录</string>
-    <string name="invite_code_hint">邀请码（必填）</string>
+    <string name="invite_code_hint">邀请码</string>
     <string name="safe_mail_check">开启邮箱认证</string>
     <string name="safe_bind_check">开启安全认证</string>
     <string name="jump">跳过</string>
@@ -578,7 +578,7 @@
     <string name="current_login_password">请输入原密码</string>
     <string name="new_password">请输入新密码</string>
     <string name="new_password_again">请确认新密码</string>
-    <string name="change_password_warning">修改安全项目后，24小时内禁止提币和法币卖出</string>
+    <string name="change_password_warning">更改安全项目后，24小时内禁止提币和法币卖出</string>
     <string name="reset_password">重置登录密码</string>
     <string name="hint_password_length">密码 (不少于8位字符)</string>
     <string name="hint_input_mail_code">输入邮箱验证码</string>
@@ -666,7 +666,7 @@
     <string name="extract_not_support">提币通道暂未打开</string>
     <string name="extract_google_verify">请先进行谷歌认证</string>
     <string name="input_identity_no_hit">请输入证件号码</string>
-    <string name="activity_real_name_authenticate_01">上传图片示例:</string>
+    <string name="activity_real_name_authenticate_01">拍摄要求</string>
     <string name="last_version">已是最新版本</string>
     <string name="login_phone">手机登录</string>
     <string name="login_email">邮箱登录</string>
@@ -1092,5 +1092,19 @@
     <string name="shenfenzheng">身份证</string>
     <string name="zhengjian_num">证件号码</string>
     <string name="guojia">国家列表</string>
+    <string name="tijiao_success">提交成功</string>
+    <string name="weirenzheng">未认证</string>
+    <string name="renzheng_next">认证后可支持提现、C2C交易等业务。</string>
+    <string name="zhuti">主题和意见</string>
+    <string name="ganxie">请输入您反馈的问题和意见，感谢支持！</string>
+    <string name="miaoshu">描述</string>
+    <string name="zhuming">请注明您的设备型号和APP版本</string>
+    <string name="jietu">问题截图（选填）</string>
+    <string name="lianxi">联系方式（选填）</string>
+    <string name="liuge">留个联系方式，更可能解决问题~</string>
+    <string name="tijiao">提交</string>
+    <string name="zuche_success">注册成功</string>
+    <string name="zuche_failed">验证码错误</string>
+
 
 </resources>

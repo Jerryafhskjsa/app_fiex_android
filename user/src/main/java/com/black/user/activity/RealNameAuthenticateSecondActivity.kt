@@ -1,6 +1,7 @@
 package com.black.user.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -8,8 +9,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
@@ -101,9 +105,9 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         binding?.realNameImage2?.layoutParams = layoutParams
         binding?.realNameImage3?.layoutParams = layoutParams
         if (fryingLanguage == null || fryingLanguage.languageCode == FryingLanguage.Chinese) {
-            binding?.realNameImage1?.setImageResource(R.drawable.real_name_authenricaticate_01)
-            binding?.realNameImage2?.setImageResource(R.drawable.real_name_authenricaticate_02)
-            binding?.realNameImage3?.setImageResource(R.drawable.real_name_authenricaticate_03)
+            binding?.realNameImage1?.setImageResource(R.drawable.shenfenzheng3)
+            binding?.realNameImage2?.setImageResource(R.drawable.shenfenzheng4)
+            binding?.realNameImage3?.setImageResource(R.drawable.shenfenzheng5)
         } else {
             binding?.realNameImage1?.setImageResource(R.drawable.real_name_authenricaticate_en_01)
             binding?.realNameImage2?.setImageResource(R.drawable.real_name_authenricaticate_en_02)
@@ -159,7 +163,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         binding?.btnSubmit?.isEnabled = !(photoImageList.isEmpty())
     }
 
-    private fun createPhotoImageItem(): PhotoImageItem {
+    private fun createPhotoImageItem(count: Int): PhotoImageItem {
         val item = PhotoImageItem()
         val imageLayout = View.inflate(mContext, R.layout.activity_real_name_authenticate_image_select, null)
         item.imageLayout = imageLayout
@@ -202,7 +206,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         //添加新的ITEM
         count = photoImageList.size
         if (count < 3) {
-            photoImageList.add(createPhotoImageItem())
+            photoImageList.add(createPhotoImageItem(count))
         }
         for (i in photoImageList.indices) {
             val item = photoImageList[i]
@@ -390,11 +394,7 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
         UserApiServiceHelper.bindIdentity(mContext, idType, realName, idNo, idNoImg, countryId, birthday, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                    FryingUtil.showToast(mContext, getString(R.string.submit_success))
-                    BlackRouter.getInstance().build(RouterConstData.START_PAGE)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .go(mContext)
+                    dialog()
                     //返回起始页，更新信息
                 } else {
                     FryingUtil.showToast(mContext, returnData?.msg)
@@ -402,5 +402,33 @@ class RealNameAuthenticateSecondActivity : BaseActivity(), View.OnClickListener 
             }
 
         })
+    }
+
+    private fun dialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.shenhe_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.START_PAGE)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .go(mContext)
+            dialog.dismiss()
+        }
     }
 }
