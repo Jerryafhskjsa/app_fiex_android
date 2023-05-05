@@ -1,6 +1,5 @@
 package com.black.frying.contract.viewmodel.model
 
-import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.SymbolBean
 import com.black.base.util.CookieUtil
 import com.black.base.util.LanguageUtil
@@ -45,3 +44,17 @@ fun SymbolBean.display(): String {
     }
 //    return symbol.replace("_","/").uppercase(Locale.ROOT)
 }
+
+
+data class OrderInfo(
+    val symbol :String,
+    val origQty :Number,
+    val orderType:String,
+    val price :Number,
+    val timeInForce :String,
+    val orderSide :String,
+    val positionSide :String,
+    val triggerProfitPrice :Number,
+    val triggerStopPrice :Number,
+    val reduceOnly :Boolean
+)

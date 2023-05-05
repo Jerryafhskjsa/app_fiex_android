@@ -14,7 +14,7 @@ import com.black.util.NumberUtils
 import com.fbsex.exchange.R
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import kotlin.math.log
+import java.math.RoundingMode
 
 class FuturesOrderCreateViewModel : ViewModel() {
     companion object {
@@ -133,8 +133,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
             val symbol = symbolBean.symbol
             viewModelScope.launch {
                 //确认订单信息后提交
-                //
-                val price = getCurrentPrice()//获取限价 或者 买一卖一价
+                val price = getCurrentPrice() ?: return@launch//获取限价 或者 买一卖一价
                 val createOrder = FuturesRepository.createOrder(
                     symbol,
                     origQty,
@@ -155,13 +154,52 @@ class FuturesOrderCreateViewModel : ViewModel() {
     }
 
     private fun getContractCount(): BigDecimal {
+        val availableBalance = globalStateViewModel?.balanceBeanLiveData?.value?.availableBalance?:BigDecimal.ZERO
+        if (availableBalance == BigDecimal.ZERO) {
+            return BigDecimal.ZERO
+        }
+        val precision = globalStateViewModel?.pricePrecision?.value?:0
+        if (isLimit()){
+            val currentPrice = getCurrentPrice()
+            return NumberUtils.divide(availableBalance,currentPrice, precision,RoundingMode.DOWN)
+        }else if (isMarket()){
+            if (buyOrSell.value == true){
+                val sellFirstPrice = globalStateViewModel?.sellFirstPrice
+                if (sellFirstPrice== BigDecimal.ZERO){
+                    return BigDecimal.ZERO
+                }
+                return NumberUtils.divide(availableBalance,sellFirstPrice, precision,RoundingMode.DOWN)
+            }else{
+                globalStateViewModel?.balanceBeanLiveData?.value?.coin?:BigDecimal.ZERO
+                if (availableBalance == BigDecimal.ZERO) {
+                    return BigDecimal.ZERO
+                }
+                // TODO:
+                globalStateViewModel?.buyFirstPrice
+            }
+        }
         return BigDecimal.ZERO
     }
 
-    fun getCurrentPrice(): BigDecimal {
+    private fun getCurrentPrice(): BigDecimal? {
+        if (isLimit()){
+            return futurePrice.value
+        }else if (isMarket()){
+            return if (buyOrSell.value == true){
+                globalStateViewModel?.sellFirstPrice
+            }else{
+                globalStateViewModel?.buyFirstPrice
+            }
+        }
         return BigDecimal.ZERO
     }
 
+    private fun isLimit(): Boolean {
+        return orderType.value == ORDER_TYPE_LIMIT
+    }
+    private fun isMarket(): Boolean {
+        return orderType.value == ORDER_TYPE_MARKET
+    }
     fun changeOrderType(buy: Boolean) {
         buyOrSell.value = buy
     }
