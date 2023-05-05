@@ -28,6 +28,7 @@ import com.fbsex.exchange.databinding.FuturesLayoutDeepGraphBinding
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 
 class FuturesDeepGraphFragment : Fragment() {
     enum class ShowMode {
@@ -319,6 +320,8 @@ class FuturesDeepGraphFragment : Fragment() {
                     addAll(it.toList())
                     FryingUtil.computeTradeOrderWeightPercent(this, showCount)
                     formatShowPrice()
+                    globalViewModel.buyFirstPrice = it.last()?.price?.toBigDecimal()?: BigDecimal.ZERO
+
                 }
                 binding.rvBtmList.adapter?.notifyDataSetChanged()
             }
@@ -329,6 +332,8 @@ class FuturesDeepGraphFragment : Fragment() {
                     FryingUtil.computeTradeOrderWeightPercent(it, showCount)
                     addAll(it.reversed().toList())
                     formatShowPrice()
+                    globalViewModel.sellFirstPrice = it.first()?.price?.toBigDecimal()?: BigDecimal.ZERO
+
                 }
                 binding.rvUpList.adapter?.notifyDataSetChanged()
             }

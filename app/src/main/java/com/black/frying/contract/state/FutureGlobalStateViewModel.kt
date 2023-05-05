@@ -19,6 +19,7 @@ import com.black.util.NumberUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -26,6 +27,8 @@ const val TAG = "FutureGlobalStateViewModel"
 
 class FutureGlobalStateViewModel : ViewModel() {
 
+    var sellFirstPrice: BigDecimal = BigDecimal.ZERO
+    var buyFirstPrice: BigDecimal = BigDecimal.ZERO
     private val okWebSocketHelper: OkWebSocketHelper by lazy(mode = LazyThreadSafetyMode.PUBLICATION) {
         val okWebSocket = getMarketOkWebSocket()
         return@lazy OkWebSocketHelper(okWebSocket).apply {
@@ -144,9 +147,9 @@ class FutureGlobalStateViewModel : ViewModel() {
         pricePrecision: String?,
         depthPrecisionMerge: Int?
     ): ArrayList<Deep> {
-        var depth = depthPrecisionMerge
-        var pricePrecision = pricePrecision
-        var deepList = ArrayList<Deep>()
+        val depth = depthPrecisionMerge
+        val pricePrecision = pricePrecision
+        val deepList = ArrayList<Deep>()
         for (index in 0..(depth?.minus(1) ?: 0)) {
             var deep = Deep()
             var d = pricePrecision?.toInt()?.minus(index)
@@ -171,8 +174,6 @@ class FutureGlobalStateViewModel : ViewModel() {
         viewModelScope.launch {
             symbolBean?.let {
                 val deepGraph = FuturesRepository.getDeepGraph(it.symbol)
-
-
 //                deepBeanLiveData.postValue()
             }
         }
