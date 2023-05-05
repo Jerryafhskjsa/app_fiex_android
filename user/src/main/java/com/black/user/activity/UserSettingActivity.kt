@@ -1,10 +1,12 @@
 package com.black.user.activity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
@@ -89,6 +91,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+    @SuppressLint("MissingInflatedId")
     private fun showChangeDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_change_style,null)
         val alertDialog = Dialog(mContext, R.style.AlertDialog)
@@ -108,6 +111,7 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         val display = resources.displayMetrics
         val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.setContentView(contentView, layoutParams)
+        alertDialog.show()
         if (style == null || style == 0) {
             contentView.findViewById<SpanCheckedTextView>(R.id.green_up).isChecked = false
             contentView.findViewById<View>(R.id.bar_a).visibility = View.VISIBLE
@@ -134,7 +138,9 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             v.tag = application!!.getStyleChange(FryingStyleChange.redUp)
             change(v.tag as FryingStyleChange)
         }
-        alertDialog.show()
+        contentView.findViewById<ImageView>(R.id.btn_cancel).setOnClickListener { v ->
+            alertDialog.dismiss()
+        }
 }
 private fun change(styleChange: FryingStyleChange){
     if(styleChange != StyleChangeUtil.getStyleChangeSetting(this)){

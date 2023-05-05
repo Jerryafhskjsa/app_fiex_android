@@ -28,11 +28,16 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
     private var parent: HomePageActivity? = null
     private var binding: FragmentHomePageQuotationMainBinding? = null
     private var fragmentList: MutableList<Fragment>? = null
+    private var currentTabPosition:Int = 0
     private var tabSets: List<String?>? = null
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         parent = activity as HomePageActivity
+    }
+    override fun onStop() {
+        super.onStop()
+        currentTabPosition = binding?.marketTopTab?.selectedTabPosition!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,7 +75,7 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
 
     //初始化行情分组
     private fun initQuotationGroup() {
-        tabSets = listOf(getString(R.string.spot), getString(R.string.futures))
+        tabSets = listOf(getString(R.string.pair_collect),getString(R.string.spot), getString(R.string.futures))
         if (tabSets != null && tabSets!!.isNotEmpty()) {
             val setSize = tabSets!!.size
             fragmentList = ArrayList(setSize)
@@ -78,7 +83,12 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
                 val set = tabSets!![i]
                 try {
                     when(i){
-                        0 -> fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        0 -> {fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        }
+                        1 -> {fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        }
+                        2 -> {fragmentList?.add(HomePageQuotationFragment.newSelfInstance(set))
+                        }
                     }
 
                 } catch (throwable: Throwable) {

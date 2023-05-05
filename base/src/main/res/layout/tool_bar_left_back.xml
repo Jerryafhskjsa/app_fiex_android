@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="109dp"
+        android:visibility="gone"
         app:layout_collapseMode="pin">
 
         <com.black.base.widget.SpanTextView

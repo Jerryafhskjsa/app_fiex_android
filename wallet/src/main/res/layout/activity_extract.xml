@@ -385,6 +385,21 @@
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:orientation="vertical">
+            <View
+                android:layout_width="140dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="@dimen/text_size_20"
+                style="@style/ButtonBlack"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_layout"
@@ -392,6 +407,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/text_size_10"
             android:padding="@dimen/double_padding">
 <LinearLayout
     android:layout_width="wrap_content"
@@ -435,5 +451,6 @@
                 android:textSize="@dimen/text_size_14"
                  />
         </LinearLayout>
+
     </RelativeLayout>
 </layout>

@@ -96,6 +96,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
         updateComfirmTransferBtn()
+        getUserBalance(true)
     }
 
 
@@ -120,6 +121,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             }
             R.id.rel_choose ->{
                 showSupportCoin = true
+                getUserBalance(false)
                 supportTransferCoin
             }
             R.id.img_exchange ->{
@@ -199,6 +201,9 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                         else if (binding?.tvFromAccount?.text == getString(R.string.contract_account) && binding?.tvToAccount?.text == getString(R.string.spot_account)){
                             userBalanceList = returnData.data?.tigerBalance
                         }
+                        else {
+                            userBalanceList = returnData.data?.spotBalance
+                        }
                     }
                 }
             }))
@@ -247,8 +252,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     canTransferCoin?.add(supportCoinInfo)
                     break
                 }
+
             }
+
         }
+
         var result:ArrayList<CanTransferCoin?>? = ArrayList()
         for (k in canTransferCoin?.indices!!){
              var canTransferCoin = canTransferCoin[k]
@@ -260,7 +268,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     break
                 }
             }
+
         }
+
+
         return result
     }
 
@@ -300,7 +311,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                         successDialog()
                     } else {
                         //FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
-                        failedDialog()
+                        failedDialog(returnData?.msg)
                     }
                 }
             })
@@ -326,7 +337,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
         if (spot != null) {
             for (i in spot){
-                var initFromData =  SupportAccount("","",false)
+                var initFromData =  SupportAccount("FINANCIAL",getString(R.string.capital_account),false)
                 initFromData.type = i
                 when(i){
                     "SPOT" -> initFromData.name = getString(R.string.spot_account)
@@ -337,7 +348,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
         if(transName != null){
             for (j in transName){
-                var initToData =  SupportAccount("","",false)
+                var initToData =  SupportAccount("FINANCIAL",getString(R.string.capital_account),false)
                 initToData.type = j
                 when(j){
                     "CONTRACT" -> initToData.name = getString(R.string.contract_account)
@@ -503,7 +514,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
     }
 
-    private fun failedDialog() {
+    private fun failedDialog(data:String?) {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_failed, null)
         val dialog = Dialog(mContext, R.style.AlertDialog)
         val window = dialog.window
@@ -523,7 +534,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
         dialog.findViewById<View>(R.id.amount).visibility = View.GONE
-        dialog.findViewById<SpanTextView>(R.id.failed).text = "无法划转，当前余额不足"
+        dialog.findViewById<SpanTextView>(R.id.failed).text = data
         dialog.findViewById<SpanTextView>(R.id.red_up).text = "去充值"
         dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
             BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(mContext)

@@ -134,6 +134,7 @@
                                 android:layout_height="13dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/gonggao" />
+
                             <com.black.base.widget.VerticalTextView
                                 android:id="@+id/notice_text_view"
                                 android:layout_width="0dp"

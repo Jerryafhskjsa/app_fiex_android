@@ -327,23 +327,33 @@
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/btn_confirm_transfer"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="@dimen/default_padding"
-            android:layout_marginTop="@dimen/default_padding"
-            android:layout_marginEnd="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/default_padding"
-            android:background="@drawable/anniu"
-            android:checked="false"
             android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="@string/confirm_transfer"
-            android:textColor="@color/T8"
-            android:textSize="@dimen/text_size_14"
-            android:textStyle="bold" />
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:orientation="vertical">
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_confirm_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/default_padding"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_marginEnd="@dimen/default_padding"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:background="@drawable/anniu"
+                android:checked="false"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/confirm_transfer"
+                android:textColor="@color/T8"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </RelativeLayout>
 </layout>

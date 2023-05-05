@@ -447,6 +447,49 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                             }
                         })
                 }
+                if (tabTag.equals(getString(R.string.pair_collect))) {
+                    var pairStatusType: ConstData.PairStatusType? = null
+                    when (set) {
+                        getString(R.string.spot) -> pairStatusType =
+                            ConstData.PairStatusType.SPOT_DEAR
+                        getString(R.string.futures) -> pairStatusType =
+                            ConstData.PairStatusType.FUTURE_DEAR
+                    }
+                    SocketDataContainer.getFuturesPairsWithSet(
+                        activity,
+                        pairStatusType,
+                        object : Callback<ArrayList<PairStatus?>?>() {
+                            override fun error(type: Int, error: Any) {
+                                gettingPairsData = false
+                            }
+
+                            override fun callback(returnData: ArrayList<PairStatus?>?) {
+                                if (returnData == null) {
+                                    gettingPairsData = false
+                                    return
+                                }
+                                synchronized(dataMap) {
+                                    synchronized(dataList) {
+                                        dataMap.clear()
+                                        dataList.clear()
+                                        dataList.addAll(returnData)
+                                        for (pairStatus in returnData) {
+                                            pairStatus?.pair?.let {
+                                                dataMap[it] = pairStatus
+                                            }
+                                        }
+                                        mContext?.runOnUiThread {
+                                            adapter?.data = dataList
+                                            adapter?.sortData(comparator)
+                                            adapter?.notifyDataSetChanged()
+                                            gettingPairsData = false
+                                        }
+                                    }
+                                }
+                                gettingPairsData = false
+                            }
+                        })
+                }
             })
         }
 
@@ -462,6 +505,9 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     .go(it)
             }
             if (tabTag == getString(R.string.futures)) {
+
+            }
+            if (tabTag == getString(R.string.pair_collect)) {
 
             }
         }

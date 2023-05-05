@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 
 class SupportAccount:Parcelable{
-    var type:String? = ""
+    var type:String? = "FINANCIAL"
     var name:String? = ""
     var selected:Boolean? = false
     constructor(type:String?,name: String?,selected:Boolean?){

@@ -142,16 +142,18 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
 
                 when(type){
                     ConstData.AUTHENTICATE_TYPE_PHONE ->{
+                        bundle.putInt(ConstData.BIRTH,type)
                         bundle.putString(ConstData.COUNTRY_CODE,binding?.countryCode?.text.toString().trim { it <= ' ' })
                         bundle.putString(ConstData.ACCOUNT,binding?.phoneAccount?.text.toString().trim { it <= ' ' })
-                        bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodePhone?.text.toString().trim { it <= ' ' })
-                        bundle.putString(ConstData.PHONE_CAPTCHA,phoneCaptcha)
+                        //bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodePhone?.text.toString().trim { it <= ' ' })
+                        //bundle.putString(ConstData.PHONE_CAPTCHA,phoneCaptcha)
                     }
                     ConstData.AUTHENTICATE_TYPE_MAIL ->{
+                        bundle.putInt(ConstData.BIRTH,type)
                         bundle.putString(ConstData.ACCOUNT,binding?.mailAccount?.text.toString().trim { it <= ' ' })
-                        bundle.putString(ConstData.GOOGLE_CODE,binding?.editGoogleCode?.text.toString().trim { it <= ' ' })
-                        bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodeMail?.text.toString().trim { it <= ' ' })
-                        bundle.putString(ConstData.MAIL_CAPTCHA,mailCaptcha)
+                        //bundle.putString(ConstData.GOOGLE_CODE,binding?.editGoogleCode?.text.toString().trim { it <= ' ' })
+                       // bundle.putString(ConstData.VERIFY_CODE,binding?.verifyCodeMail?.text.toString().trim { it <= ' ' })
+                        //bundle.putString(ConstData.MAIL_CAPTCHA,mailCaptcha)
                     }
                 }
                 BlackRouter.getInstance().build(RouterConstData.FORGET_PASSWORD_NEW_PWD).with(bundle).go(mContext)
@@ -243,11 +245,11 @@ class ForgetPasswordFiexActivity : BaseActivity(), View.OnClickListener {
 
     private fun checkClickable() {
         when (type) {
-            ConstData.AUTHENTICATE_TYPE_PHONE -> binding!!.btnNext.isEnabled = !(TextUtils.isEmpty(binding!!.phoneAccount.text.toString().trim { it <= ' ' })
-                    || (TextUtils.isEmpty(binding!!.verifyCodePhone.text.toString().trim { it <= ' ' })))
-            ConstData.AUTHENTICATE_TYPE_MAIL -> binding!!.btnNext.isEnabled = !(TextUtils.isEmpty(binding!!.mailAccount.text.toString().trim { it <= ' ' })
-                    || (TextUtils.isEmpty(binding!!.verifyCodeMail.text.toString().trim { it <= ' ' }))
-                    || (TextUtils.isEmpty(binding!!.editGoogleCode.text.toString().trim { it <= ' ' })))
+            ConstData.AUTHENTICATE_TYPE_PHONE -> binding!!.btnNext.isEnabled = !(TextUtils.isEmpty(binding!!.phoneAccount.text.toString().trim { it <= ' ' }))
+                    //|| (TextUtils.isEmpty(binding!!.verifyCodePhone.text.toString().trim { it <= ' ' })))
+            ConstData.AUTHENTICATE_TYPE_MAIL -> binding!!.btnNext.isEnabled = !(TextUtils.isEmpty(binding!!.mailAccount.text.toString().trim { it <= ' ' }))
+                    //|| (TextUtils.isEmpty(binding!!.verifyCodeMail.text.toString().trim { it <= ' ' }))
+                    //|| (TextUtils.isEmpty(binding!!.editGoogleCode.text.toString().trim { it <= ' ' })))
             else -> binding!!.btnNext.isEnabled = false
         }
     }

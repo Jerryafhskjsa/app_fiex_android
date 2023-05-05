@@ -6,7 +6,7 @@
             name="rechargeModel"
             type="Object" />
     </data>
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
@@ -262,7 +262,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/text_size_20">
+            android:layout_marginBottom="30dp">
 
 
             <com.black.base.widget.SpanTextView
@@ -290,5 +290,5 @@
                 android:layout_marginLeft="10dp"
                 android:scaleType="fitXY" />
         </RelativeLayout>
-    </FrameLayout>
+    </RelativeLayout>
 </layout>

@@ -21,6 +21,7 @@
         android:textColor="@color/T1"
         android:textSize="@dimen/text_size_16" />
         <ImageView
+            android:id="@+id/btn_cancel"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/guanbi"

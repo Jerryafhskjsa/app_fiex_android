@@ -40,7 +40,7 @@ class CountryChooseWindow(private val activity: Activity, private val type: Int,
         val contentView = inflater.inflate(R.layout.view_country_choose, null)
         popupWindow = PopupWindow(contentView, WindowManager.LayoutParams.MATCH_PARENT, (dm.heightPixels * 0.5).toInt())
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+        //popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.animationStyle = R.style.anim_bottom_in_out
         popupWindow.setOnDismissListener(this)

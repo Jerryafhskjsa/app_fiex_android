@@ -845,7 +845,7 @@
     <string name="vol">24H Vol</string>
     <string name="spot">Spot</string>
     <string name="zone">Region</string>
-    <string name="coin_volume">Transaction volume</string>
+    <string name="coin_volume">/Transaction volume</string>
     <string name="limit_order">Limit Order</string>
     <string name="sheet">Sheet</string>
     <string name="management_fee">Management fee</string>
@@ -1105,6 +1105,16 @@
     <string name="tijiao">提交</string>
     <string name="zuche_success">注册成功</string>
     <string name="zuche_failed">验证码错误</string>
+    <string name="input_password_again">请再次输入新密码</string>
+    <string name="confirm_new_password">确认新密码</string>
+    <string name="do_nat_yang">两次密码不一致</string>
+    <string name="chengjiao">/成交量</string>
+    <string name="zhiding">置顶</string>
+    <string name="tuodong">拖动</string>
+    <string name="bianji_zixuan">编辑自选</string>
+    <string name="baocun">保存</string>
+    <string name="quanbu_xuan">全部选择</string>
+
 </resources>
 
 

@@ -73,6 +73,7 @@ object RouterConstData {
 
     const val ACCOUNT_MANAGER = "fiex://accountManager"
     const val MONEY_PASSWORD = "fiex://moneyPassword"
+    const val PAIR_COLLECT = "fiex://pairCollect"
     const val PAYMENT_METHOD_MANAGER = "fiex://paymentMethodManager"
     const val PAYMENT_METHOD_TYPE_CHOOSE = "fiex://paymentMethodTypeChoose"
     const val PAYMENT_METHOD_ADD = "fiex://paymentMethodAdd"

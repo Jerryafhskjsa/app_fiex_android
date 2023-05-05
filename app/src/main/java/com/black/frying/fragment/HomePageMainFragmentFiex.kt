@@ -22,13 +22,10 @@ import com.black.base.adapter.BaseDataBindAdapter
 import com.black.base.adapter.BaseViewPagerAdapter
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
-import com.black.base.api.WalletApiService
-import com.black.base.api.WalletApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.banner.FryingUrlImageNormalBanner
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
@@ -38,26 +35,25 @@ import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
-import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
 import com.black.base.util.ConstData.CHOOSE_COIN_WITHDRAW
 import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
-import com.black.base.widget.SpanTextView
 import com.black.base.widget.VerticalTextView
-import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.HomeMainRiseFallAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.MainMorePopup
 import com.black.frying.view.MainMorePopup.OnMainMoreClickListener
 import com.black.frying.viewmodel.MainViewModel
 import com.black.im.util.IMHelper
-import com.black.lib.banner.BannerContainer
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
 import com.github.mikephil.charting.charts.LineChart
@@ -69,7 +65,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -90,8 +85,8 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     private val hardGridViewMap = HashMap<String?, GridView?>()
     var imageBanner: FryingUrlImageNormalBanner? = null
     private var statusAdapter: BaseViewPagerAdapter? = null
+    private var banner:Banner? = null
     private var chatFloatAdView: FloatAdView? = null
-
     var binding: FragmentHomePageMainFiexBinding? = null
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
@@ -117,6 +112,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         viewModel = MainViewModel(mContext!!, this)
         layout = binding?.root as FrameLayout
         StatusBarUtil.addStatusBarPadding(layout)
+       /* imageBanner = if (activity == null) null else FryingUrlImageNormalBanner(activity!!)
+        imageBanner?.setScale(0.3333f, binding?.bannerLayout)
+        binding?.bannerLayout?.addView(imageBanner?.bannerView)
+        banner?.imageUrl = "https://img.zcool.cn/community/013de756fb63036ac7257948747896.jpg"
+        banner?.type = 1
+        imageBanner?.setData(listOf(banner))
+        imageBanner?.startScroll()
+
+        */
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {

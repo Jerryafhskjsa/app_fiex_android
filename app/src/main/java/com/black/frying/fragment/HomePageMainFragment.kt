@@ -251,7 +251,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
     }
 
     private fun formatMoneyValue(moneyView: TextView) {
-        val stringTag: String? = moneyView.tag as String
+        val stringTag: String = moneyView.tag as String
         if (stringTag == null) {
             moneyView.text = getString(R.string.number_default)
         } else {

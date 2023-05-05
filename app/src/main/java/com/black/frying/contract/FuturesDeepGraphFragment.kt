@@ -101,7 +101,7 @@ class FuturesDeepGraphFragment : Fragment() {
         )
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel.init(context!!)
     }
