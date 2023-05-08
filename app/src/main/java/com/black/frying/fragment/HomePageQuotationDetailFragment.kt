@@ -10,10 +10,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CheckedTextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import com.black.base.api.PairApiService
+import com.black.base.api.PairApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
+import com.black.base.manager.ApiManager
+import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.model.QuotationSet
 import com.black.base.model.SuccessObserver
 import com.black.base.model.socket.PairStatus
@@ -23,11 +29,13 @@ import com.black.frying.FryingApplication
 import com.black.frying.adapter.HomeQuotationDetailAdapter
 import com.black.frying.util.PairQuotationComparator
 import com.black.lib.refresh.QRefreshLayout
+import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageQuotationDetailBinding
+import io.reactivex.Observable
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
 import java.util.*
@@ -46,6 +54,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
 
     private var adapter: HomeQuotationDetailAdapter? = null
     private val dataList = ArrayList<PairStatus?>()
+    private var been1: Boolean = false
+    private var been2: Boolean = false
     private val dataMap: MutableMap<String?, PairStatus?> = HashMap()
     private val dearPairs = java.util.ArrayList<String?>()
 
@@ -62,6 +72,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
     private var futureTickerObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var gettingPairsData: Boolean? = false
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +81,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         if (binding != null) {
             return binding?.root
         }
-        collect = getString(R.string.pair_collect)
+        collect = getString(R.string.spot)
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -81,6 +92,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1)
         drawable.alpha = (0xff * 0.3).toInt()
+        binding?.tianJia?.setOnClickListener(this)
+        binding?.ziZhu?.setOnClickListener(this)
         binding?.listView?.divider = drawable
         binding?.listView?.dividerHeight = 1
         adapter = HomeQuotationDetailAdapter(mContext!!, dataList)
@@ -105,12 +118,22 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
             }
         })
         if (collect != null && collect.equals(set, ignoreCase = true)) {
+            /*binding?.yijian?.visibility = View.VISIBLE
+            binding?.checkOne?.setOnClickListener {
+                binding?.checkOne?.isChecked =
+                    binding?.checkOne?.isChecked != true
+                if (binding?.checkOne?.isChecked == true)
+                    been1 = true
+            }
+
+             */
             val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
             emptyView.findViewById<View>(R.id.btn_action).setOnClickListener(this)
             val group = binding?.listView?.parent as ViewGroup
             group.addView(emptyView)
             binding?.listView?.emptyView = emptyView
-        } else {
+            }
+         else {
             val emptyView = inflater.inflate(R.layout.list_view_empty_long, null)
             val group = binding?.listView?.parent as ViewGroup
             group.addView(emptyView)
@@ -371,7 +394,8 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                 if (tabTag.equals(getString(R.string.spot))) {
                     SocketDataContainer.getPairsWithSet(
                         activity,
-                        set,
+                        " ",
+                       // set,
                         object : Callback<ArrayList<PairStatus?>?>() {
                             override fun error(type: Int, error: Any) {
                                 gettingPairsData = false
@@ -450,14 +474,164 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                 if (tabTag.equals(getString(R.string.pair_collect))) {
                     var pairStatusType: ConstData.PairStatusType? = null
                     when (set) {
-                        getString(R.string.spot) -> pairStatusType =
-                            ConstData.PairStatusType.SPOT_DEAR
-                        getString(R.string.futures) -> pairStatusType =
-                            ConstData.PairStatusType.FUTURE_DEAR
+                        getString(R.string.spot) -> {
+                            SocketDataContainer.getPairsWithSet(
+                                activity,
+                                context?.getString(com.black.base.R.string.pair_collect),
+                                object : Callback<ArrayList<PairStatus?>?>() {
+                                    override fun error(type: Int, error: Any) {
+                                        gettingPairsData = false
+                                    }
+
+                                    override fun callback(returnData: ArrayList<PairStatus?>?) {
+                                        if (returnData == null) {
+                                            gettingPairsData = false
+                                            return
+                                        }
+                                        synchronized(dataMap) {
+                                            synchronized(dataList) {
+                                                dataMap.clear()
+                                                dataList.clear()
+                                                dataList.addAll(returnData)
+                                                for (pairStatus in returnData) {
+                                                    pairStatus?.pair?.let {
+                                                        dataMap[it] = pairStatus
+                                                    }
+                                                }
+                                                mContext?.runOnUiThread {
+                                                    adapter?.data = dataList
+                                                    adapter?.sortData(comparator)
+                                                    adapter?.notifyDataSetChanged()
+                                                    gettingPairsData = false
+                                                }
+                                            }
+                                        }
+                                        gettingPairsData = false
+                                    }
+                                })
+                        }
+                        getString(R.string.futures) -> {
+                            pairStatusType =
+                                ConstData.PairStatusType.FUTURE_DEAR
+
+                            SocketDataContainer.getFuturesPairsWithSet(
+                                activity,
+                                pairStatusType,
+                                object : Callback<ArrayList<PairStatus?>?>() {
+                                    override fun error(type: Int, error: Any) {
+                                        gettingPairsData = false
+                                    }
+
+                                    override fun callback(returnData: ArrayList<PairStatus?>?) {
+                                        if (returnData == null) {
+                                            gettingPairsData = false
+                                            return
+                                        }
+                                        synchronized(dataMap) {
+                                            synchronized(dataList) {
+                                                dataMap.clear()
+                                                dataList.clear()
+                                                dataList.addAll(returnData)
+                                                for (pairStatus in returnData) {
+                                                    pairStatus?.pair?.let {
+                                                        dataMap[it] = pairStatus
+                                                    }
+                                                }
+                                                mContext?.runOnUiThread {
+                                                    adapter?.data = dataList
+                                                    adapter?.sortData(comparator)
+                                                    adapter?.notifyDataSetChanged()
+                                                    gettingPairsData = false
+                                                }
+                                            }
+                                        }
+                                        gettingPairsData = false
+                                    }
+                                })
+                        }
                     }
-                    SocketDataContainer.getFuturesPairsWithSet(
+                }
+            })
+        }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+        activity?.let {
+            val pairStatus = adapter?.getItem(position)
+            if (tabTag == getString(R.string.spot)) {
+                CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                val bundle = Bundle()
+                bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                    .go(it)
+            }
+            if (tabTag == getString(R.string.futures)) {
+
+            }
+            if (tabTag == getString(R.string.pair_collect)) {
+                when(set){
+                    getString(R.string.spot) ->  {
+                        CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                    sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                        val bundle = Bundle()
+                    bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                        .go(it)}
+                    getString(R.string.futures) ->{}
+                }
+
+            }
+        }
+    }
+
+    fun updateCompare(comparator: PairQuotationComparator) {
+        this.comparator = comparator
+        if (isVisible) {
+            CommonUtil.checkActivityAndRunOnUI(mContext) {
+                adapter?.sortData(this.comparator)
+                adapter?.notifyDataSetChanged()
+            }
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.tian_jia -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
+                .go(mContext) { _, _ -> }
+            R.id.zi_zhu -> {
+                if (been1) {
+                    val pair = "BTC_USDT"
+                    PairApiServiceHelper.pairCollect(
+                        context,
+                        pair,
+                        object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                            override fun callback(returnData: HttpRequestResultString?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    DearPairService.dearPairMap[pair] = true
+                                    //callBack?.callback(true)
+                                    val updatedPairs = HashMap<String, Boolean?>()
+                                    updatedPairs[pair] = true
+                                    SocketDataContainer.updateDearPairs(
+                                        context,
+                                        socketHandler,
+                                        updatedPairs,
+                                        false
+                                    )
+
+                                }
+                                else {
+                                    FryingUtil.showToast(
+                                        context,
+                                        if (returnData == null) "null" else returnData.msg
+                                    )
+                                }
+                            }
+                        })
+                    binding?.yijian?.visibility = View.GONE
+                    SocketDataContainer.getPairsWithSet(
                         activity,
-                        pairStatusType,
+                        context?.getString(com.black.base.R.string.pair_collect),
                         object : Callback<ArrayList<PairStatus?>?>() {
                             override fun error(type: Int, error: Any) {
                                 gettingPairsData = false
@@ -489,44 +663,10 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                 gettingPairsData = false
                             }
                         })
+                    //DearPairService.insertDearPair(mContext!!, socketHandler, "BTC/USDT")
+                    //DearPairService.insertDearPair(mContext!!, socketHandler, "ETH/USDT")
                 }
-            })
-        }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        activity?.let {
-            val pairStatus = adapter?.getItem(position)
-            if (tabTag == getString(R.string.spot)) {
-                CookieUtil.setCurrentPair(it, pairStatus?.pair)
-                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-                val bundle = Bundle()
-                bundle.putString(ConstData.PAIR, pairStatus?.pair)
-                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
-                    .go(it)
             }
-            if (tabTag == getString(R.string.futures)) {
-
-            }
-            if (tabTag == getString(R.string.pair_collect)) {
-
-            }
-        }
-    }
-
-    fun updateCompare(comparator: PairQuotationComparator) {
-        this.comparator = comparator
-        if (isVisible) {
-            CommonUtil.checkActivityAndRunOnUI(mContext) {
-                adapter?.sortData(this.comparator)
-                adapter?.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
-                .go(mContext) { _, _ -> }
         }
     }
 

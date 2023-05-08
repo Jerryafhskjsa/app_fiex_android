@@ -208,10 +208,10 @@ class HomePageContractFragment : BaseFragment(),
         }
         exchanged = ExchangeRatesUtil.getExchangeRatesSetting(mContext as HomePageActivity)!!.rateCode
         if (exchanged == 0) {
-            rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdt ?: 0.0
         }
         if (exchanged == 1) {
-            rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+            rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd ?: 0.0
         }
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
@@ -224,7 +224,6 @@ class HomePageContractFragment : BaseFragment(),
         )
         layout = binding?.root
         viewModel = ContractViewModel(mContext!!, this)
-
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -1203,6 +1202,10 @@ class HomePageContractFragment : BaseFragment(),
                             positionSide = "SHORT"
                             orderSide = "SELL"
                         }
+                            else ->{
+                                positionSide = "LONG"
+                                orderSide = "BUY"
+                            }
                     }
                     createOrderFuture(positionSide!!, orderSide!!)
                 }
@@ -1807,6 +1810,7 @@ class HomePageContractFragment : BaseFragment(),
                         )
                     )
                 } else {
+
                     binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
                 }
                 binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
@@ -1863,13 +1867,13 @@ class HomePageContractFragment : BaseFragment(),
         var priceDouble = NumberUtil.toBigDecimal(price)
         val timeInForce: String = currentTimeInForceType?:"GTC"
         val origQty = header1View?.transactionQuota?.text.toString().trim()
-        val origQtyNum = NumberUtil.toBigDecimal(price);
+        val origQtyNum = NumberUtil.toBigDecimal(origQty)
         if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
 
-        val totalAmountInt = NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"").multiply(priceDouble)//priceDouble.times()
+        val totalAmountInt = (NumberUtil.toBigDecimal(origQty))/(NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"0.0").multiply(priceDouble))//priceDouble.times()
 //            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
         if (orderType.equals("MARKET")) {
             priceDouble = BigDecimal.ZERO
@@ -1894,16 +1898,17 @@ class HomePageContractFragment : BaseFragment(),
                 priceDouble.toDouble(),
                 timeInForce,
                 totalAmountInt.toInt(),
-                tigerProfitValue,
-                tigerLoseValue,
+                if (tigerStop == true) tigerProfitValue else null,
+                if (tigerStop == true) tigerLoseValue else null,
                 false,
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
                         if (returnData != null) {
-                            Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
-                            header1View?.price?.setText("")
-                            header1View?.transactionQuota?.setText("")
+                            //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
+                            header1View?.price?.setText(price)
+                            header1View?.transactionQuota?.setText("0.0")
+
                             FryingUtil.showToast(context, getString(R.string.trade_success))
                             /**
                              * todo 刷新持仓列表
@@ -1924,7 +1929,7 @@ class HomePageContractFragment : BaseFragment(),
     fun withTimerGetCurrentTradeOrder() {
         var count = 0
         var timer = Timer()
-        timer?.schedule(object : TimerTask() {
+        timer.schedule(object : TimerTask() {
             override fun run() {
                 getTradeOrderCurrent()
                 count++
@@ -1948,8 +1953,8 @@ class HomePageContractFragment : BaseFragment(),
     /**
      * 当行情价格发生变化的时候，需要更新可开空的数量
      */
-    fun updateOpenAvailableData() {
-        var price = header1View?.price?.text
+     fun updateOpenAvailableData() {
+        val price = header1View?.price?.text
         updateCanOpenAmount(price.toString())
     }
 
@@ -2072,6 +2077,7 @@ class HomePageContractFragment : BaseFragment(),
     override fun updateTotalProfit(totalProfit: String) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+
         }
     }
 
@@ -2232,7 +2238,7 @@ class HomePageContractFragment : BaseFragment(),
         if (currentOrderType.equals("MARKET")) {
             return
         }
-        header1View?.price?.setText(tradeOrder.formattedPrice)
+        header1View?.price?.setText(tradeOrder.formattedPrice?: "0.0")
         val scaleAnim = AnimationUtils.loadAnimation(mContext, R.anim.transaction_price_anim)
         header1View?.price?.startAnimation(scaleAnim)
 //        val amount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().toDouble()

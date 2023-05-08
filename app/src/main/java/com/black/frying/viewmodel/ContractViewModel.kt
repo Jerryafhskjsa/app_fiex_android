@@ -533,7 +533,7 @@ class ContractViewModel(
         }
     }
 
-    private fun createMarkPriceObserver(): Observer<MarkPriceBean?>? {
+    private fun createMarkPriceObserver(): Observer<MarkPriceBean?> {
         return object : SuccessObserver<MarkPriceBean?>() {
             override fun onSuccess(value: MarkPriceBean?) {
 //                todo 计算总权益
@@ -548,7 +548,7 @@ class ContractViewModel(
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
-                        totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
+                        totalProfit = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                     }
                     onContractModelListener?.updateTotalProfit(totalProfit.toString())
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())

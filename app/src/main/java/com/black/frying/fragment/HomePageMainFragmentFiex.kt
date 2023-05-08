@@ -155,6 +155,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     PairApiServiceHelper.getSymboleListPairData(mContext)
                 )
 
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}

@@ -18,6 +18,7 @@ import com.black.base.util.RouterConstData
 import com.black.base.util.StatusBarUtil
 import com.black.frying.activity.HomePageActivity
 import com.black.router.BlackRouter
+import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageQuotationMainBinding
 import com.google.android.material.tabs.TabLayout
@@ -109,12 +110,24 @@ class HomePageQuotationFragmentMain : BaseFragment(), View.OnClickListener {
                 }
             }
             binding?.marketTopTab?.setupWithViewPager(binding?.quotationMainViewPager, true)
-
             binding?.marketTopTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_18).toFloat()
+                var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
                 override fun onTabSelected(tab: TabLayout.Tab) {
+                    val view = tab.customView
+                    val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
+                    binding?.quotationMainViewPager?.currentItem = tab.position
+                    val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationFragment
+                    if (currentFragment != null && currentFragment.isVisible) {
+//                        currentFragment.onResume()
+                    }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) {
+                    val view = tab.customView
+                    val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}

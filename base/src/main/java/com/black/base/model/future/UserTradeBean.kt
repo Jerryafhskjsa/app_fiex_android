@@ -5,5 +5,5 @@ data class UserTradeBean(
     val orderId: String,
     val price: String,
     val quantity: String,
-    val timestamp: Int
+    val timestamp: Long
 )

@@ -176,6 +176,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
             init()
         }
             if(tabTag.equals(getString(R.string.spot))){
+                binding?.setTab?.visibility = View.GONE
                 PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
                     override fun error(type: Int, error: Any) {
                     }

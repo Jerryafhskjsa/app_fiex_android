@@ -223,7 +223,7 @@ class ContractMultipleSelectWindow(
             override fun callback(returnData: HttpRequestResultBean<String>?) {
                 if (returnData != null) {
                     Log.d("iiiiii-->adjustLeverage", returnData.result.toString())
-                    onReturnListener?.onReturn(bean)
+                    onReturnListener.onReturn(bean)
                     dismiss()
                 }
             }

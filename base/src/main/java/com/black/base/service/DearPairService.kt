@@ -10,6 +10,7 @@ import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
 import com.black.base.util.CookieUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.FryingUtil.showToast
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.SocketDataContainer.cachePair
@@ -82,7 +83,7 @@ object DearPairService {
             return Observable.just(result)
         }
         //登录情况同步接口
-        return ApiManager.build(context!!,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
+        return ApiManager.build(context,UrlConfig.ApiType.URl_UC).getService(PairApiService::class.java)
                 ?.pairCollect(pair)
                 ?.flatMap { result: HttpRequestResultString? ->
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {

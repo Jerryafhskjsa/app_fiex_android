@@ -1235,6 +1235,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             //买入
             if (transactionType == 1) {
                 if (currentBalanceSell != null) {
+                    binding!!.fragmentHomePageTransactionHeader1.countProgress
                     binding!!.fragmentHomePageTransactionHeader1.useable.setText(
                         NumberUtil.formatNumberNoGroup(
                             currentBalanceSell?.availableBalance?.toDoubleOrNull(),

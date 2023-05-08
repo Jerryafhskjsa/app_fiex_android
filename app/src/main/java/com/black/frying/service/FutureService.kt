@@ -737,11 +737,11 @@ object FutureService {
             precision = 8
         }
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
+        var base = BigDecimal(positionBean.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
-                    BigDecimal(markPrice?.p).subtract(BigDecimal(positionBean.entryPrice))
+                    BigDecimal(markPrice.p).subtract(BigDecimal(positionBean.entryPrice))
                         .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit =
@@ -1162,7 +1162,7 @@ object FutureService {
         //持仓价值
         var positionValue = BigDecimal(positionBean?.positionSize)
             .multiply(BigDecimal(positionBean?.entryPrice))
-            .multiply(BigDecimal(contractSize.toString()))
+            .multiply(BigDecimal((contractSize?:BigDecimal.ZERO).toString()))
         var result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
             .minus(orderValue!!)

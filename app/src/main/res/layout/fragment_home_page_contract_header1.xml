@@ -570,6 +570,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -622,6 +623,7 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_useable"
                             style="@style/ContractBondTextRightText"
+                            android:layout_height="match_parent"
                             android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
@@ -668,6 +670,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView

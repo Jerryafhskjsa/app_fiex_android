@@ -324,6 +324,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<UserTradeBean?>() {}.type
                             )
                             Log.d("ttttttt-->UserListener", userTradeBean.toString());
+
                         }
                         "user.order" -> {
                             val userOrderBean = gson.fromJson<UserOrderBean>(

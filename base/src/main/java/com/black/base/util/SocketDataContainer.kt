@@ -1498,7 +1498,11 @@ object SocketDataContainer {
                                             pairStatus?.is_dear = true
                                             result.add(pairStatus)
                                         }
-                                    } else {
+                                    }
+                                    else if (" " == setName){
+                                        result.add(pairStatus)
+                                    }
+                                    else {
                                         if (TextUtils.equals(pairStatus?.setName, setName)) {
                                             result.add(pairStatus)
                                         }

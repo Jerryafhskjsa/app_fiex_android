@@ -1114,6 +1114,10 @@
     <string name="bianji_zixuan">编辑自选</string>
     <string name="baocun">保存</string>
     <string name="quanbu_xuan">全部选择</string>
+    <string name="tianjia_cion">一件添加主流币种</string>
+    <string name="tianjia_zixuan">添加到自选</string>
+    <string name="tianjia_bidui">自主添加币对</string>
+
 
 
 </resources>
