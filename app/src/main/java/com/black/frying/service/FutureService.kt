@@ -9,6 +9,7 @@ import com.black.base.util.*
 import com.black.base.util.LoginUtil
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
+import com.black.util.NumberUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -1157,15 +1158,15 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
 
-        var positionBean: PositionBean? =
+        val positionBean: PositionBean? =
             currentSymbolPositionValue(Constants.LONG) ?: return BigDecimal.ZERO
         //持仓价值
-        var positionValue = BigDecimal(positionBean?.positionSize)
-            .multiply(BigDecimal(positionBean?.entryPrice))
-            .multiply(BigDecimal(contractSize.toString()))
-        var result = BigDecimal(maxNominalValue)
+        val positionValue = NumberUtils.toBigDecimal(positionBean?.positionSize)
+            .multiply(NumberUtils.toBigDecimal(positionBean?.entryPrice))
+            .multiply(NumberUtils.toBigDecimal(contractSize.toString()))
+        val result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
-            .minus(orderValue!!)
+            .minus(orderValue)
             .divide(inputPrice.times(contractSize!!), 8, RoundingMode.DOWN)
         return result
     }
