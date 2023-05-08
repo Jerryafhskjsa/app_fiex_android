@@ -1612,7 +1612,7 @@ class HomePageContractFragment : BaseFragment(),
         if (price != null && price > 0) {
             header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    price * rates!!,
+                    price * (rates ?: 0.0),
                     4,
                     4
                 )
