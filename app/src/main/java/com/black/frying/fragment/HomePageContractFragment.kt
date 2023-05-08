@@ -228,6 +228,7 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
+
                 binding!!.refreshLayout.postDelayed(
                     { binding!!.refreshLayout.setRefreshing(false) },
                     300
