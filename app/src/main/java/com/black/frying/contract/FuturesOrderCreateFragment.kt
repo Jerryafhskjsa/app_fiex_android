@@ -61,6 +61,10 @@ class FuturesOrderCreateFragment : Fragment() {
             }
         })
 
+        globalViewModel.selectPriceLd.observe(viewLifecycleOwner) { it ->
+            binding?.futurePriceInput?.setText(it.toString())
+        }
+
         binding?.let {
             it.btnBuy.setOnClickListener {
                 viewModel.changeOrderType(true)

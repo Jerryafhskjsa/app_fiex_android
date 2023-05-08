@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.black.base.api.C2CApiServiceHelper
 import com.black.base.model.socket.Deep
 import com.black.base.model.socket.TradeOrder
@@ -26,11 +27,13 @@ import com.black.util.NumberUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FuturesLayoutDeepGraphBinding
 import com.zhy.adapter.recyclerview.CommonAdapter
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter.OnItemClickListener
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 
 class FuturesDeepGraphFragment : Fragment() {
+
     enum class ShowMode {
         DEFAULT,
         SELL,
@@ -139,6 +142,23 @@ class FuturesDeepGraphFragment : Fragment() {
                             it.text = tradeOrder?.exchangeAmountFormat
                         }
                     }
+                }.apply {
+                    setOnItemClickListener(object :OnItemClickListener{
+                        override fun onItemClick(p0: View?, p1: RecyclerView.ViewHolder?, p2: Int) {
+                           viewModel.sellList[p2]?.price?.apply {
+                                onSelectItem(this)
+                            }
+                        }
+
+                        override fun onItemLongClick(
+                            p0: View?,
+                            p1: RecyclerView.ViewHolder?,
+                            p2: Int
+                        ): Boolean {
+                            return false
+                        }
+
+                    })
                 }
             }
 
@@ -171,6 +191,22 @@ class FuturesDeepGraphFragment : Fragment() {
                             it.text = tradeOrder?.exchangeAmountFormat
                         }
                     }
+                }.apply {
+                    setOnItemClickListener(object :OnItemClickListener{
+                        override fun onItemClick(p0: View?, p1: RecyclerView.ViewHolder?, p2: Int) {
+                            viewModel.buyList[p2]?.price?.apply {
+                                onSelectItem(this)
+                            }
+                        }
+
+                        override fun onItemLongClick(
+                            p0: View?,
+                            p1: RecyclerView.ViewHolder?,
+                            p2: Int
+                        ): Boolean {
+                            return false
+                        }
+                    })
                 }
             }
 
@@ -193,6 +229,10 @@ class FuturesDeepGraphFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun onSelectItem(price: Double){
+        globalViewModel.selectPriceLd.postValue(price)
     }
 
     private fun refreshDeepView() {
