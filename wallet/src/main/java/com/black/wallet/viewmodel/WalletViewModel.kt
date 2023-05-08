@@ -390,15 +390,15 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     fun updateTigerBalance(balance: UserBalance?){
         var updateTigerWalletList = ArrayList<TigerWallet?>()
         for (j in tigerWalletList?.indices!!){
-            var newWallet = TigerWallet()
-            var wallet = walletList!![j]
+            val newWallet = TigerWallet()
+            val wallet = walletList!![j]
             if(balance?.coin.equals(wallet?.coinType)){
-                newWallet?.totalAmount = balance?.balance?.toDouble()!!
-                newWallet?.coinAmount =  balance?.availableBalance?.toDouble()!!
-                newWallet?.estimatedTotalAmount = balance?.estimatedTotalAmount?.toDouble()!!
-                newWallet?.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()!!
-                newWallet?.profit = balance?.profit?.toDouble()!!
-                newWallet?.crossedMargin =  balance?.crossedMargin?.toDouble()!!
+                newWallet.totalAmount = balance?.balance?.toDouble()?:0.0
+                newWallet.coinAmount =  balance?.availableBalance?.toDouble()?:0.0
+                newWallet.estimatedTotalAmount = balance?.estimatedTotalAmount?.toDouble()?:0.0
+                newWallet.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()?:0.0
+                newWallet.profit = balance?.profit?.toDouble()?:0.0
+                newWallet.crossedMargin =  balance?.crossedMargin?.toDouble()?:0.0
             }
             updateTigerWalletList.add(newWallet)
         }
