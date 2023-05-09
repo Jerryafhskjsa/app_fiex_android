@@ -1209,6 +1209,9 @@ object FutureService {
         }
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
         //余额多仓最大可开
+        if (contractSize == null ){
+            return BigDecimal.ZERO
+        }
         return availableBalanceDisplay.divide(
             inputPrice.multiply(contractSize).multiply(
                 BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
@@ -1400,8 +1403,10 @@ object FutureService {
     }
 
     private fun usdt2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
-
+        if (contractSize == null){
+            return BigDecimal.ZERO
+        }
         return value.divide(price, 8, RoundingMode.DOWN)
-            .divide(contractSize ?: BigDecimal.ZERO, 8, RoundingMode.DOWN)
+            .divide(contractSize!!, 8, RoundingMode.DOWN)
     }
 }

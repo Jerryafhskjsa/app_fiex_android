@@ -63,6 +63,7 @@ import com.black.router.annotation.Route
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.NumberUtil
+import com.black.util.NumberUtils
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import com.fbsex.exchange.databinding.FragmentHomePageContractHeader1Binding
@@ -1425,11 +1426,11 @@ class HomePageContractFragment : BaseFragment(),
     //计算最大交易数量
     private fun getMaxAmount(): BigDecimal? {
         if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
-            val usable = currentBalanceSell?.availableBalance
-            val price =
-                CommonUtil.parseDouble(binding!!.fragmentHomePageContractHeader1.price.text.toString())
-            return if (usable == null || price == null || price == 0.0) null else BigDecimal(usable).divide(
-                BigDecimal(price),
+//            val usable = currentBalanceSell?.availableBalance
+            val usable = viewModel?.balanceDetailBean?.availableBalance
+            val price = if (isLimit()) binding!!.fragmentHomePageContractHeader1.price.text.toString() else binding!!.fragmentHomePageContractHeader1.currentPrice.text.toString()
+            return if (usable == null || price.isEmpty()) null else NumberUtils.toBigDecimal(usable).divide(
+                NumberUtils.toBigDecimal(price),
                 2,
                 BigDecimal.ROUND_HALF_DOWN
             )
