@@ -1441,6 +1441,9 @@ class HomePageContractFragment : BaseFragment(),
 
 
     private fun resetAmountLength() {
+        binding!!.fragmentHomePageContractHeader1.currentPrice.setText("")
+        binding!!.fragmentHomePageContractHeader1.currentPriceCny.setText("")
+        binding!!.fragmentHomePageContractHeader1.tagPrice.setText("")
         binding!!.fragmentHomePageContractHeader1.transactionQuota.filters =
             arrayOf(NumberFilter(), PointLengthFilter(viewModel!!.getAmountLength()))
     }
@@ -1452,6 +1455,8 @@ class HomePageContractFragment : BaseFragment(),
                     ?: 8
             )
         )
+        //价格输入清空
+        binding?.fragmentHomePageContractHeader1?.price?.setText("")
     }
 
     //获取一个单位的价格，根据深度计算

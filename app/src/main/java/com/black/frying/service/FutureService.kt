@@ -687,7 +687,7 @@ object FutureService {
         }
 
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
+        var base = NumberUtils.toBigDecimal(positionBean.positionSize).multiply(contractSize?: BigDecimal.ZERO)
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
@@ -967,7 +967,7 @@ object FutureService {
 
         //获取最新成交价
         var tickerBean = FutureSocketData.tickerList.get(symbol)
-        var sellPrice = inputPrice.max(BigDecimal(tickerBean?.c))
+        var sellPrice = inputPrice.max(NumberUtils.toBigDecimal(tickerBean?.c))
         var shortMaxOpenSheet =
             getUserShortMaxOpen(sellPrice, shortLeverage).setScale(0, BigDecimal.ROUND_DOWN)
         var shortMaxOpen =
@@ -976,7 +976,7 @@ object FutureService {
 //        Log.d("ttttttt-->shortInputSheetAmount---", shortInputSheetAmount.toString())
 
         var shortSheetAmount: BigDecimal = BigDecimal.ZERO
-        shortSheetAmount = if (shortInputSheetAmount.compareTo(BigDecimal(0)) == 1) {
+        shortSheetAmount = if (shortInputSheetAmount.compareTo(BigDecimal.ZERO) == 1) {
             shortInputSheetAmount.setScale(0, RoundingMode.DOWN)
         } else {
             val amount =  shortMaxOpen.multiply(
@@ -1164,11 +1164,13 @@ object FutureService {
         val positionValue = NumberUtils.toBigDecimal(positionBean?.positionSize)
             .multiply(NumberUtils.toBigDecimal(positionBean?.entryPrice))
             .multiply(NumberUtils.toBigDecimal(contractSize.toString()))
-        val result = BigDecimal(maxNominalValue)
+        if (contractSize == null || contractSize == BigDecimal.ZERO) {
+            return BigDecimal.ZERO
+        }
+        return BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
             .minus(orderValue)
             .divide(inputPrice.times(contractSize!!), 8, RoundingMode.DOWN)
-        return result
     }
 
     /**
