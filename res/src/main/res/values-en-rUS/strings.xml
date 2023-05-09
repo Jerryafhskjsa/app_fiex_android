@@ -1117,6 +1117,12 @@
     <string name="tianjia_cion">一件添加主流币种</string>
     <string name="tianjia_zixuan">添加到自选</string>
     <string name="tianjia_bidui">自主添加币对</string>
+    <string name="yincang">隐藏其他币种</string>
+    <string name="fanxiang">反向平仓</string>
+    <string name="tiao_ganggan">调整杠杆</string>
+    <string name="zhiying_zhisun">止盈止损</string>
+    <string name="zoushitu">走势图</string>
+    <string name="zhankai">展开图表</string>
 
 </resources>
 

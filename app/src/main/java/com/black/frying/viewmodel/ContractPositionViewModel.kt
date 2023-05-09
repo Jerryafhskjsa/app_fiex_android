@@ -313,7 +313,7 @@ class ContractPositionViewModel(
 
                 override fun callback(returnData: HttpRequestResultBean<FundingRateBean?>?) {
                     if (returnData != null) {
-                        fundRate = returnData?.result
+                        fundRate = returnData.result
                         onContractPositionModelListener?.onFundingRate(fundRate)
                     }
                 }

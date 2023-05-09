@@ -11,43 +11,81 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_size_20"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_10"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:orientation="horizontal">
 
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/positionSide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/T16"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="3dp"
-                    android:text="@string/contract_see_down"
-                    android:textAlignment="center"
-                    android:textColor="@color/T8"
-                    android:textSize="12sp" />
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/positionDes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:text="@string/perpetual_warehouse_by_warehouse"
                     android:textAlignment="center"
                     android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_14"
+                    android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="@string/sustainable"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionSide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/T16"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T8"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/cangwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/beishu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@+id/item_position_adl"
@@ -59,10 +97,10 @@
                 </ImageView>
 
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/icon_contract_risk_tips">
+                    android:src="@drawable/shuoming">
 
                 </ImageView>
 
@@ -73,19 +111,33 @@
                     android:gravity="right">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/icon_share" />
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        android:src="@drawable/fenxiang" />
                 </LinearLayout>
 
 
             </LinearLayout>
-
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="ID: 90898098"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
+                android:textColor="@color/T2"
+                android:drawableRight="@drawable/fuzhi"
+                android:textSize="@dimen/text_size_10" />
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/text_size_13"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:layout_height="wrap_content">
 
                 <com.black.base.widget.SpanTextView
+                    android:id="@+id/weishixian"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -106,10 +158,12 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_padding" />
+                android:layout_height="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:layout_height="wrap_content">
 
                 <com.black.base.widget.SpanTextView
@@ -135,8 +189,16 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:background="@color/B1"/>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:layout_height="50dp">
 
                 <LinearLayout
@@ -220,6 +282,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:layout_height="50dp">
 
                 <LinearLayout
@@ -303,6 +367,7 @@
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/contract_already_profits"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_padding"
@@ -318,6 +383,7 @@
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/already_close_profit"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:text="-11.11"
                     android:textColor="@color/T10"
@@ -327,6 +393,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:gravity="right">
 
@@ -356,6 +423,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding"
                 android:gravity="center_vertical">
 
                 <LinearLayout
@@ -364,39 +433,56 @@
                     android:layout_weight="9">
 
                     <TextView
+                        style="@style/ButtonGray"
                         android:id="@+id/btn_bond"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_contract_record_item_btn"
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="@string/contract_bond"
-                        android:textColor="@color/T13"
-                        android:textSize="@dimen/text_size_13"
+                        android:text="@string/tiao_ganggan"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 
                     <View
-                        android:layout_width="2dp"
+                        android:layout_width="5dp"
                         android:layout_height="match_parent" />
 
                     <TextView
+                        style="@style/ButtonGray"
                         android:id="@+id/btn_with_limit"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_contract_record_item_btn"
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/contract_disturb"
-                        android:textColor="@color/T13"
-                        android:textSize="@dimen/text_size_13"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 
                     <View
-                        android:layout_width="2dp"
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        style="@style/ButtonGray"
+                        android:id="@+id/btn_close_position_fan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/fanxiang"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                    <View
+                        android:layout_width="5dp"
                         android:layout_height="match_parent" />
 
                     <TextView
@@ -404,29 +490,22 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_contract_record_item_btn"
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/contract_fast_done"
-                        android:textColor="@color/T13"
-                        android:textSize="@dimen/text_size_13"
+                        android:background="@drawable/anniu"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/icon_contract_disturb" />
-                </LinearLayout>
-
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_height="@dimen/text_size_13"
+                android:background="@color/B1"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

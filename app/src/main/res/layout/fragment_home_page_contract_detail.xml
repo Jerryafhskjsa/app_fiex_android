@@ -16,9 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/B1"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_margin="@dimen/default_padding"
             android:id="@+id/entrust_type">
             <com.black.base.widget.SpanTextView
@@ -44,6 +49,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
             android:layout_height="32dp"
             >
 
@@ -57,12 +64,13 @@
                     android:id="@+id/contract_with_limit"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:button="@drawable/btn_reg_check_box"
+                    android:button="@drawable/yin_cang"
+                    android:checked="false"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:text="@string/contract_show_all"
+                    android:text="@string/yincang"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12" />
             </LinearLayout>
@@ -73,13 +81,6 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical">
 
-                <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_flash">
-
-                </ImageView>
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/all_done"
@@ -92,8 +93,11 @@
 
                 </com.black.base.widget.SpanTextView>
             </LinearLayout>
-
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/B1"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

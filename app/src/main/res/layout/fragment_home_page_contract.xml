@@ -37,8 +37,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/default_padding"
-                    android:layout_marginRight="@dimen/default_padding"
                     android:orientation="vertical">
 
                     <include
@@ -46,12 +44,22 @@
                         layout="@layout/fragment_home_page_contract_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/text_size_14"
+                        android:background="@color/B1"/>
 
                     <include
                         android:id="@+id/fragment_home_page_contract_header1"
                         layout="@layout/fragment_home_page_contract_header1"
+                        android:layout_marginLeft="@dimen/default_padding"
+                        android:layout_marginRight="@dimen/default_padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/text_size_14"
+                        android:background="@color/B1"/>
 
                     <include
                         android:id="@+id/fragment_home_page_contract_header2"

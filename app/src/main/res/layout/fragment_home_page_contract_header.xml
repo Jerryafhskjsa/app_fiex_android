@@ -15,6 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -67,16 +68,13 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/dotted_line"></View>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/text_size_5"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -96,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_equity"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <com.black.base.widget.DashLineView
                         android:layout_width="match_parent"
@@ -110,7 +108,7 @@
                     android:layout_marginTop="4dp"
                     android:text="--"
                     android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_12">
+                    android:textSize="@dimen/text_size_10">
 
                 </com.black.base.widget.SpanTextView>
 
@@ -128,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/fond_time"
                     android:textColor="@color/T11_ALPHA60"
-                    android:textSize="@dimen/text_size_12">
+                    android:textSize="@dimen/text_size_10">
 
                 </com.black.base.widget.SpanTextView>
 
@@ -143,14 +141,18 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_10">
+
+                    </com.black.base.widget.SpanTextView>
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="/"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_10">
+
+                    </com.black.base.widget.SpanTextView>
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_rate_time"
@@ -158,9 +160,65 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/T14"
-                        android:textSize="@dimen/text_size_12"></com.black.base.widget.SpanTextView>
+                        android:textSize="@dimen/text_size_12">
+
+                    </com.black.base.widget.SpanTextView>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/B1">
+
+        </View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/text_size_10"
+        android:layout_marginLeft="@dimen/text_size_10"
+        android:layout_marginBottom="@dimen/text_size_10"
+        android:orientation="horizontal">
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/coin_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BTC/USDT"
+            android:textColor="@color/T14"
+            android:textSize="@dimen/text_size_12">
+
+        </com.black.base.widget.SpanTextView>
+        <com.black.base.widget.SpanTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:text="@string/zoushitu"
+            android:textColor="@color/T14"
+            android:textSize="@dimen/text_size_12">
+
+        </com.black.base.widget.SpanTextView>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:layout_weight="1">
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/B1"/>
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:drawableRight="@drawable/xiala"
+                android:drawablePadding="@dimen/text_size_10"
+                android:text="@string/zhankai"
+                android:textColor="@color/T11_ALPHA60"
+                android:textSize="@dimen/text_size_10">
+            </com.black.base.widget.SpanTextView>
+        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </layout>

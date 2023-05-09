@@ -1,5 +1,6 @@
 package com.black.frying.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -18,6 +19,8 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
+    private var amount: Double? = null
+    private var amount2: Double? = null
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -30,42 +33,65 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         return R.layout.list_item_contract_tab_position
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPositionBinding>?) {
         val positionData = getItem(position)
 
         Log.d("ttt----->item", positionData.toString())
-        var unit = positionData?.symbol.toString().split("_")[1].uppercase()
+        var unit = positionData?.symbol!!.split("_")[1].toString().uppercase()
 
         var viewHolder = holder?.dataBing
         var sideDes: String? = null
         var sideBgColor: Int? = null
+        var sideBlackColor: Int? = null
         var bondDes: String? = null
         var positionType: String? = null
         var autoMergeBond: Boolean? = positionData?.autoMargin
+        /*if (unit == "ETHUSDT") {
+            amount = positionData?.availableCloseSize?.toDouble()!! * 100 / (positionData.forceStopPrice!!.toDouble())
+            //持仓数量
+            viewHolder?.positionAmount?.text = amount?.toString()
+            //可平数量
+            viewHolder?.availableCloseAmount?.text = amount?.toString()
+        }
+        else {
+            amount = positionData?.availableCloseSize?.toDouble()!! * 10000 / (positionData.forceStopPrice!!.toDouble())
+            //持仓数量
+            viewHolder?.positionAmount?.text = amount?.toString()
+            //可平数量
+            viewHolder?.availableCloseAmount?.text = amount?.toString()
+        }
+
+         */
         when (positionData?.positionSide) {
             //做多
             "LONG" -> {
                 sideDes = getString(R.string.contract_see_up)
                 sideBgColor = context.getColor(R.color.T17)
+                sideBlackColor = context.getColor(R.color.T22)
             }
             //做空
             "SHORT" -> {
                 sideDes = getString(R.string.contract_see_down)
                 sideBgColor = context.getColor(R.color.T16)
+                sideBlackColor = context.getColor(R.color.T21)
             }
         }
         when (positionData?.positionType) {
             //逐仓
             "ISOLATED" -> {
-                bondDes = positionData?.isolatedMargin
+                bondDes = positionData.isolatedMargin
                 positionType = getString(R.string.contract_fiexble_position)
             }
             //全仓
             "CROSSED" -> {
-                bondDes = positionData?.openOrderMarginFrozen
+                bondDes = positionData.openOrderMarginFrozen
                 positionType = getString(R.string.contract_all_position)
             }
         }
+
+        viewHolder?.weishixian?.text =
+            String.format(context.getString(R.string.contract_profits), unit)
 
         viewHolder?.contractHoldAmount?.text =
             String.format(context.getString(R.string.contract_hold_amount), unit)
@@ -89,33 +115,38 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             String.format(context.getString(R.string.contract_already_profits), unit)
 
         //仓位描述
-        viewHolder?.positionDes?.text = positionData?.symbol.toString()
-            .uppercase() + " " + positionType + "." + positionData?.leverage + "X"
+        viewHolder?.positionDes?.text = positionData.symbol.toString().uppercase()
+        viewHolder?.cangwei?.text = positionType
+        viewHolder?.beishu?.text = positionData.leverage.toString() + "X"
         //方向
         viewHolder?.positionSide?.text = sideDes
-        viewHolder?.positionSide?.setBackgroundColor(sideBgColor!!)
+        viewHolder?.positionSide?.setTextColor(sideBgColor!!)
+        viewHolder?.positionSide?.setBackgroundColor(sideBlackColor!!)
         //已实现盈亏
-        viewHolder?.alreadyCloseProfit?.text = positionData?.realizedProfit
+        viewHolder?.alreadyCloseProfit?.text = positionData.realizedProfit
         //当前盈亏
-        viewHolder?.profits?.text = positionData?.unRealizedProfit
+        viewHolder?.profits?.text = positionData.unRealizedProfit
         //当前盈亏百分比
-        viewHolder?.profitsPercent?.text = positionData?.profitRate
-        //持仓数量
-        viewHolder?.positionAmount?.text = positionData?.positionSize
-        //可平数量
-        viewHolder?.availableCloseAmount?.text = positionData?.availableCloseSize
+        viewHolder?.profitsPercent?.text = positionData.profitRate
         //持仓均价
-        viewHolder?.entryPrice?.text = positionData?.entryPrice
+        viewHolder?.entryPrice?.text = positionData.entryPrice
         //强平价格>0
-        if(positionData?.forceStopPrice != null){
-            if (BigDecimal(positionData?.forceStopPrice).compareTo(BigDecimal.ZERO) == 1) {
-                viewHolder?.forceClosePrice?.text = positionData?.forceStopPrice
+        //持仓数量
+        viewHolder?.positionAmount?.text = positionData.availableCloseSize
+        //可平数量
+        viewHolder?.availableCloseAmount?.text = positionData.availableCloseSize
+        //仓位保证金
+        viewHolder?.bondAmount?.text = positionData.isolatedMargin
+
+        if(positionData.forceStopPrice != null){
+            if (BigDecimal(positionData.forceStopPrice).compareTo(BigDecimal.ZERO) == 1) {
+                viewHolder?.forceClosePrice?.text = positionData.forceStopPrice
             } else {
                 viewHolder?.forceClosePrice?.text = "--"
             }
         }
         //标记价格
-        viewHolder?.flagPrice?.text = positionData?.flagPrice
+        viewHolder?.flagPrice?.text = positionData.flagPrice
         //保证金
         viewHolder?.bondAmount?.text = bondDes
         //是否自动追加保证金开关
@@ -164,5 +195,8 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         }
 
     }
+    /*fun set(price:String?)
+    {
 
-}
+    }*/
+    }

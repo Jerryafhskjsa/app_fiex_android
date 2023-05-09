@@ -39,8 +39,8 @@ class ContractPositionTabFragment : BaseFragment(),
 
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
-
     private var viewModel: ContractPositionViewModel? = null
+    private var price: Double? = null //标记价格
     private var adapter: ContractPositionTabAdapter? = null
     private var dataList: ArrayList<PositionBean?> = ArrayList()
 
@@ -128,7 +128,7 @@ class ContractPositionTabFragment : BaseFragment(),
         super.onStop()
         if (futureMarkPriceObserver != null) {
             SocketDataContainer.removeMarkPriceObservable(futureMarkPriceObserver)
-            futureMarkPriceObserver == null
+            futureMarkPriceObserver = null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -207,6 +207,7 @@ class ContractPositionTabFragment : BaseFragment(),
     }
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {
+        //adapter?.set(marketPrice?.p)
 
     }
 

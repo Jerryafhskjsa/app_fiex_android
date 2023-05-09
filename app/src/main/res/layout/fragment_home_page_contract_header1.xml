@@ -344,10 +344,10 @@
                     android:gravity="right">
 
                     <LinearLayout
+                        style="@style/ButtonGray"
                         android:id="@+id/lin_limit_type"
                         android:layout_width="70dp"
                         android:layout_height="26dp"
-                        android:background="@drawable/bg_transaction_input"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -358,6 +358,7 @@
                             android:gravity="center"
                             android:maxLines="1"
                             android:text="GTC"
+                            android:textColor="@color/T2"
                             android:textSize="@dimen/text_size_12"
                             android:textStyle="bold" />
 
@@ -570,7 +571,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -670,7 +670,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView

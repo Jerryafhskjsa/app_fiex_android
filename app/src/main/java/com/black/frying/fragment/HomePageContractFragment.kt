@@ -225,6 +225,7 @@ class HomePageContractFragment : BaseFragment(),
         )
         layout = binding?.root
         viewModel = ContractViewModel(mContext!!, this)
+        binding!!.actionBarLayout.actionBarTitle
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -546,13 +547,13 @@ class HomePageContractFragment : BaseFragment(),
                         if (isDear!!) {
                             binding?.actionBarLayout?.imgCollect?.setImageDrawable(
                                 mContext?.getDrawable(
-                                    R.drawable.btn_collect_dis
+                                    R.drawable.bianzu_1
                                 )
                             )
                         } else {
                             binding?.actionBarLayout?.imgCollect?.setImageDrawable(
                                 mContext?.getDrawable(
-                                    R.drawable.btn_collect_default
+                                    R.drawable.shoucang
                                 )
                             )
                         }
@@ -561,9 +562,9 @@ class HomePageContractFragment : BaseFragment(),
         } else {
             isDear = dear
             if (isDear!!) {
-                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_dis))
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.bianzu_1))
             } else {
-                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_default))
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.shoucang))
             }
         }
     }
@@ -1188,8 +1189,8 @@ class HomePageContractFragment : BaseFragment(),
             }
             //卖出/开空
             R.id.btn_handle_1 -> {
-                var positionSide: String? = null
-                var orderSide: String? = null
+                var positionSide: String? = "LONG"
+                var orderSide: String? = "SELL"
                 when (transactionType) {
                     ConstData.FUTURE_OPERATE_OPEN -> {
                         orderSide = "BUY"
@@ -1208,8 +1209,8 @@ class HomePageContractFragment : BaseFragment(),
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    var positionSide: String? = null
-                    var orderSide: String? = null
+                    var positionSide: String = "LONG"
+                    var orderSide: String = "BUY"
                     when (transactionType) {
                         ConstData.FUTURE_OPERATE_OPEN -> {
                             positionSide = "LONG"
@@ -1219,12 +1220,9 @@ class HomePageContractFragment : BaseFragment(),
                             positionSide = "SHORT"
                             orderSide = "SELL"
                         }
-                            else ->{
-                                positionSide = "LONG"
-                                orderSide = "BUY"
-                            }
+
                     }
-                    createOrderFuture(positionSide!!, orderSide!!)
+                    createOrderFuture(positionSide, orderSide)
                 }
             }
 
@@ -2431,7 +2429,7 @@ class HomePageContractFragment : BaseFragment(),
             var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
             Log.d(tag, "priceSince1 = $result")
             binding!!.actionBarLayout.currentPriceSince.setText(result)
-            binding!!.actionBarLayout.currentPriceSince.background = background
+           // binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
         if (since != null && styleChange == 0) {
@@ -2450,7 +2448,7 @@ class HomePageContractFragment : BaseFragment(),
             var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
             Log.d(tag, "priceSince1 = $result")
             binding!!.actionBarLayout.currentPriceSince.setText(result)
-            binding!!.actionBarLayout.currentPriceSince.background = background
+           // binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
     }
