@@ -31,6 +31,7 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 
 public class OkWebSocket extends WebSocketListener {
+    public static final Boolean DEBUG = false;
 
     public static final String TAG = "OkWebSocket";
     private final HandlerThread mReceiveHandlerThread;
@@ -318,7 +319,8 @@ public class OkWebSocket extends WebSocketListener {
     }
 
     private void d(String msg) {
-        Log.d(OkWebSocket.TAG, msg);
+        if(DEBUG)
+            Log.d(OkWebSocket.TAG, msg);
     }
 
     private void notifyObserverOnOpen() {

@@ -89,6 +89,7 @@ class FutureGlobalStateViewModel : ViewModel() {
     //订阅交易对的信息
     val tickerBeanLiveData = MutableLiveData<TickerBean>()
 
+    val selectPriceLd = MutableLiveData<Double>(0.0)
 
     //价格精度
     val pricePrecision = MutableLiveData<Int>(ConstData.DEFAULT_PRECISION)

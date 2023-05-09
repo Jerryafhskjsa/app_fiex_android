@@ -57,7 +57,6 @@ import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout
-import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -77,7 +76,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.pow
-import kotlin.math.roundToInt
+
+const val LIMIT = "LIMIT"
+const val MARKET = "MARKET"
 
 //首页合约简介
 @Route(
@@ -116,7 +117,7 @@ class HomePageContractFragment : BaseFragment(),
     private var countProgressSale: Drawable? = null
     private var rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var exchanged = 0
-    private var currentOrderType: String? = "LIMIT"
+    private var currentOrderType: String? = LIMIT
     private var currentUnitType: String? = "USDT"
     private var currentTimeInForceType: String? = "GTC"
     private var inputNumber: Boolean? = false//是否手动输入数量
@@ -227,6 +228,7 @@ class HomePageContractFragment : BaseFragment(),
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
+
                 binding!!.refreshLayout.postDelayed(
                     { binding!!.refreshLayout.setRefreshing(false) },
                     300
@@ -274,6 +276,20 @@ class HomePageContractFragment : BaseFragment(),
 
             dialog.dismiss()
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun isLimit() :Boolean{
+        return currentOrderType == LIMIT;
+    }
+    private fun isMarket() :Boolean{
+        return currentOrderType == MARKET;
+    }
+    private fun buildByOrderType() {
+
     }
 
     private fun getFutrueOpen(){
@@ -978,7 +994,7 @@ class HomePageContractFragment : BaseFragment(),
             }
 
             R.id.lin_order_type -> {
-                currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) "LIMIT" else "MARKET"
+                currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else "MARKET"
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                    currentOrderType,
@@ -991,7 +1007,8 @@ class HomePageContractFragment : BaseFragment(),
                             refreshOrderType(item)
                             currentOrderType = item
                             viewModel?.setCurrentPairOrderType(item)
-                            if (currentOrderType.equals("LIMIT")) {
+                            if (currentOrderType.equals(LIMIT)) {
+                                fillLimitPrice()
 //                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                             } else if (currentOrderType.equals("MARKET")) {
                             }
@@ -1012,7 +1029,7 @@ class HomePageContractFragment : BaseFragment(),
                             refreshUnitType(item)
                             currentUnitType = item
                             viewModel?.setCurrentUnitType(item)
-                            if (currentOrderType.equals("LIMIT")) {
+                            if (currentOrderType.equals(LIMIT)) {
                             } else if (currentOrderType.equals("MARKET")) {
                             }
                         }
@@ -1217,6 +1234,26 @@ class HomePageContractFragment : BaseFragment(),
                     .go(mContext)
             }
         }
+        }
+    }
+
+    private fun getMarketPrice(): BigDecimal {
+        val price = header1View?.currentPrice?.text?.toString() ?: ""
+        return NumberUtil.toBigDecimal(price)
+    }
+    private fun initLimitPrice(){
+        val price =  binding?.fragmentHomePageContractHeader1?.price?.text?:""
+        if (price.isEmpty()){
+            fillLimitPrice()
+        }
+    }
+    private fun fillLimitPrice() {
+        val price = header1View?.currentPrice?.text?.toString() ?: ""
+        val decimal = NumberUtil.toBigDecimal(price)
+        if (decimal == BigDecimal.ZERO) {
+            binding?.fragmentHomePageContractHeader1?.price?.setText("")
+        } else {
+            binding?.fragmentHomePageContractHeader1?.price?.setText(decimal.toString())
         }
     }
 
@@ -1438,7 +1475,7 @@ class HomePageContractFragment : BaseFragment(),
                 .trim { it <= ' ' })
         if (price != null) {
             if (count != null && (count != 0.0)) {
-                if (currentOrderType.equals("LIMIT")) {
+                if (currentOrderType.equals(LIMIT)) {
 //                    binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                 }
             } else { //只有价格
@@ -1472,7 +1509,7 @@ class HomePageContractFragment : BaseFragment(),
                         header1View?.useableBuy?.setText("0.0000")
                     }
                 }
-                if (currentOrderType.equals("LIMIT")) {
+                if (currentOrderType.equals(LIMIT)) {
                     if (price != null && count != null) {
 //                        binding!!.fragmentHomePageContractHeader1.tradeValue.setText(NumberUtil.formatNumberNoGroup(price * count!!, RoundingMode.FLOOR, viewModel!!.getAmountLength(), viewModel!!.getAmountLength())+viewModel!!.getSetName())
                     }
@@ -1578,7 +1615,7 @@ class HomePageContractFragment : BaseFragment(),
         if (price != null && price > 0) {
             header1View?.priceCny?.setText(
                 "≈" + NumberUtil.formatNumberNoGroup(
-                    price * rates!!,
+                    price * (rates ?: 0.0),
                     4,
                     4
                 )
@@ -1621,7 +1658,7 @@ class HomePageContractFragment : BaseFragment(),
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
-        currentOrderType = "LIMIT"
+        currentOrderType = LIMIT
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
         viewModel?.setCurrentPairOrderType(currentOrderType)
@@ -1637,7 +1674,7 @@ class HomePageContractFragment : BaseFragment(),
                 binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
                 binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.GONE
             }
-            "LIMIT" -> {
+            LIMIT -> {
                 typeDes = getString(R.string.order_type_limit)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
                 binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
@@ -1980,7 +2017,7 @@ class HomePageContractFragment : BaseFragment(),
         if (pairStatus?.supportingPrecisionList != null) {
             onDeepChoose()
         }
-        currentOrderType = "LIMIT"
+        currentOrderType = LIMIT
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
         viewModel?.setCurrentPairOrderType(currentOrderType)
@@ -2347,6 +2384,7 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun updateCurrentPairPrice(price: String?) {
         header1View?.currentPrice?.setText(price)
+        initLimitPrice()
         if (price != null && price.toDouble() > 0) {
 //            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
             if (C2CApiServiceHelper?.coinUsdtPrice?.usdt == null) {

@@ -9,6 +9,7 @@ import com.black.base.util.*
 import com.black.base.util.LoginUtil
 import com.black.frying.model.OrderItem
 import com.black.util.Callback
+import com.black.util.NumberUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -737,11 +738,11 @@ object FutureService {
             precision = 8
         }
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base = BigDecimal(positionBean.positionSize).multiply(contractSize)
+        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
-                    BigDecimal(markPrice.p).subtract(BigDecimal(positionBean.entryPrice))
+                    BigDecimal(markPrice?.p).subtract(BigDecimal(positionBean.entryPrice))
                         .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit =
@@ -1157,15 +1158,15 @@ object FutureService {
         //订单名义价值
         var orderValue = currentSymbolOrderValue(Constants.LONG)
 
-        var positionBean: PositionBean? =
+        val positionBean: PositionBean? =
             currentSymbolPositionValue(Constants.LONG) ?: return BigDecimal.ZERO
         //持仓价值
-        var positionValue = BigDecimal(positionBean?.positionSize)
-            .multiply(BigDecimal(positionBean?.entryPrice))
-            .multiply(BigDecimal((contractSize?:BigDecimal.ZERO).toString()))
-        var result = BigDecimal(maxNominalValue)
+        val positionValue = NumberUtils.toBigDecimal(positionBean?.positionSize)
+            .multiply(NumberUtils.toBigDecimal(positionBean?.entryPrice))
+            .multiply(NumberUtils.toBigDecimal(contractSize.toString()))
+        val result = BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
-            .minus(orderValue!!)
+            .minus(orderValue)
             .divide(inputPrice.times(contractSize!!), 8, RoundingMode.DOWN)
         return result
     }
@@ -1249,7 +1250,7 @@ object FutureService {
         }
 //        Log.d("ttt--->availableBalanceDisplay", availableBalance)
 //        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
-        var a = BigDecimal(availableBalance).plus(crossedFloatProfit!!)
+        val a = NumberUtils.toBigDecimal(availableBalance).plus(crossedFloatProfit!!)
         // 可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
         return BigDecimal(0).max(a)
     }
@@ -1336,7 +1337,7 @@ object FutureService {
             }
 
             for (item in orderShortList!!) {
-                var value = BigDecimal(item.marginFrozen).divide(
+                val value = BigDecimal(item.marginFrozen).divide(
                     BigDecimal(1).divide(BigDecimal(shortLeverage), 4, RoundingMode.DOWN).plus(
                         BigDecimal(userStepRate?.takerFee).times(
                             BigDecimal(
@@ -1349,7 +1350,7 @@ object FutureService {
                 shortResult = shortResult.add(value)
             }
         }
-        return if (positionSide.equals(Constants.LONG)) {
+        return if (positionSide == Constants.LONG) {
             longResult
         } else {
             shortResult
@@ -1366,7 +1367,7 @@ object FutureService {
             return null
         }
         for (item in leverageBracket?.leverageBrackets!!) {
-            if (leverage < item?.maxLeverage.toInt()) {
+            if (leverage < item.maxLeverage.toInt()) {
                 leverageBracketItem = item
             }
         }
@@ -1377,20 +1378,19 @@ object FutureService {
      * 获取价值
      */
     fun getValue(price: String, amount: String, contractSize: String): String {
-        var result = BigDecimal(price).times(BigDecimal(amount)).times(BigDecimal(contractSize))
+        val result = NumberUtils.toBigDecimal(price).times(NumberUtils.toBigDecimal(amount)).times(NumberUtils.toBigDecimal(contractSize))
         return result.toString()
     }
 
     private fun getCoinValue(price: String, amount: String, contractSize: String): String {
-        var result = BigDecimal(amount).times(BigDecimal(contractSize)).div(BigDecimal(price))
+        val result = BigDecimal(amount).times(NumberUtils.toBigDecimal(contractSize)).div(BigDecimal(price))
         return result.toString()
     }
 
 
     private fun sheet2CurrentUnit(positionSize: String, price: String): BigDecimal {
-        var resultBN =
-            BigDecimal(positionSize).times(contractSize!!).times(BigDecimal(price))
-        return resultBN
+        return BigDecimal(positionSize).times(contractSize ?: BigDecimal.ZERO)
+            .times(BigDecimal(price))
     }
 
     private fun currentUnit2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
@@ -1399,8 +1399,7 @@ object FutureService {
 
     private fun usdt2Sheet(value: BigDecimal, price: BigDecimal): BigDecimal {
 
-        var result =
-            value.divide(price, 8, RoundingMode.DOWN).divide(contractSize, 8, RoundingMode.DOWN)
-        return result
+        return value.divide(price, 8, RoundingMode.DOWN)
+            .divide(contractSize ?: BigDecimal.ZERO, 8, RoundingMode.DOWN)
     }
 }
