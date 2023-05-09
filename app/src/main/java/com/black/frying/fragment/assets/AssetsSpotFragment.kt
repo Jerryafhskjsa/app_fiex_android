@@ -2,12 +2,14 @@ package com.black.frying.fragment.assets
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -192,6 +194,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                 binding?.moneyTotal?.text = "****"
                 binding?.moneyTotalcny?.text = "****"
                 binding?.profitLoss?.text = "****"
+                binding?.currentPriceSince?.text = "**"
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
@@ -199,6 +202,8 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                 var cny = String.format("≈ %S CNY", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+                var background: Drawable?
+                var color: Int?
                 if (total != null && exChange == 0) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
                     cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
@@ -207,7 +212,18 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
                     usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
                 }
-                binding?.profitLoss?.setText(": 0.0 USDT")
+                    if (total?.profitAmount != null  && total.profitAmount!! < 0.0) {//涨
+                        background = mContext?.getDrawable(com.fbsex.exchange.R.drawable.trans_raise_bg_corner)
+                        color = mContext?.getColor(com.fbsex.exchange.R.color.T10)
+                    } else if (total?.profitAmount!! > 0.0) {
+                        background = mContext?.getDrawable(com.fbsex.exchange.R.drawable.trans_fall_bg_corner)
+                        color = mContext?.getColor(com.fbsex.exchange.R.color.T9)
+                    } else {
+                        background = mContext?.getDrawable(com.fbsex.exchange.R.drawable.trans_default_bg_corner)
+                        color = mContext?.getColor(com.fbsex.exchange.R.color.B3)
+                    }
+                    binding!!.currentPriceSince.background = background
+                    binding!!.currentPriceSince.setTextColor(color!!)
                 if (exChange == 0){
                     binding?.moneyTotal?.setText(usdt)
                     binding?.moneyTotalcny?.setText(cny)
@@ -216,6 +232,8 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
                     binding?.moneyTotal?.setText(usdt)
                     binding?.moneyTotalcny?.setText(usd)
                 }
+                binding?.profitLoss?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total.profitAmount, 8, 2, 2) + "USDT")
+                binding?.currentPriceSince?.setText(NumberUtil.formatNumberDynamicScaleNoGroup(total.phaseRate!! * 100, 8, 2, 2) + "%")
             }
         }
     }

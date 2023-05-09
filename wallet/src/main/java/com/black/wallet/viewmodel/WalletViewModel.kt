@@ -47,6 +47,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var coinList:ArrayList<CoinInfo?>? = ArrayList()
     private var spotBalanceList:ArrayList<UserBalance?>?  = null
     private var tigerBalanceList:ArrayList<UserBalance?>?  = null
+    private var priceRate: Double? = null
+    private var profitAmount: Double? = null
 
 
 
@@ -190,6 +192,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                         spotBalanceList = returnData.data?.spotBalance
                         tigerBalanceList = returnData.data?.tigerBalance
+                        priceRate = returnData.data?.phaseRate
+                        profitAmount = returnData.data?.profitAmount
                         handleBalanceResult(walletList)
                         handleTigerBalanceResult(tigerWalletList)
                     }
@@ -287,6 +291,8 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             }
         }
         onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
+            it.phaseRate = priceRate
+            it.profitAmount = profitAmount
             it.usdt = walletTotal
             it.cny = walletTotalCNY
             it.forze = coinFtoze

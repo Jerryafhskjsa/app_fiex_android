@@ -928,7 +928,7 @@
     <string name="from">Từ</string>
     <string name="to">Tới</string>
     <string name="total_assets">Tổng vốn có sẵn(USDT)</string>
-    <string name="profit_loss">Lợi nhuận hôm nay</string>
+    <string name="profit_loss">PNL của Hôm nay:</string>
     <string name="investment_portfolio">Danh mục đầu tư</string>
     <string name="quick_recharged">Kênh mua nhanh</string>
     <string name="quick_extract">Kênh bán nhanh</string>

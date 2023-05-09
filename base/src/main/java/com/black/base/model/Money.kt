@@ -12,4 +12,6 @@ class Money {
     var walletBalance: Double? = null
     var profit: Double? = null
     var crossedMargin: Double? = null
+    var phaseRate: Double? = null
+    var profitAmount: Double? = null
 }

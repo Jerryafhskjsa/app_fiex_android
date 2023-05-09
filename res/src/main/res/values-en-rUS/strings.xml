@@ -926,7 +926,7 @@
     <string name="from">From</string>
     <string name="to">to</string>
     <string name="total_assets">Spot assets(USDT)</string>
-    <string name="profit_loss">Profit loss</string>
+    <string name="profit_loss">Today PNL:</string>
     <string name="investment_portfolio">Investment portfolio</string>
     <string name="quick_recharged">Quick recharge</string>
     <string name="quick_extract">Quick extract</string>
