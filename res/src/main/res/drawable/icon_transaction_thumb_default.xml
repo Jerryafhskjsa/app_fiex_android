@@ -12,4 +12,5 @@
         android:fillColor="@color/B2"
         android:pathData="M0 0V4H4V0"
         tools:ignore="VectorRaster" />
+
 </vector>

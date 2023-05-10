@@ -404,12 +404,14 @@ class ContractViewModel(
             override fun onSuccess(value: UserBalance?) {
                 onContractModelListener?.run {
                     if (value != null) {
-                        onContractModelListener?.onUserBalanceChanged(value)
+                        //onContractModelListener.onUserBalanceChanged(value)
                     }
                 }
             }
         }
     }
+
+
 
     private fun createUserOrderObserver(): Observer<TradeOrderFiex?> {
         return object : SuccessObserver<TradeOrderFiex?>() {
@@ -548,8 +550,9 @@ class ContractViewModel(
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
-                        totalProfit = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
+                        totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                     }
+                    onContractModelListener?.futureBalance(balanceDetailBean)
                     onContractModelListener?.updateTotalProfit(totalProfit.toString())
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
@@ -654,7 +657,7 @@ class ContractViewModel(
                         var recentDeal = CommonUtil.getItemFromList(dealList, 0)
                         onContractModelListener?.run {
                             if (recentDeal != null && currentPairStatus.pair != null) {
-                                onContractModelListener?.onPairDeal(recentDeal)
+                                onContractModelListener.onPairDeal(recentDeal)
                             }
                         }
                     }
@@ -896,7 +899,7 @@ class ContractViewModel(
                             depth.b = fDepth.b
                             depth.t = fDepth.t
                             depth.u = fDepth.u
-                            tradeOrderDepthPair = depth?.let {
+                            tradeOrderDepthPair = depth.let {
                                 SocketDataContainer.parseOrderDepthData(
                                     context,
                                     ConstData.DEPTH_FUTURE_TYPE,
@@ -922,7 +925,7 @@ class ContractViewModel(
      * 获取用户资产
      *
      */
-    fun getCurrentUserBalance(balanceType: ConstData.BalanceType?) {
+    /*fun getCurrentUserBalance(balanceType: ConstData.BalanceType?) {
         onContractModelListener?.getUserBalanceCallback()?.let {
             WalletApiServiceHelper.getUserBalanceReal(
                 context,
@@ -935,10 +938,10 @@ class ContractViewModel(
                             var balanceList: ArrayList<UserBalance?>? = null
                             when (balanceType) {
                                 ConstData.BalanceType.SPOT -> {
-                                    balanceList = balances?.spotBalance
+                                    balanceList = balances.spotBalance
                                 }
                                 ConstData.BalanceType.CONTRACT -> {
-                                    balanceList = balances?.tigerBalance
+                                    balanceList = balances.tigerBalance
                                 }
                             }
                             if (balanceList != null) {
@@ -975,7 +978,9 @@ class ContractViewModel(
         }
     }
 
-    fun getCurrentWallet(tabType: Int) {
+     */
+
+    /*fun getCurrentWallet(tabType: Int) {
         onContractModelListener?.getWalletCallback()?.let {
             if (tabType == ConstData.TAB_LEVER) {
                 WalletApiServiceHelper.getWalletLeverList(
@@ -1039,6 +1044,8 @@ class ContractViewModel(
             }
         }
     }
+
+     */
 
     fun checkDearPair(): Observable<Boolean>? {
         return DearPairService.isDearPair(context, socketHandler, currentPairStatus.pair)
@@ -1196,7 +1203,7 @@ class ContractViewModel(
         /**
          * 用户余额变化
          */
-        fun onUserBalanceChanged(userBalance: UserBalance?)
+        //fun onUserBalanceChanged(userBalance: UserBalance?)
 
         /**
          * 交易对24小时行情变更
@@ -1249,19 +1256,22 @@ class ContractViewModel(
          */
         fun onLeverageDetail(leverageBracket: LeverageBracketBean?)
 
-        fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
-        fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>
+        //fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
+        //fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>
 
-        fun onWalletLeverDetail(leverDetail: WalletLeverDetail?)
+        //fun onWalletLeverDetail(leverDetail: WalletLeverDetail?)
         fun onLeverPairConfigCheck(hasLeverConfig: Boolean)
-        fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
+        //fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
 
-        fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
+        //fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
 
         /**
          * 更新总权益
          */
         fun updateTotalProfit(totalProfit: String)
+
+        fun futureBalance(balanceDetailBean: BalanceDetailBean?)
+
         fun onPositionData(data: ArrayList<PositionBean?>?)
         fun onProfitData(data: ArrayList<ProfitsBean?>?)
         fun onPlanData(data: PlanUnionBean?)

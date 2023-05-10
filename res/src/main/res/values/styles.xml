@@ -329,8 +329,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:max">100</item>
-        <item name="android:maxHeight">6dp</item>
-        <item name="android:minHeight">6dp</item>
+        <item name="android:maxHeight">2dp</item>
+        <item name="android:minHeight">2dp</item>
         <item name="android:progressDrawable">@drawable/bg_transaction_progress_bar_buy</item>
     </style>
     <style name="TradeSeekBarCheckbox">
@@ -344,14 +344,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:max">100</item>
-        <item name="android:maxHeight">20dp</item>
-        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">9dp</item>
+        <item name="android:minHeight">9dp</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:progressDrawable">@color/transparent</item>
         <item name="android:splitTrack">false</item>
-        <item name="android:thumb">@drawable/icon_thumbcount_bar</item>
+        <item name="android:thumb">@drawable/zhiyingzhisun</item>
         <item name="android:thumbOffset">0dp</item>
     </style>
 
@@ -471,7 +471,7 @@
         <item name="android:layout_height">4dp</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:scaleType">centerInside</item>
-        <item name="android:src">@drawable/icon_selector_down</item>
+        <item name="android:src">@drawable/xiala</item>
     </style>
 
     <style name="Sousuo">

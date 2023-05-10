@@ -21,6 +21,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:background="@drawable/bg_transaction_input"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -43,16 +44,48 @@
                     android:textColor="@color/btn_sale_check" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanCheckedTextView
+                    style="@style/ContractHeader1BuyBtn"
+                    android:layout_height="25dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/btn_gray_default"
+                    android:drawableEnd="@drawable/xiala"
+                    android:checked="true"
+                    android:textStyle="normal"
+                    android:text="@string/contract_all_position"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="#FF262838" />
+                <View
+                    android:layout_width="@dimen/text_size_10"
+                    android:layout_height="match_parent"/>
+
+                <com.black.base.widget.SpanCheckedTextView
+                    style="@style/ContractHeader1BuyBtn"
+                    android:layout_margin="2dp"
+                    android:layout_height="25dp"
+                    android:textStyle="normal"
+                    android:background="@drawable/btn_gray_default"
+                    android:drawableEnd="@drawable/xiala"
+                    android:textSize="@dimen/text_size_12"
+                    android:text="100X"
+                    android:textColor="#FF262838" />
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_padding" />
+                android:layout_height="@dimen/text_size_10" />
 
             <LinearLayout
+                style="@style/ButtonGray"
                 android:id="@+id/lin_order_type"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:background="@drawable/bg_transaction_input"
-                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
 
@@ -60,14 +93,18 @@
                     android:id="@+id/order_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginLeft="@dimen/default_padding"
+                    android:gravity="center"
                     android:maxLines="1"
                     android:text="@string/limit_order"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/order_type_arrow"
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
                     style="@style/ContractSmallArrow"
                     android:layout_margin="@dimen/default_padding" />
 
@@ -75,33 +112,52 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_padding" />
+                android:layout_height="@dimen/text_size_10" />
+            <LinearLayout
+                android:id="@+id/lin_market_price"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/btn_shijia"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="@string/order_type_market"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:textColor="@color/T3"
+                    app:useDelete="false" />
+            </LinearLayout>
 
             <LinearLayout
+                style="@style/ButtonGray"
                 android:id="@+id/lin_price"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="match_parent"
+                    android:layout_gravity="center"
                     android:layout_height="32dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/price_sub"
-                            android:layout_width="8dp"
-                            android:layout_height="2dp"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginLeft="@dimen/default_padding"
                             android:adjustViewBounds="true"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_sub" />
+                            android:src="@drawable/jianhao" />
 
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/price"
@@ -114,28 +170,29 @@
                             android:hint="@string/price"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_16"
+                            android:textColor="@color/T3"
                             app:useDelete="false" />
 
                         <ImageView
                             android:id="@+id/price_add"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
                             android:adjustViewBounds="true"
-                            android:padding="12dp"
+                            android:layout_marginRight="@dimen/default_padding"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_add" />
+                            android:src="@drawable/jiahao" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="4dp" />
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:id="@+id/lin_prince_cny"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -158,14 +215,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:background="@drawable/bg_transaction_input"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/btn_gray_default"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -176,6 +233,7 @@
 
                         <ImageView
                             android:id="@+id/amount_sub"
+                            android:visibility="gone"
                             android:layout_width="8dp"
                             android:layout_height="2dp"
                             android:layout_marginLeft="@dimen/default_padding"
@@ -194,14 +252,15 @@
                             android:hint="@string/amount"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold"
+                            android:textColor="@color/T3"
+                            android:textSize="@dimen/text_size_16"
                             app:useDelete="false" />
 
                         <ImageView
                             android:id="@+id/amount_add"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             android:adjustViewBounds="true"
                             android:padding="12dp"
                             android:scaleType="fitXY"
@@ -210,33 +269,36 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="6dp"
+                    android:layout_width="10dp"
                     android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:id="@+id/lin_unit_type"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:background="@drawable/bg_transaction_input"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_gray_default"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <com.black.base.widget.SpanCheckedTextView
                         android:id="@+id/unit_type"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/text_size_5"
                         android:maxLines="1"
                         android:text="USDT"
                         android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/T3"
                         android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/unit_type_arrow"
-                        style="@style/ContractSmallArrow"
-                        android:layout_marginRight="@dimen/default_padding" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/text_size_5"
+                        android:background="@drawable/qiehuan"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -246,6 +308,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/text_size_10"
                 android:layout_height="wrap_content">
 
                 <ProgressBar
@@ -317,6 +380,55 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/text_size_5"
+                android:layout_marginBottom="@dimen/text_size_16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_buy_count"
+                    style="@style/ContractBondTextLeft"
+                    android:text="@string/contract_can_buy_raise" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_sell_count"
+                    style="@style/ContractBondTextLeft"
+                    android:text="@string/contract_can_buy_fall" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_size_2"
+                    android:gravity="center_vertical">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/black"
+                    android:text="0.0000" />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black"
+                        android:text="/" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/sell_useable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/black"
+                    android:text="0.0000" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -334,7 +446,7 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:text="@string/contract_with_limit"
-                    android:textColor="@color/T2"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/text_size_12" />
 
                 <LinearLayout
@@ -345,6 +457,7 @@
 
                     <LinearLayout
                         style="@style/ButtonGray"
+                        android:visibility="gone"
                         android:id="@+id/lin_limit_type"
                         android:layout_width="70dp"
                         android:layout_height="26dp"
@@ -380,10 +493,18 @@
             <LinearLayout
                 android:id="@+id/lin_stop_value"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                >
 
-                <LinearLayout style="@style/ContractStopLoseEditLin">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    style="@style/ButtonGray"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <com.black.base.widget.SpanMaterialEditText
                         android:id="@+id/stop_surplus"
@@ -397,8 +518,12 @@
                     android:layout_width="@dimen/default_padding"
                     android:layout_height="match_parent" />
 
-                <LinearLayout style="@style/ContractStopLoseEditLin">
-
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    style="@style/ButtonGray"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
                     <com.black.base.widget.SpanMaterialEditText
                         android:id="@+id/stop_lose"
                         style="@style/ContractStopLoseEdit"
@@ -439,11 +564,17 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_freez_unit_1"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:text="0" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/freez_amount_1"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:paddingLeft="8dp"
                             android:text="USDT" />
                     </LinearLayout>
@@ -467,12 +598,18 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_buy_unit_1"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:text="0" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_buy_1"
                             style="@style/ContractBondTextRightText"
                             android:paddingLeft="8dp"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
@@ -484,13 +621,12 @@
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/not_login_btn"
                     style="@style/ContractBuyBtnStyle"
+                    android:layout_height="40dp"
                     android:background="@drawable/btn_t7"
+                    android:gravity="center"
                     android:checked="true"
                     android:text="@string/login_title" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -503,6 +639,8 @@
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_handle"
                     style="@style/ContractBuyBtnStyle"
+                    android:layout_height="40dp"
+                    android:gravity="center"
                     android:background="@drawable/btn_t7"
                     android:checked="true"
                     android:text="@string/contract_buy_raise" />
@@ -513,19 +651,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_buy_count"
-                        style="@style/ContractBondTextLeft"
-                        android:text="@string/contract_can_buy_raise" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/useable"
-                            style="@style/ContractBondTextRightText"
-                            android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_unit"
@@ -542,6 +673,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -583,11 +715,17 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_buy"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/useable_buy_unit"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:paddingLeft="8dp"
                             android:text="USDT" />
                     </LinearLayout>
@@ -601,6 +739,8 @@
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_handle_1"
                     style="@style/ContractBuyBtnStyle"
+                    android:layout_height="40dp"
+                    android:gravity="center"
                     android:background="@drawable/btn_t5"
                     android:checked="true"
                     android:text="@string/contract_sell_fall" />
@@ -611,20 +751,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
-                    <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_sell_count"
-                        style="@style/ContractBondTextLeft"
-                        android:text="@string/contract_can_buy_fall" />
 
                     <LinearLayout style="@style/ContractBondTextRightLin">
 
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/sell_useable"
-                            style="@style/ContractBondTextRightText"
-                            android:layout_height="match_parent"
-                            android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_useable_unit"
@@ -641,6 +773,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -682,13 +815,57 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_out_unit"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/sell_out"
                             style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:paddingLeft="8dp"
                             android:text="USDT" />
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.black.base.widget.SpanTextView
+                        style="@style/ContractBondTextLeft"
+                        android:text="@string/usable" />
+
+                    <LinearLayout style="@style/ContractBondTextRightLin"
+                        android:gravity="center_vertical|right">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/amount"
+                            style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/coin"
+                            style="@style/ContractBondTextRightText"
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:text="USDT" />
+                        <ImageView
+                            android:layout_width="19dp"
+                            android:layout_height="19dp"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:background="@drawable/huazhuan3"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -915,11 +1092,12 @@
                             android:maxLines="1"
                             android:text="@string/number_default"
                             android:textColor="@color/black_real"
-                            android:textSize="@dimen/text_size_16"
+                            android:textSize="@dimen/text_size_20"
                             android:textStyle="bold" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/current_price_cny"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -1138,12 +1316,12 @@
                 android:visibility="visible">
 
                 <com.black.base.widget.SpanTextView
+                    style="@style/ButtonGray"
                     android:id="@+id/deep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/bg_transaction_input"
-                    android:drawableRight="@drawable/icon_deep"
+                    android:drawableRight="@drawable/xiala"
                     android:drawablePadding="8dp"
                     android:includeFontPadding="false"
                     android:padding="8dp"

@@ -999,7 +999,7 @@
     <string name="simulation_base">模拟盘</string>
     <string name="contract_buy">开仓</string>
     <string name="contract_sell">平仓</string>
-    <string name="contract_with_limit">止盈止损</string>
+    <string name="contract_with_limit">止盈/止损</string>
     <string name="contract_buy_raise">买入/开多</string>
     <string name="contract_sell_fall">卖出/开空</string>
     <string name="contract_buy_fall">买入/平空</string>
@@ -1009,7 +1009,7 @@
     <string name="contract_can_buy_raise">可开多</string>
     <string name="contract_can_sell_fail">可平空</string>
     <string name="contract_can_sell_raise">可平多</string>
-    <string name="contract_can_buy_fall">可开空</string>
+    <string name="contract_can_buy_fall">/可开空</string>
     <string name="contract_buy_in">买入</string>
     <string name="contract_sell_out">卖出</string>
     <string name="contract_stop_surplus_price">止盈价</string>

@@ -91,7 +91,6 @@ class HomePageContractFragment : BaseFragment(),
     OnSeekBarChangeListener,
     EntrustCurrentHomeAdapter.OnHandleClickListener,
     OnItemClickListener,
-    OnTransactionMoreClickListener,
     ContractViewModel.OnContractModelListener,
     ContractDeepViewBinding.OnTransactionDeepListener {
     companion object {
@@ -128,6 +127,8 @@ class HomePageContractFragment : BaseFragment(),
     private var headerView: FragmentHomePageContractHeaderBinding? = null
     private var header1View: FragmentHomePageContractHeader1Binding? = null
     private var priceInputFlag: Boolean? = false
+    private var balanceDetailBean1: BalanceDetailBean? = null
+    private var contractSize: BigDecimal? = BigDecimal.ZERO
 
     //交易对杠杆分层
     private var leverageBracket: LeverageBracketBean? = null
@@ -475,7 +476,7 @@ class HomePageContractFragment : BaseFragment(),
     override fun onResume() {
         super.onResume()
         viewModel?.setTabType(tabType)
-        viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
+        //viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getLeverageBracketDetail()
         viewModel?.getAggTicker()
@@ -483,7 +484,7 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.onResume()
         initAdjustLeverageData()
         updateDear(isDear)
-        FutureService.getContractSize(viewModel?.getCurrentPair())
+        contractSize = FutureService.getContractSize(viewModel?.getCurrentPair())
         header1View?.currentPriceLayout?.setOnClickListener(this)
         if (header1View?.tagPrice?.text.toString().isNotEmpty()) {
 //            FutureService.getAvailableCloseData("10000", header1View?.tagPrice?.text.toString())
@@ -943,10 +944,10 @@ class HomePageContractFragment : BaseFragment(),
             }
             R.id.tab_transaction_coin -> {
                 if (tabType != ConstData.TAB_COIN) {
-                    changeTabType(ConstData.TAB_COIN)
+                    //changeTabType(ConstData.TAB_COIN)
                 }
             }
-            R.id.risk_info -> {
+            /*R.id.risk_info -> {
                 if (mContext != null && tabType == ConstData.TAB_LEVER && TextUtils.equals(
                         viewModel?.getCurrentPair(),
                         leverDetail?.pair
@@ -967,6 +968,7 @@ class HomePageContractFragment : BaseFragment(),
                     }
                 }
             }
+             */
             R.id.img_collect -> {
                 viewModel!!.toggleDearPair(isDear!!)
                     ?.subscribe(
@@ -1280,17 +1282,6 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    private fun changeTabType(tabType: Int) {
-        this.tabType = tabType
-        viewModel!!.setTabType(tabType)
-        viewModel!!.changePairSocket()
-        resetPriceLength()
-        resetAmountLength()
-        refreshCurrentWallet()
-        refreshTransactionHardViews()
-        refreshUsable()
-        refreshData()
-    }
 
     override fun onPairDeal(value: PairDeal) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
@@ -1466,6 +1457,7 @@ class HomePageContractFragment : BaseFragment(),
 
     //计算总额
     private fun computeTotal() {
+        /*
         val price = CommonUtil.parseDouble(
             header1View?.price?.text.toString().trim { it <= ' ' })
         val count = CommonUtil.parseDouble(
@@ -1520,6 +1512,8 @@ class HomePageContractFragment : BaseFragment(),
                 header1View?.useableBuy?.setText("0.0000")
             }
         }
+
+         */
     }
 
     /**
@@ -1542,12 +1536,12 @@ class HomePageContractFragment : BaseFragment(),
             ConstData.FUTURE_OPERATE_OPEN -> {
                 //可开多数量
                 header1View?.useable?.text =
-                    String.format("%.4f", availableOpenData.longMaxOpen?.toFloat())
+                    String.format("%.4f", availableOpenData.longMaxOpen.toFloat())
                 header1View?.sellUseable?.text =
-                    String.format("%.4f", availableOpenData.shortMaxOpen?.toFloat())
+                    String.format("%.4f", availableOpenData.shortMaxOpen.toFloat())
             }
             ConstData.FUTURE_OPERATE_CLOSE -> {
-                if (price?.isNotEmpty() == true && header1View?.tagPrice?.text.toString()
+                if (price.isNotEmpty() && header1View?.tagPrice?.text.toString()
                         .isNotEmpty()
                 ) {
                     var closeData: CloseData? = FutureService.getAvailableCloseData(
@@ -1669,14 +1663,16 @@ class HomePageContractFragment : BaseFragment(),
             "MARKET" -> {
                 typeDes = getString(R.string.order_type_market)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.GONE
-                binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
-                binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.linMarketPrice.visibility = View.VISIBLE
+                //binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
+                //binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.GONE
             }
             LIMIT -> {
                 typeDes = getString(R.string.order_type_limit)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
-                binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
-                binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.linMarketPrice.visibility = View.GONE
+                //binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
+                //binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.VISIBLE
             }
         }
         binding!!.fragmentHomePageContractHeader1.orderType.text = typeDes
@@ -1792,65 +1788,6 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.getMarketPrice(viewModel?.getCurrentPair())
         viewModel?.getSymbolTicker(viewModel?.getCurrentPair())
         viewModel?.getFundRate(viewModel?.getCurrentPair())
-    }
-
-    //刷新当前钱包
-    private fun refreshCurrentWallet() {
-        currentWallet = null
-        currentEstimatedWallet = null
-        viewModel!!.getCurrentWallet(tabType)
-    }
-
-    private fun refreshUsable() {
-        activity?.runOnUiThread {
-            //买入
-            if (transactionType == 1) {
-                if (currentBalanceSell != null) {
-                    binding!!.fragmentHomePageContractHeader1.useable.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceSell?.availableBalance?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            0,
-                            8
-                        )
-                    )
-                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceSell?.freeze?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            0,
-                            8
-                        )
-                    )
-                } else {
-                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
-                }
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
-            } else if (transactionType == 2) {
-                if (currentBalanceBuy != null) {
-                    binding!!.fragmentHomePageContractHeader1.useable.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            0,
-                            8
-                        )
-                    )
-                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(
-                        NumberUtil.formatNumberNoGroup(
-                            currentBalanceBuy?.freeze?.toDoubleOrNull(),
-                            RoundingMode.FLOOR,
-                            0,
-                            8
-                        )
-                    )
-                } else {
-
-                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
-                }
-                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
-            }
-        }
     }
 
     //当前委托
@@ -2023,16 +1960,6 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.setCurrentTimeInForceType(currentTimeInForceType)
     }
 
-    override fun onUserBalanceChanged(userBalance: UserBalance?) {
-        Log.d(TAG, "onUserBalanceChanged,coin = " + userBalance?.coin)
-        if (userBalance?.coin.equals(currentBalanceBuy?.coin)) {
-            currentBalanceBuy = userBalance
-        }
-        if (userBalance?.coin.equals(currentBalanceSell?.coin)) {
-            currentBalanceSell = userBalance
-        }
-        refreshUsable()
-    }
 
     override fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?) {
         Log.d(TAG, "onUserTradeOrderChanged,executedQty = " + userTradeOrder?.executedQty)
@@ -2059,270 +1986,6 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onTradePairInfo(pairStatus: PairStatus?) {
 
-    }
-
-    override fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?) {
-        observable?.subscribe(
-            HttpCallbackSimple(
-                mContext,
-                false,
-                object : NormalCallback<Pair<Wallet?, Wallet?>?>(mContext!!) {
-                    override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
-                        if (returnData != null) {
-                            currentWallet = returnData.first
-                            currentEstimatedWallet = returnData.second
-                        }
-                        refreshUsable()
-                    }
-
-                    override fun error(type: Int, error: Any?) {
-                        refreshUsable()
-                    }
-                })
-        )
-    }
-
-    override fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>> {
-        return object : Callback<Pair<UserBalance?, UserBalance?>>() {
-            override fun callback(returnData: Pair<UserBalance?, UserBalance?>?) {
-                if (returnData != null) {
-                    currentBalanceBuy = returnData.first
-                    currentBalanceSell = returnData.second
-                }
-                refreshUsable()
-            }
-
-            override fun error(type: Int, error: Any?) {
-//                if (currentWallet != null && currentEstimatedWallet != null
-//                    && TextUtils.equals(currentWallet?.coinType, viewModel!!.getCoinType()) && TextUtils.equals(currentEstimatedWallet?.coinType, viewModel!!.getSetName())) {
-//                    //如果当前资产数据符合当前交易对，在错误情况下不清空资产数据
-//                } else {
-//                    currentWallet = null
-//                    currentEstimatedWallet = null
-//                    refreshUsable()
-//                }
-            }
-
-        }
-    }
-
-    /**
-     * 更新总权益
-     */
-    override fun updateTotalProfit(totalProfit: String) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) {
-            binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
-
-        }
-    }
-
-    override fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>> {
-        return object : Callback<Pair<Wallet?, Wallet?>>() {
-            override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
-                if (returnData != null) {
-                    currentWallet = returnData.first
-                    currentEstimatedWallet = returnData.second
-                }
-                refreshUsable()
-            }
-
-            override fun error(type: Int, error: Any?) {
-                if (currentWallet != null && currentEstimatedWallet != null
-                    && TextUtils.equals(
-                        currentWallet?.coinType,
-                        viewModel!!.getCoinType()
-                    ) && TextUtils.equals(
-                        currentEstimatedWallet?.coinType,
-                        viewModel!!.getSetName()
-                    )
-                ) {
-                    //如果当前资产数据符合当前交易对，在错误情况下不清空资产数据
-                } else {
-                    currentWallet = null
-                    currentEstimatedWallet = null
-                    refreshUsable()
-                }
-            }
-
-        }
-    }
-
-    private var leverDetail: WalletLeverDetail? = null
-    override fun onWalletLeverDetail(leverDetail: WalletLeverDetail?) {
-        if (tabType == ConstData.TAB_LEVER && TextUtils.equals(
-                viewModel?.getCurrentPair(),
-                leverDetail?.pair
-            )
-        ) {
-            this.leverDetail = leverDetail
-            CommonUtil.checkActivityAndRunOnUI(mContext) {
-                val checkRiskRate =
-                    leverDetail?.riskRate == null || leverDetail.riskRate == BigDecimal.ZERO
-                binding?.actionBarLayout?.risk?.setText(
-                    String.format(
-                        "%s%s",
-                        if (checkRiskRate) nullAmount else if (leverDetail?.riskRate!! > BigDecimal(
-                                2
-                            )
-                        ) ">200.00" else NumberUtil.formatNumberNoGroupHardScale(
-                            leverDetail?.riskRate!! * BigDecimal(
-                                100
-                            ), 2
-                        ),
-                        if (checkRiskRate) nullAmount else "%"
-                    )
-                )
-                if (leverDetail?.riskRate == null || leverDetail.riskRate == BigDecimal.ZERO || leverDetail?.riskRate!! >= BigDecimal(
-                        2
-                    )
-                ) {
-                    binding?.actionBarLayout?.explodePrice?.setText(
-                        String.format(
-                            "%s%s",
-                            nullAmount,
-                            nullAmount
-                        )
-                    )
-                } else {
-                    val checkExplodePrice =
-                        leverDetail?.burstPrice == null || leverDetail.burstPrice == BigDecimal.ZERO
-                    binding?.actionBarLayout?.explodePrice?.setText(
-                        String.format(
-                            "%s%s",
-                            if (checkExplodePrice) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
-                                leverDetail?.burstPrice,
-                                9,
-                                0,
-                                viewModel?.getPrecision()!!
-                            ),
-                            if (checkExplodePrice || leverDetail?.afterCoinType == null) nullAmount else leverDetail.afterCoinType
-                        )
-                    )
-                }
-            }
-        } else {
-            this.leverDetail = null
-        }
-    }
-
-    override fun onLeverPairConfigCheck(hasLeverConfig: Boolean) {
-    }
-
-    override fun onRechargeClick(transactionMorePopup: TransactionMorePopup) {
-        fryingHelper.checkUserAndDoing(Runnable {
-            val bundle = Bundle()
-            bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
-            bundle.putString(ConstData.COIN_TYPE, viewModel!!.getCoinType())
-            BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(mFragment)
-        }, TRADE_INDEX)
-    }
-
-    override fun onExtractClick(transactionMorePopup: TransactionMorePopup) {
-        fryingHelper.checkUserAndDoing(Runnable {
-            val bundle = Bundle()
-            bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
-            bundle.putString(ConstData.COIN_TYPE, viewModel!!.getCoinType())
-            BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(mFragment)
-        }, TRADE_INDEX)
-    }
-
-    override fun onBillClick(transactionMorePopup: TransactionMorePopup) {
-        fryingHelper.checkUserAndDoing(Runnable {
-            //点击账户详情
-            val extras = Bundle()
-            extras.putString(ConstData.ROUTER_COIN_TYPE, viewModel!!.getCoinType())
-            BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras)
-                .go(mFragment)
-        }, TRADE_INDEX)
-    }
-
-    override fun onCollectClick(
-        transactionMorePopup: TransactionMorePopup,
-        btnCollect: CheckedTextView
-    ) {
-        viewModel!!.toggleDearPair(btnCollect.isChecked)
-            ?.subscribe(
-                HttpCallbackSimple(
-                    mContext,
-                    true,
-                    object : NormalCallback<HttpRequestResultString?>(mContext!!) {
-                        override fun callback(result: HttpRequestResultString?) {
-                            if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                                isDear = !isDear!!
-                                updateDear(isDear)
-                                val showMsg =
-                                    if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(
-                                        R.string.pair_collect_cancel_ok
-                                    )
-                                FryingUtil.showToast(mContext, showMsg)
-                            } else {
-                                FryingUtil.showToast(
-                                    mContext,
-                                    if (result == null) "null" else result.msg
-                                )
-                            }
-                        }
-                    })
-            )
-    }
-
-    override fun onChatRoomClick(transactionMorePopup: TransactionMorePopup, chatRoomId: String?) {
-    }
-
-    override fun onTradeOrderFastClick(tradeOrder: TradeOrder) {
-        if (currentOrderType.equals("MARKET")) {
-            return
-        }
-        header1View?.price?.setText(tradeOrder.formattedPrice?: "0.0")
-        val scaleAnim = AnimationUtils.loadAnimation(mContext, R.anim.transaction_price_anim)
-        header1View?.price?.startAnimation(scaleAnim)
-//        val amount = binding!!.fragmentHomePageContractHeader1.transactionQuota.text.toString().toDouble()
-//        val price = CommonUtil.parseDouble(tradeOrder.formattedPrice) ?: 0.0
-//        var usableAmount = 0.0
-//        if (transactionType == 1) {
-//            usableAmount = if (currentEstimatedWallet != null && price != null && price != 0.0) {
-//                min(amount, currentEstimatedWallet?.coinAmount!!.toDouble() / price)
-//            } else {
-//                0.0
-//            }
-//        } else if (transactionType == 2) {
-//            usableAmount = if (currentWallet != null) {
-//                min(amount, currentWallet?.coinAmount!!.toDouble())
-//            } else {
-//                0.0
-//            }
-//        }
-//        if (usableAmount != 0.0) {
-//            binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(NumberUtil.formatNumberNoGroup(usableAmount, RoundingMode.FLOOR, 0, viewModel!!.getAmountLength()))
-//        } else {
-//            binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("0.0")
-//        }
-    }
-
-    override fun onDeepChanged(deep: Deep) {
-        onDeepChoose()
-    }
-
-    override fun onUserBanlance(observable: Observable<HttpRequestResultDataList<UserBalance?>?>?) {
-        observable!!.subscribe(
-            HttpCallbackSimple(
-                mContext,
-                false,
-                object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
-                    override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            Log.d(TAG, "onUserBanlance succ")
-                            userBalance = returnData.data
-                        } else {
-                            Log.d(TAG, "onUserBanlance data null or fail")
-                        }
-                    }
-
-                    override fun error(type: Int, error: Any?) {
-                        Log.d(TAG, "onUserBanlance error")
-                    }
-                })
-        )
     }
 
     /**
@@ -2363,6 +2026,35 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onLeverageDetail(data: LeverageBracketBean?) {
         leverageBracket = data
+    }
+    /**
+     * 更新总权益
+     */
+    override fun updateTotalProfit(totalProfit: String) {
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+
+        }
+    }
+
+    override fun futureBalance(balanceDetailBean: BalanceDetailBean?) {
+        balanceDetailBean1 = balanceDetailBean
+        binding?.fragmentHomePageContractHeader1?.amount?.setText(balanceDetailBean1?.availableBalance.toString())
+    }
+
+    override fun onLeverPairConfigCheck(hasLeverConfig: Boolean) {
+    }
+    override fun onTradeOrderFastClick(tradeOrder: TradeOrder) {
+        if (currentOrderType.equals("MARKET")) {
+            return
+        }
+        header1View?.price?.setText(tradeOrder.formattedPrice?: "0.0")
+        val scaleAnim = AnimationUtils.loadAnimation(mContext, R.anim.transaction_price_anim)
+        header1View?.price?.startAnimation(scaleAnim)
+    }
+
+    override fun onDeepChanged(deep: Deep) {
+        onDeepChoose()
     }
 
     private fun updateFundTime(nextCollectionTime: Long?) {
@@ -2452,6 +2144,317 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
     }
+    //刷新当前钱包
+    private fun refreshCurrentWallet() {
+        /*currentWallet = null
+        currentEstimatedWallet = null
+        viewModel!!.getCurrentWallet(tabType)
 
+         */
+    }
+
+    private fun refreshUsable() {
+        /*activity?.runOnUiThread {
+            //买入
+            if (transactionType == 1) {
+                if (currentBalanceSell != null) {
+                    binding!!.fragmentHomePageContractHeader1.useable.setText(
+                        NumberUtil.formatNumberNoGroup(
+                            currentBalanceSell?.availableBalance?.toDoubleOrNull(),
+                            RoundingMode.FLOOR,
+                            0,
+                            8
+                        )
+                    )
+                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(
+                        NumberUtil.formatNumberNoGroup(
+                            currentBalanceSell?.freeze?.toDoubleOrNull(),
+                            RoundingMode.FLOOR,
+                            0,
+                            8
+                        )
+                    )
+                } else {
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
+                }
+            }
+            else if (transactionType == 2) {
+                if (currentBalanceBuy != null) {
+                    binding!!.fragmentHomePageContractHeader1.useable.setText(
+                        NumberUtil.formatNumberNoGroup(
+                            currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
+                            RoundingMode.FLOOR,
+                            0,
+                            8
+                        )
+                    )
+                    binding!!.fragmentHomePageContractHeader1.freezAmount.setText(
+                        NumberUtil.formatNumberNoGroup(
+                            currentBalanceBuy?.freeze?.toDoubleOrNull(),
+                            RoundingMode.FLOOR,
+                            0,
+                            8
+                        )
+                    )
+                } else {
+
+                    binding!!.fragmentHomePageContractHeader1.useable.setText("0.0000")
+                }
+                binding!!.fragmentHomePageContractHeader1.useableBuy.setText("0.0000")
+            }
+
+        }*/
+    }
+   /* override fun onUserBalanceChanged(userBalance: UserBalance?) {
+      Log.d(TAG, "onUserBalanceChanged,coin = " + userBalance?.coin)
+      if (userBalance?.coin.equals(currentBalanceBuy?.coin)) {
+          currentBalanceBuy = userBalance
+          header1View!!.useableBuy.text = currentBalanceBuy?.availableBalance.toString()
+      }
+      if (userBalance?.coin.equals(currentBalanceSell?.coin)) {
+          header1View!!.useableBuy.text = currentBalanceBuy?.availableBalance.toString()
+          currentBalanceSell = userBalance
+      }
+      refreshUsable()
+  }
+
+    */
+    /*override fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?) {
+           observable?.subscribe(
+               HttpCallbackSimple(
+                   mContext,
+                   false,
+                   object : NormalCallback<Pair<Wallet?, Wallet?>?>(mContext!!) {
+                       override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
+                           if (returnData != null) {
+                               currentWallet = returnData.first
+                               currentEstimatedWallet = returnData.second
+                           }
+                           refreshUsable()
+                       }
+
+                       override fun error(type: Int, error: Any?) {
+                           refreshUsable()
+                       }
+                   })
+           )
+       }
+
+        */
+
+    /* override fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>> {
+         return object : Callback<Pair<UserBalance?, UserBalance?>>() {
+             override fun callback(returnData: Pair<UserBalance?, UserBalance?>?) {
+                 if (returnData != null) {
+                     //currentBalanceBuy = returnData.first
+                     //currentBalanceSell = returnData.second
+                 }
+                // refreshUsable()
+             }
+
+             override fun error(type: Int, error: Any?) {
+ //                if (currentWallet != null && currentEstimatedWallet != null
+ //                    && TextUtils.equals(currentWallet?.coinType, viewModel!!.getCoinType()) && TextUtils.equals(currentEstimatedWallet?.coinType, viewModel!!.getSetName())) {
+ //                    //如果当前资产数据符合当前交易对，在错误情况下不清空资产数据
+ //                } else {
+ //                    currentWallet = null
+ //                    currentEstimatedWallet = null
+ //                    refreshUsable()
+ //                }
+             }
+
+         }
+     }
+
+     */
+
+
+    /*override fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>> {
+        return object : Callback<Pair<Wallet?, Wallet?>>() {
+            override fun callback(returnData: Pair<Wallet?, Wallet?>?) {
+                if (returnData != null) {
+                    currentWallet = returnData.first
+                    currentEstimatedWallet = returnData.second
+                }
+                refreshUsable()
+            }
+
+            override fun error(type: Int, error: Any?) {
+                if (currentWallet != null && currentEstimatedWallet != null
+                    && TextUtils.equals(
+                        currentWallet?.coinType,
+                        viewModel!!.getCoinType()
+                    ) && TextUtils.equals(
+                        currentEstimatedWallet?.coinType,
+                        viewModel!!.getSetName()
+                    )
+                ) {
+                    //如果当前资产数据符合当前交易对，在错误情况下不清空资产数据
+                } else {
+                    currentWallet = null
+                    currentEstimatedWallet = null
+                    refreshUsable()
+                }
+            }
+
+        }
+    }
+
+     */
+
+    /* private var leverDetail: WalletLeverDetail? = null
+     override fun onWalletLeverDetail(leverDetail: WalletLeverDetail?) {
+         if (tabType == ConstData.TAB_LEVER && TextUtils.equals(
+                 viewModel?.getCurrentPair(),
+                 leverDetail?.pair
+             )
+         ) {
+             this.leverDetail = leverDetail
+             CommonUtil.checkActivityAndRunOnUI(mContext) {
+                 val checkRiskRate =
+                     leverDetail?.riskRate == null || leverDetail.riskRate == BigDecimal.ZERO
+                 binding?.actionBarLayout?.risk?.setText(
+                     String.format(
+                         "%s%s",
+                         if (checkRiskRate) nullAmount else if (leverDetail?.riskRate!! > BigDecimal(
+                                 2
+                             )
+                         ) ">200.00" else NumberUtil.formatNumberNoGroupHardScale(
+                             leverDetail?.riskRate!! * BigDecimal(
+                                 100
+                             ), 2
+                         ),
+                         if (checkRiskRate) nullAmount else "%"
+                     )
+                 )
+                 if (leverDetail?.riskRate == null || leverDetail.riskRate == BigDecimal.ZERO || leverDetail?.riskRate!! >= BigDecimal(
+                         2
+                     )
+                 ) {
+                     binding?.actionBarLayout?.explodePrice?.setText(
+                         String.format(
+                             "%s%s",
+                             nullAmount,
+                             nullAmount
+                         )
+                     )
+                 } else {
+                     val checkExplodePrice =
+                         leverDetail?.burstPrice == null || leverDetail.burstPrice == BigDecimal.ZERO
+                     binding?.actionBarLayout?.explodePrice?.setText(
+                         String.format(
+                             "%s%s",
+                             if (checkExplodePrice) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
+                                 leverDetail?.burstPrice,
+                                 9,
+                                 0,
+                                 viewModel?.getPrecision()!!
+                             ),
+                             if (checkExplodePrice || leverDetail?.afterCoinType == null) nullAmount else leverDetail.afterCoinType
+                         )
+                     )
+                 }
+             }
+         } else {
+             this.leverDetail = null
+         }
+     }
+
+     */
+
+
+    /* override fun onRechargeClick(transactionMorePopup: TransactionMorePopup) {
+         fryingHelper.checkUserAndDoing(Runnable {
+             val bundle = Bundle()
+             bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_EXCHANGE)
+             bundle.putString(ConstData.COIN_TYPE, viewModel!!.getCoinType())
+             BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(mFragment)
+         }, TRADE_INDEX)
+     }
+
+     override fun onExtractClick(transactionMorePopup: TransactionMorePopup) {
+         fryingHelper.checkUserAndDoing(Runnable {
+             val bundle = Bundle()
+             bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
+             bundle.putString(ConstData.COIN_TYPE, viewModel!!.getCoinType())
+             BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(mFragment)
+         }, TRADE_INDEX)
+     }
+
+
+     */
+    /* override fun onBillClick(transactionMorePopup: TransactionMorePopup) {
+         fryingHelper.checkUserAndDoing(Runnable {
+             //点击账户详情
+             val extras = Bundle()
+             extras.putString(ConstData.ROUTER_COIN_TYPE, viewModel!!.getCoinType())
+             BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras)
+                 .go(mFragment)
+         }, TRADE_INDEX)
+     }
+
+     */
+
+    /* override fun onCollectClick(
+         transactionMorePopup: TransactionMorePopup,
+         btnCollect: CheckedTextView
+     ) {
+         viewModel!!.toggleDearPair(btnCollect.isChecked)
+             ?.subscribe(
+                 HttpCallbackSimple(
+                     mContext,
+                     true,
+                     object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                         override fun callback(result: HttpRequestResultString?) {
+                             if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                                 isDear = !isDear!!
+                                 updateDear(isDear)
+                                 val showMsg =
+                                     if (isDear!!) getString(R.string.pair_collect_add_ok) else getString(
+                                         R.string.pair_collect_cancel_ok
+                                     )
+                                 FryingUtil.showToast(mContext, showMsg)
+                             } else {
+                                 FryingUtil.showToast(
+                                     mContext,
+                                     if (result == null) "null" else result.msg
+                                 )
+                             }
+                         }
+                     })
+             )
+     }
+
+     */
+
+    /* override fun onChatRoomClick(transactionMorePopup: TransactionMorePopup, chatRoomId: String?) {
+     }
+     */
+
+
+
+/* override fun onUserBanlance(observable: Observable<HttpRequestResultDataList<UserBalance?>?>?) {
+     observable!!.subscribe(
+         HttpCallbackSimple(
+             mContext,
+             false,
+             object : Callback<HttpRequestResultDataList<UserBalance?>?>() {
+                 override fun callback(returnData: HttpRequestResultDataList<UserBalance?>?) {
+                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                         Log.d(TAG, "onUserBanlance succ")
+                         userBalance = returnData.data
+                     } else {
+                         Log.d(TAG, "onUserBanlance data null or fail")
+                     }
+                 }
+
+                 override fun error(type: Int, error: Any?) {
+                     Log.d(TAG, "onUserBanlance error")
+                 }
+             })
+     )
+ }
+
+ */
 
 }
