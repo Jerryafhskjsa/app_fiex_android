@@ -71,6 +71,7 @@ import com.fbsex.exchange.databinding.FragmentHomePageContractHeader1Binding
 import com.fbsex.exchange.databinding.FragmentHomePageContractHeaderBinding
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
+import retrofit2.http.Field
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -131,6 +132,7 @@ class HomePageContractFragment : BaseFragment(),
     private var headerView: FragmentHomePageContractHeaderBinding? = null
     private var header1View: FragmentHomePageContractHeader1Binding? = null
     private var priceInputFlag: Boolean? = false
+    private var leverage: Int? = 10
     private var balanceDetailBean1: BalanceDetailBean? = null
     private var contractSize: BigDecimal? = BigDecimal.ZERO
 
@@ -588,6 +590,7 @@ class HomePageContractFragment : BaseFragment(),
         binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
         binding?.actionBarLayout?.headCharts?.setOnClickListener(this)
         binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
+        binding?.actionBarLayout?.exchange?.setOnClickListener(this)
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
         binding?.actionBarLayout?.imgCollect?.setOnClickListener(this)
@@ -618,6 +621,8 @@ class HomePageContractFragment : BaseFragment(),
         header1View?.linLimitType?.setOnClickListener(this)
         header1View?.btnBuy?.setOnClickListener(this)
         header1View?.btnSale?.setOnClickListener(this)
+        header1View?.trassfer?.setOnClickListener(this)
+        header1View?.beishu?.setOnClickListener(this)
         header1View?.price?.addTextChangedListener(object :
             TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -927,13 +932,27 @@ class HomePageContractFragment : BaseFragment(),
             fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
         } else {
         when (v.id) {
+            R.id.trassfer -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            }
+            R.id.exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            }
             R.id.current_price_layout -> {
                 Currentdialog()
             }
             R.id.not_login_btn -> {
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }
-            R.id.lin_buy_multiple -> {
+            R.id.beishu -> {
+                if (CookieUtil.getUserInfo(context!!) == null) {
+                    //未登录，请求登陆
+                    fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
+                } else {
+                    showOrientationMultipleDialog(buyMultiChooseBean)
+                }
+            }
+            /*R.id.lin_buy_multiple -> {
                 if (CookieUtil.getUserInfo(context!!) == null) {
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
@@ -949,6 +968,8 @@ class HomePageContractFragment : BaseFragment(),
                     showOrientationMultipleDialog(sellMultiChooseBean)
                 }
             }
+
+             */
             R.id.tab_transaction_coin -> {
                 if (tabType != ConstData.TAB_COIN) {
                     //changeTabType(ConstData.TAB_COIN)
@@ -1004,7 +1025,7 @@ class HomePageContractFragment : BaseFragment(),
             }
 
             R.id.lin_order_type -> {
-                currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else "MARKET"
+                currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                    currentOrderType,
@@ -1021,6 +1042,9 @@ class HomePageContractFragment : BaseFragment(),
                                 fillLimitPrice()
 //                                    binding?.fragmentHomePageContractHeader1?.relVolume?.visibility = View.VISIBLE
                             } else if (currentOrderType.equals("MARKET")) {
+                            }
+                            else {
+                                fillLimitPrice()
                             }
                         }
                     }).show()
@@ -1198,19 +1222,21 @@ class HomePageContractFragment : BaseFragment(),
             }
             //卖出/开空
             R.id.btn_handle_1 -> {
-                var positionSide: String? = "LONG"
-                var orderSide: String? = "SELL"
+                var positionSide: String = "SHORT"
+                var orderSide: String = "SELL"
                 when (transactionType) {
                     ConstData.FUTURE_OPERATE_OPEN -> {
-                        orderSide = "BUY"
+                        orderSide = "SELL"
                         positionSide = "SHORT"
                     }
-                    ConstData.FUTURE_OPERATE_CLOSE -> {
+                   /* ConstData.FUTURE_OPERATE_CLOSE -> {
                         positionSide = "LONG"
                         orderSide = "SELL"
                     }
+
+                    */
                 }
-                createOrderFuture(positionSide!!, orderSide!!)
+                createOrderFuture(positionSide, orderSide)
             }
             //买入/开多
             R.id.btn_handle -> mContext?.let {
@@ -1225,10 +1251,12 @@ class HomePageContractFragment : BaseFragment(),
                             positionSide = "LONG"
                             orderSide = "BUY"
                         }
-                        ConstData.FUTURE_OPERATE_CLOSE -> {
+                        /*ConstData.FUTURE_OPERATE_CLOSE -> {
                             positionSide = "SHORT"
                             orderSide = "SELL"
                         }
+
+                         */
 
                     }
                     createOrderFuture(positionSide, orderSide)
@@ -1358,6 +1386,7 @@ class HomePageContractFragment : BaseFragment(),
                 2,
                 BigDecimal.ROUND_HALF_DOWN
             )
+
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
             return currentBalanceBuy?.availableBalance?.toBigDecimal()
         }
@@ -1462,8 +1491,8 @@ class HomePageContractFragment : BaseFragment(),
         if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null) {
             return
         }
-        var longLeverage = buyMultiChooseBean?.defaultMultiple
-        var shortLeverage = sellMultiChooseBean?.defaultMultiple
+        var longLeverage = leverage
+        var shortLeverage = leverage
         if (longLeverage == null || shortLeverage == null) {
             return
         }
@@ -1517,8 +1546,8 @@ class HomePageContractFragment : BaseFragment(),
         ) {
             return
         }
-        var longLeverage = buyMultiChooseBean?.defaultMultiple
-        var shortLeverage = sellMultiChooseBean?.defaultMultiple
+        var longLeverage = leverage
+        var shortLeverage = leverage
         var availableOpenData = FutureService.getAvailableOpenData(
             BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount),
             BigDecimal.ZERO
@@ -1599,10 +1628,11 @@ class HomePageContractFragment : BaseFragment(),
     private fun refreshOrderType(type: String?) {
         var typeDes: String? = null
         when (type) {
-            "MARKET" -> {
+            MARKET -> {
                 typeDes = getString(R.string.order_type_market)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.GONE
                 binding!!.fragmentHomePageContractHeader1.linMarketPrice.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.weituoPrice.visibility = View.GONE
                 //binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.GONE
                 //binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.GONE
             }
@@ -1610,8 +1640,15 @@ class HomePageContractFragment : BaseFragment(),
                 typeDes = getString(R.string.order_type_limit)
                 binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
                 binding!!.fragmentHomePageContractHeader1.linMarketPrice.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.weituoPrice.visibility = View.GONE
                 //binding!!.fragmentHomePageContractHeader1.linPrinceCny.visibility = View.VISIBLE
                 //binding!!.fragmentHomePageContractHeader1.linLimitType.visibility = View.VISIBLE
+            }
+            PLAN -> {
+                typeDes = getString(R.string.jihua_price)
+                binding!!.fragmentHomePageContractHeader1.linPrice.visibility = View.VISIBLE
+                binding!!.fragmentHomePageContractHeader1.linMarketPrice.visibility = View.GONE
+                binding!!.fragmentHomePageContractHeader1.weituoPrice.visibility = View.VISIBLE
             }
         }
         binding!!.fragmentHomePageContractHeader1.orderType.text = typeDes
@@ -1666,17 +1703,17 @@ class HomePageContractFragment : BaseFragment(),
             header1View?.countProgress?.progressDrawable =
                 countProgressSale
             header1View?.amountZero?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             header1View?.amountTwenty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             header1View?.amountFourty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             header1View?.amountSixty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             header1View?.amountEighty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             header1View?.amountAll?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
             binding!!.actionBarLayout.actionBarTitle.setText(
@@ -1799,6 +1836,21 @@ class HomePageContractFragment : BaseFragment(),
 
         val tigerLose: String = header1View?.stopLose?.text.toString().trim()
         val tigerLoseValue =  NumberUtil.toBigDecimal(tigerLose)
+        var stopPrice:BigDecimal? = null
+        var triggerPriceType: String? = null
+        var entrustType: String? = null
+        if (currentOrderType == "PLAN")
+        {
+            if (header1View?.price?.text == null){
+                FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
+                return
+            }
+            entrustType = "STOP"
+            triggerPriceType = "MARK_PRICE"
+            val price2: String = header1View?.price?.text.toString().trim()
+            stopPrice = NumberUtil.toBigDecimal(price2)
+
+        }
 
         val createRunnable = Runnable {
             FutureApiServiceHelper.createOrder(context,
@@ -1813,9 +1865,12 @@ class HomePageContractFragment : BaseFragment(),
                 if (tigerStop == true) tigerLoseValue else null,
                 false,
                 true,
+                stopPrice?.toDouble(),
+                triggerPriceType,
+                entrustType,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null) {
+                        if (returnData != null ) {
                             //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
                             header1View?.price?.setText(price)
                             header1View?.transactionQuota?.setText("0.0")
@@ -1879,8 +1934,10 @@ class HomePageContractFragment : BaseFragment(),
                binding!!.fragmentHomePageContractHeader1.cang.text =
                    getString(R.string.contract_fiexble_position)
            }
-           binding!!.fragmentHomePageContractHeader1.cangBeishu.text = data[0]!!.leverage.toString() + "X"
-
+           binding!!.fragmentHomePageContractHeader1.cangBeishu.text = data[0]!!.leverage.toString()
+           leverage = data[0]!!.leverage
+           val price = header1View?.price?.text
+           updateCanOpenAmount(price.toString())
        }
 
     }

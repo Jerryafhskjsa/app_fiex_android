@@ -13,6 +13,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
 import com.black.util.Callback
+import retrofit2.http.Field
 
 object FutureApiServiceHelper {
 
@@ -677,6 +678,9 @@ object FutureApiServiceHelper {
         triggerStopPrice: Number?,
         reduceOnly: Boolean?,
         isShowLoading: Boolean,
+        stopPrice: Double?,
+        triggerPriceType: String?,
+        entrustType: String?,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
         if (context == null || callback == null) {
@@ -694,7 +698,10 @@ object FutureApiServiceHelper {
                 origQty,
                 triggerProfitPrice,
                 triggerStopPrice,
-                reduceOnly
+                reduceOnly,
+                stopPrice,
+                triggerPriceType,
+                entrustType
             )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

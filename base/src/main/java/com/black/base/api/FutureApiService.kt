@@ -241,7 +241,10 @@ interface FutureApiService {
         @Field("origQty") origQty: Int?,
         @Field("triggerProfitPrice") triggerProfitPrice: Number?,
         @Field("triggerStopPrice") triggerStopPrice: Number?,
-        @Field("reduceOnly") reduceOnly: Boolean?
+        @Field("reduceOnly") reduceOnly: Boolean?,
+        @Field("stopPrice") stopPrice: Double?,
+        @Field("triggerPriceType") triggerPriceType: String?,
+        @Field("entrustType") entrustType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

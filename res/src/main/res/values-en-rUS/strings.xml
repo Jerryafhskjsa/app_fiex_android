@@ -1123,6 +1123,9 @@
     <string name="zhiying_zhisun">止盈止损</string>
     <string name="zoushitu">走势图</string>
     <string name="zhankai">展开图表</string>
+    <string name="chufa_price">触发价</string>
+    <string name="weituo_price">委托价</string>
+    <string name="jihua_price">计划委托</string>
 
 </resources>
 

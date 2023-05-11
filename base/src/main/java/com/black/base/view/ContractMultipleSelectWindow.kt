@@ -109,7 +109,7 @@ class ContractMultipleSelectWindow(
         btnMultiAdd = contentView.findViewById(R.id.multi_add)
         countBar = contentView.findViewById(R.id.count_bar)
         countBar.max = bean?.maxMultiple!!
-        countBar?.setProgress(bean?.defaultMultiple!!,true)
+        countBar?.setProgress(bean.defaultMultiple!!,true)
         countBar.setOnSeekBarChangeListener(this)
         progressBar = contentView.findViewById(R.id.count_progress)
         zeroView = contentView.findViewById(R.id.amount_zero)

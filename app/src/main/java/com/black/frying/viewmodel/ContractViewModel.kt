@@ -24,6 +24,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.frying.fragment.PLAN
 import com.black.frying.service.FutureService
 import com.black.frying.service.socket.FiexSocketManager
 import com.black.net.HttpRequestResult

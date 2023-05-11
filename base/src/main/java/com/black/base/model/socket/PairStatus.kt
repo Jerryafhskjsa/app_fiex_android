@@ -146,6 +146,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
             for (i in temp.indices) {
                 typeList.add(temp[i])
             }
+            typeList.add("PLAN")
         }
         return typeList
     }

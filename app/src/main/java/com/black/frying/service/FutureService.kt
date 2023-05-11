@@ -840,7 +840,7 @@ object FutureService {
     /**
      * 下单
      */
-    fun createOrder(
+   /* fun createOrder(
         context: Context?,
         orderSide: String,
         orderType: String,
@@ -863,6 +863,8 @@ object FutureService {
             null,
             reduceOnly,
             false,
+            null,
+            null,null,
             object : Callback<HttpRequestResultBean<String>?>() {
                 override fun callback(returnData: HttpRequestResultBean<String>?) {
                     if (returnData != null) {
@@ -876,6 +878,8 @@ object FutureService {
 
             })
     }
+
+    */
 
     /**
      * 获取用户的阶梯费率

@@ -3,5 +3,5 @@
     <item android:drawable="@drawable/icon_transaction_thumb_buy" android:state_pressed="true" />
     <item android:drawable="@drawable/icon_transaction_thumb_buy" android:state_focused="true" />
     <item android:drawable="@drawable/icon_transaction_thumb_buy" android:state_checked="true" />
-    <item android:drawable="@drawable/icon_transaction_thumb_default" />
+    <item android:drawable="@drawable/black_yuan" />
 </selector>
