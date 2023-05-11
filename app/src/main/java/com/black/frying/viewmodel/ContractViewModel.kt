@@ -240,7 +240,8 @@ class ContractViewModel(
      * 获取仓位列表
      */
     private fun getPositionData() {
-        FutureApiServiceHelper.getPositionList(context, null, false,
+        var symbol:String? = currentPairStatus.pair
+        FutureApiServiceHelper.getPositionList(context, symbol, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
@@ -550,11 +551,13 @@ class ContractViewModel(
 //                    Log.d("ttt------>floatProfit", floatProfit.toString())
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
+                    var available: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
+                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                     }
                     onContractModelListener?.futureBalance(balanceDetailBean)
-                    onContractModelListener?.updateTotalProfit(totalProfit.toString())
+                    onContractModelListener?.updateTotalProfit(totalProfit.toString(),available.toString())
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
 
@@ -1269,7 +1272,7 @@ class ContractViewModel(
         /**
          * 更新总权益
          */
-        fun updateTotalProfit(totalProfit: String)
+        fun updateTotalProfit(totalProfit: String,available:String)
 
         fun futureBalance(balanceDetailBean: BalanceDetailBean?)
 

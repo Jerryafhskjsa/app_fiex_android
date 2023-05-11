@@ -1170,7 +1170,7 @@ object FutureService {
         return BigDecimal(maxNominalValue)
             .minus(BigDecimal(positionValue.toString()))
             .minus(orderValue)
-            .divide(inputPrice.times(contractSize!!), 8, RoundingMode.DOWN)
+            .divide(inputPrice.times(contractSize?: BigDecimal.ZERO), 8, RoundingMode.DOWN)
     }
 
     /**

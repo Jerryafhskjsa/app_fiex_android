@@ -32,7 +32,7 @@ object ConstData {
     const val DEPTH_FUTURE_TYPE = 1
 
     const val CONTRACT_REC_HOLD_AMOUNT = 0//当前持仓tab
-    const val CONTRACT_REC_WITH_LIMIE = 1//止盈止损tab
+    const val CONTRACT_REC_WITH_LIMIE = 1//当前委托tab
     const val CONTRACT_REC_CURRENT = 2//计划委托tab
 
     const val USER_VERIFY_NO = "0"
@@ -324,6 +324,9 @@ object ConstData {
 
     const val TAB_COIN = 4 // 币币交易
     const val TAB_LEVER = 8 //杠杆交易
+
+    const val TAB_CROSSED = "CROSSED" // 全仓
+    const val TAB_ISOLATED = "ISOLATED" //逐仓
 
     const val TAB_EXCHANGE = 0
     const val TAB_WITHDRAW = 1

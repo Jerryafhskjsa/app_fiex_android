@@ -1,5 +1,6 @@
 package com.black.frying.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -80,6 +81,7 @@ import kotlin.math.pow
 
 const val LIMIT = "LIMIT"
 const val MARKET = "MARKET"
+const val PLAN = "PLAN"
 
 //首页合约简介
 @Route(
@@ -112,6 +114,7 @@ class HomePageContractFragment : BaseFragment(),
 
     private var transactionType = ConstData.FUTURE_OPERATE_OPEN // 1开仓,2平仓
     private var tabType = ConstData.TAB_COIN
+    private var positionType = ConstData.TAB_CROSSED
 
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
@@ -290,6 +293,9 @@ class HomePageContractFragment : BaseFragment(),
     }
     private fun isMarket() :Boolean{
         return currentOrderType == MARKET;
+    }
+    private fun isPlan() :Boolean{
+        return currentOrderType == PLAN;
     }
     private fun buildByOrderType() {
 
@@ -1283,79 +1289,6 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-
-    override fun onPairDeal(value: PairDeal) {
-        CommonUtil.checkActivityAndRunOnUI(mContext) {
-            updateCurrentPairPrice(value.p)
-        }
-    }
-
-    override fun onPlanData(data: PlanUnionBean?) {
-        var count = data?.planList?.size!! + data?.limitPriceList?.size!!
-        updateTabTitles(ConstData.CONTRACT_REC_CURRENT, count)
-    }
-
-    override fun onProfitData(data: ArrayList<ProfitsBean?>?) {
-        updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, data?.size)
-    }
-
-    override fun onPositionData(data: ArrayList<PositionBean?>?) {
-        updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
-    }
-
-    override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        //显示滑块选择的数量
-        binding!!.fragmentHomePageContractHeader1.countProgress.progress = progress
-        val amountPercent = progress.toDouble() / seekBar.max
-        val max: BigDecimal? = getMaxAmount()
-        if (!inputNumber!!) {
-            if (max == null || max == BigDecimal.ZERO) {
-                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("0.00")
-            } else {
-                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(
-                    NumberUtil.formatNumberNoGroup(
-                        max * BigDecimal(amountPercent),
-                        RoundingMode.FLOOR,
-                        0,
-                        viewModel!!.getAmountLength()
-                    )
-                )
-            }
-        }
-        onCountProgressClick(progress * 5 / 100)
-    }
-
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        when {
-            isVisibleToUser -> {
-                //setCurrentPairStatus(currentPairStatus);
-            }
-        }
-    }
-
-    override fun doResetSkinResources() {
-        colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
-        colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
-        colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
-        val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
-        val drawable = SkinCompatResources.getDrawable(context, R.drawable.divider_list_item_l1)
-        drawable.alpha = (0.6 * 255).toInt()
-        decoration.setDrawable(drawable)
-        binding!!.fragmentHomePageContractHeader1.price.resetRes()
-        binding!!.fragmentHomePageContractHeader1.transactionQuota.resetRes()
-        countProgressBuy =
-            SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
-        countProgressSale =
-            SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
-        //        countProgress.setEnabled(false);
-        deepViewBinding!!.doResetSkinResources()
-    }
-
     private fun onCountProgressClick(type: Int) {
         when (type) {
             0 -> {
@@ -1918,6 +1851,93 @@ class HomePageContractFragment : BaseFragment(),
         }, Date(), 1000)
     }
 
+
+    override fun onPairDeal(value: PairDeal) {
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            updateCurrentPairPrice(value.p)
+        }
+    }
+
+    override fun onPlanData(data: PlanUnionBean?) {
+        updateTabTitles(ConstData.CONTRACT_REC_CURRENT, data?.limitPriceList?.size!!)
+        updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE,data.planList?.size!! )
+    }
+
+    override fun onProfitData(data: ArrayList<ProfitsBean?>?) {
+        //updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, data?.size)
+    }
+//初始化杠杆倍数方向
+    @SuppressLint("SetTextI18n")
+    override fun onPositionData(data: ArrayList<PositionBean?>?) {
+        updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
+       if ( data?.size != null && data.size > 0){
+           if (positionType == ConstData.TAB_CROSSED) {
+               binding!!.fragmentHomePageContractHeader1.cang.text =
+                   getString(R.string.contract_all_position)
+           }
+           else {
+               binding!!.fragmentHomePageContractHeader1.cang.text =
+                   getString(R.string.contract_fiexble_position)
+           }
+           binding!!.fragmentHomePageContractHeader1.cangBeishu.text = data[0]!!.leverage.toString() + "X"
+
+       }
+
+    }
+
+    override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+        //显示滑块选择的数量
+        binding!!.fragmentHomePageContractHeader1.countProgress.progress = progress
+        val amountPercent = progress.toDouble() / seekBar.max
+        val max: BigDecimal? = getMaxAmount()
+        if (!inputNumber!!) {
+            if (max == null || max == BigDecimal.ZERO) {
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText("0.00")
+            } else {
+                binding!!.fragmentHomePageContractHeader1.transactionQuota.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        max * BigDecimal(amountPercent),
+                        RoundingMode.FLOOR,
+                        0,
+                        viewModel!!.getAmountLength()
+                    )
+                )
+            }
+        }
+        onCountProgressClick(progress * 5 / 100)
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        when {
+            isVisibleToUser -> {
+                //setCurrentPairStatus(currentPairStatus);
+            }
+        }
+    }
+
+    override fun doResetSkinResources() {
+        colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
+        colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
+        colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
+        val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
+        val drawable = SkinCompatResources.getDrawable(context, R.drawable.divider_list_item_l1)
+        drawable.alpha = (0.6 * 255).toInt()
+        decoration.setDrawable(drawable)
+        binding!!.fragmentHomePageContractHeader1.price.resetRes()
+        binding!!.fragmentHomePageContractHeader1.transactionQuota.resetRes()
+        countProgressBuy =
+            SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_buy)
+        countProgressSale =
+            SkinCompatResources.getDrawable(mContext, R.drawable.bg_transaction_progress_bar_sale)
+        //        countProgress.setEnabled(false);
+        deepViewBinding!!.doResetSkinResources()
+    }
+
     //更新涨跌幅和当前价格
     override fun onPairQuotation(tickerBean: PairQuotation?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
@@ -2036,16 +2056,19 @@ class HomePageContractFragment : BaseFragment(),
     /**
      * 更新总权益
      */
-    override fun updateTotalProfit(totalProfit: String) {
+    override fun updateTotalProfit(totalProfit: String, available: String) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+            binding?.fragmentHomePageContractHeader1?.amount?.text = available
 
         }
     }
 
     override fun futureBalance(balanceDetailBean: BalanceDetailBean?) {
         balanceDetailBean1 = balanceDetailBean
-        binding?.fragmentHomePageContractHeader1?.amount?.setText(balanceDetailBean1?.availableBalance.toString())
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            //binding?.fragmentHomePageContractHeader1?.amount?.setText(balanceDetailBean1?.availableBalance.toString())
+        }
     }
 
     override fun onLeverPairConfigCheck(hasLeverConfig: Boolean) {
