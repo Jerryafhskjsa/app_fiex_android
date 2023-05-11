@@ -116,8 +116,9 @@ class ContractViewModel(
     //持仓列表
     private var positionList: ArrayList<PositionBean?>? = null
 
-    private var balanceDetailBean: BalanceDetailBean? = null
+    var balanceDetailBean: BalanceDetailBean? = null
     private var planUnionBean = PlanUnionBean()
+
 
 
     init {
