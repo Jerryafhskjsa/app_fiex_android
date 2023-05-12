@@ -670,6 +670,9 @@ object UrlConfig {
         //调整合约倍数
         const val URL_ADJUST_LEVERAGE = "user/v1/position/adjust-leverage"
 
+        //调整合约开仓方向
+        const val URL_CHANGE_TYPE = "user/v1/position/change-type"
+
         //一键全部平仓
         const val URL_CLOSE_ALL = "user/v1/position/close-all"
 
@@ -734,6 +737,8 @@ object UrlConfig {
         const val URL_BALANCE_BILLS = "user/v1/balance/bills"
 
         const val ULR_ORDER_CREATE = "trade/v1/order/create"
+
+        const val ULR_ORDER_CREATE_PLAN = "trade/v1/entrust/create-plan"
 
         const val ULR_USER_STEP_RATE = "user/v1/user/step-rate/getUserStepRate"
 

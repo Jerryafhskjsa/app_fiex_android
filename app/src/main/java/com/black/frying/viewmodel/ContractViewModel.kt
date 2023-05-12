@@ -692,6 +692,23 @@ class ContractViewModel(
             })
     }
 
+    /**
+     * 改变当前杠杆类型
+     */
+    fun changeType(positionSide: String? , positionType: String?) {
+        FutureApiServiceHelper.changType(context, getCurrentPair(), positionSide, positionType,false,
+            object : Callback<HttpRequestResultBean<String>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                    if (returnData != null) {
+                        }
+                    }
+
+            })
+    }
+
 
     private fun sortTradeOrder(pair: String?, orderPairList: TradeOrderPairList?) {
         Observable.just(orderPairList)

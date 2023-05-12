@@ -230,6 +230,23 @@ interface FutureApiService {
      * 下单接口
      */
     @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE_PLAN)
+    fun planOrderCreate(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("price") price: Double?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("triggerProfitPrice") triggerProfitPrice: Number?,
+        @Field("triggerStopPrice") triggerStopPrice: Number?,
+        @Field("stopPrice") stopPrice: Double?,
+        @Field("triggerPriceType") triggerPriceType: String?,
+        @Field("entrustType") entrustType: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    @FormUrlEncoded
     @POST(UrlConfig.Future.ULR_ORDER_CREATE)
     fun orderCreate(
         @Field("orderSide") orderSide: String?,
@@ -242,9 +259,6 @@ interface FutureApiService {
         @Field("triggerProfitPrice") triggerProfitPrice: Number?,
         @Field("triggerStopPrice") triggerStopPrice: Number?,
         @Field("reduceOnly") reduceOnly: Boolean?,
-        @Field("stopPrice") stopPrice: Double?,
-        @Field("triggerPriceType") triggerPriceType: String?,
-        @Field("entrustType") entrustType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**
@@ -267,6 +281,17 @@ interface FutureApiService {
         @Field("symbol") symbol: String?,
         @Field("positionSide") positionSide: String?,
         @Field("leverage") leverage: Int?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 调整杠杆方向
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CHANGE_TYPE)
+    fun changeType(
+        @Field("symbol") symbol: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("positionType") positionType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

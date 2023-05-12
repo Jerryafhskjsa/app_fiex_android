@@ -1126,6 +1126,7 @@
     <string name="chufa_price">触发价</string>
     <string name="weituo_price">委托价</string>
     <string name="jihua_price">计划委托</string>
+    <string name="cangwei_type">请选择仓位类型</string>
 
 
 

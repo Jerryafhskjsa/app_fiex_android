@@ -37,6 +37,7 @@ class ContractMultipleSelectWindow(
     private val activity: Activity,
     title: String?,
     private val bean: ContractMultiChooseBean?,
+    private val beishu: String?,
     private val onReturnListener: OnReturnListener
 ) : View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
@@ -73,6 +74,7 @@ class ContractMultipleSelectWindow(
         btnCancel = contentView.findViewById(R.id.btn_cancel)
         btnCommit = contentView.findViewById(R.id.btn_commit)
         tvDirection = contentView.findViewById(R.id.direction)
+        bean?.defaultMultiple = beishu?.toInt()
         if (bean?.orientation.equals("BUY")) {
             tvDirection?.setText(activity.getString(R.string.contract_do_raise))
             tvDirection.setBackgroundColor(activity.getColor(R.color.T9))
@@ -89,7 +91,7 @@ class ContractMultipleSelectWindow(
         }
 
         editMulti = contentView.findViewById(R.id.editMultiple)
-        editMulti?.setText(bean?.defaultMultiple.toString())
+        editMulti?.setText(beishu)
         editMulti.addTextChangedListener(object :
             TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -125,7 +127,6 @@ class ContractMultipleSelectWindow(
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {

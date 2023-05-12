@@ -1237,12 +1237,17 @@ object FutureService {
         var crossedFloatProfit: BigDecimal? = BigDecimal(0)
 
         if (coin.equals("usdt")) {
-            for (p in positionList!!) {
-                if (p?.symbol!!.split("_")[1].equals("usdt")) {
-                    var fp = getFloatProfit(p!!)
-                    floatProfit = floatProfit!!.plus(fp)
-                    if (p.positionType.equals(Constants.CROSSED)) {
-                        crossedFloatProfit = crossedFloatProfit!!.plus(fp)
+            if (positionList == null){
+
+            }
+            else {
+                for (p in positionList!!) {
+                    if (p?.symbol!!.split("_")[1].equals("usdt")) {
+                        var fp = getFloatProfit(p!!)
+                        floatProfit = floatProfit!!.plus(fp)
+                        if (p.positionType.equals(Constants.CROSSED)) {
+                            crossedFloatProfit = crossedFloatProfit!!.plus(fp)
+                        }
                     }
                 }
             }

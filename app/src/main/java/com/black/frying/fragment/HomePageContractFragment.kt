@@ -106,6 +106,8 @@ class HomePageContractFragment : BaseFragment(),
 //            fragment.tag = tag
             return fragment
         }
+        var TAB_CROSSED = "CROSSED" // 全仓
+        var TAB_ISOLATED = "ISOLATED" //逐仓
     }
 
 
@@ -115,7 +117,6 @@ class HomePageContractFragment : BaseFragment(),
 
     private var transactionType = ConstData.FUTURE_OPERATE_OPEN // 1开仓,2平仓
     private var tabType = ConstData.TAB_COIN
-    private var positionType = ConstData.TAB_CROSSED
 
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
@@ -173,6 +174,8 @@ class HomePageContractFragment : BaseFragment(),
     private var binding: FragmentHomePageContractBinding? = null
     private var viewModel: ContractViewModel? = null
     private var deepViewBinding: ContractDeepViewBinding? = null
+    private var list: MutableList<String>? = null
+    private var positionType: String? = null
 
     /**
      * 用户资产
@@ -221,6 +224,12 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd ?: 0.0
         }
+        TAB_CROSSED = getString(R.string.contract_all_position)
+        TAB_ISOLATED = getString(R.string.contract_fiexble_position)
+        positionType = TAB_CROSSED
+        list = ArrayList()
+        list?.add(TAB_CROSSED)
+        list?.add(TAB_ISOLATED)
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -622,6 +631,7 @@ class HomePageContractFragment : BaseFragment(),
         header1View?.btnBuy?.setOnClickListener(this)
         header1View?.btnSale?.setOnClickListener(this)
         header1View?.trassfer?.setOnClickListener(this)
+        header1View?.cangwei?.setOnClickListener(this)
         header1View?.beishu?.setOnClickListener(this)
         header1View?.price?.addTextChangedListener(object :
             TextWatcher {
@@ -629,7 +639,7 @@ class HomePageContractFragment : BaseFragment(),
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 computeTotal()
                 computePriceCNY()
-                updateCanOpenAmount(s.toString())
+                    updateCanOpenAmount(s.toString())
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -904,23 +914,18 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun showOrientationMultipleDialog(bean: ContractMultiChooseBean?) {
+    private fun showOrientationMultipleDialog(bean: ContractMultiChooseBean? , beishu: String?) {
         ContractMultipleSelectWindow(mContext as Activity,
             getString(R.string.contract_adjust),
             bean,
+            beishu,
             object : ContractMultipleSelectWindow.OnReturnListener {
                 override fun onReturn(
                     item: ContractMultiChooseBean?
                 ) {
-                    if (item?.orientation.equals("BUY")) {
                         buyMultiChooseBean = item
-                        binding?.fragmentHomePageContractHeader?.buyMultiple?.text =
-                            getMultipleDes(buyMultiChooseBean)
-                    } else {
-                        sellMultiChooseBean = item
-                        binding?.fragmentHomePageContractHeader?.sellMultiple?.text =
-                            getMultipleDes(sellMultiChooseBean)
-                    }
+                        binding?.fragmentHomePageContractHeader1?.cangBeishu?.text =
+                            buyMultiChooseBean?.defaultMultiple.toString()
                 }
             }).show()
     }
@@ -932,6 +937,32 @@ class HomePageContractFragment : BaseFragment(),
             fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
         } else {
         when (v.id) {
+            R.id.cangwei -> {
+                DeepControllerWindow(mContext as Activity,
+                    getString(R.string.cangwei_type),
+                    positionType,
+                    list,
+                    object : DeepControllerWindow.OnReturnListener<String?> {
+                        override fun onReturn(
+                            window: DeepControllerWindow<String?>,
+                            item: String?
+                        ) {
+                            if (positionType == item) {
+                                return
+                            } else {
+                                positionType = item
+                                binding?.fragmentHomePageContractHeader1?.cang?.text = item
+                                if (item == getString(R.string.contract_fiexble_position)) {
+                                    viewModel?.changeType("LONG", "ISOLATED")
+                                    viewModel?.changeType("SHORT", "ISOLATED")
+                                } else {
+                                    viewModel?.changeType("LONG", "CROSSED")
+                                    viewModel?.changeType("SHORT", "CROSSED")
+                                }
+                            }
+                        }
+                    }).show()
+            }
             R.id.trassfer -> {
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
             }
@@ -949,7 +980,7 @@ class HomePageContractFragment : BaseFragment(),
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
-                    showOrientationMultipleDialog(buyMultiChooseBean)
+                    showOrientationMultipleDialog(buyMultiChooseBean ,binding?.fragmentHomePageContractHeader1?.cangBeishu?.text.toString())
                 }
             }
             /*R.id.lin_buy_multiple -> {
@@ -1282,6 +1313,7 @@ class HomePageContractFragment : BaseFragment(),
             fillLimitPrice()
         }
     }
+    @SuppressLint("SetTextI18n")
     private fun fillLimitPrice() {
         val price = header1View?.currentPrice?.text?.toString() ?: ""
         val decimal = NumberUtil.toBigDecimal(price)
@@ -1849,47 +1881,83 @@ class HomePageContractFragment : BaseFragment(),
             triggerPriceType = "MARK_PRICE"
             val price2: String = header1View?.price?.text.toString().trim()
             stopPrice = NumberUtil.toBigDecimal(price2)
+            val createRunnable = Runnable {
+                FutureApiServiceHelper.createOrderPlan(context,
+                    orderSide,
+                    orderType!!,
+                    viewModel?.getCurrentPair(),
+                    positionSide,
+                    priceDouble.toDouble(),
+                    timeInForce,
+                    totalAmountInt.toInt(),
+                    if (tigerStop == true) tigerProfitValue else null,
+                    if (tigerStop == true) tigerLoseValue else null,
+                    stopPrice?.toDouble(),
+                    triggerPriceType,
+                    entrustType,
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null ) {
+                                //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
+                                header1View?.price?.setText(price)
+                                header1View?.transactionQuota?.setText("0.0")
 
-        }
-
-        val createRunnable = Runnable {
-            FutureApiServiceHelper.createOrder(context,
-                orderSide,
-                orderType!!,
-                viewModel?.getCurrentPair(),
-                positionSide,
-                priceDouble.toDouble(),
-                timeInForce,
-                totalAmountInt.toInt(),
-                if (tigerStop == true) tigerProfitValue else null,
-                if (tigerStop == true) tigerLoseValue else null,
-                false,
-                true,
-                stopPrice?.toDouble(),
-                triggerPriceType,
-                entrustType,
-                object : Callback<HttpRequestResultBean<String>?>() {
-                    override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null ) {
-                            //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
-                            header1View?.price?.setText(price)
-                            header1View?.transactionQuota?.setText("0.0")
-
-                            FryingUtil.showToast(context, getString(R.string.trade_success))
-                            /**
-                             * todo 刷新持仓列表
-                             */
+                                FryingUtil.showToast(context, getString(R.string.trade_success))
+                                /**
+                                 * todo 刷新持仓列表
+                                 */
+                            }
                         }
-                    }
 
-                    override fun error(type: Int, error: Any?) {
-                        Log.d("iiiiii-->createFutureOrder--error", error.toString())
-                        FryingUtil.showToast(context, error.toString())
-                    }
+                        override fun error(type: Int, error: Any?) {
+                            Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                            FryingUtil.showToast(context, error.toString())
+                        }
 
-                })
+                    })
+            }
+            createRunnable.run()
         }
-        createRunnable.run()
+        else {
+            val createRunnable = Runnable {
+                FutureApiServiceHelper.createOrder(context,
+                    orderSide,
+                    orderType!!,
+                    viewModel?.getCurrentPair(),
+                    positionSide,
+                    priceDouble.toDouble(),
+                    timeInForce,
+                    totalAmountInt.toInt(),
+                    if (tigerStop == true) tigerProfitValue else null,
+                    if (tigerStop == true) tigerLoseValue else null,
+                    false,
+                    true,
+                    /*stopPrice?.toDouble(),
+                triggerPriceType,
+                entrustType,*/
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null) {
+                                //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
+                                header1View?.price?.setText(price)
+                                header1View?.transactionQuota?.setText("0.0")
+
+                                FryingUtil.showToast(context, getString(R.string.trade_success))
+                                /**
+                                 * todo 刷新持仓列表
+                                 */
+                            }
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                            Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                            FryingUtil.showToast(context, error.toString())
+                        }
+
+                    })
+            }
+            createRunnable.run()
+        }
     }
 
     fun withTimerGetCurrentTradeOrder() {
@@ -2159,11 +2227,13 @@ class HomePageContractFragment : BaseFragment(),
 
 
     private fun updateCurrentPairPrice(price: String?) {
-        header1View?.currentPrice?.setText(price)
+        if (price != null) {
+            header1View?.currentPrice?.setText(price)
+        }
         initLimitPrice()
         if (price != null && price.toDouble() > 0) {
 //            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
-            if (C2CApiServiceHelper?.coinUsdtPrice?.usdt == null) {
+            if (C2CApiServiceHelper.coinUsdtPrice?.usdt == null) {
                 return
             }
             header1View?.currentPriceCny?.setText(

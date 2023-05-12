@@ -665,6 +665,45 @@ object FutureApiServiceHelper {
      * 仓位方向->positionSide:LONG,SHORT
      *
      */
+    fun createOrderPlan(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        price: Double?,
+        timeInForce: String?,
+        origQty: Int,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        stopPrice: Double?,
+        triggerPriceType: String?,
+        entrustType: String?,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.planOrderCreate(
+                orderSide,
+                symbol,
+                price,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                triggerProfitPrice,
+                triggerStopPrice,
+                stopPrice,
+                triggerPriceType,
+                entrustType
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
     fun createOrder(
         context: Context?,
         orderSide: String,
@@ -678,9 +717,6 @@ object FutureApiServiceHelper {
         triggerStopPrice: Number?,
         reduceOnly: Boolean?,
         isShowLoading: Boolean,
-        stopPrice: Double?,
-        triggerPriceType: String?,
-        entrustType: String?,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
         if (context == null || callback == null) {
@@ -698,10 +734,7 @@ object FutureApiServiceHelper {
                 origQty,
                 triggerProfitPrice,
                 triggerStopPrice,
-                reduceOnly,
-                stopPrice,
-                triggerPriceType,
-                entrustType
+                reduceOnly
             )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
@@ -734,7 +767,7 @@ object FutureApiServiceHelper {
 
     /**
      * 调整杠杆倍数
-     * 仓位方向：LONG(全仓);SHORT(逐仓)
+     * 仓位方向：LONG(买);SHORT(卖)
      */
     fun adjustLeverage(
         context: Context?,
@@ -750,6 +783,28 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.adjustLeverage(symbol, positionSide, leverage)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 调整杠杆方向
+     * 仓位方向：CROSSED(全仓)，ISOLATED(逐仓)
+     */
+    fun changType(
+        context: Context?,
+        symbol: String?,
+        positionSide: String?,
+        positionType: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.changeType(symbol, positionSide, positionType)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

@@ -266,6 +266,7 @@
                             android:background="@null"
                             android:gravity="center_horizontal"
                             android:hint="@string/price"
+                            android:text="0.0"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textSize="@dimen/text_size_16"
