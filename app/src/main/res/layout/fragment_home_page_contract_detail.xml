@@ -105,6 +105,8 @@
                 android:id="@+id/list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/text_size_10"
                 android:dividerHeight="@dimen/line"
                 android:fadingEdge="none"
                 android:nestedScrollingEnabled="false"

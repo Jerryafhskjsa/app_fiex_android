@@ -18,21 +18,22 @@ import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
+import com.black.frying.adapter.ContactCurrentAdapter
 import com.black.frying.adapter.ContractPlanTabAdapter
 import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
+import com.black.wallet.fragment.DelegationFragment
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import com.tencent.imsdk.friendship.TIMPendencyType
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
-import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
 /**
  * @author 合约计划委托列表页
  */
-class ContractPlanTabFragment : BaseFragment(),
+class ContractCurrentFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
     View.OnClickListener,
     ContractPositionViewModel.OnContractPositionModelListener {
@@ -41,15 +42,15 @@ class ContractPlanTabFragment : BaseFragment(),
     private var binding: FragmentHomePageContractDetailBinding? = null
     private var mViewPager: AutoHeightViewPager? = null
 
-    private var adapter: ContractPlanTabAdapter? = null
-    private var dataList: ArrayList<PlansBean?>? = ArrayList()
+    private var adapter: ContactCurrentAdapter? = null
+    private var dataList: ArrayList<OrderBeanItem>? = null
     private var viewModel: ContractPositionViewModel? = null
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
     private var onTabModelListener: OnTabModelListener? = null
-    private var contractSize: String? = null
+
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var planUnionBean = PlanUnionBean()
     private var entrustType:Int?  = 0//0限价委托，1计划委托
@@ -80,7 +81,6 @@ class ContractPlanTabFragment : BaseFragment(),
             false
         )
         viewModel = ContractPositionViewModel(mContext!!, this)
-        contractSize = viewModel?.getContractSize()
         binding?.btnLimitPrice?.setOnClickListener(this)
         binding?.btnPlan?.setOnClickListener(this)
         binding?.allDone?.setOnClickListener(this)
@@ -96,7 +96,7 @@ class ContractPlanTabFragment : BaseFragment(),
         val group = binding?.listView?.parent as ViewGroup
         group.addView(emptyView)
         binding?.listView?.emptyView = emptyView
-        adapter = ContractPlanTabAdapter(mContext!!, dataList)
+        adapter = ContactCurrentAdapter(mContext!!,dataList)
         binding?.listView?.adapter = adapter
         binding?.listView?.onItemClickListener = this
         if (arguments != null) {
@@ -112,7 +112,7 @@ class ContractPlanTabFragment : BaseFragment(),
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        getPlanData(Constants.UNFINISHED)
+        getLimitPricePlanData()
     }
 
     override fun onStop() {
@@ -159,7 +159,6 @@ class ContractPlanTabFragment : BaseFragment(),
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
-                                getPlanData(Constants.UNFINISHED)
                             }
                         }
 
@@ -188,45 +187,39 @@ class ContractPlanTabFragment : BaseFragment(),
     }
 
     /**
-     * 获取当前委托列表数据
+     * 获取当前限价委托
      */
-    private fun getPlanData(state: String?) {
+    private fun getLimitPricePlanData() {
         var symbol:String? = viewModel?.getCurrentPairSymbol()
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
-        FutureApiServiceHelper.getPlanList(context,symbol, state, false,
-            object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
+            FutureApiServiceHelper.getOrderList(1, 10, symbol, Constants.UNFINISHED, context, false,
+                object : Callback<HttpRequestResultBean<OrderBean>>() {
+                    override fun error(type: Int, error: Any?) {
 
-                override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
-                    if (returnData != null) {
-                        planUnionBean.planList = returnData.result?.items
-                        val count = planUnionBean.planList?.size!!
-                        /*for (i in 1..count){
-                            planUnionBean.planList!![i]?.amount = BigDecimal(planUnionBean.planList!![i]?.origQty)
-                                .multiply(BigDecimal(planUnionBean.planList!![i]?.price))
-                                .multiply(BigDecimal(contractSize.toString())).toString()
-                        }
-
-                         */
-                        adapter?.data = planUnionBean.planList
-                        adapter?.notifyDataSetChanged()
-                        onTabModelListener?.onCount(count)
                     }
-                }
-            })
-    }
+
+                    override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                        if (returnData != null) {
+                            dataList = returnData.result?.items
+                            adapter?.data = dataList
+                            adapter?.notifyDataSetChanged()
+                            val count = planUnionBean.limitPriceList?.size!!
+                            onTabModelListener?.onCount(count)
+                        }
+                    }
+                })
+        }
 
     interface OnTabModelListener {
         fun onCount(count: Int?)
     }
 
     companion object {
-        fun newInstance(type: ContractRecordTabBean?): ContractPlanTabFragment {
+        fun newInstance(type: ContractRecordTabBean?): ContractCurrentFragment {
             val args = Bundle()
-            val fragment = ContractPlanTabFragment()
+            val fragment = ContractCurrentFragment()
             fragment.arguments = args
             fragment.type = type
             return fragment

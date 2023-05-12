@@ -184,7 +184,7 @@ class HomePageContractFragment : BaseFragment(),
     private var tabData: ArrayList<ContractRecordTabBean?>? = null
     private var recordFragmentList: MutableList<Fragment?>? = null
     private var positionTabListener: ContractPositionTabFragment.OnTabModelListener? = null
-    private var profitTabListener: ContractProfitTabFragment.OnTabModelListener? = null
+    private var profitTabListener: ContractCurrentFragment.OnTabModelListener? = null
     private var planTabListener: ContractPlanTabFragment.OnTabModelListener? = null
 
     private var currentTabPosition: Int = 0
@@ -663,11 +663,14 @@ class HomePageContractFragment : BaseFragment(),
                 if (count != null) {
                     val max: BigDecimal? = getMaxAmount()
                     if (max != null) {
-                        var countB = count?.let { BigDecimal(it) }
-                        var progress = (countB?.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
+                        if (max.compareTo(BigDecimal(0.00)) == 0) {
+                            return
+                        }
+                        val countB = count.let { BigDecimal(it) }
+                        val progress = (countB.divide(max, 2, BigDecimal.ROUND_HALF_DOWN))?.times(
                             BigDecimal(100)
                         )
-                        header1View?.countBar?.progress =
+                       header1View?.countBar?.progress =
                             progress?.toInt()!!
                     }
                 }
@@ -720,27 +723,27 @@ class HomePageContractFragment : BaseFragment(),
         if (tabData == null) {
             tabData = ArrayList()
         }
-        var tab1 = ContractRecordTabBean()
+        val tab1 = ContractRecordTabBean()
         tab1.amount = 0
-        tab1.name = getString(R.string.contract_record_tab1, tab1?.amount.toString())
+        tab1.name = getString(R.string.contract_record_tab1, tab1.amount.toString())
         tab1.type = ConstData.CONTRACT_REC_HOLD_AMOUNT
-        var tab2 = ContractRecordTabBean()
-        tab2.amount = 0
-        tab2.name = getString(R.string.contract_record_tab2, tab2?.amount.toString())
-        tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
-        var tab3 = ContractRecordTabBean()
+        val tab3 = ContractRecordTabBean()
         tab3.amount = 0
-        tab3.name = getString(R.string.contract_record_tab3, tab3?.amount.toString())
+        tab3.name = getString(R.string.contract_record_tab3, tab3.amount.toString())
         tab3.type = ConstData.CONTRACT_REC_CURRENT
+        val tab2 = ContractRecordTabBean()
+        tab2.amount = 0
+        tab2.name = getString(R.string.contract_record_tab2, tab2.amount.toString())
+        tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
         tabData?.add(tab1)
-        tabData?.add(tab2)
         tabData?.add(tab3)
+        tabData?.add(tab2)
         positionTabListener = object : ContractPositionTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
                 updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, count)
             }
         }
-        profitTabListener = object : ContractProfitTabFragment.OnTabModelListener {
+        profitTabListener = object : ContractCurrentFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
                 updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, count)
             }
@@ -764,23 +767,23 @@ class HomePageContractFragment : BaseFragment(),
                         ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
                             fragment = ContractPositionTabFragment.newInstance(tabData)
                         }
-                        ConstData.CONTRACT_REC_WITH_LIMIE -> fragment =
-                            ContractProfitTabFragment.newInstance(tabData)
                         ConstData.CONTRACT_REC_CURRENT -> fragment =
                             ContractPlanTabFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_WITH_LIMIE -> fragment =
+                            ContractCurrentFragment.newInstance(tabData)
 
                     }
                     if (fragment is ContractPositionTabFragment) {
-                        fragment?.setAutoHeightViewPager(recordViewPager)
-                        fragment?.setOnTabModeListener(positionTabListener as ContractPositionTabFragment.OnTabModelListener)
+                        fragment.setAutoHeightViewPager(recordViewPager)
+                        fragment.setOnTabModeListener(positionTabListener as ContractPositionTabFragment.OnTabModelListener)
                     }
-                    if (fragment is ContractProfitTabFragment) {
-                        fragment?.setAutoHeightViewPager(recordViewPager)
-                        fragment?.setOnTabModeListener(profitTabListener as ContractProfitTabFragment.OnTabModelListener)
+                    if (fragment is ContractCurrentFragment) {
+                        fragment.setAutoHeightViewPager(recordViewPager)
+                        fragment.setOnTabModeListener(profitTabListener as ContractCurrentFragment.OnTabModelListener)
                     }
                     if (fragment is ContractPlanTabFragment) {
-                        fragment?.setAutoHeightViewPager(recordViewPager)
-                        fragment?.setOnTabModeListener(planTabListener as ContractPlanTabFragment.OnTabModelListener)
+                        fragment.setAutoHeightViewPager(recordViewPager)
+                        fragment.setOnTabModeListener(planTabListener as ContractPlanTabFragment.OnTabModelListener)
                     }
 //                    if (fragment is EmptyFragment) {
 //                        fragment?.setAutoHeightViewPager(recordViewPager)
@@ -797,8 +800,8 @@ class HomePageContractFragment : BaseFragment(),
                 override fun getItem(position: Int): Fragment {
                     if (recordFragmentList!![position] is ContractPositionTabFragment) {
                         return recordFragmentList!![position] as ContractPositionTabFragment
-                    } else if (recordFragmentList!![position] is ContractProfitTabFragment) {
-                        return recordFragmentList!![position] as ContractProfitTabFragment
+                    } else if (recordFragmentList!![position] is ContractCurrentFragment) {
+                        return recordFragmentList!![position] as ContractCurrentFragment
                     } else {
                         return recordFragmentList!![position] as ContractPlanTabFragment
                     }
@@ -1413,11 +1416,18 @@ class HomePageContractFragment : BaseFragment(),
 //            val usable = currentBalanceSell?.availableBalance
             val usable = viewModel?.balanceDetailBean?.availableBalance
             val price = if (isLimit()) binding!!.fragmentHomePageContractHeader1.price.text.toString() else binding!!.fragmentHomePageContractHeader1.currentPrice.text.toString()
-            return if (usable == null || price.isEmpty()) null else NumberUtils.toBigDecimal(usable).divide(
-                NumberUtils.toBigDecimal(price),
-                2,
-                BigDecimal.ROUND_HALF_DOWN
-            )
+            if (usable == null || price.isEmpty()){
+                return null
+            }
+           else {
+                val newUsable: BigDecimal = if (usable.toDouble() == 0.0) BigDecimal.ZERO else NumberUtils.toBigDecimal(usable)
+                val newPrice: BigDecimal = if (price.toDouble() == 0.0) BigDecimal.ZERO else NumberUtils.toBigDecimal(price)
+                return newUsable.divide(
+                    newPrice,
+                    2,
+                    BigDecimal.ROUND_HALF_DOWN
+                )
+            }
 
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
             return currentBalanceBuy?.availableBalance?.toBigDecimal()

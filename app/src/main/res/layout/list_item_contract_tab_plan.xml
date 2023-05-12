@@ -24,79 +24,79 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/positionSide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/T16"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="5dp"
-                    android:text="@string/contract_see_down"
-                    android:textAlignment="center"
-                    android:textColor="@color/T8" />
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/positionDes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:text="@string/perpetual_warehouse_by_warehouse"
-                    android:textAlignment="center"
-                    android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold" />
-
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right">
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="@dimen/default_padding"
+                    android:orientation="horizontal">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_revoke"
+                        android:id="@+id/positionSide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/revoke"
-                        android:textColor="@color/T13"
-                        android:textSize="@dimen/text_size_12"
+                        android:background="@color/T16"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="3dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/T8"
+                        android:textSize="10sp" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/positionDes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_16"
                         android:textStyle="bold" />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:text="@string/sustainable"
+                        android:textAlignment="center"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/beishu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#F1F3F4"
+                        android:layout_marginLeft="@dimen/text_size_5"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="3dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/T2"
+                        android:textSize="10sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/tv_create_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="2022/12/09 19:09:09"
+                            android:textSize="@dimen/text_size_12" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/tv_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="@string/contract_disturb"
-                        android:textColor="@color/T17"
-                        android:textSize="@dimen/text_size_13"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_create_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="2022/12/09 19:09:09"
-                    android:textSize="@dimen/text_size_12" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,9 +113,9 @@
                         android:id="@+id/tv_entrust_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_open_avg_price"
+                        android:text="@string/chufa"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_entrust_price_des"
@@ -136,15 +136,14 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_entrust_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_entrust_amount"
+                        android:text="@string/type"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_entrust_amount_des"
+                        android:id="@+id/type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
@@ -165,9 +164,9 @@
                         android:id="@+id/tv_deal_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_deal_amount"
+                        android:text="@string/weituo_states"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_deal_amount_des"
@@ -195,9 +194,9 @@
                         android:id="@+id/tv_profit_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_profit_price"
+                        android:text="@string/weituo"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_profit_price_des"
@@ -218,19 +217,19 @@
                     android:orientation="vertical">
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_lose_price"
+                        android:id="@+id/tv_entrust_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_loss_price"
+                        android:text="@string/contract_entrust_amount"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
-                        android:id="@+id/tv_lose_price_des"
+                        android:id="@+id/tv_entrust_amount_des"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/default_padding"
-                        android:text="20000"
+                        android:text="19888"
                         android:textColor="@color/T14"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
@@ -248,7 +247,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/contract_bond_amount"
                         android:textColor="@color/T11_ALPHA60"
-                        android:textSize="@dimen/text_size_10" />
+                        android:textSize="@dimen/text_size_12" />
 
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/tv_bond_amount_des"
@@ -260,8 +259,26 @@
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
                 </LinearLayout>
-
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tv_revoke"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:background="@drawable/btn_gray"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:gravity="center">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/revoke"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_16"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

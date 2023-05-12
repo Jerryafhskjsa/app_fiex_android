@@ -38,15 +38,15 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         val positionData = getItem(position)
 
         Log.d("ttt----->item", positionData.toString())
-        var unit = positionData?.symbol!!.split("_")[1].toString().uppercase()
+        val unit = positionData?.symbol!!.split("_")[1].toString().uppercase()
 
-        var viewHolder = holder?.dataBing
+        val viewHolder = holder?.dataBing
         var sideDes: String? = null
         var sideBgColor: Int? = null
         var sideBlackColor: Int? = null
         var bondDes: String? = null
         var positionType: String? = null
-        var autoMergeBond: Boolean? = positionData?.autoMargin
+        val autoMergeBond: Boolean? = positionData.autoMargin
         /*if (unit == "ETHUSDT") {
             amount = positionData?.availableCloseSize?.toDouble()!! * 100 / (positionData.forceStopPrice!!.toDouble())
             //持仓数量
@@ -63,7 +63,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         }
 
          */
-        when (positionData?.positionSide) {
+        when (positionData.positionSide) {
             //做多
             "LONG" -> {
                 sideDes = getString(R.string.contract_see_up)
@@ -77,7 +77,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 sideBlackColor = context.getColor(R.color.T21)
             }
         }
-        when (positionData?.positionType) {
+        when (positionData.positionType) {
             //逐仓
             "ISOLATED" -> {
                 bondDes = positionData.isolatedMargin
@@ -132,9 +132,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         viewHolder?.entryPrice?.text = positionData.entryPrice
         //强平价格>0
         //持仓数量
-        viewHolder?.positionAmount?.text = positionData.availableCloseSize
+        viewHolder?.positionAmount?.text = positionData.price
         //可平数量
-        viewHolder?.availableCloseAmount?.text = positionData.availableCloseSize
+        viewHolder?.availableCloseAmount?.text = positionData.price
         //仓位保证金
         viewHolder?.bondAmount?.text = positionData.isolatedMargin
 
@@ -154,8 +154,8 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         viewHolder?.autoAddBond?.setOnCheckedChangeListener { _, isChecked ->
             FutureApiServiceHelper.autoMargin(
                 context,
-                positionData?.symbol,
-                positionData?.positionSide,
+                positionData.symbol,
+                positionData.positionSide,
                 isChecked,
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
@@ -170,7 +170,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                     }
                 })
         }
-        when (positionData?.adl) {
+        when (positionData.adl) {
             0 -> {
                 viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_0)
             }

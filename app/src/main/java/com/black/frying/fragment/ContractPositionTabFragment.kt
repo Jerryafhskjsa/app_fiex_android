@@ -19,6 +19,7 @@ import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
+import com.black.frying.service.FutureService
 import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -43,7 +44,6 @@ class ContractPositionTabFragment : BaseFragment(),
     private var price: Double? = null //标记价格
     private var adapter: ContractPositionTabAdapter? = null
     private var dataList: ArrayList<PositionBean?> = ArrayList()
-
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null

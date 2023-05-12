@@ -555,7 +555,7 @@ class ContractViewModel(
                     var available: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
-                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
+                        available = BigDecimal(balanceDetailBean?.availableBalance)
                     }
                     onContractModelListener?.futureBalance(balanceDetailBean)
                     onContractModelListener?.updateTotalProfit(totalProfit.toString(),available.toString())

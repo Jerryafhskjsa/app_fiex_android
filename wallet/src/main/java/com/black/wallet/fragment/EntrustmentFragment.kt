@@ -191,7 +191,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
     //获取计划委托记录
     private fun getPlanData() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, null, false,
+            FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, "UNFINISHED", false,
                 object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

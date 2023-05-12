@@ -1016,12 +1016,12 @@
     <string name="contract_stop_lose_price">止损价</string>
     <string name="contract_record_tab1">持有仓位(%s)</string>
     <string name="contract_record_tab2">计划委托(%s)</string>
-    <string name="contract_record_tab3">当前委托(%s)</string>
+    <string name="contract_record_tab3">限价委托(%s)</string>
     <string name="contract_show_all">显示全部</string>
     <string name="contract_fast_done">一键平仓</string>
     <string name="contract_fast_cancel">一键撤销</string>
-    <string name="contract_see_down">做空</string>
-    <string name="contract_see_up">做多</string>
+    <string name="contract_see_down">空</string>
+    <string name="contract_see_up">多</string>
     <string name="contract_profits">未实现盈亏(%s)</string>
     <string name="contract_profits_per">收益率</string>
     <string name="contract_hold_amount">持仓数量(%s)</string>
@@ -1127,6 +1127,10 @@
     <string name="weituo_price">委托价</string>
     <string name="jihua_price">计划委托</string>
     <string name="cangwei_type">请选择仓位类型</string>
+    <string name="chufa">触发价格(%s)</string>
+    <string name="weituo">委托价格(%s)</string>
+    <string name="weituo_states">委托状态</string>
+    <string name="weituo_amount">委托数量(%s)</string>
 
 
 

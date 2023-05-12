@@ -1127,6 +1127,10 @@
     <string name="weituo_price">委托价</string>
     <string name="jihua_price">计划委托</string>
     <string name="cangwei_type">请选择仓位类型</string>
+    <string name="chufa">触发价格(%s)</string>
+    <string name="weituo">委托价格(%s)</string>
+    <string name="weituo_states">委托状态</string>
+    <string name="weituo_amount">委托数量(%s)</string>
 
 </resources>
 
