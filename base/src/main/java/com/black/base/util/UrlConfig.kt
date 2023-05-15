@@ -740,6 +740,8 @@ object UrlConfig {
 
         const val ULR_ORDER_CREATE_PLAN = "trade/v1/entrust/create-plan"
 
+        const val ULR_ORDER_CREATE_PROFIT = "trade/v1/entrust/create-profit"
+
         const val ULR_USER_STEP_RATE = "user/v1/user/step-rate/getUserStepRate"
 
         const val ULR_ORDER_LIST = "trade/v1/order/list"

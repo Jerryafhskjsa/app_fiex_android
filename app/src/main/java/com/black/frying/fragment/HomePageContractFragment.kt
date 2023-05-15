@@ -332,7 +332,7 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun oneDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.one_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -349,18 +349,18 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             twoDialog()
             dialog.dismiss()
         }
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun twoDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.two_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -377,18 +377,18 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
            threeDialog()
             dialog.dismiss()
         }
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun threeDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.three_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -405,18 +405,18 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             fourDialog()
             dialog.dismiss()
         }
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun fourDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.four_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -433,18 +433,18 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             fiveDialog()
             dialog.dismiss()
         }
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun fiveDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.five_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!,R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -461,10 +461,10 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
             dialog.dismiss()
         }
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             dialog.dismiss()
         }
     }
@@ -481,7 +481,7 @@ class HomePageContractFragment : BaseFragment(),
         sellMultiChooseBean?.maxMultiple = 100
         sellMultiChooseBean?.defaultMultiple = 10
         sellMultiChooseBean?.orientation = "SELL"
-        sellMultiChooseBean?.type = 0
+        sellMultiChooseBean?.type = 1
         sellMultiChooseBean?.symbol = viewModel?.getCurrentPair()
         binding?.fragmentHomePageContractHeader?.sellMultiple?.text =
             getMultipleDes(sellMultiChooseBean)

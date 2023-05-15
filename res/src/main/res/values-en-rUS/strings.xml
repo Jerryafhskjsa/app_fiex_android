@@ -1131,6 +1131,8 @@
     <string name="weituo">委托价格(%s)</string>
     <string name="weituo_states">委托状态</string>
     <string name="weituo_amount">委托数量(%s)</string>
+    <string name="bao_amount">保数量/已成交</string>
+    <string name="junjia">成交均价</string>
 
 </resources>
 

@@ -704,6 +704,33 @@ object FutureApiServiceHelper {
             ?.subscribe(HttpCallbackSimple(context, false, callback))
     }
 
+    fun createOrderProfit(
+        context: Context?,
+        symbol: String?,
+        origQty: Int,
+        positionSide: String?,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        triggerPriceType: String?,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.profitOrderCreate(
+                symbol,
+                origQty,
+                positionSide,
+                triggerProfitPrice,
+                triggerStopPrice,
+                triggerPriceType
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
     fun createOrder(
         context: Context?,
         orderSide: String,

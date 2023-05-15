@@ -1,5 +1,6 @@
 package com.black.frying.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.black.base.adapter.BaseDataTypeBindAdapter
@@ -7,6 +8,7 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.OrderBeanItem
 import com.black.util.Callback
+import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
 import skin.support.content.res.SkinCompatResources
@@ -29,13 +31,15 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         return R.layout.list_item_contract_tab_plan
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPlanBinding>?) {
         val planData = getItem(position)
         var viewHolder = holder?.dataBing
         var sideDes:String? = null
         var bondDes:String? = null
         var positionType:String? = null
-        when(planData?.positionSide){
+        val unit = planData.symbol!!.split("_")[1].toString().uppercase()
+        when(planData.positionSide){
             //做多
             "LONG" ->{
                 sideDes = getString(R.string.contract_see_up)
@@ -51,37 +55,44 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         }
         viewHolder?.positionSide?.setTextColor(sideBgColor!!)
         viewHolder?.positionSide?.setBackgroundColor(sideBlackColor!!)
+        viewHolder?.tvEntrustPrice?.setText(getString(R.string.price) +"(" + unit + ")")
+        viewHolder?.typeOne?.setText( getString((R.string.bao_amount)) + "(" + unit + ")")
+        viewHolder?.tvDealAmount?.setText(getString(R.string.type))
+        viewHolder?.tvProfitPrice?.setText(getString((R.string.junjia)) + "(" + unit + ")")
+        viewHolder?.tvEntrustAmount?.setText(getString((R.string.contract_bond)) + "(" + unit + ")")
+        viewHolder?.tvBondAmount?.setText(getString((R.string.contract_with_limit)) + "(" + unit + ")")
+
         //仓位描述
-        viewHolder?.positionDes?.text = planData?.symbol.toString().uppercase()
+        viewHolder?.positionDes?.text = planData.symbol.toString().uppercase()
         //方向
         viewHolder?.positionSide?.text = sideDes
         //订单类型
         viewHolder?.type?.text = getString(R.string.jihua_price)
-        viewHolder?.tvDealAmountDes?.text = if (planData?.state == "NOT_TRIGGERED") "新建委托（未触发）" else if (planData?.state == "TRIGGERING")  "触发中" else if (planData?.state == "TRIGGERED") "已触发" else if (planData?.state == "USER_REVOCATION") "用户撤销" else if (planData?.state == "PLATFORM_REVOCATION")"平台撤销（拒绝）" else  "已过期"
+        viewHolder?.tvDealAmountDes?.text = "限价"
         //创建时间
-        viewHolder?.tvCreateTime?.text = String.format("HHBBXX ccaa", planData?.createdTime)
-        //开仓均价
-        viewHolder?.tvEntrustPriceDes?.text = ""
-        //委托数量
-        viewHolder?.tvEntrustAmountDes?.text = ""
+        viewHolder?.tvCreateTime?.text = CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", planData.createdTime!!)
+        //成交均价
+        viewHolder?.tvEntrustPriceDes?.text = planData.price
+        //保证金
+        viewHolder?.tvEntrustAmountDes?.text = "-"
         //止盈价格
-        viewHolder?.tvProfitPriceDes?.text = planData?.price
+        viewHolder?.tvProfitPriceDes?.text = planData.avgPrice
         //占用保证金
-        viewHolder?.tvBondAmountDes?.text = "--"
+        viewHolder?.tvBondAmountDes?.text = planData.origQty.toString() + "/" + planData.executedQty
         //撤销
         viewHolder?.tvRevoke?.setOnClickListener {
-            FutureApiServiceHelper.cancelPlanById(
+            FutureApiServiceHelper.cancelOrderId(
                 context,
                 planData.sourceId.toString(),
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
                         if (returnData != null) {
-                            Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
+                            //Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
                         }
                     }
                     override fun error(type: Int, error: Any?) {
-                        Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
+                        //Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
                     }
                 })
         }

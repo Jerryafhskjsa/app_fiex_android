@@ -1,9 +1,6 @@
 package com.black.base.view
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.PaintDrawable
 import android.os.Build
 import android.text.Editable
 import android.text.TextUtils
@@ -215,11 +212,7 @@ class ContractMultipleSelectWindow(
     }
 
     private fun adjustLeverage(bean: ContractMultiChooseBean?){
-        var positionSide:String? = null
-        when(bean?.type){
-            0 -> positionSide = "SHORT"
-            1 -> positionSide = "LONG"
-        }
+        val positionSide:String = "SHORT"
         FutureApiServiceHelper.adjustLeverage(activity,bean?.symbol,positionSide,bean?.defaultMultiple,true,object : Callback<HttpRequestResultBean<String>?>() {
             override fun callback(returnData: HttpRequestResultBean<String>?) {
                 if (returnData != null) {
@@ -234,11 +227,30 @@ class ContractMultipleSelectWindow(
         })
     }
 
+    private fun adjustLeverage1(bean: ContractMultiChooseBean?){
+        val positionSide:String = "LONG"
+        FutureApiServiceHelper.adjustLeverage(activity,bean?.symbol,positionSide,bean?.defaultMultiple,true,object : Callback<HttpRequestResultBean<String>?>() {
+            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                if (returnData != null) {
+                    Log.d("iiiiii-->adjustLeverage", returnData.result.toString())
+                    onReturnListener.onReturn(bean)
+                    dismiss()
+                }
+
+
+            }
+            override fun error(type: Int, error: Any?) {
+                FryingUtil.showToast(activity,error.toString())
+            }
+        })
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_cancel -> dismiss()
             R.id.btn_commit -> {
                 adjustLeverage(bean)
+                adjustLeverage1(bean)
             }
             R.id.btn_fiexible -> {
                 btnFiexible.isChecked = true

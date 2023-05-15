@@ -404,7 +404,7 @@
     <string name="please_ali_pay">请输入支付宝账号</string>
     <string name="rise_fall">涨跌幅</string>
     <string name="coin_type">币种</string>
-    <string name="new_price">最新价</string>
+    <string name="new_price">最新价格</string>
     <string name="rise_amount">24h涨跌</string>
     <string name="trade_history">历史委托</string>
     <string name="limite_buy">限价买入</string>
@@ -1016,7 +1016,7 @@
     <string name="contract_stop_lose_price">止损价</string>
     <string name="contract_record_tab1">持有仓位(%s)</string>
     <string name="contract_record_tab2">计划委托(%s)</string>
-    <string name="contract_record_tab3">限价委托(%s)</string>
+    <string name="contract_record_tab3">当前委托(%s)</string>
     <string name="contract_show_all">显示全部</string>
     <string name="contract_fast_done">一键平仓</string>
     <string name="contract_fast_cancel">一键撤销</string>
@@ -1131,6 +1131,8 @@
     <string name="weituo">委托价格(%s)</string>
     <string name="weituo_states">委托状态</string>
     <string name="weituo_amount">委托数量(%s)</string>
+    <string name="bao_amount">保数量/已成交</string>
+    <string name="junjia">成交均价</string>
 
 
 

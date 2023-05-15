@@ -246,6 +246,20 @@ interface FutureApiService {
         @Field("entrustType") entrustType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
+    /**
+     * 创建止盈止损
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE_PROFIT)
+    fun profitOrderCreate(
+        @Field("symbol") symbol: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("positionSide") positionSide: String?,
+        @Field("triggerProfitPrice") triggerProfitPrice: Number?,
+        @Field("triggerStopPrice") triggerStopPrice: Number?,
+        @Field("triggerPriceType") triggerPriceType: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
     @FormUrlEncoded
     @POST(UrlConfig.Future.ULR_ORDER_CREATE)
     fun orderCreate(

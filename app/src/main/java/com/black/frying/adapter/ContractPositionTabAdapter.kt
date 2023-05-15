@@ -1,14 +1,29 @@
 package com.black.frying.adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.api.FutureApiServiceHelper
+import com.black.base.model.ContractMultiChooseBean
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.PositionBean
+import com.black.base.util.FryingUtil
+import com.black.base.view.ContractMultipleSelectWindow
 import com.black.util.Callback
+import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPositionBinding
 import skin.support.content.res.SkinCompatResources
@@ -19,20 +34,28 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
+    private var color: Int? = null
+    private var gray: Int? = null
+    private var colorGray: Int? = null
     private var amount: Double? = null
     private var amount2: Double? = null
+    private var buyMultiChooseBean: ContractMultiChooseBean? = null
 
     override fun resetSkinResources() {
         super.resetSkinResources()
         bgDefault = SkinCompatResources.getColor(context, R.color.T3)
         bgWin = SkinCompatResources.getColor(context, R.color.T10)
         bgLose = SkinCompatResources.getColor(context, R.color.T9)
+        color = SkinCompatResources.getColor(context, R.color.T13)
+        gray = SkinCompatResources.getColor(context, R.color.black)
+        colorGray = SkinCompatResources.getColor(context, R.color.gray)
     }
 
     override fun getItemLayoutId(): Int {
         return R.layout.list_item_contract_tab_position
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPositionBinding>?) {
         val positionData = getItem(position)
@@ -46,23 +69,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         var sideBlackColor: Int? = null
         var bondDes: String? = null
         var positionType: String? = null
+        var amonut: Double? = 0.0
         val autoMergeBond: Boolean? = positionData.autoMargin
-        /*if (unit == "ETHUSDT") {
-            amount = positionData?.availableCloseSize?.toDouble()!! * 100 / (positionData.forceStopPrice!!.toDouble())
-            //持仓数量
-            viewHolder?.positionAmount?.text = amount?.toString()
-            //可平数量
-            viewHolder?.availableCloseAmount?.text = amount?.toString()
-        }
-        else {
-            amount = positionData?.availableCloseSize?.toDouble()!! * 10000 / (positionData.forceStopPrice!!.toDouble())
-            //持仓数量
-            viewHolder?.positionAmount?.text = amount?.toString()
-            //可平数量
-            viewHolder?.availableCloseAmount?.text = amount?.toString()
-        }
-
-         */
+        amonut = positionData.price?.toDouble()?:0.0
         when (positionData.positionSide) {
             //做多
             "LONG" -> {
@@ -191,6 +200,184 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             }
         }
         viewHolder?.btnClosePosition?.setOnClickListener {
+
+        }
+        viewHolder?.btnBond?.setOnClickListener {
+            v -> ContractMultipleSelectWindow(context as Activity,
+                getString(R.string.contract_adjust),
+                buyMultiChooseBean,
+                positionData.leverage.toString(),
+                object : ContractMultipleSelectWindow.OnReturnListener {
+                    override fun onReturn(
+                        item: ContractMultiChooseBean?
+                    ) {
+                        buyMultiChooseBean = item
+                        viewHolder.beishu.setText(buyMultiChooseBean?.defaultMultiple.toString())
+                    }
+                })
+
+        }
+        viewHolder?.btnWithLimit?.setOnClickListener {
+            v ->
+            val contentView = LayoutInflater.from(context).inflate(R.layout.profit_loss_dialog, null)
+            val dialog = Dialog(context, R.style.AlertDialog)
+            val window = dialog.window
+            if (window != null) {
+                val params = window.attributes
+                //设置背景昏暗度
+                params.dimAmount = 0.2f
+                params.gravity = Gravity.BOTTOM
+                params.width = WindowManager.LayoutParams.MATCH_PARENT
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                window.attributes = params
+            }
+            //设置dialog的宽高为屏幕的宽高
+            val layoutParams =
+                ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.setContentView(contentView, layoutParams)
+            dialog.show()
+            dialog.findViewById<TextView>(R.id.positionDes).text = positionData.symbol.toString().uppercase()
+            dialog.findViewById<TextView>(R.id.cangwei).text = positionType
+            dialog.findViewById<TextView>(R.id.beishu).text = positionData.leverage.toString() + "X"
+            dialog.findViewById<TextView>(R.id.positionSide).text = sideDes
+            dialog.findViewById<TextView>(R.id.keping).text = positionData.price + unit
+            dialog.findViewById<TextView>(R.id.positionSide).setTextColor(sideBgColor!!)
+            dialog.findViewById<TextView>(R.id.positionSide).setBackgroundColor(sideBlackColor!!)
+            dialog.findViewById<TextView>(R.id.junjia).text = positionData.entryPrice
+            dialog.findViewById<TextView>(R.id.zuixin).text = positionData.flagPrice
+
+            dialog.findViewById<TextView>(R.id.qiangping2).text =  if (BigDecimal(positionData.forceStopPrice).compareTo(BigDecimal.ZERO) == 1)
+            {
+                positionData.forceStopPrice
+            } else {
+                 "--"
+            }
+            dialog.findViewById<View>(R.id.xuanzhe).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.VISIBLE
+                dialog.findViewById<View>(R.id.qiangping).visibility = View.GONE
+                if (dialog.findViewById<TextView>(R.id.xuanzhe).text == "限价")
+                {
+                    dialog.findViewById<TextView>(R.id.xiajia).setTextColor(color!!)
+                    dialog.findViewById<TextView>(R.id.shijia).setTextColor(gray!!)
+                }
+                else{
+                    dialog.findViewById<TextView>(R.id.xiajia).setTextColor(gray!!)
+                    dialog.findViewById<TextView>(R.id.shijia).setTextColor(color!!)
+                }
+            }
+            dialog.findViewById<View>(R.id.xiajia).setOnClickListener { v ->
+                dialog.findViewById<TextView>(R.id.xiajia).setTextColor(color!!)
+                dialog.findViewById<TextView>(R.id.shijia).setTextColor(gray!!)
+                dialog.findViewById<TextView>(R.id.xuanzhe).text = "限价"
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.GONE
+                dialog.findViewById<View>(R.id.qiangping).visibility = View.VISIBLE
+            }
+            dialog.findViewById<View>(R.id.shijia).setOnClickListener { v ->
+                dialog.findViewById<TextView>(R.id.xiajia).setTextColor(gray!!)
+                dialog.findViewById<TextView>(R.id.shijia).setTextColor(color!!)
+                dialog.findViewById<TextView>(R.id.xuanzhe).text = "市价"
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.GONE
+                dialog.findViewById<View>(R.id.qiangping).visibility = View.VISIBLE
+            }
+            dialog.findViewById<View>(R.id.first).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.1 *  amonut) + unit
+
+            }
+            dialog.findViewById<View>(R.id.second).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.25 * amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.third).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.5 * amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.fourth).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.75 * amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.fifth).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(color!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",amonut) + unit
+            }
+            dialog.findViewById<TextView>(R.id.one).addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                  val one = CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.one).text.trim { it < ' ' }.toString())!!.minus(CommonUtil.parseDouble(positionData.entryPrice)?:0.0)
+                    val two = one.div(CommonUtil.parseDouble(positionData.entryPrice)?:1.0) * 100
+                    if (one >= 0.0) {
+                        dialog.findViewById<TextView>(R.id.yinli).text = String.format("%.2f", one)
+                        dialog.findViewById<TextView>(R.id.two).text = String.format("%.2f %", two)
+                    }
+                    }
+
+                override fun afterTextChanged(s: Editable) {
+                }
+            })
+            dialog.findViewById<TextView>(R.id.three).addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    val one = (CommonUtil.parseDouble(positionData.entryPrice)?:0.0).minus(CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.three).text.trim { it < ' ' }.toString())!!)
+                    val two = one.div(CommonUtil.parseDouble(positionData.entryPrice)?:1.0) * 100
+                    if (one >= 0.0) {
+                        dialog.findViewById<TextView>(R.id.yinli).text = String.format("%.2f", one)
+                        dialog.findViewById<TextView>(R.id.two).text = String.format("%.2f %", two)
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable) {
+                }
+            })
+                dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                    FutureApiServiceHelper.createOrderProfit(
+                        context,
+                        positionData.symbol,
+                        positionData.positionSize!!.toInt(),
+                        positionData.positionSide,
+                        CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.one).text.trim { it < ' ' }.toString()),
+                        CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.three).text.trim { it < ' ' }.toString()),
+                        "LATEST_PRICE",
+                        object : Callback<HttpRequestResultBean<String>?>() {
+                            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                if (returnData != null) {
+                                    FryingUtil.showToast(context,"Success")
+                                    dialog.dismiss()
+                                }
+                            }
+                            override fun error(type: Int, error: Any?) {
+                                FryingUtil.showToast(context, error.toString())
+                            }
+                        })
+            }
+            dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+                dialog.dismiss()
+            }
+
+
+        }
+        viewHolder?.btnClosePositionFan?.setOnClickListener {
 
         }
 

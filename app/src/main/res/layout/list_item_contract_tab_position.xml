@@ -495,7 +495,7 @@
                         android:paddingBottom="8dp"
                         android:text="@string/contract_fast_done"
                         android:background="@drawable/anniu"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
                 </LinearLayout>
