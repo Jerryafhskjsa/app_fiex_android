@@ -59,7 +59,7 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         viewHolder?.typeOne?.setText( getString((R.string.bao_amount)) + "(" + unit + ")")
         viewHolder?.tvDealAmount?.setText(getString(R.string.type))
         viewHolder?.tvProfitPrice?.setText(getString((R.string.junjia)) + "(" + unit + ")")
-        viewHolder?.tvEntrustAmount?.setText(getString((R.string.contract_bond)) + "(" + unit + ")")
+        viewHolder?.tvEntrustAmount?.setText(getString((R.string.contract_bond)))
         viewHolder?.tvBondAmount?.setText(getString((R.string.contract_with_limit)) + "(" + unit + ")")
 
         //仓位描述
@@ -67,18 +67,18 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         //方向
         viewHolder?.positionSide?.text = sideDes
         //订单类型
-        viewHolder?.type?.text = getString(R.string.jihua_price)
+        viewHolder?.type?.text = planData.origQty.toString() + "/" + planData.executedQty
         viewHolder?.tvDealAmountDes?.text = "限价"
         //创建时间
         viewHolder?.tvCreateTime?.text = CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", planData.createdTime!!)
         //成交均价
         viewHolder?.tvEntrustPriceDes?.text = planData.price
         //保证金
-        viewHolder?.tvEntrustAmountDes?.text = "-"
+        viewHolder?.tvEntrustAmountDes?.text = planData.marginFrozen
         //止盈价格
         viewHolder?.tvProfitPriceDes?.text = planData.avgPrice
-        //占用保证金
-        viewHolder?.tvBondAmountDes?.text = planData.origQty.toString() + "/" + planData.executedQty
+        //zhiyinzhisun
+        viewHolder?.tvBondAmountDes?.text = planData.triggerProfitPrice.toString() + "/" + planData.triggerProfitPrice
         //撤销
         viewHolder?.tvRevoke?.setOnClickListener {
             FutureApiServiceHelper.cancelOrderId(

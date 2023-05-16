@@ -359,7 +359,6 @@
                         android:orientation="horizontal">
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/two"
-                            style="@style/NormalEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/btn_gray"
@@ -473,7 +472,6 @@
                 android:orientation="horizontal">
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/four"
-                    style="@style/NormalEditTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/btn_gray"

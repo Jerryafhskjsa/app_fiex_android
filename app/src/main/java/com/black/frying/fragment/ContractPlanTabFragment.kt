@@ -148,7 +148,7 @@ class ContractPlanTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (dataList?.size == 0) {
+                if (entrustType == 0) {
                     FryingUtil.showToast(activity, getString(R.string.null_bills))
                     return
                 }
@@ -159,7 +159,9 @@ class ContractPlanTabFragment : BaseFragment(),
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
+                                FryingUtil.showToast(activity, "Success")
                                 getPlanData(Constants.UNFINISHED)
+                                onTabModelListener?.onCount(0)
                             }
                         }
 
@@ -204,6 +206,7 @@ class ContractPlanTabFragment : BaseFragment(),
                     if (returnData != null) {
                         planUnionBean.planList = returnData.result?.items
                         val count = planUnionBean.planList?.size!!
+                        entrustType = planUnionBean.planList?.size
                         /*for (i in 1..count){
                             planUnionBean.planList!![i]?.amount = BigDecimal(planUnionBean.planList!![i]?.origQty)
                                 .multiply(BigDecimal(planUnionBean.planList!![i]?.price))

@@ -217,7 +217,7 @@ class ContractViewModel(
     /**
      * 获取资产
      */
-    private fun initBalanceByCoin(context: Context?) {
+     fun initBalanceByCoin(context: Context?) {
         if(currentPairStatus.pair == null){
             return
         }
@@ -240,7 +240,7 @@ class ContractViewModel(
     /**
      * 获取仓位列表
      */
-    private fun getPositionData() {
+     fun getPositionData() {
         var symbol:String? = currentPairStatus.pair
         FutureApiServiceHelper.getPositionList(context, symbol, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
@@ -267,7 +267,7 @@ class ContractViewModel(
     /**
      * 获取当前持仓数据
      */
-    private fun getProfitData(state: String?) {
+     fun getProfitData(state: String?) {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
             symbol = null
@@ -292,7 +292,7 @@ class ContractViewModel(
     /**
      * 获取当前计划委托列表
      */
-    private fun getPlanData(state: String?) {
+     fun getPlanData(state: String?) {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
@@ -315,7 +315,7 @@ class ContractViewModel(
     /**
      * 获取当前限价委托
      */
-    private fun getLimitPricePlanData() {
+    fun getLimitPricePlanData() {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
@@ -555,10 +555,10 @@ class ContractViewModel(
                     var available: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
-                        available = BigDecimal(balanceDetailBean?.availableBalance)
+                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                     }
                     onContractModelListener?.futureBalance(balanceDetailBean)
-                    onContractModelListener?.updateTotalProfit(totalProfit.toString(),available.toString())
+                    onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
 

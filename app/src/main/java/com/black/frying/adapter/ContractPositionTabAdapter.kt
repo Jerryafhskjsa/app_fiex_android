@@ -71,6 +71,10 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         var positionType: String? = null
         var amonut: Double? = 0.0
         val autoMergeBond: Boolean? = positionData.autoMargin
+        buyMultiChooseBean = ContractMultiChooseBean()
+        buyMultiChooseBean?.maxMultiple = 100
+        buyMultiChooseBean?.defaultMultiple = positionData.leverage
+        buyMultiChooseBean?.symbol = "btc_usdt"
         amonut = positionData.price?.toDouble()?:0.0
         when (positionData.positionSide) {
             //做多
@@ -78,23 +82,27 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 sideDes = getString(R.string.contract_see_up)
                 sideBgColor = context.getColor(R.color.T17)
                 sideBlackColor = context.getColor(R.color.T22)
+                buyMultiChooseBean?.orientation = "BUY"
             }
             //做空
             "SHORT" -> {
                 sideDes = getString(R.string.contract_see_down)
                 sideBgColor = context.getColor(R.color.T16)
                 sideBlackColor = context.getColor(R.color.T21)
+                buyMultiChooseBean?.orientation = "SELL"
             }
         }
         when (positionData.positionType) {
             //逐仓
             "ISOLATED" -> {
                 bondDes = positionData.isolatedMargin
+                buyMultiChooseBean?.type = 0
                 positionType = getString(R.string.contract_fiexble_position)
             }
             //全仓
             "CROSSED" -> {
-                bondDes = positionData.openOrderMarginFrozen
+                bondDes = positionData.isolatedMargin
+                buyMultiChooseBean?.type = 1
                 positionType = getString(R.string.contract_all_position)
             }
         }
@@ -145,7 +153,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         //可平数量
         viewHolder?.availableCloseAmount?.text = positionData.price
         //仓位保证金
-        viewHolder?.bondAmount?.text = positionData.isolatedMargin
+        //viewHolder?.bondAmount?.text = positionData.isolatedMargin
 
         if(positionData.forceStopPrice != null){
             if (BigDecimal(positionData.forceStopPrice).compareTo(BigDecimal.ZERO) == 1) {
@@ -199,11 +207,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_5)
             }
         }
-        viewHolder?.btnClosePosition?.setOnClickListener {
-
-        }
         viewHolder?.btnBond?.setOnClickListener {
-            v -> ContractMultipleSelectWindow(context as Activity,
+            v ->
+            ContractMultipleSelectWindow(context as Activity,
                 getString(R.string.contract_adjust),
                 buyMultiChooseBean,
                 positionData.leverage.toString(),
@@ -214,7 +220,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                         buyMultiChooseBean = item
                         viewHolder.beishu.setText(buyMultiChooseBean?.defaultMultiple.toString())
                     }
-                })
+                }).show()
 
         }
         viewHolder?.btnWithLimit?.setOnClickListener {
@@ -245,6 +251,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.findViewById<TextView>(R.id.positionSide).setBackgroundColor(sideBlackColor!!)
             dialog.findViewById<TextView>(R.id.junjia).text = positionData.entryPrice
             dialog.findViewById<TextView>(R.id.zuixin).text = positionData.flagPrice
+            dialog.findViewById<TextView>(R.id.price).text = positionData.price
 
             dialog.findViewById<TextView>(R.id.qiangping2).text =  if (BigDecimal(positionData.forceStopPrice).compareTo(BigDecimal.ZERO) == 1)
             {
@@ -320,11 +327,11 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 dialog.findViewById<View>(R.id.fifth).setBackgroundColor(color!!)
                 dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",amonut) + unit
             }
-            dialog.findViewById<TextView>(R.id.one).addTextChangedListener(object :
+            /* dialog.findViewById<TextView>(R.id.one).addTextChangedListener(object :
                 TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                  val one = CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.one).text.trim { it < ' ' }.toString())!!.minus(CommonUtil.parseDouble(positionData.entryPrice)?:0.0)
+                 val one = CommonUtil.parseDouble(dialog.findViewById<TextView>(R.id.one).text.trim { it < ' ' }.toString())!!.minus(CommonUtil.parseDouble(positionData.entryPrice)?:0.0)
                     val two = one.div(CommonUtil.parseDouble(positionData.entryPrice)?:1.0) * 100
                     if (one >= 0.0) {
                         dialog.findViewById<TextView>(R.id.yinli).text = String.format("%.2f", one)
@@ -334,6 +341,8 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
                 override fun afterTextChanged(s: Editable) {
                 }
+
+
             })
             dialog.findViewById<TextView>(R.id.three).addTextChangedListener(object :
                 TextWatcher {
@@ -345,11 +354,15 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                         dialog.findViewById<TextView>(R.id.yinli).text = String.format("%.2f", one)
                         dialog.findViewById<TextView>(R.id.two).text = String.format("%.2f %", two)
                     }
+
+
                 }
 
                 override fun afterTextChanged(s: Editable) {
                 }
-            })
+
+
+            })*/
                 dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
                     FutureApiServiceHelper.createOrderProfit(
                         context,
@@ -380,10 +393,41 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         viewHolder?.btnClosePositionFan?.setOnClickListener {
 
         }
+        viewHolder?.btnClosePosition?.setOnClickListener {
+            val createRunnable = Runnable {
+                FutureApiServiceHelper.createOrder2(context,
+                    "SELL",
+                    "MARKET",
+                    positionData.symbol,
+                    positionData.positionSide,
+                    "IOC",
+                    positionData.positionSize!!.toInt(),
+                     "1001",
+                    true,
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null) {
+                                FryingUtil.showToast(context, "平仓成功")
+
+                                /**
+                                 * todo 刷新持仓列表
+                                 */
+                            }
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                            Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                            FryingUtil.showToast(context, error.toString())
+                        }
+
+                    })
+            }
+            createRunnable.run()
+
+        }
 
     }
     /*fun set(price:String?)
     {
-
     }*/
     }

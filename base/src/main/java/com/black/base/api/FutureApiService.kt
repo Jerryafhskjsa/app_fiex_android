@@ -275,6 +275,18 @@ interface FutureApiService {
         @Field("reduceOnly") reduceOnly: Boolean?,
     ): Observable<HttpRequestResultBean<String>?>?
 
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE)
+    fun orderCreate2(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("sourceType") sourceType: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
     /**
      * 修改自动追加保证金
      */

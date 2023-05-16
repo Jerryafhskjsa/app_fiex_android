@@ -68,6 +68,9 @@ class ContractPositionViewModel(
                         positionList = data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
                         doUpdate(context,null,null,false)
                     }
+                    else{
+                        positionList = null
+                    }
                 }
             })
     }

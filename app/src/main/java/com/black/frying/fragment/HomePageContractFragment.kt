@@ -672,6 +672,8 @@ class HomePageContractFragment : BaseFragment(),
                         )
                        header1View?.countBar?.progress =
                             progress?.toInt()!!
+                        header1View?.useableBuy?.setText(count.toString())
+                        header1View?.sellOutUnit?.setText(count.toString())
                     }
                 }
             }
@@ -690,8 +692,8 @@ class HomePageContractFragment : BaseFragment(),
         header1View?.priceAdd?.setOnClickListener(this)
         header1View?.amountAdd?.setOnClickListener(this)
         header1View?.amountSub?.setOnClickListener(this)
-        header1View?.useable?.setText(getString(R.string.number_default))
-        header1View?.useableBuy?.setText(getString(R.string.number_default))
+        header1View?.useable?.setText("0.0000")
+        header1View?.useableBuy?.setText("0.0000")
         header1View?.countBar?.setOnSeekBarChangeListener(this)
         header1View?.btnHandle?.setOnClickListener(this)
         header1View?.btnHandle1?.setOnClickListener(this)
@@ -1415,18 +1417,14 @@ class HomePageContractFragment : BaseFragment(),
         if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
 //            val usable = currentBalanceSell?.availableBalance
             val usable = viewModel?.balanceDetailBean?.availableBalance
-            val price = if (isLimit()) binding!!.fragmentHomePageContractHeader1.price.text.toString() else binding!!.fragmentHomePageContractHeader1.currentPrice.text.toString()
+            val price = binding!!.fragmentHomePageContractHeader1.sellUseable.text.toString()
             if (usable == null || price.isEmpty()){
                 return null
             }
            else {
                 val newUsable: BigDecimal = if (usable.toDouble() == 0.0) BigDecimal.ZERO else NumberUtils.toBigDecimal(usable)
                 val newPrice: BigDecimal = if (price.toDouble() == 0.0) BigDecimal.ZERO else NumberUtils.toBigDecimal(price)
-                return newUsable.divide(
-                    newPrice,
-                    2,
-                    BigDecimal.ROUND_HALF_DOWN
-                )
+                return newPrice
             }
 
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
@@ -1545,6 +1543,7 @@ class HomePageContractFragment : BaseFragment(),
         when (transactionType) {
             ConstData.FUTURE_OPERATE_OPEN -> {
                 //可开多数量
+                header1View?.useableBuy
                 header1View?.useable?.text =
                     String.format("%.4f", availableOpenData.longMaxOpen.toFloat())
                 header1View?.sellUseable?.text =
@@ -1799,6 +1798,14 @@ class HomePageContractFragment : BaseFragment(),
         viewModel!!.getAllOrder()
     }
 
+    private fun refreshShuju() {
+        viewModel!!.initBalanceByCoin(mContext)
+        viewModel!!.getPositionData()
+        viewModel!!.getProfitData(Constants.UNFINISHED)
+        viewModel!!.getPlanData(Constants.UNFINISHED)
+        viewModel!!.getLimitPricePlanData()
+
+    }
     private fun refreshData() {
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
@@ -1849,12 +1856,12 @@ class HomePageContractFragment : BaseFragment(),
     private fun createOrderFuture(positionSide: String, orderSide: String) {
         var orderType: String? = currentOrderType
         val price: String = header1View?.price?.text.toString().trim()
-        val priceNum = NumberUtil.toBigDecimal(price)
+        val priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         if (priceNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
             return
         }
-        var priceDouble = NumberUtil.toBigDecimal(price)
+        var priceDouble = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         val timeInForce: String = currentTimeInForceType?:"GTC"
         val origQty = header1View?.transactionQuota?.text.toString().trim()
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
@@ -1889,7 +1896,7 @@ class HomePageContractFragment : BaseFragment(),
             }
             entrustType = "STOP"
             triggerPriceType = "MARK_PRICE"
-            val price2: String = header1View?.price?.text.toString().trim()
+            val price2: String = header1View?.priceA?.text.toString().trim()
             stopPrice = NumberUtil.toBigDecimal(price2)
             val createRunnable = Runnable {
                 FutureApiServiceHelper.createOrderPlan(context,
@@ -1911,8 +1918,9 @@ class HomePageContractFragment : BaseFragment(),
                                 //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
                                 header1View?.price?.setText(price)
                                 header1View?.transactionQuota?.setText("0.0")
-
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
+                                refreshShuju()
+                                initRecordTab()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -1951,8 +1959,9 @@ class HomePageContractFragment : BaseFragment(),
                                 //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
                                 header1View?.price?.setText(price)
                                 header1View?.transactionQuota?.setText("0.0")
-
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
+                                refreshShuju()
+                                initRecordTab()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2017,8 +2026,15 @@ class HomePageContractFragment : BaseFragment(),
            val price = header1View?.price?.text
            updateCanOpenAmount(price.toString())
        }
+    else{
+           binding!!.fragmentHomePageContractHeader1.cangBeishu.text = "10"
+           leverage = 10
+           val price = header1View?.price?.text
+           updateCanOpenAmount(price.toString())
+    }
 
     }
+
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         //显示滑块选择的数量

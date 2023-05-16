@@ -766,7 +766,36 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
-
+//pingcang
+    fun createOrder2(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        timeInForce: String?,
+        origQty: Int,
+        souceType: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.orderCreate2(
+                orderSide,
+                symbol,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                souceType,
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
     /**
      * 修改自动追加保证金
      * 买卖方向：BUY;SELL

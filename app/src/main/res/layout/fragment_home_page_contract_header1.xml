@@ -98,7 +98,7 @@
                     android:gravity="right|center_vertical"
                     android:textStyle="normal"
                     android:textSize="@dimen/text_size_12"
-                    android:text="100"
+                    android:text="10"
                     android:textColor="#FF262838" />
                     <com.black.base.widget.SpanCheckedTextView
                         android:id="@+id/shuai"
@@ -964,7 +964,7 @@
                             android:layout_width="19dp"
                             android:layout_height="19dp"
                             android:layout_marginLeft="@dimen/text_size_10"
-                            android:background="@drawable/huazhuan3"/>
+                            android:background="@drawable/huazhuan7"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -1190,7 +1190,7 @@
                             android:includeFontPadding="false"
                             android:maxLines="1"
                             android:text="@string/number_default"
-                            android:textColor="@color/black_real"
+                            android:textColor="@color/T10"
                             android:textSize="@dimen/text_size_20"
                             android:textStyle="bold" />
 

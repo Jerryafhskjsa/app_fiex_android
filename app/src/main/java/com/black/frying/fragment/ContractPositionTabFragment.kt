@@ -47,7 +47,7 @@ class ContractPositionTabFragment : BaseFragment(),
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
-
+    private var num: Int = 0
     private var futureMarkPriceObserver: Observer<MarkPriceBean?>? = null
     private var onTabModelListener: OnTabModelListener? = null
 
@@ -168,7 +168,7 @@ class ContractPositionTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (dataList?.size == 0) {
+                if (num == 0){
                     return
                 }
                 FutureApiServiceHelper.closeAll(
@@ -178,7 +178,9 @@ class ContractPositionTabFragment : BaseFragment(),
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
                                 var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
+                                FryingUtil.showToast(mContext, "Success")
                                 viewModel?.getPositionData(all)
+                                onTabModelListener?.onCount(0)
                             }
                         }
 
@@ -193,6 +195,7 @@ class ContractPositionTabFragment : BaseFragment(),
     override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             onTabModelListener?.onCount(positionList?.size)
+            num = positionList?.size?: 0
             adapter?.data = positionList
             adapter?.notifyDataSetChanged()
         }

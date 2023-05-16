@@ -152,13 +152,16 @@ class ContractCurrentFragment : BaseFragment(),
                     FryingUtil.showToast(activity, getString(R.string.null_bills))
                     return
                 }
-                FutureApiServiceHelper.cancelALlPlan(
+                FutureApiServiceHelper.closeAll(
                     activity,
                     symbol = null,
                     true,
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
+                                FryingUtil.showToast(activity, "Success")
+                                getLimitPricePlanData()
+                                onTabModelListener?.onCount(0)
                             }
                         }
 
