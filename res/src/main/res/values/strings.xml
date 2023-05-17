@@ -41,7 +41,7 @@
     <string name="info_futrues">您当前合约尚未开通。</string>
     <string name="one_dialog">通过划转资金到合约账户即可进行合约交易</string>
     <string name="two_dialog">通过点击限价可以选择不同的委托类型进行交易</string>
-    <string name="three_dialog">点击逐仓..可以修改不同的杠杆进行交易</string>
+    <string name="three_dialog">点击仓位和杠杆倍数可以修改不同的仓位和杠杆进行交易</string>
     <string name="four_dialog">点击设置可以设置偏好设置</string>
     <string name="five_dialog">点击全部可以显示全部合约</string>
     <string name="confirmed">已完成</string>
@@ -1133,6 +1133,7 @@
     <string name="weituo_amount">委托数量(%s)</string>
     <string name="bao_amount">保数量/已成交</string>
     <string name="junjia">成交均价</string>
+    <string name="zongquanyi">总权益</string>
 
 
 

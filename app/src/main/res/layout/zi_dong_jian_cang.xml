@@ -29,7 +29,7 @@
                 android:textSize="@dimen/text_size_16"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="标记价格" />
+                android:text="自动减仓" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_bills"
@@ -39,7 +39,7 @@
                 android:textSize="@dimen/text_size_14"
                 android:textColor="@color/black"
                 android:layout_weight="1"
-                android:text="@string/biao_ji_price" />
+                android:text="这一指标显示你持仓在自动减仓队列中的位置，如果所有指示灯亮起，在发生强平事件后，你持仓的仓位可能被减小" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"

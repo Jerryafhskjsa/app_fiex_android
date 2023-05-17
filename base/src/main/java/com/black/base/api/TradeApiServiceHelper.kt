@@ -143,4 +143,21 @@ object TradeApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
+
+    fun getTradeOrderDealFuture(
+        context: Context?,
+        level: Int?,
+        symbol: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultDataList<PairDeal?>?>
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, false, UrlConfig.ApiType.URL_FUT_F)
+            .getService(TradeApiService::class.java)
+            ?.getTradeOrderDealFuture(level, symbol)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 }

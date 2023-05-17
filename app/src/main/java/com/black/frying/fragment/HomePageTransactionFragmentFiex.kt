@@ -494,6 +494,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             ) {
                 val bundle = Bundle()
                 bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair())
+                bundle.putInt(ConstData.NAME,0)
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }

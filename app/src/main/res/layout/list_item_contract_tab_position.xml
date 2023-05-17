@@ -120,6 +120,7 @@
             </LinearLayout>
             <com.black.base.widget.SpanTextView
                 android:id="@+id/id"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"

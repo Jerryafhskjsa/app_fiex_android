@@ -49,11 +49,13 @@ import com.black.base.view.ContractMultipleSelectWindow
 import com.black.base.view.DeepControllerWindow
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
+import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
+import com.black.frying.view.MoreTimeStepSelector
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
@@ -115,6 +117,10 @@ class HomePageContractFragment : BaseFragment(),
     private var colorLost = 0
     private var colorT3 = 0
 
+    private var moreTimeStepSelector: MoreTimeStepSelector? = null
+    private var moreTimeStepTextView: TextView? = null
+    private var kLinePage = 0
+    private var lastTimeStepIndex = 0
     private var transactionType = ConstData.FUTURE_OPERATE_OPEN // 1开仓,2平仓
     private var tabType = ConstData.TAB_COIN
 
@@ -263,9 +269,105 @@ class HomePageContractFragment : BaseFragment(),
         initHeader()
         initHeader1()
         initHeader2()
+        initTimeStepTab()
         return layout
     }
 
+    private fun initTimeStepTab() {
+        val pubSteps = arrayOf(AnalyticChart.TimeStep.NONE,AnalyticChart.TimeStep.MIN_15, AnalyticChart.TimeStep.HOUR_1, AnalyticChart.TimeStep.HOUR_4, AnalyticChart.TimeStep.DAY_1,AnalyticChart.TimeStep.MORE)
+        val timeStepTab = headerView!!.kTimeStepTab
+        timeStepTab.setSelectedTabIndicatorHeight(0)
+        timeStepTab.tabMode = TabLayout.MODE_FIXED
+        val moreIndex = pubSteps.size - 1
+        for (i in pubSteps.indices) {
+            val timeStep = pubSteps[i]
+            val tab = timeStepTab.newTab().setText(timeStep.toString())
+            tab.tag = timeStep
+            if (timeStep === AnalyticChart.TimeStep.MORE) {
+                tab.setCustomView(R.layout.view_k_time_step_tab_more)
+            } else {
+                tab.setCustomView(R.layout.view_k_time_step_tab)
+            }
+            val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
+            if (timeStep === AnalyticChart.TimeStep.MORE) {
+                moreTimeStepTextView = textView
+            }
+            textView.text = timeStep.toString()
+            timeStepTab.addTab(tab)
+        }
+        moreTimeStepSelector = MoreTimeStepSelector(mContext!!)
+        moreTimeStepSelector!!.setOnMoreTimeStepSelectorListener(object : MoreTimeStepSelector.OnMoreTimeStepSelectorListener {
+            override fun onSelect(timeStep: AnalyticChart.TimeStep?) {
+                if (timeStep != null) {
+                    moreTimeStepTextView!!.text = timeStep.toString()
+                    lastTimeStepIndex = moreIndex
+                    selectKTab(timeStep)
+                } else {
+                    if (lastTimeStepIndex != moreIndex) {
+                        timeStepTab.getTabAt(lastTimeStepIndex)!!.select()
+                    }
+                }
+            }
+
+        })
+        timeStepTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val timeStep = tab.tag as AnalyticChart.TimeStep?
+                if (timeStep !== AnalyticChart.TimeStep.MORE) {
+                    moreTimeStepTextView!!.text = AnalyticChart.TimeStep.MORE.toString()
+                    if (lastTimeStepIndex != tab.position) {
+                        selectKTab(timeStep)
+                    }
+                } else {
+                    moreTimeStepSelector!!.show(headerView?.timeStepLayout, headerView?.analyticChart?.getTimeStep()!!)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val timeStep = tab.tag as AnalyticChart.TimeStep?
+                if (timeStep !== AnalyticChart.TimeStep.MORE) {
+                    lastTimeStepIndex = tab.position
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                val timeStep = tab.tag as AnalyticChart.TimeStep?
+                if (timeStep === AnalyticChart.TimeStep.MORE) {
+                    moreTimeStepSelector!!.show(timeStepTab, headerView?.analyticChart?.getTimeStep()!!)
+                }
+            }
+        })
+        val tab = timeStepTab.getTabAt(1)
+        tab?.select()
+    }
+    private fun selectKTab(timeStep: AnalyticChart.TimeStep?) {
+        if (timeStep == null) {
+            return
+        }
+        viewModel!!.finishListenKLine()
+        if (headerView?.analyticChart?.getTimeStep() != timeStep) {
+            headerView?.analyticChart?.setTimeStep(timeStep)
+            listenKLineData()
+            var endTime = System.currentTimeMillis() - (headerView?.analyticChart?.getTimeStep()?.value?.times(
+                1000*100
+            ) ?: 0) * kLinePage
+            var startTime = endTime - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+            startTime = startTime.coerceAtLeast(1567296000)
+            endTime = endTime.coerceAtLeast(1567296000)
+            viewModel!!.getKLineDataFiex(headerView?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
+        }
+    }
+    private fun listenKLineData() {
+        headerView?.analyticChart?.let { viewModel!!.listenKLineData(it!!) }
+    }
+    private fun refreshKLineChart(kLineItems: ArrayList<KLineItem?>) {
+        try {
+            headerView?.analyticChart?.setData(kLineItems)
+            headerView?.analyticChart?.invalidate()
+        } catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
     private fun openDialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.futrues_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
@@ -611,6 +713,10 @@ class HomePageContractFragment : BaseFragment(),
         headerView = binding?.fragmentHomePageContractHeader
         headerView?.linBuyMultiple?.setOnClickListener(this)
         headerView?.linSellMultiple?.setOnClickListener(this)
+        headerView?.shangla?.setOnClickListener(this)
+        headerView?.xiala?.setOnClickListener(this)
+        headerView?.total?.setOnClickListener(this)
+        headerView?.rate?.setOnClickListener(this)
 
     }
 
@@ -968,6 +1074,14 @@ class HomePageContractFragment : BaseFragment(),
                         }
                     }).show()
             }
+            R.id.shangla -> {
+                headerView?.shangla?.visibility = View.GONE
+                headerView?.xiala?.visibility = View.VISIBLE
+            }
+            R.id.xiala -> {
+                headerView?.shangla?.visibility = View.VISIBLE
+                headerView?.xiala?.visibility = View.GONE
+            }
             R.id.trassfer -> {
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
             }
@@ -976,6 +1090,12 @@ class HomePageContractFragment : BaseFragment(),
             }
             R.id.current_price_layout -> {
                 Currentdialog()
+            }
+            R.id.total -> {
+                Currentdialog1()
+            }
+            R.id.rate -> {
+                Currentdialog2()
             }
             R.id.not_login_btn -> {
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
@@ -1129,7 +1249,8 @@ class HomePageContractFragment : BaseFragment(),
                 )
             ) {
                 val bundle = Bundle()
-                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair()!!.uppercase())
+                bundle.putString(ConstData.PAIR, viewModel?.getCurrentPair())
+                bundle.putInt(ConstData.NAME,1)
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }
@@ -1331,6 +1452,54 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun Currentdialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.current_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun Currentdialog1(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.zong_quan_yi_dialog, null)
+        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+
+            dialog.dismiss()
+        }
+    }
+    private fun Currentdialog2(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.zi_jin_rate_dialog, null)
         val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
@@ -2325,6 +2494,30 @@ class HomePageContractFragment : BaseFragment(),
            // binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
+    }
+    override fun onKLineDataAll(items: ArrayList<KLineItem?>) {
+        if(items.isNotEmpty()){
+            refreshKLineChart(items)
+        }
+    }
+
+    override fun onKLineDataAdd(item: KLineItem) {
+        if(item != null){
+            headerView?.analyticChart?.addData(item)
+            headerView?.analyticChart?.postInvalidate()
+        }
+    }
+
+    override fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>) {
+        headerView?.analyticChart?.setLoadingMore(false)
+        if(items.isNotEmpty()){
+            headerView?.analyticChart?.addDataList(kLinePage, items)
+            headerView?.analyticChart?.postInvalidate()
+        }
+    }
+
+    override fun onKLineLoadingMore() {
+        headerView?.analyticChart?.setLoadingMore(false)
     }
     //刷新当前钱包
     private fun refreshCurrentWallet() {

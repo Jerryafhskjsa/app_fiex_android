@@ -3,7 +3,9 @@ package com.black.base.api
 import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.PagingData
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
@@ -16,6 +18,29 @@ import com.black.util.Callback
 import retrofit2.http.Field
 
 object FutureApiServiceHelper {
+
+    /**
+     * 获取K线历史数据
+     */
+    fun getHistoryKline(
+        context: Context?,
+        symbol: String,
+        interval: String,
+        limit: Int,
+        isShowLoading: Boolean,
+        startTime: Long,
+        endTime: Long,
+        callback: Callback<HttpRequestResultDataList<Kline?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getHistoryKline(symbol, interval, limit, startTime, endTime)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 
     /**
      * 获取深度列表

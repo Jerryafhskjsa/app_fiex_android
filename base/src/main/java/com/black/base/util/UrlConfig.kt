@@ -465,6 +465,9 @@ object UrlConfig {
 
         //获取当前交易对的成交
         const val URL_TRADE_ORDERS_DEAL = "public/deal"
+
+        //获取当前交易对的成交
+        const val URL_TRADE_FUTURE = "market/v1/public/q/deal"
     }
 
     object Wallet {
@@ -663,6 +666,8 @@ object UrlConfig {
     object Future {
 
         const val URL_DEPTH = "market/v1/public/q/depth";
+
+        const val URL_KLINE = "market/v1/public/q/kline";
 
         //交易对配置列表
         const val URL_SYMBOL_LIST = "market/v1/public/symbol/list"

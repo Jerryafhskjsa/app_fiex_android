@@ -2,7 +2,9 @@ package com.black.base.api
 
 
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.PagingData
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
@@ -15,6 +17,15 @@ import retrofit2.http.*
 
 
 interface FutureApiService {
+    /**
+     * 获取K线
+     */
+    @GET(UrlConfig.Future.URL_KLINE)
+    fun getHistoryKline(@Query("symbol") symbol: String?,
+                        @Query("interval") interval: String?,
+                        @Query("limit") limit: Int?,
+                        @Query("startTime") startTime:Long,
+                        @Query("endTime") endTime:Long): Observable<HttpRequestResultDataList<Kline?>?>?
 
     /**
      * 获取深度

@@ -29,17 +29,25 @@
                 android:textSize="@dimen/text_size_16"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="标记价格" />
+                android:text="@string/zongquanyi" />
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/btn_bills"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_size_16"
                 android:textSize="@dimen/text_size_14"
                 android:textColor="@color/black"
                 android:layout_weight="1"
-                android:text="@string/biao_ji_price" />
+                android:text="钱包余额+未实现盈" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_bills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_14"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:text="包括体验金 0 U" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"

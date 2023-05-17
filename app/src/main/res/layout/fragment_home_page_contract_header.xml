@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -78,6 +79,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/total"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -115,6 +117,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -175,6 +178,7 @@
 
         </View>
     <LinearLayout
+        android:id="@+id/xiala"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/text_size_10"
@@ -220,5 +224,57 @@
             </com.black.base.widget.SpanTextView>
         </LinearLayout>
     </LinearLayout>
+        <LinearLayout
+            android:id="@+id/shangla"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/time_step_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/k_time_step_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    app:tabBackground="@color/transparent"
+                    app:tabMaxWidth="200dp"
+                    app:tabMinWidth="20dp"
+                    app:tabPaddingBottom="0dp"
+                    app:tabPaddingEnd="0dp"
+                    app:tabPaddingStart="0dp"
+                    app:tabPaddingTop="0dp"
+                    app:tabRippleColor="@color/transparent"
+                    app:tabTextAppearance="@style/DefaultTabStyle" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/B1"/>
+                <ImageView
+                    android:layout_width="@dimen/text_size_16"
+                    android:layout_height="@dimen/text_size_16"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shangla">
+                </ImageView>
+            </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+                <com.black.base.widget.AnalyticChart
+                    android:id="@+id/analytic_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>

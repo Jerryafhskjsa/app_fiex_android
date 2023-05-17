@@ -562,10 +562,18 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                 sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
                 val bundle = Bundle()
                 bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                bundle.putInt(ConstData.NAME,0)
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(it)
             }
             if (tabTag == getString(R.string.futures)) {
+                CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                val bundle = Bundle()
+                bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                bundle.putInt(ConstData.NAME,1)
+                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                    .go(it)
 
             }
             if (tabTag == getString(R.string.pair_collect)) {
@@ -575,6 +583,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                     sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
                         val bundle = Bundle()
                     bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                        bundle.putInt(ConstData.NAME,0)
                             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                         .go(it)}
                     getString(R.string.futures) ->{}

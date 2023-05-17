@@ -29,7 +29,7 @@
                 android:textSize="@dimen/text_size_16"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="标记价格" />
+                android:text="资金费率" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_bills"
@@ -39,7 +39,7 @@
                 android:textSize="@dimen/text_size_14"
                 android:textColor="@color/black"
                 android:layout_weight="1"
-                android:text="@string/biao_ji_price" />
+                android:text="买方卖方在下个资金时段要交换的资金费率。资金费率周期内(每8小时)每分钟计算一次溢价指数，并将溢价指数以时间加权平均的方式应用于计算资金费率" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"

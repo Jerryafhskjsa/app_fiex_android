@@ -1133,6 +1133,7 @@
     <string name="weituo_amount">委托数量(%s)</string>
     <string name="bao_amount">保数量/已成交</string>
     <string name="junjia">成交均价</string>
+    <string name="zongquanyi">总权益</string>
 
 </resources>
 

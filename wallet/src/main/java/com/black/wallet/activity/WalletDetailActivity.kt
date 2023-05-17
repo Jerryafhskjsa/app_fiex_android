@@ -365,6 +365,7 @@ class WalletDetailActivity : BaseActivity(),
             sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
             val bundle = Bundle()
             bundle.putString(ConstData.PAIR, pairStatus?.pair)
+            bundle.putInt(ConstData.NAME,0)
             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                 .go(it)
         }

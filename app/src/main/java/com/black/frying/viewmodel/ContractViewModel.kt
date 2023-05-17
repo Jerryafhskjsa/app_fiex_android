@@ -11,6 +11,7 @@ import android.util.Pair
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
@@ -24,6 +25,7 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.base.widget.AnalyticChart
 import com.black.frying.fragment.PLAN
 import com.black.frying.service.FutureService
 import com.black.frying.service.socket.FiexSocketManager
@@ -56,6 +58,8 @@ class ContractViewModel(
     private var currentTimeInForceType: String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
+    private var kLineId: String? = ""
+    private var onKLineAllEnd = false
     var askMax = 5
     var bidMax = 5
 
@@ -941,7 +945,71 @@ class ContractViewModel(
                 }
             })
     }
+    fun listenKLineData(analyticChart: AnalyticChart) {
+        kLineId = System.nanoTime().toString()
+        onKLineAllEnd = false
+        val bundle = Bundle()
+        bundle.putString("timeStep", analyticChart.getTimeStepRequestStr())
+        bundle.putString("kLineId", kLineId)
+        //进行延时请求，数据无法及时返回
+        socketHandler?.run {
+            post {
+                SocketUtil.sendSocketCommandBroadcast(context!!, SocketUtil.COMMAND_KTAB_CHANGED, bundle)
+            }
+        }
+    }
 
+    fun getKLineDataFiex(timeStep:String?,kLinePage: Int,startTime:Long,endTime:Long){
+        currentPairStatus.pair?.let {
+            if (timeStep != null) {
+                FutureApiServiceHelper.getHistoryKline(
+                    context,
+                    it,
+                    timeStep,
+                    500,
+                    true,
+                    startTime,
+                    endTime,
+                    object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                        override fun error(type: Int, error: Any) {
+                            if(kLinePage != 0){
+                                onContractModelListener!!.onKLineLoadingMore()
+                            }
+                        }
+                        override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                var items = returnData.data!!
+                                onKLineAllEnd = true
+                                if(items != null && items.size>0){
+                                    var dataItem = ArrayList<KLineItem?>()
+                                    for (i in items.indices){
+                                        var klineItem = KLineItem()
+                                        var temp = items[i]
+                                        klineItem.a = temp?.a?.toDouble()!!
+                                        klineItem.c = temp?.c?.toDouble()!!
+                                        klineItem.h = temp?.h?.toDouble()!!
+                                        klineItem.l = temp?.l?.toDouble()!!
+                                        klineItem.o = temp?.o?.toDouble()!!
+                                        klineItem.t = temp?.t?.div(1000)
+                                        klineItem.v = temp?.v?.toDouble()!!
+                                        dataItem?.add(klineItem)
+                                    }
+                                    if(kLinePage == 0){
+                                        onContractModelListener!!.onKLineDataAll(dataItem)
+                                    }else{
+                                        onContractModelListener!!.onKLineDataMore(kLinePage, dataItem)
+                                    }
+                                }
+                            }else{
+                                if(kLinePage != 0){
+                                    onContractModelListener!!.onKLineLoadingMore()
+                                }
+                            }
+                        }
+                    })
+            }
+        }
+    }
 
     /**
      * 获取用户资产
@@ -1201,6 +1269,10 @@ class ContractViewModel(
         return null
     }
 
+    fun finishListenKLine() {
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_KTAB_CLOSE)
+    }
+
     fun getCurrentPriceCNY(): Double? {
         return currentPairStatus.currentPriceCNY
     }
@@ -1291,6 +1363,11 @@ class ContractViewModel(
          * 更新总权益
          */
         fun updateTotalProfit(totalProfit: String,available:String)
+
+        fun onKLineDataAll(items: ArrayList<KLineItem?>)
+        fun onKLineDataAdd(item: KLineItem)
+        fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>)
+        fun onKLineLoadingMore()
 
         fun futureBalance(balanceDetailBean: BalanceDetailBean?)
 

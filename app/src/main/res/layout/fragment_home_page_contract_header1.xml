@@ -253,9 +253,14 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginLeft="@dimen/default_padding"
+                            android:layout_marginRight="@dimen/text_size_10"
                             android:adjustViewBounds="true"
                             android:scaleType="fitXY"
                             android:src="@drawable/jianhao" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/line"/>
 
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/price"
@@ -272,6 +277,11 @@
                             android:textSize="@dimen/text_size_16"
                             android:textColor="@color/T3"
                             app:useDelete="false" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/text_size_10"
+                            android:background="@color/line"/>
 
                         <ImageView
                             android:id="@+id/price_add"
@@ -411,10 +421,12 @@
 
                 <ProgressBar
                     android:id="@+id/count_progress"
-                    style="@style/TradeProgressBarStyle" />
+                    style="@style/TradeProgressBarStyle"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:orientation="horizontal">
@@ -487,43 +499,40 @@
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_buy_count"
-                    style="@style/ContractBondTextLeft"
-                    android:text="@string/contract_can_buy_raise" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_sell_count"
-                    style="@style/ContractBondTextLeft"
-                    android:text="@string/contract_can_buy_fall" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/text_size_2"
-                    android:gravity="center_vertical">
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/black"
-                    android:text="0.0000" />
+                    android:layout_marginRight="@dimen/text_size_5"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:layout_height="wrap_content">
+
                     <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_12"
-                        android:textColor="@color/black"
-                        android:text="/" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/sell_useable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/black"
-                    android:text="0.0000" />
+                        style="@style/ContractBondTextLeft"
+                        android:text="@string/usable" />
+
+                    <LinearLayout style="@style/ContractBondTextRightLin"
+                        android:gravity="center_vertical|right">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/amount"
+                            style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/coin"
+                            style="@style/ContractBondTextRightText"
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:text="USDT" />
+                        <ImageView
+                            android:id="@+id/trassfer"
+                            android:layout_width="19dp"
+                            android:layout_height="19dp"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:background="@drawable/huazhuan7"/>
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -771,7 +780,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -801,6 +809,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -828,7 +837,35 @@
                             android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/tv_buy_count"
+                        style="@style/ContractBondTextLeft"
+                        android:text="@string/contract_can_buy_raise" />
+
+                    <LinearLayout style="@style/ContractBondTextRightLin">
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/useable"
+                            style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:text="0.0000" />
+
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/useable_buy_type"
+                            style="@style/ContractBondTextRightText"
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black"
+                            android:textStyle="normal"
+                            android:paddingLeft="8dp"
+                            android:text="USDT" />
+                    </LinearLayout>
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_padding" />
@@ -871,7 +908,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -901,6 +937,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
@@ -928,23 +965,19 @@
                             android:text="USDT" />
                     </LinearLayout>
                 </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.black.base.widget.SpanTextView
+                        android:id="@+id/tv_sell_count"
                         style="@style/ContractBondTextLeft"
-                        android:text="@string/usable" />
+                        android:text="@string/contract_can_buy_fall" />
 
-                    <LinearLayout style="@style/ContractBondTextRightLin"
-                        android:gravity="center_vertical|right">
+                    <LinearLayout style="@style/ContractBondTextRightLin">
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/amount"
+                            android:id="@+id/sell_useable"
                             style="@style/ContractBondTextRightText"
                             android:textSize="@dimen/text_size_12"
                             android:textColor="@color/black"
@@ -952,21 +985,19 @@
                             android:text="0.0000" />
 
                         <com.black.base.widget.SpanTextView
-                            android:id="@+id/coin"
+                            android:id="@+id/useable_sale_type"
                             style="@style/ContractBondTextRightText"
-                            android:layout_marginLeft="@dimen/text_size_5"
                             android:textSize="@dimen/text_size_12"
                             android:textColor="@color/black"
                             android:textStyle="normal"
+                            android:paddingLeft="8dp"
                             android:text="USDT" />
-                        <ImageView
-                            android:id="@+id/trassfer"
-                            android:layout_width="19dp"
-                            android:layout_height="19dp"
-                            android:layout_marginLeft="@dimen/text_size_10"
-                            android:background="@drawable/huazhuan7"/>
                     </LinearLayout>
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp" />
+
             </LinearLayout>
 
 
