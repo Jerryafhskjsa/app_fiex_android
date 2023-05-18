@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.black.frying.contract.FuturesOrderCreateFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_transaction_input"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <skin.support.widget.SkinCompatCheckedTextView
+                android:id="@+id/btn_buy"
+                style="@style/ContractHeader1BuyBtn"
+                android:layout_margin="2dp"
+                android:background="@drawable/bg_transaction_buy"
+                android:checked="true"
+                android:text="@string/contract_buy"
+                android:textColor="@color/btn_sale_check" />
+
+            <skin.support.widget.SkinCompatCheckedTextView
+                android:id="@+id/btn_sell"
+                style="@style/ContractHeader1BuyBtn"
+                android:layout_margin="2dp"
+                android:background="@drawable/bg_transaction_sale"
+                android:text="@string/contract_sell"
+                android:textColor="@color/btn_sale_check" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <com.black.frying.contract.biz.view.FuturesOrderPriceTypeView
+            android:id="@+id/futurePriceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <com.black.frying.contract.biz.view.FuturesPriceEditTextView
+            android:id="@+id/futurePriceInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/lin_prince_cny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/price_cny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+
+        <com.black.frying.contract.biz.view.FuturesPriceEditTextView
+            android:id="@+id/futurePriceAmountInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <com.warkiz.tickseekbar.TickSeekBar
+            android:id="@+id/futureNumberSeekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tsb_show_tick_texts="below"
+            app:tsb_tick_texts_color="@color/T1"
+            app:tsb_show_tick_marks_type="oval"
+            app:tsb_tick_marks_color="@color/colorAccent"
+            app:tsb_ticks_count="5"
+            />
+
+        <!--    添加seek process-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanCheckBox
+                android:id="@+id/contract_with_limit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/btn_reg_check_box"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:text="@string/contract_with_limit"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/with_lin_cb_limit__type"
+                    android:layout_width="70dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/bg_transaction_input"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/with_lin_cb_with_limit_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="GTC"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/with_lin_cb_with_limit_arrow"
+                        style="@style/ContractSmallArrow"
+                        android:layout_marginLeft="@dimen/default_padding" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <LinearLayout
+            android:id="@+id/lin_stop_value"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:visibility="gone">
+
+            <LinearLayout style="@style/ContractStopLoseEditLin">
+
+                <com.black.base.widget.MaterialEditText
+                    android:id="@+id/stop_surplus"
+                    style="@style/ContractStopLoseEdit"
+                    android:hint="@string/contract_stop_surplus_price"
+                    app:useDelete="false" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/default_padding"
+                android:layout_height="match_parent" />
+
+            <LinearLayout style="@style/ContractStopLoseEditLin">
+
+                <com.black.base.widget.SpanMaterialEditText
+                    android:id="@+id/stop_lose"
+                    style="@style/ContractStopLoseEdit"
+                    android:hint="@string/contract_stop_lose_price"
+                    app:useDelete="false" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <!--       not_login_layout-->
+
+        <LinearLayout
+            android:id="@+id/login_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_action_buy"
+                style="@style/ContractBuyBtnStyle"
+                android:background="@drawable/btn_t7"
+                android:checked="true"
+                android:text="@string/contract_buy_raise" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_buy_count"
+                    style="@style/ContractBondTextLeft"
+                    android:text="@string/contract_can_buy_raise" />
+
+                <LinearLayout style="@style/ContractBondTextRightLin">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/useable"
+                        style="@style/ContractBondTextRightText"
+                        android:text="0.0000" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/useable_unit"
+                        style="@style/ContractBondTextRightText"
+                        android:paddingLeft="8dp"
+                        android:text="USDT" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/action_buy_freez"
+                    style="@style/ContractBondTextLeft"
+                    android:layout_height="match_parent"
+                    android:text="@string/contract_bond_empty" />
+
+                <LinearLayout style="@style/ContractBondTextRightLin">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/margin_amount"
+                        style="@style/ContractBondTextRightText"
+                        android:text="0.0000" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/margin_unit"
+                        style="@style/ContractBondTextRightText"
+                        android:paddingLeft="8dp"
+                        android:text="USDT" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_padding" />
+
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_action_sell"
+                style="@style/ContractBuyBtnStyle"
+                android:background="@drawable/btn_t5"
+                android:checked="true"
+                android:text="@string/contract_sell_fall" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/tv_sell_count"
+                    style="@style/ContractBondTextLeft"
+                    android:text="@string/contract_can_buy_fall" />
+
+                <LinearLayout style="@style/ContractBondTextRightLin">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/sell_useable"
+                        style="@style/ContractBondTextRightText"
+                        android:text="0.0000" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/sell_useable_unit"
+                        style="@style/ContractBondTextRightText"
+                        android:paddingLeft="8dp"
+                        android:text="USDT" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/action_sell_freez"
+                    style="@style/ContractBondTextLeft"
+                    android:text="@string/contract_bond_empty" />
+
+                <LinearLayout style="@style/ContractBondTextRightLin">
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/sell_bond"
+                        style="@style/ContractBondTextRightText"
+                        android:text="0.0000" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/sell_bond_unit"
+                        style="@style/ContractBondTextRightText"
+                        android:paddingLeft="8dp"
+                        android:text="USDT" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

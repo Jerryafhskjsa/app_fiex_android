@@ -27,7 +27,8 @@
                 android:theme="@style/AppTheme"
                 app:elevation="12dp">
 
-                <include layout="@layout/tool_bar_left_back" />
+                <include layout="@layout/tool_bar_left_back"/>
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.base.widget.ObserveScrollView
@@ -45,43 +46,74 @@
                     android:layout_height="match_parent"
                     android:background="@color/B2"
                     android:orientation="vertical">
-
-                    <LinearLayout
+                    <RelativeLayout
+                        android:layout_toRightOf="@+id/btn_userinfo"
+                        android:id="@+id/btn_search_menu"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="@dimen/default_padding"
-                        android:layout_marginRight="@dimen/default_padding"
-                        android:background="@drawable/bg_transfer_corner"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:layout_height="36dp"
+                        android:layout_marginLeft="@dimen/text_size_14"
+                        android:gravity="center_vertical">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/default_padding"
-                            android:src="@drawable/icon_search_wallet" />
+                        <com.black.lib.view.InputLinearLayout
+                            style="@style/ButtonGrayLight"
+                            android:layout_width="match_parent"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <com.black.base.widget.SpanMaterialEditText
-                            android:id="@+id/choose_coin_search"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:hint="@string/search_coin"
-                            android:imeOptions="actionSearch"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:padding="0dp"
-                            android:textColor="@color/T1"
-                            android:textColorHint="@color/T3"
-                            android:textSize="@dimen/text_size_16" />
-                    </LinearLayout>
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/sousuo" />
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:id="@+id/choose_coin_search"
+                                style="@style/NormalEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:hint="搜索币种"
+                                android:textColor="#5F616D"
+                                android:textSize="@dimen/text_size_12" />
+                        </com.black.lib.view.InputLinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/default_padding" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:orientation="vertical">
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:dividerHeight="0dp"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            >
+                        </HorizontalScrollView>
+
+                    </LinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:text="币对列表"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold"/>
                     <com.black.base.widget.NoScrollListView
                         android:id="@+id/list_view"
                         android:layout_width="match_parent"

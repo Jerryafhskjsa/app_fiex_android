@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.black.frying.contract.FuturesTransactionInfoFragment">
+
+    <com.black.frying.contract.biz.view.FuturesMultipleSettingView
+        android:id="@+id/futuresMultipleSettingView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.black.base.widget.DashLineView
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp" />
+
+    <com.black.frying.contract.biz.view.FuturesAccountInfoView
+        android:id="@+id/futuresAccountAndRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/futureCreateOrderLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="186" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <FrameLayout
+            android:id="@+id/futureDisplayDeepGraph"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="153" />
+    </LinearLayout>
+</LinearLayout>

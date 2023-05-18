@@ -21,7 +21,7 @@ class HttpInterceptHelperIml : HttpInterceptHelper {
         if (response == null) {
             return
         }
-        val responseBody = response.body()
+        val responseBody = response.body() ?: return
         val contentLength = responseBody.contentLength()
         if (bodyEncoded(response.headers())) {
         } else {

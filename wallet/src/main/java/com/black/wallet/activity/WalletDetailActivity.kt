@@ -54,8 +54,7 @@ import java.util.*
 
 //现货币种详情
 @Route(value = [RouterConstData.WALLET_DETAIL])
-class
-WalletDetailActivity : BaseActivity(),
+class WalletDetailActivity : BaseActivity(),
     View.OnClickListener,
     QRefreshLayout.OnRefreshListener,
     QRefreshLayout.OnLoadListener,
@@ -93,8 +92,8 @@ WalletDetailActivity : BaseActivity(),
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
         binding?.transaction?.setOnClickListener(this)
+        binding?.exchange?.setOnClickListener(this)
 
-        binding?.appBarLayout?.findViewById<SpanTextView>(R.id.action_bar_title_big)?.text = wallet?.coinType
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         layoutManager.isSmoothScrollbarEnabled = true
@@ -134,8 +133,9 @@ WalletDetailActivity : BaseActivity(),
         return !super.isStatusBarDark()
     }
 
-    override fun getTitleText(): String? {
-        return if (wallet != null) if (wallet?.coinType == null) "" else wallet?.coinType else (if (coinType == null) "" else coinType)
+    override fun getTitleText(): String {
+        return "资产详情"
+        //return if (wallet != null) if (wallet?.coinType == null) "" else wallet?.coinType else (if (coinType == null) "" else coinType)
     }
 
     override fun onClick(v: View) {
@@ -152,6 +152,10 @@ WalletDetailActivity : BaseActivity(),
                 bundle.putParcelable(ConstData.WALLET, wallet)
                 BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this)
             }
+
+            R.id.exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(this)
+            }
             R.id.transaction -> {
                 BlackRouter.getInstance().build(RouterConstData.TRANSACTION)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -161,24 +165,28 @@ WalletDetailActivity : BaseActivity(),
     }
 
     private fun refreshWallet() {
-
-
-        val totalText =  binding?.root?.findViewById<SpanTextView>(R.id.tv_all_des)
-        totalText?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
-
-        val totalCnyText =  binding?.root?.findViewById<SpanTextView>(R.id.total_cny)
-        totalCnyText?.setText(if (wallet == null) nullAmount else "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(
+        binding?.coinType?.setText(wallet?.coinType)
+        binding?.coinTypeDes?.setText(wallet?.coinTypeDes)
+        val requestOptions = RequestOptions
+            .bitmapTransform(RoundedCorners(DipPx.dip2px(mContext, 15f)))
+        Glide.with(mContext)
+            .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext, wallet?.coinIconUrl)))
+            .apply(requestOptions)
+            .into(binding?.iconCoin!!)
+         binding?.usable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
+         binding?.totalCny?.setText(if (wallet == null) nullAmount else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
             rate!! * (wallet?.estimatedAvailableAmountCny!!),
             10,
             2,
             2
-        ) + "USD")
+        ) )
 
-        val able =  binding?.root?.findViewById<SpanTextView>(R.id.able)
-        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberNoGroup(wallet?.estimatedAvailableAmountCny?.toDouble() , RoundingMode.FLOOR, 2, 8) + "USDT")
+        binding?.
 
-        val unable =  binding?.root?.findViewById<SpanTextView>(R.id.unable)
-        unable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
+
+        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(wallet?.estimatedAvailableAmountCny , 10, 2, 2) + "USDT")
+
+        binding?.freez?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
             wallet?.coinFroze,
             10,
             2,
@@ -238,20 +246,20 @@ WalletDetailActivity : BaseActivity(),
             data.add(WalletBillType.getDefaultFilterEntity(mContext, walletBillType, walletBillTypeFilter))
             //                data.add(DateFilter.getDefaultFilterEntity(dateFilter));
             FilterWindow(mContext as Activity, data)
-                    .show(object : FilterWindow.OnFilterSelectListener {
-                        override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
-                            for (filterResult in selectResult) {
-                                if (WalletBillType.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    walletBillTypeFilter = filterResult.data as WalletBillType
-                                } else if (DateFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
-                                    dateFilter = filterResult.data as DateFilter
-                                }
+                .show(object : FilterWindow.OnFilterSelectListener {
+                    override fun onFilterSelect(filterWindow: FilterWindow?, selectResult: List<FilterResult<*>>) {
+                        for (filterResult in selectResult) {
+                            if (WalletBillType.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                walletBillTypeFilter = filterResult.data as WalletBillType
+                            } else if (DateFilter.KEY.equals(filterResult.key, ignoreCase = true)) {
+                                dateFilter = filterResult.data as DateFilter
                             }
-                            currentPage = 1
-                            getBillData(true)
                         }
+                        currentPage = 1
+                        getBillData(true)
+                    }
 
-                    })
+                })
         }
         if (walletBillType == null) {
             WalletApiServiceHelper.getWalletBillType(this, object : NormalCallback<HttpRequestResultDataList<WalletBillType?>?>(mContext!!) {
@@ -312,22 +320,22 @@ WalletDetailActivity : BaseActivity(),
     }
     private fun refreshSets() {
 
-            PairApiServiceHelper.getTradeSetsLocal(mContext, false, object : Callback<ArrayList<QuotationSet?>?>() {
-                override fun error(type: Int, error: Any) {
-                }
-                override fun callback(returnData: ArrayList<QuotationSet?>?) {
-                    if (returnData != null) {
-                        val setData = ArrayList<QuotationSet?>()
-                        setData.addAll(returnData)
-                        val optionalSet = QuotationSet()
-                        setData.add(0,  optionalSet)
-                        if (setData.isNotEmpty()) {
-                            sets = setData
-                            initQuotationGroup()
-                        }
+        PairApiServiceHelper.getTradeSetsLocal(mContext, false, object : Callback<ArrayList<QuotationSet?>?>() {
+            override fun error(type: Int, error: Any) {
+            }
+            override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                if (returnData != null) {
+                    val setData = ArrayList<QuotationSet?>()
+                    setData.addAll(returnData)
+                    val optionalSet = QuotationSet()
+                    setData.add(0,  optionalSet)
+                    if (setData.isNotEmpty()) {
+                        sets = setData
+                        initQuotationGroup()
                     }
                 }
-            })
+            }
+        })
 
 
     }
@@ -353,13 +361,14 @@ WalletDetailActivity : BaseActivity(),
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         mContext.let {
             val pairStatus = adapter2?.getItem(position)
-                CookieUtil.setCurrentPair(it, pairStatus?.pair)
-                sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
-                val bundle = Bundle()
-                bundle.putString(ConstData.PAIR, pairStatus?.pair)
-                BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
-                    .go(it)
-            }
+            CookieUtil.setCurrentPair(it, pairStatus?.pair)
+            sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+            val bundle = Bundle()
+            bundle.putString(ConstData.PAIR, pairStatus?.pair)
+            bundle.putInt(ConstData.NAME,0)
+            BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                .go(it)
+        }
 
 
     }

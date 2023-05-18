@@ -9,7 +9,7 @@
             type="Object" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
@@ -115,5 +115,15 @@
                 android:persistentDrawingCache="animation"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/text_size_20"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:orientation="vertical">
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

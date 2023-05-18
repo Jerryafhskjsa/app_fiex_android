@@ -3,7 +3,6 @@ package com.black.frying.service.socket
 import android.content.Context
 import android.os.Handler
 import android.text.TextUtils
-import android.util.Log
 import com.black.base.model.socket.KLineItem
 import com.black.base.util.FryingUtil
 import com.black.base.util.SocketDataContainer
@@ -216,7 +215,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
     override fun initSocket(): Socket {
 //        val url = UrlConfig.getSocketHost(context) + "/quotation"
 //        Log.e(TAG, "initSocket url:$url")
-        return IO.socket(UrlConfig.getSocketHost(context) + "/quotation", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost() + "/quotation", socketOptions)
     }
 
     override fun start() {

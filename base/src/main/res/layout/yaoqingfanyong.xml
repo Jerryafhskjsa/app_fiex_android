@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/double_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="@drawable/haibao"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="472dp"
+            android:layout_marginLeft="263dp"
+            android:background="@drawable/haibao"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_size_10"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_cancel"
+            style="@style/ButtonReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="13dp"
+            android:text="@string/cancel"
+            android:textSize="@dimen/text_size_15" />
+
+        <View
+            android:layout_width="@dimen/double_padding"
+            android:layout_height="match_parent" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_resume"
+            android:background="@drawable/anniu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="13dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+                android:text="分享海报"
+            android:textSize="@dimen/text_size_15" />
+
+    </LinearLayout>
+
+</LinearLayout>

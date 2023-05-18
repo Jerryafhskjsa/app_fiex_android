@@ -74,30 +74,120 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/country_area"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16" />
+                                android:textColor="@color/T2"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_12" />
 
+
+                        </LinearLayout>
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/country"
+                            android:layout_width="match_parent"
+                            android:layout_height="57dp"
+                            android:drawableRight="@drawable/xiala"
+                            android:drawablePadding="6dp"
+                            android:background="@drawable/bg_login_editbox"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/text_size_10"
+                            android:maxLines="1"
+                            android:text="@string/please_choose_country"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_14" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:text="名"
+                                android:textColor="@color/T2"
+                                android:textStyle="bold"
+                                android:paddingLeft="5dp"
+                                android:textSize="@dimen/text_size_12"
+                                app:use_delete="true" />
                             <View
-                                android:layout_width="@dimen/double_padding"
-                                android:layout_height="@dimen/line" />
+                                android:layout_width="@dimen/text_size_10"
+                                android:layout_height="match_parent"/>
 
                             <com.black.base.widget.SpanTextView
-                                android:id="@+id/country"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
                                 android:layout_weight="1"
-                                android:drawableRight="@drawable/icon_left"
-                                android:drawablePadding="6dp"
-                                android:gravity="right"
-                                android:maxLines="1"
-                                android:text="@string/please_choose_country"
-                                android:textColor="@color/T13"
-                                android:textSize="@dimen/text_size_16" />
+                                android:text="姓"
+                                android:textColor="@color/T2"
+                                android:textStyle="bold"
+                                android:paddingLeft="5dp"
+                                android:textSize="@dimen/text_size_12"
+                                app:use_delete="true" />
+
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:background="@drawable/bg_login_editbox"
+                                android:gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:paddingLeft="5dp"
+                                android:textSize="@dimen/text_size_12"
+                                app:use_delete="true" />
+                            <View
+                                android:layout_width="@dimen/text_size_10"
+                                android:layout_height="match_parent"/>
+
+                            <com.black.base.widget.SpanMaterialEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:background="@drawable/bg_login_editbox"
+                                android:gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:paddingLeft="5dp"
+                                android:textSize="@dimen/text_size_12"
+                                app:use_delete="true" />
+                        </LinearLayout>
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:text="@string/country_area"
+                            android:textColor="@color/T2"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_12" />
+
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/shenfen"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:drawableRight="@drawable/xiala"
+                        android:drawablePadding="6dp"
+                        android:background="@drawable/bg_login_editbox"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/text_size_10"
+                        android:maxLines="1"
+                        android:text="@string/shenfenzheng"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_14" />
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/name"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
+                            android:visibility="gone"
                             android:background="@drawable/bg_login_editbox"
                             android:gravity="center_vertical"
                             android:hint="@string/hint_input_user_name"
@@ -112,6 +202,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/double_padding"
@@ -141,11 +232,19 @@
                                 android:textColor="@color/T13"
                                 android:textSize="@dimen/text_size_16" />
                         </LinearLayout>
-
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:layout_marginBottom="@dimen/text_size_10"
+                            android:text="@string/zhengjian_num"
+                            android:textColor="@color/T2"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_12" />
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/identity"
                             android:layout_width="match_parent"
-                            android:layout_height="45dp"
+                            android:layout_height="57dp"
                             android:background="@drawable/bg_login_editbox"
                             android:gravity="center_vertical"
                             android:hint="@string/input_identity_no_hit"
@@ -168,14 +267,28 @@
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/btn_submit"
-            style="@style/ButtonBlue"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_submit"
+            style="@style/ButtonBlue"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/btn_buy_check"
             android:layout_margin="@dimen/double_padding"
             android:padding="@dimen/middle_padding"
             android:text="@string/next" />
+        <View
+            style="@style/ButtonBlack"
+            android:layout_width="142dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/text_size_10"
+            android:layout_height="5dp"
+            />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

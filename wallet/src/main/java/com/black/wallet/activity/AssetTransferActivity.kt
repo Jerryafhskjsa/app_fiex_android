@@ -1,13 +1,18 @@
 package com.black.wallet.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
@@ -23,10 +28,12 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.ChooseCoinControllerWindow
 import com.black.base.view.ChooseWalletControllerWindow
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.util.Callback
+import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivityAssetTransferBinding
 import com.bumptech.glide.Glide
@@ -78,7 +85,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_asset_transfer)
-        binding?.relFrom?.setOnClickListener(this)
+       // binding?.relFrom?.setOnClickListener(this)
         binding?.relTo?.setOnClickListener(this)
         binding?.relChoose?.setOnClickListener(this)
         binding?.btnConfirmTransfer?.setOnClickListener(this)
@@ -89,6 +96,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         actionBarRecord?.visibility = View.VISIBLE
         actionBarRecord?.setOnClickListener(this)
         updateComfirmTransferBtn()
+        getUserBalance(true)
     }
 
 
@@ -98,7 +106,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
 
     override fun getTitleText(): String {
-        return getString(R.string.asset_transfer)
+        return getString(R.string.exchange)
     }
 
     override fun onClick(v: View?) {
@@ -113,6 +121,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             }
             R.id.rel_choose ->{
                 showSupportCoin = true
+                getUserBalance(false)
                 supportTransferCoin
             }
             R.id.img_exchange ->{
@@ -192,6 +201,9 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                         else if (binding?.tvFromAccount?.text == getString(R.string.contract_account) && binding?.tvToAccount?.text == getString(R.string.spot_account)){
                             userBalanceList = returnData.data?.tigerBalance
                         }
+                        else {
+                            userBalanceList = returnData.data?.spotBalance
+                        }
                     }
                 }
             }))
@@ -199,8 +211,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private val supportTransferCoin:Unit
         get() {
-            var from = fromAccount?.type?.lowercase()
-            var to = toAccount?.type?.lowercase()
+            val from = fromAccount?.type?.lowercase()
+            val to = toAccount?.type?.lowercase()
             if (to != null && from != null) {
                     WalletApiServiceHelper.getSupportTransferCoin(this,  from, to,true, object : NormalCallback<HttpRequestResultDataList<CanTransferCoin?>?>(mContext!!) {
                         override fun callback(returnData: HttpRequestResultDataList<CanTransferCoin?>?) {
@@ -209,7 +221,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                                 supportCoinData = result
                                 if(supportCoinData != null && supportCoinData?.size!! > 0){
                                     if(showSupportCoin == true){
-                                        var result = getNeedCoinInfo()
+                                        val result = getNeedCoinInfo()
                                         showCoinChooseDialog(result)
                                         showSupportCoin = false
                                     }
@@ -240,8 +252,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     canTransferCoin?.add(supportCoinInfo)
                     break
                 }
+
             }
+
         }
+
         var result:ArrayList<CanTransferCoin?>? = ArrayList()
         for (k in canTransferCoin?.indices!!){
              var canTransferCoin = canTransferCoin[k]
@@ -253,7 +268,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     break
                 }
             }
+
         }
+
+
         return result
     }
 
@@ -289,9 +307,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             WalletApiServiceHelper.doTransfer(this, transferCoin,true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
                 override fun callback(returnData: HttpRequestResultString?) {
                     if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                        FryingUtil.showToast(mContext, getString(R.string.transfer_succ))
+                        //FryingUtil.showToast(mContext, getString(R.string.transfer_succ))
+                        successDialog()
                     } else {
-                        FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
+                        //FryingUtil.showToast(mContext, if (returnData == null) getString(R.string.error_data) else returnData.msg)
+                        failedDialog(returnData?.msg)
                     }
                 }
             })
@@ -317,7 +337,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
         if (spot != null) {
             for (i in spot){
-                var initFromData =  SupportAccount("","",false)
+                var initFromData =  SupportAccount("FINANCIAL",getString(R.string.capital_account),false)
                 initFromData.type = i
                 when(i){
                     "SPOT" -> initFromData.name = getString(R.string.spot_account)
@@ -328,7 +348,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         }
         if(transName != null){
             for (j in transName){
-                var initToData =  SupportAccount("","",false)
+                var initToData =  SupportAccount("FINANCIAL",getString(R.string.capital_account),false)
                 initToData.type = j
                 when(j){
                     "CONTRACT" -> initToData.name = getString(R.string.contract_account)
@@ -438,7 +458,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         var maxtCoin = if(userBalance != null)userBalance?.availableBalance + " "+userBalance?.coin else{
             "0.00"
         }
-        binding?.maxTransfer?.text = getString(R.string.max_transfer,maxtCoin)
+        binding?.maxTransfer?.text = maxtCoin
         binding?.editAmount?.setText("")
     }
 
@@ -458,5 +478,77 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                     }
                 })
             chooseCoinDialog?.show()
+    }
+
+
+
+    private fun successDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_succcess, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.BOTTOM
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.amount).visibility = View.GONE
+        dialog.findViewById<SpanTextView>(R.id.successed).text = "划转成功，是否立即交易"
+        dialog.findViewById<SpanTextView>(R.id.red_up).text = "去交易"
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
+
+    private fun failedDialog(data:String?) {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_failed, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.BOTTOM
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.amount).visibility = View.GONE
+        dialog.findViewById<SpanTextView>(R.id.failed).text = data
+        dialog.findViewById<SpanTextView>(R.id.red_up).text = "去充值"
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.TRANSACTION).go(mContext)
+            dialog.dismiss()
+            /* bundle.putString(ConstData.TITLE, getString(R.string.finance_account))
+             bundle.putString(ConstData.URL, UrlConfig.getSupportsUrl(mContext!!))
+             BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+
+             */
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
     }
 }

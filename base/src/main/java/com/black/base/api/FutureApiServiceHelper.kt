@@ -3,7 +3,9 @@ package com.black.base.api
 import android.content.Context
 import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.PagingData
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
@@ -13,8 +15,32 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.RxJavaHelper
 import com.black.base.util.UrlConfig
 import com.black.util.Callback
+import retrofit2.http.Field
 
 object FutureApiServiceHelper {
+
+    /**
+     * 获取K线历史数据
+     */
+    fun getHistoryKline(
+        context: Context?,
+        symbol: String,
+        interval: String,
+        limit: Int,
+        isShowLoading: Boolean,
+        startTime: Long,
+        endTime: Long,
+        callback: Callback<HttpRequestResultDataList<Kline?>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.getHistoryKline(symbol, interval, limit, startTime, endTime)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
 
     /**
      * 获取深度列表
@@ -664,6 +690,72 @@ object FutureApiServiceHelper {
      * 仓位方向->positionSide:LONG,SHORT
      *
      */
+    fun createOrderPlan(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        price: Double?,
+        timeInForce: String?,
+        origQty: Int,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        stopPrice: Double?,
+        triggerPriceType: String?,
+        entrustType: String?,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.planOrderCreate(
+                orderSide,
+                symbol,
+                price,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                triggerProfitPrice,
+                triggerStopPrice,
+                stopPrice,
+                triggerPriceType,
+                entrustType
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
+    fun createOrderProfit(
+        context: Context?,
+        symbol: String?,
+        origQty: Int,
+        positionSide: String?,
+        triggerProfitPrice: Number?,
+        triggerStopPrice: Number?,
+        triggerPriceType: String?,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.profitOrderCreate(
+                symbol,
+                origQty,
+                positionSide,
+                triggerProfitPrice,
+                triggerStopPrice,
+                triggerPriceType
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, false, callback))
+    }
+
     fun createOrder(
         context: Context?,
         orderSide: String,
@@ -699,7 +791,36 @@ object FutureApiServiceHelper {
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
-
+//pingcang
+    fun createOrder2(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        timeInForce: String?,
+        origQty: Int,
+        souceType: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.orderCreate2(
+                orderSide,
+                symbol,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                souceType,
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
     /**
      * 修改自动追加保证金
      * 买卖方向：BUY;SELL
@@ -727,7 +848,7 @@ object FutureApiServiceHelper {
 
     /**
      * 调整杠杆倍数
-     * 仓位方向：LONG(全仓);SHORT(逐仓)
+     * 仓位方向：LONG(买);SHORT(卖)
      */
     fun adjustLeverage(
         context: Context?,
@@ -743,6 +864,28 @@ object FutureApiServiceHelper {
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
             ?.adjustLeverage(symbol, positionSide, leverage)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+
+    /**
+     * 调整杠杆方向
+     * 仓位方向：CROSSED(全仓)，ISOLATED(逐仓)
+     */
+    fun changType(
+        context: Context?,
+        symbol: String?,
+        positionSide: String?,
+        positionType: String?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.changeType(symbol, positionSide, positionType)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

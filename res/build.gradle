@@ -50,8 +50,8 @@ dependencies {
     //implementation 'com.github.ForgetAll:LoadingDialog:v1.0.4'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'io.reactivex.rxjava2:rxjava:2.1.1'
-    api 'com.squareup.retrofit2:retrofit:2.2.0'
-    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
     api 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     //网易易盾(图片验证发送短信)

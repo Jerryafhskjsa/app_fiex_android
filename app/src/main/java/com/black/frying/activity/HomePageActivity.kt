@@ -51,7 +51,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
 
     private var tabHost: FragmentTabHost? = null
 
-    private val tabs = arrayOfNulls<HomeTab>(4)
+    private val tabs = arrayOfNulls<HomeTab>(5)
     var transactionIndex = -1
     var transactionTabType = -1
     private val transactionExtras = Bundle()
@@ -70,7 +70,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         tabs[ConstData.TAB_QUOTATION] = HomeTab(getString(R.string.home_tab_qutation), R.drawable.home_tab_qutation, HomePageQuotationFragmentMain::class.java)
 //        tabs[2] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragment::class.java)
         tabs[ConstData.TAB_TRANSATION] = HomeTab(getString(R.string.home_tab_transaction), R.drawable.home_tab_transaction, HomePageTransactionFragmentFiex::class.java)
-       // tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageContractFragmentMain::class.java)
+        tabs[ConstData.TAB_CONTRACT] = HomeTab(getString(R.string.home_tab_future), R.drawable.home_tab_futures, HomePageContractFragmentMain::class.java)
         tabs[ConstData.TAB_ASSET] = HomeTab(getString(R.string.home_tab_asset), R.drawable.home_tab_assets, HomePageAssetsFragment::class.java)
         for (i in tabs.indices) {
             val tab = tabs[i]!!
@@ -82,7 +82,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             //            Drawable drawable = SkinCompatResources.getDrawable(this, tab.topIconId);
 //
 //            tv_indicator.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            tvIndicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.home_tab_text_color))
+            tvIndicator.setTextColor(SkinCompatResources.getColorStateList(this, R.color.host_color))
             tvIndicator.text = tab.tabName
             tab.setIndicatorTextView(tvIndicator)
             val tabSpec = tabHost?.newTabSpec(tab.tabName)?.setIndicator(indicator)
@@ -150,7 +150,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                 Log.d("666666","initAllFutureSymbolList,error")
             }
         })
-        checkUpdate(false)
+        checkUpdate(true)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -342,9 +342,9 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     }
 
     private fun checkUpdate(silent: Boolean) {
-       /* if (CommonUtil.isApkInDebug(this)) {
-            return
-        }*/
+        /* if (CommonUtil.isApkInDebug(this)) {
+             return
+         }*/
         CommonApiServiceHelper.checkUpdate(this, !silent, object : Callback<HttpRequestResultData<Update?>?>() {
             override fun error(type: Int, error: Any) {}
             override fun callback(returnData: HttpRequestResultData<Update?>?) {
@@ -352,8 +352,8 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
                     val update = returnData.data ?: return
                     if (update.version != null && update.version!![2] != CommonUtil.getVersionName(mContext,"1.2.0")[2]) {
                         //需要更新
-                            update.force = true
-                            FryingUtil.showUpdateDialog(mContext as Activity, update)
+                        update.force = true
+                        FryingUtil.showUpdateDialog(mContext as Activity, update)
                     }
                     else if (update.version!![2] == CommonUtil.getVersionName(mContext,"1.2.0")[2] && update.version!![4] != CommonUtil.getVersionName(mContext,"1.2.0")[4]){
                         FryingUtil.showUpdateDialog(mContext as Activity, update)

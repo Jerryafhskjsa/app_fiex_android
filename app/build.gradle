@@ -88,6 +88,17 @@ android {
         cruncherEnabled = false
         useNewCruncher = false
     }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 repositories {
@@ -115,5 +126,11 @@ dependencies {
     implementation project(':im')
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+//    def lifecycle_version = "2.1.0"
+//    implementation "androidx.lifecycle.lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'com.github.warkiz.tickseekbar:tickseekbar:0.1.4'
+
 //    implementation group: 'com.zendesk', name: 'support', version: '5.1.0'
 }

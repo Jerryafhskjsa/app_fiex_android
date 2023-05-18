@@ -1,5 +1,6 @@
 package com.black.frying.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -38,12 +39,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //K线竖屏数据模型
-class QuotationDetailViewModel(context: Context, private val pair: String?, private val onKLineModelListener: OnKLineModelListener?) : BaseViewModel<Any?>(context) {
+class QuotationDetailViewModel(context: Context, private val pair: String?,private val type: Int?, private val onKLineModelListener: OnKLineModelListener?) : BaseViewModel<Any?>(context) {
     private var currentPairStatus: PairStatus = PairStatus()
     private var coinType: String? = null
     private var pairSet: String? = null
     private var nullAmount: String? = null
-
+    private var  pairStatusType: ConstData.PairStatusType? = ConstData.PairStatusType.SPOT
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
@@ -179,7 +180,13 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
 
     //根据当前交易对状态，刷新所有数据
     private fun getPairStatus() {
-        SocketDataContainer.getPairStatusObservable(context!!,ConstData.PairStatusType.SPOT, currentPairStatus.pair)?.run {
+        if (type == 0){
+            pairStatusType = ConstData.PairStatusType.SPOT
+        }
+        else {
+            pairStatusType = ConstData.PairStatusType.FUTURE_U
+        }
+        SocketDataContainer.getPairStatusObservable(context,pairStatusType, currentPairStatus.pair)?.run {
             subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .observeOn(AndroidSchedulers.from(socketHandler?.looper))
                     .subscribe {
@@ -304,6 +311,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
 
     private fun createDealObserver(): Observer<Pair<String?, ArrayList<TradeOrder?>?>> {
         return object : SuccessObserver<Pair<String?, ArrayList<TradeOrder?>?>>() {
+            @SuppressLint("CheckResult")
             override fun onSuccess(value: Pair<String?, ArrayList<TradeOrder?>?>) {
                 onKLineModelListener?.let {
                     if (TextUtils.equals(currentPairStatus.pair, value.first) && value.second != null) {
@@ -319,6 +327,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
 
     private fun createKLineObserver(): Observer<KLineItemListPair?> {
         return object : SuccessObserver<KLineItemListPair?>() {
+            @SuppressLint("CheckResult")
             override fun onSuccess(value: KLineItemListPair?) {
                 if (value == null) {
                     return
@@ -413,7 +422,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
             return
         }
         CommonUtil.postHandleTask(socketHandler) {
-            SocketDataContainer.getOrderList(context,ConstData.DEPTH_SPOT_TYPE, object : NormalCallback<TradeOrderPairList?>(context) {
+            SocketDataContainer.getOrderList(context,type, object : NormalCallback<TradeOrderPairList?>(context) {
                 override fun callback(returnData: TradeOrderPairList?) {
                     sortTradeOrder(returnData)
                 }
@@ -425,26 +434,72 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     fun getQuotationDeals() {
         onKLineModelListener?.run {
             CommonUtil.postHandleTask(socketHandler) {
-                TradeApiServiceHelper.getTradeOrderDeal(context,SocketDataContainer.DEAL_MAX_SIZE,currentPairStatus.pair,false,object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
-                    override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
-                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            var dealList = returnData.data
-                            var newData = ArrayList<QuotationDealNew?>()
-                            for (i in dealList?.indices!!){
-                                var quotationDealNew = QuotationDealNew()
-                                quotationDealNew.pair = dealList[i]?.s
-                                quotationDealNew.p = dealList[i]?.p
-                                quotationDealNew.a = dealList[i]?.a?.toDouble()!!
-                                quotationDealNew.d = dealList[i]?.m
-                                quotationDealNew.t = dealList[i]?.t!!
-                                newData.add(quotationDealNew)
+                if (type == 0) {
+                    TradeApiServiceHelper.getTradeOrderDeal(
+                        context,
+                        SocketDataContainer.DEAL_MAX_SIZE,
+                        currentPairStatus.pair,
+                        false,
+                        object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
+                            override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    var dealList = returnData.data
+                                    var newData = ArrayList<QuotationDealNew?>()
+                                    for (i in dealList?.indices!!) {
+                                        var quotationDealNew = QuotationDealNew()
+                                        quotationDealNew.pair = dealList[i]?.s
+                                        quotationDealNew.p = dealList[i]?.p
+                                        quotationDealNew.a = dealList[i]?.a?.toDouble()!!
+                                        quotationDealNew.d = dealList[i]?.m
+                                        quotationDealNew.t = dealList[i]?.t!!
+                                        newData.add(quotationDealNew)
+                                    }
+                                    SocketDataContainer.updateQuotationDealNewData(
+                                        socketHandler,
+                                        currentPairStatus.pair,
+                                        newData,
+                                        true
+                                    )
+                                }
                             }
-                            SocketDataContainer.updateQuotationDealNewData(socketHandler,currentPairStatus.pair,newData,true)
-                        }
-                    }
-                    override fun error(type: Int, error: Any?) {
-                    }
-                })
+
+                            override fun error(type: Int, error: Any?) {
+                            }
+                        })
+                }
+                else{
+                    TradeApiServiceHelper.getTradeOrderDealFuture(
+                        context,
+                        SocketDataContainer.DEAL_MAX_SIZE,
+                        currentPairStatus.pair,
+                        false,
+                        object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
+                            override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                    var dealList = returnData.data
+                                    var newData = ArrayList<QuotationDealNew?>()
+                                    for (i in dealList?.indices!!) {
+                                        var quotationDealNew = QuotationDealNew()
+                                        quotationDealNew.pair = dealList[i]?.s
+                                        quotationDealNew.p = dealList[i]?.p
+                                        quotationDealNew.a = dealList[i]?.a?.toDouble()!!
+                                        quotationDealNew.d = dealList[i]?.m
+                                        quotationDealNew.t = dealList[i]?.t!!
+                                        newData.add(quotationDealNew)
+                                    }
+                                    SocketDataContainer.updateQuotationDealNewData(
+                                        socketHandler,
+                                        currentPairStatus.pair,
+                                        newData,
+                                        true
+                                    )
+                                }
+                            }
+
+                            override fun error(type: Int, error: Any?) {
+                            }
+                        })
+                }
             }
         }
     }
@@ -461,7 +516,13 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
 
     //获取当前交易对深度
     fun getTradePairInfo() {
-        SocketDataContainer.getPairStatus(context, ConstData.PairStatusType.SPOT,pair, object : Callback<PairStatus?>() {
+        if (type == 0){
+            pairStatusType = ConstData.PairStatusType.SPOT
+        }
+        else {
+            pairStatusType = ConstData.PairStatusType.FUTURE_U
+        }
+        SocketDataContainer.getPairStatus(context, pairStatusType,pair, object : Callback<PairStatus?>() {
             override fun error(type: Int, error: Any) {
                 FryingUtil.showToast(context, context.getString(R.string.pair_error), FryingSingleToast.ERROR)
             }
@@ -515,51 +576,108 @@ class QuotationDetailViewModel(context: Context, private val pair: String?, priv
     fun getKLineDataFiex(timeStep:String?,kLinePage: Int,startTime:Long,endTime:Long){
         currentPairStatus.pair?.let {
             if (timeStep != null) {
-                CommonApiServiceHelper.getHistoryKline(
-                    context,
-                    it,
-                    timeStep,
-                    1500,
-                    true,
-                    startTime,
-                    endTime,
-                    object : Callback<HttpRequestResultDataList<Kline?>?>() {
-                        override fun error(type: Int, error: Any) {
-                            if(kLinePage != 0){
-                                onKLineModelListener!!.onKLineLoadingMore()
-                            }
-                        }
-                        override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
-                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                var items = returnData.data!!
-                                onKLineAllEnd = true
-                                if(items != null && items.size>0){
-                                    var dataItem = ArrayList<KLineItem?>()
-                                    for (i in items.indices){
-                                        var klineItem = KLineItem()
-                                        var temp = items[i]
-                                        klineItem.a = temp?.a?.toDouble()!!
-                                        klineItem.c = temp?.c?.toDouble()!!
-                                        klineItem.h = temp?.h?.toDouble()!!
-                                        klineItem.l = temp?.l?.toDouble()!!
-                                        klineItem.o = temp?.o?.toDouble()!!
-                                        klineItem.t = temp?.t?.div(1000)
-                                        klineItem.v = temp?.v?.toDouble()!!
-                                        dataItem?.add(klineItem)
-                                    }
-                                    if(kLinePage == 0){
-                                        onKLineModelListener!!.onKLineDataAll(dataItem)
-                                    }else{
-                                        onKLineModelListener!!.onKLineDataMore(kLinePage, dataItem)
-                                    }
-                                }
-                            }else{
-                                if(kLinePage != 0){
+                if (type == 0) {
+                    CommonApiServiceHelper.getHistoryKline(
+                        context,
+                        it,
+                        timeStep,
+                        1500,
+                        true,
+                        startTime,
+                        endTime,
+                        object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                            override fun error(type: Int, error: Any) {
+                                if (kLinePage != 0) {
                                     onKLineModelListener!!.onKLineLoadingMore()
                                 }
                             }
-                        }
-                    })
+
+                            override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                    val items = returnData.data!!
+                                    onKLineAllEnd = true
+                                    if (items.size > 0) {
+                                        val dataItem = ArrayList<KLineItem?>()
+                                        for (i in items.indices) {
+                                            val klineItem = KLineItem()
+                                            val temp = items[i]
+                                            klineItem.a = temp?.a?.toDouble()!!
+                                            klineItem.c = temp.c?.toDouble()!!
+                                            klineItem.h = temp.h?.toDouble()!!
+                                            klineItem.l = temp.l?.toDouble()!!
+                                            klineItem.o = temp.o?.toDouble()!!
+                                            klineItem.t = temp.t?.div(1000)
+                                            klineItem.v = temp.v?.toDouble()!!
+                                            dataItem.add(klineItem)
+                                        }
+                                        if (kLinePage == 0) {
+                                            onKLineModelListener!!.onKLineDataAll(dataItem)
+                                        } else {
+                                            onKLineModelListener!!.onKLineDataMore(
+                                                kLinePage,
+                                                dataItem
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    if (kLinePage != 0) {
+                                        onKLineModelListener!!.onKLineLoadingMore()
+                                    }
+                                }
+                            }
+                        })
+                }
+                else{
+                    FutureApiServiceHelper.getHistoryKline(
+                        context,
+                        it,
+                        timeStep,
+                        500,
+                        true,
+                        startTime,
+                        endTime,
+                        object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                            override fun error(type: Int, error: Any) {
+                                if (kLinePage != 0) {
+                                    onKLineModelListener!!.onKLineLoadingMore()
+                                }
+                            }
+
+                            override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                    val items = returnData.data!!
+                                    onKLineAllEnd = true
+                                    if (items.size > 0) {
+                                        val dataItem = ArrayList<KLineItem?>()
+                                        for (i in items.indices) {
+                                            val klineItem = KLineItem()
+                                            val temp = items[i]
+                                            klineItem.a = temp?.a?.toDouble()!!
+                                            klineItem.c = temp.c?.toDouble()!!
+                                            klineItem.h = temp.h?.toDouble()!!
+                                            klineItem.l = temp.l?.toDouble()!!
+                                            klineItem.o = temp.o?.toDouble()!!
+                                            klineItem.t = temp.t?.div(1000)
+                                            klineItem.v = temp.v?.toDouble()!!
+                                            dataItem.add(klineItem)
+                                        }
+                                        if (kLinePage == 0) {
+                                            onKLineModelListener!!.onKLineDataAll(dataItem)
+                                        } else {
+                                            onKLineModelListener!!.onKLineDataMore(
+                                                kLinePage,
+                                                dataItem
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    if (kLinePage != 0) {
+                                        onKLineModelListener!!.onKLineLoadingMore()
+                                    }
+                                }
+                            }
+                        })
+                }
             }
         }
     }

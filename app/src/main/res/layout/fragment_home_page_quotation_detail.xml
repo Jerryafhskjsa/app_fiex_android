@@ -13,18 +13,154 @@
             android:id="@+id/market_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/yijian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:gravity="center"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/tianjia_cion"
+                    android:textColor="#262838"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/one"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/btn_return_pressed"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/pair_name_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_16"
+                            android:text="BTC"
+                            android:textColor="#262838"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/set_name_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/USDT"
+                            android:layout_weight="1"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_10"
+                            android:textStyle="bold" />
+                        <CheckedTextView
+                            android:id="@+id/check_one"
+                            android:layout_width="16dp"
+                            android:layout_height="@dimen/text_size_16"
+                            android:layout_marginRight="@dimen/text_size_16"
+                            android:background="@drawable/confirm_collect_coin"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"/>
+                    <LinearLayout
+                        android:id="@+id/two"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:visibility="gone"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/btn_return_pressed"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/pair_name_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_16"
+                            android:text="ETC"
+                            android:textColor="#262838"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/set_name_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/USDT"
+                            android:layout_weight="1"
+                            android:textColor="@color/T2"
+                            android:textSize="@dimen/text_size_10"
+                            android:textStyle="bold" />
+                        <CheckedTextView
+                            android:id="@+id/check_two"
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="16dp"
+                            android:layout_marginRight="@dimen/text_size_16"
+                            android:background="@drawable/confirm_collect_coin"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/zi_zhu"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/anniu"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:layout_marginTop="@dimen/text_size_20">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tianjia_zixuan"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tian_jia"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/text_size_16"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:layout_marginTop="@dimen/text_size_20">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tianjia_bidui"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
                 <ListView
                     android:id="@+id/list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_size_10"
                     android:dividerHeight="@dimen/line"
                     android:fadingEdge="none"
                     android:overScrollMode="never"
                     android:scrollbars="none">
                 </ListView>
-            </FrameLayout>
+            </LinearLayout>
         </com.black.lib.refresh.QRefreshLayout>
 </layout>

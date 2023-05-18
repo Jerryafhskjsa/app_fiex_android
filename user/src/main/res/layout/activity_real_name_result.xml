@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="realNameMenuModel"
+            type="Object" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/B2">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/B2">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="12dp"
+                android:theme="@style/AppTheme"
+                app:elevation="12dp">
+
+                <include layout="@layout/tool_bar_left_back" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:background="@color/B1" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.black.base.widget.ObserveScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/tongguo"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/xianhuo"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_marginTop="@dimen/text_size_20"
+                        android:orientation="vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="@string/jichu"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_14" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/tonguo"
+                                    android:textColor="@color/T7"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="@dimen/text_size_16"
+                                android:layout_height="@dimen/text_size_16"
+                                android:src="@drawable/queren"
+                                 />
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:maxLines="1"
+                                android:text="@string/geren"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="@dimen/text_size_16"
+                                android:layout_height="@dimen/text_size_16"
+                                android:src="@drawable/queren"
+                                />
+
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_10"
+                                android:maxLines="1"
+                                android:text="@string/shenfen"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/shenhezhong"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xianhuo"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:orientation="vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="@string/jichu"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_14" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/shenhezhong"
+                                    android:textColor="#F0C300"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:maxLines="1"
+                                    android:text="@string/renzhenghou"
+                                    android:textColor="@color/T2"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:maxLines="1"
+                                    android:text="@string/shenheshijian"
+                                    android:textColor="#F0C300"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/weitongguo"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xianhuo"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:orientation="vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="@string/jichu"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_14" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/weitongguo"
+                                    android:textColor="#FF0F0F"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:maxLines="1"
+                                    android:text="@string/liyou"
+                                    android:textColor="#FF0F0F"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_size_10"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/text_size_10"
+                                    android:maxLines="1"
+                                    android:text="@string/qingshang"
+                                    android:textColor="#FF0F0F"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/weirenzheng"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xianhuo"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/text_size_20"
+                            android:layout_marginTop="@dimen/text_size_20"
+                            android:orientation="vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1"
+                                    android:text="@string/jichu"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_14" />
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/weirenzheng"
+                                    android:textColor="#FF0F0F"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="30dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="@string/renzheng_next"
+                                    android:textColor="@color/T2"
+                                    android:textSize="@dimen/text_size_14" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.black.base.widget.ObserveScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+</layout>

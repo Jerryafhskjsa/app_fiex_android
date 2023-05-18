@@ -2,7 +2,9 @@ package com.black.base.api
 
 
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.PagingData
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairDeal
 import com.black.base.model.socket.PairQuotation
@@ -15,6 +17,15 @@ import retrofit2.http.*
 
 
 interface FutureApiService {
+    /**
+     * 获取K线
+     */
+    @GET(UrlConfig.Future.URL_KLINE)
+    fun getHistoryKline(@Query("symbol") symbol: String?,
+                        @Query("interval") interval: String?,
+                        @Query("limit") limit: Int?,
+                        @Query("startTime") startTime:Long,
+                        @Query("endTime") endTime:Long): Observable<HttpRequestResultDataList<Kline?>?>?
 
     /**
      * 获取深度
@@ -230,6 +241,37 @@ interface FutureApiService {
      * 下单接口
      */
     @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE_PLAN)
+    fun planOrderCreate(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("price") price: Double?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("triggerProfitPrice") triggerProfitPrice: Number?,
+        @Field("triggerStopPrice") triggerStopPrice: Number?,
+        @Field("stopPrice") stopPrice: Double?,
+        @Field("triggerPriceType") triggerPriceType: String?,
+        @Field("entrustType") entrustType: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 创建止盈止损
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE_PROFIT)
+    fun profitOrderCreate(
+        @Field("symbol") symbol: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("positionSide") positionSide: String?,
+        @Field("triggerProfitPrice") triggerProfitPrice: Number?,
+        @Field("triggerStopPrice") triggerStopPrice: Number?,
+        @Field("triggerPriceType") triggerPriceType: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    @FormUrlEncoded
     @POST(UrlConfig.Future.ULR_ORDER_CREATE)
     fun orderCreate(
         @Field("orderSide") orderSide: String?,
@@ -241,7 +283,19 @@ interface FutureApiService {
         @Field("origQty") origQty: Int?,
         @Field("triggerProfitPrice") triggerProfitPrice: Number?,
         @Field("triggerStopPrice") triggerStopPrice: Number?,
-        @Field("reduceOnly") reduceOnly: Boolean?
+        @Field("reduceOnly") reduceOnly: Boolean?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE)
+    fun orderCreate2(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("sourceType") sourceType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**
@@ -264,6 +318,17 @@ interface FutureApiService {
         @Field("symbol") symbol: String?,
         @Field("positionSide") positionSide: String?,
         @Field("leverage") leverage: Int?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+    /**
+     * 调整杠杆方向
+     */
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.URL_CHANGE_TYPE)
+    fun changeType(
+        @Field("symbol") symbol: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("positionType") positionType: String?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

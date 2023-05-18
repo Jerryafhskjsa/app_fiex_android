@@ -11,6 +11,7 @@
                 android:topLeftRadius="3dp"
                 android:topRightRadius="3dp"/>
             <size
+                android:width="@dimen/text_size_20"
                 android:height="4dp"/>
         </shape>
     </item>

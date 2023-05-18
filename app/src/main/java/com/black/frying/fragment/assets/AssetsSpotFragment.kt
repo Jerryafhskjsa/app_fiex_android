@@ -1,5 +1,6 @@
 package com.black.frying.fragment.assets
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -15,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,9 +30,11 @@ import com.black.base.model.wallet.TigerWallet
 import com.black.base.model.wallet.Wallet
 import com.black.base.util.ConstData
 import com.black.base.util.ExchangeRatesUtil
+import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.lib.refresh.QRefreshLayout
 import com.black.router.BlackRouter
+import com.black.util.CommonUtil
 import com.black.util.NumberUtil
 import com.black.wallet.BR
 import com.black.wallet.R
@@ -39,14 +43,16 @@ import com.black.wallet.databinding.FragmentWalletNormalBinding
 import com.black.wallet.viewmodel.WalletViewModel
 import java.math.BigDecimal
 
-class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
-    private var isVisibility: Boolean = false
+class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickListener{
+    private var isVisibility: Boolean = true
     private var searchKey: String? = null
     private var doSearch = true
     private var wallet: Wallet? = null
     private var binding: FragmentWalletNormalBinding? = null
     private var layout: View? = null
-
+    private var walletFragment: AssetsWalletFragment? = null
+    private var financeFragment: AssetsFinanceFragment? = null
+    private var contractFragment: AssetsContractFragment? = null
     private var adapter: WalletAdapter? = null
     private var eventListener:EventResponseListener? = null
 
@@ -62,9 +68,9 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         if (layout != null) {
             return layout
         }
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
-
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_normal, container, false)
         binding?.btnExchange?.setOnClickListener(this)
         binding?.btnWithdraw?.setOnClickListener(this)
@@ -110,15 +116,19 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         binding?.coinSearch?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
+                eventListener?.search(s.toString(), WalletViewModel.WALLET_NORMAL)
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
         binding?.btnWalletFilter?.setOnCheckedChangeListener { _, isChecked ->
-                eventListener?.setWalletCoinFilter(isChecked)
-                eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
-                doSearch = isChecked
+            eventListener?.setWalletCoinFilter(isChecked)
+            eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_NORMAL)
+            doSearch = isChecked
+        }
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
         }
         return layout
     }
@@ -126,6 +136,7 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
     override fun onResume() {
         super.onResume()
         doSearch = (if (eventListener?.getWalletCoinFilter() == null) false else eventListener?.getWalletCoinFilter()!!)
+        isVisibility = (if (eventListener?.getWalletziCanFilter() == null) true else eventListener?.getWalletziCanFilter()!!)
         binding?.btnWalletFilter?.isChecked = doSearch
     }
 
@@ -140,6 +151,48 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         val extras = Bundle()
         extras.putParcelable(ConstData.WALLET, wallet)
         BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras).go(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN_RECHARGE -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.CHOOSE_COIN_WITHDRAW -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.LEVER_PAIR_CHOOSE -> {
+                    val pair = data?.getStringExtra(ConstData.PAIR)
+                    if (pair != null) {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.PAIR, pair)
+                            BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
+                        })
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(v: View?) {
@@ -198,19 +251,19 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
             } else {
                 val total: Money? = binding?.moneyTotal?.tag as Money?
                 var usdt = "$nullAmount "
-                var usd = String.format("≈ %s USD", nullAmount)
-                var cny = String.format("≈ %S CNY", nullAmount)
+                var usd = String.format("≈ %s $", nullAmount)
+                var cny = String.format("≈ %S ￥", nullAmount)
                 val exChange = ExchangeRatesUtil.getExchangeRatesSetting(mContext!!)?.rateCode
                 val rates: Double? = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                 var background: Drawable?
                 var color: Int?
                 if (total != null && exChange == 0) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    cny = String.format("≈ %S CNY", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
+                    cny = String.format("≈ %S ￥", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * (total.rate!!), 8, 2, 2))
                 }
                 if (total != null && exChange == 1) {
                     usdt = NumberUtil.formatNumberDynamicScaleNoGroup(total.cny, 8, 2, 2) + " "
-                    usd = String.format("≈ %S USD", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
+                    usd = String.format("≈ %S $", NumberUtil.formatNumberDynamicScaleNoGroup(total.cny!! * rates!!, 8, 2, 2))
                 }
                     if (total?.profitAmount != null  && total.profitAmount!! < 0.0) {//涨
                         background = mContext?.getDrawable(com.fbsex.exchange.R.drawable.trans_raise_bg_corner)
@@ -238,10 +291,11 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
     }
 
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
-        refreshMoneyDisplay()
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
         adapter?.setVisibility(isVisibility)
+        binding?.xianshi?.isChecked = isChecked
+        refreshMoneyDisplay()
     }
 
     fun setWalletCoinFilter(isChecked: Boolean) {
@@ -260,12 +314,18 @@ class AssetsSpotFragment : BaseFragment(), OnItemClickListener, View.OnClickList
         }
 
         fun getWalletCoinFilter(): Boolean? {
-             return false
+            return false
         }
 
         fun setWalletCoinFilter(checked: Boolean) {
         }
 
+        fun setWalletziCanFilter(checked: Boolean) {
+        }
+
+        fun getWalletziCanFilter(): Boolean? {
+            return false
+        }
         fun search(searchKey: String, walletType: Int) {
         }
     }

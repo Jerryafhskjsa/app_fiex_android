@@ -87,7 +87,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_quotation_detail)
-        viewModel = QuotationDetailViewModel(this, intent.getStringExtra(ConstData.PAIR), this)
+        viewModel = QuotationDetailViewModel(this, intent.getStringExtra(ConstData.PAIR), intent.getIntExtra(ConstData.NAME,0),this)
         deepBinding = QuotationDetailDeepViewBinding(this, binding?.quotationDetailDeepLayout!!, MAX_SHOW_COUNT)
 
         colorT7 = SkinCompatResources.getColor(this, R.color.T17)

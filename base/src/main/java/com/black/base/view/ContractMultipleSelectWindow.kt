@@ -1,9 +1,6 @@
 package com.black.base.view
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.PaintDrawable
 import android.os.Build
 import android.text.Editable
 import android.text.TextUtils
@@ -37,6 +34,7 @@ class ContractMultipleSelectWindow(
     private val activity: Activity,
     title: String?,
     private val bean: ContractMultiChooseBean?,
+    private val beishu: String?,
     private val onReturnListener: OnReturnListener
 ) : View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
@@ -73,6 +71,7 @@ class ContractMultipleSelectWindow(
         btnCancel = contentView.findViewById(R.id.btn_cancel)
         btnCommit = contentView.findViewById(R.id.btn_commit)
         tvDirection = contentView.findViewById(R.id.direction)
+        bean?.defaultMultiple = beishu?.toInt()
         if (bean?.orientation.equals("BUY")) {
             tvDirection?.setText(activity.getString(R.string.contract_do_raise))
             tvDirection.setBackgroundColor(activity.getColor(R.color.T9))
@@ -89,7 +88,7 @@ class ContractMultipleSelectWindow(
         }
 
         editMulti = contentView.findViewById(R.id.editMultiple)
-        editMulti?.setText(bean?.defaultMultiple.toString())
+        editMulti?.setText(beishu)
         editMulti.addTextChangedListener(object :
             TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -109,7 +108,7 @@ class ContractMultipleSelectWindow(
         btnMultiAdd = contentView.findViewById(R.id.multi_add)
         countBar = contentView.findViewById(R.id.count_bar)
         countBar.max = bean?.maxMultiple!!
-        countBar?.setProgress(bean?.defaultMultiple!!,true)
+        countBar?.setProgress(bean.defaultMultiple!!,true)
         countBar.setOnSeekBarChangeListener(this)
         progressBar = contentView.findViewById(R.id.count_progress)
         zeroView = contentView.findViewById(R.id.amount_zero)
@@ -125,7 +124,6 @@ class ContractMultipleSelectWindow(
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {
@@ -214,18 +212,32 @@ class ContractMultipleSelectWindow(
     }
 
     private fun adjustLeverage(bean: ContractMultiChooseBean?){
-        var positionSide:String? = null
-        when(bean?.type){
-            0 -> positionSide = "SHORT"
-            1 -> positionSide = "LONG"
-        }
+        val positionSide:String = "SHORT"
         FutureApiServiceHelper.adjustLeverage(activity,bean?.symbol,positionSide,bean?.defaultMultiple,true,object : Callback<HttpRequestResultBean<String>?>() {
             override fun callback(returnData: HttpRequestResultBean<String>?) {
                 if (returnData != null) {
                     Log.d("iiiiii-->adjustLeverage", returnData.result.toString())
-                    onReturnListener?.onReturn(bean)
+                    onReturnListener.onReturn(bean)
                     dismiss()
                 }
+            }
+            override fun error(type: Int, error: Any?) {
+                FryingUtil.showToast(activity,error.toString())
+            }
+        })
+    }
+
+    private fun adjustLeverage1(bean: ContractMultiChooseBean?){
+        val positionSide:String = "LONG"
+        FutureApiServiceHelper.adjustLeverage(activity,bean?.symbol,positionSide,bean?.defaultMultiple,true,object : Callback<HttpRequestResultBean<String>?>() {
+            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                if (returnData != null) {
+                    Log.d("iiiiii-->adjustLeverage", returnData.result.toString())
+                    onReturnListener.onReturn(bean)
+                    dismiss()
+                }
+
+
             }
             override fun error(type: Int, error: Any?) {
                 FryingUtil.showToast(activity,error.toString())
@@ -238,6 +250,7 @@ class ContractMultipleSelectWindow(
             R.id.btn_cancel -> dismiss()
             R.id.btn_commit -> {
                 adjustLeverage(bean)
+                adjustLeverage1(bean)
             }
             R.id.btn_fiexible -> {
                 btnFiexible.isChecked = true

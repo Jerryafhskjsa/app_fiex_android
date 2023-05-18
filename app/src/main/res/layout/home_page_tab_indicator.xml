@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp" />
 
@@ -23,7 +23,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:paddingBottom="4dp"
-        android:textColor="@color/home_tab_text_color"
+        android:textColor="@color/host_color"
         android:textSize="@dimen/text_size_10"
         android:textStyle="bold" />
 </RelativeLayout>

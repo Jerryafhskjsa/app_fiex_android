@@ -13,7 +13,7 @@ import com.black.wallet.R
 import com.black.wallet.databinding.ListTabContractPlanBinding
 import skin.support.content.res.SkinCompatResources
 
-    class ContraLimitTabListAdapter(context: Context, variableId: Int, data: ArrayList<OrderBeanItem>?) : BaseRecycleDataBindAdapter<OrderBeanItem, ListTabContractPlanBinding>(context, variableId, data){
+    class ContraLimitTabListAdapter(context: Context, variableId: Int, data: MutableList<OrderBeanItem>?) : BaseRecycleDataBindAdapter<OrderBeanItem, ListTabContractPlanBinding>(context, variableId, data){
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null

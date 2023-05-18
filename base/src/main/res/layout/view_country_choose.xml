@@ -2,53 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    style="@style/wanshang"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/default_padding" />
 
     <LinearLayout
+        style="@style/wanshang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/double_padding">
+        android:padding="@dimen/text_size_16"
+        android:orientation="vertical">
+    <com.black.base.widget.SpanTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="@string/country_area"
+        android:textStyle="bold"
+        android:textColor="@color/T1"
+        android:textSize="@dimen/text_size_16" />
+    <LinearLayout
+        style="@style/ButtonGrayLight"
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="30dp"
+        android:gravity="center_vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_search" />
+        <com.black.lib.view.InputLinearLayout
+            android:layout_width="158dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.black.base.widget.MaterialEditText
-            android:id="@+id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="@string/hint_input_word"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="10dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/sousuo" />
 
-        <com.black.base.widget.SpanTextView
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:textColor="@color/T2"
-            android:textSize="@dimen/text_size_16" />
+            <com.black.base.widget.SpanMaterialEditText
+                android:id="@+id/input"
+                style="@style/NormalEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="搜索国家/地区"
+                android:textColorHint="@color/T3"
+                android:textSize="@dimen/text_size_12" />
+        </com.black.lib.view.InputLinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line"
-        android:layout_marginLeft="@dimen/middle_padding"
-        android:layout_marginRight="@dimen/middle_padding"
-        android:background="#EAF0F2" />
+    <com.black.base.widget.SpanTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="20dp"
+        android:text="@string/guojia"
+        android:textStyle="bold"
+        android:textColor="@color/T2"
+        android:textSize="@dimen/text_size_12" />
+
 
     <ListView
         android:id="@+id/list_view"
@@ -59,4 +74,5 @@
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:scrollbars="none" />
+</LinearLayout>
 </LinearLayout>

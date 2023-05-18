@@ -40,8 +40,8 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
         binding?.chineseTw?.tag = application!!.getLanguage(FryingLanguage.Chinese_tw)
         binding?.english?.setOnClickListener(this)
         binding?.english?.tag = application!!.getLanguage(FryingLanguage.English)
-        binding?.vietnam?.setOnClickListener(this)
-        binding?.vietnam?.tag = application!!.getLanguage(FryingLanguage.Vietnam)
+        binding?.janpanese?.setOnClickListener(this)
+        binding?.janpanese?.tag = application!!.getLanguage(FryingLanguage.Japanese)
         binding?.englishUk?.setOnClickListener(this)
         binding?.englishUk?.tag = application!!.getLanguage(FryingLanguage.English_uk)
     }
@@ -56,18 +56,24 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when(v.id){
-            R.id.chinese,R.id.chinese_tw,R.id.english,R.id.vietnam,R.id.english_uk -> changeLanguage(v.tag as FryingLanguage)
+            R.id.chinese,R.id.chinese_tw,R.id.english,R.id.janpanese,R.id.english_uk -> changeLanguage(v.tag as FryingLanguage)
         }
     }
 
     private fun changeLanguage(language: FryingLanguage) {
-        if (language.languageCode != 0  && language.languageCode != 3) {
+        if (language.languageCode != 0 && language.languageCode != 2) {
             FryingUtil.showToast(this, getString(R.string.please_waiting))
             return
         }
         if (language != LanguageUtil.getLanguageSetting(this)) {
             LanguageUtil.changeAppLanguage(this, language, true)
-            ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
+            if (language.languageCode == 0) {
+                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
+            }
+            if (language.languageCode == 2)
+            {
+                ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
+            }
             onLanguageChanged()
             BlackRouter.getInstance().build(RouterConstData.START_PAGE)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -77,22 +83,22 @@ class LanguageSettingActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onLanguageChanged() {
-        val language = LanguageUtil.getLanguageSetting(this)
+        var language = LanguageUtil.getLanguageSetting(this)
         refreshLanguageChecked(language, binding?.chinese)
         refreshLanguageChecked(language, binding?.chineseTw)
         refreshLanguageChecked(language, binding?.english)
-        refreshLanguageChecked(language, binding?.vietnam)
+        refreshLanguageChecked(language, binding?.janpanese)
         refreshLanguageChecked(language, binding?.englishUk)
     }
 
     private fun refreshLanguageChecked(language: FryingLanguage?, textView: TextView?) {
         if (language == null || textView == null) {
-            CommonUtil.setTextViewCompoundDrawable(binding?.english, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
+            CommonUtil.setTextViewCompoundDrawable(binding?.chinese, SkinCompatResources.getDrawable(this, R.drawable.queren2), 2)
         }
-        val tag = textView?.tag
+        var tag = textView?.tag
         if(tag is FryingLanguage){
             if (language?.languageCode == tag.languageCode ) {
-                CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
+                CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.queren2), 2)
             } else {
                 CommonUtil.setTextViewCompoundDrawable(textView, null, 2)
             }

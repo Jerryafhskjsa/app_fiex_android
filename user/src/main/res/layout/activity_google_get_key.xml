@@ -35,13 +35,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/xianhuo"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_16"
                     android:orientation="vertical"
                     >
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/bg_edittext_default">
                         <ImageView
                             android:id="@+id/qrcode_image"
@@ -61,41 +65,96 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
                         android:orientation="horizontal">
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textColor="@color/T2"
-                            android:text="@string/google_key"
-                            android:textSize="@dimen/text_size_15" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/qrcode_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="RTRWCFGS"
-                            android:textColor="@color/T14"
-                            android:textSize="@dimen/text_size_12" />
                         <ImageView
-                            android:id="@+id/btn_copy"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginLeft="10dp"
-                            android:src="@drawable/icon_copy">
-                        </ImageView>
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:background="@drawable/banner_point_select"/>
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:gravity="center"
+                            android:textColor="@color/T1"
+                            android:text="@string/google_key"
+                            android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_size_20"
+                        android:orientation="horizontal">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/qrcode_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:layout_weight="1"
+                       android:layout_marginLeft="@dimen/text_size_10"
+                        android:text="RTRWCFGS"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12" />
+                    <ImageView
+                        android:id="@+id/btn_copy"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/fuzhi">
+                    </ImageView>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/B1"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginRight="@dimen/text_size_16"/>
+                    <LinearLayout
+                        android:layout_marginLeft="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/text_size_10"
+                            android:background="@drawable/banner_point_select"/>
+
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_20"
+                            android:gravity="center"
+                            android:text="@string/bangding_google"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_12" />
+                    </LinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:text="打开 Google Authentication，点击“+”，选择“手动输入密钥”，页面中填入下方密钥"
+                        android:textColor="@color/T3"
+                        android:textSize="@dimen/text_size_12" />
                 <com.black.lib.view.InputLinearLayout
                     android:id="@+id/google_code_layout"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/text_size_20"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_edittext_default"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="30dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <com.black.base.widget.SpanMaterialEditText
                         android:id="@+id/new_password_again"
-                        style="@style/EditTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -112,32 +171,47 @@
 
                     </View>
 
-                    <com.black.base.widget.SpanTextView
+                    <ImageView
                         android:id="@+id/google_code_copy"
-                        style="@style/EditTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="15dp"
-                        android:text="@string/paste"
-                        android:textColor="@color/T13"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/fuzhi"
                         android:textSize="@dimen/text_size_16" />
                 </com.black.lib.view.InputLinearLayout>
-                    <LinearLayout
-                        android:id="@+id/bottom_layout"
+                    <View
                         android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/B1"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginRight="@dimen/text_size_16"/>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/double_padding">
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/btn_next"
-                            style="@style/ButtonBlue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/middle_padding"
-                            android:text="@string/next" />
-                    </LinearLayout>
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:text="注：请将此备份密钥保存在安全位置。如果您丢失手机，此密钥将允许您恢复您的身份验证器。"
+                        android:textColor="@color/T13"
+                        android:textSize="@dimen/text_size_12" />
+
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/double_padding">
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/btn_next"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/middle_padding"
+                android:text="@string/next" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

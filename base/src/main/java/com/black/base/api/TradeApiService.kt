@@ -89,4 +89,10 @@ interface TradeApiService {
         @Query("symbol") symbol: String?
     ): Observable<HttpRequestResultDataList<PairDeal?>?>?
 
+    @GET(UrlConfig.Trade.URL_TRADE_FUTURE)
+    fun getTradeOrderDealFuture(
+        @Query("level") level: Int?,
+        @Query("symbol") symbol: String?
+    ): Observable<HttpRequestResultDataList<PairDeal?>?>?
+
 }

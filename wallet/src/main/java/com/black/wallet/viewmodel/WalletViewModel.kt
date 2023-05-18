@@ -42,6 +42,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var walletLeverList: ArrayList<WalletLever?>? = null
     private var searchKey: String? = null
     private var walletCoinFilter: Boolean? = false
+    private var isVisibility: Boolean? = true
 
     private var symbolList:ArrayList<PairStatus?>? = null
     private var coinList:ArrayList<CoinInfo?>? = ArrayList()
@@ -141,6 +142,14 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         return walletCoinFilter
     }
 
+    fun setWalletziCanFilter(walletCoinFilter: Boolean) {
+        CookieUtil.setWalletziCanFilter(context, walletCoinFilter)
+        this.isVisibility = walletCoinFilter
+    }
+    fun getWalletziCanFilter(): Boolean? {
+        return isVisibility
+    }
+
     fun getWalletList(): ArrayList<Wallet?>? {
         return walletList
     }
@@ -226,11 +235,11 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 }
             }
         }
-       for (i in buyCoinSet){
-           if (i != null) {
-               setListSet.add(i)
-           }
-       }
+        for (i in buyCoinSet){
+            if (i != null) {
+                setListSet.add(i)
+            }
+        }
         for (j in sellCoinSet){
             if (j != null) {
                 setListSet.add(j)
@@ -246,30 +255,30 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
         if(spotBalanceList != null){
             if(coinList != null){
                 for(coin in coinList!!){
-                        var wallet = Wallet()
-                        wallet.coinType = coin?.coinType
-                        wallet.coinIconUrl = coin?.logosUrl
-                        wallet.coinTypeDes = coin?.coinFullName
-                        wallet.coinAmount = BigDecimal(0)
-                        wallet.estimatedAvailableAmount = 0.0
-                        wallet.estimatedAvailableAmountCny = 0.0
-                        wallet.coinFroze = 0.0
-                        walletList?.add(wallet)
+                    var wallet = Wallet()
+                    wallet.coinType = coin?.coinType
+                    wallet.coinIconUrl = coin?.logosUrl
+                    wallet.coinTypeDes = coin?.coinFullName
+                    wallet.coinAmount = BigDecimal(0)
+                    wallet.estimatedAvailableAmount = 0.0
+                    wallet.estimatedAvailableAmountCny = 0.0
+                    wallet.coinFroze = 0.0
+                    walletList?.add(wallet)
+                }
+            }
+            for(i in walletList!!.indices){
+                for (k in spotBalanceList!!.indices){
+                    if(spotBalanceList!![k]?.coin == walletList!![i]?.coinType){
+                        walletList!![i]?.totalAmount = spotBalanceList!![k]?.balance?.toDouble()!!
+                        walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
+                        walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
+                        walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
+                        walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
+                        walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
+                        break
                     }
                 }
-                for(i in walletList!!.indices){
-                    for (k in spotBalanceList!!.indices){
-                        if(spotBalanceList!![k]?.coin == walletList!![i]?.coinType){
-                            walletList!![i]?.totalAmount = spotBalanceList!![k]?.balance?.toDouble()!!
-                            walletList!![i]?.coinAmount = BigDecimal(spotBalanceList!![k]?.availableBalance?.toDouble()!!)
-                            walletList!![i]?.estimatedAvailableAmount = spotBalanceList!![k]?.estimatedAvailableAmount?.toDouble()!!
-                            walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
-                            walletList!![i]?.estimatedAvailableAmountCny = spotBalanceList!![k]?.estimatedCynAmount?.toDouble()!!
-                            walletList!![i]?.coinFroze = spotBalanceList!![k]?.freeze?.toDouble()!!
-                            break
-                        }
-                    }
-                }
+            }
         }
         onWalletModelListener?.onWallet(Observable.just(walletList)
             .compose(RxJavaHelper.observeOnMainThread()), false)
@@ -387,15 +396,15 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
     fun updateTigerBalance(balance: UserBalance?){
         var updateTigerWalletList = ArrayList<TigerWallet?>()
         for (j in tigerWalletList?.indices!!){
-            var newWallet = TigerWallet()
-            var wallet = walletList!![j]
+            val newWallet = TigerWallet()
+            val wallet = walletList!![j]
             if(balance?.coin.equals(wallet?.coinType)){
-                newWallet?.totalAmount = balance?.balance?.toDouble()!!
-                newWallet?.coinAmount =  balance?.availableBalance?.toDouble()!!
-                newWallet?.estimatedTotalAmount = balance?.estimatedTotalAmount?.toDouble()!!
-                newWallet?.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()!!
-                newWallet?.profit = balance?.profit?.toDouble()!!
-                newWallet?.crossedMargin =  balance?.crossedMargin?.toDouble()!!
+                newWallet.totalAmount = balance?.balance?.toDouble()?:0.0
+                newWallet.coinAmount =  balance?.availableBalance?.toDouble()?:0.0
+                newWallet.estimatedTotalAmount = balance?.estimatedTotalAmount?.toDouble()?:0.0
+                newWallet.estimatedAvailableAmountCny = balance?.estimatedCynAmount?.toDouble()?:0.0
+                newWallet.profit = balance?.profit?.toDouble()?:0.0
+                newWallet.crossedMargin =  balance?.crossedMargin?.toDouble()?:0.0
             }
             updateTigerWalletList.add(newWallet)
         }
@@ -409,72 +418,72 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                     walletList = returnData.data?.userCoinAccountVO
                     walletLeverList = returnData.data?.userCoinAccountLeverVO
                     C2CApiServiceHelper.getC2CPrice(context!!)
-                            ?.materialize()
-                            ?.flatMap(Function<Notification<C2CPrice?>, Observable<Int>> { notify ->
-                                if (notify.isOnNext) {
-                                    val c2CPrice = notify.value
-                                    //循环累加
-                                    var walletTotal = 0.0
-                                    var walletTotalCNY = 0.0
-                                    var walletLeverTotal = 0.0
-                                    var walletLeverTotalCNY = 0.0
-                                    walletList?.run {
-                                        for (wallet in walletList!!) {
-                                            walletTotal += wallet?.estimatedTotalAmount
-                                                    ?: 0.toDouble()
-                                            val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(wallet?.estimatedTotalAmount, c2CPrice)
-                                            cny?.also {
-                                                wallet?.totalAmountCny = it
-                                                walletTotalCNY += it
-                                            }
+                        ?.materialize()
+                        ?.flatMap(Function<Notification<C2CPrice?>, Observable<Int>> { notify ->
+                            if (notify.isOnNext) {
+                                val c2CPrice = notify.value
+                                //循环累加
+                                var walletTotal = 0.0
+                                var walletTotalCNY = 0.0
+                                var walletLeverTotal = 0.0
+                                var walletLeverTotalCNY = 0.0
+                                walletList?.run {
+                                    for (wallet in walletList!!) {
+                                        walletTotal += wallet?.estimatedTotalAmount
+                                            ?: 0.toDouble()
+                                        val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(wallet?.estimatedTotalAmount, c2CPrice)
+                                        cny?.also {
+                                            wallet?.totalAmountCny = it
+                                            walletTotalCNY += it
                                         }
                                     }
-                                    walletLeverList?.run {
-                                        for (walletLever in walletLeverList!!) {
-                                            walletLeverTotal += walletLever?.estimatedTotalAmount
-                                                    ?: 0.toDouble()
-                                            val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(walletLever?.estimatedTotalAmount, c2CPrice)
-                                            cny?.also {
-                                                walletLever?.totalAmountCny = it
-                                                walletLeverTotalCNY += it
-                                            }
-                                            walletLeverTotal += walletLever?.afterEstimatedTotalAmount
-                                                    ?: 0.toDouble()
-                                            val cny2: Double? = SocketDataContainer.computeTotalMoneyCNY(walletLever?.afterEstimatedTotalAmount, c2CPrice)
-                                            cny2?.also {
-                                                walletLever?.afterTotalAmountCny = it
-                                                walletLeverTotalCNY += it
-                                            }
+                                }
+                                walletLeverList?.run {
+                                    for (walletLever in walletLeverList!!) {
+                                        walletLeverTotal += walletLever?.estimatedTotalAmount
+                                            ?: 0.toDouble()
+                                        val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(walletLever?.estimatedTotalAmount, c2CPrice)
+                                        cny?.also {
+                                            walletLever?.totalAmountCny = it
+                                            walletLeverTotalCNY += it
+                                        }
+                                        walletLeverTotal += walletLever?.afterEstimatedTotalAmount
+                                            ?: 0.toDouble()
+                                        val cny2: Double? = SocketDataContainer.computeTotalMoneyCNY(walletLever?.afterEstimatedTotalAmount, c2CPrice)
+                                        cny2?.also {
+                                            walletLever?.afterTotalAmountCny = it
+                                            walletLeverTotalCNY += it
                                         }
                                     }
-                                    onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
-                                        it.usdt = walletTotal
-                                        it.cny = walletTotalCNY
-                                    })
-                                            .compose(RxJavaHelper.observeOnMainThread()))
-                                    onWalletModelListener?.onWalletLeverTotal(Observable.just(Money().also {
-                                        it.usdt = walletLeverTotal
-                                        it.cny = walletLeverTotalCNY
-                                    })
-                                            .compose(RxJavaHelper.observeOnMainThread()))
-                                    onWalletModelListener?.onTotalMoney(Observable.just(walletTotal + walletLeverTotal)
-                                            .compose(RxJavaHelper.observeOnMainThread()))
-                                    return@Function Observable.just(2)
                                 }
-                                if (notify.isOnError) {
-                                    return@Function Observable.just(1)
-                                }
-                                Observable.empty()
-                            })
-                            ?.flatMap {
-                                onWalletModelListener?.onWallet(Observable.just(filterWallet())
-                                        .compose(RxJavaHelper.observeOnMainThread()), isShowLoading)
-                                onWalletModelListener?.onWalletLever(Observable.just(filterWalletLever())
-                                        .compose(RxJavaHelper.observeOnMainThread()), isShowLoading)
-                                Observable.just(1)
+                                onWalletModelListener?.onWalletTotal(Observable.just(Money().also {
+                                    it.usdt = walletTotal
+                                    it.cny = walletTotalCNY
+                                })
+                                    .compose(RxJavaHelper.observeOnMainThread()))
+                                onWalletModelListener?.onWalletLeverTotal(Observable.just(Money().also {
+                                    it.usdt = walletLeverTotal
+                                    it.cny = walletLeverTotalCNY
+                                })
+                                    .compose(RxJavaHelper.observeOnMainThread()))
+                                onWalletModelListener?.onTotalMoney(Observable.just(walletTotal + walletLeverTotal)
+                                    .compose(RxJavaHelper.observeOnMainThread()))
+                                return@Function Observable.just(2)
                             }
-                            ?.compose(RxJavaHelper.observeOnMainThread())
-                            ?.subscribe()
+                            if (notify.isOnError) {
+                                return@Function Observable.just(1)
+                            }
+                            Observable.empty()
+                        })
+                        ?.flatMap {
+                            onWalletModelListener?.onWallet(Observable.just(filterWallet())
+                                .compose(RxJavaHelper.observeOnMainThread()), isShowLoading)
+                            onWalletModelListener?.onWalletLever(Observable.just(filterWalletLever())
+                                .compose(RxJavaHelper.observeOnMainThread()), isShowLoading)
+                            Observable.just(1)
+                        }
+                        ?.compose(RxJavaHelper.observeOnMainThread())
+                        ?.subscribe()
                 } else {
                     FryingUtil.showToast(context, returnData?.message)
                 }
@@ -574,7 +583,7 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
                 } else {
                     for (wallet in walletLeverList!!) {
                         if ((wallet?.coinType != null && wallet.coinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault())))
-                                || (wallet?.afterCoinType != null && wallet.afterCoinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault())))) {
+                            || (wallet?.afterCoinType != null && wallet.afterCoinType!!.toUpperCase(Locale.getDefault()).trim { it <= ' ' }.contains(searchKey!!.toUpperCase(Locale.getDefault())))) {
                             showData?.add(wallet)
                         }
                     }
@@ -635,46 +644,46 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
 
     fun computeTotalCNY(total: Double?) {
         onWalletModelListener?.onTotalCNY(
-                Observable.just(total)
-                        .flatMap { money: Double? ->
-                            if (money == null) {
-                                Observable.just(null)
+            Observable.just(total)
+                .flatMap { money: Double? ->
+                    if (money == null) {
+                        Observable.just(null)
+                    }
+                    C2CApiServiceHelper.getC2CPrice(context!!)
+                        ?.materialize()
+                        ?.flatMap(Function<Notification<C2CPrice?>, Observable<Double?>> { notify ->
+                            if (notify.isOnNext) {
+                                val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(money, notify.value)
+                                return@Function Observable.just(cny)
                             }
-                            C2CApiServiceHelper.getC2CPrice(context!!)
-                                    ?.materialize()
-                                    ?.flatMap(Function<Notification<C2CPrice?>, Observable<Double?>> { notify ->
-                                        if (notify.isOnNext) {
-                                            val cny: Double? = SocketDataContainer.computeTotalMoneyCNY(money, notify.value)
-                                            return@Function Observable.just(cny)
-                                        }
-                                        if (notify.isOnError) {
-                                            return@Function Observable.just(null)
-                                        }
-                                        Observable.empty()
-                                    })
-                        }
-                        .compose(RxJavaHelper.observeOnMainThread())
+                            if (notify.isOnError) {
+                                return@Function Observable.just(null)
+                            }
+                            Observable.empty()
+                        })
+                }
+                .compose(RxJavaHelper.observeOnMainThread())
         )
     }
 
     fun computeTotalBTC(total: Double?) {
         onWalletModelListener?.onTotalBTC(
-                Observable.just(total)
-                        .flatMap { money: Double? ->
-                            if (money == null) {
-                                Observable.just(null)
-                            }
-                            if (money == 0.0) {
-                                Observable.just(0.0)
-                            }
-                            val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, ConstData.PairStatusType.SPOT,"BTC_USDT")
-                            if (pairStatus == null || pairStatus.currentPrice == 0.0) {
-                                Observable.just(null)
-                            } else {
-                                Observable.just(money!! / pairStatus.currentPrice)
-                            }
-                        }
-                        .compose(RxJavaHelper.observeOnMainThread()))
+            Observable.just(total)
+                .flatMap { money: Double? ->
+                    if (money == null) {
+                        Observable.just(null)
+                    }
+                    if (money == 0.0) {
+                        Observable.just(0.0)
+                    }
+                    val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(context, ConstData.PairStatusType.SPOT,"BTC_USDT")
+                    if (pairStatus == null || pairStatus.currentPrice == 0.0) {
+                        Observable.just(null)
+                    } else {
+                        Observable.just(money!! / pairStatus.currentPrice)
+                    }
+                }
+                .compose(RxJavaHelper.observeOnMainThread()))
     }
 
     interface OnWalletModelListener {

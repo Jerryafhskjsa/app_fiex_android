@@ -76,6 +76,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortVolume?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
+        binding?.bianJi?.setOnClickListener(this)
         binding?.sortRange?.setOnClickListener(this)
         return binding?.root
     }
@@ -96,6 +97,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.bian_ji -> {
+                BlackRouter.getInstance().build(RouterConstData.PAIR_COLLECT).go(mContext)
+            }
             R.id.sort_coin -> {
                 comparator.coinType = getNextType(comparator.coinType)
                 comparator.tradeVolmeType =  PairQuotationComparator.NORMAL
@@ -150,9 +154,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     private fun getIcon(type: Int): Drawable {
         return when (type) {
-            PairQuotationComparator.UP -> SkinCompatResources.getDrawable(mContext, R.drawable.icon_quotation_sort_pre_02)
-            PairQuotationComparator.DOWN -> SkinCompatResources.getDrawable(mContext, R.drawable.icon_quotation_sort_pre_01)
-            else -> SkinCompatResources.getDrawable(mContext, R.drawable.icon_quotation_sort_nor)
+            PairQuotationComparator.UP -> SkinCompatResources.getDrawable(mContext, R.drawable.shaixuan2)
+            PairQuotationComparator.DOWN -> SkinCompatResources.getDrawable(mContext, R.drawable.shaixuan)
+            else -> SkinCompatResources.getDrawable(mContext, R.drawable.shaixuan1)
         }
     }
 
@@ -168,7 +172,11 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun refreshSets() {
+        if (tabTag.equals(getString(R.string.pair_collect))){
+            init()
+        }
             if(tabTag.equals(getString(R.string.spot))){
+                binding?.setTab?.visibility = View.GONE
                 PairApiServiceHelper.getTradeSetsLocal(activity, false, object : Callback<ArrayList<QuotationSet?>?>() {
                     override fun error(type: Int, error: Any) {
                     }
@@ -192,22 +200,31 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                 initFutureQuotationGroup()
             }
     }
+    private fun init(){
+        var setData = ArrayList<QuotationSet?>(2)
+        var optionalSet = QuotationSet()
+        optionalSet.coinType = getString(R.string.spot)
+        optionalSet.name = getString(R.string.spot)
+        setData?.add(0,  optionalSet)
+        var optionalFaverSet = QuotationSet()
+        optionalFaverSet.coinType = getString(R.string.futures)
+        optionalFaverSet.name = getString(R.string.futures)
+        setData?.add(1, optionalFaverSet)
+        sets = setData
+        initQuotationGroup()
+    }
 
     //初始化合约行情分组
     private fun initFutureQuotationGroup(){
-        var setData = ArrayList<QuotationSet?>(3)
-        var optionalFaverSet = QuotationSet()
-        optionalFaverSet.coinType = getString(R.string.pair_collect)
-        optionalFaverSet.name = getString(R.string.pair_collect)
-        setData?.add(0,  optionalFaverSet)
+        var setData = ArrayList<QuotationSet?>(2)
         var optionalUbaseSet = QuotationSet()
         optionalUbaseSet.coinType = getString(R.string.usdt_base)
         optionalUbaseSet.name = getString(R.string.usdt_base)
-        setData?.add(1,  optionalUbaseSet)
+        setData?.add(0,  optionalUbaseSet)
         var optionalCoinBaseSet = QuotationSet()
         optionalCoinBaseSet.coinType = getString(R.string.coin_base)
         optionalCoinBaseSet.name = getString(R.string.coin_base)
-        setData?.add(2,  optionalCoinBaseSet)
+        setData?.add(1,  optionalCoinBaseSet)
         sets = setData
         initQuotationGroup()
     }

@@ -27,6 +27,7 @@ import com.black.base.model.wallet.*
 import com.black.base.net.NormalObserver
 import com.black.base.util.*
 import com.black.base.view.ChooseWalletControllerWindow
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -53,6 +54,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
     private var address:String? = null
     private var amount: Double? = null
     protected var memoNeeded = false
+    private var type: Int = 0
 
     private var binding: ActivityExtractBinding? = null
 
@@ -69,6 +71,8 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         actionBarRecord?.setOnClickListener(this)
         binding?.chooseCoinLayout?.setOnClickListener(this)
         binding?.chooseChainLayout?.setOnClickListener(this)
+        binding?.tixian?.setOnClickListener(this)
+        binding?.neibuZhuan?.setOnClickListener(this)
         binding?.tvTransfer?.setOnClickListener(this)
         val c1 = SkinCompatResources.getColor(this, R.color.C1)
         val l1 = SkinCompatResources.getColor(this, R.color.L1)
@@ -79,8 +83,33 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
                 var amount = CommonUtil.parseDouble(binding?.extractCount?.text.toString().trim { it <= ' ' })
                 if (amount == null)
                     amount = 0.0
-                binding?.arriveCount?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount < coinInfoReal?.withdrawFee!!) getString(R.string.actual_receive_amount,"0.0")  else getString(R.string.actual_receive_amount,NumberUtil.formatNumberNoGroup(amount - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount))
-                binding?.poundage?.setText(getString(R.string.fee_amount,String.format("%s %s", NumberUtil.formatNumberNoGroup(coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount,4,8), coinType)))
+                if (type == 0) {
+                    binding?.arriveCount?.text =
+                        if (coinInfoReal?.withdrawFee == null || amount < coinInfoReal?.withdrawFee!!) getString(
+                            R.string.tixian_amount,
+                            "0.0"
+                        ) else getString(
+                            R.string.tixian_amount,
+                            NumberUtil.formatNumberNoGroup(amount - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount,RoundingMode.FLOOR,2,2)
+                        )
+                    binding?.poundage?.setText(
+                        getString(
+                            R.string.fee_amount,
+                            String.format(
+                                "%s %s",
+                                NumberUtil.formatNumberNoGroup(
+                                    coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount,
+                                    4,
+                                    8
+                                ),
+                                coinType
+                            )
+                        )
+                    )
+                }
+                else {
+                    binding?.arriveCount?.text = NumberUtil.formatNumberNoGroup(amount,RoundingMode.FLOOR,2,2)
+                }
 
             }
             override fun afterTextChanged(s: Editable) {}
@@ -200,6 +229,22 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.total ->binding?.extractCount?.setText(if (wallet?.coinAmount == null) "" else NumberUtil.formatNumberNoGroup(wallet?.coinAmount, RoundingMode.FLOOR, 0, 8))
             R.id.choose_chain_layout ->  showChainChooseDialog()
+            R.id.tixian -> {
+                type = 0
+                binding?.tixian?.isChecked = true
+                binding?.neibuZhuan?.isChecked = false
+                binding?.poundage?.visibility = View.VISIBLE
+                binding?.uuid?.visibility = View.GONE
+                binding?.extractCount?.setText("")
+            }
+            R.id.neibu_zhuan -> {
+                type = 1
+                binding?.tixian?.isChecked = false
+                binding?.neibuZhuan?.isChecked = true
+                binding?.uuid?.visibility = View.VISIBLE
+                binding?.poundage?.visibility = View.GONE
+               binding?.extractCount?.setText("")
+            }
             R.id.tv_transfer ->{
                 BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
             }
@@ -326,6 +371,70 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
             }
     }
 
+    private fun successDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_succcess, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog?.findViewById<SpanTextView>(R.id.amount)?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount!! < coinInfoReal?.withdrawFee!!) getString(R.string.tixian_amount,"0.0")  else getString(R.string.tixian_amount,NumberUtil.formatNumberNoGroup(amount!! - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount!!))
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
+
+    private fun failedDialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.tixian_failed, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog?.findViewById<SpanTextView>(R.id.amount)?.text = if (amount == null || coinInfoReal?.withdrawFee == null || amount!! < coinInfoReal?.withdrawFee!!) getString(R.string.tixian_amount,"0.0")  else getString(R.string.tixian_amount,NumberUtil.formatNumberNoGroup(amount!! - coinInfoReal?.withdrawFee!! - (coinInfoReal?.withdrawFeeRate!!) * amount!!))
+        dialog.findViewById<View>(R.id.red_up).setOnClickListener { v ->
+            val bundle = Bundle()
+           /* bundle.putString(ConstData.TITLE, getString(R.string.finance_account))
+            bundle.putString(ConstData.URL, UrlConfig.getSupportsUrl(mContext!!))
+            BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+
+            */
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.green_up).setOnClickListener { v ->
+            finish()
+            dialog.dismiss()
+        }
+    }
     private fun getDialog() {
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.withdraw_dialog, null)
         val dialog = Dialog(mContext, R.style.AlertDialog)
@@ -611,7 +720,7 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
         if (amount == null)
             amount = 0.0
         jsonObject.addProperty("coinType", coinType)
-        jsonObject.addProperty("withdrawFee", coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount)
+        jsonObject.addProperty("withdrawFee", if (type == 0)coinInfoReal?.withdrawFee!! + (coinInfoReal?.withdrawFeeRate!!) * amount else 0)
         jsonObject.addProperty("txTo", binding?.extractAddress?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("amount", binding?.extractCount?.text.toString().trim { it <= ' ' })
         jsonObject.addProperty("chain", binding?.currentChain?.text.toString().trim { it <= ' ' })
@@ -643,10 +752,11 @@ open class ExtractActivity : BaseActivity(), View.OnClickListener {
 
                     override fun callback(result: HttpRequestResultString?) {
                         if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                            FryingUtil.showToast(mContext, getString(R.string.withdraw_success))
                             verifyWindow.dismiss()
+                            successDialog()
                         } else {
-                            FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
+                            //FryingUtil.showToast(mContext, if (result == null) "null" else result.msg)
+                            failedDialog()
                         }
                     }
 

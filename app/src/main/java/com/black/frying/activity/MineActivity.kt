@@ -34,6 +34,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityMineBinding
+import kotlinx.android.synthetic.main.activity_mine.fenxiang
 import skin.support.SkinCompatManager
 import skin.support.SkinCompatManager.SkinLoaderListener
 import skin.support.content.res.SkinCompatResources
@@ -55,6 +56,12 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mine);
+        binding?.bangzu?.setOnClickListener(this)
+        binding?.tongyong?.setOnClickListener(this)
+        binding?.fenxiang?.setOnClickListener(this)
+        binding?.relVerifyStatus?.setOnClickListener(this)
+        binding?.xianlu?.setOnClickListener(this)
+        binding?.yijian?.setOnClickListener(this)
         imageLoader = ImageLoader(this)
         binding?.imgBack?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
@@ -111,14 +118,15 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.currentExchangeRates?.setText(R.string.language_cny)
         }
         if (CommonUtil.isApkInDebug(applicationContext)) {
-            binding?.serverSetting?.visibility = View.VISIBLE
+            binding?.serverSetting?.visibility = View.GONE
         } else {
             binding?.serverSetting?.visibility = View.GONE
         }
         binding?.serverSetting?.setOnClickListener(this)
         binding?.setting?.setOnClickListener(this)
         //initServiceApi()
-        //getNetworkLines(false)
+        refreshUserViews()
+        getNetworkLines(false)
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -292,7 +300,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 UdeskUtil.start(applicationContext)
             R.id.safe_center -> BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
                 .go(mContext)
-            R.id.help_center -> {
+            R.id.bangzu -> {
                 //帮助中心
 //                BlackRouter.getInstance().build(RouterConstData.PROMOTIONS).go(mContext);
                 val bundle = Bundle()
@@ -344,6 +352,23 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                             })
                     })
                 }
+            }
+            R.id.tongyong -> {
+                BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
+            }
+            R.id.fenxiang -> {
+                fenxiangdialog()
+            }
+            R.id.xianlu -> {
+                BlackRouter.getInstance().build(RouterConstData.XIANLU)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
+            }
+            R.id.rel_verify_status -> {
+                    BlackRouter.getInstance().build(RouterConstData.REAL_NAME_RESULT).go(mContext)
+            }
+            R.id.yijian -> {
+                BlackRouter.getInstance().build(RouterConstData.QUESTION_ACTIVITY).go(mContext)
             }
         }
     }
@@ -446,7 +471,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         alertDialog.show()
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
         if(userInfo != null){
@@ -523,23 +548,22 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
 
     //刷新用户信息
     private fun refreshUserViews() {
-        binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
+        //binding?.name?.setTextColor(SkinCompatResources.getColor(mContext, R.color.T1))
         if (userInfo != null) {
             if(userInfo?.headPortrait != null){
                 binding?.iconAvatar?.let {
                     Glide.with(mContext)
                         .load(Uri.parse(userInfo?.headPortrait!!))
-                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.icon_avatar))
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()).error(R.drawable.gerenzhongxin))
                         .into(it)
                 }
             }
             val userName = if (userInfo!!.username == null) "" else userInfo!!.username
             binding?.name?.text = String.format("%s", userName)
-
             var relVerifyBg: Drawable? = null
             var tvVerifyColor: Int? = null
             var tvVerifyText: String? = null
-            when (userInfo?.idNoStatus) {
+           /* when (userInfo?.idNoStatus) {
                 ConstData.USER_VERIFY_NO -> {
                     relVerifyBg = getDrawable(R.drawable.bg_user_unverify_corner)
                     tvVerifyColor = getColor(R.color.T8)
@@ -561,15 +585,20 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     tvVerifyText = getString(R.string.purchase_failed)
                 }
             }
-            binding?.relVerifyStatus?.background = relVerifyBg
+
+            */
+           /* binding?.relVerifyStatus?.background = relVerifyBg
             binding?.tvVerify?.text = tvVerifyText
             if (tvVerifyColor != null) {
                 binding?.tvVerify?.setTextColor(tvVerifyColor)
             }
+            
+            */
 
             binding?.uuid?.visibility = View.VISIBLE
+            binding?.relVerifyStatus?.visibility = View.VISIBLE
             binding?.uuid?.text = "UID:" + if (userInfo!!.id == null) "" else userInfo!!.id
-            if (TextUtils.equals("email", userInfo!!.registerFrom)) {
+            /*if (TextUtils.equals("email", userInfo!!.registerFrom)) {
                 if (TextUtils.equals(userInfo!!.phoneSecurityStatus, "1") && TextUtils.equals(
                         userInfo!!.emailSecurityStatus,
                         "1"
@@ -602,18 +631,16 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                 } else {
                     binding?.safeLevel?.setText(R.string.level_low)
                 }
-            }
+            }*/
             binding?.btnLoginOut?.visibility = View.VISIBLE
             binding?.loginStatus?.visibility = View.VISIBLE
             binding?.btnLogin?.visibility = View.GONE
         } else {
             binding?.name?.setText(R.string.please_login)
-            binding?.uuid?.visibility = View.GONE
-            binding?.uuid?.setText(R.string.welcome_fbsex)
-            binding?.safeLevel?.text = ""
+            binding?.uuid?.setText(R.string.denglutishi)
+           // binding?.safeLevel?.text = ""
             binding?.btnLoginOut?.visibility = View.GONE
-            binding?.loginStatus?.visibility = View.GONE
-            binding?.btnLogin?.visibility = View.VISIBLE
+            binding?.btnLogin?.visibility = View.GONE
         }
     }
 
@@ -643,6 +670,34 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                     }
                 }
             })
+    }
+
+    private fun fenxiangdialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.haibao_dialog, null)
+        val dialog = Dialog(mContext, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+
     }
 
 

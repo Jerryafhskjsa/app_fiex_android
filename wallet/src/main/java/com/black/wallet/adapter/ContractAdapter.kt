@@ -35,6 +35,10 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
         super.onBindViewHolder(holder, position)
         val wallet = getItem(position)
         val viewHolder = holder.dataBing
+        var rates = C2CApiServiceHelper.coinUsdtPrice?.usdt
+        var rate = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
+        val exChange = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
+
             viewHolder?.coinType?.setText(if (wallet?.coinType == null) "" else wallet.coinType)
             viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
             if (isVisibility) {
@@ -46,6 +50,43 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                         8
                     )
                 )
+                viewHolder?.usable?.setText(
+                    NumberUtil.formatNumberDynamicScaleNoGroup(
+                        wallet?.totalAmount,
+                        8,
+                        2,
+                        2
+                    )
+                )
+                viewHolder?.totalCny?.setText(if (exChange == 0){ "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet?.totalAmount!! * rates!!,
+                    8,
+                    2,
+                    2
+                )} else {"≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
+                    wallet?.totalAmount!! * rate!!,
+                    8,
+                    2,
+                    2
+                )
+                })
+                    /*if (exChange == 0) "≈ ￥ " + {
+                            NumberUtil.formatNumberNoGroup(
+                            wallet?.totalAmount!! * rates!!,
+                                RoundingMode.FLOOR,
+                            2,
+                            8
+                        )
+                    } else{"≈ $ " + NumberUtil.formatNumberNoGroup(
+                            wallet?.totalAmount!! * rate!!,
+                            RoundingMode.FLOOR,
+                            2,
+                            8
+                        )
+                    })
+
+                     */
+
                 viewHolder?.profit?.setText(
                     NumberUtil.formatNumberNoGroup(
                         wallet?.profit,
@@ -63,11 +104,11 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                     )
                 )
                 viewHolder?.experienceGold?.setText(
-                    NumberUtil.formatNumberNoGroup(
+                    NumberUtil.formatNumberDynamicScaleNoGroup(
                         wallet?.experienceGold,
-                        RoundingMode.FLOOR,
+                        8,
                         2,
-                        8
+                        2
                     )
                 )
                 viewHolder?.balance?.setText(
@@ -93,10 +134,12 @@ class ContractAdapter(context: Context, variableId: Int, data: ArrayList<TigerWa
                 viewHolder?.experienceGold?.setText("****")
                 viewHolder?.balance?.setText("****")
                 viewHolder?.deduction?.setText("****")
+                viewHolder?.usable?.setText("****")
+                viewHolder?.totalCny?.setText("****")
             }
             if (wallet?.coinIconUrl != null) {
                 Glide.with(context)
-                    .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet?.coinIconUrl)))
+                    .load(Uri.parse(UrlConfig.getCoinIconUrl(context, wallet.coinIconUrl)))
                     .apply(RequestOptions().error(R.drawable.icon_coin_default))
                     .into(viewHolder?.iconCoin!!)
             }

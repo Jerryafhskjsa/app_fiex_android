@@ -11,7 +11,9 @@ import java.util.*
 
 object SharedPreferenceUtils {
     private val TAG: String = BaseApplication.instance.packageName
-    private val sp: SharedPreferences = BaseApplication.instance.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+    private val sp: SharedPreferences =
+        BaseApplication.instance.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+
     /**
      * 保存数据到SharedPreferences
      *
@@ -43,6 +45,14 @@ object SharedPreferenceUtils {
         }
         editor.apply()
         return result
+    }
+
+    fun getBoolean(key: String, defaultValue: Boolean): Boolean {
+        return sp.getBoolean(key, defaultValue)
+    }
+
+    fun putBoolean(key: String, defaultValue: Boolean) {
+        sp.edit().putBoolean(key, defaultValue).apply()
     }
 
     /**

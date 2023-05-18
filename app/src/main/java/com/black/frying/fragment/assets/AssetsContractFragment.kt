@@ -24,6 +24,7 @@ import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.Money
 import com.black.base.model.future.AccountInfoBean
 import com.black.base.model.wallet.TigerWallet
+import com.black.base.util.ConstData
 import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
@@ -40,7 +41,7 @@ import com.black.wallet.viewmodel.WalletViewModel
 
 class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClickListener {
     private var walletList: ArrayList<TigerWallet?>? = null
-    private var isVisibility: Boolean = false
+    private var isVisibility: Boolean = true
     private var searchKey: String? = null
     private var doSearch = true
     private var type: Int = 0
@@ -49,6 +50,9 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var adapter: ContractAdapter? = null
     private var eventListener:ContractEventResponseListener? = null
+    private var normalFragment: AssetsSpotFragment? = null
+    private var financeFragment: AssetsFinanceFragment? = null
+    private var walletFragment: AssetsWalletFragment? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -63,7 +67,7 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
             return layout
         }
 //        walletList = arguments?.getParcelableArrayList(ConstData.WALLET_LIST)
-        isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
+        //isVisibility = if (arguments?.getBoolean("isVisibility", false) == null) false else arguments?.getBoolean("isVisibility", false)!!
         searchKey = arguments?.getString("searchKey")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contract_normal, container, false)
@@ -121,11 +125,16 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
                 eventListener?.search(binding?.coinSearch?.text.toString(), WalletViewModel.WALLET_CONTRACT)
                 doSearch = isChecked
         }
+        binding?.xianshi?.setOnCheckedChangeListener {_, isChecked ->
+            eventListener?.setWalletziCanFilter(isChecked)
+            isVisibility = isChecked
+        }
         return layout
     }
 
     override fun onResume() {
         super.onResume()
+        isVisibility = (if (eventListener?.getWalletziCanFilter() == null) true else eventListener?.getWalletziCanFilter()!!)
         doSearch = (if (eventListener?.getContractWalletCoinFilter() == null) true else eventListener?.getContractWalletCoinFilter()!!)
         binding?.btnWalletFilter?.isChecked = true
     }
@@ -134,9 +143,11 @@ class AssetsContractFragment : BaseFragment(), OnItemClickListener, View.OnClick
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
-        BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .go(mContext)
+        val wallet = adapter?.getItem(position)
+        //点击账户详情
+        val extras = Bundle()
+        extras.putParcelable(ConstData.WALLET, wallet)
+        BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(extras).go(this)
     }
 
 
@@ -375,10 +386,11 @@ private fun refresh(type: Int){
         }
     }
 
-    fun setVisibility(isVisibility: Boolean) {
-        this.isVisibility = isVisibility
-        refreshMoneyDisplay()
+    fun setVisibility(isChecked: Boolean) {
+        isVisibility = isChecked
         adapter?.setVisibility(isVisibility)
+        binding?.xianshi?.isChecked = isChecked
+        refreshMoneyDisplay()
     }
 
     fun setWalletCoinFilter(isChecked: Boolean) {
@@ -399,10 +411,15 @@ private fun refresh(type: Int){
         fun getContractWalletCoinFilter(): Boolean? {
             return false
         }
+        fun setWalletziCanFilter(checked: Boolean) {
+        }
 
         fun setWalletCoinFilter(checked: Boolean) {
         }
 
+        fun getWalletziCanFilter(): Boolean? {
+            return false
+        }
         fun search(searchKey: String, walletType: Int) {
         }
     }

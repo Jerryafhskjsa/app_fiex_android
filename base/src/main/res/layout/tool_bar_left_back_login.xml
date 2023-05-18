@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="109dp"
+        android:visibility="gone"
         app:layout_collapseMode="pin">
 
         <com.black.base.widget.SpanTextView
@@ -40,8 +41,8 @@
             android:layout_height="match_parent">
             <ImageButton
                 android:id="@+id/action_bar_back"
-                android:layout_width="9dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
@@ -49,7 +50,7 @@
                 android:contentDescription="@null"
                 android:onClick="onBackClick"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_back" />
+                android:src="@drawable/fanhui" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@id/action_bar_title"
@@ -58,13 +59,16 @@
                 android:layout_gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/T1"
-                android:textSize="@dimen/text_size_20" />
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_16" />
             <com.black.base.widget.SpanTextView
                 android:id="@+id/text_action_bar_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:layout_centerVertical="true"
+                android:text="@string/login_title"
+                android:textSize="@dimen/text_size_14"
                 android:textColor="@color/T13"
                 android:layout_gravity="right|center_vertical"
                 />

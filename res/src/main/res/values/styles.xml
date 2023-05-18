@@ -221,9 +221,10 @@
 
     <style name="ButtonGray">
         <item name="android:background">@drawable/btn_gray</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
         <item name="android:textColor">@color/T1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="ButtonWhiteGray">
         <item name="android:background">@drawable/btn_white_gray</item>
@@ -233,6 +234,10 @@
     <style name="ButtonWhite">
     <item name="android:background">@drawable/btn_white_c2c</item>
     </style>
+
+    <style name="ButtonTanChuang">
+        <item name="android:background">@drawable/tan_chuang</item>
+    </style>
     <style name="ButtonWhiteGreen">
         <item name="android:background">@drawable/btn_white_green</item>
         <item name="android:textSize">@dimen/text_size_14</item>
@@ -240,8 +245,8 @@
     </style>
 
     <style name="ButtonGrayLight">
-        <item name="android:background">@drawable/btn_light_gray</item>
-        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_gray_light_one</item>
+        <item name="android:gravity">left</item>
         <item name="android:textColor">@color/T1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
     </style>
@@ -286,7 +291,7 @@
         <item name="android:textColor">@color/tab_contranct_text</item>
     </style>
     <style name="MainTabStyle">
-        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textStyle">bold</item>
     </style>
     <style name="SettingIconStyle">
@@ -299,7 +304,7 @@
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">#F3F4F6</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
     <style name="HomeFeturesItem">
@@ -328,13 +333,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:max">100</item>
-        <item name="android:maxHeight">6dp</item>
-        <item name="android:minHeight">6dp</item>
+        <item name="android:maxHeight">2dp</item>
+        <item name="android:minHeight">2dp</item>
         <item name="android:progressDrawable">@drawable/bg_transaction_progress_bar_buy</item>
     </style>
     <style name="TradeSeekBarCheckbox">
-        <item name="android:layout_width">8dp</item>
-        <item name="android:layout_height">6dp</item>
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">10dp</item>
         <item name="android:button">@drawable/icon_transaction_count_buy</item>
         <item name="android:enabled">false</item>
     </style>
@@ -343,14 +348,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:max">100</item>
-        <item name="android:maxHeight">20dp</item>
-        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">9dp</item>
+        <item name="android:minHeight">9dp</item>
         <item name="android:paddingStart">10dp</item>
-        <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:progressDrawable">@color/transparent</item>
         <item name="android:splitTrack">false</item>
-        <item name="android:thumb">@drawable/icon_thumbcount_bar</item>
+        <item name="android:thumb">@drawable/zhiyingzhisun</item>
         <item name="android:thumbOffset">0dp</item>
     </style>
 
@@ -371,6 +375,11 @@
         <item name="android:orientation">vertical</item>
         <item name="android:layout_weight">180</item>
     </style>
+    <style name="ContractHeaderNewRight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
     <style name="ContractHeader1Right">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -382,7 +391,12 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
     </style>
-
+    <style name="ContractDeepItemRel2">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="ContractStopLoseEditLin">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -460,7 +474,44 @@
         <item name="android:layout_height">4dp</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:scaleType">centerInside</item>
-        <item name="android:src">@drawable/icon_selector_down</item>
+        <item name="android:src">@drawable/xiala</item>
     </style>
 
+    <style name="Sousuo">
+        <item name="android:layout_width">268dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:src">@drawable/suo_suo</item>
+    </style>
+
+
+    <style name="wangluo">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:src">@drawable/xianlu2</item>
+    </style>
+
+    <style name="Yinying">
+        <item name="android:maxLines">1</item>
+        <item name="android:shadowColor">#fff1f1f1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:background">@drawable/yin_ying</item>
+    </style>
+
+    <style name="wanshang">
+        <item name="android:background">@drawable/white_white</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ButtonBlack">
+        <item name="android:background">@drawable/black_reduis</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/T1</item>
+    </style>
+
+    <style name="shenfen">
+        <item name="android:background">@drawable/white_raduis</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

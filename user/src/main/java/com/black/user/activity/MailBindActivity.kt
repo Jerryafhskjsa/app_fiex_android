@@ -1,12 +1,17 @@
 package com.black.user.activity
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.UserApiServiceHelper
@@ -205,14 +210,37 @@ class MailBindActivity : BaseActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     FryingUtil.showToast(mContext, getString(R.string.alert_bind_success))
-                    onBindSuccess()
+                    dialog()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
                 }
             }
         })
     }
-
+    private fun dialog() {
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.mail_bind_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+            onBindSuccess()
+            dialog.dismiss()
+        }
+    }
     private fun onBindSuccess() {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {

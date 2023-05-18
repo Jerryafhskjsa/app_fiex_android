@@ -5,7 +5,6 @@ import android.os.Handler
 import android.text.TextUtils
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
-import com.black.base.util.SocketDataContainer
 import com.black.base.util.UrlConfig
 import com.black.util.CommonUtil
 import io.socket.client.IO
@@ -75,7 +74,7 @@ class FactionSocket(context: Context, handler: Handler) : FryingSocket(context, 
 
     @Throws(Exception::class)
     override fun initSocket(): Socket {
-        return IO.socket(UrlConfig.getSocketHost(context) + "/league", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost() + "/league", socketOptions)
     }
 
     //请求监听笑傲江湖连接

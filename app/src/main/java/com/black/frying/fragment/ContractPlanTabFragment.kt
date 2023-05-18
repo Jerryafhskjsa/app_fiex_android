@@ -26,6 +26,7 @@ import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import com.tencent.imsdk.friendship.TIMPendencyType
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
 /**
@@ -48,7 +49,7 @@ class ContractPlanTabFragment : BaseFragment(),
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
     private var onTabModelListener: OnTabModelListener? = null
-
+    private var contractSize: String? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var planUnionBean = PlanUnionBean()
     private var entrustType:Int?  = 0//0限价委托，1计划委托
@@ -79,6 +80,7 @@ class ContractPlanTabFragment : BaseFragment(),
             false
         )
         viewModel = ContractPositionViewModel(mContext!!, this)
+        contractSize = viewModel?.getContractSize()
         binding?.btnLimitPrice?.setOnClickListener(this)
         binding?.btnPlan?.setOnClickListener(this)
         binding?.allDone?.setOnClickListener(this)
@@ -146,7 +148,7 @@ class ContractPlanTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (dataList?.size == 0) {
+                if (entrustType == 0) {
                     FryingUtil.showToast(activity, getString(R.string.null_bills))
                     return
                 }
@@ -157,7 +159,9 @@ class ContractPlanTabFragment : BaseFragment(),
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
+                                FryingUtil.showToast(activity, "Success")
                                 getPlanData(Constants.UNFINISHED)
+                                onTabModelListener?.onCount(0)
                             }
                         }
 
@@ -166,26 +170,9 @@ class ContractPlanTabFragment : BaseFragment(),
                         }
                     })
             }
-            R.id.btn_limit_price,R.id.btn_plan -> entrustTypeClick(entrustType)
         }
     }
 
-    private fun entrustTypeClick(type:Int?){
-        when(type){
-            0 ->{
-                entrustType = 1
-                binding?.btnLimitPrice?.isEnabled = true
-                binding?.btnPlan?.isEnabled = false
-                getLimitPricePlanData()
-            }
-            1 ->{
-                entrustType = 0
-                binding?.btnLimitPrice?.isEnabled = false
-                binding?.btnPlan?.isEnabled = true
-                getPlanData(Constants.UNFINISHED)
-            }
-        }
-    }
 
     override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
     }
@@ -218,35 +205,18 @@ class ContractPlanTabFragment : BaseFragment(),
                 override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
                     if (returnData != null) {
                         planUnionBean.planList = returnData.result?.items
-                        getLimitPricePlanData()
-                    }
-                }
-            })
-    }
+                        val count = planUnionBean.planList?.size!!
+                        entrustType = planUnionBean.planList?.size
+                        /*for (i in 1..count){
+                            planUnionBean.planList!![i]?.amount = BigDecimal(planUnionBean.planList!![i]?.origQty)
+                                .multiply(BigDecimal(planUnionBean.planList!![i]?.price))
+                                .multiply(BigDecimal(contractSize.toString())).toString()
+                        }
 
-    /**
-     * 获取当前限价委托
-     */
-    private fun getLimitPricePlanData() {
-        var symbol:String? = viewModel?.getCurrentPairSymbol()
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
-            symbol = null
-        }
-        FutureApiServiceHelper.getOrderList(1, 10, symbol,Constants.UNFINISHED, context, false,
-            object : Callback<HttpRequestResultBean<OrderBean>>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
-                    if (returnData != null) {
-                        val orderData = returnData.result
-                        val orderList = orderData?.items
-                        planUnionBean.limitPriceList = orderList
+                         */
                         adapter?.data = planUnionBean.planList
                         adapter?.notifyDataSetChanged()
-                        val count = planUnionBean.planList?.size!! + planUnionBean.limitPriceList?.size!!
                         onTabModelListener?.onCount(count)
-
                     }
                 }
             })

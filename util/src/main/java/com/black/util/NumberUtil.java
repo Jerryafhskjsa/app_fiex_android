@@ -229,7 +229,7 @@ public class NumberUtil {
     }
 
 
-    public static BigDecimal toBigDecimal(@NonNull String value){
+    public static BigDecimal toBigDecimal( String value){
         try {
             return new BigDecimal(value);
         } catch (Exception e) {

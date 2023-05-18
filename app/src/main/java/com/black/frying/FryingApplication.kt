@@ -109,30 +109,16 @@ class FryingApplication : BaseApplication() {
         WebView(applicationContext).destroy()
         //初始化腾讯i
         initTencentIM()
-        val local = applicationContext.resources.configuration.locale.country
-        println(local)
         val languageCode = LanguageUtil.getLanguageSetting(this)?.languageCode
         if (languageCode == null || languageCode < 0){
-            if (local == "VI" || local == "VN") {
-                LanguageUtil.changeAppLanguage(
-                    this,
-                    FryingLanguage(Locale.KOREAN, 3, getString(R.string.language_vietnam)),
-                    true
-                )
-            }
-            else{
-                LanguageUtil.changeAppLanguage(
-                    this,
-                    FryingLanguage(Locale.ENGLISH, 0, getString(R.string.language_english)),
-                    true
-                )
-            }
+            LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.CHINESE,2,getString(R.string.language_english)),true)
         }
         else{
             initLanguageItems(applicationContext)
         }
+        //LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
         StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
-        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(1, "USD"))
+        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
         initFilters()
         BlackRouter.getInstance().init(this)
         BlackRouter.getInstance().setWebViewPath(RouterConstData.WEB_VIEW)
@@ -143,7 +129,7 @@ class FryingApplication : BaseApplication() {
                     checkTokenError = false
                 }
                 if (!LanguageUtil.isSameWithSetting(activity)) {
-                    LanguageUtil.changeAppLanguage(activity, LanguageUtil.getLanguageSetting(activity), true)
+                    LanguageUtil.changeAppLanguage(activity,LanguageUtil.getLanguageSetting(applicationContext), true)
                 }
                 //ExchangeRatesUtil.setExChangeRatesSetting(activity, FryingExchangeRates(0,"CNY"))
             }

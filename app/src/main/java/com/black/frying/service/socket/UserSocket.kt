@@ -6,12 +6,10 @@ import android.text.TextUtils
 import android.util.Log
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
-import com.black.base.util.SocketDataContainer
 import com.black.base.util.UrlConfig
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import io.socket.engineio.client.transports.WebSocket
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -102,7 +100,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     override fun initSocket(): Socket {
         Log.d(TAG,"initSocket")
 //        return IO.socket(UrlConfig.getSocketHost(context) + "/user", socketOptions)
-        return IO.socket(UrlConfig.getSocketHost(context), socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(), socketOptions)
     }
 
 

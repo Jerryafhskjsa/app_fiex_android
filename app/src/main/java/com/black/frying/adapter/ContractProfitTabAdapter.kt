@@ -56,7 +56,7 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
             }
         }
         //仓位描述
-        viewHolder?.positionDes?.text = profitData?.symbol +positionType
+        viewHolder?.positionDes?.text = profitData?.symbol + positionType
         //方向
         viewHolder?.positionSide?.text = sideDes
         //创建时间

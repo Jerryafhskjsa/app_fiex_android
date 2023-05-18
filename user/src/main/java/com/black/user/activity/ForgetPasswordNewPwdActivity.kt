@@ -1,6 +1,7 @@
 package com.black.user.activity
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -8,17 +9,23 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
+import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiService
+import com.black.base.api.UserApiServiceHelper
 import com.black.base.lib.verify.Target
 import com.black.base.lib.verify.VerifyType
 import com.black.base.lib.verify.VerifyWindowObservable
 import com.black.base.manager.ApiManager
+import com.black.base.model.CountryCode
+import com.black.base.model.HttpRequestResultDataList
 import com.black.base.model.HttpRequestResultString
+import com.black.base.model.NormalCallback
 import com.black.base.net.NormalObserver2
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.UrlConfig
+import com.black.base.view.CountryChooseWindow
 import com.black.net.HttpRequestResult
 import com.black.net.RequestFunction
 import com.black.net.RequestFunction2
@@ -42,9 +49,13 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
     private var countryCode:String? = null
     private var verifyCode:String? = null
     private var googlgCode:String? = null
+    private var thisCountry: CountryCode? = null
+    private var chooseWindow: CountryChooseWindow? = null
     private var phoneCaptcha:String? = null
     private var mailCaptcha:String? = null
     private var newPsw:String? = null
+    private var getMailCodeLockedTime: Long = 0
+    private var countDownTimer: CountDownTimer? = null
 
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -64,11 +75,28 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
         googlgCode = intent.getStringExtra(ConstData.GOOGLE_CODE)
         phoneCaptcha = intent.getStringExtra(ConstData.PHONE_CAPTCHA)
         mailCaptcha = intent.getStringExtra(ConstData.MAIL_CAPTCHA)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password_new_pwd)
         binding?.btnConfirm?.setOnClickListener(this)
+        binding?.imgCountryCode?.setOnClickListener(this)
+        binding?.getPhoneCode?.setOnClickListener(this)
         binding?.newPsw?.addTextChangedListener(watcher)
+        if (thisCountry == null) {
+            thisCountry = CountryCode()
+            thisCountry?.code = "86"
+            binding?.countryCode?.tag = thisCountry?.code
+            binding?.countryCode?.setText("+" + thisCountry?.code)
+        }
+        chooseWindow = CountryChooseWindow(this, thisCountry, object :
+            CountryChooseWindow.OnCountryChooseListener {
+            override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {
+                chooseWindow.dismiss()
+                thisCountry = countryCode
+                binding?.countryCode?.tag = thisCountry?.code
+                binding?.countryCode?.setText("+" + thisCountry?.code)
+            }
+        })
         initView()
+        initChooseWindowData()
     }
 
 
@@ -80,17 +108,88 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
             ConstData.AUTHENTICATE_TYPE_MAIL ->{
                 binding?.loginType?.text = getString(R.string.email)
                 binding?.countryCode?.visibility = View.GONE
+                binding?.imgCountryCode?.visibility = View.GONE
             }
         }
         binding?.tvAccount?.text = account
     }
 
+    private fun initChooseWindowData() {
+        CommonApiServiceHelper.getCountryCodeList(this, false, object : NormalCallback<HttpRequestResultDataList<CountryCode?>?>(mContext!!) {
+            override fun callback(returnData: HttpRequestResultDataList<CountryCode?>?) {
+                if (returnData != null && returnData.code == 0 && returnData.data != null) {
+                    chooseWindow!!.setCountryList(returnData.data)
+                }
+            }
+        })
+    }
+    private fun chooseCountryCode() {
+        chooseWindow!!.show(thisCountry)
+    }
     private fun checkClickable() {
         binding!!.btnConfirm.isEnabled = !(TextUtils.isEmpty(binding!!.newPsw.text.toString().trim { it <= ' ' }))
+                ||!(TextUtils.isEmpty(binding!!.tvAccount.text.toString().trim{ it <= ' '}))
+                ||!(TextUtils.isEmpty(binding!!.phoneCode.text.toString().trim{ it <= ' '}))
+                ||!(TextUtils.isEmpty(binding!!.newPswConfirm.text.toString().trim{ it <= ' '}))
     }
 
+    private fun getPhoneVerifyCode() {
+        val telCountryCode = if (binding?.countryCode?.tag == null) null else binding?.countryCode?.tag.toString()
+        if (TextUtils.isEmpty(telCountryCode)) {
+            FryingUtil.showToast(mContext, getString(R.string.alert_choose_country))
+            return
+        }
+        val userName = binding?.tvAccount?.text.toString().trim { it <= ' ' }
+        if (TextUtils.isEmpty(userName)) {
+            FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
+            return
+        }
+        getMailCodeLockedTime = 1000*60
+        countDownTimer = object : CountDownTimer(getMailCodeLockedTime,1000) {
+            //1000ms运行一次onTick里面的方法
+            override fun onFinish() {
+                binding?.getPhoneCode?.setText(R.string.sent)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                val minute = millisUntilFinished / 1000 / 60 % 60
+                val second = millisUntilFinished / 1000 % 60
+                binding?.getPhoneCode?.setText("$minute:$second")
+            }
+        }.start()
+        UserApiServiceHelper.getVerifyCode(this, userName, telCountryCode, true, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+            override fun callback(returnData: HttpRequestResultString?) {
+                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_success))
+                    phoneCaptcha = returnData.data
+
+                } else {
+                    FryingUtil.showToast(mContext, getString(R.string.alert_verify_code_failed))
+                }
+            }
+        })
+    }
     private fun resetPassword() {
+        account = binding?.tvAccount?.text.toString().trim { it <= ' ' }
+        countryCode = binding?.countryCode?.text.toString().trim { it <= ' ' }
         newPsw = binding?.newPsw?.text.toString().trim { it <= ' ' }
+        verifyCode = binding?.phoneCode?.text.toString().trim { it <= ' ' }
+        val rnewPsw = binding?.newPswConfirm?.text.toString().trim { it <= ' ' }
+        if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
+            if(TextUtils.isEmpty(account)){
+                FryingUtil.showToast(mContext, getString(R.string.alert_not_phone))
+                return
+            }
+        } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
+            if(TextUtils.isEmpty(account)){
+                FryingUtil.showToast(mContext, getString(R.string.alert_not_mail))
+                return
+            }
+        }
+        if (newPsw != rnewPsw){
+            FryingUtil.showToast(mContext, getString(R.string.do_nat_yang))
+            return
+        }
         if(TextUtils.isEmpty(newPsw)){
             FryingUtil.showToast(mContext, getString(R.string.alert_input_new_password))
             return
@@ -99,13 +198,7 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
             FryingUtil.showToast(mContext, getString(R.string.alert_password_too_short))
             return
         }
-        var captcha: String? = null
-        if (type == ConstData.AUTHENTICATE_TYPE_PHONE) {
-            captcha = phoneCaptcha
-        } else if (type == ConstData.AUTHENTICATE_TYPE_MAIL) {
-            captcha = mailCaptcha
-        }
-        doResetPassword(account, countryCode, verifyCode, captcha)
+        doResetPassword(account, countryCode, verifyCode, phoneCaptcha)
     }
 
     open fun doResetPassword(userName: String?, telCountryCode: String?, verificationCode: String?, captcha: String?) {
@@ -293,6 +386,12 @@ class ForgetPasswordNewPwdActivity : BaseActivity(), View.OnClickListener {
         when(v.id){
             R.id.btn_confirm ->{
                 resetPassword()
+            }
+            R.id.get_phone_code -> {
+                getPhoneVerifyCode()
+            }
+            R.id.img_country_code ->{
+                chooseCountryCode()
             }
         }
     }

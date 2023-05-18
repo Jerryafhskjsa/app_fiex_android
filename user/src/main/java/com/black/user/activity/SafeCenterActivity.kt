@@ -1,10 +1,15 @@
 package com.black.user.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
@@ -20,6 +25,7 @@ import com.black.base.util.ConstData
 import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.base.widget.SpanTextView
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -34,7 +40,8 @@ import skin.support.content.res.SkinCompatResources
 @Route(value = [RouterConstData.SAFE_CENTER], beforePath = RouterConstData.LOGIN)
 class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private var userInfo: UserInfo? = null
-
+    private var num: Int = 0
+    private var type: Int = 0
     private var binding: ActivitySafeCenterBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +69,11 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         binding?.safeMailLayout?.setOnClickListener(this)
         binding?.safeGoogleLayout?.setOnClickListener(this)
 
-        binding?.safeGoogleStatus?.trackDrawable = SkinCompatResources.getDrawable(this, R.drawable.bg_switch_track)
+       /* binding?.safeGoogleStatus?.trackDrawable = SkinCompatResources.getDrawable(this, R.drawable.bg_switch_track)
         binding?.safeGoogleStatus?.thumbDrawable = SkinCompatResources.getDrawable(this, R.drawable.icon_switch_thumb)
         binding?.safeGoogleStatus?.setOnCheckedChangeListener(this)
+
+        */
 
         binding?.changePassword?.setOnClickListener(this)
         binding?.resetMoneyPasswordLayout?.setOnClickListener(this)
@@ -83,7 +92,13 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
     override fun onClick(v: View) {
         val i = v.id
         if (i == R.id.safe_phone_layout) {
-            BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
+            if (TextUtils.isEmpty(userInfo?.tel)) {
+                BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
+            }
+            else{
+                type = 1
+                dialog(type)
+            }
 //            if (!TextUtils.equals("phone", userInfo?.registerFrom)) {
 //            }
 //            if (TextUtils.isEmpty(userInfo?.tel)) {
@@ -99,14 +114,16 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
                 //未绑定
                 BlackRouter.getInstance().build(RouterConstData.EMAIL_BIND).go(mContext)
             } else {
+                type = 0
+                dialog(type)
                 //                BlackRouter.getInstance().build(RouterConstData.EMAIL_SECURITY_STATUS).go(mContext);
             }
         } else if (i == R.id.safe_google_layout) {
-            //            if (!TextUtils.equals(userInfo.googleSecurityStatus, "1")) {
-//                BlackRouter.getInstance().build(RouterConstData.GOOGLE_GET_KEY).go(mContext);
-//            } else {
-////                BlackRouter.getInstance().build(RouterConstData.GOOGLE_SECURITY_STATUS).go(mContext);
-//            }
+                        if (!TextUtils.equals(userInfo?.googleSecurityStatus, "1")) {
+                BlackRouter.getInstance().build(RouterConstData.GOOGLE_GET_KEY).go(mContext);
+            } else {
+                BlackRouter.getInstance().build(RouterConstData.GOOGLE_SECURITY_STATUS).go(mContext);
+           }
         }   else if (i == R.id.change_password) {
             BlackRouter.getInstance().build(RouterConstData.CHANGE_PASSWORD).go(this)
         } else if (i == R.id.payment_method_layout) {
@@ -124,14 +141,23 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         if (userInfo == null) {
             return
         }
-        if (TextUtils.equals(userInfo?.phoneSecurityStatus, "1")) {
-            binding?.safePhoneStatus?.text = if (userInfo?.tel == null) "" else userInfo?.tel?.replace("(?<=\\d{3})\\d(?=\\d{4})".toRegex(), "*")
-//            binding?.safePhoneStatusIcon?.visibility = View.GONE
-        } else {
-            binding?.safePhoneStatus?.setText(R.string.status_closed)
-            binding?.safePhoneStatusIcon?.visibility = View.VISIBLE
+        binding?.three?.isChecked = TextUtils.equals(userInfo?.phoneSecurityStatus, "1")
+        binding?.two?.isChecked = TextUtils.equals(userInfo?.emailSecurityStatus, "1")
+        binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+
+        val google = if (binding?.one?.isChecked == true ) 1 else 0
+        val phone = if (binding?.three?.isChecked == true ) 1 else 0
+        val mail = if (binding?.two?.isChecked == true ) 1 else 0
+        num = google + phone + mail
+        if (num == 2) {
+            binding?.barA?.isChecked = true
+            binding?.jibie?.setText(getString(R.string.level_middle))
         }
-        if (TextUtils.equals(userInfo?.emailSecurityStatus, "1")) {
+        if (num == 3) {
+            binding?.barB?.isChecked = true
+            binding?.jibie?.setText(getString(R.string.level_high))
+        }
+        /*if (TextUtils.equals(userInfo?.emailSecurityStatus, "1")) {
             binding?.safeMailStatus?.text = if (userInfo?.email == null) "" else userInfo?.email
             binding?.safeMailStatusIcon?.visibility = View.GONE
         } else {
@@ -139,8 +165,10 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
             binding?.safeMailStatusIcon?.visibility = View.VISIBLE
         }
         binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
-        refreshAccountProtect()
-        refreshMoneyPasswordViews()
+
+         */
+        //refreshAccountProtect()
+        //refreshMoneyPasswordViews()
     }
 
     private var fingerPrintAction = 0 // 1 关闭  2 开启
@@ -294,7 +322,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         UserApiServiceHelper.enableSecurity(mContext, target.poneCountyCode, target.phone, target.phoneCode,null,null, target.mail, target.mailCode, target.googleCode, password, action, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 FryingUtil.showToast(mContext, error.toString())
-                binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
             }
 
             override fun callback(returnData: HttpRequestResultString?) {
@@ -303,7 +331,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
                     onExecuteSuccess()
                 } else {
                     FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-                    binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                    binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
                 }
             }
         })
@@ -313,11 +341,11 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {
                 userInfo = result
-                binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
             }
 
             override fun error(type: Int, error: Any) {
-                binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
             }
         })
     }
@@ -393,7 +421,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
                         //进行验证
                         window.dismiss()
                         if (target == null) {
-                            binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                            binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
                         } else {
                             changeSecurityStatus("3", target)
                         }
@@ -401,7 +429,7 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
 
                     override fun onDismiss(window: VerifyWindow, dismissType: Int) {
                         if (dismissType == 0) {
-                            binding?.safeGoogleStatus?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
+                            binding?.one?.isChecked = TextUtils.equals(userInfo?.googleSecurityStatus, "1")
                         }
                     }
                 }).show()
@@ -481,6 +509,47 @@ class SafeCenterActivity : BaseActionBarActivity(), View.OnClickListener, Compou
         }
     }
 
+    private fun dialog(type: Int){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.change_yanzheng_dialog, null)
+        val dialog = Dialog(mContext, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        if (type == 0){
+            dialog.findViewById<SpanTextView>(R.id.message).text = "3. 更换邮箱验证需先启用谷歌验证或邮箱验证（双重身份验证）。"
+            dialog.findViewById<SpanTextView>(R.id.title).text = "您确定要更改邮箱验证吗。"
+        }
+        else{
+            dialog.findViewById<SpanTextView>(R.id.message).text = "3. 更换手机验证需先启用谷歌验证或手机验证（双重身份验证）。"
+            dialog.findViewById<SpanTextView>(R.id.title).text = "您确定要更改手机验证吗。"
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            if (type == 0){
+                BlackRouter.getInstance().build(RouterConstData.EMAIL_BIND).go(mContext)
+                dialog.dismiss()
+            }
+            else {
+                BlackRouter.getInstance().build(RouterConstData.PHONE_BIND).go(mContext)
+                dialog.dismiss()
+            }
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+    }
     private fun onCloseMoneyPasswordSuccess() {
         getUserInfo(object : Callback<UserInfo?>() {
             override fun callback(result: UserInfo?) {

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout style="@style/ContractHeaderNewRight">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/deep_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/price"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/deep_price_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deep_price"
+                android:layout_alignParentLeft="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingTop="4dp"
+                android:text="(USDT)"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/deep_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/amount"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/deep_amount_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deep_amount"
+                android:layout_alignParentRight="true"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingTop="4dp"
+                android:text="(BTC)"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_up_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:itemCount="4"
+                tools:listitem="@layout/futures_layout_deep_graph_item" />
+
+            <include
+                android:id="@+id/include_mid"
+                layout="@layout/futures_layout_deep_graph_center" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_btm_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:itemCount="4"
+                tools:listitem="@layout/futures_layout_deep_graph_item" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_padding" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/deep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_transaction_input"
+                android:drawableRight="@drawable/icon_deep"
+                android:drawablePadding="8dp"
+                android:includeFontPadding="false"
+                android:padding="8dp"
+                android:text="@string/number_default"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_10" />
+
+            <ImageView
+                android:id="@+id/display_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:src="@drawable/icon_trade_deep" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

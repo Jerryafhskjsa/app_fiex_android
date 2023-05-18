@@ -92,7 +92,7 @@ class ExchangeRatesActivity : BaseActivity(), View.OnClickListener {
         var tag = textView.tag
         if(tag is FryingExchangeRates){
             if (rate.rateCode == tag.rateCode) {
-                CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.icon_language_ok), 2)
+                CommonUtil.setTextViewCompoundDrawable(textView, SkinCompatResources.getDrawable(this, R.drawable.queren2), 2)
             } else {
                 CommonUtil.setTextViewCompoundDrawable(textView, null, 2)
             }

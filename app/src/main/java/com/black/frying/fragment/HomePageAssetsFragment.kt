@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,7 @@ import com.fbsex.exchange.databinding.FragmentHomePageAssetsBinding
 import com.black.frying.fragment.assets.AssetsWalletFragment
 import com.black.router.annotation.Route
 
+
 @Route(
     value = [RouterConstData.HOME_ASSET],
     fragmentParentPath = RouterConstData.HOME_PAGE,
@@ -59,7 +61,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         private const val TYPE_BTC = "BTC"
         private val TAB_TITLES = arrayOfNulls<String>(4) //标题
         private var TAB_NORMAL: String? = null
-       // private var TAB_CONTRACT: String? = null
+        private var TAB_CONTRACT: String? = null
         private var TAB_FINANCE: String? = null
         private var TAB_WALLET: String? = null
     }
@@ -67,10 +69,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var bgDefault: Int? = null
     private var btnBackDefault: Drawable? = null
     private var btnBackNormal: Drawable? = null
+    private var actionType: String? = null
+    private var isVisibility: Boolean = true
     private var rate = C2CApiServiceHelper.coinUsdtPrice?.usdt
     private var colorDefault = 0
     private var colorT1: Int = 0
-
+    private var currentTabPosition:Int = 0
     private var appBarLayout: AppBarLayout? = null
 
     private var otherMoneyType = TYPE_CNY
@@ -85,7 +89,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var walletFragment: AssetsWalletFragment? = null
     private var contractFragment: AssetsContractFragment? = null
     private var assetsContractFragment: EmptyFragment? = null
-    private var assetsFinanceFragment: EmptyFragment? = null
+    private var assetsFinanceFragment: AssetsFinanceFragment? = null
     private var assetsWalletFragment: EmptyFragment? = null
 //    private var assetsContractFragment: AssetsContractFragment? = null
 //    private var assetsFinanceFragment: AssetsFinanceFragment? = null
@@ -94,6 +98,10 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     private var leverFragment: WalletLeverFragment? = null
 
 
+    override fun onStop() {
+        super.onStop()
+        currentTabPosition = binding?.tabLayout?.selectedTabPosition!!
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (layout != null) {
             return layout
@@ -136,15 +144,17 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             TAB_NORMAL = it
             TAB_TITLES[1] = TAB_NORMAL
         }
-       /* getString(R.string.contract_account).also {
+        getString(R.string.contract_account).also {
             TAB_CONTRACT = it
             TAB_TITLES[2] = TAB_CONTRACT
-        }*/
-
-        getString(R.string.finance_account).also {
-            TAB_FINANCE = it
-            TAB_TITLES[2] = TAB_FINANCE
         }
+
+      /*  getString(R.string.finance_account).also {
+            TAB_FINANCE = it
+            TAB_TITLES[3] = TAB_FINANCE
+        }
+
+       */
         getString(R.string.capital_account).also {
             TAB_FINANCE = it
             TAB_TITLES[3] = TAB_FINANCE
@@ -153,7 +163,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
         binding?.tabLayout?.setSelectedTabIndicatorHeight(0)
         binding?.tabLayout?.tabMode = TabLayout.MODE_SCROLLABLE
-
+        actionType = TAB_NORMAL
         initFragmentList()
 
         binding?.viewPager?.adapter = object : FragmentStatePagerAdapter(mContext!!.supportFragmentManager) {
@@ -167,6 +177,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
             override fun getPageTitle(position: Int): CharSequence? {
                 return TAB_TITLES[position]
+
             }
 
             override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
@@ -189,6 +200,27 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 FryingUtil.printError(throwable)
             }
         }
+        binding?.viewPager?.currentItem = currentTabPosition
+        val textView = binding?.tabLayout?.getTabAt(currentTabPosition)?.customView?.findViewById<View>(android.R.id.text1) as TextView
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+        binding?.tabLayout?.getTabAt(currentTabPosition)?.select()
+        binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat()
+            var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = if (view == null) return else view.findViewById<View>(android.R.id.text1) as TextView
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val view = tab.customView
+                val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
         return binding?.root
     }
 
@@ -274,10 +306,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         refreshMoneyDisplay()
-        normalFragment?.setVisibility(isChecked)
+       /* normalFragment?.setVisibility(isChecked)
         walletFragment?.setVisibility(isChecked)
         contractFragment?.setVisibility(isChecked)
         leverFragment?.setVisibility(isChecked)
+
+        */
     }
 
     private fun initFragmentList() {
@@ -288,7 +322,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsWalletFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             it.arguments = bundle
             walletFragment = it
             walletFragment?.setEventListener(this)
@@ -296,40 +330,43 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         fragmentList?.add(AssetsSpotFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
             normalFragment = it
             normalFragment?.setEventListener(this)
         })
-        /*fragmentList?.add(AssetsContractFragment().also {
+        fragmentList?.add(AssetsContractFragment().also {
             val bundle = Bundle()
 //            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putBoolean("isVisibility", isVisibility)
             bundle.putString("searchKey", viewModel?.getSearchKey())
             it.arguments = bundle
             contractFragment = it
             contractFragment?.setEventListener(this)
         })
+        fragmentList?.add(AssetsFinanceFragment().also {
+            val bundle = Bundle()
+//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
+            bundle.putBoolean("isVisibility", isVisibility)
+            bundle.putString("searchKey", viewModel?.getSearchKey())
+            it.arguments = bundle
+            assetsFinanceFragment = it
+            assetsFinanceFragment?.setEventListener(this)
+//            assetsWalletFragment = it
+//            assetsWalletFragment?.setEventListener(this)
+        })
+        /*fragmentList?.add(EmptyFragment().also {
+            val bundle = Bundle()
+//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
+            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
+            bundle.putString("searchKey", viewModel?.getSearchKey())
+            it.arguments = bundle
+//            assetsWalletFragment = it
+//            assetsWalletFragment?.setEventListener(this)
+        })
+
          */
-        fragmentList?.add(EmptyFragment().also {
-            val bundle = Bundle()
-//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
-            bundle.putString("searchKey", viewModel?.getSearchKey())
-            it.arguments = bundle
-//            assetsWalletFragment = it
-//            assetsWalletFragment?.setEventListener(this)
-        })
-        fragmentList?.add(EmptyFragment().also {
-            val bundle = Bundle()
-//            bundle.putParcelableArrayList(ConstData.WALLET_LIST, viewModel?.getWalletList())
-            bundle.putBoolean("isVisibility", binding?.btnWalletEye?.isChecked ?: false)
-            bundle.putString("searchKey", viewModel?.getSearchKey())
-            it.arguments = bundle
-//            assetsWalletFragment = it
-//            assetsWalletFragment?.setEventListener(this)
-        })
 
     }
     fun setMoney(total: Money?){
@@ -436,12 +473,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
             }
             assetsFinanceFragment?.run {
                 observable?.subscribe {
-//                    setData(it)
+                    setData(it)
                 }
             }
-            walletFragment?.run {
+            assetsWalletFragment?.run {
                 observable?.subscribe {
-                                setData(it)
+//                                setData(it)
                 }
             }
         }
@@ -484,6 +521,12 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
                 }
             }
             walletFragment?.run {
+                observable?.subscribe {
+                    setTotal(it)
+                }
+            }
+
+            assetsFinanceFragment?.run {
                 observable?.subscribe {
                     setTotal(it)
                 }
@@ -552,7 +595,19 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         viewModel!!.setWalletCoinFilter(checked)
         normalFragment?.setWalletCoinFilter(checked)
         contractFragment?.setWalletCoinFilter(checked)
-        leverFragment?.setWalletCoinFilter(checked)
+        assetsFinanceFragment?.setWalletCoinFilter(checked)
+    }
+
+    override fun setWalletziCanFilter(checked: Boolean) {
+        viewModel!!.setWalletziCanFilter(checked)
+        normalFragment?.setVisibility(checked)
+        contractFragment?.setVisibility(checked)
+        assetsFinanceFragment?.setVisibility(checked)
+        walletFragment?.setVisibility(checked)
+    }
+
+    override fun getWalletziCanFilter(): Boolean? {
+        return viewModel!!.getWalletziCanFilter()
     }
 
     override fun search(searchKey: String, walletType: Int) {
@@ -576,8 +631,6 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
     override fun getAssetAllWallet(isShowLoading: Boolean) {
         viewModel!!.getAllWallet(isShowLoading)
     }
-
-
 
 
 

@@ -3,6 +3,7 @@ package com.black.base.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.black.base.BaseApplication
 import com.black.base.model.socket.PairStatus
 import com.black.base.model.user.UserInfo
 import com.black.base.util.ConstData.CURRENT_PAIR_LEVER
@@ -64,6 +65,9 @@ object CookieUtil {
         } catch (e: Exception) {
             null
         }
+    }
+    fun isLogin(): Boolean {
+        return getUserInfo(BaseApplication.instance) != null
     }
 
     /**
@@ -306,6 +310,14 @@ object CookieUtil {
 
     fun getWalletCoinFilter(context: Context): Boolean {
         return getSharedPreferences(context).getBoolean(ConstData.WALLET_COIN_FILTER, false)
+    }
+
+    fun setWalletziCanFilter(context: Context, isFilter: Boolean) {
+        getSharedPreferences(context).edit().putBoolean(ConstData.WALLET_ZI_CAN, isFilter).apply()
+    }
+
+    fun getWalletziCanFilter(context: Context): Boolean {
+        return getSharedPreferences(context).getBoolean(ConstData.WALLET_ZI_CAN, false)
     }
 
     fun setUpdateJumpVersion(context: Context, version: String?) {

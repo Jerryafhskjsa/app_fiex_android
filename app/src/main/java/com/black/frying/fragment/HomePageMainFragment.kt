@@ -253,7 +253,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
     }
 
     private fun formatMoneyValue(moneyView: TextView) {
-        val stringTag: String? = moneyView.tag as String
+        val stringTag: String = moneyView.tag as String
         if (stringTag == null) {
             moneyView.text = getString(R.string.number_default)
         } else {
@@ -601,8 +601,10 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
     private fun onQuotationPairStatusClick(pairStatus: PairStatus) {
         //选择的交易对，进入详情
         activity?.let {
+            val bundle = Bundle()
             CookieUtil.setCurrentPair(it, pairStatus.pair)
             sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+            bundle.putInt(ConstData.NAME,0)
             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).go(it)
         }
     }

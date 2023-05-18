@@ -40,29 +40,26 @@ class HomeQuotationDetailAdapter(context: Context, data: MutableList<PairStatus?
         var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
         if (styleChange == 1){
             val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! > 0 ) bgWin!! else bgLose!!
-            viewHolder?.since?.setTextColor(color)
+            viewHolder?.sinceColor?.setBackgroundColor(color)
+            viewHolder?.price?.setTextColor(color)
         }
         if (styleChange == 0){
             val color = if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) bgDefault!! else if (pairStatus.priceChangeSinceToday!! < 0 ) bgWin!! else bgLose!!
-            viewHolder?.since?.setTextColor(color)
-        }
-        if (pairStatus?.isHighRisk != null && true == pairStatus.isHighRisk) {
-            viewHolder?.stView?.visibility = View.VISIBLE
-        } else {
-            viewHolder?.stView?.visibility = View.GONE
+            viewHolder?.sinceColor?.setBackgroundColor(color)
+            viewHolder?.price?.setTextColor(color)
         }
         val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
         if (exChangeRates == 0)
         {
             viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
-            viewHolder?.priceCny?.setText(String.format("≈ %sCNY", pairStatus?.currentPriceCNYFormat))
+            viewHolder?.cny?.setText(String.format("%sCNY", pairStatus?.currentPriceCNYFormat))
         }
         else{
             viewHolder?.price?.setText(pairStatus?.currentPriceFormat)
-            viewHolder?.priceCny?.setText(String.format("≈ %sUSD", pairStatus?.currentPriceFormat))
+            viewHolder?.cny?.setText(String.format("%sUSD", pairStatus?.currentPriceFormat))
         }
-        viewHolder?.pairName?.setText(pairStatus?.name)
-        viewHolder?.setName?.setText(pairStatus?.setName)
+        viewHolder?.pairName?.setText(pairStatus?.name?.uppercase())
+        viewHolder?.setName?.setText(pairStatus?.setName?.uppercase())
         viewHolder?.volume24?.setText(context.getString(R.string.volumn_24, pairStatus?.tradeAmountFormat
                 ?: "0.00"))
         viewHolder?.since?.setText(pairStatus?.priceChangeSinceTodayFormat)

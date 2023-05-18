@@ -2,26 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/text_size_10"
+    android:gravity="center_vertical"
     >
 
+    <LinearLayout
+        style="@style/ButtonGray"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/text_size_10"
+        android:layout_marginBottom="@dimen/text_size_10"
+        android:orientation="horizontal">
     <com.black.base.widget.SpanTextView
         android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:paddingTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:gravity="left|center_vertical"
+        android:layout_weight="10"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="@dimen/text_size_10"
         android:text="@string/spot_account"
-        android:textColor="@color/T14"
+        android:textColor="#262838 "
         android:textSize="@dimen/text_size_14" />
 
     <ImageView
         android:id="@+id/img_select"
         android:layout_width="16dp"
         android:layout_height="11dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="@dimen/text_size_16"
         android:layout_marginRight="15dp"
         android:src="@drawable/icon_selected"
-        android:visibility="visible"></ImageView>
+        android:visibility="visible">
+
+    </ImageView>
+
+    </LinearLayout>
 </RelativeLayout>

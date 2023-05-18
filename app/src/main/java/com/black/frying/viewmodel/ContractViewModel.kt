@@ -11,6 +11,7 @@ import android.util.Pair
 import com.black.base.api.*
 import com.black.base.manager.ApiManager
 import com.black.base.model.*
+import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
@@ -24,6 +25,8 @@ import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.base.widget.AnalyticChart
+import com.black.frying.fragment.PLAN
 import com.black.frying.service.FutureService
 import com.black.frying.service.socket.FiexSocketManager
 import com.black.net.HttpRequestResult
@@ -55,6 +58,8 @@ class ContractViewModel(
     private var currentTimeInForceType: String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
+    private var kLineId: String? = ""
+    private var onKLineAllEnd = false
     var askMax = 5
     var bidMax = 5
 
@@ -116,8 +121,11 @@ class ContractViewModel(
     //持仓列表
     private var positionList: ArrayList<PositionBean?>? = null
 
-    private var balanceDetailBean: BalanceDetailBean? = null
+    var userStepRate: UserStepRate? = null//用户费率
+
+    var balanceDetailBean: BalanceDetailBean? = null
     private var planUnionBean = PlanUnionBean()
+
 
 
     init {
@@ -215,7 +223,7 @@ class ContractViewModel(
     /**
      * 获取资产
      */
-    private fun initBalanceByCoin(context: Context?) {
+     fun initBalanceByCoin(context: Context?) {
         if(currentPairStatus.pair == null){
             return
         }
@@ -238,8 +246,9 @@ class ContractViewModel(
     /**
      * 获取仓位列表
      */
-    private fun getPositionData() {
-        FutureApiServiceHelper.getPositionList(context, null, false,
+     fun getPositionData() {
+        var symbol:String? = currentPairStatus.pair
+        FutureApiServiceHelper.getPositionList(context, symbol, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
@@ -264,7 +273,7 @@ class ContractViewModel(
     /**
      * 获取当前持仓数据
      */
-    private fun getProfitData(state: String?) {
+     fun getProfitData(state: String?) {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
             symbol = null
@@ -289,7 +298,7 @@ class ContractViewModel(
     /**
      * 获取当前计划委托列表
      */
-    private fun getPlanData(state: String?) {
+     fun getPlanData(state: String?) {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
@@ -312,7 +321,7 @@ class ContractViewModel(
     /**
      * 获取当前限价委托
      */
-    private fun getLimitPricePlanData() {
+    fun getLimitPricePlanData() {
         var symbol:String? = currentPairStatus?.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
@@ -404,19 +413,21 @@ class ContractViewModel(
             override fun onSuccess(value: UserBalance?) {
                 onContractModelListener?.run {
                     if (value != null) {
-                        onContractModelListener?.onUserBalanceChanged(value)
+                        //onContractModelListener.onUserBalanceChanged(value)
                     }
                 }
             }
         }
     }
 
+
+
     private fun createUserOrderObserver(): Observer<TradeOrderFiex?> {
         return object : SuccessObserver<TradeOrderFiex?>() {
             override fun onSuccess(value: TradeOrderFiex?) {
                 onContractModelListener?.run {
                     if (value != null) {
-                        onContractModelListener?.onUserTradeOrderChanged(value)
+                        onContractModelListener.onUserTradeOrderChanged(value)
                     }
                 }
             }
@@ -533,7 +544,7 @@ class ContractViewModel(
         }
     }
 
-    private fun createMarkPriceObserver(): Observer<MarkPriceBean?>? {
+    private fun createMarkPriceObserver(): Observer<MarkPriceBean?> {
         return object : SuccessObserver<MarkPriceBean?>() {
             override fun onSuccess(value: MarkPriceBean?) {
 //                todo 计算总权益
@@ -547,10 +558,13 @@ class ContractViewModel(
 //                    Log.d("ttt------>floatProfit", floatProfit.toString())
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
+                    var available: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
+                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                     }
-                    onContractModelListener?.updateTotalProfit(totalProfit.toString())
+                    onContractModelListener?.futureBalance(balanceDetailBean)
+                    onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
 
@@ -654,7 +668,7 @@ class ContractViewModel(
                         var recentDeal = CommonUtil.getItemFromList(dealList, 0)
                         onContractModelListener?.run {
                             if (recentDeal != null && currentPairStatus.pair != null) {
-                                onContractModelListener?.onPairDeal(recentDeal)
+                                onContractModelListener.onPairDeal(recentDeal)
                             }
                         }
                     }
@@ -681,6 +695,23 @@ class ContractViewModel(
                         }
                     }
                 }
+            })
+    }
+
+    /**
+     * 改变当前杠杆类型
+     */
+    fun changeType(positionSide: String? , positionType: String?) {
+        FutureApiServiceHelper.changType(context, getCurrentPair(), positionSide, positionType,false,
+            object : Callback<HttpRequestResultBean<String>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                    if (returnData != null) {
+                        }
+                    }
+
             })
     }
 
@@ -772,7 +803,7 @@ class ContractViewModel(
             .subscribe()
     }
 
-    fun getCurrentPairOrderTypeList(): ArrayList<String?>? {
+    fun getCurrentPairOrderTypeList(): ArrayList<String?> {
         return currentPairStatus.getSupportOrderTypeList()
     }
 
@@ -896,7 +927,7 @@ class ContractViewModel(
                             depth.b = fDepth.b
                             depth.t = fDepth.t
                             depth.u = fDepth.u
-                            tradeOrderDepthPair = depth?.let {
+                            tradeOrderDepthPair = depth.let {
                                 SocketDataContainer.parseOrderDepthData(
                                     context,
                                     ConstData.DEPTH_FUTURE_TYPE,
@@ -916,13 +947,77 @@ class ContractViewModel(
                 }
             })
     }
+    fun listenKLineData(analyticChart: AnalyticChart) {
+        kLineId = System.nanoTime().toString()
+        onKLineAllEnd = false
+        val bundle = Bundle()
+        bundle.putString("timeStep", analyticChart.getTimeStepRequestStr())
+        bundle.putString("kLineId", kLineId)
+        //进行延时请求，数据无法及时返回
+        socketHandler?.run {
+            post {
+                SocketUtil.sendSocketCommandBroadcast(context!!, SocketUtil.COMMAND_KTAB_CHANGED, bundle)
+            }
+        }
+    }
 
+    fun getKLineDataFiex(timeStep:String?,kLinePage: Int,startTime:Long,endTime:Long){
+        currentPairStatus.pair?.let {
+            if (timeStep != null) {
+                FutureApiServiceHelper.getHistoryKline(
+                    context,
+                    it,
+                    timeStep,
+                    500,
+                    true,
+                    startTime,
+                    endTime,
+                    object : Callback<HttpRequestResultDataList<Kline?>?>() {
+                        override fun error(type: Int, error: Any) {
+                            if(kLinePage != 0){
+                                onContractModelListener!!.onKLineLoadingMore()
+                            }
+                        }
+                        override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
+                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
+                                var items = returnData.data!!
+                                onKLineAllEnd = true
+                                if(items != null && items.size>0){
+                                    var dataItem = ArrayList<KLineItem?>()
+                                    for (i in items.indices){
+                                        var klineItem = KLineItem()
+                                        var temp = items[i]
+                                        klineItem.a = temp?.a?.toDouble()!!
+                                        klineItem.c = temp?.c?.toDouble()!!
+                                        klineItem.h = temp?.h?.toDouble()!!
+                                        klineItem.l = temp?.l?.toDouble()!!
+                                        klineItem.o = temp?.o?.toDouble()!!
+                                        klineItem.t = temp?.t?.div(1000)
+                                        klineItem.v = temp?.v?.toDouble()!!
+                                        dataItem?.add(klineItem)
+                                    }
+                                    if(kLinePage == 0){
+                                        onContractModelListener!!.onKLineDataAll(dataItem)
+                                    }else{
+                                        onContractModelListener!!.onKLineDataMore(kLinePage, dataItem)
+                                    }
+                                }
+                            }else{
+                                if(kLinePage != 0){
+                                    onContractModelListener!!.onKLineLoadingMore()
+                                }
+                            }
+                        }
+                    })
+            }
+        }
+    }
 
     /**
      * 获取用户资产
      *
      */
-    fun getCurrentUserBalance(balanceType: ConstData.BalanceType?) {
+    /*fun getCurrentUserBalance(balanceType: ConstData.BalanceType?) {
         onContractModelListener?.getUserBalanceCallback()?.let {
             WalletApiServiceHelper.getUserBalanceReal(
                 context,
@@ -975,7 +1070,9 @@ class ContractViewModel(
         }
     }
 
-    fun getCurrentWallet(tabType: Int) {
+     */
+
+    /*fun getCurrentWallet(tabType: Int) {
         onContractModelListener?.getWalletCallback()?.let {
             if (tabType == ConstData.TAB_LEVER) {
                 WalletApiServiceHelper.getWalletLeverList(
@@ -1039,6 +1136,8 @@ class ContractViewModel(
             }
         }
     }
+
+     */
 
     fun checkDearPair(): Observable<Boolean>? {
         return DearPairService.isDearPair(context, socketHandler, currentPairStatus.pair)
@@ -1109,6 +1208,23 @@ class ContractViewModel(
             })
     }
 
+    fun initUserStepRate() {
+        FutureApiServiceHelper.getUserStepRate(context, false,
+            object : Callback<HttpRequestResultBean<UserStepRate>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->initUserStepRate--error", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<UserStepRate>?) {
+                    if (returnData != null) {
+                        userStepRate = returnData.result
+                        onContractModelListener?.onUserFundingRate(userStepRate)
+                    }
+                }
+
+            })
+    }
+
     /**
      * 获取资金费率
      */
@@ -1120,7 +1236,7 @@ class ContractViewModel(
 
                 override fun callback(returnData: HttpRequestResultBean<FundingRateBean?>?) {
                     if (returnData != null) {
-                        fundRate = returnData?.result
+                        fundRate = returnData.result
                         onContractModelListener?.onFundingRate(fundRate)
                     }
                 }
@@ -1172,6 +1288,10 @@ class ContractViewModel(
         return null
     }
 
+    fun finishListenKLine() {
+        SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_KTAB_CLOSE)
+    }
+
     fun getCurrentPriceCNY(): Double? {
         return currentPairStatus.currentPriceCNY
     }
@@ -1196,7 +1316,7 @@ class ContractViewModel(
         /**
          * 用户余额变化
          */
-        fun onUserBalanceChanged(userBalance: UserBalance?)
+        //fun onUserBalanceChanged(userBalance: UserBalance?)
 
         /**
          * 交易对24小时行情变更
@@ -1245,23 +1365,36 @@ class ContractViewModel(
         fun onFundingRate(fundRate: FundingRateBean?)
 
         /**
+         * 用户费率变化
+         */
+        fun onUserFundingRate(fundRate: UserStepRate?)
+
+        /**
          * 杠杆分层
          */
         fun onLeverageDetail(leverageBracket: LeverageBracketBean?)
 
-        fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
-        fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>
+        //fun onWallet(observable: Observable<Pair<Wallet?, Wallet?>>?)
+        //fun getWalletCallback(): Callback<Pair<Wallet?, Wallet?>>
 
-        fun onWalletLeverDetail(leverDetail: WalletLeverDetail?)
+        //fun onWalletLeverDetail(leverDetail: WalletLeverDetail?)
         fun onLeverPairConfigCheck(hasLeverConfig: Boolean)
-        fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
+        //fun onUserBanlance(userBalance: Observable<HttpRequestResultDataList<UserBalance?>?>?)
 
-        fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
+        //fun getUserBalanceCallback(): Callback<Pair<UserBalance?, UserBalance?>>
 
         /**
          * 更新总权益
          */
-        fun updateTotalProfit(totalProfit: String)
+        fun updateTotalProfit(totalProfit: String,available:String)
+
+        fun onKLineDataAll(items: ArrayList<KLineItem?>)
+        fun onKLineDataAdd(item: KLineItem)
+        fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>)
+        fun onKLineLoadingMore()
+
+        fun futureBalance(balanceDetailBean: BalanceDetailBean?)
+
         fun onPositionData(data: ArrayList<PositionBean?>?)
         fun onProfitData(data: ArrayList<ProfitsBean?>?)
         fun onPlanData(data: PlanUnionBean?)

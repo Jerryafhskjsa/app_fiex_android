@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    style="@style/wanshang"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/double_padding">
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/tixian_amount"
+        android:textStyle="bold"
+        android:textColor="#20B759"
+        android:textSize="@dimen/text_size_18" />
+
+    <com.black.base.widget.SpanTextView
+        android:id="@+id/successed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:drawableLeft="@drawable/queren"
+        android:layout_marginTop="@dimen/text_size_10"
+        android:text="提现成功"
+        android:textColor="@color/T1"
+        android:textSize="@dimen/text_size_16" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/double_padding" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_size_20"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/green_up"
+            style="@style/ButtonGray"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:padding="13dp"
+            android:text="返回"
+            android:textSize="@dimen/text_size_15" />
+
+        <View
+            android:layout_width="@dimen/double_padding"
+            android:layout_height="match_parent" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/red_up"
+            android:background="@drawable/anniu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="13dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="去资产"
+            android:textSize="@dimen/text_size_15" />
+
+    </LinearLayout>
+</LinearLayout>

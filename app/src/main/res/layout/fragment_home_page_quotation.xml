@@ -12,14 +12,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/wanshang"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
+            android:layout_marginLeft="@dimen/text_size_5"
             android:orientation="horizontal"
-            android:paddingLeft="15dp">
+            >
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/set_tab"
@@ -30,6 +32,7 @@
                 app:tabIndicator="@drawable/tabs_rounded_line_indicator"
                 app:tabIndicatorColor="@color/T13"
                 app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="2dp"
                 app:tabMaxWidth="200dp"
                 app:tabMinWidth="20dp"
                 app:tabPaddingBottom="0dp"
@@ -38,7 +41,19 @@
                 app:tabPaddingTop="0dp"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabTextAppearance="@style/DefaultTabStyle" />
+            <ImageView
+                android:id="@+id/bian_ji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_size_20"
+                android:src="@drawable/bianji"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_20"
+            android:background="@color/B1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,9 +64,9 @@
             android:paddingRight="15dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="15"
+
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -67,13 +82,13 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/coin_type"
                         android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <ImageView
                         android:id="@+id/icon_sort_coin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_quotation_sort_nor" />
+                        android:src="@drawable/shaixuan1" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -81,7 +96,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="35"
-                android:visibility="gone"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -90,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                   >
 
                     <com.black.base.widget.SpanTextView
                         android:layout_width="wrap_content"
@@ -98,13 +112,13 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/coin_volume"
                         android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <ImageView
                         android:id="@+id/icon_sort_volume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_quotation_sort_nor" />
+                        android:src="@drawable/shaixuan1" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -127,13 +141,13 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/new_price"
                         android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <ImageView
                         android:id="@+id/icon_sort_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_quotation_sort_nor" />
+                        android:src="@drawable/shaixuan1" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -156,13 +170,13 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/rise_amount"
                         android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textSize="@dimen/text_size_10" />
 
                     <ImageView
                         android:id="@+id/icon_sort_range"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_quotation_sort_nor" />
+                        android:src="@drawable/shaixuan1" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

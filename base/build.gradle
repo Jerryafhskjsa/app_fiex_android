@@ -74,6 +74,7 @@ dependencies {
     api project(':routerAnnotation')
     api project(':router')
     api project(':util')
+    api 'com.zhy:base-rvadapter:3.0.3'
     kapt project(":routerProcess")
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

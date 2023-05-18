@@ -19,6 +19,7 @@ class ChooseWalletControllerWindow<T>(private val activity: Activity, title: Str
     private val COLOR_DEFAULT: Int = SkinCompatResources.getColor(activity, R.color.T1)
     private val COLOR_SELECT: Int = SkinCompatResources.getColor(activity, R.color.C1)
     private val COLOR_BG: Int = SkinCompatResources.getColor(activity, R.color.B2)
+    private val COLOR_LIAN: Int = SkinCompatResources.getColor(activity, R.color.B2_LIAN)
     private var density: Float
     private val popupWindow: PopupWindow
     private val titleView: TextView
@@ -81,6 +82,7 @@ class ChooseWalletControllerWindow<T>(private val activity: Activity, title: Str
     }
     fun setTipsText(text:String?){
         tipsText.setText(text)
+        tipsText.setTextColor(COLOR_LIAN)
     }
     fun setTipsTextVisible(visible:Boolean){
         tipsText.visibility = if(visible) View.VISIBLE else View.GONE

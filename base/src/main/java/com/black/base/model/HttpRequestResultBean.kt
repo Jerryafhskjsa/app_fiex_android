@@ -5,4 +5,7 @@ class HttpRequestResultBean<T : Any?> : HttpRequestResultBase() {
     var returnCode: Int? = null
     var result: T? = null
 
+    fun isOk(): Boolean {
+        return returnCode == 0
+    }
 }

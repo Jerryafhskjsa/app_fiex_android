@@ -7,21 +7,25 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.widget.*
-import androidx.appcompat.widget.SwitchCompat
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.FrameLayout
+import android.widget.GridView
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
 import com.black.base.adapter.BaseViewPagerAdapter
 import com.black.base.api.PairApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
-import com.black.base.api.WalletApiService
-import com.black.base.api.WalletApiServiceHelper
 import com.black.base.databinding.ListItemPageMainStatusBinding
 import com.black.base.fragment.BaseFragment
+import com.black.base.lib.banner.FryingUrlImageNormalBanner
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
@@ -31,13 +35,10 @@ import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
-import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
 import com.black.base.util.ConstData.CHOOSE_COIN_WITHDRAW
 import com.black.base.view.FloatAdView
 import com.black.base.widget.ObserveScrollView
-import com.black.base.widget.SpanCheckedTextView
 import com.black.base.widget.VerticalTextView
-import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.HomeMainRiseFallAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.MainMorePopup
@@ -50,7 +51,9 @@ import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.util.ImageUtil
-import com.black.wallet.viewmodel.WalletViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageMainFiexBinding
 import com.github.mikephil.charting.charts.LineChart
@@ -62,7 +65,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -70,9 +72,9 @@ import kotlin.collections.HashMap
  *先取symbolList,在取tickers,然后取kLine数据
  */
 class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
-    ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener,OnMainMoreClickListener {
+    ObserveScrollView.ScrollListener, MainViewModel.OnMainModelListener, OnMainMoreClickListener {
     companion object {
-        private const val STATUS_PAGE_COUNT = 2
+        private const val STATUS_PAGE_COUNT = 3
         private var TAG = HomePageMainFragment::class.java.simpleName
     }
 
@@ -81,10 +83,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     private var chooseWallet: Wallet? = null
     private val hotPairMap = HashMap<String?, PairStatus?>()
     private val hardGridViewMap = HashMap<String?, GridView?>()
-
+    var imageBanner: FryingUrlImageNormalBanner? = null
     private var statusAdapter: BaseViewPagerAdapter? = null
+    private var banner:Banner? = null
     private var chatFloatAdView: FloatAdView? = null
-
     var binding: FragmentHomePageMainFiexBinding? = null
     var layout: FrameLayout? = null
     private var imageLoader: ImageLoader? = null
@@ -110,6 +112,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         viewModel = MainViewModel(mContext!!, this)
         layout = binding?.root as FrameLayout
         StatusBarUtil.addStatusBarPadding(layout)
+       /* imageBanner = if (activity == null) null else FryingUrlImageNormalBanner(activity!!)
+        imageBanner?.setScale(0.3333f, binding?.bannerLayout)
+        binding?.bannerLayout?.addView(imageBanner?.bannerView)
+        banner?.imageUrl = "https://img.zcool.cn/community/013de756fb63036ac7257948747896.jpg"
+        banner?.type = 1
+        imageBanner?.setData(listOf(banner))
+        imageBanner?.startScroll()
+
+        */
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -118,7 +129,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
 //                viewModel!!.getHomeTicker()
 //                viewModel!!.getHomeKline()
                 binding!!.refreshLayout.postDelayed(
-                    { binding!!.refreshLayout.setRefreshing(false) },
+                    { binding!!.refreshLayout.setRefreshing(false)},
                     300
                 )
             }
@@ -144,6 +155,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     PairApiServiceHelper.getSymboleListPairData(mContext)
                 )
 
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -160,12 +172,13 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         }
 
         binding!!.btnNoticeMore.setOnClickListener(this)
-        binding!!.c2c.setOnClickListener(this)
+       // binding!!.c2c.setOnClickListener(this)
         binding!!.btnUserinfo.setOnClickListener(this)
-        binding!!.cvStaking.setOnClickListener(this)
+        //binding!!.cvStaking.setOnClickListener(this)
         binding!!.btnSearchMenu.setOnClickListener(this)
-        binding!!.btnScanMenu.setOnClickListener(this)
-        binding!!.btnMoreMenu.setOnClickListener(this)
+      //  binding!!.btnScanMenu.setOnClickListener(this)
+       // binding!!.btnMoreMenu.setOnClickListener(this)
+        binding!!.xianlu.setOnClickListener(this)
         binding!!.relDeposit.setOnClickListener(this)
         binding!!.relFutures.setOnClickListener(this)
         binding!!.relSupport.setOnClickListener(this)
@@ -253,48 +266,51 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
             R.id.btn_userinfo -> BlackRouter.getInstance().build(RouterConstData.MINE)
                 .go(mContext)//用户信息
-            R.id.c2c ->
-                if (CookieUtil.getUserInfo(context!!) == null) {
-                    //未登录，请求登陆
-                    fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
-                }
-            else {
-                dialog()
-                }
+           /* R.id.c2c ->
+                FryingUtil.showToast(mContext, getString(R.string.please_waiting))*/
             R.id.rel_deposit -> {
-                BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                    .go(this)
         }
             R.id.rel_support -> {
-                getSupportUrl()
-            }
-            R.id.rel_futures ->
                 BlackRouter.getInstance().build(RouterConstData.HOME_CONTRACT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .go(mContext)
-            R.id.rel_more ->
+               // getSupportUrl()
+            }
+            R.id.xianlu ->
+                BlackRouter.getInstance().build(RouterConstData.XIANLU)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .go(mContext)
+            R.id.rel_futures ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-            R.id.rel_referral ->
-                BlackRouter.getInstance().build(RouterConstData.RECOMMEND).go(mContext)
+            R.id.rel_more ->
+                dialog()
+            R.id.rel_referral ->{
+                val extras = Bundle()
+                BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                    .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                    .go(this)}
                /*if(CookieUtil.getUserInfo(mContext!!) == null){
                 BlackRouter.getInstance().build(RouterConstData.LOGIN).go(mContext)
             }else {
                 BlackRouter.getInstance().build(RouterConstData.C2C_NEW).go(mContext)
             }*/
-            R.id.cv_staking -> {
-                BlackRouter.getInstance().build(RouterConstData.PROMOTIONS)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .go(mContext)
-            }
+            /*R.id.cv_staking -> {
+                val bundle = Bundle()
+                bundle.putString(ConstData.TITLE, getString(com.black.user.R.string.finance_account))
+                bundle.putString(ConstData.URL, UrlConfig.getFinancalUrl(mContext!!))
+                BlackRouter.getInstance().build(RouterConstData.WEB_VIEW).with(bundle).go(mContext)
+            }*/
             R.id.btn_search_menu -> BlackRouter.getInstance()
                 .build(RouterConstData.DEAR_PAIR_SEARCH).go(mContext)
-            R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)
+         /*  R.id.btn_scan_menu -> BlackRouter.getInstance().build(RouterConstData.CAPTURE)
                 .withRequestCode(ConstData.SCANNIN_GREQUEST_CODE)
                 .go(mContext)
             R.id.btn_more_menu -> mContext?.let {
                 MainMorePopup(it).setOnMainMoreClickListener(this).show(v)
-            }
+            }*/
         }
     }
 
@@ -302,42 +318,6 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
     }
 
-    private fun dialog(){
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_buy_sell, null)
-        val dialog = Dialog(mContext!!, R.style.AlertDialog)
-        val window = dialog.window
-        if (window != null) {
-            val params = window.attributes
-            params.dimAmount = 0.2f
-            //设置背景昏暗度
-            params.gravity = Gravity.BOTTOM
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            //设置dialog动画
-            window.setWindowAnimations(R.style.anim_bottom_in_out)
-            window.attributes = params
-        }
-        //设置dialog的宽高为屏幕的宽高
-        val display = resources.displayMetrics
-        val layoutParams = ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.setContentView(contentView, layoutParams)
-        dialog.show()
-        dialog.findViewById<View>(R.id.first_buy).setOnClickListener { v ->
-            BlackRouter.getInstance().build(RouterConstData.THREEPAYMENT)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .go(mContext)
-            dialog.dismiss()
-        }
-        dialog.findViewById<View>(R.id.two_c2c).setOnClickListener { v ->
-            BlackRouter.getInstance().build(RouterConstData.C2C_NEW)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .go(mContext)
-            dialog.dismiss()
-        }
-        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
-            dialog.dismiss()
-        }
-    }
     override fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?) {
         observable!!.subscribe { updatePairData ->
             CommonUtil.checkActivityAndRunOnUI(activity) {
@@ -530,16 +510,44 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             }
         })
     }
+
+    private fun dialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.yaoqingfanyong, null)
+        val dialog = Dialog(mContext, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+
+    }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
-        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" }
+        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" || it?.pair == "BNB_USDT"}
         val viewList: MutableList<View> = ArrayList()
         if (ticketData != null) {
             val pairCount = ticketData.size
             if (pairCount > 0) {
                 var pageCount = pairCount / STATUS_PAGE_COUNT
 //                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
-                pageCount = 1//暂时取1，如果有更多的交易对需要展示，在修改该值
+                pageCount = 2//暂时取1，如果有更多的交易对需要展示，在修改该值
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
@@ -608,6 +616,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
             val bundle = Bundle()
             bundle.putString(ConstData.PAIR, pairStatus.pair)
+            bundle.putInt(ConstData.NAME,0)
             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(it)
         }
     }
@@ -776,22 +785,22 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                         R.drawable.hot_item_bg_corner_down
                     )
                 pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                binding?.gridIndicator?.setBackgroundColor(color)
-                binding?.raiseDownBg?.background = bgWinLose
+                //binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.pairSince?.setTextColor(color)
                 binding?.pairName?.text =
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
                 binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+                //binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
                 val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
                 if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                        String.format("≈ ￥%s", pairStatus.currentPriceCNYFormat)
                 } else {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s USD", pairStatus.currentPriceFormat)
+                        String.format("≈ $%s", pairStatus.currentPriceFormat)
                 }
                 val kLineData = pairStatus.kLineData
                 if (kLineData != null) {
@@ -810,23 +819,23 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                         R.drawable.hot_item_bg_corner_down
                     )
                 pairStatus.setCurrentPriceCNY(pairStatus.currentPriceCNY, nullAmount)
-                binding?.gridIndicator?.setBackgroundColor(color)
-                binding?.raiseDownBg?.background = bgWinLose
+                //binding?.gridIndicator?.setBackgroundColor(color)
+                binding?.pairSince?.setTextColor(color)
                 binding?.pairName?.text =
                     if (pairStatus.pair == null) "null" else pairStatus.pair!!.replace("_", "/")
                 binding?.pairPrice?.setTextColor(color)
                 binding?.pairSince?.text = pairStatus.priceChangeSinceTodayFormat
-                binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
+               // binding?.pairSince?.setTextColor(context.getColor(R.color.T4))
                 binding?.pairPrice?.text = pairStatus.currentPriceFormat
                 val exChangeRates = ExchangeRatesUtil.getExchangeRatesSetting(context)?.rateCode
                 if (exChangeRates == 0) {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s CNY", pairStatus.currentPriceCNYFormat)
+                        String.format("≈ ￥%s", pairStatus.currentPriceCNYFormat)
                 } else {
                     binding?.pairPrice?.text = pairStatus.currentPriceFormat
                     binding?.pairPriceCny?.text =
-                        String.format("%s USD", pairStatus.currentPriceFormat)
+                        String.format("≈ $%s", pairStatus.currentPriceFormat)
                 }
                 val kLineData = pairStatus.kLineData
                 if (kLineData != null) {

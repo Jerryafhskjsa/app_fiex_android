@@ -68,11 +68,11 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
-        pairSearchHistory
     }
 
     override fun onResume() {
         super.onResume()
+        pairSearchHistory
         searchPair("")
     }
 
@@ -132,6 +132,7 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
         val bundle = Bundle()
         bundle.putString(ConstData.PAIR, pairSearch.pair)
+        bundle.putInt(ConstData.NAME,0)
         BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(this)
     }
 

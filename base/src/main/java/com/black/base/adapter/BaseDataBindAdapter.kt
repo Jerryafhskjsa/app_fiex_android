@@ -140,7 +140,7 @@ abstract class BaseDataBindAdapter<T, DB : ViewDataBinding?>(protected var conte
 
     protected abstract fun bindView(position: Int, holder: ViewHolder<DB>?)
 
-    protected inner class ViewHolder<VDB : ViewDataBinding?> {
+    inner class ViewHolder<VDB : ViewDataBinding?> {
         var dataBing: VDB? = null
     }
 }

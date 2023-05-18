@@ -50,11 +50,11 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
         viewHolder?.coinTypeDes?.setText(if (wallet?.coinTypeDes == null) "" else wallet.coinTypeDes)
         if (isVisibility) {
             viewHolder?.usable?.setText(
-                NumberUtil.formatNumberNoGroup(
+                NumberUtil.formatNumberDynamicScaleNoGroup(
                     wallet?.totalAmount,
-                    RoundingMode.FLOOR,
+                    8,
                     2,
-                    8
+                    2
                 )
             )
         } else {
@@ -66,14 +66,14 @@ class WalletAdapter(context: Context, variableId: Int, data: ArrayList<Wallet?>?
                     R.string.number_default
                 ) else if (exChange == 0) "≈ ￥ " + NumberUtil.formatNumberDynamicScaleNoGroup(
                     wallet.estimatedAvailableAmountCny!! * rates!!,
-                    10,
+                    8,
                     2,
                     2
                 ) else {
                     rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd
                     "≈ $ " + NumberUtil.formatNumberDynamicScaleNoGroup(
                     wallet.estimatedAvailableAmountCny!! * rates!!,
-                    10,
+                    8,
                     2,
                     2
                 )

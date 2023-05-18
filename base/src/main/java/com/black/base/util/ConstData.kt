@@ -32,7 +32,7 @@ object ConstData {
     const val DEPTH_FUTURE_TYPE = 1
 
     const val CONTRACT_REC_HOLD_AMOUNT = 0//当前持仓tab
-    const val CONTRACT_REC_WITH_LIMIE = 1//止盈止损tab
+    const val CONTRACT_REC_WITH_LIMIE = 1//当前委托tab
     const val CONTRACT_REC_CURRENT = 2//计划委托tab
 
     const val USER_VERIFY_NO = "0"
@@ -51,6 +51,7 @@ object ConstData {
     const val TAB_ASSET = 3
     //交易对默认精度
     const val DEFAULT_PRECISION = 6
+    const val DEFAULT_AMOUNT_PRECISION = 4
 
     const val DEFAULT_PSW_LEN = 8
     const val FRYING_PASSWORD = "frying" //不可修改
@@ -158,6 +159,7 @@ object ConstData {
     const val MAIN_EYE = "main_eye"
     const val SHOW_TRADE_WARNING = "show_trade_warning"
     const val WALLET_COIN_FILTER = "wallet_coin_filter"
+    const val WALLET_ZI_CAN = "wallet_zi_can"
     const val UPDATE_PAIRS = "update_pairs"
     const val UPDATE_VERSION = "update_version"
     const val NIGHT_MODE = "night_mode"
@@ -322,6 +324,9 @@ object ConstData {
 
     const val TAB_COIN = 4 // 币币交易
     const val TAB_LEVER = 8 //杠杆交易
+
+    const val TAB_CROSSED = "CROSSED" // 全仓
+    const val TAB_ISOLATED = "ISOLATED" //逐仓
 
     const val TAB_EXCHANGE = 0
     const val TAB_WITHDRAW = 1

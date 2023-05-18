@@ -20,38 +20,62 @@
             <ImageView
                 android:id="@+id/icon_coin"
                 android:layout_width="30dp"
-                android:layout_marginTop="3dp"
                 android:layout_height="30dp"
-                android:src="@drawable/icon_coin_default"/>
+                android:layout_marginTop="3dp"
+                android:src="@drawable/icon_coin_default" />
             <LinearLayout
                 android:layout_toRightOf="@+id/icon_coin"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingLeft="10dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/coin_type"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_real"
-                    android:textSize="@dimen/text_size_14"
+                    android:layout_marginRight="@dimen/text_size_2"
+                    android:textSize="@dimen/text_size_12"
                     android:text="BTC"
                     android:textStyle="bold" />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/coin_type_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/black_real"
-                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_10"
                     android:text="BTC"
                     />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/usable"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textColor="@color/T1"
+                    android:gravity="right"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/total_cny"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:gravity="right"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_10" />
             </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:paddingTop="@dimen/default_padding"
             android:paddingBottom="@dimen/default_padding">
 
@@ -102,6 +126,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:paddingTop="@dimen/default_padding"
             android:paddingBottom="@dimen/default_padding">
 
@@ -150,6 +175,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:paddingTop="@dimen/default_padding"
             android:paddingBottom="@dimen/default_padding">
 
@@ -195,10 +221,7 @@
                     android:textStyle="bold"/>
             </LinearLayout>
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/C2"/>
+
 
     </LinearLayout>
 </layout>

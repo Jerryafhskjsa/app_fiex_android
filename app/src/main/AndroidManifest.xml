@@ -90,6 +90,55 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
+            android:name="com.black.frying.activity.PairCollectActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan"
+            tools:ignore="MissingClass" />
+
+        <activity
+            android:name="com.black.frying.activity.PaymentDetails"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+
+        <activity
+            android:name="com.black.frying.activity.PairCollectActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan"
+            tools:ignore="MissingClass" />
+        <activity
+            android:name="com.black.frying.activity.ThirdPayment"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.black.frying.activity.ChoosePayment"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
             android:name="com.black.frying.activity.PaymentDetails"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -164,6 +213,14 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
             android:name="com.black.user.activity.SafeCenterActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.black.clutter.activity.XianLuActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/app_name"
@@ -252,6 +309,14 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
         <activity
             android:name="com.black.wallet.activity.WalletChooseCoinActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.black.user.activity.RealNameResult"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/app_name"
@@ -637,6 +702,14 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name="com.black.user.activity.ChangePasswordActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.black.user.activity.QuestionActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/app_name"

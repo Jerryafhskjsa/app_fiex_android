@@ -23,5 +23,7 @@ open class PlansBean : BaseAdapterItem(){
     val triggerPriceType:String? = null//触发价格类型
     val triggerProfitPrice:String? = null//止盈价格
     val triggerStopPrice:String? = null//止损价格
+    //计算委托数量
+    var amount: String? = null
 }
 
