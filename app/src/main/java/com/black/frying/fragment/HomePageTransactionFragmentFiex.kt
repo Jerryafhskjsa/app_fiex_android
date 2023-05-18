@@ -631,6 +631,10 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     )
                 }
             }
+
+
+
+
             R.id.btn_buy -> context?.let {
                 if (CookieUtil.getUserInfo(it) == null) {
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
@@ -1437,7 +1441,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     fun withTimerGetCurrentTradeOrder() {
         var count = 0
         var timer = Timer()
-        timer?.schedule(object : TimerTask() {
+        timer.schedule(object : TimerTask() {
             override fun run() {
                 getTradeOrderCurrent()
                 count++

@@ -121,6 +121,8 @@ class ContractViewModel(
     //持仓列表
     private var positionList: ArrayList<PositionBean?>? = null
 
+    var userStepRate: UserStepRate? = null//用户费率
+
     var balanceDetailBean: BalanceDetailBean? = null
     private var planUnionBean = PlanUnionBean()
 
@@ -425,7 +427,7 @@ class ContractViewModel(
             override fun onSuccess(value: TradeOrderFiex?) {
                 onContractModelListener?.run {
                     if (value != null) {
-                        onContractModelListener?.onUserTradeOrderChanged(value)
+                        onContractModelListener.onUserTradeOrderChanged(value)
                     }
                 }
             }
@@ -1206,6 +1208,23 @@ class ContractViewModel(
             })
     }
 
+    fun initUserStepRate() {
+        FutureApiServiceHelper.getUserStepRate(context, false,
+            object : Callback<HttpRequestResultBean<UserStepRate>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->initUserStepRate--error", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<UserStepRate>?) {
+                    if (returnData != null) {
+                        userStepRate = returnData.result
+                        onContractModelListener?.onUserFundingRate(userStepRate)
+                    }
+                }
+
+            })
+    }
+
     /**
      * 获取资金费率
      */
@@ -1217,7 +1236,7 @@ class ContractViewModel(
 
                 override fun callback(returnData: HttpRequestResultBean<FundingRateBean?>?) {
                     if (returnData != null) {
-                        fundRate = returnData?.result
+                        fundRate = returnData.result
                         onContractModelListener?.onFundingRate(fundRate)
                     }
                 }
@@ -1344,6 +1363,11 @@ class ContractViewModel(
          * 资金费率变化
          */
         fun onFundingRate(fundRate: FundingRateBean?)
+
+        /**
+         * 用户费率变化
+         */
+        fun onUserFundingRate(fundRate: UserStepRate?)
 
         /**
          * 杠杆分层

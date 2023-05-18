@@ -621,7 +621,10 @@ object FutureService {
                 override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
                     if (returnData != null) {
-                        balanceDetail = returnData?.result!!
+                        balanceDetail = returnData.result
+                        if (balanceDetail == null){
+                            initBalanceByCoin(context)
+                        }
                     }
                 }
             })
@@ -893,7 +896,10 @@ object FutureService {
 
                 override fun callback(returnData: HttpRequestResultBean<UserStepRate>?) {
                     if (returnData != null) {
-                        userStepRate = returnData?.result
+                        userStepRate = returnData.result
+                        if (userStepRate == null){
+                            initUserStepRate(context)
+                        }
                         Log.d("ttttttt-->initUserStepRate", userStepRate.toString())
                     }
                 }
@@ -1131,8 +1137,7 @@ object FutureService {
             return BigDecimal(0)
         }
         var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
-
-        var b = price.multiply(contractSize)
+        var b = price.multiply(contractSize?:BigDecimal(0.0001))
             .multiply(
                 BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
                     .add(BigDecimal(userStepRate?.takerFee))

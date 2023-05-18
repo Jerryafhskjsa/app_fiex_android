@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewKLineQuotaSelectorModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            style="@style/ButtonTanChuang"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/limit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="限价单"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:checked="true"
+                        android:textStyle="bold"
+                        android:textColor="@color/c2c_tab_buy"
+                        android:textSize="@dimen/text_size_14" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/L1_ALPHA30" />
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/market"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="市价单"
+                        android:checked="true"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:textColor="@color/c2c_tab_buy"
+                        android:textSize="@dimen/text_size_14" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/L1_ALPHA30" />
+
+                    <com.black.base.widget.SpanCheckedTextView
+                        android:id="@+id/plan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="计划委托"
+                        android:textStyle="bold"
+                        android:checked="true"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:layout_marginBottom="@dimen/text_size_10"
+                        android:textColor="@color/c2c_tab_buy"
+                        android:textSize="@dimen/text_size_13" />
+                </LinearLayout>
+
+<View
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"/>
+    </LinearLayout>
+</layout>

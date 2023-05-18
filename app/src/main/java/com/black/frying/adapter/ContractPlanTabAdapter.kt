@@ -38,7 +38,8 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         var sideDes:String? = null
         var bondDes:String? = null
         var positionType:String? = null
-        when(planData?.positionSide){
+        val unit = planData?.symbol!!.split("_")[1].toString().uppercase()
+        when(planData.positionSide){
             //做多
             "LONG" ->{
                 sideDes = getString(R.string.contract_see_up)
@@ -52,17 +53,21 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
                 sideBlackColor = context.getColor(R.color.T21)
             }
         }
+        viewHolder?.tvEntrustPrice?.setText(String.format(context.getString(R.string.chufa),unit))
+        viewHolder?.tvProfitPrice?.setText(String.format(context.getString(R.string.weituo),unit))
+        viewHolder?.tvEntrustAmount?.setText(String.format(context.getString(R.string.contract_entrust_amount),unit))
+        viewHolder?.tvBondAmount?.setText(String.format(context.getString(R.string.contract_bond_amount),unit))
         viewHolder?.positionSide?.setTextColor(sideBgColor!!)
         viewHolder?.positionSide?.setBackgroundColor(sideBlackColor!!)
         //仓位描述
-        viewHolder?.positionDes?.text = planData?.symbol.toString().uppercase()
+        viewHolder?.positionDes?.text = planData.symbol.toString().uppercase()
         //方向
         viewHolder?.positionSide?.text = sideDes
         //订单类型
         viewHolder?.type?.text = getString(R.string.jihua_price)
-        viewHolder?.tvDealAmountDes?.text = if (planData?.state == "NOT_TRIGGERED") "新建委托（未触发）" else if (planData?.state == "TRIGGERING")  "触发中" else if (planData?.state == "TRIGGERED") "已触发" else if (planData?.state == "USER_REVOCATION") "用户撤销" else if (planData?.state == "PLATFORM_REVOCATION")"平台撤销（拒绝）" else  "已过期"
+        viewHolder?.tvDealAmountDes?.text = if (planData.state == "NOT_TRIGGERED") "新建委托（未触发）" else if (planData.state == "TRIGGERING")  "触发中" else if (planData.state == "TRIGGERED") "已触发" else if (planData?.state == "USER_REVOCATION") "用户撤销" else if (planData?.state == "PLATFORM_REVOCATION")"平台撤销（拒绝）" else  "已过期"
         //创建时间
-        viewHolder?.tvCreateTime?.text = CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", planData?.createdTime!!)
+        viewHolder?.tvCreateTime?.text = CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", planData.createdTime!!)
         //开仓均价
         viewHolder?.tvEntrustPriceDes?.text = planData.stopPrice
         //委托数量

@@ -1009,7 +1009,7 @@
     <string name="contract_can_buy_raise">Max Open</string>
     <string name="contract_can_sell_fail">Max Close</string>
     <string name="contract_can_sell_raise">Max Close</string>
-    <string name="contract_can_buy_fall">/Max Open</string>
+    <string name="contract_can_buy_fall">Max Open</string>
     <string name="contract_buy_in">Buy</string>
     <string name="contract_sell_out">Sell</string>
     <string name="contract_stop_surplus_price">Take Profit</string>

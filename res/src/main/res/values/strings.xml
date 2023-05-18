@@ -981,8 +981,8 @@
     <string name="price_amplitude">最新价/24h涨跌幅</string>
     <string name="brackets">(%s)</string>
     <string name="select_order_type">请选择下单类型</string>
-    <string name="order_type_limit">限价</string>
-    <string name="order_type_market">市价</string>
+    <string name="order_type_limit">限价单</string>
+    <string name="order_type_market">市价单</string>
     <string name="total_entrust_amount">累计数量</string>
     <string name="total_price">累计金额</string>
     <string name="usdt_base">U本位</string>
@@ -1009,7 +1009,7 @@
     <string name="contract_can_buy_raise">可开多</string>
     <string name="contract_can_sell_fail">可平空</string>
     <string name="contract_can_sell_raise">可平多</string>
-    <string name="contract_can_buy_fall">/可开空</string>
+    <string name="contract_can_buy_fall">可开空</string>
     <string name="contract_buy_in">买入</string>
     <string name="contract_sell_out">卖出</string>
     <string name="contract_stop_surplus_price">止盈价</string>

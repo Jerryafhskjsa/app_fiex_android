@@ -55,7 +55,11 @@ import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
+import com.black.frying.view.FutureMSG
+import com.black.frying.view.KLineQuotaSelector
 import com.black.frying.view.MoreTimeStepSelector
+import com.black.frying.view.PositionSideSelector
+import com.black.frying.view.PositionTypeSeletor
 import com.black.frying.view.TransactionMorePopup
 import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
@@ -118,6 +122,9 @@ class HomePageContractFragment : BaseFragment(),
     private var colorT3 = 0
 
     private var moreTimeStepSelector: MoreTimeStepSelector? = null
+    private var kLineQuotaSelector: PositionSideSelector? = null
+    private var positionTypeSelector: PositionTypeSeletor? = null
+    private var futureMSG: FutureMSG? = null
     private var moreTimeStepTextView: TextView? = null
     private var kLinePage = 0
     private var lastTimeStepIndex = 0
@@ -142,6 +149,7 @@ class HomePageContractFragment : BaseFragment(),
     private var leverage: Int? = 10
     private var balanceDetailBean1: BalanceDetailBean? = null
     private var contractSize: BigDecimal? = BigDecimal.ZERO
+    private var userStepRate: UserStepRate? = null
 
     //交易对杠杆分层
     private var leverageBracket: LeverageBracketBean? = null
@@ -230,12 +238,13 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd ?: 0.0
         }
-        TAB_CROSSED = getString(R.string.contract_all_position)
+        /*TAB_CROSSED = getString(R.string.contract_all_position)
         TAB_ISOLATED = getString(R.string.contract_fiexble_position)
         positionType = TAB_CROSSED
         list = ArrayList()
         list?.add(TAB_CROSSED)
         list?.add(TAB_ISOLATED)
+         */
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -258,6 +267,60 @@ class HomePageContractFragment : BaseFragment(),
                 )
             }
 
+        })
+        kLineQuotaSelector = PositionSideSelector(mContext!!)
+        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : PositionSideSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: String?) {
+                if (type != null) {
+                    if (type == LIMIT){
+                        header1View?.orderType?.text = getString(R.string.order_type_limit)
+                    }
+                    else if (type == MARKET){
+                        header1View?.orderType?.text =  getString(R.string.order_type_market)
+                    }
+                    else{
+                        header1View?.orderType?.text = "计划委托"
+                    }
+                    currentOrderType = type
+                    refreshOrderType(type)
+                }
+            }
+
+        })
+        positionTypeSelector = PositionTypeSeletor(mContext!!)
+        positionTypeSelector?.setOnKLineQuotaSelectorListener(object : PositionTypeSeletor.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: String?) {
+                if (type != null) {
+                    if (type == "CROSSED"){
+                        header1View?.cang?.text = getString(R.string.contract_all_position)
+                    }
+                    else{
+                        header1View?.cang?.text = getString(R.string.contract_fiexble_position)
+                    }
+                    positionType = type
+                    viewModel?.changeType("LONG", type)
+                    viewModel?.changeType("SHORT", type)
+                }
+                }
+        })
+        futureMSG = FutureMSG(mContext!!)
+        futureMSG?.setOnKLineQuotaSelectorListener(object : FutureMSG.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: String?) {
+                if (type != null) {
+                    if (type == "0"){
+                        FryingUtil.showToast(mContext, "111")
+                    }
+                    else if(type == "1") {
+                        FryingUtil.showToast(mContext, "222")
+                    }
+                    else if(type == "2") {
+                        FryingUtil.showToast(mContext, "333")
+                    }
+                    else if(type == "3") {
+                        Currentdialog3()
+                    }
+                }
+            }
         })
         deepViewBinding = ContractDeepViewBinding(
             mContext!!,
@@ -602,6 +665,7 @@ class HomePageContractFragment : BaseFragment(),
         viewModel?.getAggTicker()
         viewModel?.getCurrentDeal()
         viewModel?.onResume()
+        viewModel?.initUserStepRate()
         initAdjustLeverageData()
         updateDear(isDear)
         contractSize = FutureService.getContractSize(viewModel?.getCurrentPair())
@@ -1049,6 +1113,9 @@ class HomePageContractFragment : BaseFragment(),
         } else {
         when (v.id) {
             R.id.cangwei -> {
+                positionType =  if (binding?.fragmentHomePageContractHeader1?.cang?.text.toString() == getString(R.string.contract_all_position)) "CROSSED" else "ISOLATED"
+                positionTypeSelector!!.show(header1View?.cang, positionType!!)
+                /*
                 DeepControllerWindow(mContext as Activity,
                     getString(R.string.cangwei_type),
                     positionType,
@@ -1073,6 +1140,8 @@ class HomePageContractFragment : BaseFragment(),
                             }
                         }
                     }).show()
+
+                 */
             }
             R.id.shangla -> {
                 headerView?.shangla?.visibility = View.GONE
@@ -1182,7 +1251,8 @@ class HomePageContractFragment : BaseFragment(),
 
             R.id.lin_order_type -> {
                 currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
-                DeepControllerWindow(mContext as Activity,
+                kLineQuotaSelector!!.show(header1View?.linOrderType, currentOrderType!!)
+                /*DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                    currentOrderType,
                     viewModel?.getCurrentPairOrderTypeList() as List<String?>?,
@@ -1204,6 +1274,8 @@ class HomePageContractFragment : BaseFragment(),
                             }
                         }
                     }).show()
+
+                 */
             }
             R.id.lin_unit_type -> {
                 currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
@@ -1254,12 +1326,16 @@ class HomePageContractFragment : BaseFragment(),
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }
-            R.id.head_transaction_more -> viewModel!!.checkDearPair()
+            R.id.head_transaction_more ->
+            futureMSG!!.show(binding!!.actionBarLayout.headTransactionMore, null)
+                /*viewModel!!.checkDearPair()
                 ?.subscribe(HttpCallbackSimple(mContext, true, object : Callback<Boolean>() {
                     override fun error(type: Int, error: Any) {}
                     override fun callback(returnData: Boolean) {
                     }
                 }))
+
+                 */
             R.id.btn_transaction_memu -> mContext?.let {
                 var setData = ArrayList<QuotationSet?>(3)
                 var optionalUbaseSet = QuotationSet()
@@ -1442,7 +1518,7 @@ class HomePageContractFragment : BaseFragment(),
     @SuppressLint("SetTextI18n")
     private fun fillLimitPrice() {
         val price = header1View?.currentPrice?.text?.toString() ?: ""
-        val decimal = NumberUtil.toBigDecimal(price)
+        val decimal = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         if (decimal == BigDecimal.ZERO) {
             binding?.fragmentHomePageContractHeader1?.price?.setText("")
         } else {
@@ -1452,7 +1528,7 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun Currentdialog(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.current_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -1469,14 +1545,14 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun Currentdialog1(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.zong_quan_yi_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -1493,14 +1569,14 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
         }
     }
     private fun Currentdialog2(){
         val contentView = LayoutInflater.from(mContext).inflate(R.layout.zi_jin_rate_dialog, null)
-        val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
         val window = dialog.window
         if (window != null) {
             val params = window.attributes
@@ -1517,9 +1593,39 @@ class HomePageContractFragment : BaseFragment(),
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
-        dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
 
             dialog.dismiss()
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    private fun Currentdialog3(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.future_rate_dialog, null)
+        val dialog = Dialog(mContext!!, R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        dialog.findViewById<TextView>(R.id.one).text = "+" + String.format("%.3f",BigDecimal(100) * BigDecimal(userStepRate?.makerFee)) + "%"
+        dialog.findViewById<TextView>(R.id.two).text = "+" +  String.format("%.3f",BigDecimal(100) * BigDecimal(userStepRate?.takerFee)) + "%"
+        dialog.findViewById<TextView>(R.id.three).text = userStepRate?.discountLevel.toString()
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.four).setOnClickListener { v ->
+
         }
     }
 
@@ -1697,15 +1803,12 @@ class HomePageContractFragment : BaseFragment(),
      * 计算可开多/空的数量
      */
     private fun updateCanOpenAmount(price: String?) {
-        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null) {
+        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null || BigDecimal(price) == BigDecimal.ZERO) {
             return
         }
-        var longLeverage = leverage
-        var shortLeverage = leverage
-        if (longLeverage == null || shortLeverage == null) {
-            return
-        }
-        var availableOpenData = FutureService.getAvailableOpenData(
+        val longLeverage = leverage?: 10
+        val shortLeverage = leverage?: 10
+        val availableOpenData = FutureService.getAvailableOpenData(
             BigDecimal(price), longLeverage, shortLeverage, BigDecimal.ZERO,
             BigDecimal.ZERO
         )
@@ -1828,7 +1931,6 @@ class HomePageContractFragment : BaseFragment(),
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
-        currentOrderType = LIMIT
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
         viewModel?.setCurrentPairOrderType(currentOrderType)
@@ -2023,26 +2125,34 @@ class HomePageContractFragment : BaseFragment(),
      * 数量 = 输入数量/(输入价格*合约面值)
      */
     private fun createOrderFuture(positionSide: String, orderSide: String) {
-        var orderType: String? = currentOrderType
+        var orderType: String? =if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
         val price: String = header1View?.price?.text.toString().trim()
-        val priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
+        var priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         if (priceNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
             return
         }
-        var priceDouble = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         val timeInForce: String = currentTimeInForceType?:"GTC"
+        val num = NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"0.0001")?: BigDecimal.ZERO
+        if (num == BigDecimal.ZERO) {
+            FryingUtil.showToast(mContext, "合约面值未获取，无法下单")
+            return
+        }
         val origQty = header1View?.transactionQuota?.text.toString().trim()
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
         if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
+        if (origQtyNum > NumberUtils.toBigDecimal("100000")) {
+            FryingUtil.showToast(mContext,"单笔交易不能大于100000")
+            return
+        }
 
-        val totalAmountInt = (NumberUtil.toBigDecimal(origQty))/(NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"0.0").multiply(priceDouble))//priceDouble.times()
+        val totalAmountInt = (origQtyNum)/(num*(priceNum))//priceDouble.times()
 //            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
         if (orderType.equals("MARKET")) {
-            priceDouble = BigDecimal.ZERO
+            priceNum = BigDecimal.ZERO
         }
         //止盈止损
         var tigerStop: Boolean? = header1View?.contractWithLimit?.isChecked
@@ -2073,7 +2183,7 @@ class HomePageContractFragment : BaseFragment(),
                     orderType!!,
                     viewModel?.getCurrentPair(),
                     positionSide,
-                    priceDouble.toDouble(),
+                    priceNum.toDouble(),
                     timeInForce,
                     totalAmountInt.toInt(),
                     if (tigerStop == true) tigerProfitValue else null,
@@ -2083,7 +2193,7 @@ class HomePageContractFragment : BaseFragment(),
                     entrustType,
                     object : Callback<HttpRequestResultBean<String>?>() {
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
-                            if (returnData != null ) {
+                            if (returnData != null) {
                                 //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
                                 header1View?.price?.setText(price)
                                 header1View?.transactionQuota?.setText("0.0")
@@ -2094,10 +2204,12 @@ class HomePageContractFragment : BaseFragment(),
                                  * todo 刷新持仓列表
                                  */
                             }
+                            else{
+                                FryingUtil.showToast(context, returnData?.msg)
+                            }
                         }
 
                         override fun error(type: Int, error: Any?) {
-                            Log.d("iiiiii-->createFutureOrder--error", error.toString())
                             FryingUtil.showToast(context, error.toString())
                         }
 
@@ -2112,7 +2224,7 @@ class HomePageContractFragment : BaseFragment(),
                     orderType!!,
                     viewModel?.getCurrentPair(),
                     positionSide,
-                    if (currentOrderType == "LIMIT") priceDouble.toDouble() else null,
+                    if (currentOrderType == "LIMIT") priceNum.toDouble() else null,
                     if (currentOrderType == "LIMIT") timeInForce else "IOC",
                     totalAmountInt.toInt(),
                     if (tigerStop == true) tigerProfitValue else null,
@@ -2298,7 +2410,6 @@ class HomePageContractFragment : BaseFragment(),
         if (pairStatus?.supportingPrecisionList != null) {
             onDeepChoose()
         }
-        currentOrderType = LIMIT
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
         viewModel?.setCurrentPairOrderType(currentOrderType)
@@ -2309,6 +2420,8 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?) {
         Log.d(TAG, "onUserTradeOrderChanged,executedQty = " + userTradeOrder?.executedQty)
+        initRecordTab()
+
     }
 
     //用户信息被修改，刷新委托信息和钱包
@@ -2370,6 +2483,15 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    /**
+     * 用户表费率更新
+     */
+    override fun onUserFundingRate(fundRate: UserStepRate?) {
+        CommonUtil.checkActivityAndRunOnUI(mContext) {
+            userStepRate = fundRate
+        }
+    }
+
     override fun onLeverageDetail(data: LeverageBracketBean?) {
         leverageBracket = data
     }
@@ -2421,34 +2543,26 @@ class HomePageContractFragment : BaseFragment(),
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun updateCurrentPairPrice(price: String?) {
-        if (price != null) {
-            header1View?.currentPrice?.setText(price)
-        }
-        initLimitPrice()
         if (price != null && price.toDouble() > 0) {
+            header1View?.currentPrice?.setText(price)
 //            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
             if (C2CApiServiceHelper.coinUsdtPrice?.usdt == null) {
                 return
             }
+            else {
+                header1View?.currentPriceCny?.text = "≈" + NumberUtil.formatNumberNoGroup(rates!! * price.toDouble(), 4, 4) + if (exchanged == 0) "CNY" else "USD"
+
+            }
+        }
+        else {
             header1View?.currentPriceCny?.setText(
-                "≈" + NumberUtil.formatNumberNoGroup(
-                    rates!! * price.toDouble(),
-                    4,
-                    4
-                )
-                + if (exchanged == 0) "CNY" else "USD"
-            )
-        } else {
-            header1View?.currentPriceCny?.setText(
-                "≈" + NumberUtil.formatNumberNoGroup(
-                    0.0f,
-                    4,
-                    4
-                )
+                "≈" + "0.0000"
                 + if (exchanged == 0) "CNY" else "USD"
             )
         }
+        initLimitPrice()
     }
 
     //更新涨跌幅
