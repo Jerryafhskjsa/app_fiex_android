@@ -64,7 +64,7 @@ class PushSocket(context: Context, handler: Handler) : FryingSocket(context, han
 
     @Throws(Exception::class)
     override fun initSocket(): Socket {
-        return IO.socket(UrlConfig.getSocketHost() + "/push", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(context) + "/push", socketOptions)
     }
 
 

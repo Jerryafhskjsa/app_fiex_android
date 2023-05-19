@@ -68,7 +68,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:text="@string/rade"
+                                    android:text="银行"
                                     android:textColor="@color/T3"
                                     android:textSize="@dimen/text_size_14"
                                     android:textStyle="bold" />
@@ -111,7 +111,7 @@
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/total_m"
+                                    android:text="数量"
                                     android:textColor="@color/T3"
                                     android:textSize="@dimen/text_size_13" />
 
@@ -154,7 +154,7 @@
                                 <com.black.base.widget.SpanTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/you_get"
+                                    android:text="你将得到"
                                     android:textColor="@color/T3"
                                     android:textSize="@dimen/text_size_13" />
                                 <com.black.base.widget.SpanTextView
@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="@dimen/text_size_20"
-                            android:text="@string/mian"
+                            android:text="提示"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="@dimen/text_size_14" />
@@ -183,7 +183,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="@dimen/text_size_10"
-                            android:text="@string/sheng_ming"
+                            android:text="提示"
                             android:textSize="@dimen/text_size_14" />
 
                     </LinearLayout>
@@ -206,7 +206,7 @@
                 android:drawableLeft="@drawable/c2c_range"
                 android:layout_gravity="center"
                 android:textColor="@color/black"
-                android:text="@string/i_agree" />
+                android:text="我同意" />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_submit"

@@ -58,7 +58,7 @@
                             android:textSize="@dimen/text_size_20"
                             android:textColor="@color/black"
                             android:textStyle="bold"
-                            android:text="@string/pay_for_seller" />
+                            android:text="付款给卖家" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -74,7 +74,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/last_time" />
+                            android:text="剩余时间" />
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/time"
                             android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
                             android:layout_weight="1"
-                            android:text="@string/yourself"
+                            android:text="本人"
                             android:textColor="@color/C5" />
                     </LinearLayout>
                     <LinearLayout
@@ -417,7 +417,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/payment_code" />
+                                android:text="付款码" />
 
                             <ImageView
                                 android:id="@+id/id_pay_ma"
@@ -547,7 +547,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="@string/payment_code" />
+                                    android:text="付款吗" />
 
                                 <ImageView
                                     android:id="@+id/wei_xin_ma"
@@ -587,7 +587,7 @@
                             android:layout_marginTop="@dimen/text_size_5"
                             android:layout_marginBottom="@dimen/text_size_5"
                             android:layout_weight="1"
-                            android:text="@string/tips" />
+                            android:text="提示" />
                     </LinearLayout>
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
@@ -625,7 +625,7 @@
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/had_paid" />
+                android:text="付款给卖家" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

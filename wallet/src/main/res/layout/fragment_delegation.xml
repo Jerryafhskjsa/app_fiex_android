@@ -11,7 +11,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/B2"
         android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/text_size_5"
+            android:background="@color/B1"/>
 
         <com.black.lib.refresh.QRefreshLayout
             android:id="@+id/refresh_layout"
@@ -22,7 +28,7 @@
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
+                android:background="@color/B2"
                 android:fadingEdge="none"
                 android:fillViewport="true"
                 android:overScrollMode="never"
@@ -35,12 +41,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_size_10"
                     android:background="@color/B2"
                     android:orientation="horizontal">
                     <LinearLayout
                         android:id="@+id/contract_choose"
                         android:layout_width="wrap_content"
+                        android:visibility="gone"
                         style="@style/ButtonReturn"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/text_size_5"
@@ -66,7 +72,6 @@
                     <LinearLayout
                         android:id="@+id/btn_all"
                         android:layout_width="wrap_content"
-                        style="@style/ButtonReturn"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/text_size_5"
                         android:layout_marginLeft="@dimen/text_size_10"
@@ -74,24 +79,25 @@
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/all"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_5"
-                            android:textColor="@color/T11"
+                            android:textColor="@color/black"
                             android:gravity="center"
                             android:text="@string/all"
-                            android:textSize="@dimen/text_size_12" />
+                            android:textSize="@dimen/text_size_14" />
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_size_10"
                             android:layout_marginRight="@dimen/text_size_5"
-                            android:background="@drawable/icon_deep"/>
+                            android:background="@drawable/xiala"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/time_choose"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:gravity="center"
                         android:layout_marginLeft="@dimen/text_size_10"
                         android:layout_marginTop="@dimen/text_size_5"
@@ -128,6 +134,37 @@
                             android:textSize="@dimen/text_size_15" />
                     </LinearLayout>
                 </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:background="@color/B1"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/text_size_16"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:layout_marginRight="@dimen/text_size_14"
+                        android:layout_height="wrap_content">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:textColor="@color/T2"
+                            android:gravity="center"
+                            android:text="时间/合约"
+                            android:textSize="@dimen/text_size_10" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_size_5"
+                            android:layout_weight="1"
+                            android:textColor="@color/T2"
+                            android:gravity="center|right"
+                            android:text="收取区间/资金费率"
+                            android:textSize="@dimen/text_size_10" />
+                    </LinearLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

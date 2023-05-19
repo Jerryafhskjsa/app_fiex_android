@@ -112,13 +112,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     private fun initSocketManager(context: Context?) {
-        val socketUrl = UrlConfig.getSpotSocketHostSoeasyEx()
+        val socketUrl = UrlConfig.getSpotSocketHostSoeasyEx(context)
         d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
-        val futurSocketUrl = UrlConfig.getSocketHostSoeasyEx("market")
+        val futurSocketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
         d("666666","futurSocketUrl = "+futurSocketUrl)
         futureSocketSetting = WebSocketSetting()
         futureSocketSetting.connectUrl = futurSocketUrl

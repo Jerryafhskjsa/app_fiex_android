@@ -84,7 +84,7 @@ class BuyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.OnRefres
     }
 
     private fun getList(isShowLoading: Boolean){
-        WalletApiServiceHelper.getDepositOrderList(mContext, isShowLoading,wallet,currentPage,10,object : NormalCallback<HttpRequestResultData<PagingData<payOrder?>?>?>(mContext!!) {
+       /* WalletApiServiceHelper.getDepositOrderList(mContext, isShowLoading,wallet,currentPage,10,object : NormalCallback<HttpRequestResultData<PagingData<payOrder?>?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
             }
@@ -99,6 +99,8 @@ class BuyFragment : BaseFragment(), OnItemClickListener, QRefreshLayout.OnRefres
                 }
             }
         })
+
+        */
     }
 
     private fun showData(dataList: ArrayList<payOrder?>?) {

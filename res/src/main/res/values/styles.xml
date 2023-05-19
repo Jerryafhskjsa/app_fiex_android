@@ -439,13 +439,17 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:gravity">right</item>
         <item name="android:textColor">@color/T5</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
     </style>
     <style name="ContractDeepItemTextLeft1" parent="ContractDeepItemTextLeft">
         <item name="android:textColor">@color/T7</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
     </style>
     <style name="ContractDeepItemTextRight" parent="ContractDeepItemTextBase">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textColor">@color/T2</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
     </style>
 
     <style name="ContractBondTextLeft">

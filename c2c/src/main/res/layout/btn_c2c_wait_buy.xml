@@ -45,7 +45,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/shenshu_time" />
+                            android:text="付款时间" />
 
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/time"
@@ -265,7 +265,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/sell_name" />
+                                android:text="卖家名字" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name"
@@ -291,7 +291,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/jiedan" />
+                                android:text="接单数" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name_name"
@@ -347,7 +347,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/shou_kuan_ren" />
+                                android:text="收款人" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/person"
@@ -400,7 +400,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="@string/payment_code" />
+                                android:text="二维码" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -485,7 +485,7 @@
                 android:layout_marginBottom="@dimen/text_size_20"
                 android:layout_weight="1"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/fang_bi" />
+                android:text="已放币" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

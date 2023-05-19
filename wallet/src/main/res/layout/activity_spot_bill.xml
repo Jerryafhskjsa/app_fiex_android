@@ -66,7 +66,7 @@
                                 android:paddingLeft="@dimen/double_padding"
                                 android:paddingRight="@dimen/double_padding"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/btn_back" />
+                                android:src="@drawable/fanhui" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@id/action_bar_title"
@@ -83,25 +83,25 @@
                     </androidx.appcompat.widget.Toolbar>
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/default_padding"
-                    android:background="@color/B1" />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginTop="0dp"
-                    android:background="@drawable/bg_asset_coin_corner"
                     android:fadingEdge="none"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:tabRippleColor="@color/transparent"
-                    app:tabMode="scrollable"
-                    app:tabMaxWidth="200dp"
-                    app:tabMinWidth="20dp"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
                     android:overScrollMode="never"
                     android:scrollbars="none"
+                    app:tabIndicator="@drawable/tabs_rounded_line_indicator"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabIndicatorAnimationDuration="1"
+                    app:tabIndicatorColor="@color/T13"
+                    app:tabRippleColor="@color/transparent"
+                    app:tabSelectedTextColor="@color/black_real"
+                    app:tabTextAppearance="@style/MainTabStyle"
+                    app:tabTextColor="@color/grey"
                     />
             </com.google.android.material.appbar.AppBarLayout>
 

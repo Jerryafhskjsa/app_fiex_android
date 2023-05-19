@@ -25,13 +25,13 @@
                 android:padding="@dimen/middle_padding"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="@string/queren_z" />
+                android:text="" />
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/queren_q" />
+                android:text="" />
 
             <LinearLayout
                 android:id="@+id/cards"
@@ -148,7 +148,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textColor="@color/partTranslucent"
-                    android:text="@string/cancel1" />
+                    android:text="取消" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"

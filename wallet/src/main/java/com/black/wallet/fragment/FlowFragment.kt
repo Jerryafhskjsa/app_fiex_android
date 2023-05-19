@@ -102,7 +102,7 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
             R.id.contract_choose -> {
                 DeepControllerWindow(
                     mContext as Activity,
-                    null,
+                    "币对筛选",
                     otherType,
                     typeList,
                     object : DeepControllerWindow.OnReturnListener<String> {
@@ -137,7 +137,7 @@ class FlowFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, Q
                 }
                 DeepControllerWindow(
                     mContext as Activity,
-                    null,
+                    "币对筛选",
                     type,
                     list,
                     object : DeepControllerWindow.OnReturnListener<String> {

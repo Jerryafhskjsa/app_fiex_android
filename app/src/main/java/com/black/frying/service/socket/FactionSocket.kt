@@ -74,7 +74,7 @@ class FactionSocket(context: Context, handler: Handler) : FryingSocket(context, 
 
     @Throws(Exception::class)
     override fun initSocket(): Socket {
-        return IO.socket(UrlConfig.getSocketHost() + "/league", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(context) + "/league", socketOptions)
     }
 
     //请求监听笑傲江湖连接

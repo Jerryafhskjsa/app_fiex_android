@@ -308,10 +308,10 @@ class HomePageContractFragment : BaseFragment(),
             override fun onSelect(type: String?) {
                 if (type != null) {
                     if (type == "0"){
-                        FryingUtil.showToast(mContext, "111")
+                        BlackRouter.getInstance().build(RouterConstData.FUTURE_MSG_ACTIVITY).go(mContext)
                     }
                     else if(type == "1") {
-                        FryingUtil.showToast(mContext, "222")
+                        BlackRouter.getInstance().build(RouterConstData.FUTURE_COUNT_ACTIVITY).go(mContext)
                     }
                     else if(type == "2") {
                         FryingUtil.showToast(mContext, "333")
@@ -1280,7 +1280,7 @@ class HomePageContractFragment : BaseFragment(),
             R.id.lin_unit_type -> {
                 currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
                 DeepControllerWindow(mContext as Activity,
-                    getString(R.string.select_order_type),
+                    "请选择换算单位",
                     currentUnitType,
                     viewModel?.getCurrentUnitTypeList() as List<String?>?,
                     object : DeepControllerWindow.OnReturnListener<String?> {
@@ -1291,9 +1291,6 @@ class HomePageContractFragment : BaseFragment(),
                             refreshUnitType(item)
                             currentUnitType = item
                             viewModel?.setCurrentUnitType(item)
-                            if (currentOrderType.equals(LIMIT)) {
-                            } else if (currentOrderType.equals("MARKET")) {
-                            }
                         }
                     }).show()
             }
@@ -2142,6 +2139,11 @@ class HomePageContractFragment : BaseFragment(),
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
         if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
+            return
+        }
+        if (origQtyNum <= num*(priceNum)) {
+            FryingUtil.showToast(mContext, "单笔下单应大于" + String.format("%.4f", num*(priceNum)) + "USDT")
+            //FryingUtil.showToast(mContext, "单笔下单应大于0.0001" + "BTC")
             return
         }
         if (origQtyNum > NumberUtils.toBigDecimal("100000")) {

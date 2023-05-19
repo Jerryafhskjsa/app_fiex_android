@@ -60,8 +60,8 @@ class ContractViewModel(
     private var pairSet: String? = null
     private var kLineId: String? = ""
     private var onKLineAllEnd = false
-    var askMax = 5
-    var bidMax = 5
+    var askMax = 10
+    var bidMax = 10
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null

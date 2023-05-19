@@ -73,7 +73,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         list3 = ArrayList()
         list4 = ArrayList()
         list5 = ArrayList()
-        getUrl()
+       // getUrl()
     }
 
     override fun onResume() {
@@ -96,7 +96,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 if (TextUtils.isEmpty(name))
                     FryingUtil.showToast(mContext ,"Please put amount")
                 else {
-                    getDepositCreate("B" , null, null ,name)
+                    //getDepositCreate("B" , null, null ,name)
                 }
             }
 
@@ -107,7 +107,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                 if (TextUtils.isEmpty(account) || TextUtils.isEmpty(name) || TextUtils.isEmpty(amount))
                     FryingUtil.showToast(mContext ,"Please put amount or account or name")
                 else {
-                    getDepositCreate("S" ,account , name ,amount)
+                    //getDepositCreate("S" ,account , name ,amount)
                 }
             }
 
@@ -240,7 +240,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
         }
     }
-    private fun getUrl(){
+   /* private fun getUrl(){
         WalletApiServiceHelper.getDepositOrderCodeList(mContext, object : NormalCallback<HttpRequestResultData<PagingData<Deposit?>?>?>(mContext) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -257,6 +257,8 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
             }
         })
     }
+
+    */
 
 
     private fun showData(){
@@ -286,7 +288,7 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
         binding?.chooseAddress?.setText(payChain3)
     }
 
-    private fun getDepositCreate(type: String?,account: String? , name: String? , amount: String?) {
+    /*private fun getDepositCreate(type: String?,account: String? , name: String? , amount: String?) {
         val payVO = PayVO()
         payVO.accName = name
         payVO.accNo = account
@@ -338,6 +340,8 @@ class ThirdPayment: BaseActivity(), View.OnClickListener{
                     }
                 })
     }
+
+     */
 
     //获得现货usdt资产
     private fun getUserBalance(isShowLoading: Boolean ){

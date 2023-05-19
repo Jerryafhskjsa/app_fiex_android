@@ -2,15 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/text_size_18"
+    android:layout_marginRight="@dimen/text_size_18"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <com.black.base.widget.SpanTextView
         android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:maxLines="1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center|left"
+        android:layout_weight="1"
         android:textColor="@color/T1"
-        android:textSize="@dimen/text_size_16" />
+        android:textSize="@dimen/text_size_12" />
+    <com.black.base.widget.SpanCheckedTextView
+        android:id="@+id/queren"
+        android:visibility="gone"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/queren2"/>
 </LinearLayout>

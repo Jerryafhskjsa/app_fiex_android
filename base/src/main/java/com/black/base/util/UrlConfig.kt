@@ -4,7 +4,7 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    val HOSTS = "https://pixelex.co"
+    val HOSTS = "https://hipiex.net"
 
 
     fun getHost(context: Context): String {
@@ -26,10 +26,10 @@ object UrlConfig {
         return HOSTS + apiTypeDes
     }
 
-    private val SOCKET_HOSTS_SOEASTEX = "wss://pixelex.co/ws/"//正式
+     var SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/ws/"//正式
 
 
-    private val SPOT_SOCKET_HOSTS_SOEASTEX = "wss://pixelex.co/socket"//正式
+    var SPOT_SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/socket"//正式
 
 
 
@@ -463,6 +463,9 @@ object UrlConfig {
 
         //获取当前交易对的成交
         const val URL_TRADE_ORDERS_DEAL = "public/deal"
+
+        //获取当前交易对的成交
+        const val URL_TRADE_FUTURE = "market/v1/public/q/deal"
     }
 
     object Wallet {
@@ -672,6 +675,8 @@ object UrlConfig {
     //合约相关
     object Future {
 
+        const val URL_KLINE = "market/v1/public/q/kline";
+
         const val URL_DEPTH = "market/v1/public/q/depth";
 
         //交易对配置列表
@@ -679,6 +684,10 @@ object UrlConfig {
 
         //调整合约倍数
         const val URL_ADJUST_LEVERAGE = "user/v1/position/adjust-leverage"
+
+        //调整合约开仓方向
+        const val URL_CHANGE_TYPE = "user/v1/position/change-type"
+
 
         //一键全部平仓
         const val URL_CLOSE_ALL = "user/v1/position/close-all"
@@ -742,6 +751,10 @@ object UrlConfig {
         const val ULR_BALANCE_LIST = "user/v1/balance/list"
 
         const val URL_BALANCE_BILLS = "user/v1/balance/bills"
+
+        const val ULR_ORDER_CREATE_PLAN = "trade/v1/entrust/create-plan"
+
+        const val ULR_ORDER_CREATE_PROFIT = "trade/v1/entrust/create-profit"
 
         const val ULR_ORDER_CREATE = "trade/v1/order/create"
 

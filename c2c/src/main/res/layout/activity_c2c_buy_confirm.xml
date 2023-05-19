@@ -154,7 +154,7 @@
                                             android:paddingLeft="20dp"
                                             android:paddingTop="@dimen/text_size_10"
                                             android:singleLine="true"
-                                            android:text="@string/cunru"
+                                            android:text="存入"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text_size_14" />
                                         <LinearLayout
@@ -400,7 +400,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/sell_name" />
+                                android:text="卖家名字" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/real_name"
@@ -426,7 +426,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/jiedan" />
+                                android:text="接单数" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/total_amount"

@@ -149,7 +149,7 @@
                         android:id="@+id/num5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/payment_code"
+                        android:text="付款码"
                         android:textSize="12dp" />
                     <ImageView
                         android:id="@+id/num6"

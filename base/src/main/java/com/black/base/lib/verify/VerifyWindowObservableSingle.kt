@@ -18,7 +18,8 @@ import com.google.android.material.tabs.TabLayout
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
-class VerifyWindowObservableSingle(activity: Activity, type: Int, target: Target, alwaysNoToken: Boolean) : VerifyWindowObservable(activity, type, target, alwaysNoToken), TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
+class VerifyWindowObservableSingle
+    (activity: Activity, type: Int, target: Target, alwaysNoToken: Boolean) : VerifyWindowObservable(activity, type, target, alwaysNoToken), TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
     private var singleBinding: ViewVerifySingleBinding? = null
     private var showViews: ArrayList<View>? = ArrayList()
     private var googleIndex = -1

@@ -32,7 +32,7 @@ fun OkWebSocketHelper.sendCommandUnSymbol() {
 }
 
 fun getMarketOkWebSocket(): OkWebSocket {
-    return OKWebSocketFactory.getOkWebSocket(UrlConfig.SOCKET_HOSTS_SOEASTEX + "market")
+    return  OKWebSocketFactory.getOkWebSocket(UrlConfig.SOCKET_HOSTS_SOEASTEX + "market")
 }
 
 fun getUserOkWebSocket(): OkWebSocket {

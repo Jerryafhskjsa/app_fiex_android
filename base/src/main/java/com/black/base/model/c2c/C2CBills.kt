@@ -42,16 +42,16 @@ class C2CBills: BaseAdapterItem() {
                 statusText = context.getString(R.string.cancel1)
             }
             2 -> {
-                statusText = context.getString(R.string.pending_payment)
+                statusText = context.getString(R.string.cancel1)//context.getString(R.string.pending_payment)
             }
             3 -> {
-                statusText = context.getString(R.string.paid)
+                statusText = context.getString(R.string.cancel1)//context.getString(R.string.paid)
             }
             4 -> {
-                statusText = context.getString(R.string.been_placed)
+                statusText = context.getString(R.string.cancel1)//context.getString(R.string.been_placed)
             }
             5 -> {
-                statusText = context.getString(R.string.under_review)
+                statusText = context.getString(R.string.cancel1)//context.getString(R.string.under_review)
             }
 
         }

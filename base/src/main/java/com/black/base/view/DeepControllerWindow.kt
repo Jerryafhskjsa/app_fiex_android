@@ -11,6 +11,7 @@ import android.widget.*
 import com.black.base.R
 import com.black.base.model.FryingLinesConfig
 import com.black.base.model.socket.Deep
+import com.black.base.widget.SpanCheckedTextView
 import skin.support.content.res.SkinCompatResources
 import java.util.*
 
@@ -33,7 +34,7 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
             dm.widthPixels,
             WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+       // popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener {
@@ -43,9 +44,9 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
         }
         titleView = contentView.findViewById(R.id.title)
         if (TextUtils.isEmpty(title)) {
-            titleView.visibility = View.GONE
+            titleView.text = ""
         } else {
-            titleView.visibility = View.VISIBLE
+            //titleView.visibility = View.VISIBLE
             titleView.text = title
         }
         listView = contentView.findViewById(R.id.list_view)
@@ -129,7 +130,9 @@ class DeepControllerWindow<T>(private val activity: Activity, title: String?, pr
             if(item is String){
                 if (item == selectObject) {
                     textView?.setTextColor(COLOR_SELECT)
+                    view?.findViewById<SpanCheckedTextView>(R.id.queren)?.visibility = View.VISIBLE
                 } else {
+                    view?.findViewById<SpanCheckedTextView>(R.id.queren)?.visibility = View.GONE
                     textView?.setTextColor(COLOR_DEFAULT)
                 }
                 text = if(item == "LIMIT"){

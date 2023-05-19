@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Hipiex</string>
+    <string name="app_name">Piexlex</string>
     <string name="edt_account_hint">请输入手机号</string>
     <string name="get_check_code">获取验证码</string>
     <string name="cancel">取消</string>
@@ -374,7 +374,7 @@
     <string name="map_entrustment">计划委托</string>
     <string name="historical_orders">历史订单</string>
     <string name="capital_flow">资金流水</string>
-    <string name="capital_cost">资金费用</string>
+    <string name="capital_cost">资金费用历史</string>
     <string name="position_reduce">自动减仓</string>
     <string name="merge">仓位合并</string>
     <string name="distribution_of_experience_fund">体验金发放</string>
@@ -1134,6 +1134,44 @@
     <string name="bao_amount">保数量/已成交</string>
     <string name="junjia">成交均价</string>
     <string name="zongquanyi">总权益</string>
+    <string name="ad">广告</string>
+    <string name="c_ad">身份认证</string>
+    <string name="bond">保证金</string>
+    <string name="want_buy">我要买</string>
+    <string name="want_sell">我要卖</string>
+    <string name="will_get">我将得到</string>
+    <string name="will_receive">我将得到</string>
+    <string name="choose_rade">选择渠道</string>
+    <string name="payment_methods">付款方式</string>
+    <string name="id">ID</string>
+    <string name="total_m">总数量</string>
+    <string name="cancel1">取消</string>
+    <string name="coin_asset"> </string>
+    <string name="fang_thirty"> </string>
+    <string name="fu_thity"> </string>
+    <string name="shouci"> </string>
+    <string name="block"> </string>
+    <string name="tishi_jin"> </string>
+    <string name="tijiao_a"> </string>
+    <string name="language_vietnam"> </string>
+    <string name="pending"> </string>
+    <string name="complet"> </string>
+    <string name="watting_get"> </string>
+    <string name="shengsu_f"> </string>
+    <string name="queren_f"> </string>
+    <string name="seller_g"> </string>
+    <string name="cancel_s"> </string>
+    <string name="queren_s"> </string>
+    <string name="fangbi_s"> </string>
+    <string name="yigai"> </string>
+    <string name="statement"> </string>
+    <string name="jinggao"> </string>
+    <string name="pay_details"> </string>
+    <string name="mian3"> </string>
+    <string name="buy_sell"> </string>
+
+
+
 
 
 

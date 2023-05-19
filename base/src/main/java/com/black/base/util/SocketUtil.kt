@@ -825,7 +825,7 @@ object SocketUtil {
             ) TradeOrder.COMPARATOR_UP else TradeOrder.COMPARATOR_DOWN
         )
         if (maxSize <= 0) {
-            maxSize = 5
+            maxSize = 10
         }
         val result: MutableList<TradeOrder> = ArrayList(maxSize)
         var lastOrder: TradeOrder? = null

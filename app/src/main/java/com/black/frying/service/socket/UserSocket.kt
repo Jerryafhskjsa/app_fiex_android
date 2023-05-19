@@ -100,7 +100,7 @@ class UserSocket(context: Context, handler: Handler) : FryingSocket(context, han
     override fun initSocket(): Socket {
         Log.d(TAG,"initSocket")
 //        return IO.socket(UrlConfig.getSocketHost(context) + "/user", socketOptions)
-        return IO.socket(UrlConfig.getSocketHost(), socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(context), socketOptions)
     }
 
 

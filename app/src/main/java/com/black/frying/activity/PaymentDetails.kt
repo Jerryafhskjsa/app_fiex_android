@@ -112,7 +112,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                 if (binding?.barA?.isChecked == false) {
                     FryingUtil.showToast(mContext,getString(R.string.mian3))
                 } else {
-                    getUrl()
+                    //getUrl()
 
                 }
 
@@ -120,7 +120,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
             }
         }
     }
-    private fun getUrl(){
+    /*private fun getUrl(){
             WalletApiServiceHelper.getDepositConfirm(mContext, order?.id , object : NormalCallback<HttpRequestResultString?>(mContext) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
@@ -145,5 +145,7 @@ class PaymentDetails: BaseActivity(), View.OnClickListener{
                 }
             })
         }
+
+     */
 
 }

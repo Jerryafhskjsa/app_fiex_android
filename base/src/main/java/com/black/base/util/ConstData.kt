@@ -48,7 +48,7 @@ object ConstData {
     const val TAB_QUOTATION = 1
     const val TAB_TRANSATION = 2
     const val TAB_CONTRACT = 3
-    const val TAB_ASSET = 3
+    const val TAB_ASSET = 4
     //交易对默认精度
     const val DEFAULT_PRECISION = 6
     const val DEFAULT_AMOUNT_PRECISION = 4

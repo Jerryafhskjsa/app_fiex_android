@@ -1,5 +1,6 @@
 package com.black.frying.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -28,9 +29,10 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
         return R.layout.list_item_contract_tab_profit
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabProfitBinding>?) {
         val profitData = getItem(position)
-        var viewHolder = holder?.dataBing
+        val viewHolder = holder?.dataBing
         var sideDes:String? = null
         var bondDes:String? = null
         var positionType:String? = null
@@ -47,7 +49,7 @@ class ContractProfitTabAdapter(context: Context, data: MutableList<ProfitsBean?>
         when(profitData?.positionType){
             //逐仓
             "ISOLATED" -> {
-                bondDes = profitData?.isolatedMargin
+                bondDes = profitData.isolatedMargin
                 positionType = getString(R.string.contract_fiexble_position)
             }
             //全仓

@@ -215,7 +215,7 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
     override fun initSocket(): Socket {
 //        val url = UrlConfig.getSocketHost(context) + "/quotation"
 //        Log.e(TAG, "initSocket url:$url")
-        return IO.socket(UrlConfig.getSocketHost() + "/quotation", socketOptions)
+        return IO.socket(UrlConfig.getSocketHost(context) + "/quotation", socketOptions)
     }
 
     override fun start() {

@@ -494,7 +494,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="@string/contract_fast_done"
+                        android:text="平仓"
                         android:background="@drawable/anniu"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_12"

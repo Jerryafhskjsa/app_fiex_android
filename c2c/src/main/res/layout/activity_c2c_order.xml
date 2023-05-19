@@ -59,7 +59,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/miniute" />
+                                android:text="付款时间" />
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/time"
                                 android:layout_width="wrap_content"
