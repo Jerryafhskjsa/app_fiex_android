@@ -70,11 +70,11 @@ class SocketService : Service() {
             SocketUtil.COMMAND_KTAB_CHANGED -> {
                 if (msg.obj is Bundle) {
                     fiexSocketManager?.kLineTimeStep = (msg.obj as Bundle).getString("timeStep")
-                    fiexSocketManager?.kLineTimeStepSecond =
-                        (msg.obj as Bundle).getLong("timeStepSecond")
+                    fiexSocketManager?.kLineTimeStepSecond = (msg.obj as Bundle).getLong("timeStepSecond")
                     fiexSocketManager?.kLineId = (msg.obj as Bundle).getString("kLineId")
                 }
                 fiexSocketManager?.startListenKLine()
+                fiexSocketManager?.startListenFutureKline()
             }
             SocketUtil.COMMAND_RECEIVE, SocketUtil.COMMAND_RESUME -> {
                 fiexSocketManager?.startConnectAll()

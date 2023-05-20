@@ -2265,10 +2265,20 @@ object SocketDataContainer {
         currentPair: String?,
         handler: Handler?,
         kLineId: String?,
+        depthType: Int?,
         kLineItem: KLineItem?
     ) {
         if (currentPair == null || kLineItem == null) {
             return
+        }
+        var observer1 = ArrayList<Observer<KLineItemPair?>>()
+        when (depthType) {
+            ConstData.DEPTH_SPOT_TYPE -> {
+                observer1 = kLineAddObservers
+            }
+            ConstData.DEPTH_FUTURE_TYPE -> {
+                observer1 = kLineAddObservers
+            }
         }
         CommonUtil.postHandleTask(handler) {
             Observable.create<String> { emitter -> emitter.onNext(gson.toJson(kLineItem)) }
@@ -2276,8 +2286,8 @@ object SocketDataContainer {
                 .observeOn(Schedulers.trampoline())
                 .subscribe(object : SuccessObserver<String?>() {
                     override fun onSuccess(s: String?) {
-                        synchronized(kLineAddObservers) {
-                            for (observer in kLineAddObservers) {
+                        synchronized(observer1) {
+                            for (observer in observer1) {
                                 observer.onNext(
                                     KLineItemPair(
                                         currentPair,

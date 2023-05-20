@@ -314,7 +314,7 @@ class HomePageContractFragment : BaseFragment(),
                         BlackRouter.getInstance().build(RouterConstData.FUTURE_COUNT_ACTIVITY).go(mContext)
                     }
                     else if(type == "2") {
-                        FryingUtil.showToast(mContext, "333")
+                        BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
                     }
                     else if(type == "3") {
                         Currentdialog3()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.text.TextUtils
 import com.black.base.model.socket.KLineItem
+import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
 import com.black.base.util.SocketDataContainer
 import com.black.base.util.SocketUtil
@@ -191,7 +192,8 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                 }
                 if (data != null) {
                     val newData = gson.fromJson<KLineItem>(data.toString(), object : TypeToken<KLineItem?>() {}.type)
-                    SocketDataContainer.addKLineData(currentPair, handler, kLineId, newData)
+                    SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_SPOT_TYPE, newData)
+                    SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_FUTURE_TYPE, newData)
                 }
             }
         }

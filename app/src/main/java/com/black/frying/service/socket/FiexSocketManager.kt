@@ -70,6 +70,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     private var futureSymbolListener: SocketListener? = FutureSymbolListener()
     private var futureTickersListener: SocketListener? = FutureTickersListener()
     private var futureMarkPriceListener:SocketListener? = FutureMarkPriceListener()
+    private var futureKlineListener:SocketListener? = FutureKlineListener()
 
     /*****future*****/
 
@@ -130,6 +131,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_TICKETS, socketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_SYMBOL, futureSocketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER, futureSocketSetting)
+        WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_KLINE, futureSocketSetting)
         WebSocketHandler.initGeneralWebSocket(SocketUtil.WS_FUTURE_SUB_MARK_PRICE,futureSocketSetting)
     }
 
@@ -226,6 +228,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         FutureTickersListener()
                     }
                 }
+                SocketUtil.WS_FUTURE_SUB_KLINE -> {
+                    listener = if (futureKlineListener != null) {
+                        futureKlineListener
+                    } else {
+                        FutureTickersListener()
+                    }
+                }
                 SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
                     listener = if (futureMarkPriceListener != null) {
                         futureMarkPriceListener
@@ -264,6 +273,10 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 WebSocketHandler.getWebSocket(socketKey)?.removeListener(futureMarkPriceListener)
                 futureMarkPriceListener = null
             }
+            SocketUtil.WS_FUTURE_SUB_KLINE ->{
+                WebSocketHandler.getWebSocket(socketKey)?.removeListener(futureKlineListener)
+                futureKlineListener = null
+            }
         }
     }
 
@@ -290,6 +303,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 SocketUtil.WS_FUTURE_SUB_TICKER -> {
                     listener = futureTickersListener
                 }
+                SocketUtil.WS_FUTURE_SUB_KLINE -> {
+                    listener = futureKlineListener
+                }
                 SocketUtil.WS_FUTURE_SUB_MARK_PRICE ->{
                     listener = futureMarkPriceListener
                 }
@@ -302,6 +318,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         pairKlineSocketListener = null
         futureSymbolListener = null
         futureTickersListener = null
+        futureKlineListener = null
         futureMarkPriceListener = null
     }
 
@@ -357,6 +374,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         futureMarkPriceListener
                     } else {
                         FutureMarkPriceListener()
+                    }
+                }
+                SocketUtil.WS_FUTURE_SUB_KLINE -> {
+                    listener = if (futureKlineListener != null) {
+                        futureKlineListener
+                    } else {
+                        FutureKlineListener()
                     }
                 }
             }
@@ -466,6 +490,27 @@ class FiexSocketManager(context: Context, handler: Handler) {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_ticker")
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_TICKER)
+                ?.send(jsonObject.toString())
+        } catch (e: Exception) {
+            FryingUtil.printError(e)
+        }
+    }
+
+    /**
+     * 合约监听所有交易对K线
+     * "req":"sub_ticker",
+    "  symbol":"btc_usdt" 不传为订阅所有
+     */
+    fun startListenFutureKline() {
+        currentPair = SocketUtil.getCurrentPair(mCcontext!!)
+        d(TAG, "startListenKline = $currentPair")
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("sub", "subKline")
+            jsonObject.put("symbol", currentPair)
+            jsonObject.put("type", kLineTimeStep)
+
+            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_KLINE)
                 ?.send(jsonObject.toString())
         } catch (e: Exception) {
             FryingUtil.printError(e)
@@ -700,6 +745,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     currentPair,
                                     mHandler,
                                     kLineId,
+                                    ConstData.DEPTH_SPOT_TYPE,
                                     klineItem
                                 )
                             }
@@ -955,6 +1001,72 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                         false
                                     )
                                 }
+                            }
+                        }
+                    }
+                } catch (e: JSONException) {
+                    FryingUtil.printError(e)
+                }
+            }
+        }
+    }
+
+    /**
+     * 合约24小时所有交易对K线
+     */
+    inner class FutureKlineListener() : SimpleListener() {
+        override fun onConnected() {
+            d(TAG, "FutureKlineListener---->ßonConnected")
+            startListenFutureKline()
+        }
+
+        override fun <T : Any?> onMessage(message: String?, data: T) {
+            d(TAG, "FutureKlineListener->onMessage = $message")
+            if (message.equals("succeed") || message.equals("pong")) {
+                return
+            }
+            CommonUtil.postHandleTask(mHandler) {
+                var data: JSONObject? = null
+                try {
+                    data = JSONObject(message)
+                    if (data != null) {
+                        d(TAG, "FutureKlineListener->resType = " + data.getString("resType"))
+                        var resultData = data.get("data");
+                        val kline = gson.fromJson<Kline>(
+                            resultData.toString(),
+                            object : TypeToken<Kline?>() {}.type
+                        )
+                        var klineItem = KLineItem()
+                        if (kline != null) {
+                            if (kline?.a != null) {
+                                klineItem.a = kline?.a?.toDouble()!!
+                            }
+                            if (kline?.c != null) {
+                                klineItem.c = kline?.c?.toDouble()!!
+                            }
+                            if (kline?.h != null) {
+                                klineItem.h = kline?.h?.toDouble()!!
+                            }
+                            if (kline?.l != null) {
+                                klineItem.l = kline?.l?.toDouble()!!
+                            }
+                            if (kline?.o != null) {
+                                klineItem.o = kline?.o?.toDouble()!!
+                            }
+                            if (kline?.t != null) {
+                                klineItem.t = kline?.t?.div(1000)
+                            }
+                            if (kline.v != null) {
+                                klineItem.v = kline?.v?.toDouble()!!
+                            }
+                            if (kline.s.equals(currentPair)) {
+                                SocketDataContainer.addKLineData(
+                                    currentPair,
+                                    mHandler,
+                                    kLineId,
+                                    ConstData.DEPTH_FUTURE_TYPE,
+                                    klineItem
+                                )
                             }
                         }
                     }

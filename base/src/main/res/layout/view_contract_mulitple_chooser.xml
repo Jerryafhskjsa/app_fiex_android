@@ -234,7 +234,7 @@
         android:layout_marginRight="@dimen/text_size_14"
         android:layout_marginLeft="@dimen/text_size_14"
         android:layout_marginTop="@dimen/text_size_16"
-        android:text="当前杠杆最高可持有仓位价值：150000USDT"
+        android:text="当前杠杆最高可持有仓位价值：100000USDT"
         android:drawablePadding="@dimen/text_size_14"
         android:drawableRight="@drawable/xiala3"
         android:textColor="#FF5F616D"
