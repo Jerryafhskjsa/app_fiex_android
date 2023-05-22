@@ -1,5 +1,6 @@
 package com.black.frying.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -105,6 +106,9 @@ class ContractViewModel(
 
     private var tradeOrderDepthPair: TradeOrderPairList? = null
     private var singleOrderDepthList: ArrayList<QuotationOrderNew?>? = null
+    private var fkLineObserver: Observer<KLineItemListPair?>? = createKLineObserver()
+    private var fkLineAddObserver: Observer<KLineItemPair?>? = createKLineAddObserver()
+    private var fkLineAddMoreObserver: Observer<KLineItemListPair?>? = createKLineAddMoreObserver()
 
     //标记价格
     private var marketPrice: MarkPriceBean? = null
@@ -185,6 +189,21 @@ class ContractViewModel(
         }
         SocketDataContainer.subscribeFuturePairQuotationObservable(pairQuotationObserver)
 
+        if (fkLineObserver == null) {
+            fkLineObserver = createKLineObserver()
+        }
+        SocketDataContainer.subscribeFKLineObservable(fkLineObserver)
+
+        if (fkLineAddObserver == null) {
+            fkLineAddObserver = createKLineAddObserver()
+        }
+        SocketDataContainer.subscribeFKLineAddObservable(fkLineAddObserver)
+
+        if (fkLineAddMoreObserver == null) {
+            fkLineAddMoreObserver = createKLineAddMoreObserver()
+        }
+        SocketDataContainer.subscribeFKLineAddMoreObservable(fkLineAddMoreObserver)
+
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
         SocketUtil.sendSocketCommandBroadcast(
@@ -218,128 +237,6 @@ class ContractViewModel(
             getProfitData(Constants.UNFINISHED)
             getPlanData(Constants.UNFINISHED)
         }
-    }
-
-    /**
-     * 获取资产
-     */
-     fun initBalanceByCoin(context: Context?) {
-        if(currentPairStatus.pair == null){
-            return
-        }
-        var coin = currentPairStatus.pair.toString().split("_")[1]
-        FutureApiServiceHelper.getBalanceDetail(context, coin, FutureService.underlyingType, false,
-            object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
-                override fun error(type: Int, error: Any?) {
-                    Log.d("ttttttt-->getBalanceDetail", error.toString())
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
-                    Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
-                    if (returnData != null) {
-                        balanceDetailBean = returnData?.result!!
-                    }
-                }
-            })
-    }
-
-    /**
-     * 获取仓位列表
-     */
-     fun getPositionData() {
-        var symbol:String? = currentPairStatus.pair
-        FutureApiServiceHelper.getPositionList(context, symbol, false,
-            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
-                    if (returnData != null) {
-
-                        var data: ArrayList<PositionBean?>? = returnData.result
-                        positionList =
-                            data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
-                        if (positionList?.size!! > 0) {
-                            onContractModelListener?.onPositionData(positionList)
-                        }
-                    }
-                }
-            })
-    }
-
-    /**
-     * 获取止盈止损列表
-     */
-    /**
-     * 获取当前持仓数据
-     */
-     fun getProfitData(state: String?) {
-        var symbol:String? = currentPairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
-            symbol = null
-        }
-        FutureApiServiceHelper.getProfitList(context, symbol,state, false,
-            object : Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<PagingData<ProfitsBean?>?>?) {
-                    if (returnData != null) {
-                        var data = returnData.result?.items
-                        if (data?.size!! > 0) {
-                            onContractModelListener?.onProfitData(data)
-                        }
-
-                    }
-                }
-            })
-    }
-
-    /**
-     * 获取当前计划委托列表
-     */
-     fun getPlanData(state: String?) {
-        var symbol:String? = currentPairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
-            symbol = null
-        }
-        FutureApiServiceHelper.getPlanList(context,symbol, state, false,
-            object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
-                    if (returnData != null) {
-                        var data = returnData.result?.items
-                        planUnionBean?.planList = data
-                        getLimitPricePlanData()
-                    }
-                }
-            })
-    }
-
-    /**
-     * 获取当前限价委托
-     */
-    fun getLimitPricePlanData() {
-        var symbol:String? = currentPairStatus?.pair
-        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
-            symbol = null
-        }
-        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
-            object : Callback<HttpRequestResultBean<OrderBean>>() {
-                override fun error(type: Int, error: Any?) {
-                }
-
-                override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
-                    if (returnData != null) {
-                        var orderData = returnData?.result
-                        var orderList = orderData?.items
-                        planUnionBean?.limitPriceList = orderList
-                        onContractModelListener?.onPlanData(planUnionBean)
-                    }
-                }
-            })
     }
 
 
@@ -399,6 +296,16 @@ class ContractViewModel(
             SocketDataContainer.removeFundRateObservable(fundRateObserver)
         }
 
+        if (fkLineObserver != null) {
+            SocketDataContainer.removeFKLineObservable(fkLineObserver)
+        }
+        if (fkLineAddObserver != null) {
+            SocketDataContainer.removeFKLineAddObservable(fkLineAddObserver)
+        }
+        if (fkLineAddMoreObserver != null) {
+            SocketDataContainer.removeFKLineAddMoreObservable(fkLineAddMoreObserver)
+        }
+
         if (socketHandler != null) {
             socketHandler!!.removeMessages(0)
             socketHandler = null
@@ -406,6 +313,128 @@ class ContractViewModel(
         if (handlerThread != null) {
             handlerThread!!.quit()
         }
+    }
+
+    /**
+     * 获取资产
+     */
+    fun initBalanceByCoin(context: Context?) {
+        if(currentPairStatus.pair == null){
+            return
+        }
+        var coin = currentPairStatus.pair.toString().split("_")[1]
+        FutureApiServiceHelper.getBalanceDetail(context, coin, FutureService.underlyingType, false,
+            object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                    Log.d("ttttttt-->getBalanceDetail", error.toString())
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
+                    Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
+                    if (returnData != null) {
+                        balanceDetailBean = returnData?.result!!
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取仓位列表
+     */
+    fun getPositionData() {
+        var symbol:String? = currentPairStatus.pair
+        FutureApiServiceHelper.getPositionList(context, symbol, false,
+            object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
+                    if (returnData != null) {
+
+                        var data: ArrayList<PositionBean?>? = returnData.result
+                        positionList =
+                            data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
+                        if (positionList?.size!! > 0) {
+                            onContractModelListener?.onPositionData(positionList)
+                        }
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取止盈止损列表
+     */
+    /**
+     * 获取当前持仓数据
+     */
+    fun getProfitData(state: String?) {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getProfitList(context, symbol,state, false,
+            object : Callback<HttpRequestResultBean<PagingData<ProfitsBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<PagingData<ProfitsBean?>?>?) {
+                    if (returnData != null) {
+                        var data = returnData.result?.items
+                        if (data?.size!! > 0) {
+                            onContractModelListener?.onProfitData(data)
+                        }
+
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取当前计划委托列表
+     */
+    fun getPlanData(state: String?) {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getPlanList(context,symbol, state, false,
+            object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
+                    if (returnData != null) {
+                        var data = returnData.result?.items
+                        planUnionBean?.planList = data
+                        getLimitPricePlanData()
+                    }
+                }
+            })
+    }
+
+    /**
+     * 获取当前限价委托
+     */
+    fun getLimitPricePlanData() {
+        var symbol:String? = currentPairStatus?.pair
+        if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
+            symbol = null
+        }
+        FutureApiServiceHelper.getOrderList(1, 10,symbol, Constants.UNFINISHED, context, false,
+            object : Callback<HttpRequestResultBean<OrderBean>>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
+                    if (returnData != null) {
+                        var orderData = returnData?.result
+                        var orderList = orderData?.items
+                        planUnionBean?.limitPriceList = orderList
+                        onContractModelListener?.onPlanData(planUnionBean)
+                    }
+                }
+            })
     }
 
     private fun createUserBalanceObserver(): Observer<UserBalance?> {
@@ -1009,6 +1038,70 @@ class ContractViewModel(
                             }
                         }
                     })
+            }
+        }
+    }
+
+    private fun createKLineObserver(): Observer<KLineItemListPair?> {
+        return object : SuccessObserver<KLineItemListPair?>() {
+            @SuppressLint("CheckResult")
+            override fun onSuccess(value: KLineItemListPair?) {
+                if (value == null) {
+                    return
+                }
+                onContractModelListener?.run {
+                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.items != null) {
+                        FryingUtil.observableWithHandler(socketHandler, value.items!!)
+                            ?.subscribe {
+                                onKLineAllEnd = true
+                                onKLineDataAll(it)
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createKLineAddObserver(): Observer<KLineItemPair?> {
+        return object : SuccessObserver<KLineItemPair?>() {
+            override fun onSuccess(value: KLineItemPair?) {
+                if (value == null) {
+                    return
+                }
+                onContractModelListener?.run {
+                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.item != null) {
+                        FryingUtil.observableWithHandler(socketHandler, value.item!!)
+                            ?.subscribe {
+                                onKLineDataAdd(it)
+                            }
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    private fun createKLineAddMoreObserver(): Observer<KLineItemListPair?> {
+        return object : SuccessObserver<KLineItemListPair?>() {
+            override fun onSuccess(value: KLineItemListPair?) {
+                value ?: return
+                onContractModelListener?.run {
+                    val returnKLineIdPair = value.kLineId ?: return
+                    val arr = returnKLineIdPair.split("_").toTypedArray()
+                    if (arr.size != 2) {
+                        return
+                    }
+                    val returnKlineId = arr[0]
+                    val kLinePage = arr[1]
+                    val kLinePageInt = CommonUtil.parseInt(kLinePage) ?: return
+                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(returnKlineId, kLineId) && value.items != null) {
+                        FryingUtil.observableWithHandler(socketHandler, value.items!!)
+                            ?.subscribe {
+                                onKLineDataMore(kLinePageInt, it)
+                            }
+                    }
+                }
             }
         }
     }

@@ -58,7 +58,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
-        binding?.countryCode?.tag = "61"
+        binding?.countryCode?.tag = "86"
         binding?.countryCode?.setOnClickListener(this)
         binding?.phoneAccount?.addTextChangedListener(watcher)
         binding?.phoneCode?.addTextChangedListener(watcher)
@@ -80,7 +80,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
         if (thisCountry == null) {
             thisCountry = CountryCode()
-            thisCountry?.code = "61"
+            thisCountry?.code = "86"
         }
         chooseWindow = CountryChooseWindow(this, thisCountry, object : OnCountryChooseListener {
             override fun onCountryChoose(chooseWindow: CountryChooseWindow, countryCode: CountryCode?) {

@@ -192,8 +192,8 @@ class QuotationSocket(context: Context, handler: Handler) : FryingSocket(context
                 }
                 if (data != null) {
                     val newData = gson.fromJson<KLineItem>(data.toString(), object : TypeToken<KLineItem?>() {}.type)
-                    SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_SPOT_TYPE, newData)
-                    SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_FUTURE_TYPE, newData)
+                    //SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_SPOT_TYPE, newData)
+                    //SocketDataContainer.addKLineData(currentPair, handler, kLineId, ConstData.DEPTH_FUTURE_TYPE, newData)
                 }
             }
         }

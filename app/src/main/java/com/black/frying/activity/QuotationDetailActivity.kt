@@ -460,7 +460,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onPairChanged(pair: String?) {
-        coinTypeView?.text = pair?.replace("_", "/") ?: "NULL"
+        coinTypeView?.text = pair?.uppercase()?.replace("_", "/") ?: "NULL"
         deepBinding!!.refreshTitles(pair)
     }
 

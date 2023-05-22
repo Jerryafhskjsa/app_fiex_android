@@ -65,7 +65,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
 
     init {
         currentPairStatus.pair = (pair)
-        this.nullAmount = context?.resources?.getString(R.string.number_default)
+        this.nullAmount = context.resources?.getString(R.string.number_default)
     }
 
     override fun onResume() {
@@ -173,7 +173,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                 coinType = arr[0]
                 pairSet = arr[1]
             }
-//            getTradePairInfo()
+            //getTradePairInfo()
             getPairStatus()
         }
     }
@@ -359,6 +359,8 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                                 }
                     }
                 }
+
+
             }
         }
     }

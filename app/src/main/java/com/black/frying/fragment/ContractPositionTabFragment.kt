@@ -179,7 +179,7 @@ class ContractPositionTabFragment : BaseFragment(),
                             if (returnData != null) {
                                 var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
                                 FryingUtil.showToast(mContext, "Success")
-                                viewModel?.getPositionData(all)
+                                viewModel?.getPositionData(false)
                                 onTabModelListener?.onCount(0)
                             }
                         }
@@ -196,8 +196,10 @@ class ContractPositionTabFragment : BaseFragment(),
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             onTabModelListener?.onCount(positionList?.size)
             num = positionList?.size?: 0
-            adapter?.data = positionList
-            adapter?.notifyDataSetChanged()
+                adapter?.data = null
+                adapter?.notifyDataSetChanged()
+                adapter?.data = positionList
+                adapter?.notifyDataSetChanged()
         }
     }
 

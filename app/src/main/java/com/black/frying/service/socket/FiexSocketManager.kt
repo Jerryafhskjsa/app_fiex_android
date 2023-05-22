@@ -782,73 +782,71 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 var data: JSONObject? = null
                 try {
                     data = JSONObject(message)
-                    if (data != null) {
-                        var resType = data.getString("resType")
+                    var resType = data.getString("resType")
 //                    d(TAG, "subStatus->resType = $resType")
-                        var resultData = data.getString("data")
+                    var resultData = data.getString("data")
 //                    d(TAG, "subStatus->data = $resultData")
-                        val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
-                        when (resType) {
-                            //50挡深度
-                            "qAllDepth" -> {
-                                val allDepth: TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(
-                                    jsonObject.toString(),
-                                    object : TypeToken<TradeOrderDepth?>() {}.type
+                    val jsonObject: JsonObject = JsonParser().parse(resultData) as JsonObject
+                    when (resType) {
+                        //50挡深度
+                        "qAllDepth" -> {
+                            val allDepth: TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(
+                                jsonObject.toString(),
+                                object : TypeToken<TradeOrderDepth?>() {}.type
+                            )
+                            if (allDepth != null) {
+                                SocketDataContainer.updateQuotationOrderNewDataFiex(
+                                    mCcontext,
+                                    ConstData.DEPTH_SPOT_TYPE,
+                                    mHandler,
+                                    currentPair,
+                                    allDepth,
+                                    true
                                 )
-                                if (allDepth != null) {
-                                    SocketDataContainer.updateQuotationOrderNewDataFiex(
-                                        mCcontext,
-                                        ConstData.DEPTH_SPOT_TYPE,
-                                        mHandler,
-                                        currentPair,
-                                        allDepth,
-                                        true
-                                    )
-                                }
                             }
-                            "qDepth" -> {
-                                val oneDepth: TradeOrderOneDepth? =
-                                    gson.fromJson<TradeOrderOneDepth?>(
-                                        jsonObject.toString(),
-                                        object : TypeToken<TradeOrderOneDepth??>() {}.type
-                                    )
-                                if (oneDepth != null) {
-                                    var allDepthData = TradeOrderDepth()
-                                    var direction = oneDepth?.m
-                                    var desArray: Array<String?>? =
-                                        arrayOf(oneDepth?.p, oneDepth?.q)
-                                    if (direction.equals("1")) {//BID
-                                        var bidArray = arrayOf(desArray)
-                                        allDepthData?.b = bidArray
-                                    }
-                                    if (direction.equals("2")) {//ASK
-                                        var askArray = arrayOf(desArray)
-                                        allDepthData?.a = askArray
-                                    }
-                                    allDepthData.s = oneDepth?.s
+                        }
+                        "qDepth" -> {
+                            val oneDepth: TradeOrderOneDepth? =
+                                gson.fromJson<TradeOrderOneDepth?>(
+                                    jsonObject.toString(),
+                                    object : TypeToken<TradeOrderOneDepth??>() {}.type
+                                )
+                            if (oneDepth != null) {
+                                var allDepthData = TradeOrderDepth()
+                                var direction = oneDepth?.m
+                                var desArray: Array<String?>? =
+                                    arrayOf(oneDepth?.p, oneDepth?.q)
+                                if (direction.equals("1")) {//BID
+                                    var bidArray = arrayOf(desArray)
+                                    allDepthData?.b = bidArray
+                                }
+                                if (direction.equals("2")) {//ASK
+                                    var askArray = arrayOf(desArray)
+                                    allDepthData?.a = askArray
+                                }
+                                allDepthData.s = oneDepth?.s
 //                            SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepthData,false)
-                                }
                             }
-                            //当前交易对成交数据
-                            "qDeal" -> {
+                        }
+                        //当前交易对成交数据
+                        "qDeal" -> {
 //                            d(TAG, "qDeal->data = $resultData")
-                                val pairDeal: PairDeal? = gson.fromJson<PairDeal?>(
-                                    jsonObject.toString(),
-                                    object : TypeToken<PairDeal??>() {}.type
-                                )
-                                if (pairDeal != null) {
-                                    SocketDataContainer.getCurrentPairDeal(mHandler, pairDeal)
-                                }
+                            val pairDeal: PairDeal? = gson.fromJson<PairDeal?>(
+                                jsonObject.toString(),
+                                object : TypeToken<PairDeal??>() {}.type
+                            )
+                            if (pairDeal != null) {
+                                SocketDataContainer.getCurrentPairDeal(mHandler, pairDeal)
                             }
-                            //当前交易对24小时行情
-                            "qStats" -> {
-                                val pairQuo: PairQuotation? = gson.fromJson<PairQuotation?>(
-                                    jsonObject.toString(),
-                                    object : TypeToken<PairQuotation?>() {}.type
-                                )
-                                if (pairQuo != null) {
-                                    SocketDataContainer.getCurrentPairQuotation(mHandler, pairQuo)
-                                }
+                        }
+                        //当前交易对24小时行情
+                        "qStats" -> {
+                            val pairQuo: PairQuotation? = gson.fromJson<PairQuotation?>(
+                                jsonObject.toString(),
+                                object : TypeToken<PairQuotation?>() {}.type
+                            )
+                            if (pairQuo != null) {
+                                SocketDataContainer.getCurrentPairQuotation(mHandler, pairQuo)
                             }
                         }
                     }
@@ -1022,7 +1020,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
             d(TAG, "FutureKlineListener->onMessage = $message")
-            if (message.equals("succeed") || message.equals("pong")) {
+            if (message.equals("succeed")) {
                 return
             }
             CommonUtil.postHandleTask(mHandler) {

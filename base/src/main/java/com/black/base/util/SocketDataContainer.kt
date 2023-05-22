@@ -140,6 +140,10 @@ object SocketDataContainer {
     private val kLineAddObservers = ArrayList<Observer<KLineItemPair?>>()
     private val kLineAddMoreObservers = ArrayList<Observer<KLineItemListPair?>>()
 
+    private val fkLineObservers = ArrayList<Observer<KLineItemListPair?>>()
+    private val fkLineAddObservers = ArrayList<Observer<KLineItemPair?>>()
+    private val fkLineAddMoreObservers = ArrayList<Observer<KLineItemListPair?>>()
+
     //用户信息有修改
     private val userInfoObservers = ArrayList<Observer<String?>>()
 
@@ -327,12 +331,30 @@ object SocketDataContainer {
         }
     }
 
+    fun subscribeFKLineObservable(observer: Observer<KLineItemListPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineObservers) {
+            if (!fkLineObservers.contains(observer)) {
+                fkLineObservers.add(observer)
+            }
+        }
+    }
+
     //移除K线观察者
     fun removeKLineObservable(observer: Observer<KLineItemListPair?>?) {
         if (observer == null) {
             return
         }
         synchronized(kLineObservers) { kLineObservers.remove(observer) }
+    }
+
+    fun removeFKLineObservable(observer: Observer<KLineItemListPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineObservers) { fkLineObservers.remove(observer) }
     }
 
     //添加K线新增观察者
@@ -346,6 +368,16 @@ object SocketDataContainer {
             }
         }
     }
+    fun subscribeFKLineAddObservable(observer: Observer<KLineItemPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineAddObservers) {
+            if (!fkLineAddObservers.contains(observer)) {
+                fkLineAddObservers.add(observer)
+            }
+        }
+    }
 
     //移除K线新增观察者
     fun removeKLineAddObservable(observer: Observer<KLineItemPair?>?) {
@@ -355,6 +387,12 @@ object SocketDataContainer {
         synchronized(kLineAddObservers) { kLineAddObservers.remove(observer) }
     }
 
+    fun removeFKLineAddObservable(observer: Observer<KLineItemPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineAddObservers) { fkLineAddObservers.remove(observer) }
+    }
     //添加K线加载更多观察者
     fun subscribeKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
         if (observer == null) {
@@ -367,12 +405,30 @@ object SocketDataContainer {
         }
     }
 
+    fun subscribeFKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineAddMoreObservers) {
+            if (!fkLineAddMoreObservers.contains(observer)) {
+                fkLineAddMoreObservers.add(observer)
+            }
+        }
+    }
+
     //移除K线加载更多观察者
     fun removeKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
         if (observer == null) {
             return
         }
         synchronized(kLineAddMoreObservers) { kLineAddMoreObservers.remove(observer) }
+    }
+
+    fun removeFKLineAddMoreObservable(observer: Observer<KLineItemListPair?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(fkLineAddMoreObservers) { fkLineAddMoreObservers.remove(observer) }
     }
 
     //添加用户信息观察者
@@ -2277,7 +2333,7 @@ object SocketDataContainer {
                 observer1 = kLineAddObservers
             }
             ConstData.DEPTH_FUTURE_TYPE -> {
-                observer1 = kLineAddObservers
+                observer1 = fkLineAddObservers
             }
         }
         CommonUtil.postHandleTask(handler) {
@@ -2507,6 +2563,7 @@ object SocketDataContainer {
         synchronized(pairDataSource) { pairDataSource.clear() }
         synchronized(dearPairMap) { dearPairMap.clear() }
         synchronized(depthDataList) { depthDataList.clear() }
+        synchronized(futureDepthDataList) { futureDepthDataList.clear() }
         synchronized(dealList) { dealList.clear() }
         synchronized(leverDetailCache) { leverDetailCache.clear() }
     }

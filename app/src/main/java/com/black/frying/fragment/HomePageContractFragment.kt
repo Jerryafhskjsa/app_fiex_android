@@ -887,6 +887,8 @@ class HomePageContractFragment : BaseFragment(),
 
     //初始化记录相关的tab
     private fun initRecordTab() {
+        viewModel?.getPositionData()
+
         recordTab?.setTabTextColors(
             SkinCompatResources.getColor(activity, R.color.C5),
             SkinCompatResources.getColor(activity, R.color.C1)
@@ -2201,7 +2203,7 @@ class HomePageContractFragment : BaseFragment(),
                                 header1View?.transactionQuota?.setText("0.0")
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 refreshShuju()
-                                initRecordTab()
+                                initHeader2()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2244,7 +2246,7 @@ class HomePageContractFragment : BaseFragment(),
                                 header1View?.transactionQuota?.setText("0.0")
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 refreshShuju()
-                                initRecordTab()
+                                initHeader2()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2422,7 +2424,7 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onUserTradeOrderChanged(userTradeOrder: TradeOrderFiex?) {
         Log.d(TAG, "onUserTradeOrderChanged,executedQty = " + userTradeOrder?.executedQty)
-        initRecordTab()
+        initHeader2()
 
     }
 
