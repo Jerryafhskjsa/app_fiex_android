@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -52,6 +53,7 @@ import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.activity.HomePageActivity
+import com.black.frying.activity.QuotationDetailActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
@@ -328,6 +330,80 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1
         )
         deepViewBinding?.setOnTransactionDeepListener(this)
+       /* kLineQuotaSelector = KLineQuotaSelector(this)
+        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : KLineQuotaSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: Int?) {
+                if (type != null) {
+                    headerView?.analyticChart?.setType(type)
+                }
+            }
+
+        })
+        headerView?.analyticChart?.setType(AnalyticChart.BOLL or AnalyticChart.KDJ)
+        headerView?.analyticChart?.hideSub()
+        headerView?.analyticChart?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val params = headerView?.analyticChart?.layoutParams
+                params?.height = headerView?.analyticChart?.width?.times(1.1)?.toInt()
+                headerView?.analyticChart?.layoutParams = params
+                headerView?.analyticChart?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            }
+        })
+        selectKTab(headerView?.analyticChart?.getTimeStep())
+        headerView?.analyticChart?.setAnalyticChartHelper(object : AnalyticChart.AnalyticChartHelper {
+            override fun onLoadMore(page: Int) {
+//                viewModel?.listenKLineDataMore(page)
+                var endTime = System.currentTimeMillis() - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*
+                        100
+                ) ?: 0) * (page)
+                var startTime = endTime - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+                startTime = Math.max(startTime, 1567296000)
+                endTime = Math.max(endTime, 1567296000)
+                if(page > 1){
+                    headerView?.analyticChart?.setLoadingMore(true)
+                }
+                viewModel?.getKLineDataFiex(headerView?.analyticChart?.getTimeStepRequestStr(),page,startTime,endTime)
+            }
+
+        })
+
+
+        binding?.tab?.setSelectedTabIndicatorHeight(0)
+        binding?.tab?.tabMode = TabLayout.MODE_FIXED
+        for (i in QuotationDetailActivity.TAB_TITLES.indices) {
+            val tab = binding?.tab?.newTab()?.setText(QuotationDetailActivity.TAB_TITLES[i])
+            tab?.setCustomView(R.layout.view_k_line_tab)
+            val textView: TextView? = tab?.customView?.findViewById(android.R.id.text1)
+            textView?.text = QuotationDetailActivity.TAB_TITLES[i]
+            binding?.tab?.addTab(tab!!)
+        }
+        binding?.tab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                val view = tab?.customView
+                val textView: TextView? = view?.findViewById(android.R.id.text1)
+                if (textView != null) {
+                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL)
+                    textView.postInvalidate()
+                }
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val view = tab?.customView
+                val textView: TextView? = view?.findViewById(android.R.id.text1)
+                if (textView != null) {
+                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD), Typeface.BOLD)
+                    textView.postInvalidate()
+                }
+                val checkedId: Int? = tab?.position
+                selectTab(checkedId)
+            }
+
+        })
+
+        */
         initActionBar()
         initHeader()
         initHeader1()
@@ -658,6 +734,7 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
+        selectKTab(headerView?.analyticChart?.getTimeStep())
         viewModel?.setTabType(tabType)
         //viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
@@ -701,6 +778,13 @@ class HomePageContractFragment : BaseFragment(),
                 }
 
             })
+        var endTime = System.currentTimeMillis() - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*
+                100
+        ) ?: 0) * (kLinePage)
+        var startTime = endTime - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
+        startTime = startTime.coerceAtLeast(1567296000)
+        endTime = endTime.coerceAtLeast(1567296000)
+        viewModel!!.getKLineDataFiex(headerView?.analyticChart?.getTimeStepRequestStr(),kLinePage,startTime,endTime)
 //        FutureService.initMarkPrice(mContext)
 //        FutureService.getPositionAdl(mContext)
 //        FutureService.getBalanceByCoin(mContext)
@@ -2551,6 +2635,7 @@ class HomePageContractFragment : BaseFragment(),
     private fun updateCurrentPairPrice(price: String?) {
         if (price != null && price.toDouble() > 0) {
             header1View?.currentPrice?.setText(price)
+            headerView?.analyticChart?.setCurrentPrice(price.toDouble())
 //            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
             if (C2CApiServiceHelper.coinUsdtPrice?.usdt == null) {
                 return
@@ -2615,6 +2700,7 @@ class HomePageContractFragment : BaseFragment(),
     }
     override fun onKLineDataAll(items: ArrayList<KLineItem?>) {
         if(items.isNotEmpty()){
+            Log.d("121212",kLinePage.toString())
             refreshKLineChart(items)
         }
     }
@@ -2629,6 +2715,7 @@ class HomePageContractFragment : BaseFragment(),
     override fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>) {
         headerView?.analyticChart?.setLoadingMore(false)
         if(items.isNotEmpty()){
+            Log.d("121212",kLinePage.toString())
             headerView?.analyticChart?.addDataList(kLinePage, items)
             headerView?.analyticChart?.postInvalidate()
         }

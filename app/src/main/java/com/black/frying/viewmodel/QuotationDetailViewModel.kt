@@ -88,7 +88,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
         if (pairObserver == null) {
             pairObserver = createPairObserver()
         }
-        SocketDataContainer.subscribePairObservable(pairObserver)
+            SocketDataContainer.subscribePairObservable(pairObserver)
 
         if (dealObserver == null) {
             dealObserver = createDealObserver()
@@ -98,17 +98,32 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
         if (kLineObserver == null) {
             kLineObserver = createKLineObserver()
         }
-        SocketDataContainer.subscribeKLineObservable(kLineObserver)
+        if (type == 0) {
+            SocketDataContainer.subscribeKLineObservable(kLineObserver)
+        }
+        else{
+            SocketDataContainer.subscribeFKLineObservable(kLineObserver)
+        }
 
         if (kLineAddObserver == null) {
             kLineAddObserver = createKLineAddObserver()
         }
+        if (type == 0) {
         SocketDataContainer.subscribeKLineAddObservable(kLineAddObserver)
+    }
+    else{
+        SocketDataContainer.subscribeFKLineAddObservable(kLineAddObserver)
+    }
 
         if (kLineAddMoreObserver == null) {
             kLineAddMoreObserver = createKLineAddMoreObserver()
         }
-        SocketDataContainer.subscribeKLineAddMoreObservable(kLineAddMoreObserver)
+        if (type == 0) {
+            SocketDataContainer.subscribeKLineAddMoreObservable(kLineAddMoreObserver)
+        }
+            else{
+                SocketDataContainer.subscribeFKLineAddMoreObservable(kLineAddMoreObserver)
+            }
 
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_ORDER_RELOAD)
         SocketUtil.sendSocketCommandBroadcast(context, SocketUtil.COMMAND_QUOTA_OPEN)
@@ -151,13 +166,28 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
             SocketDataContainer.removeDealObservable(dealObserver)
         }
         if (kLineObserver != null) {
-            SocketDataContainer.removeKLineObservable(kLineObserver)
+            if (type == 0) {
+                SocketDataContainer.removeKLineObservable(kLineObserver)
+            }
+            else{
+                SocketDataContainer.removeFKLineObservable(kLineObserver)
+            }
         }
         if (kLineAddObserver != null) {
-            SocketDataContainer.removeKLineAddObservable(kLineAddObserver)
+            if (type == 0) {
+                SocketDataContainer.removeKLineAddObservable(kLineAddObserver)
+            }
+            else{
+                SocketDataContainer.removeFKLineAddObservable(kLineAddObserver)
+            }
         }
         if (kLineAddMoreObserver != null) {
-            SocketDataContainer.removeKLineAddMoreObservable(kLineAddMoreObserver)
+            if (type == 0) {
+                SocketDataContainer.removeKLineAddMoreObservable(kLineAddMoreObserver)
+            }
+            else{
+                SocketDataContainer.removeFKLineAddMoreObservable(kLineAddMoreObserver)
+            }
         }
     }
 
@@ -180,11 +210,14 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
 
     //根据当前交易对状态，刷新所有数据
     private fun getPairStatus() {
+        var pair: String? = null
         if (type == 0){
             pairStatusType = ConstData.PairStatusType.SPOT
+            pair = currentPairStatus.pair?.uppercase()
         }
         else {
             pairStatusType = ConstData.PairStatusType.FUTURE_U
+            pair = currentPairStatus.pair?.lowercase()
         }
         SocketDataContainer.getPairStatusObservable(context,pairStatusType, currentPairStatus.pair)?.run {
             subscribeOn(AndroidSchedulers.from(socketHandler?.looper))
@@ -333,14 +366,14 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                     return
                 }
                 onKLineModelListener?.run {
-                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.items != null) {
+                    //if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.items != null) {
                         FryingUtil.observableWithHandler(socketHandler, value.items!!)
                                 ?.subscribe {
                                     onKLineAllEnd = true
                                     onKLineDataAll(it)
                                 }
                     }
-                }
+                //}
             }
         }
     }
@@ -352,13 +385,13 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                     return
                 }
                 onKLineModelListener?.run {
-                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.item != null) {
+                   // if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(kLineId, value.kLineId) && value.item != null) {
                         FryingUtil.observableWithHandler(socketHandler, value.item!!)
                                 ?.subscribe {
                                     onKLineDataAdd(it)
                                 }
                     }
-                }
+               // }
 
 
             }
@@ -378,13 +411,13 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                     val returnKlineId = arr[0]
                     val kLinePage = arr[1]
                     val kLinePageInt = CommonUtil.parseInt(kLinePage) ?: return
-                    if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(returnKlineId, kLineId) && value.items != null) {
+                    //if (TextUtils.equals(currentPairStatus.pair, value.pair) && TextUtils.equals(returnKlineId, kLineId) && value.items != null) {
                         FryingUtil.observableWithHandler(socketHandler, value.items!!)
                                 ?.subscribe {
                                     onKLineDataMore(kLinePageInt, it)
                                 }
                     }
-                }
+               // }
             }
         }
     }
@@ -473,7 +506,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                     TradeApiServiceHelper.getTradeOrderDealFuture(
                         context,
                         SocketDataContainer.DEAL_MAX_SIZE,
-                        currentPairStatus.pair,
+                        currentPairStatus.pair?.lowercase(),
                         false,
                         object : Callback<HttpRequestResultDataList<PairDeal?>?>() {
                             override fun callback(returnData: HttpRequestResultDataList<PairDeal?>?) {
@@ -491,7 +524,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                                     }
                                     SocketDataContainer.updateQuotationDealNewData(
                                         socketHandler,
-                                        currentPairStatus.pair,
+                                        currentPairStatus.pair?.lowercase(),
                                         newData,
                                         true
                                     )
@@ -636,8 +669,6 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                         timeStep,
                         500,
                         true,
-                        startTime,
-                        endTime,
                         object : Callback<HttpRequestResultDataList<Kline?>?>() {
                             override fun error(type: Int, error: Any) {
                                 if (kLinePage != 0) {
@@ -646,12 +677,12 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                             }
 
                             override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
-                                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                    val items = returnData.data!!
+                                if (returnData != null) {
+                                    val items = returnData.result!!
                                     onKLineAllEnd = true
                                     if (items.size > 0) {
                                         val dataItem = ArrayList<KLineItem?>()
-                                        for (i in items.indices) {
+                                        for (i in items.lastIndex downTo 0) {
                                             val klineItem = KLineItem()
                                             val temp = items[i]
                                             klineItem.a = temp?.a?.toDouble()!!

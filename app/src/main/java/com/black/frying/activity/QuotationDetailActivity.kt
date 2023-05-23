@@ -450,6 +450,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun onKLineDataMore(kLinePage: Int, items: ArrayList<KLineItem?>) {
         binding?.analyticChart?.setLoadingMore(false)
         if(items.isNotEmpty()){
+            Log.d("1234",kLinePage.toString())
             binding?.analyticChart?.addDataList(kLinePage, items)
             binding?.analyticChart?.postInvalidate()
         }

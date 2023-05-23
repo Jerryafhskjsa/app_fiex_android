@@ -11,7 +11,6 @@ import java.util.List;
 
 public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
     public static final String TAG = "OkWebSocketHelper";
-    public static final Boolean DEBUG = false;
 
     private final OkWebSocket mOkWebSocket;
 
@@ -56,7 +55,6 @@ public class OkWebSocketHelper implements OkWebSocket.IOkWebSocketMessage {
     }
 
     private void d(String message) {
-        if(DEBUG)
         Log.d(TAG, message);
     }
 

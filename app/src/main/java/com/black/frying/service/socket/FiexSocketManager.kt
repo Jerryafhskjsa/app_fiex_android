@@ -114,13 +114,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     private fun initSocketManager(context: Context?) {
         val socketUrl = UrlConfig.getSpotSocketHostSoeasyEx(context)
-        d("666666","socketUrl = "+socketUrl)
+        Log.d("666666","socketUrl = "+socketUrl)
         socketSetting = WebSocketSetting()
         socketSetting.connectUrl = socketUrl
         socketSetting.connectionLostTimeout = 60//心跳间隔时间
         socketSetting.setReconnectWithNetworkChanged(true)//设置网络状态发生改变自动重连
         val futurSocketUrl = UrlConfig.getSocketHostSoeasyEx(context,"market")
-        d("666666","futurSocketUrl = "+futurSocketUrl)
+        Log.d("666666","futurSocketUrl = "+futurSocketUrl)
         futureSocketSetting = WebSocketSetting()
         futureSocketSetting.connectUrl = futurSocketUrl
         futureSocketSetting.connectionLostTimeout = 60//心跳间隔时间
@@ -139,15 +139,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
     fun startConnect(socketName: String?) {
         WebSocketHandler.getWebSocket(socketName)?.start()
     }
-    private fun d(tag:String ,message: String) {
-        if (OkWebSocketHelper.DEBUG) d(tag, message)
-    }
     fun startConnectAll() {
         var socketMap = WebSocketHandler.getAllWebSocket()
         socketMap.forEach {
-            d(TAG, "start all socketMap,key = " + it.key)
-            d(TAG, "start all socketMap,state = " + it.value.socketState)
-            d(TAG, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
+            Log.d(TAG, "start all socketMap,key = " + it.key)
+            Log.d(TAG, "start all socketMap,state = " + it.value.socketState)
+            Log.d(TAG, "start all socketMap,isListenerEmpty = " + it.value.isListenerEmpty)
             it.value.start()
         }
         startPingTimer()
@@ -161,8 +158,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
         removeListenerAll()
         var socketMap = WebSocketHandler.getAllWebSocket()
         socketMap.forEach {
-            d(TAG, "stop all socketMap,key = " + it.key)
-            d(TAG, "stop all socketMap,state = " + it.value.socketState)
+            Log.d(TAG, "stop all socketMap,key = " + it.key)
+            Log.d(TAG, "stop all socketMap,state = " + it.value.socketState)
             it.value.disConnect()
         }
         endPingTimer()
@@ -178,9 +175,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
     fun addListener(socketKey: String?) {
         var socketMar = WebSocketHandler.getWebSocket(socketKey)
         var isConnected = socketMar.isConnect
-        d(TAG, "addListener,socketKey = $socketKey,isConnected = $isConnected")
+        Log.d(TAG, "addListener,socketKey = $socketKey,isConnected = $isConnected")
         if (!isConnected) {
-            d(TAG, "addListener,socketKey = $socketKey,----start")
+            Log.d(TAG, "addListener,socketKey = $socketKey,----start")
             socketMar.start()
         }
         if (socketMar != null) {
@@ -389,14 +386,14 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     fun sendPing() {
-        d(TAG, "sendPing")
+        Log.d(TAG, "sendPing")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("ping", "ping")
             var allSocket: Map<String, WebSocketManager>? = WebSocketHandler.getAllWebSocket()
             if (allSocket != null) {
                 for ((key, value) in allSocket) {
-                    d(
+                    Log.d(
                         TAG,
                         "socket state =," + value.socketState + "listener is empty= " + value.isListenerEmpty
                     )
@@ -412,11 +409,11 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     fun startListenKLine() {
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-        d(TAG, "startListenKline = $currentPair")
+        Log.d(TAG, "startListenKline = $currentPair")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("sub", "subKline")
-            jsonObject.put("symbol", currentPair)
+            jsonObject.put("symbol", currentPair?.uppercase())
             jsonObject.put("type", kLineTimeStep)
             WebSocketHandler.getWebSocket(SocketUtil.WS_PAIR_KLINE).send(jsonObject.toString())
         } catch (e: Exception) {
@@ -425,7 +422,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     fun startListenPair(pair: String?) {
-        d(TAG, "startListenPair = $pair")
+        Log.d(TAG, "startListenPair = $pair")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("sub", "subSymbol")
@@ -437,7 +434,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     fun startListenUser() {
-        d(TAG, "startListenUser")
+        Log.d(TAG, "startListenUser")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("sub", "subUser")
@@ -449,7 +446,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     }
 
     fun startListenTickers() {
-        d(TAG, "startListenTickers")
+        Log.d(TAG, "startListenTickers")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("sub", "subStats")
@@ -465,8 +462,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
     "  symbol":"btc_usdt"
      */
     fun startListenFutureSymbol(symbol: String) {
-        d(TAG, "startListenFutureSymbol---")
-        d("666666","startListenFutureSymbol->pair = "+symbol)
+        Log.d(TAG, "startListenFutureSymbol---")
+        Log.d("666666","startListenFutureSymbol->pair = "+symbol)
         currentUFuturePair = symbol
         try {
             val jsonObject = JSONObject()
@@ -485,7 +482,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     "  symbol":"btc_usdt" 不传为订阅所有
      */
     fun startListenFutureTickers() {
-        d(TAG, "startListenFutureTickers---")
+        Log.d(TAG, "startListenFutureTickers---")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_ticker")
@@ -498,18 +495,17 @@ class FiexSocketManager(context: Context, handler: Handler) {
 
     /**
      * 合约监听所有交易对K线
-     * "req":"sub_ticker",
+     * "req":"sub_kline",
     "  symbol":"btc_usdt" 不传为订阅所有
      */
     fun startListenFutureKline() {
         currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-        d(TAG, "startListenKline = $currentPair")
+        Log.d(TAG, "startListenKline = $currentPair")
         try {
             val jsonObject = JSONObject()
-            jsonObject.put("sub", "subKline")
-            jsonObject.put("symbol", currentPair)
+            jsonObject.put("req", "sub_kline")
+            jsonObject.put("symbol", currentPair?.lowercase())
             jsonObject.put("type", kLineTimeStep)
-
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_KLINE)
                 ?.send(jsonObject.toString())
         } catch (e: Exception) {
@@ -523,7 +519,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
     "  symbol":"btc_usdt" 不传为订阅所有
      */
     fun startListenMarkPrice() {
-        d(TAG, "startListenMarkPrice---")
+        Log.d(TAG, "startListenMarkPrice---")
         try {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_mark_price")
@@ -539,16 +535,16 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class UserDataListener() : SimpleListener() {
         override fun onDisconnect() {
-            d(TAG, "UserDataListener onDisconnect")
+            Log.d(TAG, "UserDataListener onDisconnect")
         }
 
         override fun onConnected() {
-            d(TAG, "UserDataListener onConnected")
+            Log.d(TAG, "UserDataListener onConnected")
             startListenUser()
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            d(TAG, "UserDataListener message = $message")
+            Log.d(TAG, "UserDataListener message = $message")
             if (message.equals("succeed")) {
                 return
             }
@@ -563,8 +559,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
                     if (data != null) {
                         var resType = data.getString("resType")
                         var resultData = data.getString("data")
-                        d(TAG, "UserDataListener resType = $resType")
-                        d(TAG, "UserDataListener resultData = $resultData")
+                        Log.d(TAG, "UserDataListener resType = $resType")
+                        Log.d(TAG, "UserDataListener resultData = $resultData")
                         when (resType) {
                             //余额变更
                             "uBalance" -> {
@@ -634,11 +630,11 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class TickerStatusListener() : SimpleListener() {
         override fun onDisconnect() {
-            d(TAG, "tickerStatus onDisconnect")
+            Log.d(TAG, "tickerStatus onDisconnect")
         }
 
         override fun onConnected() {
-            d(TAG, "tickerStatus onConnected")
+            Log.d(TAG, "tickerStatus onConnected")
             startListenTickers()
         }
 
@@ -693,16 +689,16 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class PairKlineListener() : SimpleListener() {
         override fun onDisconnect() {
-            d(TAG, "PairKline onDisconnect")
+            Log.d(TAG, "PairKline onDisconnect")
         }
 
         override fun onConnected() {
-            d(TAG, "PairKline onConnected")
+            Log.d(TAG, "PairKline onConnected")
             startListenKLine()
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            d(TAG, "PairKline->onMessage = $message")
+            Log.d(TAG, "PairKline->onMessage = $message")
             if (message.equals("succeed")) {
                 return
             }
@@ -711,7 +707,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 try {
                     data = JSONObject(message)
                     if (data != null) {
-                        d(TAG, "PairKline->resType = " + data.getString("resType"))
+                        Log.d(TAG, "PairKline->resType = " + data.getString("resType"))
                         var resultData = data.getString("data")
                         val kline = gson.fromJson<Kline>(
                             resultData.toString(),
@@ -763,13 +759,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class SubStatusDataListener() : SimpleListener() {
         override fun onDisconnect() {
-            d(TAG, "SubStatusDataListener onDisconnect")
+            Log.d(TAG, "SubStatusDataListener onDisconnect")
         }
 
         override fun onConnected() {
-            d(TAG, "SubStatusDataListener onConnected")
+            Log.d(TAG, "SubStatusDataListener onConnected")
             currentPair = SocketUtil.getCurrentPair(mCcontext!!)
-            d(TAG, "SubStatusDataListener currentPair = "+currentPair)
+            Log.d(TAG, "SubStatusDataListener currentPair = "+currentPair)
             startListenPair(currentPair)
         }
 
@@ -777,7 +773,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
             if (message.equals("succeed")) {
                 return
             }
-            d(TAG, "SubStatusDataListener->onMessage = $message")
+            Log.d(TAG, "SubStatusDataListener->onMessage = $message")
             CommonUtil.postHandleTask(mHandler) {
                 var data: JSONObject? = null
                 try {
@@ -862,7 +858,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class FutureSymbolListener() : SimpleListener() {
         override fun onConnected() {
-            d(TAG, "SymbolListener---->ßonConnected")
+            Log.d(TAG, "SymbolListener---->ßonConnected")
             currentUFuturePair = CookieUtil.getCurrentFutureUPair(mCcontext!!)
             CookieUtil.getCurrentFutureUPair(mCcontext!!)?.let { startListenFutureSymbol(it) }
         }
@@ -881,7 +877,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                         var data = data.get("data");
 //                        val jsonObject: JsonObject = JsonParser().parse(data) as JsonObject
 //                        d(TAG, "SymbolListener message = $channel")
-                        d(TAG, "SymbolListener->onMessage = $message")
+                        Log.d(TAG, "SymbolListener->onMessage = $message")
                         when (channel) {
                             "push.ticker" -> { //行情，更新涨跌幅
                                 val tickerBean = gson.fromJson<PairQuotation>(
@@ -919,6 +915,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<PairDeal?>() {}.type
                                 )
                                 if(dealBean != null){
+                                    SocketDataContainer.getCurrentPairDeal(mHandler, dealBean)
                                     SocketDataContainer.updateFutureCurrentPairDeal(mHandler,dealBean)
                                 }
                             }
@@ -933,7 +930,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     data.toString(),
                                     object : TypeToken<TradeOrderDepth?>() {}.type
                                 )
-                                d(TAG, "SymbolListener futureCurrentPair = $currentUFuturePair")
+                                Log.d(TAG, "SymbolListener futureCurrentPair = $currentUFuturePair")
                                 if (allDepth != null) {
                                     SocketDataContainer.updateQuotationOrderNewDataFiex(
                                         mCcontext,
@@ -968,12 +965,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class FutureTickersListener() : SimpleListener() {
         override fun onConnected() {
-            d(TAG, "FutureTickersListener---->ßonConnected")
+            Log.d(TAG, "FutureTickersListener---->ßonConnected")
             startListenFutureTickers()
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            d(TAG, "FutureTickersListener->onMessage = $message")
+            Log.d(TAG, "FutureTickersListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }
@@ -984,7 +981,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                     if (data.has("channel")) {
                         var channel = data.get("channel");
                         var data = data.get("data");
-                        d(TAG, "FutureTickersListener message = $channel")
+                        Log.d(TAG, "FutureTickersListener message = $channel")
                         when (channel) {
                             "push.ticker" -> { //行情
                                 val tickerBean = gson.fromJson<PairStatusNew>(
@@ -1014,12 +1011,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class FutureKlineListener() : SimpleListener() {
         override fun onConnected() {
-            d(TAG, "FutureKlineListener---->ßonConnected")
+            Log.d(TAG, "FutureKlineListener---->ßonConnected")
             startListenFutureKline()
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            d(TAG, "FutureKlineListener->onMessage = $message")
+            Log.d(TAG, "FutureKlineListener->onMessage = $message")
             if (message.equals("succeed")) {
                 return
             }
@@ -1027,45 +1024,43 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 var data: JSONObject? = null
                 try {
                     data = JSONObject(message)
-                    if (data != null) {
-                        d(TAG, "FutureKlineListener->resType = " + data.getString("resType"))
-                        var resultData = data.get("data");
-                        val kline = gson.fromJson<Kline>(
-                            resultData.toString(),
-                            object : TypeToken<Kline?>() {}.type
-                        )
-                        var klineItem = KLineItem()
-                        if (kline != null) {
-                            if (kline?.a != null) {
-                                klineItem.a = kline?.a?.toDouble()!!
-                            }
-                            if (kline?.c != null) {
-                                klineItem.c = kline?.c?.toDouble()!!
-                            }
-                            if (kline?.h != null) {
-                                klineItem.h = kline?.h?.toDouble()!!
-                            }
-                            if (kline?.l != null) {
-                                klineItem.l = kline?.l?.toDouble()!!
-                            }
-                            if (kline?.o != null) {
-                                klineItem.o = kline?.o?.toDouble()!!
-                            }
-                            if (kline?.t != null) {
-                                klineItem.t = kline?.t?.div(1000)
-                            }
-                            if (kline.v != null) {
-                                klineItem.v = kline?.v?.toDouble()!!
-                            }
-                            if (kline.s.equals(currentPair)) {
-                                SocketDataContainer.addKLineData(
-                                    currentPair,
-                                    mHandler,
-                                    kLineId,
-                                    ConstData.DEPTH_FUTURE_TYPE,
-                                    klineItem
-                                )
-                            }
+                    Log.d(TAG, "FutureKlineListener->channel = " + data.getString("channel"))
+                    var resultData = data.get("data");
+                    val kline = gson.fromJson<Kline>(
+                        resultData.toString(),
+                        object : TypeToken<Kline?>() {}.type
+                    )
+                    var klineItem = KLineItem()
+                    if (kline != null) {
+                        if (kline?.a != null) {
+                            klineItem.a = kline?.a?.toDouble()!!
+                        }
+                        if (kline?.c != null) {
+                            klineItem.c = kline?.c?.toDouble()!!
+                        }
+                        if (kline?.h != null) {
+                            klineItem.h = kline?.h?.toDouble()!!
+                        }
+                        if (kline?.l != null) {
+                            klineItem.l = kline?.l?.toDouble()!!
+                        }
+                        if (kline?.o != null) {
+                            klineItem.o = kline?.o?.toDouble()!!
+                        }
+                        if (kline?.t != null) {
+                            klineItem.t = kline?.t?.div(1000)
+                        }
+                        if (kline.v != null) {
+                            klineItem.v = kline?.v?.toDouble()!!
+                        }
+                        if (kline.s.equals(currentPair?.lowercase())) {
+                            SocketDataContainer.addKLineData(
+                                currentPair?.lowercase(),
+                                mHandler,
+                                kLineId,
+                                ConstData.DEPTH_FUTURE_TYPE,
+                                klineItem
+                            )
                         }
                     }
                 } catch (e: JSONException) {
@@ -1081,12 +1076,12 @@ class FiexSocketManager(context: Context, handler: Handler) {
      */
     inner class FutureMarkPriceListener() : SimpleListener() {
         override fun onConnected() {
-            d(TAG, "FutureMarkPriceListener---->ßonConnected")
+            Log.d(TAG, "FutureMarkPriceListener---->ßonConnected")
             startListenMarkPrice()
         }
 
         override fun <T : Any?> onMessage(message: String?, data: T) {
-            d(TAG, "FutureMarkPriceListener->onMessage = $message")
+            Log.d(TAG, "FutureMarkPriceListener->onMessage = $message")
             if (message.equals("succeed") || message.equals("pong")) {
                 return
             }

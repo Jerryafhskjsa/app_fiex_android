@@ -23,9 +23,7 @@ interface FutureApiService {
     @GET(UrlConfig.Future.URL_KLINE)
     fun getHistoryKline(@Query("symbol") symbol: String?,
                         @Query("interval") interval: String?,
-                        @Query("limit") limit: Int?,
-                        @Query("startTime") startTime:Long,
-                        @Query("endTime") endTime:Long): Observable<HttpRequestResultDataList<Kline?>?>?
+                        @Query("limit") limit: Int?): Observable<HttpRequestResultDataList<Kline?>?>?
 
     /**
      * 获取深度

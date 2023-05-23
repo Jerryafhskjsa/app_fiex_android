@@ -81,7 +81,7 @@ open class PairStatus : BaseAdapterItem(), Findable {
         set(value) {
             field = value
             if (value != null) {
-                val arr = value.uppercase().split("_").toTypedArray()
+                val arr = value.split("_").toTypedArray()
                 if (arr.size > 1) {
                     name = arr[0]
                     setName = arr[1]

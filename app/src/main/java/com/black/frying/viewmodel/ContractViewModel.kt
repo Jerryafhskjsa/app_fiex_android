@@ -999,8 +999,6 @@ class ContractViewModel(
                     timeStep,
                     500,
                     true,
-                    startTime,
-                    endTime,
                     object : Callback<HttpRequestResultDataList<Kline?>?>() {
                         override fun error(type: Int, error: Any) {
                             if(kLinePage != 0){
@@ -1008,22 +1006,22 @@ class ContractViewModel(
                             }
                         }
                         override fun callback(returnData: HttpRequestResultDataList<Kline?>?) {
-                            if (returnData != null && returnData.code == HttpRequestResult.SUCCESS && returnData.data != null) {
-                                var items = returnData.data!!
+                            if (returnData != null) {
+                                var items = returnData.result!!
                                 onKLineAllEnd = true
-                                if(items != null && items.size>0){
+                                if(items.size>0){
                                     var dataItem = ArrayList<KLineItem?>()
-                                    for (i in items.indices){
+                                    for (i in items.lastIndex downTo 0){
                                         var klineItem = KLineItem()
                                         var temp = items[i]
                                         klineItem.a = temp?.a?.toDouble()!!
-                                        klineItem.c = temp?.c?.toDouble()!!
-                                        klineItem.h = temp?.h?.toDouble()!!
-                                        klineItem.l = temp?.l?.toDouble()!!
-                                        klineItem.o = temp?.o?.toDouble()!!
-                                        klineItem.t = temp?.t?.div(1000)
-                                        klineItem.v = temp?.v?.toDouble()!!
-                                        dataItem?.add(klineItem)
+                                        klineItem.c = temp.c?.toDouble()!!
+                                        klineItem.h = temp.h?.toDouble()!!
+                                        klineItem.l = temp.l?.toDouble()!!
+                                        klineItem.o = temp.o?.toDouble()!!
+                                        klineItem.t = temp.t?.div(1000)
+                                        klineItem.v = temp.v?.toDouble()!!
+                                        dataItem.add(klineItem)
                                     }
                                     if(kLinePage == 0){
                                         onContractModelListener!!.onKLineDataAll(dataItem)
