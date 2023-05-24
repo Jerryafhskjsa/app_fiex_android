@@ -138,7 +138,7 @@
     <string name="alert_input_sms_code">请填写短信验证码！</string>
     <string name="alert_input_mail_code">请填写邮箱验证码！</string>
     <string name="input_phone_code_veifily">请新手机短信验证码！</string>
-    <string name="deep">深度</string>
+    <string name="deep">深度图</string>
     <string name="direction">方向</string>
     <string name="fond_time">资金费率/结算时间</string>
     <string name="cny_maybe">≈</string>
@@ -161,8 +161,8 @@
     <string name="change_style">风格切换</string>
     <string name="exit">确认退出当前账号吗？</string>
     <string name="number_default">－</string>
-    <string name="high">24h高</string>
-    <string name="low">24h低</string>
+    <string name="high">24h最高价</string>
+    <string name="low">24h最低价</string>
     <string name="_1_day" tools:ignore="UnusedResources">1天</string>
     <string name="pull_down_refresh">下拉刷新</string>
     <string name="loading">加载中...</string>
@@ -217,7 +217,7 @@
     <string name="ti_shi_2">提示</string>
     <string name="withdraw_must_money_password">请设置资金密码</string>
     <string name="can_not_withdraw_02">该币暂不支持提币</string>
-    <string name="deal">成交</string>
+    <string name="deal">最新成交</string>
     <string name="alert_input_price">请填写价格！</string>
     <string name="alert_input_count">请填写数量！</string>
     <string name="take_picture">拍照</string>
@@ -286,8 +286,9 @@
     <string name="min_30">30分</string>
     <string name="hour_1">1小时</string>
     <string name="hour_4">4小时</string>
+    <string name="hour_6">6小时</string>
     <string name="day_1">日线</string>
-    <string name="week_1">1周</string>
+    <string name="week_1">周线</string>
     <string name="mon_1">1月</string>
     <string name="update_title">V%s 版本更新</string>
     <string name="btn_update">现在升级</string>
@@ -359,7 +360,7 @@
     <string name="my_confirm">我的完成率</string>
     <string name="many">多</string>
     <string name="volumn">24h量</string>
-    <string name="collect_add">加自选</string>
+    <string name="collect_add">自选</string>
     <string name="collect_delete">删自选</string>
     <string name="total_amount">总账户资产 (≈）</string>
     <string name="more">更多</string>
@@ -431,7 +432,7 @@
     <string name="current_version">版本</string>
     <string name="logout">退出登录</string>
     <string name="notice">公告</string>
-    <string name="coin_description">简介</string>
+    <string name="coin_description">信息</string>
     <string name="in_audit"><![CDATA[审核中]]></string>
     <string name="audit_failed"><![CDATA[审核未通过]]></string>
     <string name="not_real_name">未实名</string>

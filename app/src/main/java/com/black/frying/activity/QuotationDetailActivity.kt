@@ -21,10 +21,12 @@ import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
+import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AnalyticChart.AnalyticChartHelper
 import com.black.base.widget.AnalyticChart.Companion.BOLL
 import com.black.base.widget.AnalyticChart.Companion.KDJ
 import com.black.base.widget.AnalyticChart.TimeStep
+import com.black.base.widget.SpanCheckedTextView
 import com.black.frying.adapter.QuotationDetailDealAdapter
 import com.black.frying.view.KLineQuotaSelector
 import com.black.frying.view.MoreTimeStepSelector
@@ -59,12 +61,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var moreTimeStepSelector: MoreTimeStepSelector? = null
 
     private var lastTimeStepIndex = 0
-    private var kLineQuotaSelector: KLineQuotaSelector? = null
 
     private var dealAdapter: QuotationDetailDealAdapter? = null
     private var quotationList: MutableList<TradeOrder?> = ArrayList()
 
-    private var btnCollect: ImageView? = null
+    private var btnCollect: SpanCheckedTextView? = null
     private var coinTypeView: TextView? = null
     private var chatRoomId: String? = null
     private var btnChatRoom: View? = null
@@ -103,17 +104,14 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         TAB_TITLES[1] = getString(R.string.deal)
         TAB_TITLES[2] = getString(R.string.coin_description)
 
-        binding?.quota?.setOnClickListener(this)
-
-        kLineQuotaSelector = KLineQuotaSelector(this)
-        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : KLineQuotaSelector.OnKLineQuotaSelectorListener {
-            override fun onSelect(type: Int?) {
-                if (type != null) {
-                    binding?.analyticChart?.setType(type)
-                }
-            }
-
-        })
+        binding?.ma?.setOnClickListener(this)
+        binding?.boll?.setOnClickListener(this)
+        binding?.macd?.setOnClickListener(this)
+        binding?.kdj?.setOnClickListener(this)
+        binding?.rsi?.setOnClickListener(this)
+        binding?.wr?.setOnClickListener(this)
+        binding?.ma?.setOnClickListener(this)
+        binding?.fullScreen?.setOnClickListener(this)
         binding?.analyticChart?.setType(BOLL or KDJ)
         binding?.analyticChart?.hideSub()
         binding?.analyticChart?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -181,14 +179,14 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
         binding?.btnBuy?.setOnClickListener(this)
         binding?.btnSale?.setOnClickListener(this)
-
+        binding?.zixuan?.setOnClickListener(this)
         binding?.tab?.getTabAt(0)?.select()
         selectTab(0)
 
         initTimeStepTab()
         initDealLayout()
         initDescriptionLayout()
-
+        getType()
         checkAndShowChatRoomButton()
     }
 
@@ -214,10 +212,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     override fun initActionBarView(view: View) {
         coinTypeView = view.findViewById(R.id.action_bar_title)
-        view.findViewById<View>(R.id.full_screen).setOnClickListener(this)
         view.findViewById<View>(R.id.btn_chat_room).also { btnChatRoom = it }.setOnClickListener(this)
-        btnCollect = view.findViewById(R.id.btn_collect)
-        btnCollect?.setOnClickListener(this)
     }
 
     private fun selectTab(position: Int?) {
@@ -274,7 +269,9 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                     }
                 }
             }
-            R.id.btn_collect -> viewModel!!.toggleDearPair(isDear!!)
+            R.id.zixuan -> {
+                viewModel!!.toggleDearPair(isDear!!)
+            }
             R.id.btn_buy -> {
                 val bundle = Bundle()
                 bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, 2)
@@ -311,13 +308,78 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
                             }
                         }
             }
-            R.id.quota -> kLineQuotaSelector!!.show(binding?.quota, binding?.analyticChart?.getType()!!)
             R.id.white_book -> openDescriptionLink(binding?.quotationDetailDescriptionLayout?.whiteBook?.text.toString())
             R.id.company_link -> openDescriptionLink(binding?.quotationDetailDescriptionLayout?.companyLink?.text.toString())
             R.id.search -> openDescriptionLink(binding?.quotationDetailDescriptionLayout?.search?.text.toString())
+            R.id.ma -> {
+                binding?.ma?.isChecked = binding?.ma?.isChecked == false
+                binding?.boll?.isChecked = false
+                getType()
+            }
+            R.id.boll -> {
+                binding?.ma?.isChecked = false
+                binding?.boll?.isChecked = binding?.boll?.isChecked == false
+                getType()
+            }
+            R.id.macd -> {
+                binding?.macd?.isChecked = binding?.macd?.isChecked == false
+                binding?.kdj?.isChecked = false
+                binding?.rsi?.isChecked = false
+                binding?.wr?.isChecked = false
+                getType()
+            }
+            R.id.kdj -> {
+                binding?.macd?.isChecked = false
+                binding?.kdj?.isChecked = binding?.kdj?.isChecked == false
+                binding?.rsi?.isChecked = false
+                binding?.wr?.isChecked = false
+                getType()
+            }
+            R.id.rsi -> {
+                binding?.macd?.isChecked = false
+                binding?.kdj?.isChecked = false
+                binding?.rsi?.isChecked = binding?.rsi?.isChecked == false
+                binding?.wr?.isChecked = false
+                getType()
+            }
+            R.id.wr -> {
+                binding?.macd?.isChecked = false
+                binding?.kdj?.isChecked = false
+                binding?.rsi?.isChecked = false
+                binding?.wr?.isChecked = binding?.wr?.isChecked == false
+                getType()
+            }
         }
     }
 
+    private fun getType() {
+        var type = 0
+        if (true == binding?.ma?.isChecked) {
+            type = type or AnalyticChart.MA
+        }
+        if (true == binding?.boll?.isChecked) {
+            type = type or AnalyticChart.BOLL
+        }
+        if (false == binding?.ma?.isChecked && false == binding?.boll?.isChecked){
+            type = type or AnalyticChart.MAIN_HIDDEN
+        }
+        if (true == binding?.macd?.isChecked) {
+            type = type or AnalyticChart.MACD
+        }
+        if (true == binding?.kdj?.isChecked) {
+            type = type or AnalyticChart.KDJ
+        }
+        if (true == binding?.rsi?.isChecked) {
+            type = type or AnalyticChart.RSI
+        }
+        if (true == binding?.wr?.isChecked) {
+            type = type or AnalyticChart.WR
+        }
+        if (false == binding?.macd?.isChecked && false == binding?.kdj?.isChecked&&false == binding?.rsi?.isChecked && false == binding?.wr?.isChecked) {
+            type = type or AnalyticChart.SUB_HIDDEN
+        }
+        binding?.analyticChart?.setType(type)
+    }
     private fun initTimeStepTab() {
         val pubSteps = arrayOf(TimeStep.NONE, TimeStep.MIN_15, TimeStep.HOUR_1, TimeStep.HOUR_4, TimeStep.DAY_1, TimeStep.MORE)
         val timeStepTab = findViewById<TabLayout>(R.id.k_time_step_tab)
@@ -495,31 +557,34 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         if(styleChange == 0) {
             if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
                 binding?.price?.setTextColor(colorT3)
-                binding?.percentage?.background = bgT3
+                binding?.percentage?.setTextColor(colorT3)
             } else if (pairStatus.isDown) {
                 binding?.price?.setTextColor(colorT5)
-                binding?.percentage?.background = bgT5
+                binding?.percentage?.setTextColor(colorT5)
             } else {
                 binding?.price?.setTextColor(colorT7)
-                binding?.percentage?.background = bgT7
+                binding?.percentage?.setTextColor(colorT7)
             }
         }
         if(styleChange == 1) {
             if (pairStatus.priceChangeSinceToday != null && pairStatus.priceChangeSinceToday == 0.0) {
                 binding?.price?.setTextColor(colorT3)
-                binding?.percentage?.background = bgT3
+                binding?.percentage?.setTextColor(colorT3)
             } else if (pairStatus.isDown) {
                 binding?.price?.setTextColor(colorT7)
-                binding?.percentage?.background = bgT7
+                binding?.percentage?.setTextColor(colorT7)
             } else {
                 binding?.price?.setTextColor(colorT5)
-                binding?.percentage?.background = bgT5
+                binding?.percentage?.setTextColor(colorT5)
             }
         }
         binding?.high?.setText(pairStatus.maxPriceFormat)
         binding?.low?.setText(pairStatus.minPriceFormat)
-        binding?.volumeH24?.setText(pairStatus.totalAmountFromat)
+        binding?.volumeH24?.setText(pairStatus.tradeVolueFormat)
+        binding?.coinVolumeH24?.setText(pairStatus.tradeAmountFormat)
         binding?.analyticChart?.setCurrentPrice(pairStatus.currentPrice)
+        binding?.liang?.setText(String.format("24h成交量(%s)",pairStatus.setName?.uppercase()))
+        binding?.jiao?.setText(String.format("24h成交额(%s)",pairStatus.setName?.uppercase()))
 //        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
     }
 
@@ -575,11 +640,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     }
 
     override fun onCheckDearPair(isDearPair: Boolean?) {
-        if (isDearPair == true) {
-            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_dis))
-        } else {
-            btnCollect!!.setImageDrawable(getDrawable(R.drawable.btn_collect_default))
-        }
+        binding?.zixuan?.isChecked = isDearPair == true
         isDear = isDearPair
     }
 

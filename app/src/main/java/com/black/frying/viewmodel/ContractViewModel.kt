@@ -27,6 +27,7 @@ import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.base.widget.AnalyticChart
+import com.black.base.widget.AnalyticChart2
 import com.black.frying.fragment.PLAN
 import com.black.frying.service.FutureService
 import com.black.frying.service.socket.FiexSocketManager
@@ -976,7 +977,7 @@ class ContractViewModel(
                 }
             })
     }
-    fun listenKLineData(analyticChart: AnalyticChart) {
+    fun listenKLineData(analyticChart: AnalyticChart2) {
         kLineId = System.nanoTime().toString()
         onKLineAllEnd = false
         val bundle = Bundle()

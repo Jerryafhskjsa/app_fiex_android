@@ -38,6 +38,7 @@
                 android:clickable="true"
                 android:maxLines="1"
                 android:layout_marginLeft="@dimen/double_padding"
+                android:drawableLeft="@drawable/daohanglan"
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_17"
                 android:textStyle="bold" />
@@ -66,11 +67,12 @@
                 android:id="@+id/btn_collect"
                 android:layout_height="22dp"
                 android:layout_width="22dp"
+                android:visibility="gone"
                 android:background="@null"
                 android:contentDescription="@null"
                 android:onClick="onBackClick"
                 android:scaleType="centerInside"
-                android:src="@drawable/btn_collect_default" />
+                android:src="@drawable/btn_collect" />
 
             <ImageButton
                 android:id="@+id/full_screen"
@@ -80,7 +82,7 @@
                 android:contentDescription="@null"
                 android:paddingLeft="@dimen/default_padding"
                 android:paddingRight="15dip"
-                android:src="@drawable/icon_large" />
+                android:src="@drawable/fenxiang" />
 
         </LinearLayout>
     </FrameLayout>

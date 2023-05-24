@@ -51,6 +51,7 @@ import com.black.base.view.DeepControllerWindow
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AnalyticChart
+import com.black.base.widget.AnalyticChart2
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.activity.QuotationDetailActivity
@@ -240,13 +241,6 @@ class HomePageContractFragment : BaseFragment(),
         if (exchanged == 1) {
             rates = C2CApiServiceHelper.coinUsdtPrice?.usdtToUsd ?: 0.0
         }
-        /*TAB_CROSSED = getString(R.string.contract_all_position)
-        TAB_ISOLATED = getString(R.string.contract_fiexble_position)
-        positionType = TAB_CROSSED
-        list = ArrayList()
-        list?.add(TAB_CROSSED)
-        list?.add(TAB_ISOLATED)
-         */
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
@@ -330,80 +324,6 @@ class HomePageContractFragment : BaseFragment(),
             binding!!.fragmentHomePageContractHeader1
         )
         deepViewBinding?.setOnTransactionDeepListener(this)
-       /* kLineQuotaSelector = KLineQuotaSelector(this)
-        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : KLineQuotaSelector.OnKLineQuotaSelectorListener {
-            override fun onSelect(type: Int?) {
-                if (type != null) {
-                    headerView?.analyticChart?.setType(type)
-                }
-            }
-
-        })
-        headerView?.analyticChart?.setType(AnalyticChart.BOLL or AnalyticChart.KDJ)
-        headerView?.analyticChart?.hideSub()
-        headerView?.analyticChart?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val params = headerView?.analyticChart?.layoutParams
-                params?.height = headerView?.analyticChart?.width?.times(1.1)?.toInt()
-                headerView?.analyticChart?.layoutParams = params
-                headerView?.analyticChart?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
-            }
-        })
-        selectKTab(headerView?.analyticChart?.getTimeStep())
-        headerView?.analyticChart?.setAnalyticChartHelper(object : AnalyticChart.AnalyticChartHelper {
-            override fun onLoadMore(page: Int) {
-//                viewModel?.listenKLineDataMore(page)
-                var endTime = System.currentTimeMillis() - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*
-                        100
-                ) ?: 0) * (page)
-                var startTime = endTime - (headerView?.analyticChart?.getTimeStep()?.value?.times(1000*100) ?: 0)
-                startTime = Math.max(startTime, 1567296000)
-                endTime = Math.max(endTime, 1567296000)
-                if(page > 1){
-                    headerView?.analyticChart?.setLoadingMore(true)
-                }
-                viewModel?.getKLineDataFiex(headerView?.analyticChart?.getTimeStepRequestStr(),page,startTime,endTime)
-            }
-
-        })
-
-
-        binding?.tab?.setSelectedTabIndicatorHeight(0)
-        binding?.tab?.tabMode = TabLayout.MODE_FIXED
-        for (i in QuotationDetailActivity.TAB_TITLES.indices) {
-            val tab = binding?.tab?.newTab()?.setText(QuotationDetailActivity.TAB_TITLES[i])
-            tab?.setCustomView(R.layout.view_k_line_tab)
-            val textView: TextView? = tab?.customView?.findViewById(android.R.id.text1)
-            textView?.text = QuotationDetailActivity.TAB_TITLES[i]
-            binding?.tab?.addTab(tab!!)
-        }
-        binding?.tab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                val view = tab?.customView
-                val textView: TextView? = view?.findViewById(android.R.id.text1)
-                if (textView != null) {
-                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL)
-                    textView.postInvalidate()
-                }
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val view = tab?.customView
-                val textView: TextView? = view?.findViewById(android.R.id.text1)
-                if (textView != null) {
-                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD), Typeface.BOLD)
-                    textView.postInvalidate()
-                }
-                val checkedId: Int? = tab?.position
-                selectTab(checkedId)
-            }
-
-        })
-
-        */
         initActionBar()
         initHeader()
         initHeader1()
@@ -413,73 +333,43 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun initTimeStepTab() {
-        val pubSteps = arrayOf(AnalyticChart.TimeStep.NONE,AnalyticChart.TimeStep.MIN_15, AnalyticChart.TimeStep.HOUR_1, AnalyticChart.TimeStep.HOUR_4, AnalyticChart.TimeStep.DAY_1,AnalyticChart.TimeStep.MORE)
+        val pubSteps = arrayOf(AnalyticChart2.TimeStep2.NONE,AnalyticChart2.TimeStep2.MIN_1,AnalyticChart2.TimeStep2.MIN_5,AnalyticChart2.TimeStep2.MIN_15,AnalyticChart2.TimeStep2.MIN_30, AnalyticChart2.TimeStep2.HOUR_1,AnalyticChart2.TimeStep2.HOUR_4, AnalyticChart2.TimeStep2.DAY_1,AnalyticChart2.TimeStep2.WEEK_1)
         val timeStepTab = headerView!!.kTimeStepTab
-        timeStepTab.setSelectedTabIndicatorHeight(0)
-        timeStepTab.tabMode = TabLayout.MODE_FIXED
-        val moreIndex = pubSteps.size - 1
+        timeStepTab.tabMode = TabLayout.MODE_SCROLLABLE
         for (i in pubSteps.indices) {
             val timeStep = pubSteps[i]
             val tab = timeStepTab.newTab().setText(timeStep.toString())
             tab.tag = timeStep
-            if (timeStep === AnalyticChart.TimeStep.MORE) {
-                tab.setCustomView(R.layout.view_k_time_step_tab_more)
-            } else {
-                tab.setCustomView(R.layout.view_k_time_step_tab)
-            }
-            val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
-            if (timeStep === AnalyticChart.TimeStep.MORE) {
-                moreTimeStepTextView = textView
-            }
-            textView.text = timeStep.toString()
             timeStepTab.addTab(tab)
         }
-        moreTimeStepSelector = MoreTimeStepSelector(mContext!!)
-        moreTimeStepSelector!!.setOnMoreTimeStepSelectorListener(object : MoreTimeStepSelector.OnMoreTimeStepSelectorListener {
-            override fun onSelect(timeStep: AnalyticChart.TimeStep?) {
-                if (timeStep != null) {
-                    moreTimeStepTextView!!.text = timeStep.toString()
-                    lastTimeStepIndex = moreIndex
-                    selectKTab(timeStep)
-                } else {
-                    if (lastTimeStepIndex != moreIndex) {
-                        timeStepTab.getTabAt(lastTimeStepIndex)!!.select()
-                    }
-                }
-            }
-
-        })
         timeStepTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val timeStep = tab.tag as AnalyticChart.TimeStep?
-                if (timeStep !== AnalyticChart.TimeStep.MORE) {
-                    moreTimeStepTextView!!.text = AnalyticChart.TimeStep.MORE.toString()
+                val timeStep = tab.tag as AnalyticChart2.TimeStep2?
+                if (timeStep != null) {
                     if (lastTimeStepIndex != tab.position) {
                         selectKTab(timeStep)
                     }
                 } else {
-                    moreTimeStepSelector!!.show(headerView?.timeStepLayout, headerView?.analyticChart?.getTimeStep()!!)
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                val timeStep = tab.tag as AnalyticChart.TimeStep?
-                if (timeStep !== AnalyticChart.TimeStep.MORE) {
+                val timeStep = tab.tag as AnalyticChart2.TimeStep2?
+                if (timeStep != null) {
                     lastTimeStepIndex = tab.position
                 }
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
-                val timeStep = tab.tag as AnalyticChart.TimeStep?
-                if (timeStep === AnalyticChart.TimeStep.MORE) {
-                    moreTimeStepSelector!!.show(timeStepTab, headerView?.analyticChart?.getTimeStep()!!)
+                val timeStep = tab.tag as AnalyticChart2.TimeStep2?
+                if (timeStep != null) {
                 }
             }
         })
         val tab = timeStepTab.getTabAt(1)
         tab?.select()
     }
-    private fun selectKTab(timeStep: AnalyticChart.TimeStep?) {
+    private fun selectKTab(timeStep: AnalyticChart2.TimeStep2?) {
         if (timeStep == null) {
             return
         }

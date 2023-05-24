@@ -25,6 +25,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_16"
                 android:background="@color/B2"
                 android:orientation="vertical">
 
@@ -57,22 +58,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/number_default"
-                                android:textSize="@dimen/text_size_16"
+                                android:textSize="@dimen/text_size_28"
                                 android:textStyle="bold" />
 
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/percentage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
-                                android:background="@drawable/bg_t7_corner3"
-                                android:paddingLeft="5dp"
-                                android:paddingTop="2dp"
-                                android:paddingRight="5dp"
-                                android:paddingBottom="2dp"
-                                android:text="@string/number_default"
-                                android:textColor="@color/T4"
-                                android:textSize="@dimen/text_size_10" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -89,14 +77,99 @@
                                 android:layout_height="wrap_content"
                                 android:padding="0dp"
                                 android:text="@string/number_default"
-                                android:textColor="@color/T2"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/text_size_12" />
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:paddingLeft="5dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="5dp"
+                                android:paddingBottom="2dp"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T2"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_10" />
                         </LinearLayout>
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/pair_layout_03"
+                        android:layout_width="107dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/pair_layout_01"
+                        android:layout_alignBottom="@id/pair_layout_01"
+                        android:layout_marginRight="@dimen/text_size_20"
+                        android:layout_toLeftOf="@id/pair_layout_02"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="right"
+                        android:orientation="vertical">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/liang"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="24h成交量(%s)"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_10" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/coin_volume_h24"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_10" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/jiao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="24h成交额(%s)"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/text_size_10" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@+id/volume_h24"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:text="@string/number_default"
+                                android:textColor="@color/T1"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_10" />
+                        </LinearLayout>
+
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/pair_layout_02"
-                        android:layout_width="107dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignTop="@+id/pair_layout_01"
                         android:layout_alignBottom="@id/pair_layout_01"
@@ -104,51 +177,23 @@
                         android:layout_marginLeft="5dp"
                         android:gravity="right"
                         android:orientation="vertical">
-
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="top"
-                            android:orientation="horizontal">
-
-                            <com.black.base.widget.SpanTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/volumn"
-                                android:textColor="@color/T2"
-                                android:textSize="@dimen/trend_default" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/volume_h24"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:maxLines="1"
-                                android:text="@string/number_default"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_12" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="top"
-                            android:orientation="horizontal">
+                            android:gravity="right"
+                            android:orientation="vertical">
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/high"
                                 android:textColor="@color/T2"
-                                android:textSize="@dimen/trend_default" />
+                                android:textSize="@dimen/text_size_10" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/high"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
@@ -156,26 +201,28 @@
                                 android:maxLines="1"
                                 android:text="@string/number_default"
                                 android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_12" />
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_10" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="@dimen/text_size_10"
+                            android:gravity="right"
+                            android:orientation="vertical">
 
                             <com.black.base.widget.SpanTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/low"
                                 android:textColor="@color/T2"
-                                android:textSize="@dimen/trend_default" />
+                                android:textSize="@dimen/text_size_10" />
 
                             <com.black.base.widget.SpanTextView
                                 android:id="@+id/low"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
@@ -183,13 +230,16 @@
                                 android:maxLines="1"
                                 android:text="@string/number_default"
                                 android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_12" />
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_10" />
                         </LinearLayout>
+
                     </LinearLayout>
                 </RelativeLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/text_size_20"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
@@ -206,10 +256,9 @@
 
                             <com.google.android.material.tabs.TabLayout
                                 android:id="@+id/k_time_step_tab"
-                                android:layout_width="0dp"
+                                android:layout_width="250dp"
                                 android:layout_height="24dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_weight="1"
                                 app:tabBackground="@color/transparent"
                                 app:tabMaxWidth="200dp"
                                 app:tabMinWidth="20dp"
@@ -218,23 +267,34 @@
                                 app:tabPaddingStart="0dp"
                                 app:tabPaddingTop="0dp"
                                 app:tabRippleColor="@color/transparent"
-                                app:tabTextAppearance="@style/DefaultTabStyle" />
+                                app:tabTextColor="@color/tab_contranct_text"
+                                />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="right|center_vertical"
+                                android:layout_weight="1">
 
                             <View
-                                android:layout_width="@dimen/line"
+                                android:layout_width="1dp"
                                 android:layout_height="18dp"
                                 android:background="@color/L1_ALPHA60" />
 
-                            <ImageView
-                                android:id="@+id/quota"
-                                android:layout_width="53dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center_vertical"
-                                android:paddingTop="2dp"
-                                android:paddingBottom="2dp"
-                                android:src="@drawable/icon_quota" />
-                        </LinearLayout>
+                            <com.black.base.widget.SpanTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/text_size_16"
+                                android:layout_marginRight="@dimen/text_size_16"
+                                android:text="深度"
+                                android:textColor="@color/T2"
+                                android:textSize="@dimen/trend_default" />
+                            </LinearLayout>
 
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/B1"/>
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -265,24 +325,137 @@
                         <!--app:lottie_fileName="loading.json" />-->
                     </FrameLayout>
                 </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/ma"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="MA"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/boll"
+                            android:layout_width="16dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:text="BOLL"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="18dp"
+                            android:background="@color/B1"/>
+
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/macd"
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:text="MACD"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/kdj"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:text="KDJ"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/rsi"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:text="RSI"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <com.black.base.widget.SpanCheckedTextView
+                            android:id="@+id/wr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_weight="1"
+                            android:text="WR"
+                            android:textStyle="bold"
+                            android:textColor="@color/tab_k_time_step_more"
+                            android:textSize="@dimen/text_size_12" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="18dp"
+                            android:background="@color/B1"/>
+                        <ImageView
+                            android:id="@+id/full_screen"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="@dimen/text_size_13"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/quanping" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="16dp"
+    android:background="@color/L1_ALPHA30"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/B1"
+                    android:background="#F8F8FA"
                     android:orientation="vertical">
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tab"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="35dp"
                         app:tabBackground="@color/transparent"
                         app:tabMaxWidth="200dp"
                         app:tabMinWidth="20dp"
                         app:tabPaddingBottom="0dp"
                         app:tabPaddingTop="0dp"
                         app:tabRippleColor="@color/transparent"
-                        app:tabTextAppearance="@style/DefaultTabStyle" />
+                        app:tabTextColor="@color/c2c_tab_sale" />
 
                     <View
                         android:layout_width="match_parent"
@@ -324,7 +497,7 @@
         <LinearLayout
             android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="104dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
@@ -335,13 +508,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="104dp"
                 android:background="@color/B2"
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingTop="10dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="10dp">
+
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/zixuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:drawableTop="@drawable/btn_collect"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:text="@string/collect_add"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_10"
+                    android:textStyle="bold" />
 
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/btn_buy"

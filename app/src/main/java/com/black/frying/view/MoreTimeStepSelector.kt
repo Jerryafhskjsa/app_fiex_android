@@ -15,7 +15,7 @@ import com.fbsex.exchange.databinding.ViewMoreTimeStepSelectorBinding
 class MoreTimeStepSelector(activity: Activity) : PopupWindow.OnDismissListener, View.OnClickListener {
     private val popupWindow: PopupWindow?
     private val margin: Float
-    private val tabs = arrayOfNulls<CheckedTextView>(4)
+    private val tabs = arrayOfNulls<CheckedTextView>(5)
     private var selectedTimeStep: TimeStep? = null
     private var onMoreTimeStepSelectorListener: OnMoreTimeStepSelectorListener? = null
 
@@ -28,21 +28,24 @@ class MoreTimeStepSelector(activity: Activity) : PopupWindow.OnDismissListener, 
         margin = 5 * dm.density
         popupWindow = PopupWindow(binding.root, (dm.widthPixels - 2 * margin).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(PaintDrawable())
+        //popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener(this)
-        binding.tabMin1?.setOnClickListener(this)
-        binding.tabMin1?.tag = TimeStep.MIN_1
-        binding.tabMin5?.setOnClickListener(this)
-        binding.tabMin5?.tag = TimeStep.MIN_5
-        binding.tabMin30?.setOnClickListener(this)
-        binding.tabMin30?.tag = TimeStep.MIN_30
-        binding.tabWeek1?.setOnClickListener(this)
-        binding.tabWeek1?.tag = TimeStep.WEEK_1
+        binding.tabMin1.setOnClickListener(this)
+        binding.tabMin1.tag = TimeStep.MIN_1
+        binding.tabMin5.setOnClickListener(this)
+        binding.tabMin5.tag = TimeStep.MIN_5
+        binding.tabMin30.setOnClickListener(this)
+        binding.tabMin30.tag = TimeStep.MIN_30
+        binding.tab6H.setOnClickListener(this)
+        binding.tab6H.tag = TimeStep.HOUR_6
+        binding.tabWeek1.setOnClickListener(this)
+        binding.tabWeek1.tag = TimeStep.WEEK_1
         tabs[0] = binding.tabMin1
         tabs[1] = binding.tabMin5
         tabs[2] = binding.tabMin30
-        tabs[3] = binding.tabWeek1
+        tabs[3] = binding.tab6H
+        tabs[4] = binding.tabWeek1
     }
 
     override fun onDismiss() {
@@ -68,16 +71,39 @@ class MoreTimeStepSelector(activity: Activity) : PopupWindow.OnDismissListener, 
         selectedTimeStep = null
         when {
             timeStep === TimeStep.MIN_1 -> {
-                binding.tabMin1?.isChecked = true
+                binding.tabMin1.isChecked = true
+                binding.tabMin5.isChecked = false
+                binding.tabMin30.isChecked = false
+                binding.tab6H.isChecked = false
+                binding.tabWeek1.isChecked = false
             }
             TimeStep.MIN_5 === timeStep -> {
-                binding.tabMin5?.isChecked = true
+                binding.tabMin5.isChecked = true
+                binding.tabMin1.isChecked = false
+                binding.tabMin30.isChecked = false
+                binding.tab6H.isChecked = false
+                binding.tabWeek1.isChecked = false
             }
             TimeStep.MIN_30 === timeStep -> {
-                binding.tabMin30?.isChecked = true
+                binding.tabMin30.isChecked = true
+                binding.tabMin1.isChecked = false
+                binding.tabMin5.isChecked = false
+                binding.tab6H.isChecked = false
+                binding.tabWeek1.isChecked = false
+            }
+            TimeStep.HOUR_6 === timeStep -> {
+                binding.tab6H.isChecked = true
+                binding.tabMin1.isChecked = false
+                binding.tabMin5.isChecked = false
+                binding.tabMin30.isChecked = false
+                binding.tabWeek1.isChecked = false
             }
             TimeStep.WEEK_1 === timeStep -> {
-                binding.tabWeek1?.isChecked = true
+                binding.tabWeek1.isChecked = true
+                binding.tabMin1.isChecked = false
+                binding.tabMin5.isChecked = false
+                binding.tabMin30.isChecked = false
+                binding.tab6H.isChecked = false
             }
         }
         popupWindow!!.showAsDropDown(view, margin.toInt(), margin.toInt())

@@ -171,9 +171,9 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1.5dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/B1">
 
         </View>
@@ -209,7 +209,7 @@
             android:gravity="right"
             android:layout_weight="1">
             <View
-                android:layout_width="1dp"
+                android:layout_width="1.5dp"
                 android:layout_height="match_parent"
                 android:background="@color/B1"/>
             <com.black.base.widget.SpanTextView
@@ -229,9 +229,7 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/text_size_10"
-            android:layout_marginLeft="@dimen/text_size_10"
-            android:layout_marginBottom="@dimen/text_size_10"
+            android:layout_marginBottom="@dimen/text_size_5"
             android:orientation="vertical">
             <LinearLayout
                 android:id="@+id/time_step_layout"
@@ -241,18 +239,24 @@
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/k_time_step_tab"
                     android:layout_width="0dp"
-                    android:layout_height="24dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
+                    android:fadingEdge="none"
                     app:tabBackground="@color/transparent"
+                    app:tabRippleColor="@android:color/transparent"
+                    app:tabIndicator="@drawable/tabs_rounded_line_indicator"
+                    app:tabIndicatorColor="@color/T13"
                     app:tabMaxWidth="200dp"
                     app:tabMinWidth="20dp"
                     app:tabPaddingBottom="0dp"
-                    app:tabPaddingEnd="0dp"
-                    app:tabPaddingStart="0dp"
+                    app:tabPaddingEnd="@dimen/default_padding"
+                    app:tabPaddingStart="@dimen/default_padding"
                     app:tabPaddingTop="0dp"
-                    app:tabRippleColor="@color/transparent"
-                    app:tabTextAppearance="@style/DefaultTabStyle" />
+                    app:tabIndicatorFullWidth="false"
+                    app:tabTextAppearance="@style/DefaultTabStyle"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
 
                 <View
                     android:layout_width="1dp"
@@ -262,15 +266,23 @@
                     android:layout_width="@dimen/text_size_16"
                     android:layout_height="@dimen/text_size_16"
                     android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"
                     android:layout_gravity="center"
                     android:background="@drawable/shangla">
                 </ImageView>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/B1">
+
+            </View>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.black.base.widget.AnalyticChart
+                <com.black.base.widget.AnalyticChart2
                     android:id="@+id/analytic_chart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

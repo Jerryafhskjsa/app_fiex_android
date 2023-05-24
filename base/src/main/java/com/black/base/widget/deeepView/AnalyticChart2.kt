@@ -33,7 +33,7 @@ import java.util.*
 import kotlin.math.abs
 
 
-class AnalyticChart : SkinCompatView {
+class AnalyticChart2 : SkinCompatView {
     companion object {
         private const val TAG = "AnalyticChart"
         private const val WIDTH = 300
@@ -176,7 +176,7 @@ class AnalyticChart : SkinCompatView {
     //正在显示的时间区域
     private var showingMinTime: Long = 0
     private var showingMaxTime: Long = 0
-    private var timeStep = TimeStep.MIN_15
+    private var timeStep = TimeStep2.MIN_15
     //主图最值
     private var showingMinValue = 0.0
     private var showingMaxValue = 0.0
@@ -229,7 +229,7 @@ class AnalyticChart : SkinCompatView {
     private var currentPrice //当前价格
             = 0.0
     private var currentPriceY = INVALID_Y //当前价格坐标
-            .toDouble()
+        .toDouble()
     private var currentPricePopRect //当前价格右边箭头区域
             : RectF? = null
 
@@ -274,18 +274,18 @@ class AnalyticChart : SkinCompatView {
         //        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         numberDefault = context.getString(R.string.number_default)
         //设置 TimeStep Text
-        TimeStep.NONE.text = context.getString(R.string.min_none)
-        TimeStep.MIN_1.text = context.getString(R.string.min_1)
-        TimeStep.MIN_5.text = context.getString(R.string.min_5)
-        TimeStep.MIN_15.text = context.getString(R.string.min_15)
-        TimeStep.MIN_30.text = context.getString(R.string.min_30)
-        TimeStep.HOUR_1.text = context.getString(R.string.hour_1)
-        TimeStep.HOUR_4.text = context.getString(R.string.hour_4)
-        TimeStep.HOUR_6.text = context.getString(R.string.hour_6)
-        TimeStep.DAY_1.text = context.getString(R.string.day_1)
-        TimeStep.WEEK_1.text = context.getString(R.string.week_1)
-        TimeStep.MONTH_1.text = context.getString(R.string.mon_1)
-        TimeStep.MORE.text = context.getString(R.string.more)
+        TimeStep2.NONE.text = context.getString(R.string.min_none)
+        TimeStep2.MIN_1.text = context.getString(R.string.min_1)
+        TimeStep2.MIN_5.text = context.getString(R.string.min_5)
+        TimeStep2.MIN_15.text = context.getString(R.string.min_15)
+        TimeStep2.MIN_30.text = context.getString(R.string.min_30)
+        TimeStep2.HOUR_1.text = context.getString(R.string.hour_1)
+        TimeStep2.HOUR_4.text = context.getString(R.string.hour_4)
+        TimeStep2.HOUR_6.text = context.getString(R.string.hour_6)
+        TimeStep2.DAY_1.text = context.getString(R.string.day_1)
+        TimeStep2.WEEK_1.text = context.getString(R.string.week_1)
+        TimeStep2.MONTH_1.text = context.getString(R.string.mon_1)
+        TimeStep2.MORE.text = context.getString(R.string.more)
 //        logoDrawable = SkinCompatResources.getDrawable(context, R.drawable.icon_k_line_logo)
         logoDrawable = null
         stepNoneLightDrawable = context.getDrawable(R.drawable.icon_analytic_chart_none_price_anim) as AnimatedVectorDrawable
@@ -820,10 +820,10 @@ class AnalyticChart : SkinCompatView {
             showMainGraph(canvas)
             //显示交易量
             canvas.translate(0f, mainGraphHeight + textHeight)
-            showVolume(canvas)
+            //showVolume(canvas)
             //显示副图
             canvas.translate(0f, businessHeight + textHeight)
-            showSubGraph(canvas)
+            //showSubGraph(canvas)
             canvas.restore()
             canvas.save()
             canvas.translate(mPaddingLeft, mPaddingTop + TOP_TEXT_HEIGHT)
@@ -877,7 +877,7 @@ class AnalyticChart : SkinCompatView {
         }
         //横向6条线
         var top = chartTop
-        for (i in 0..5) {
+        for (i in 0..4) {
             canvas.drawLine(chartLeft, top, chartRight, top, basePaint)
             top += cellHeight
         }
@@ -885,7 +885,7 @@ class AnalyticChart : SkinCompatView {
         var left = chartLeft
         for (i in 0..2) {
             left += cellWidth
-            canvas.drawLine(left, 0f, left, chartBottom, basePaint)
+            canvas.drawLine(left, chartTop, left, chartBottom, basePaint)
         }
     }
 
@@ -905,7 +905,7 @@ class AnalyticChart : SkinCompatView {
         }
         //显示主图文字
         var offset = 0f
-        if (timeStep !== TimeStep.NONE) {
+        if (timeStep !== TimeStep2.NONE) {
             if (type and MA == MA) {
                 textPaint.color = MA5_COLOR
                 val ma5v = selectedKLineChartItem?.MA5 ?: data?.MA5
@@ -949,7 +949,7 @@ class AnalyticChart : SkinCompatView {
         canvas.restore()
         //显示交易量文字
         canvas.save()
-        run {
+        /*run {
             canvas.translate(0f, TOP_TEXT_HEIGHT + mainGraphHeight)
             offset = 0f
             textPaint.color = VOL_COLOR
@@ -1048,6 +1048,8 @@ class AnalyticChart : SkinCompatView {
             wrHelper.draw(canvas, offset, 0f, 0)
         }
         canvas.restore()
+
+         */
         //显示Y轴价格坐标
         if (yValueCoos != null) {
             canvas.save()
@@ -1093,6 +1095,8 @@ class AnalyticChart : SkinCompatView {
             }
             canvas.restore()
         }
+
+
         //显示当前价格
         run {
             val last = CommonUtil.getItemFromArray(data?.kLineChartItems, showLastIndex)
@@ -1150,7 +1154,7 @@ class AnalyticChart : SkinCompatView {
                 }
             }
             //绘制最后价格的亮点
-            if (isShowRight && timeStep === TimeStep.NONE && last != null && last.outY != INVALID_Y && showLastIndex >= SHOW_COUNT_MAX - 1) { //正在显示最后一个节点
+            if (isShowRight && timeStep === TimeStep2.NONE && last != null && last.outY != INVALID_Y && showLastIndex >= SHOW_COUNT_MAX - 1) { //正在显示最后一个节点
                 if (stepNoneLightDrawable != null && stepNoneLightDrawable!!.isVisible) {
                     val rect = Rect((last.x - 6 * density).toInt(), (last.outY - 6 * density).toInt(), (last.x + 6 * density).toInt(), (last.outY + 6 * density).toInt())
                     stepNoneLightDrawable!!.bounds = rect
@@ -1164,7 +1168,7 @@ class AnalyticChart : SkinCompatView {
         }
         //显示最大和最小
         canvas.save()
-        if (timeStep !== TimeStep.NONE) {
+        if (timeStep !== TimeStep2.NONE) {
             if (showingKMaxValue != -1.0) {
                 showKMaxMinValue(canvas, showingKMaxValue, kMaxIndex, kMaxY.toFloat())
             }
@@ -1224,7 +1228,7 @@ class AnalyticChart : SkinCompatView {
         }
         //        double itemWidth = (double) chartWidth / showCount;
         val halfItemWidth = itemWidth * 0.4
-        if (timeStep !== TimeStep.NONE) { //显示影线
+        if (timeStep !== TimeStep2.NONE) { //显示影线
             for (i in showingKLineChartItemList!!.indices) {
                 val kLineChartItem = showingKLineChartItemList!![i]
                 kLineChartItem?.let {
@@ -1340,7 +1344,7 @@ class AnalyticChart : SkinCompatView {
         }
         canvas.save()
         //        double itemWidth = (double) chartWidth / showCount;
-        if (timeStep !== TimeStep.NONE) {
+        if (timeStep !== TimeStep2.NONE) {
             val halfItemWidth = itemWidth * 0.4
             val ma5Path = Path()
             val ma10Path = Path()
@@ -1398,15 +1402,21 @@ class AnalyticChart : SkinCompatView {
                     kLineChartItem?.let {
                         val halfItemWidth = itemWidth * 0.4
                         val rectF = RectF()
-                        rectF.left = kLineChartItem.x - MACD_COLUMN_WIDTH / 2
-                        rectF.right = kLineChartItem.x + MACD_COLUMN_WIDTH / 2
+                        // rectF.left = kLineChartItem.x - MACD_COLUMN_WIDTH / 2
+                        // rectF.right = kLineChartItem.x + MACD_COLUMN_WIDTH / 2
                         if (kLineChartItem.MACD > 0) {
-                            rectF.top = kLineChartItem.macdY
-                            rectF.bottom = macdZeroY
+                            rectF.left = (kLineChartItem.x - halfItemWidth).toFloat()
+                            rectF.right = (kLineChartItem.x + halfItemWidth).toFloat()
+                            rectF.top = kLineChartItem.volY
+                            rectF.bottom = businessHeight
+                            //rectF.top = kLineChartItem.macdY
+                            //rectF.bottom = macdZeroY
                             hatchPaint.color = T22
                         } else {
-                            rectF.top = macdZeroY
-                            rectF.bottom = kLineChartItem.macdY
+                            rectF.left = (kLineChartItem.x - halfItemWidth).toFloat()
+                            rectF.right = (kLineChartItem.x + halfItemWidth).toFloat()
+                            rectF.top = kLineChartItem.volY
+                            rectF.bottom = businessHeight
                             hatchPaint.color = T21
                         }
                         canvas.drawRect(rectF, hatchPaint)
@@ -1538,7 +1548,7 @@ class AnalyticChart : SkinCompatView {
 
     //显示弹窗
     private fun showPopper(canvas: Canvas, KLineChartItem: KLineChartItem?, left: Float, top: Float) {
-        if (KLineChartItem != null && timeStep !== TimeStep.NONE) {
+        if (KLineChartItem != null && timeStep !== TimeStep2.NONE) {
             canvas.save()
             canvas.translate(left, top)
             var color: Int = WIN_COLOR
@@ -1559,50 +1569,50 @@ class AnalyticChart : SkinCompatView {
 //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_time), popTextPaint, 0 + POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
 //            drawTextCenterVertical(canvas, CommonUtil.formatTimestamp(dateFormat, KLineChartItem.time * 1000), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_time))
-                    .draw(canvas, 0 + POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, 0 + POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, CommonUtil.formatTimestamp(dateFormat, KLineChartItem.time * 1000))
-                    .draw(canvas, 0 + popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, 0 + popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //显示开盘价
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_open), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
 //            drawTextCenterVertical(canvas, formatPrice(KLineChartItem.in), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_open))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, formatPrice(KLineChartItem.`in`))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //最高价
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_high), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
 //            drawTextCenterVertical(canvas, formatPrice(KLineChartItem.high), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_high))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, formatPrice(KLineChartItem.high))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //最低价
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_low), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
 //            drawTextCenterVertical(canvas, formatPrice(KLineChartItem.low), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_low))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, formatPrice(KLineChartItem.low))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //收盘价
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_close), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
 //            drawTextCenterVertical(canvas, formatPrice(KLineChartItem.out), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_close))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, formatPrice(KLineChartItem.out))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //涨跌额
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_dif), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
@@ -1610,10 +1620,10 @@ class AnalyticChart : SkinCompatView {
             //            drawTextCenterVertical(canvas, (subValue <= 0 ? "-" : "+") + CommonUtil.formatNumberNoGroup(subValue), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_dif))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = color
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, (if (subValue < 0) "" else "+") + NumberUtil.formatNumberNoGroup(subValue, 2, 5))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //涨跌幅度
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
             //            drawTextCenterVertical(canvas, getContext().getString(R.string.k_pop_dif_percent), popTextPaint, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT);
@@ -1621,10 +1631,10 @@ class AnalyticChart : SkinCompatView {
             //            drawTextCenterVertical(canvas, (subValue <= 0 ? "-" : "+") + CommonUtil.formatNumberNoGroup(subPercent * 100, 2) + "%", popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_dif_percent))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = color
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, (if (subValue < 0) "" else "+") + NumberUtil.formatNumberNoGroup(subPercent * 100, 2, 2) + "%")
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             //成交量
             popTextPaint.color = POPPER_TEXT_COLOR
             offset += POPPER_TEXT_PADDING * 2 + popTextHeight
@@ -1632,10 +1642,10 @@ class AnalyticChart : SkinCompatView {
 //            drawTextCenterVertical(canvas, CommonUtil.formatNumberNoGroup(KLineChartItem.VOL), popTextPaint, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT);
             popTextPaint.color = POPPER_TITLE_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.NORMAL, context.getString(R.string.k_pop_vol))
-                    .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.LEFT or Gravity.CENTER_VERTICAL)
             popTextPaint.color = POPPER_TEXT_COLOR
             TypefaceTextPaintHelper(context, popTextPaint, Typeface.BOLD, formatPrice(KLineChartItem.VOL))
-                    .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
+                .draw(canvas, popperWidth - POPPER_TEXT_PADDING, offset + POPPER_TEXT_PADDING + popTextHeight / 2, Gravity.RIGHT or Gravity.CENTER_VERTICAL)
             canvas.restore()
         }
     }
@@ -1662,7 +1672,7 @@ class AnalyticChart : SkinCompatView {
         chartLeft = mPaddingLeft
         chartRight = chartWidth + chartLeft
         cellWidth = chartWidth / 4
-        cellHeight = chartHeight / 5
+        cellHeight = chartHeight / 4
         RIGHT_BLANK_WIDTH_MAX = cellWidth
         if (data?.kLineChartItems == null || data?.kLineChartItems?.size == 0) {
             currentRightBlankWidth = RIGHT_BLANK_WIDTH_MAX
@@ -1766,7 +1776,7 @@ class AnalyticChart : SkinCompatView {
                 }
                 showingMinValue = if (showingMinValue == 0.0) showingKMinValue else min(showingMinValue, showingKMinValue)
                 showingMaxValue = if (showingMaxValue == 0.0) showingKMaxValue else max(showingMaxValue, showingKMaxValue)
-                if (timeStep === TimeStep.NONE) { //分时计算 kLineItem的out
+                if (timeStep === TimeStep2.NONE) { //分时计算 kLineItem的out
                     showingMinValue = if (showingMinValue == 0.0) kLineChartItem.out else min(showingMinValue, kLineChartItem.out)
                     showingMaxValue = if (showingMaxValue == 0.0) kLineChartItem.out else max(showingMaxValue, kLineChartItem.out)
                 } else {
@@ -1917,13 +1927,13 @@ class AnalyticChart : SkinCompatView {
         return type
     }
 
-    fun setTimeStep(timeStep: TimeStep) {
+    fun setTimeStep(timeStep: TimeStep2) {
         if (this.timeStep !== timeStep) {
             this.timeStep = timeStep
         }
         //        ishow = false;
         if (stepNoneLightDrawable != null) {
-            if (timeStep === TimeStep.NONE) {
+            if (timeStep === TimeStep2.NONE) {
                 stepNoneLightDrawable?.setVisible(true, true)
             } else {
                 stepNoneLightDrawable?.setVisible(false, true)
@@ -1949,7 +1959,7 @@ class AnalyticChart : SkinCompatView {
         }
     }
 
-    fun getTimeStep(): TimeStep {
+    fun getTimeStep(): TimeStep2 {
         return timeStep
     }
 
@@ -2328,7 +2338,7 @@ class AnalyticChart : SkinCompatView {
         return str
     }
 
-    class TimeStep constructor(internal var text: String, val apiText: String, val value: Long) {
+    class TimeStep2 constructor(internal var text: String, val apiText: String, val value: Long) {
 
         override fun toString(): String {
             return text
@@ -2336,18 +2346,18 @@ class AnalyticChart : SkinCompatView {
 
 
         companion object {
-            val NONE = TimeStep("", "1", 60)
-            val MIN_1 = TimeStep("", "1", 60)
-            val MIN_5 = TimeStep("", "5", 5 * 60)
-            val MIN_15 = TimeStep("", "15", 15 * 60)
-            val MIN_30 = TimeStep("", "30", 30 * 60)
-            val HOUR_1 = TimeStep("", "60", 60 * 60)
-            val HOUR_4 = TimeStep("", "240", 4 * 60 * 60)
-            val HOUR_6 = TimeStep("", "360", 6 * 60 * 60)
-            val DAY_1 = TimeStep("", "1D", 24 * 60 * 60)
-            val WEEK_1 = TimeStep("", "1W", 7 * 24 * 60 * 60)
-            val MONTH_1 = TimeStep("", "1M", 30 * 24 * 60 * 60)
-            val MORE = TimeStep("", "", 0)
+            val NONE = TimeStep2("", "1", 60)
+            val MIN_1 = TimeStep2("", "1", 60)
+            val MIN_5 = TimeStep2("", "5", 5 * 60)
+            val MIN_15 = TimeStep2("", "15", 15 * 60)
+            val MIN_30 = TimeStep2("", "30", 30 * 60)
+            val HOUR_1 = TimeStep2("", "60", 60 * 60)
+            val HOUR_4 = TimeStep2("", "240", 4 * 60 * 60)
+            val HOUR_6 = TimeStep2("", "360", 6 * 60 * 60)
+            val DAY_1 = TimeStep2("", "1D", 24 * 60 * 60)
+            val WEEK_1 = TimeStep2("", "1W", 7 * 24 * 60 * 60)
+            val MONTH_1 = TimeStep2("", "1M", 30 * 24 * 60 * 60)
+            val MORE = TimeStep2("", "", 0)
         }
 
     }

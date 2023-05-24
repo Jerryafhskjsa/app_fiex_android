@@ -2,7 +2,7 @@ package com.black.base.util
 
 import com.black.base.model.socket.KLineChartItem
 import com.black.base.model.socket.KLineItem
-import com.black.base.widget.AnalyticChart.TimeStep
+import com.black.base.widget.AnalyticChart
 import com.black.util.CommonUtil
 import java.util.*
 import kotlin.math.sqrt
@@ -491,7 +491,7 @@ object KLineUtil {
         }
     }
 
-    fun getAllNode(kLineItems: ArrayList<KLineItem?>?, timeStep: TimeStep): Array<KLineChartItem?> {
+    fun getAllNode(kLineItems: ArrayList<KLineItem?>?, value: Long): Array<KLineChartItem?> {
         var items = kLineItems
         if (items == null) {
             items = ArrayList()
@@ -513,10 +513,10 @@ object KLineUtil {
                 }
             }
             if (lastKLineChartItem != null) { //判断是否有断层
-                val count = ((kLineChartItem.time - lastKLineChartItem.time) / timeStep.value).toInt()
+                val count = ((kLineChartItem.time - lastKLineChartItem.time) / value).toInt()
                 val time = lastKLineChartItem.time
                 for (ii in 0 until count - 1) {
-                    val insertKLineChartItem = KLineChartItem(time + timeStep.value * (ii + 1), 0.0, lastKLineChartItem.high, lastKLineChartItem.low, lastKLineChartItem.`in`, lastKLineChartItem.out)
+                    val insertKLineChartItem = KLineChartItem(time + value * (ii + 1), 0.0, lastKLineChartItem.high, lastKLineChartItem.low, lastKLineChartItem.`in`, lastKLineChartItem.out)
                     kLineChartItems.add(insertKLineChartItem)
                     insertKLineChartItem.isAddData = true
                 }
@@ -528,7 +528,7 @@ object KLineUtil {
         return kLineChartItems.toTypedArray()
     }
 
-    fun addKLIneItemsToFront(oldItems: Array<KLineChartItem?>, addedItems: Array<KLineChartItem?>?, timeStep: TimeStep): Array<KLineChartItem?>? {
+    fun addKLIneItemsToFront(oldItems: Array<KLineChartItem?>, addedItems: Array<KLineChartItem?>?, value: Long): Array<KLineChartItem?>? {
         val oldFirstItem = CommonUtil.getItemFromArray(oldItems, 0)
         val oldLastItem = CommonUtil.getItemFromArray(oldItems, oldItems.size - 1)
         if (oldFirstItem == null || oldLastItem == null) {
@@ -541,7 +541,7 @@ object KLineUtil {
         }
         val addedSize = addedItems?.size ?: 0
         val oldSize = oldItems.size
-        val count = ((oldFirstItem.time - addedLastItem.time) / timeStep.value).toInt()
+        val count = ((oldFirstItem.time - addedLastItem.time) / value).toInt()
         return when {
             count == 1 -> { //完美衔接
                 val result = arrayOfNulls<KLineChartItem?>(addedSize + oldSize)
@@ -560,7 +560,7 @@ object KLineUtil {
                 val result = arrayOfNulls<KLineChartItem?>(addedSize + oldSize + count - 1)
                 val time = addedLastItem.time
                 for (ii in 0 until count - 1) {
-                    val insertKLineChartItem = KLineChartItem(time + timeStep.value * (ii + 1), 0.0, addedLastItem.high, addedLastItem.low, addedLastItem.`in`, addedLastItem.out)
+                    val insertKLineChartItem = KLineChartItem(time + value * (ii + 1), 0.0, addedLastItem.high, addedLastItem.low, addedLastItem.`in`, addedLastItem.out)
                     insertKLineChartItem.isAddData = true
                     result[addedSize + ii] = insertKLineChartItem
                 }
