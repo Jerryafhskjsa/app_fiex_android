@@ -582,15 +582,15 @@ class ContractViewModel(
                 var floatProfit: BigDecimal = BigDecimal.ZERO
                 if (positionList != null) {
                     for (item in positionList!!) {
-                        val fp = FutureService.getFloatProfit(item!!, value!!)
-                        floatProfit = floatProfit.add(fp)
+                            Log.d("tt1------>floatProfit", value.toString())
+                            val fp = FutureService.getFloatProfit(item!!, value!!)
+                            floatProfit = floatProfit.add(fp)
                     }
-                    Log.d("ttt------>items",value.toString())
-                   Log.d("ttt------>floatProfit", floatProfit.toString())
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     var available: BigDecimal = BigDecimal.ZERO
                     if (balanceDetailBean != null) {
+                        Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                         available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                     }

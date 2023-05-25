@@ -24,6 +24,7 @@ import com.black.base.model.wallet.Wallet
 import com.black.base.model.wallet.WalletLever
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
+import com.black.base.util.ConstData.CHOOSE_COIN_RECHARGE
 import com.black.base.view.DeepControllerWindow
 import com.black.base.viewmodel.BaseViewModel
 import com.black.frying.fragment.assets.AssetsContractFragment
@@ -257,7 +258,7 @@ class HomePageAssetsFragment : BaseFragment(), View.OnClickListener, CompoundBut
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                ConstData.CHOOSE_COIN_RECHARGE -> {
+                CHOOSE_COIN_RECHARGE -> {
                     val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()

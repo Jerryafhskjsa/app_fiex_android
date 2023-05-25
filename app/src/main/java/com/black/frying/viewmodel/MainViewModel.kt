@@ -14,6 +14,8 @@ import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
+import com.black.base.model.user.UserBalance
+import com.black.base.model.user.UserBalanceWarpper
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
@@ -44,7 +46,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
     private var onMainModelListener: OnMainModelListener? = null
-
+    private var userBalanceObserver: Observer<UserBalance?>? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     private var userInfoObserver: Observer<String?>? = createUserInfoObserver()
 
@@ -68,6 +70,10 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
 
+        if (userBalanceObserver == null) {
+            userBalanceObserver = createUserBalanceObserver()
+        }
+        SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_TICKETS)
         SocketUtil.sendSocketCommandBroadcast(
@@ -117,6 +123,9 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         if (userInfoObserver != null) {
             SocketDataContainer.removeUserInfoObservable(userInfoObserver)
         }
+        if (userBalanceObserver != null) {
+            SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
+        }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
             socketHandler = null
@@ -127,6 +136,22 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         }
     }
 
+    fun getAllWallet(isShowLoading: Boolean) {
+//        getWalletFromServer2(isShowLoading)
+        getUserBalance(isShowLoading)
+    }
+    private fun getUserBalance(isShowLoading: Boolean){
+        WalletApiServiceHelper.getUserBalance(context)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
+                override fun error(type: Int, error: Any) {
+                }
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    }
+                }
+            }))
+    }
     private fun initHandler() {
         if (socketHandler == null || socketHandler?.looper == null) {
             handlerThread =
@@ -158,6 +183,13 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
         return object : SuccessObserver<String?>() {
             override fun onSuccess(value: String?) {
                 onMainModelListener?.onUserInfoChanged()
+            }
+        }
+    }
+    private fun createUserBalanceObserver(): Observer<UserBalance?> {
+        return object : SuccessObserver<UserBalance?>() {
+            override fun onSuccess(value: UserBalance?) {
+                onMainModelListener?.onUserBalanceChanged(value)
             }
         }
     }
@@ -427,6 +459,9 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
                 }
             })
     }
+    /**
+     * 获取币种配置
+     */
 
 
     fun checkIntoMainChat(): Observable<ChatRoomEnable>? {
@@ -448,6 +483,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
     }
 
     interface OnMainModelListener {
+        fun onUserBalanceChanged(userBalance: UserBalance?)
         fun onPairStatusDataChanged(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onHomeTickers(observable: Observable<ArrayList<PairStatus?>?>?)
         fun onHomeKLine(observable: Observable<ArrayList<PairStatus?>?>?)

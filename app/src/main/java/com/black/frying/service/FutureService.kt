@@ -742,7 +742,7 @@ object FutureService {
         }
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
-        if (underlyingType.equals("U_BASED") && markPrice.s == symbol) {
+        if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
                     BigDecimal(markPrice.p).subtract(BigDecimal(positionBean.entryPrice))

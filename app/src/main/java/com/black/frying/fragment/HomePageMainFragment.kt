@@ -25,6 +25,7 @@ import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
+import com.black.base.model.user.UserBalance
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.CoinInfo
 import com.black.base.model.wallet.CoinInfoType
@@ -714,5 +715,7 @@ class HomePageMainFragment : BaseFragment(), View.OnClickListener, ObserveScroll
 
 
         }
+    }
+    override fun onUserBalanceChanged(userBalance: UserBalance?) {
     }
 }

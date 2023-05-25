@@ -523,6 +523,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("req", "sub_mark_price")
+            jsonObject.put("symbol", currentPair)
             WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_MARK_PRICE)
                 ?.send(jsonObject.toString())
         } catch (e: Exception) {
@@ -902,7 +903,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     data.toString(),
                                     object : TypeToken<MarkPriceBean?>() {}.type
                                 )
-                                if (markPriceBean != null) {
+                                if (markPriceBean != null && markPriceBean.s == currentPair?.lowercase()) {
+                                    Log.d("1111",currentPair)
                                     SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
                                 }
                             }

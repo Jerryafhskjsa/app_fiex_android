@@ -38,7 +38,7 @@ import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Route(value = [RouterConstData.WALLET_CHOOSE_COIN], beforePath = RouterConstData.LOGIN)
+@Route(value = [RouterConstData.WALLET_CHOOSE_COIN])
 class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener {
 
     private var userSoptBanlace: ArrayList<UserBalance?>? = null

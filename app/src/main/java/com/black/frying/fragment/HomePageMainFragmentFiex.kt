@@ -31,6 +31,7 @@ import com.black.base.model.clutter.*
 import com.black.base.model.clutter.NoticeHome.NoticeHomeItem
 import com.black.base.model.community.ChatRoomEnable
 import com.black.base.model.socket.PairStatus
+import com.black.base.model.user.UserBalance
 import com.black.base.model.user.UserInfo
 import com.black.base.model.wallet.*
 import com.black.base.net.HttpCallbackSimple
@@ -202,6 +203,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         super.onResume()
         userInfo = if (activity == null) null else CookieUtil.getUserInfo(activity!!)
         binding!!.noticeTextView.startAutoScroll()
+        viewModel!!.getAllWallet(true)
 //        viewModel!!.computeTotalAmount()
     }
 
@@ -871,5 +873,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     }
 
     override fun onInformationClick(mainMorePopup: MainMorePopup) {
+    }
+    override fun onUserBalanceChanged(userBalance: UserBalance?) {
     }
 }

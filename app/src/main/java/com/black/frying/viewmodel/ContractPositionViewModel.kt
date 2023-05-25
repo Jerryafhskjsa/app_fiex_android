@@ -66,7 +66,6 @@ class ContractPositionViewModel(
                     if (returnData != null) {
                         var data: ArrayList<PositionBean?>? = returnData.result
                         positionList = data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
-                        doUpdate(context,null,null,false)
                     }
                     else{
                         positionList = null
@@ -104,6 +103,7 @@ class ContractPositionViewModel(
      */
     private fun updateCurrentPosition(context: Context?,flagPrice:String?,symbol: String?,isSocket:Boolean?) {
         for (positionBean in positionList!!) {
+            Log.d("ttttttt--->1111", positionBean?.symbol.toString())
             if (positionBean?.positionSize.equals("0")) {
                 return
             }
@@ -244,6 +244,7 @@ class ContractPositionViewModel(
             positionBean.unRealizedProfit = String.format("%.4f",floatProfit)
             positionBean.profitRate = String.format("%.2f",floatProfitRate) + "%"
             positionBean.price = String.format("%.4f",positionValue.add(floatProfit))
+            Log.d("ttttttt---2222", positionBean.toString())
             //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
 //            Log.d("ttttttt-->positionValue", positionValue.toString())
         }

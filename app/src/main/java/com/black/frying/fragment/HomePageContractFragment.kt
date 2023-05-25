@@ -1457,6 +1457,7 @@ class HomePageContractFragment : BaseFragment(),
                     //未登录，请求登陆
                     fryingHelper.checkUserAndDoing(Runnable { }, TRADE_INDEX)
                 } else {
+                    Log.d("4444", "4")
                     var positionSide: String = "LONG"
                     var orderSide: String = "BUY"
                     when (transactionType) {
@@ -2126,7 +2127,6 @@ class HomePageContractFragment : BaseFragment(),
      * 数量 = 输入数量/(输入价格*合约面值)
      */
     private fun createOrderFuture(positionSide: String, orderSide: String) {
-        currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType.toString()
         var orderType: String? =if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
         val price: String = header1View?.price?.text.toString().trim()
         var priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
@@ -2147,6 +2147,7 @@ class HomePageContractFragment : BaseFragment(),
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
+        currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
         if (currentUnitType == "USDT") {
             if (origQtyNum <= num * (priceNum)) {
                 FryingUtil.showToast(
