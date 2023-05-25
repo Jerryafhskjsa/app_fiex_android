@@ -224,7 +224,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 ConstData.CHOOSE_COIN_RECHARGE -> {
-                    chooseWallet = data?.getParcelableExtra(ConstData.WALLET)
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
@@ -235,20 +235,27 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                         }
                     }
                 }
-                CHOOSE_COIN_WITHDRAW -> {
+                ConstData.CHOOSE_COIN_WITHDRAW -> {
                     val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
                     if (chooseWallet != null) {
                         val bundle = Bundle()
-                        bundle.putInt(ConstData.WALLET_HANDLE_TYPE, ConstData.TAB_WITHDRAW)
                         bundle.putParcelable(ConstData.WALLET, chooseWallet)
-                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle)
-                            .go(this)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
                     }
                 }
-                ConstData.SCANNIN_GREQUEST_CODE -> {
-                    val bundle = data?.extras
-                    val scanResult = bundle?.getString("result")
-//                    binding?.extractAddress?.setText(scanResult ?: "")
+                ConstData.LEVER_PAIR_CHOOSE -> {
+                    val pair = data?.getStringExtra(ConstData.PAIR)
+                    if (pair != null) {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.PAIR, pair)
+                            BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
+                        })
+                    }
                 }
             }
         }

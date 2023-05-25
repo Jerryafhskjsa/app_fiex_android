@@ -742,17 +742,17 @@ object FutureService {
         }
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
-        if (underlyingType.equals("U_BASED")) {
+        if (underlyingType.equals("U_BASED") && markPrice.s == symbol) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
-                    BigDecimal(markPrice?.p).subtract(BigDecimal(positionBean.entryPrice))
+                    BigDecimal(markPrice.p).subtract(BigDecimal(positionBean.entryPrice))
                         .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit =
-                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPrice?.p))
+                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPrice.p))
                         .multiply(base)
             }
-        } else if (underlyingType.equals("COIN_BASED")) { //币本位
+        } else if (underlyingType.equals("COIN_BASED") && markPrice.s == symbol) { //币本位
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit = BigDecimal("1")
                     .divide(BigDecimal(positionBean.entryPrice), precision, BigDecimal.ROUND_DOWN)

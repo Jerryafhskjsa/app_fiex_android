@@ -386,7 +386,7 @@ object UserApiServiceHelper {
                 ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
 
-    fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultData<SuffixResult?>?>?) {
+    fun login(context: Context?, username: String?, password: String?, telCountryCode: String?, callback: Callback<HttpRequestResultString?>?) {
         if (context == null || callback == null) {
             return
         }

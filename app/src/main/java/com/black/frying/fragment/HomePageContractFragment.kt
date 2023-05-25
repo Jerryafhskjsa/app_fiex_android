@@ -706,7 +706,7 @@ class HomePageContractFragment : BaseFragment(),
                         if (isDear!!) {
                             binding?.actionBarLayout?.imgCollect?.setImageDrawable(
                                 mContext?.getDrawable(
-                                    R.drawable.bianzu_1
+                                    R.drawable.shoucang1
                                 )
                             )
                         } else {
@@ -721,7 +721,7 @@ class HomePageContractFragment : BaseFragment(),
         } else {
             isDear = dear
             if (isDear!!) {
-                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.bianzu_1))
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.shoucang1))
             } else {
                 binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.shoucang))
             }
@@ -1264,9 +1264,16 @@ class HomePageContractFragment : BaseFragment(),
                             window: DeepControllerWindow<String?>,
                             item: String?
                         ) {
-                            refreshUnitType(item)
-                            currentUnitType = item
-                            viewModel?.setCurrentUnitType(item)
+                            if(item == currentUnitType){
+                                return
+                            }
+                            else {
+                                refreshUnitType(item)
+                                currentUnitType = item
+                                viewModel?.setCurrentUnitType(item)
+                                refreshTransactionHardViews()
+                                header1View?.transactionQuota?.setText("0.0")
+                            }
                         }
                     }).show()
             }
@@ -1310,15 +1317,15 @@ class HomePageContractFragment : BaseFragment(),
 
                  */
             R.id.btn_transaction_memu -> mContext?.let {
-                var setData = ArrayList<QuotationSet?>(3)
-                var optionalUbaseSet = QuotationSet()
+                val setData = ArrayList<QuotationSet?>(3)
+                val optionalUbaseSet = QuotationSet()
                 optionalUbaseSet.coinType = getString(R.string.usdt)
                 optionalUbaseSet.name = getString(R.string.usdt_base)
-                setData?.add(optionalUbaseSet)
-                var optionalCoinBaseSet = QuotationSet()
+                setData.add(optionalUbaseSet)
+                val optionalCoinBaseSet = QuotationSet()
                 optionalCoinBaseSet.coinType = getString(R.string.usd)
                 optionalCoinBaseSet.name = getString(R.string.coin_base)
-                setData?.add(optionalCoinBaseSet)
+                setData.add(optionalCoinBaseSet)
                 PairStatusPopupWindow.getInstance(
                     it,
                     PairStatusPopupWindow.TYPE_FUTURE_ALL,
@@ -1483,17 +1490,17 @@ class HomePageContractFragment : BaseFragment(),
         return NumberUtil.toBigDecimal(price)
     }
     private fun initLimitPrice(){
-        val price =  binding?.fragmentHomePageContractHeader1?.price?.text?:""
+        val price =  binding?.fragmentHomePageContractHeader1?.price?.text?:"0.0"
         if (price.isEmpty()){
             fillLimitPrice()
         }
     }
     @SuppressLint("SetTextI18n")
     private fun fillLimitPrice() {
-        val price = header1View?.currentPrice?.text?.toString() ?: ""
+        val price = header1View?.currentPrice?.text?.toString() ?: "0.0"
         val decimal = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
         if (decimal == BigDecimal.ZERO) {
-            binding?.fragmentHomePageContractHeader1?.price?.setText("")
+            binding?.fragmentHomePageContractHeader1?.price?.setText("0.0")
         } else {
             binding?.fragmentHomePageContractHeader1?.price?.setText(decimal.toString())
         }
@@ -1776,6 +1783,9 @@ class HomePageContractFragment : BaseFragment(),
      * 计算可开多/空的数量
      */
     private fun updateCanOpenAmount(price: String?) {
+        currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
+        binding?.fragmentHomePageContractHeader1?.useableBuyType?.setText(currentUnitType)
+        binding?.fragmentHomePageContractHeader1?.useableSaleType?.setText(currentUnitType)
         if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null || BigDecimal(price) == BigDecimal.ZERO) {
             return
         }
@@ -1788,33 +1798,40 @@ class HomePageContractFragment : BaseFragment(),
         when (transactionType) {
             ConstData.FUTURE_OPERATE_OPEN -> {
                 //可开多数量
-                header1View?.useableBuy
-                header1View?.useable?.text =
-                    String.format("%.4f", availableOpenData.longMaxOpen.toFloat())
-                header1View?.sellUseable?.text =
-                    String.format("%.4f", availableOpenData.shortMaxOpen.toFloat())
+                if (currentUnitType == "USDT") {
+                    header1View?.useable?.text =
+                        String.format("%.4f", availableOpenData.longMaxOpen.toFloat())
+                    header1View?.sellUseable?.text =
+                        String.format("%.4f", availableOpenData.shortMaxOpen.toFloat())
+                }
+                else{
+                    header1View?.useable?.text =
+                        String.format("%.4f", availableOpenData.longMaxOpen.div(BigDecimal(price)).toFloat())
+                    header1View?.sellUseable?.text =
+                        String.format("%.4f", availableOpenData.shortMaxOpen.div(BigDecimal(price)).toFloat())
+                }
             }
             ConstData.FUTURE_OPERATE_CLOSE -> {
                 if (price.isNotEmpty() && header1View?.tagPrice?.text.toString()
                         .isNotEmpty()
                 ) {
-                    var closeData: CloseData? = FutureService.getAvailableCloseData(
+                    val closeData: CloseData = FutureService.getAvailableCloseData(
                         price,
                         header1View?.tagPrice?.text.toString()
                     )
                     if (closeData != null) {
                         //可开多数量
                         header1View?.useable?.text =
-                            String.format("%.2f", closeData?.long?.toFloat())
+                            String.format("%.2f", closeData.long.toFloat())
                         //可开空数量
                         header1View?.sellUseable?.text =
-                            String.format("%.2f", closeData?.short?.toFloat())
+                            String.format("%.2f", closeData.short.toFloat())
                         //多仓持仓
                         header1View?.freezAmount?.text =
-                            String.format("%.2f", closeData?.longPosition?.toFloat())
+                            String.format("%.2f", closeData.longPosition.toFloat())
                         //空仓持仓
                         header1View?.sellBond?.text =
-                            String.format("%.2f", closeData?.shortPosition?.toFloat())
+                            String.format("%.2f", closeData.shortPosition.toFloat())
                     }
                 }
             }
@@ -1826,27 +1843,38 @@ class HomePageContractFragment : BaseFragment(),
      * 计算需要的保证金
      */
     private fun updateBondAmount(inputPrice: String?, amount: String?) {
+        currentUnitType = binding!!
+            .fragmentHomePageContractHeader1.unitType.text.toString()
         if (inputPrice?.isEmpty() == true || amount?.isEmpty() == true || !LoginUtil.isFutureLogin(
                 mContext
             )
         ) {
             return
         }
-        var longLeverage = leverage
-        var shortLeverage = leverage
-        var availableOpenData = FutureService.getAvailableOpenData(
-            BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount),
-            BigDecimal.ZERO
-        )
+        val longLeverage = leverage
+        val shortLeverage = leverage
+        var availableOpenData: AvailableOpenData? = null
+        if (currentUnitType == "USDT") {
+            availableOpenData = FutureService.getAvailableOpenData(
+                BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount),
+                BigDecimal.ZERO
+            )
+        }
+        else{
+            availableOpenData = FutureService.getAvailableOpenData(
+                BigDecimal(inputPrice), longLeverage!!, shortLeverage!!, BigDecimal(amount)*BigDecimal(inputPrice),
+                BigDecimal.ZERO
+            )
+        }
 
         when (transactionType) {
             ConstData.FUTURE_OPERATE_OPEN -> {
 
                 header1View?.freezAmount?.text =
-                    String.format("%.4f", availableOpenData?.longMargin?.toFloat())
+                    String.format("%.4f", availableOpenData.longMargin.toFloat())
 
                 header1View?.sellBond?.text =
-                    String.format("%.4f", availableOpenData?.shortMargin?.toFloat())
+                    String.format("%.4f", availableOpenData.shortMargin.toFloat())
             }
             ConstData.FUTURE_OPERATE_CLOSE -> {
 
@@ -2098,6 +2126,7 @@ class HomePageContractFragment : BaseFragment(),
      * 数量 = 输入数量/(输入价格*合约面值)
      */
     private fun createOrderFuture(positionSide: String, orderSide: String) {
+        currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType.toString()
         var orderType: String? =if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
         val price: String = header1View?.price?.text.toString().trim()
         var priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
@@ -2113,22 +2142,41 @@ class HomePageContractFragment : BaseFragment(),
         }
         val origQty = header1View?.transactionQuota?.text.toString().trim()
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
+        var totalAmountInt: BigDecimal = BigDecimal.ZERO
         if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
-        if (origQtyNum <= num*(priceNum)) {
-            FryingUtil.showToast(mContext, "单笔下单应大于" + String.format("%.4f", num*(priceNum)) + "USDT")
-            //FryingUtil.showToast(mContext, "单笔下单应大于0.0001" + "BTC")
-            return
+        if (currentUnitType == "USDT") {
+            if (origQtyNum <= num * (priceNum)) {
+                FryingUtil.showToast(
+                    mContext,
+                    "单笔下单应大于" + String.format("%.4f", num * (priceNum)) + currentUnitType
+                )
+                //FryingUtil.showToast(mContext, "单笔下单应大于0.0001" + "BTC")
+                return
+            }
+            if (origQtyNum > NumberUtils.toBigDecimal("100000")) {
+                FryingUtil.showToast(mContext, "单笔交易不能大于100000")
+                return
+            }
+            totalAmountInt = (origQtyNum) / (num * (priceNum))
         }
-        if (origQtyNum > NumberUtils.toBigDecimal("100000")) {
-            FryingUtil.showToast(mContext,"单笔交易不能大于100000")
-            return
+        else{
+            if (origQtyNum <= num) {
+                FryingUtil.showToast(
+                    mContext,
+                    "单笔下单应大于" + String.format("%.4f", num) + currentUnitType
+                )
+                //FryingUtil.showToast(mContext, "单笔下单应大于0.0001" + "BTC")
+                return
+            }
+            if (origQtyNum * priceNum > NumberUtils.toBigDecimal("100000")) {
+                FryingUtil.showToast(mContext,NumberUtils.toBigDecimal("100000").div(priceNum).toString())
+                return
+            }
+            totalAmountInt = (origQtyNum) / (num)
         }
-
-        val totalAmountInt = (origQtyNum)/(num*(priceNum))//priceDouble.times()
-//            ?.let { CommonUtil.parseInt(origQty).div(it).roundToInt() }
         if (orderType.equals("MARKET")) {
             priceNum = BigDecimal.ZERO
         }
@@ -2178,6 +2226,7 @@ class HomePageContractFragment : BaseFragment(),
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 refreshShuju()
                                 initHeader2()
+                                updateOpenAvailableData()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2221,6 +2270,7 @@ class HomePageContractFragment : BaseFragment(),
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 refreshShuju()
                                 initHeader2()
+                                updateOpenAvailableData()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2428,8 +2478,9 @@ class HomePageContractFragment : BaseFragment(),
     /**
      * 指数价格更新
      */
+    @SuppressLint("SetTextI18n")
     override fun onIndexPirce(indexPrice: IndexPriceBean?) {
-        var price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
+        val price = BigDecimal(indexPrice?.p).setScale(2, RoundingMode.DOWN)
         CommonUtil.checkActivityAndRunOnUI(mContext) {
             header1View?.indexPrice?.text = price.toString()
         }
@@ -2450,7 +2501,7 @@ class HomePageContractFragment : BaseFragment(),
     override fun onFundingRate(fundRate: FundingRateBean?) {
         Log.d("iiiiii", "onFundingRate")
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            var rate: String? = NumberUtil.formatNumberNoGroup(
+            val rate: String? = NumberUtil.formatNumberNoGroup(
                 fundRate?.fundingRate?.toFloat()?.times(100),
                 RoundingMode.FLOOR,
                 4,

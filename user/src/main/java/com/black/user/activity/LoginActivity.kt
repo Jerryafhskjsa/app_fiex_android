@@ -273,7 +273,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    /*private fun doLogin(username: String, password: String, telCountryCode: String?) {
+    private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
         ApiManager.build(this, false, UrlConfig.ApiType.URl_UC)
             .getService<UserApiService>(UserApiService::class.java)
@@ -364,13 +364,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         Observable.empty()
                     }
                 }
-            })*/
-            //?.observeOn(AndroidSchedulers.mainThread())
-            //?.subscribe
-    private fun doLogin(username: String, password: String, telCountryCode: String?) {
+            })
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
+                override fun afterRequest() {
+                    hideLoading()
+                }
+    /*private fun doLogin(username: String, password: String, telCountryCode: String?) {
         UserApiServiceHelper.login(mContext,username,password,telCountryCode, object : Callback<HttpRequestResultData<SuffixResult?>?>() {
             override fun error(type: Int, error: Any?) {
-            }
+            }*/
 
                 override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
                     if (result != null && result.code == HttpRequestResult.SUCCESS) {

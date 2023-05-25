@@ -243,6 +243,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:fadingEdge="none"
+                    android:textSize="@dimen/text_size_12"
+                    app:tabTextColor="@color/T2"
                     app:tabBackground="@color/transparent"
                     app:tabRippleColor="@android:color/transparent"
                     app:tabIndicator="@drawable/tabs_rounded_line_indicator"
@@ -254,7 +256,6 @@
                     app:tabPaddingStart="@dimen/default_padding"
                     app:tabPaddingTop="0dp"
                     app:tabIndicatorFullWidth="false"
-                    app:tabTextAppearance="@style/DefaultTabStyle"
                     android:overScrollMode="never"
                     android:scrollbars="none" />
 
@@ -271,6 +272,7 @@
                     android:background="@drawable/shangla">
                 </ImageView>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1.5dp"

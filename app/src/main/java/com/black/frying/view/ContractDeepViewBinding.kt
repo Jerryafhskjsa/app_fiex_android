@@ -17,6 +17,7 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractHeader1Binding
 import com.fbsex.exchange.databinding.FragmentHomePageTransactionHeader1Binding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.util.*
 
 class ContractDeepViewBinding(private val context: Activity, private val viewModel: ContractViewModel, private val binding: FragmentHomePageContractHeader1Binding) : View.OnClickListener {
@@ -415,8 +416,18 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
     private fun showAskOrder(pair: String?,tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
         setOrderBg(layout, tradeOrder)
         layout.tag = tradeOrder
-        priceView.text = if (tradeOrder == null) nullAmount else tradeOrder.formattedPrice
-        countView.text = if (tradeOrder == null) nullAmount else  NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
+        var amount: Double = 0.0
+        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
+            return
+        }
+        if (binding.deepAmountName.text.toString() == "(USDT)"){
+            amount = tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble()
+        }
+        else{
+            amount = tradeOrder.exchangeAmount
+        }
+        priceView.text =  tradeOrder.formattedPrice
+        countView.text =  NumberUtil.formatNumberDynamicScaleNoGroup(amount , 10, viewModel.getAmountLength(), viewModel.getAmountLength())
     }
 
     //清空显示卖出订单
@@ -479,8 +490,18 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
     private fun showBidOrder(tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
         setOrderBg(layout, tradeOrder)
         layout.tag = tradeOrder
-        priceView.text = if (tradeOrder == null) nullAmount else tradeOrder.formattedPrice
-        countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
+        var amount: Double = 0.0
+        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
+            return
+        }
+        if (binding.deepAmountName.text.toString() == "(USDT)"){
+            amount = tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble()
+        }
+        else{
+            amount = tradeOrder.exchangeAmount
+        }
+        priceView.text =  tradeOrder.formattedPrice
+        countView.text =  NumberUtil.formatNumberDynamicScaleNoGroup(amount , 10, viewModel.getAmountLength(), viewModel.getAmountLength())
     }
 
     //清空显示买入订单
