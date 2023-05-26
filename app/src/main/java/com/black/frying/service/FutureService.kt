@@ -397,7 +397,7 @@ object FutureService {
     空仓平价格 = 开仓均价 * 数量 * 面值 / (数量 * 面值 + 开仓均价 * (维持保证金 - 仓位保证金))
      *
      */
-    fun getCurrentPosition() {
+    /*fun getCurrentPosition() {
         for (positionBean in positionList!!) {
             if (positionBean?.positionSize.equals("0")) {
                 return
@@ -550,6 +550,8 @@ object FutureService {
 
     }
 
+     */
+
     /**
      * 获取维持保证金率
      */
@@ -634,7 +636,7 @@ object FutureService {
     /**
      * 获取dex值
      */
-    fun getDex(positionBean: PositionBean, positionSide: String): BigDecimal {
+    fun getDex(positionBean: PositionBean, positionSide: String,flagPrice: String): BigDecimal {
 
         var crossMaintMargin: BigDecimal = BigDecimal(0)
         var crossedFloatProfit: BigDecimal = BigDecimal(0)
@@ -648,7 +650,7 @@ object FutureService {
         ) {
             if (underlyingType.equals("U_BASED")) {
                 if (positionBean?.positionSide.equals(positionSide)) {
-                    var fp = getFloatProfit(positionBean);
+                    var fp = getFloatProfit(positionBean,flagPrice!!);
                     crossedFloatProfit = crossedFloatProfit.plus(fp);
                 }
                 crossMaintMargin = crossMaintMargin.plus(
@@ -658,7 +660,7 @@ object FutureService {
                 )
             } else if (underlyingType.equals("COIN_BASED")) {
                 if (!positionBean?.positionSide.equals(positionSide)) {
-                    var fp = getFloatProfit(positionBean);
+                    var fp = getFloatProfit(positionBean,flagPrice!!);
                     crossedFloatProfit = crossedFloatProfit.plus(fp);
                 }
                 crossMaintMargin = crossMaintMargin.plus(
@@ -682,23 +684,33 @@ object FutureService {
     /**
      * 获取浮动盈亏
      */
-    fun getFloatProfit(positionBean: PositionBean): BigDecimal {
-
-        var markPriceBean = FutureSocketData.markPrice
-        if (markPriceBean == null) {
-            markPriceBean = getMarkPrice(symbol)
+    fun getFloatProfit(positionBean: PositionBean , price: String): BigDecimal {
+        var flagPrice: String = "1"
+        if (price == "0") {
+            var markPriceBean = FutureSocketData.markPrice
+            if (markPriceBean == null) {
+                flagPrice = getMarkPrice(symbol)!!.p
+            }
+            else{
+                flagPrice = markPriceBean.p
+                contractSize = getContractSize(markPriceBean.s)
+            }
         }
-
+        else{
+            flagPrice = price
+            contractSize = getContractSize(positionBean.symbol)
+        }
+        Log.d("1221", flagPrice)
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base = NumberUtils.toBigDecimal(positionBean.positionSize).multiply(contractSize?: BigDecimal.ZERO)
+        val base = NumberUtils.toBigDecimal(positionBean.positionSize).multiply(contractSize?: BigDecimal.ZERO)
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
-                    BigDecimal(markPriceBean?.p).subtract(BigDecimal(positionBean.entryPrice))
+                    BigDecimal(flagPrice).subtract(BigDecimal(positionBean.entryPrice))
                         .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit =
-                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPriceBean?.p))
+                    BigDecimal(positionBean.entryPrice).subtract(BigDecimal(flagPrice))
                         .multiply(base)
             }
         } else if (underlyingType.equals("COIN_BASED")) { //币本位
@@ -707,12 +719,12 @@ object FutureService {
                     .divide(BigDecimal(positionBean.entryPrice), 4, BigDecimal.ROUND_HALF_UP)
                     .subtract(
                         BigDecimal("1")
-                            .divide(BigDecimal(markPriceBean?.p), 4, BigDecimal.ROUND_HALF_UP)
+                            .divide(BigDecimal(flagPrice), 4, BigDecimal.ROUND_HALF_UP)
                     )
                     .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit = BigDecimal("1")
-                    .divide(BigDecimal(markPriceBean?.p), 4, BigDecimal.ROUND_HALF_UP)
+                    .divide(BigDecimal(flagPrice), 4, BigDecimal.ROUND_HALF_UP)
                     .subtract(
                         BigDecimal("1")
                             .divide(
@@ -724,6 +736,7 @@ object FutureService {
                     .multiply(base)
             }
         }
+        Log.d("9999", floatProfit.toString())
         return floatProfit
     }
 
@@ -735,13 +748,13 @@ object FutureService {
      */
     fun getFloatProfit(positionBean: PositionBean, markPrice: MarkPriceBean): BigDecimal {
 
-        var symbolBean = getSymbolConfig(symbol)
+        var symbolBean = getSymbolConfig(positionBean.symbol!!)
         var precision = symbolBean?.quoteCoinPrecision
         if (precision == null) {
             precision = 8
         }
         var floatProfit: BigDecimal = BigDecimal(0)
-        var base = BigDecimal(positionBean?.positionSize).multiply(contractSize)
+        var base = BigDecimal(positionBean.positionSize).multiply(BigDecimal(symbolBean?.contractSize))
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
@@ -1243,14 +1256,13 @@ object FutureService {
 
         if (coin.equals("usdt")) {
             if (positionList == null){
-
             }
             else {
                 for (p in positionList!!) {
                     if (p?.symbol!!.split("_")[1].equals("usdt")) {
-                        var fp = getFloatProfit(p!!)
+                        var fp = getFloatProfit(p!!,"0")
                         floatProfit = floatProfit!!.plus(fp)
-                        if (p.positionType.equals(Constants.CROSSED)) {
+                        if (p.positionType.equals(Constants.CROSSED) && fp.toDouble() != 0.0) {
                             crossedFloatProfit = crossedFloatProfit!!.plus(fp)
                         }
                     }
@@ -1259,9 +1271,9 @@ object FutureService {
         } else {
             for (p in positionList!!) {
                 if (p?.symbol!!.split("_")[0].equals(coin)) {
-                    var fp = getFloatProfit(p!!)
+                    var fp = getFloatProfit(p,"0")
                     floatProfit = floatProfit!!.plus(fp)
-                    if (p.positionType.equals(Constants.CROSSED)) {
+                    if (p.positionType.equals(Constants.CROSSED)&& fp.toDouble() != 0.0) {
                         crossedFloatProfit = crossedFloatProfit!!.plus(fp)
                     }
                 }

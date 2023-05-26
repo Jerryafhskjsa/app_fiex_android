@@ -179,8 +179,7 @@ class ContractPositionTabFragment : BaseFragment(),
                             if (returnData != null) {
                                 var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
                                 FryingUtil.showToast(mContext, "Success")
-                                viewModel?.getPositionData(false)
-                                onTabModelListener?.onCount(0)
+                                viewModel?.getPositionData(binding?.contractWithLimit?.isChecked)
                             }
                         }
 

@@ -229,12 +229,8 @@ class ContractViewModel(
         initPairStatus()
         changePairSocket()
         if (LoginUtil.isFutureLogin(context)) {
-            if (positionList == null) {
                 getPositionData()
-            }
-            if (balanceDetailBean == null) {
                 initBalanceByCoin(context)
-            }
             getProfitData(Constants.UNFINISHED)
             getPlanData(Constants.UNFINISHED)
         }
@@ -320,10 +316,10 @@ class ContractViewModel(
      * 获取资产
      */
     fun initBalanceByCoin(context: Context?) {
-        if(currentPairStatus.pair == null){
-            return
+        var coin: String = "usdt"
+        if(currentPairStatus.pair != null){
+            coin = currentPairStatus.pair.toString().split("_")[1]
         }
-        var coin = currentPairStatus.pair.toString().split("_")[1]
         FutureApiServiceHelper.getBalanceDetail(context, coin, FutureService.underlyingType, false,
             object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
                 override fun error(type: Int, error: Any?) {
@@ -333,7 +329,7 @@ class ContractViewModel(
                 override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
                     if (returnData != null) {
-                        balanceDetailBean = returnData?.result!!
+                        balanceDetailBean = returnData.result!!
                     }
                 }
             })
@@ -343,8 +339,7 @@ class ContractViewModel(
      * 获取仓位列表
      */
     fun getPositionData() {
-        var symbol:String? = currentPairStatus.pair
-        FutureApiServiceHelper.getPositionList(context, symbol, false,
+        FutureApiServiceHelper.getPositionList(context, null, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                 }
@@ -582,24 +577,28 @@ class ContractViewModel(
                 var floatProfit: BigDecimal = BigDecimal.ZERO
                 if (positionList != null) {
                     for (item in positionList!!) {
+                        if (item?.symbol == value?.s) {
                             Log.d("tt1------>floatProfit", value.toString())
+                            Log.d("tt1------>float1", positionList.toString())
                             val fp = FutureService.getFloatProfit(item!!, value!!)
                             floatProfit = floatProfit.add(fp)
+                        }
                     }
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     var available: BigDecimal = BigDecimal.ZERO
-                    if (balanceDetailBean != null) {
+                    if (balanceDetailBean != null && floatProfit != BigDecimal.ZERO && floatProfit.toDouble() != 0.0) {
                         Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                         available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
+                        onContractModelListener?.futureBalance(balanceDetailBean)
+                        onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
                     }
-                    onContractModelListener?.futureBalance(balanceDetailBean)
-                    onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
                 }
-
-                onContractModelListener?.onMarketPrice(value)
+                if (value?.s == currentPairStatus.pair) {
+                    onContractModelListener?.onMarketPrice(value)
+                }
             }
         }
     }

@@ -122,7 +122,7 @@ class FuturesPositionTabVm : ViewModel() {
                 //dex（共享保证金） = 钱包余额 - ∑逐仓仓位保证金 - ∑全仓维持保证金 - ∑委托保证金 + ∑除本仓位其他全仓仓位未实现盈亏
                 if (positionBean?.positionSide.equals("LONG")) { //做多
                     liquidationPrice = BigDecimal(positionValue.toString())
-                        .subtract(FutureService.getDex(positionBean!!, positionSide!!))
+                        .subtract(FutureService.getDex(positionBean!!, positionSide!!,flagPrice!!))
                         .divide(
                             BigDecimal(positionBean?.positionSize)
                                 .multiply(BigDecimal(contractSize.toString())),
@@ -130,7 +130,7 @@ class FuturesPositionTabVm : ViewModel() {
                             BigDecimal.ROUND_HALF_UP
                         )
                     Log.d("ttttttt-->全仓做多--强平价格", liquidationPrice.toString())
-                    floatProfit = FutureService.getFloatProfit(positionBean!!)
+                    floatProfit = FutureService.getFloatProfit(positionBean,flagPrice!!)
                     Log.d("ttttttt-->全仓做多--浮动盈亏", floatProfit.toString())
                     floatProfitRate = floatProfit
                         .divide(
@@ -142,7 +142,7 @@ class FuturesPositionTabVm : ViewModel() {
                     Log.d("ttttttt-->全仓做多--浮动盈亏收益率", floatProfitRate.toString())
                 } else if (positionBean?.positionSide.equals("SHORT")) { //做空
                     liquidationPrice = BigDecimal(positionValue.toString())
-                        .add(FutureService.getDex(positionBean!!, positionSide!!))
+                        .add(FutureService.getDex(positionBean!!, positionSide!!,flagPrice!!))
                         .divide(
                             BigDecimal(positionBean?.positionSize)
                                 .multiply(BigDecimal(contractSize.toString())),
@@ -150,7 +150,7 @@ class FuturesPositionTabVm : ViewModel() {
                             BigDecimal.ROUND_HALF_UP
                         )
                     Log.d("ttttttt-->全仓做空--强平价格", liquidationPrice.toString())
-                    floatProfit = FutureService.getFloatProfit(positionBean!!)
+                    floatProfit = FutureService.getFloatProfit(positionBean!!,flagPrice!!)
                     Log.d("ttttttt-->全仓做空--浮动盈亏", floatProfit.toString())
                     floatProfitRate = floatProfit
                         .divide(
@@ -177,7 +177,7 @@ class FuturesPositionTabVm : ViewModel() {
                             BigDecimal.ROUND_HALF_UP
                         )
                     Log.d("ttttttt-->逐仓做多--强平价格", liquidationPrice.toString())
-                    floatProfit = FutureService.getFloatProfit(positionBean!!)
+                    floatProfit = FutureService.getFloatProfit(positionBean!!,flagPrice!!)
                     Log.d("ttttttt-->逐仓做多--浮动盈亏", floatProfit.toString())
                     //收益率=收益/isolatedMargin*100
                     floatProfitRate = floatProfit
@@ -202,7 +202,7 @@ class FuturesPositionTabVm : ViewModel() {
                             BigDecimal.ROUND_HALF_UP
                         )
                     Log.d("ttttttt-->逐仓做空--强平价格", liquidationPrice.toString())
-                    floatProfit = FutureService.getFloatProfit(positionBean!!)
+                    floatProfit = FutureService.getFloatProfit(positionBean!!,flagPrice!!)
                     Log.d("ttttttt-->逐仓做空--浮动盈亏", floatProfit.toString())
                     //收益率=收益/isolatedMargin*100
                     floatProfitRate = floatProfit

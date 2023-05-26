@@ -77,7 +77,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         buyMultiChooseBean = ContractMultiChooseBean()
         buyMultiChooseBean?.maxMultiple = 100
         buyMultiChooseBean?.defaultMultiple = positionData?.leverage
-        buyMultiChooseBean?.symbol = "btc_usdt"
+        buyMultiChooseBean?.symbol = positionData?.symbol
         amonut = positionData?.price?.toDouble()?:0.0
         when (positionData?.positionSide) {
             //做多

@@ -2323,24 +2323,26 @@ class HomePageContractFragment : BaseFragment(),
     override fun onPositionData(data: ArrayList<PositionBean?>?) {
         updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
        if ( data?.size != null && data.size > 0){
-           if (positionType == ConstData.TAB_CROSSED) {
-               binding!!.fragmentHomePageContractHeader1.cang.text =
-                   getString(R.string.contract_all_position)
+           for (item in data) {
+               if (item?.symbol == viewModel?.getCurrentPair()) {
+                   if (item?.positionType == ConstData.TAB_CROSSED) {
+                       binding!!.fragmentHomePageContractHeader1.cang.text =
+                           getString(R.string.contract_all_position)
+                   } else {
+                       binding!!.fragmentHomePageContractHeader1.cang.text =
+                           getString(R.string.contract_fiexble_position)
+                   }
+                   positionType = item?.positionType
+                   binding!!.fragmentHomePageContractHeader1.cangBeishu.text =
+                       item?.leverage.toString()
+                   leverage = item?.leverage
+                   break
+               }
            }
-           else {
-               binding!!.fragmentHomePageContractHeader1.cang.text =
-                   getString(R.string.contract_fiexble_position)
-           }
-           binding!!.fragmentHomePageContractHeader1.cangBeishu.text = data[0]!!.leverage.toString()
-           leverage = data[0]!!.leverage
-           val price = header1View?.price?.text
-           updateCanOpenAmount(price.toString())
        }
     else{
            binding!!.fragmentHomePageContractHeader1.cangBeishu.text = "10"
            leverage = 10
-           val price = header1View?.price?.text
-           updateCanOpenAmount(price.toString())
     }
 
     }
@@ -2492,6 +2494,9 @@ class HomePageContractFragment : BaseFragment(),
      */
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            if (marketPrice?.s == viewModel?.getCurrentPair())
+                Log.d("12312", marketPrice.toString()
+                )
             header1View?.tagPrice?.text = marketPrice?.p
         }
     }
@@ -2530,9 +2535,11 @@ class HomePageContractFragment : BaseFragment(),
      */
     override fun updateTotalProfit(totalProfit: String, available: String) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            if (available.toDouble() == 0.0){
+                viewModel?.initBalanceByCoin(context)
+            }
             binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
             binding?.fragmentHomePageContractHeader1?.amount?.text = available
-
         }
     }
 
@@ -2578,6 +2585,7 @@ class HomePageContractFragment : BaseFragment(),
         if (price != null && price.toDouble() > 0) {
             header1View?.currentPrice?.setText(price)
             headerView?.analyticChart?.setCurrentPrice(price.toDouble())
+
 //            Log.d("ttt---->rmb", C2CApiServiceHelper?.coinUsdtPrice?.toString())
             if (C2CApiServiceHelper.coinUsdtPrice?.usdt == null) {
                 return
