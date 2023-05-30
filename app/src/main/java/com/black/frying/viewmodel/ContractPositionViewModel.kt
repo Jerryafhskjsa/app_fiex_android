@@ -54,9 +54,10 @@ class ContractPositionViewModel(
     fun getPositionData(all:Boolean?) {
         var pair: String? = null
         if (all == true){
-            pair = currentPairStatus?.pair
+            pair = CookieUtil.getCurrentFutureUPair(context)
         }
-        FutureApiServiceHelper.getPositionList(context, pair, false,
+        Log.d("12123",pair.toString())
+        FutureApiServiceHelper.getPositionList(context, pair, true,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("iiiiii-->positionData--error", error.toString())
@@ -65,7 +66,7 @@ class ContractPositionViewModel(
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
                         var data: ArrayList<PositionBean?>? = returnData.result
-                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 || it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
+                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 && it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
                         Log.d("1221123", positionList.toString())
                     }
                     else{

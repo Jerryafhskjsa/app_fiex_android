@@ -1,26 +1,36 @@
 package com.black.wallet.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.View
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.OrderBeanItem
 import com.black.base.model.future.PlansBean
+import com.black.base.util.FryingUtil
 import com.black.util.Callback
+import com.black.util.CommonUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListTabContractPlanBinding
 import skin.support.content.res.SkinCompatResources
+import java.util.Calendar
 
-class ContractPlanTabListAdapter(context: Context, variableId: Int, data: ArrayList<PlansBean?>?) : BaseRecycleDataBindAdapter<PlansBean?, ListTabContractPlanBinding>(context, variableId, data){
+class ContractPlanTabListAdapter(context: Context, variableId: Int, data: MutableList<PlansBean?>?) : BaseRecycleDataBindAdapter<PlansBean?, ListTabContractPlanBinding>(context, variableId, data){
     private var bgWin: Int? = null
     private var bgLose: Int? = null
+    private var sideBgColor: Int? = null
+    private var sideBlackColor: Int? = null
+    private var num: String? = null
     private var bgDefault: Int? = null
+    private var bgGray: Int? = null
 
     override fun resetSkinResources() {
         super.resetSkinResources()
-        bgDefault = SkinCompatResources.getColor(context, R.color.T3)
+        bgGray = SkinCompatResources.getColor(context, R.color.T2)
+        bgDefault = SkinCompatResources.getColor(context, R.color.T13)
         bgWin = SkinCompatResources.getColor(context, R.color.T10)
         bgLose = SkinCompatResources.getColor(context, R.color.T9)
     }
@@ -29,6 +39,7 @@ class ContractPlanTabListAdapter(context: Context, variableId: Int, data: ArrayL
         return R.layout.list_tab_contract_plan
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: BaseViewHolder<ListTabContractPlanBinding>,
         position: Int
@@ -36,56 +47,107 @@ class ContractPlanTabListAdapter(context: Context, variableId: Int, data: ArrayL
         super.onBindViewHolder(holder, position)
         val planData = getItem(position)
         val viewHolder = holder.dataBing
-        var sideDes:String? = null
-        var bondDes:String? = null
-        val positionType:String? = null
-        when(planData?.positionSide){
+        var sideDes: String? = null
+        val calendar: Calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val hour = calendar.get(Calendar.HOUR)
+        val minute = calendar.get(Calendar.MINUTE)
+        val second = calendar.get(Calendar.SECOND)
+        val unit = planData?.symbol!!.split("_")[1].toString().uppercase()
+        when (planData.positionSide) {
             //做多
-            "LONG" ->{
+            "LONG" -> {
                 sideDes = getString(R.string.contract_see_up)
+                num = "≥" + planData.stopPrice
+                sideBgColor = context.getColor(R.color.T17)
+                sideBlackColor = context.getColor(R.color.T22)
             }
             //做空
-            "SHORT" ->{
+            "SHORT" -> {
                 sideDes = getString(R.string.contract_see_down)
+                num = "≤" + planData.stopPrice
+                sideBgColor = context.getColor(R.color.T16)
+                sideBlackColor = context.getColor(R.color.T21)
             }
         }
+        viewHolder?.one?.visibility = View.GONE
+        viewHolder?.two?.visibility = View.GONE
+        viewHolder?.tvEntrustPrice?.text = String.format("委托价格(%s)", unit)
+        viewHolder?.tvEntrustAmount?.text = String.format("数量(%s)", unit)
+        viewHolder?.tvDealAmount?.text = String.format("触发价格(%s)", unit)
+        viewHolder?.tvProfitPrice?.text = String.format("保证金(%s)", unit)
+        viewHolder?.tvLosePrice?.text = String.format(context.getString(R.string.contract_deal_amount), unit)
+        viewHolder?.tvBondAmount?.text = String.format("平仓盈亏(%s)", unit)
+        viewHolder?.id?.text = planData.entrustId
         //仓位描述
-        viewHolder?.positionDes?.text = planData?.symbol + positionType
+        viewHolder?.positionDes?.text = planData.symbol?.uppercase() + "永续"
         //方向
         viewHolder?.positionSide?.text = sideDes
+        viewHolder?.positionSide?.setTextColor(sideBgColor!!)
+        viewHolder?.positionSide?.setBackgroundColor(sideBlackColor!!)
         //订单类型
-        viewHolder?.tvType?.text = planData?.state
+        viewHolder?.tvRevoke?.text =
+            if (planData.state == "NOT_TRIGGERED") "新建订单（未成交）" else if (planData.state == "TRIGGERING") "触发中" else if (planData.state == "TRIGGERED") "已触发" else if (planData.state == "USER_REVOCATION") "用户撤销" else if (planData.state == "PLATFORM_REVOCATION") "平台撤销(拒绝)"  else "已过期"
         //创建时间
-        viewHolder?.tvCreateTime?.text = planData?.createdTime.toString()
+        viewHolder?.tvCreateTime?.text =
+            CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", planData.createdTime!!)
+        viewHolder?.tvCreateTime?.text =
+            CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", planData.createdTime!!)
+        viewHolder?.time?.text = String.format("$year/$month/$day $hour:$minute:$second")
         //开仓均价
-        viewHolder?.tvEntrustPriceDes?.text = planData?.price
+        viewHolder?.tvEntrustPriceDes?.text = planData.price
         //委托数量
-        viewHolder?.tvEntrustAmountDes?.text = planData?.origQty
+        viewHolder?.tvEntrustAmountDes?.text = planData.origQty.toString()
+        //手续费
+        viewHolder?.tvDealAmountDes?.text = num
+        //成交均价
+        viewHolder?.tvProfitPriceDes?.text = "--"
         //成交数量
-        viewHolder?.tvDealAmountDes?.text = "--"
-        //止盈价格
-        viewHolder?.tvProfitPriceDes?.text = planData?.triggerProfitPrice
-        //止损价格
-        viewHolder?.tvLosePriceDes?.text = planData?.triggerStopPrice
-        //占用保证金
+        viewHolder?.tvLosePriceDes?.text = planData.origQty.toString()
+        //平仓盈亏
         viewHolder?.tvBondAmountDes?.text = "--"
-        //撤销
-        viewHolder?.tvRevoke?.setOnClickListener {
-            FutureApiServiceHelper.cancelOrderId(
-                context,
-                planData?.entrustId,
-                true,
-                object : Callback<HttpRequestResultBean<String>?>() {
-                    override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null) {
-                            Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
-                        }
-                    }
-                    override fun error(type: Int, error: Any?) {
-                        Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
-                    }
-                })
+        viewHolder?.id?.setOnClickListener {
+            if (CommonUtil.copyText(
+                    context,
+                    if (planData.entrustId == null) "" else planData.entrustId
+                )
+            ) {
+                FryingUtil.showToast(context, context.getString(R.string.copy_text_success))
+            } else {
+                FryingUtil.showToast(context, context.getString(R.string.copy_text_failed))
+            }
         }
-    }
+    //撤销
+        if (planData.state == "NOT_TRIGGERED")
+        {
+            viewHolder?.tvRevoke?.setTextColor(bgDefault!!)
+            viewHolder?.tvRevoke?.setOnClickListener {
+                FutureApiServiceHelper.cancelPlanById(
+                    context,
+                    planData.entrustId,
+                    true,
+                    object : Callback<HttpRequestResultBean<String>?>() {
+                        override fun callback(returnData: HttpRequestResultBean<String>?) {
+                            if (returnData != null) {
+                                viewHolder.tvRevoke.isClickable = false
+                                viewHolder.tvRevoke.setText("用户撤销")
+                                viewHolder.tvRevoke.setTextColor(bgGray!!)
+                                Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
+                            }
+                        }
+                        override fun error(type: Int, error: Any?) {
+                            Log.d("iiiiii-->cancel profit stop by id--error", error.toString())
+                        }
+                    })
+            }
+        }
+        else{
+            viewHolder?.tvRevoke?.setTextColor(bgGray!!)
+        }
+}
+
+
 
 }

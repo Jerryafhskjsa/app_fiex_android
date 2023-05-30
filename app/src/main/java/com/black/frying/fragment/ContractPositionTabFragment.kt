@@ -21,6 +21,7 @@ import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.viewmodel.ContractPositionViewModel
+import com.black.frying.viewmodel.ContractViewModel
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R

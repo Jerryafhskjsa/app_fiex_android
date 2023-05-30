@@ -201,6 +201,7 @@ object FutureApiServiceHelper {
      * 获取U本位历史订单列表
      */
     fun getHistoryList(
+        id: String?,
         symbol: String?,
         forceClose: Boolean?,
         direction: String?,
@@ -216,7 +217,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getListHistory(symbol, forceClose  , startTime , endTime)
+            ?.getListHistory( id,symbol, forceClose  , startTime , endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }
@@ -226,6 +227,7 @@ object FutureApiServiceHelper {
      */
 
     fun getCoinHistoryList(
+        id: String?,
         symbol: String?,
         forceClose: Boolean?,
         direction: String?,
@@ -241,7 +243,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_D)
             .getService(FutureApiService::class.java)
-            ?.getListHistory(symbol, forceClose , startTime , endTime)
+            ?.getListHistory(id, symbol, forceClose , startTime , endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/double_padding">
+
+    <LinearLayout
+        android:layout_width="358dp"
+        android:layout_height="270dp"
+        android:background="@drawable/position_haibao"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/ganggan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="@dimen/text_size_12"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="多全仓"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="11dp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/20X/ BTCUSDT 永续"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/yinkui"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_12"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-0.20%"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_28" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/fourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(-0.0018USDT)"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_12"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/jiage1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开仓价格： "
+                    android:textColor="#BBBBC0"
+                    android:textSize="11dp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/fifth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="28857.76"
+                    android:textColor="@color/white"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_size_12"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/jiage2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="标记价格： "
+                    android:textColor="#BBBBC0"
+                    android:textSize="11dp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/sixth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="28857.76"
+                    android:textColor="@color/white"
+                    android:textSize="11dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginLeft="@dimen/text_size_13"
+                android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="40dp"
+                android:layout_marginLeft="@dimen/text_size_2"
+                android:layout_height="40dp"
+                />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/text_size_12"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_14" />
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="顶级安全的全球交易系统"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_12" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="358dp"
+        android:layout_height="88dp"
+        android:orientation="vertical"
+        android:background="#0E0E10">
+
+        <LinearLayout
+            android:layout_width="358dp"
+            android:layout_height="43dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:background="#0E0E10">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您可选择是否分享以下信息"
+                android:textColor="#BBBBC0"
+                android:layout_marginLeft="@dimen/text_size_12"
+                android:textSize="@dimen/text_size_12" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:background="@color/B1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/text_size_12"
+            android:layout_marginRight="@dimen/text_size_12"
+            android:gravity="center_vertical"
+            android:background="#0E0E10">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+                <com.black.base.widget.SpanCheckBox
+                    android:id="@+id/one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/rangle_ying_cang"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="bottom"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="杠杆倍数"
+                    android:textColor="#BBBBC0"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|center_vertical"
+                android:layout_weight="1">
+                <com.black.base.widget.SpanCheckBox
+                    android:id="@+id/two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/rangle_ying_cang"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="bottom"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="盈亏金额"
+                    android:textColor="#BBBBC0"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:layout_weight="1">
+                <com.black.base.widget.SpanCheckBox
+                    android:id="@+id/three"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/rangle_ying_cang"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="bottom"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="价格"
+                    android:textColor="#BBBBC0"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_size_10"
+        android:orientation="horizontal">
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_cancel"
+            style="@style/ButtonReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="13dp"
+            android:text="@string/cancel"
+            android:textSize="@dimen/text_size_15" />
+
+        <View
+            android:layout_width="@dimen/double_padding"
+            android:layout_height="match_parent" />
+
+        <com.black.base.widget.SpanTextView
+            android:id="@+id/btn_resume"
+            android:background="@drawable/anniu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="13dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="确认分享"
+            android:textSize="@dimen/text_size_15" />
+
+    </LinearLayout>
+
+</LinearLayout>

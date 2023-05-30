@@ -1,15 +1,26 @@
 package com.black.frying.activity
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +56,7 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityQuotationDetailBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_FIXED
+import com.google.zxing.WriterException
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
 import java.util.*
@@ -61,7 +73,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     private var moreTimeStepSelector: MoreTimeStepSelector? = null
 
     private var lastTimeStepIndex = 0
-
+    private var url : String? = null
     private var dealAdapter: QuotationDetailDealAdapter? = null
     private var quotationList: MutableList<TradeOrder?> = ArrayList()
 
@@ -213,6 +225,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun initActionBarView(view: View) {
         coinTypeView = view.findViewById(R.id.action_bar_title)
         view.findViewById<View>(R.id.btn_chat_room).also { btnChatRoom = it }.setOnClickListener(this)
+        view.findViewById<View>(R.id.fenxiang).setOnClickListener(this)
     }
 
     private fun selectTab(position: Int?) {
@@ -260,6 +273,9 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_chat_room -> fryingHelper.checkUserAndDoing(Runnable { viewModel!!.checkIntoChatRoom() }, 0)
+            R.id.fenxiang -> {
+                dialog()
+            }
             R.id.full_screen -> {
                 val bundle = Bundle()
                 bundle.putString(ConstData.PAIR, intent.getStringExtra(ConstData.PAIR))
@@ -352,6 +368,63 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         }
     }
 
+    private fun dialog(){
+        val contentView = LayoutInflater.from(mContext).inflate(R.layout.k_fengxiang, null)
+        val dialog = Dialog(mContext, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val display = resources.displayMetrics
+        val layoutParams =
+            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        url = UrlConfig.getHost(mContext) + "/auth/register/" + CookieUtil.getUserInfo(mContext)?.inviteCode
+        val uri = Uri.parse(url)
+        //val secret = uri.getQueryParameter("secret") //解析参数
+        if (!TextUtils.isEmpty(url)) { //显示密钥，并进行下一步
+            var qrcodeBitmap: Bitmap? = null
+            try {
+                qrcodeBitmap = CommonUtil.createQRCode(url, 72, 0)
+            } catch (e: WriterException) {
+                CommonUtil.printError(mContext, e)
+            }
+            dialog.findViewById<ImageView>(R.id.image).setImageBitmap(qrcodeBitmap)
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            val num = (mContext as BaseActionBarActivity).window
+            //获取view缓存
+            num.decorView.isDrawingCacheEnabled = true
+            val bmp: Bitmap = num.decorView.drawingCache
+            val contentResolver: ContentResolver = mContext!!.contentResolver
+            //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
+            val ur = Uri.parse(
+                MediaStore.Images.Media.insertImage(
+                    contentResolver,
+                    bmp,
+                    "IMG" + Calendar.getInstance().time,
+                    null
+                )
+            )
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_STREAM, ur)
+            ContextCompat.startActivity(mContext, Intent.createChooser(intent, "分享"), null)
+            dialog.dismiss()
+        }
+
+    }
     private fun getType() {
         var type = 0
         if (true == binding?.ma?.isChecked) {

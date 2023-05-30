@@ -204,6 +204,7 @@ interface FutureApiService {
      */
     @GET(UrlConfig.Future.URL_LIST_HISTORY)
     fun getListHistory(
+        @Query("id") id: String?,
         @Query("symbol") symbol: String?,
         @Query("forceClose") forceClose: Boolean?,
         @Query("startTime") startTime: Long?,

@@ -41,7 +41,9 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     private var adapter: ContractOdersAdapter? = null
     private var currentPage = 1
     private var total = 0
+    private var hashNext: Boolean = false
     private var otherType: String? = null
+    private var id: String? = null
     private var typeList: MutableList<String>? = null
     private var type: String? = null
     private var list: MutableList<String>? = null
@@ -76,6 +78,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         binding?.btnAll?.setOnClickListener(this)
         binding?.start?.setOnClickListener(this)
         binding?.end?.setOnClickListener(this)
+        binding?.id?.visibility = View.GONE
         TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
         TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
         TYPE_ALL = getString(R.string.all)
@@ -133,11 +136,11 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                             }
                             TYPE_BTC -> {
                                 getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
-                                binding?.all?.setText("BTCUSDT")
+                                binding?.all?.setText("BTCUSDT 永续")
                             }
                             TYPE_ETH -> {
                                 getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
-                                binding?.all?.setText("ETHUSDT")
+                                binding?.all?.setText("ETHUSDT 永续")
                             }
                         }
 
@@ -251,7 +254,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     }
 
     override fun onLoad() {
-        if (total > adapter?.count!!) {
+        if (total > adapter?.count!! || hashNext) {
             currentPage++
             getHistoryList(otherType ,type ,oder.startTime ,oder.endTime)
         } else {
@@ -260,13 +263,13 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
     }
 
     override fun onLoadMoreCheck(): Boolean {
-        return total > adapter?.count!!
+        return total > adapter?.count!! || hashNext
     }
 
     //获取历史订单
     private fun getHistoryList(otherType: String? , type: String? , startTime: Long? , endTime: Long?) {
         if (otherType == TYPE_U_CONTRACT || otherType == null) {
-            FutureApiServiceHelper.getHistoryList( if (type == TYPE_ALL) null else type ,null, "NEXT",20, startTime ,endTime , mContext ,false,
+            FutureApiServiceHelper.getHistoryList( id,if (type == TYPE_ALL) null else if (type == TYPE_BTC) "btc_usdt" else "eth_usdt" ,null, "NEXT",10, startTime ,endTime , mContext ,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)
@@ -277,8 +280,21 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
                         binding?.refreshLayout?.setRefreshing(false)
                         binding?.refreshLayout?.setLoading(false)
                         if (returnData != null && returnData.returnCode == HttpRequestResult.SUCCESS) {
+                            total = returnData.result!!.total
+                            hashNext = returnData.result!!.hasNext
                             val oderList = returnData.result?.items
-                            adapter?.data = oderList
+                            if (hashNext) {
+                                val size = returnData.result?.items?.size!! - 1
+                                id = returnData.result?.items?.get(size)?.orderId
+                            }
+                            else
+                                id = null
+                            if (currentPage == 1) {
+                                adapter?.data = oderList
+                            }
+                            else{
+                                adapter?.addAll(oderList)
+                            }
                             adapter?.notifyDataSetChanged()
                         }
                         else {
@@ -289,7 +305,7 @@ class OdersFragment : BaseFragment(), View.OnClickListener,OnItemClickListener, 
         }
 
         else{
-            FutureApiServiceHelper.getCoinHistoryList(if (type == TYPE_ALL) null else type, null,"NEXT", 20, startTime , endTime ,mContext,false,
+            FutureApiServiceHelper.getCoinHistoryList(id,if (type == TYPE_ALL) null else type, null,"NEXT", 10, startTime , endTime ,mContext,false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

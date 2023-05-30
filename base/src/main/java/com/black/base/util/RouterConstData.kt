@@ -83,6 +83,7 @@ object RouterConstData {
     const val FUTURE_RECORD = "fiex://futureRecord"
     const val SPOT_BILL_ACTIVITY = "fiex://spot_bill_activity"
     const val CONTRACT_BILL_ACTIVITY = "fiex://contract_bill_activity"
+    const val FUTURE_JI_LU = "fiex://future_ji_lu"
     const val FUTURE_MSG_ACTIVITY = "fiex://future_msg_activity"
     const val EXTRACT = "fiex://extract"
     const val THREEPAYMENT = "fiex://threePayment"

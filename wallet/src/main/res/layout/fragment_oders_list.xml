@@ -13,46 +13,17 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/text_size_10"
-        android:layout_marginRight="@dimen/text_size_10"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:background="@color/B2"
 
-        <RelativeLayout
+        >
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:maxLines="1"
-                android:text="action"
-                android:textColor="@color/T14"
-                android:textSize="@dimen/text_size_16"
-                android:textStyle="bold" />
-
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/direction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/text_size_10"
-                android:layout_toRightOf="@+id/action"
-                android:maxLines="1"
-                android:text="action"
-                android:textColor="@color/C1"
-                android:textSize="@dimen/text_size_14" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_right_arrow"></ImageView>
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,31 +35,78 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/time"
+                android:text="@string/coin_type"
                 android:textColor="@color/T3"
                 android:textSize="@dimen/text_size_13" />
 
             <com.black.base.widget.SpanTextView
-                android:id="@+id/amount"
+                android:id="@+id/coin"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:maxLines="1"
                 android:textColor="@color/T1"
+                android:textStyle="bold"
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/time"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/type"
+                    android:textColor="@color/T3"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/default_padding"
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/contract_entrust_amount"
+                android:text="@string/amount"
                 android:textColor="@color/T3"
                 android:textSize="@dimen/text_size_13" />
 
@@ -108,14 +126,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/default_padding"
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/contract_entrust_price"
+                android:text="@string/fee"
                 android:textColor="@color/T3"
                 android:textSize="@dimen/text_size_13" />
 
@@ -133,14 +151,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/default_padding"
+            android:layout_marginBottom="@dimen/text_size_10"
             android:orientation="horizontal">
 
             <com.black.base.widget.SpanTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/close_profit"
+                android:text="余额"
                 android:textColor="@color/T3"
                 android:textSize="@dimen/text_size_13" />
 
@@ -155,6 +174,12 @@
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_13" />
         </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_size_16"
+            android:background="@color/B1">
 
+        </View>
     </LinearLayout>
 </layout>

@@ -25,12 +25,12 @@ class ContractOdersAdapter(context: Context, variableId: Int, data: ArrayList<Or
         super.onBindViewHolder(holder, position)
         val oderList = getItem(position)
         val viewHolder = holder.dataBing
-        viewHolder?.action?.setText(if (oderList.symbol == "btc_usdt") "BTC_USDT" + getString(R.string.sustainable) else "ETH_USDT")
-        viewHolder?.direction?.setText(if (oderList.orderSide == "BUY") getString(R.string.contract_buy_raise) else getString(R.string.contract_sell_raise))
-        viewHolder?.amount?.setText(CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", oderList.createdTime!!))
+        viewHolder?.coin?.setText(oderList.symbol?.uppercase()  + getString(R.string.sustainable))
+        viewHolder?.type?.setText(if (oderList.orderSide == "BUY") getString(R.string.contract_buy_raise) else getString(R.string.contract_sell_raise))
+        viewHolder?.amount?.setText(CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm:ss", oderList.createdTime!!))
         viewHolder?.accountType?.setText((if(oderList.origQty == null) nullAmount else oderList.origQty.toString()) + "USDT")
-        viewHolder?.date?.setText(oderList.price)
-        viewHolder?.profit?.setText(if(oderList.closeProfit == null) nullAmount else oderList.closeProfit.toString() + "USDT")
+        viewHolder?.date?.setText("--")
+        viewHolder?.profit?.setText( if (oderList.executedQty == null)oderList.origQty.toString() + "USDT" else (oderList.origQty!! - oderList.executedQty!!).toString() + "USDT" )
     }
     }
 

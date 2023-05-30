@@ -161,7 +161,6 @@ class ContractPlanTabFragment : BaseFragment(),
                             if (returnData != null) {
                                 FryingUtil.showToast(activity, "Success")
                                 getPlanData(Constants.UNFINISHED)
-                                onTabModelListener?.onCount(0)
                             }
                         }
 
@@ -223,7 +222,12 @@ class ContractPlanTabFragment : BaseFragment(),
     }
 
     interface OnTabModelListener {
-        fun onCount(count: Int?)
+        fun onCount(count: Int?) {
+            if (count != 0)
+            {
+
+            }
+        }
     }
 
     companion object {

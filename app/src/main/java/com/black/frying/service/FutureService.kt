@@ -755,6 +755,7 @@ object FutureService {
         }
         var floatProfit: BigDecimal = BigDecimal(0)
         var base = BigDecimal(positionBean.positionSize).multiply(BigDecimal(symbolBean?.contractSize))
+        Log.d("1122", positionBean.positionSize.toString())
         if (underlyingType.equals("U_BASED")) {
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit =
@@ -765,18 +766,19 @@ object FutureService {
                     BigDecimal(positionBean.entryPrice).subtract(BigDecimal(markPrice.p))
                         .multiply(base)
             }
+            Log.d("2112", floatProfit.toString())
         } else if (underlyingType.equals("COIN_BASED") && markPrice.s == symbol) { //币本位
             if (positionBean.positionSide.equals("LONG")) {
                 floatProfit = BigDecimal("1")
                     .divide(BigDecimal(positionBean.entryPrice), precision, BigDecimal.ROUND_DOWN)
                     .subtract(
                         BigDecimal("1")
-                            .divide(BigDecimal(markPrice?.p), precision, BigDecimal.ROUND_DOWN)
+                            .divide(BigDecimal(markPrice.p), precision, BigDecimal.ROUND_DOWN)
                     )
                     .multiply(base)
             } else if (positionBean.positionSide.equals("SHORT")) {
                 floatProfit = BigDecimal("1")
-                    .divide(BigDecimal(markPrice?.p), precision, BigDecimal.ROUND_DOWN)
+                    .divide(BigDecimal(markPrice.p), precision, BigDecimal.ROUND_DOWN)
                     .subtract(
                         BigDecimal("1")
                             .divide(
@@ -1159,7 +1161,7 @@ object FutureService {
                         BigDecimal(userStepRate?.takerFee).multiply(
                             BigDecimal(1).subtract(
                                 BigDecimal(
-                                    getLeverageMaxBracket(leverage)?.maintMarginRate
+                                    getLeverageMaxBracket(leverage)?.maintMarginRate?:"0"
                                 )
                             )
                         )

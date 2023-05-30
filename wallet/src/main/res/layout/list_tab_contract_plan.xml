@@ -12,16 +12,20 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+        android:background="@color/B2"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_16"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -30,11 +34,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/T16"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="5dp"
+                    android:padding="@dimen/text_size_2"
                     android:text="@string/contract_see_down"
+                    android:textSize="@dimen/text_size_10"
                     android:textAlignment="center"
                     android:textColor="@color/T8" />
 
@@ -46,8 +48,22 @@
                     android:text="@string/perpetual_warehouse_by_warehouse"
                     android:textAlignment="center"
                     android:textColor="@color/T14"
-                    android:textSize="@dimen/text_size_14"
+                    android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/beishu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:text="20X"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -60,47 +76,54 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/revoke"
-                        android:textColor="@color/T13"
+                        android:textColor="@color/T2"
+                        android:drawablePadding="@dimen/text_size_2"
+                        android:drawableRight="@drawable/youla"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:text="ID: 31236512675"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_10"
+                android:drawableRight="@drawable/fuzhi"
+                android:textAlignment="center"
+                android:textColor="@color/T2" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:background="@color/B1"/>
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:text="2022/12/11"
+                android:textColor="@color/T11_ALPHA60"
+                android:textSize="@dimen/text_size_12" />
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:background="@color/B1"/>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/tv_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="@string/contract_disturb"
-                        android:textColor="@color/T17"
-                        android:textSize="@dimen/text_size_13"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/tv_create_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="2022/12/09 19:09:09"
-                    android:textSize="@dimen/text_size_12" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:layout_height="50dp">
 
                 <LinearLayout
@@ -114,7 +137,7 @@
                         android:id="@+id/tv_entrust_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_open_avg_price"
+                        android:text="委托价格(%s)"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_10" />
 
@@ -166,7 +189,7 @@
                         android:id="@+id/tv_deal_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_deal_amount"
+                        android:text="手续费(%s)"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_10" />
 
@@ -184,6 +207,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
                 android:layout_height="50dp">
                 <LinearLayout
                     android:layout_width="0dp"
@@ -196,7 +221,7 @@
                         android:id="@+id/tv_profit_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_profit_price"
+                        android:text="成交均价(%s)"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_10" />
 
@@ -212,6 +237,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/one"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -222,7 +248,7 @@
                         android:id="@+id/tv_lose_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_loss_price"
+                        android:text="@string/contract_deal_amount"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_10" />
 
@@ -237,6 +263,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/two"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -247,7 +274,7 @@
                         android:id="@+id/tv_bond_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract_bond_amount"
+                        android:text="平仓盈亏(%s)"
                         android:textColor="@color/T11_ALPHA60"
                         android:textSize="@dimen/text_size_10" />
 
@@ -263,6 +290,67 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:layout_height="50dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="委托时间"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/tv_create_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="2020:11"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="更新时间"
+                        android:textColor="@color/T11_ALPHA60"
+                        android:textSize="@dimen/text_size_10" />
+
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:text="2023/11/22 2:00"
+                        android:textColor="@color/T14"
+                        android:textSize="@dimen/text_size_12"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/B1"/>
+
         </LinearLayout>
     </FrameLayout>
 </layout>

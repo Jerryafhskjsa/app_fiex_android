@@ -14,6 +14,7 @@ open class PlansBean : BaseAdapterItem(){
     val orderSide: String? = null  //买卖方向
     val ordinary: Boolean? = null //
     val origQty: String? = null //数量（张）
+    val marginFrozen: String? = null //占用保证金
     val positionSide: String? = null //持仓方向
     val price: String? = null //订单价格
     val state: String? = null //订单状态 NOT_TRIGGERED：新建委托（未触发）；TRIGGERING：触发中；TRIGGERED：已触发；USER_REVOCATION：用户撤销；PLATFORM_REVOCATION：平台撤销（拒绝）；EXPIRED：已过期

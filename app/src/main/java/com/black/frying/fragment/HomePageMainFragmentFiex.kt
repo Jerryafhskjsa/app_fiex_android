@@ -1,21 +1,27 @@
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.Window
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.GridView
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.black.base.adapter.BaseDataBindAdapter
@@ -64,8 +70,10 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
+import com.google.zxing.WriterException
 import io.reactivex.Observable
 import skin.support.content.res.SkinCompatResources
+import java.util.Calendar
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -86,6 +94,7 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     private val hardGridViewMap = HashMap<String?, GridView?>()
     var imageBanner: FryingUrlImageNormalBanner? = null
     private var statusAdapter: BaseViewPagerAdapter? = null
+    private var url : String? = null
     private var banner:Banner? = null
     private var chatFloatAdView: FloatAdView? = null
     var binding: FragmentHomePageMainFiexBinding? = null
@@ -294,8 +303,10 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                     .go(mContext)
             R.id.rel_futures ->
                 FryingUtil.showToast(mContext, getString(R.string.please_waiting))
-            R.id.rel_more ->
+            R.id.rel_more -> {
                 dialog()
+            }
+
             R.id.rel_referral ->{
                 val extras = Bundle()
                 BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
@@ -539,10 +550,40 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
+        url = UrlConfig.getHost(mContext!!) + "/auth/register/" + CookieUtil.getUserInfo(mContext!!)?.inviteCode
+        val uri = Uri.parse(url)
+        //val secret = uri.getQueryParameter("secret") //解析参数
+        if (!TextUtils.isEmpty(url)) { //显示密钥，并进行下一步
+            var qrcodeBitmap: Bitmap? = null
+            try {
+                qrcodeBitmap = CommonUtil.createQRCode(url, 72, 0)
+            } catch (e: WriterException) {
+                CommonUtil.printError(mContext, e)
+            }
+            dialog.findViewById<ImageView>(R.id.image).setImageBitmap(qrcodeBitmap)
+        }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            val num = mContext!!.window
+            //获取view缓存
+            num.decorView.isDrawingCacheEnabled = true
+            val bmp: Bitmap = num.decorView.drawingCache
+            val contentResolver: ContentResolver = mContext!!.contentResolver
+            //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
+            val uri = Uri.parse(
+                MediaStore.Images.Media.insertImage(
+                    contentResolver,
+                    bmp,
+                    "IMG" + Calendar.getInstance().time,
+                    null
+                )
+            )
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(intent, "分享"))
             dialog.dismiss()
         }
 

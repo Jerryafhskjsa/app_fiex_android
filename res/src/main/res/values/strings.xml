@@ -160,7 +160,7 @@
         4.在收到到账短信后，请务必登录网上银行或第三方支付账号确认是否收到该笔款项，避免因收到诈骗短信错误释放数字货币</string>
     <string name="change_style">风格切换</string>
     <string name="exit">确认退出当前账号吗？</string>
-    <string name="number_default">－</string>
+    <string name="number_default">－－</string>
     <string name="high">24h最高价</string>
     <string name="low">24h最低价</string>
     <string name="_1_day" tools:ignore="UnusedResources">1天</string>
@@ -372,8 +372,8 @@
     <string name="transfer">划转</string>
     <string name="current_delegation">当前委托</string>
     <string name="limit_orders">限价委托</string>
-    <string name="map_entrustment">计划委托</string>
-    <string name="historical_orders">历史订单</string>
+    <string name="map_entrustment">计划委托历史</string>
+    <string name="historical_orders">历史委托</string>
     <string name="capital_flow">资金流水</string>
     <string name="capital_cost">资金费用历史</string>
     <string name="position_reduce">自动减仓</string>
@@ -422,7 +422,7 @@
     <string name="entruct_amount">委托量</string>
     <string name="clear_search_record">清除搜索记录</string>
     <string name="history_record">历史记录</string>
-    <string name="contract_history_record">合约历史记录</string>
+    <string name="contract_history_record">永续合约订单</string>
     <string name="my_wallet">资产管理</string>
     <string name="bill_manager">订单管理</string>
     <string name="recommend">邀请好友</string>
@@ -1001,10 +1001,10 @@
     <string name="contract_buy">开仓</string>
     <string name="contract_sell">平仓</string>
     <string name="contract_with_limit">止盈/止损</string>
-    <string name="contract_buy_raise">买入/开多</string>
+    <string name="contract_buy_raise">开多</string>
     <string name="contract_sell_fall">卖出/开空</string>
     <string name="contract_buy_fall">买入/平空</string>
-    <string name="contract_sell_raise">卖出/平多</string>
+    <string name="contract_sell_raise">平空</string>
     <string name="contract_bond">保证金(%s)</string>
     <string name="contract_bond_empty">保证金</string>
     <string name="contract_can_buy_raise">可开多</string>

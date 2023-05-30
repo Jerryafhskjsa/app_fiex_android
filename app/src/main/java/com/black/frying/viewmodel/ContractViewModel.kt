@@ -330,6 +330,7 @@ class ContractViewModel(
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
                     if (returnData != null) {
                         balanceDetailBean = returnData.result!!
+                        //onContractModelListener?.futureBalance(balanceDetailBean)
                     }
                 }
             })
@@ -349,7 +350,7 @@ class ContractViewModel(
 
                         var data: ArrayList<PositionBean?>? = returnData.result
                         positionList =
-                            data?.filter { it?.positionSize!!.toInt() > 0 } as ArrayList<PositionBean?>?
+                            data?.filter { it?.positionSize!!.toInt() > 0  || it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
                         if (positionList?.size!! > 0) {
                             onContractModelListener?.onPositionData(positionList)
                         }
@@ -465,7 +466,7 @@ class ContractViewModel(
             override fun onSuccess(value: PairDeal?) {
                 onContractModelListener?.run {
                     if (value != null && currentPairStatus.pair != null) {
-                        onContractModelListener?.onPairDeal(value)
+                        onContractModelListener.onPairDeal(value)
                     }
                 }
             }
@@ -577,21 +578,20 @@ class ContractViewModel(
                 var floatProfit: BigDecimal = BigDecimal.ZERO
                 if (positionList != null) {
                     for (item in positionList!!) {
+                        Log.d("tt1------>floatProfit", positionList!!.size.toString())
                         if (item?.symbol == value?.s) {
-                            Log.d("tt1------>floatProfit", value.toString())
                             Log.d("tt1------>float1", positionList.toString())
                             val fp = FutureService.getFloatProfit(item!!, value!!)
                             floatProfit = floatProfit.add(fp)
                         }
                     }
-//                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     var available: BigDecimal = BigDecimal.ZERO
-                    if (balanceDetailBean != null && floatProfit != BigDecimal.ZERO && floatProfit.toDouble() != 0.0) {
+//                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
+                    if (balanceDetailBean != null) {
                         Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                         available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
-                        onContractModelListener?.futureBalance(balanceDetailBean)
                         onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
                     }
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())

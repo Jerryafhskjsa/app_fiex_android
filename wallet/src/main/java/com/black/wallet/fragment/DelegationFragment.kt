@@ -63,6 +63,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
         binding?.recyclerView?.isNestedScrollingEnabled = false
         binding?.recyclerView?.setEmptyView(binding?.emptyView?.root)
         binding?.recyclerView?.isNestedScrollingEnabled = false
+        binding?.id?.visibility = View.GONE
         binding?.recyclerView?.setHasFixedSize(true)
         binding?.recyclerView?.isFocusable = false
 
@@ -129,10 +130,10 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
                                 binding?.all?.setText(R.string.all)
                             }
                             TYPE_BTC -> {
-                                binding?.all?.setText("BTCUSDT")
+                                binding?.all?.setText("BTCUSDT 永续")
                             }
                             TYPE_ETH -> {
-                                binding?.all?.setText("ETHUSDT")
+                                binding?.all?.setText("ETHUSDT 永续")
                             }
                         }
 
@@ -180,7 +181,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
     private fun getLimitPricePlanData() {
         //U本位
         if(otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getOrderList(1, 10, if(type != TYPE_ALL) type else null, Constants.UNFINISHED, context, false,
+            FutureApiServiceHelper.getOrderList(currentPage, 10, if(type == TYPE_ALL) null else if (type == TYPE_BTC) "btc_usdt" else "eth_usdt" , null, context, true,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

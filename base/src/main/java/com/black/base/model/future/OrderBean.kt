@@ -6,6 +6,7 @@ import com.black.base.model.BaseAdapterItem
 open class OrderBean: BaseAdapterItem() {
     val items: ArrayList<OrderBeanItem>? = null
     var total: Int = 0
+    var hasNext: Boolean = false
 
 }
 

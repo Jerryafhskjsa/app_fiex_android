@@ -84,6 +84,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
         binding?.contractChoose?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
+        binding?.id?.visibility = View.GONE
         binding?.timeChoose?.visibility = View.GONE
         TYPE_U_CONTRACT = getString(R.string.usdt_base_contract)
         TYPE_COIN_CONTRACT = getString(R.string.coin_base_contract)
@@ -140,10 +141,10 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
                                 binding?.all?.setText(R.string.all)
                             }
                             TYPE_BTC -> {
-                                binding?.all?.setText("BTCUSDT")
+                                binding?.all?.setText("BTCUSDT 永续")
                             }
                             TYPE_ETH -> {
-                                binding?.all?.setText("ETHUSDT")
+                                binding?.all?.setText("ETHUSDT 永续")
                             }
                         }
 
@@ -191,7 +192,7 @@ class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickList
     //获取计划委托记录
     private fun getPlanData() {
         if (otherType == TYPE_U_CONTRACT) {
-            FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, "UNFINISHED", false,
+            FutureApiServiceHelper.getPlanList(context, if (type != TYPE_ALL) type else null, null, true,
                 object : Callback<HttpRequestResultBean<PagingData<PlansBean?>?>?>() {
                     override fun error(type: Int, error: Any?) {
                         binding?.refreshLayout?.setRefreshing(false)

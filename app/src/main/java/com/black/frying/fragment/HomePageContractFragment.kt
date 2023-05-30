@@ -3,6 +3,7 @@ package com.black.frying.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -329,6 +330,7 @@ class HomePageContractFragment : BaseFragment(),
         initHeader1()
         initHeader2()
         initTimeStepTab()
+        initBalanceByCoin(mContext)
         return layout
     }
 
@@ -1028,6 +1030,7 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun updateTabTitles(tabType: Int?, amount: Int?) {
+        refreshCangwei()
         when (tabType) {
             ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
                 recordTab?.getTabAt(0)?.text =
@@ -1077,6 +1080,8 @@ class HomePageContractFragment : BaseFragment(),
                         buyMultiChooseBean = item
                         binding?.fragmentHomePageContractHeader1?.cangBeishu?.text =
                             buyMultiChooseBean?.defaultMultiple.toString()
+                    leverage = buyMultiChooseBean?.defaultMultiple
+                    updateOpenAvailableData()
                 }
             }).show()
     }
@@ -2071,14 +2076,6 @@ class HomePageContractFragment : BaseFragment(),
         viewModel!!.getAllOrder()
     }
 
-    private fun refreshShuju() {
-        viewModel!!.initBalanceByCoin(mContext)
-        viewModel!!.getPositionData()
-        viewModel!!.getProfitData(Constants.UNFINISHED)
-        viewModel!!.getPlanData(Constants.UNFINISHED)
-        viewModel!!.getLimitPricePlanData()
-
-    }
     private fun refreshData() {
         viewModel!!.getAllOrder()
         viewModel?.getCurrentPairDepth(50)
@@ -2226,8 +2223,6 @@ class HomePageContractFragment : BaseFragment(),
                                 header1View?.transactionQuota?.setText("0.0")
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 refreshShuju()
-                                initHeader2()
-                                updateOpenAvailableData()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2269,9 +2264,8 @@ class HomePageContractFragment : BaseFragment(),
                                 header1View?.price?.setText(price)
                                 header1View?.transactionQuota?.setText("0.0")
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
-                                refreshShuju()
                                 initHeader2()
-                                updateOpenAvailableData()
+                                refreshShuju()
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2289,6 +2283,19 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    private fun refreshCangwei(){
+        updateOpenAvailableData()
+        viewModel!!.initBalanceByCoin(mContext)
+        FutureService.initBalanceByCoin(mContext)
+    }
+    private fun refreshShuju(){
+        updateOpenAvailableData()
+        viewModel!!.initBalanceByCoin(mContext)
+        FutureService.initBalanceByCoin(mContext)
+        viewModel!!.getPositionData()
+        viewModel!!.getPlanData(Constants.UNFINISHED)
+        viewModel!!.getLimitPricePlanData()
+    }
     fun withTimerGetCurrentTradeOrder() {
         var count = 0
         var timer = Timer()
@@ -2535,17 +2542,29 @@ class HomePageContractFragment : BaseFragment(),
      */
     override fun updateTotalProfit(totalProfit: String, available: String) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            if (available.toDouble() == 0.0){
-                viewModel?.initBalanceByCoin(context)
-            }
-            binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
-            binding?.fragmentHomePageContractHeader1?.amount?.text = available
+                binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = totalProfit
+                binding?.fragmentHomePageContractHeader1?.amount?.text = available
         }
     }
 
+     private fun initBalanceByCoin(context: Context?) {
+        FutureApiServiceHelper.getBalanceDetail(context, "usdt", FutureService.underlyingType, false,
+            object : Callback<HttpRequestResultBean<BalanceDetailBean?>?>() {
+                override fun error(type: Int, error: Any?) {
+                }
+
+                override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
+                    if (returnData != null) {
+                        binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = returnData.result?.walletBalance
+                        binding?.fragmentHomePageContractHeader1?.amount?.text = returnData.result?.walletBalance
+                    }
+                }
+            })
+    }
     override fun futureBalance(balanceDetailBean: BalanceDetailBean?) {
-        balanceDetailBean1 = balanceDetailBean
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+                binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = String.format("%.4f",viewModel?.balanceDetailBean?.walletBalance?.toDouble())
+                binding?.fragmentHomePageContractHeader1?.amount?.text = String.format("%.4f",viewModel?.balanceDetailBean?.availableBalance?.toDouble())
             //binding?.fragmentHomePageContractHeader1?.amount?.setText(balanceDetailBean1?.availableBalance.toString())
         }
     }

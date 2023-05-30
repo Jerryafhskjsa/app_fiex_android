@@ -3,9 +3,16 @@ package com.black.frying.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.text.Editable
+import android.text.Layout
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
@@ -13,21 +20,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
+import com.black.base.activity.BaseActionBarActivity
 import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.ContractMultiChooseBean
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.PositionBean
+import com.black.base.util.CookieUtil
+import com.black.base.util.FryingHelper
 import com.black.base.util.FryingUtil
+import com.black.base.util.UrlConfig
 import com.black.base.view.ContractMultipleSelectWindow
+import com.black.base.widget.SpanCheckBox
+import com.black.base.widget.SpanTextView
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPositionBinding
+import com.google.zxing.WriterException
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
+import java.util.Calendar
 
 class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>) :
     BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
@@ -37,10 +54,21 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     private var color: Int? = null
     private var positionData: PositionBean? = null
     private var gray: Int? = null
+    private var url : String = UrlConfig.getHost(context) + "/auth/register/" + CookieUtil.getUserInfo(context)?.inviteCode
+    protected var mContext: BaseActionBarActivity? = null
     private var colorGray: Int? = null
     private var amount: Double? = null
     private var amount2: Double? = null
     private var buyMultiChooseBean: ContractMultiChooseBean? = null
+    private var sideDes: String? = null
+    private var sideDes2: String? = null
+    private var sideBgColor: Int? = null
+    private var color1: Int? = null
+    private var sideBgColor2: Int? = null
+    private var sideBlackColor: Int? = null
+    private var bondDes: String? = null
+    private var positionType: String? = null
+    private var amonut: Double = 0.0
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -50,6 +78,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         color = SkinCompatResources.getColor(context, R.color.T13)
         gray = SkinCompatResources.getColor(context, R.color.black)
         colorGray = SkinCompatResources.getColor(context, R.color.gray)
+        color1 = SkinCompatResources.getColor(context, R.color.T13)
     }
 
     override fun getItemLayoutId(): Int {
@@ -65,14 +94,6 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         val unit = positionData?.symbol!!.split("_")[1].toString().uppercase()
 
         val viewHolder = holder?.dataBing
-        var sideDes: String? = null
-        var sideDes2: String? = null
-        var sideBgColor: Int? = null
-        var sideBgColor2: Int? = null
-        var sideBlackColor: Int? = null
-        var bondDes: String? = null
-        var positionType: String? = null
-        var amonut: Double? = 0.0
         val autoMergeBond: Boolean? = positionData?.autoMargin
         buyMultiChooseBean = ContractMultiChooseBean()
         buyMultiChooseBean?.maxMultiple = 100
@@ -193,6 +214,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                         Log.d("iiiiii-->autoMargin--error", error.toString())
                     }
                 })
+        }
+        viewHolder?.fenxiang?.setOnClickListener{ v ->
+            dialog()
         }
         when (positionData?.adl) {
             0 -> {
@@ -427,7 +451,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.findViewById<TextView>(R.id.positionSide).setTextColor(sideBgColor!!)
             dialog.findViewById<TextView>(R.id.positionSide).setBackgroundColor(sideBlackColor!!)
             dialog.findViewById<TextView>(R.id.one).setTextColor(sideBgColor2!!)
-            dialog.findViewById<TextView>(R.id.two).setTextColor(sideBgColor2)
+            dialog.findViewById<TextView>(R.id.two).setTextColor(sideBgColor2!!)
             dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {
                 dialog.dismiss()
             }
@@ -440,6 +464,114 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         }
         viewHolder?.btnClosePosition?.setOnClickListener {
             pingcang()
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n", "CutPasteId")
+    private fun dialog(){
+        val contentView = LayoutInflater.from(context).inflate(R.layout.position_dialog, null)
+        val dialog = Dialog(context, com.black.wallet.R.style.AlertDialog)
+        val window = dialog.window
+        if (window != null) {
+            val params = window.attributes
+            //设置背景昏暗度
+            params.dimAmount = 0.2f
+            params.gravity = Gravity.CENTER
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = params
+        }
+        //设置dialog的宽高为屏幕的宽高
+        val layoutParams =
+            ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setContentView(contentView, layoutParams)
+        dialog.show()
+        url = UrlConfig.getHost(context) + "/auth/register/" + CookieUtil.getUserInfo(context)?.inviteCode
+        val uri = Uri.parse(url)
+        //val secret = uri.getQueryParameter("secret") //解析参数
+        if (!TextUtils.isEmpty(url)) { //显示密钥，并进行下一步
+            var qrcodeBitmap: Bitmap? = null
+            try {
+                qrcodeBitmap = CommonUtil.createQRCode(url, 40, 0)
+            } catch (e: WriterException) {
+                CommonUtil.printError(context, e)
+            }
+            dialog.findViewById<ImageView>(R.id.image).setImageBitmap(qrcodeBitmap)
+        }
+            dialog.findViewById<SpanTextView>(R.id.first).text = sideDes + positionType
+            dialog.findViewById<SpanTextView>(R.id.first).setTextColor(sideBgColor!!)
+            dialog.findViewById<SpanTextView>(R.id.second).text = " /" + positionData?.leverage  + "X/ " + positionData?.symbol!!.uppercase() + " 永续"
+            dialog.findViewById<SpanTextView>(R.id.fifth).text = positionData?.entryPrice
+            dialog.findViewById<SpanTextView>(R.id.sixth).text = positionData?.flagPrice
+            dialog.findViewById<SpanTextView>(R.id.fifth).setTextColor(color1!!)
+            dialog.findViewById<SpanTextView>(R.id.sixth).setTextColor(color1!!)
+        if (positionData?.unRealizedProfit?.toDouble()!! > 0.0){
+            dialog.findViewById<SpanTextView>(R.id.third).text =  "+" + positionData?.profitRate
+            dialog.findViewById<SpanTextView>(R.id.fourth).text = "(" + "+" + positionData?.unRealizedProfit + positionData?.symbol!!.split("_")[1].toString().uppercase() + ")"
+            dialog.findViewById<SpanTextView>(R.id.third).setTextColor(bgWin!!)
+            dialog.findViewById<SpanTextView>(R.id.fourth).setTextColor(bgWin!!)
+        }
+        else{
+            dialog.findViewById<SpanTextView>(R.id.third).text =  "-" + positionData?.profitRate
+            dialog.findViewById<SpanTextView>(R.id.fourth).text = "(" + "-" + positionData?.unRealizedProfit + positionData?.symbol!!.split("_")[1].toString().uppercase() + ")"
+            dialog.findViewById<SpanTextView>(R.id.third).setTextColor(bgLose!!)
+            dialog.findViewById<SpanTextView>(R.id.fourth).setTextColor(bgLose!!)
+        }
+        dialog.findViewById<SpanCheckBox>(R.id.one).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                dialog.findViewById<SpanTextView>(R.id.first).visibility = View.VISIBLE
+                dialog.findViewById<SpanTextView>(R.id.second).visibility = View.VISIBLE
+            } else {
+                dialog.findViewById<SpanTextView>(R.id.first).visibility = View.GONE
+                dialog.findViewById<SpanTextView>(R.id.second).visibility = View.GONE
+            }
+        }
+        dialog.findViewById<SpanCheckBox>(R.id.two).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                dialog.findViewById<SpanTextView>(R.id.third).visibility = View.VISIBLE
+                dialog.findViewById<SpanTextView>(R.id.fourth).visibility = View.VISIBLE
+            } else {
+                dialog.findViewById<SpanTextView>(R.id.third).visibility = View.GONE
+                dialog.findViewById<SpanTextView>(R.id.fourth).visibility = View.GONE
+            }
+        }
+        dialog.findViewById<SpanCheckBox>(R.id.three).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                dialog.findViewById<SpanTextView>(R.id.jiage1).visibility = View.VISIBLE
+                dialog.findViewById<SpanTextView>(R.id.jiage2).visibility = View.VISIBLE
+                dialog.findViewById<SpanTextView>(R.id.fifth).visibility = View.VISIBLE
+                dialog.findViewById<SpanTextView>(R.id.sixth).visibility = View.VISIBLE
+            } else {
+                dialog.findViewById<SpanTextView>(R.id.jiage1).visibility = View.GONE
+                dialog.findViewById<SpanTextView>(R.id.jiage2).visibility = View.GONE
+                dialog.findViewById<SpanTextView>(R.id.fifth).visibility = View.GONE
+                dialog.findViewById<SpanTextView>(R.id.sixth).visibility = View.GONE
+            }
+        }
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+            dialog.dismiss()
+        }
+        dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            val num = (context as BaseActionBarActivity).window
+            //获取view缓存
+            num.decorView.isDrawingCacheEnabled = true
+            val bmp: Bitmap = num.decorView.drawingCache
+            val contentResolver: ContentResolver = context.contentResolver
+            //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
+            val uri = Uri.parse(
+                MediaStore.Images.Media.insertImage(
+                    contentResolver,
+                    bmp,
+                    "IMG" + Calendar.getInstance().time,
+                    null
+                )
+            )
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(context,Intent.createChooser(intent, "分享"),null)
+            dialog.dismiss()
         }
 
     }
