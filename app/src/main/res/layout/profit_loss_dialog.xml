@@ -274,24 +274,34 @@
                 android:layout_marginLeft="@dimen/text_size_16"
                 android:orientation="horizontal">
                 <com.black.base.widget.SpanCheckBox
+                    android:id="@+id/zhiyin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/yin_cang"
+                    android:button="@drawable/rangle_ying_cang"
                     android:checked="true"
+                    android:clickable="true"
                     android:text="止盈"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_12"
-                     />
+                    android:focusable="true" />
 
                 <com.black.base.widget.SpanCheckBox
+                    android:id="@+id/zhisun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/yin_cang"
+                    android:button="@drawable/rangle_ying_cang"
                     android:checked="true"
+                    android:clickable="true"
                     android:layout_marginLeft="@dimen/text_size_16"
                     android:text="止损"
-                    android:textSize="@dimen/text_size_12" />
+                    android:textSize="@dimen/text_size_12"
+                    android:focusable="true" />
             </LinearLayout>
+        <LinearLayout
+            android:id="@+id/zhiyin_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -402,7 +412,12 @@
                 android:textColor="#FF2EBD85"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
-
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/zhisun_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -514,6 +529,7 @@
                 android:textColor="#EF444A "
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
+    </LinearLayout>
         <com.black.base.widget.SpanCheckedTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -17,6 +17,7 @@ import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.IndexPriceBean
 import com.black.base.model.future.MarkPriceBean
+import com.black.base.model.future.UserPositionBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
 import com.black.base.model.user.UserBalance
@@ -120,6 +121,9 @@ object SocketDataContainer {
 
     //u本位合约指数价格
     private val indexPriceObservers = ArrayList<Observer<IndexPriceBean?>?>()
+
+    //u本位合约仓位
+    private val positionObservers = ArrayList<Observer<UserPositionBean?>?>()
 
     //u本位合约费率
     private val fundRateObservers = ArrayList<Observer<FundRateBean?>?>()
@@ -1025,6 +1029,21 @@ object SocketDataContainer {
     }
 
     /**
+     *  添加u本位合约仓位观察者
+     */
+
+    fun subscribePositionObservable(observer: Observer<UserPositionBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(positionObservers) {
+            if (!positionObservers.contains(observer)) {
+                positionObservers.add(observer)
+            }
+        }
+    }
+
+    /**
      *  添加u本位当前交易对成交观察者
      */
 
@@ -1095,6 +1114,15 @@ object SocketDataContainer {
         synchronized(indexPriceObservers) { indexPriceObservers.remove(observer) }
     }
 
+    /**
+     *  移除合u本位合约仓位观察者
+     */
+    fun removePositionObservable(observer: Observer<UserPositionBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(positionObservers) { positionObservers.remove(observer) }
+    }
 
     /**
      *  移除合u本位合约费率观察者
@@ -2313,6 +2341,21 @@ object SocketDataContainer {
                         }
                     }
                 })
+        }
+    }
+
+    /**
+     * 更新合约费率
+     */
+    fun updatePosition(handler: Handler?, data: UserPositionBean?) {
+        Log.d("12671", data.toString())
+        synchronized(positionObservers) {
+            for (observer in positionObservers) {
+                if (data != null) {
+                    Log.d("1267198789", data.toString())
+                    observer?.onNext(data)
+                }
+            }
         }
     }
 

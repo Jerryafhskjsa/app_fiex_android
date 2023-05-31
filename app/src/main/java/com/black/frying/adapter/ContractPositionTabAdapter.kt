@@ -36,7 +36,9 @@ import com.black.base.util.FryingUtil
 import com.black.base.util.UrlConfig
 import com.black.base.view.ContractMultipleSelectWindow
 import com.black.base.widget.SpanCheckBox
+import com.black.base.widget.SpanMaterialEditText
 import com.black.base.widget.SpanTextView
+import com.black.frying.service.FutureService
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
@@ -45,6 +47,7 @@ import com.google.zxing.WriterException
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.util.Calendar
+import java.util.Objects
 
 class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBean?>) :
     BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
@@ -64,11 +67,14 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     private var sideDes2: String? = null
     private var sideBgColor: Int? = null
     private var color1: Int? = null
+    private var color2: Int? = null
     private var sideBgColor2: Int? = null
     private var sideBlackColor: Int? = null
     private var bondDes: String? = null
     private var positionType: String? = null
     private var amonut: Double = 0.0
+    private var click: Boolean = false
+    private var click2: Boolean = false
 
     override fun resetSkinResources() {
         super.resetSkinResources()
@@ -79,6 +85,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         gray = SkinCompatResources.getColor(context, R.color.black)
         colorGray = SkinCompatResources.getColor(context, R.color.gray)
         color1 = SkinCompatResources.getColor(context, R.color.T13)
+        color2 = SkinCompatResources.getColor(context, R.color.light_gray)
     }
 
     override fun getItemLayoutId(): Int {
@@ -95,6 +102,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
         val viewHolder = holder?.dataBing
         val autoMergeBond: Boolean? = positionData?.autoMargin
+        val num = FutureService.getContractSize(positionData?.symbol)?: BigDecimal(0.0001)
         buyMultiChooseBean = ContractMultiChooseBean()
         buyMultiChooseBean?.maxMultiple = 100
         buyMultiChooseBean?.defaultMultiple = positionData?.leverage
@@ -220,23 +228,74 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         }
         when (positionData?.adl) {
             0 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_0)
+                viewHolder?.one!!.setBackgroundColor(color2!!)
+                viewHolder.two.setBackgroundColor(color2!!)
+                viewHolder.three.setBackgroundColor(color2!!)
+                viewHolder.four.setBackgroundColor(color2!!)
+                viewHolder.five.setBackgroundColor(color2!!)
             }
             1 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_0)
+                viewHolder?.one!!.setBackgroundColor(bgLose!!)
+                viewHolder.two.setBackgroundColor(color2!!)
+                viewHolder.three.setBackgroundColor(color2!!)
+                viewHolder.four.setBackgroundColor(color2!!)
+                viewHolder.five.setBackgroundColor(color2!!)
             }
             2 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_2)
+                viewHolder?.one!!.setBackgroundColor(bgLose!!)
+                viewHolder.two.setBackgroundColor(bgLose!!)
+                viewHolder.three.setBackgroundColor(color2!!)
+                viewHolder.four.setBackgroundColor(color2!!)
+                viewHolder.five.setBackgroundColor(color2!!)
             }
             3 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_3)
+                viewHolder?.one!!.setBackgroundColor(bgLose!!)
+                viewHolder.two.setBackgroundColor(bgLose!!)
+                viewHolder.three.setBackgroundColor(bgLose!!)
+                viewHolder.four.setBackgroundColor(color2!!)
+                viewHolder.five.setBackgroundColor(color2!!)
             }
             4 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_4)
+                viewHolder?.one!!.setBackgroundColor(bgLose!!)
+                viewHolder.two.setBackgroundColor(bgLose!!)
+                viewHolder.three.setBackgroundColor(bgLose!!)
+                viewHolder.four.setBackgroundColor(bgLose!!)
+                viewHolder.five.setBackgroundColor(color2!!)
             }
             5 -> {
-                viewHolder?.itemPositionAdl!!.setImageResource(R.drawable.icon_adl_5)
+                viewHolder?.one!!.setBackgroundColor(bgLose!!)
+                viewHolder.two.setBackgroundColor(bgLose!!)
+                viewHolder.three.setBackgroundColor(bgLose!!)
+                viewHolder.four.setBackgroundColor(bgLose!!)
+                viewHolder.five.setBackgroundColor(bgLose!!)
             }
+        }
+        viewHolder?.jiancang?.setOnClickListener{
+            v ->
+                val contentView = LayoutInflater.from(context).inflate(R.layout.current_dialog, null)
+                val dialog = Dialog(context, R.style.AlertDialog)
+                val window = dialog.window
+                if (window != null) {
+                    val params = window.attributes
+                    //设置背景昏暗度
+                    params.dimAmount = 0.2f
+                    params.gravity = Gravity.CENTER
+                    params.width = WindowManager.LayoutParams.MATCH_PARENT
+                    params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    window.attributes = params
+                }
+                //设置dialog的宽高为屏幕的宽高
+                val display = context.resources.displayMetrics
+                val layoutParams =
+                    ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+                dialog.setContentView(contentView, layoutParams)
+                dialog.show()
+                dialog.findViewById<SpanTextView>(R.id.title).text = "自动减仓"
+                dialog.findViewById<SpanTextView>(R.id.btn_bills).text = "这一指标显示你持仓在自动减仓队列中的位置，如果所有指示灯亮起，在发生强平事件后，你持仓的仓位可能被减小"
+                dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+                    dialog.dismiss()
+                }
+
         }
         viewHolder?.btnBond?.setOnClickListener {
             v ->
@@ -284,12 +343,104 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.findViewById<TextView>(R.id.zuixin).text = positionData?.flagPrice
             dialog.findViewById<TextView>(R.id.price).text = positionData?.price
 
+
             dialog.findViewById<TextView>(R.id.qiangping2).text =  if (BigDecimal(positionData?.forceStopPrice).compareTo(BigDecimal.ZERO) == 1)
             {
                 positionData?.forceStopPrice
             } else {
                  "--"
             }
+            dialog.findViewById<SpanMaterialEditText>(R.id.one).addTextChangedListener(object :
+                TextWatcher{
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    val count1 = CommonUtil.parseDouble(
+                        dialog.findViewById<SpanMaterialEditText>(R.id.one).text.toString()
+                            .trim { it <= ' ' })?:0.0
+                    var count2 = BigDecimal.ZERO
+                    var count3 = "0.00"
+                    if (positionData?.positionSide == "LONG"){
+                        if (CommonUtil.parseDouble(positionData?.entryPrice)!! > count1){
+                            count2 = BigDecimal.ZERO
+                            click = false
+                        }
+                        else {
+                            count2 =BigDecimal(count1 - CommonUtil.parseDouble(positionData?.entryPrice)!!).multiply(num).multiply(BigDecimal(positionData?.positionSize))
+                            click = true
+                        }
+                    } else{
+                        if (CommonUtil.parseDouble(positionData?.entryPrice)!! < count1){
+                            count2 = BigDecimal.ZERO
+                            click = false
+                        }
+                        else {
+                            click = true
+                            count2 = BigDecimal(CommonUtil.parseDouble(positionData?.entryPrice)!! - count1).multiply(
+                                BigDecimal(positionData?.positionSize).multiply(num)
+                            )
+                        }
+                    }
+                    count3 =  String.format( "%.2f" , (count2.multiply(BigDecimal(100)) / (BigDecimal(bondDes))).toFloat())
+                    dialog.findViewById<SpanTextView>(R.id.yinli).text = String.format("%.2f",count2) +  "USDT"
+                    dialog.findViewById<SpanTextView>(R.id.two).text = count3
+                }
+
+                override fun afterTextChanged(s: Editable) {
+                }
+            })
+            dialog.findViewById<SpanMaterialEditText>(R.id.three).addTextChangedListener(object :
+                TextWatcher{
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    val count1 = CommonUtil.parseDouble(
+                        dialog.findViewById<SpanMaterialEditText>(R.id.three).text.toString()
+                            .trim { it <= ' ' })?:0.0
+                    var count2 = BigDecimal.ZERO
+                    var count3 = "0.00"
+                    if (positionData?.positionSide == "LONG"){
+                        if (CommonUtil.parseDouble(positionData?.entryPrice)!! < count1){
+                            count2 = BigDecimal.ZERO
+                            click2 = false
+                        }
+                        else {
+                            click2 = true
+                            count2 = BigDecimal(count1 - CommonUtil.parseDouble(positionData?.entryPrice)!!).multiply(num).multiply(BigDecimal(positionData?.positionSize))
+
+                        }
+                    } else{
+                        if (CommonUtil.parseDouble(positionData?.entryPrice)!! > count1){
+                            click2 = false
+                            count2 = BigDecimal.ZERO
+                        }
+                        else {
+                            click2 = true
+                            count2 = BigDecimal(CommonUtil.parseDouble(positionData?.entryPrice)!! - count1).multiply(
+                                BigDecimal(positionData?.positionSize).multiply(num)
+                            )
+                        }
+                    }
+                    count3 =  String.format( "%.2f" , (count2.multiply(BigDecimal(100)) / (BigDecimal(bondDes))).toFloat())
+                    dialog.findViewById<SpanTextView>(R.id.kuisun).text = String.format("%.2f",count2) +  "USDT"
+                    dialog.findViewById<SpanTextView>(R.id.four).text = count3
+                }
+
+                override fun afterTextChanged(s: Editable) {
+                }
+            })
             dialog.findViewById<View>(R.id.xuanzhe).setOnClickListener { v ->
                 dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.VISIBLE
                 dialog.findViewById<View>(R.id.qiangping).visibility = View.GONE
@@ -358,6 +509,22 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 dialog.findViewById<View>(R.id.fifth).setBackgroundColor(color!!)
                 dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",amonut) + unit
             }
+            dialog.findViewById<SpanCheckBox>(R.id.zhiyin).setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    dialog.findViewById<View>(R.id.zhiyin_layout).visibility = View.VISIBLE
+                } else {
+                    click = true
+                    dialog.findViewById<View>(R.id.zhiyin_layout).visibility = View.GONE
+                }
+            }
+            dialog.findViewById<SpanCheckBox>(R.id.zhisun).setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    dialog.findViewById<View>(R.id.zhisun_layout).visibility = View.VISIBLE
+                } else {
+                    click2 = true
+                    dialog.findViewById<View>(R.id.zhisun_layout).visibility = View.GONE
+                }
+            }
             /* dialog.findViewById<TextView>(R.id.one).addTextChangedListener(object :
                 TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -395,6 +562,22 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
             })*/
                 dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                    if (!click && positionData?.positionSide == "LONG"){
+                        FryingUtil.showToast(context,"多仓止盈价不得低于开仓价")
+                        return@setOnClickListener
+                    }
+                    if (!click && positionData?.positionSide == "SHORT"){
+                        FryingUtil.showToast(context,"空仓止盈价不得高于开仓价")
+                        return@setOnClickListener
+                    }
+                    if (!click2 && positionData?.positionSide == "LONG"){
+                        FryingUtil.showToast(context,"多仓止损价不得高于开仓价")
+                        return@setOnClickListener
+                    }
+                    if (!click2 && positionData?.positionSide == "SHORT"){
+                        FryingUtil.showToast(context,"空仓止损价不得低于开仓价")
+                        return@setOnClickListener
+                    }
                     FutureApiServiceHelper.createOrderProfit(
                         context,
                         positionData?.symbol,

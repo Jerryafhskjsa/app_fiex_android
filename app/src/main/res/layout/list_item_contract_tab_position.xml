@@ -87,16 +87,39 @@
                     android:textColor="@color/T2"
                     android:textSize="10sp" />
 
-                <ImageView
-                    android:id="@+id/item_position_adl"
-                    android:layout_width="18dp"
+                <View
+                    android:id="@+id/one"
+                    android:layout_width="3dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/icon_adl_0">
-
-                </ImageView>
+                    android:background="#F1F3F4"/>
+                <View
+                    android:id="@+id/two"
+                    android:layout_width="3dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="#F1F3F4"/>
+                <View
+                    android:id="@+id/three"
+                    android:layout_width="3dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="#F1F3F4"/>
+                <View
+                    android:id="@+id/four"
+                    android:layout_width="3dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="#F1F3F4"/>
+                <View
+                    android:id="@+id/five"
+                    android:layout_width="3dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="#F1F3F4"/>
 
                 <ImageView
+                    android:id="@+id/jiancang"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginLeft="8dp"

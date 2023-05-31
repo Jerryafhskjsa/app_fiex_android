@@ -1,4 +1,4 @@
-package com.black.wallet.fragment
+package com.black.frying.fragment
 
 import android.app.Activity
 import android.app.Dialog
@@ -10,20 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.FutureApiServiceHelper
-import com.black.base.api.WalletApiService
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.manager.ApiManager
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.HttpRequestResultData
-import com.black.base.model.NormalCallback
 import com.black.base.model.PagingData
-import com.black.base.model.future.OrderBean
 import com.black.base.model.wallet.FlowBill
 import com.black.base.model.wallet.Order
 import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletTransferRecord
-import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.lib.refresh.QRefreshLayout
@@ -31,8 +24,7 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
-import com.black.wallet.adapter.FlowAdapter
-import com.black.wallet.adapter.WalletTransferRecordAdapter
+import com.black.frying.adapter.FlowAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
 

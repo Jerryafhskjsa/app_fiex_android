@@ -160,7 +160,7 @@
 4. After receiving the incoming SMS, please be sure to log in to the online banking or third-party payment account to confirm whether the payment is received, so as to avoid the wrong release of digital currency due to the receipt of fraudulent SMS</string>
     <string name="change_style">Style switching</string>
     <string name="exit">Are you sure to exit the current account</string>
-    <string name="number_default">－－</string>
+    <string name="number_default">－</string>
     <string name="high">24h high</string>
     <string name="low">24h low</string>
     <string name="_1_day" tools:ignore="UnusedResources">1 day</string>

@@ -78,9 +78,13 @@
                         android:text="@string/revoke"
                         android:textColor="@color/T2"
                         android:drawablePadding="@dimen/text_size_2"
-                        android:drawableRight="@drawable/youla"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/youla"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/youla"/>
                 </LinearLayout>
             </LinearLayout>
             <com.black.base.widget.SpanTextView
@@ -291,6 +295,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/shijian"
                 android:layout_width="match_parent"
                 android:layout_marginRight="@dimen/text_size_10"
                 android:layout_marginLeft="@dimen/text_size_10"

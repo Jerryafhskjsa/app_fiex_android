@@ -872,6 +872,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                 var data: JSONObject? = null
                 try {
                     data = JSONObject(message)
+                    Log.d("12376156", data.toString())
                     if (data.has("channel")) {
                         var channel = data.get("channel");
                         var data = data.get("data");

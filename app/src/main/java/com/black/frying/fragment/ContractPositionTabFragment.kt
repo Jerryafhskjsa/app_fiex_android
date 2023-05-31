@@ -15,7 +15,6 @@ import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.SuccessObserver
 import com.black.base.model.future.*
-import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContractPositionTabAdapter
@@ -209,6 +208,10 @@ class ContractPositionTabFragment : BaseFragment(),
 
     override fun onLeverageDetail(leverageBracket: LeverageBracketBean?) {
 
+    }
+
+    override fun onPosition(positionList: UserPositionBean?) {
+        Log.d("222",positionList.toString())
     }
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {

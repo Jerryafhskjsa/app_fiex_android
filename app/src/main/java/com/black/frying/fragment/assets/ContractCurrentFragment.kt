@@ -7,25 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.PagingData
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.adapter.ContactCurrentAdapter
-import com.black.frying.adapter.ContractPlanTabAdapter
 import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
-import com.black.wallet.fragment.DelegationFragment
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
-import com.tencent.imsdk.friendship.TIMPendencyType
 import io.reactivex.Observer
 import skin.support.content.res.SkinCompatResources
 import kotlin.collections.ArrayList
@@ -187,6 +182,10 @@ class ContractCurrentFragment : BaseFragment(),
 
     override fun onMarketPrice(marketPrice: MarkPriceBean?) {
 
+    }
+
+    override fun onPosition(positionList: UserPositionBean?) {
+        Log.d("222",positionList.toString())
     }
 
     /**

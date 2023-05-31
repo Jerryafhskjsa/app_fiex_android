@@ -1,5 +1,6 @@
 package com.black.frying.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -8,11 +9,13 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.PlansBean
 import com.black.base.util.TimeUtil
+import com.black.frying.service.FutureService
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 
 class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) : BaseDataTypeBindAdapter<PlansBean?, ListItemContractTabPlanBinding>(context, data){
     private var bgWin: Int? = null
@@ -32,6 +35,7 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         return R.layout.list_item_contract_tab_plan
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPlanBinding>?) {
         val planData = getItem(position)
         val viewHolder = holder?.dataBing
@@ -39,6 +43,8 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         var bondDes:String? = null
         var positionType:String? = null
         val unit = planData?.symbol!!.split("_")[1].toString().uppercase()
+        val contractSize = FutureService.getContractSize(planData.symbol)?: BigDecimal(0.0001)
+        val num = BigDecimal(planData.origQty.toString()).multiply(contractSize.multiply(BigDecimal(planData.price)))
         when(planData.positionSide){
             //做多
             "LONG" ->{
@@ -71,11 +77,11 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         //开仓均价
         viewHolder?.tvEntrustPriceDes?.text = planData.stopPrice
         //委托数量
-        viewHolder?.tvEntrustAmountDes?.text = planData.origQty
+        viewHolder?.tvEntrustAmountDes?.text = String.format("%.4f",num)
         //止盈价格
         viewHolder?.tvProfitPriceDes?.text = planData.price
         //占用保证金
-        viewHolder?.tvBondAmountDes?.text = "--"
+        viewHolder?.tvBondAmountDes?.text = if (planData.marginFrozen == null) nullAmount else planData.marginFrozen
         //撤销
         viewHolder?.tvRevoke?.setOnClickListener {
             FutureApiServiceHelper.cancelPlanById(

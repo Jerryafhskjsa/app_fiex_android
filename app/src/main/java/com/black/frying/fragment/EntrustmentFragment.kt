@@ -1,4 +1,4 @@
-package com.black.wallet.fragment
+package com.black.frying.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -10,33 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.adapter.interfaces.OnItemClickListener
 import com.black.base.api.FutureApiServiceHelper
-import com.black.base.api.WalletApiService
-import com.black.base.api.WalletApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.lib.refreshlayout.defaultview.RefreshHolderFrying
-import com.black.base.manager.ApiManager
 import com.black.base.model.*
-import com.black.base.model.future.Constants
-import com.black.base.model.future.OrderBean
-import com.black.base.model.future.OrderBeanItem
 import com.black.base.model.future.PlansBean
-import com.black.base.model.wallet.FinancialRecord
 import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletTransferRecord
-import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.DeepControllerWindow
 import com.black.lib.refresh.QRefreshLayout
-import com.black.net.HttpRequestResult
-import com.black.router.BlackRouter
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
-import com.black.wallet.adapter.ContractPlanTabListAdapter
-import com.black.wallet.adapter.FinancialRecordAdapter
-import com.black.wallet.adapter.WalletTransferRecordAdapter
+import com.black.frying.adapter.ContractPlanTabListAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
-import com.black.wallet.databinding.FragmentFinancialRechargeRecordBinding
 import java.util.*
 
 class EntrustmentFragment : BaseFragment(), OnItemClickListener,View.OnClickListener, QRefreshLayout.OnRefreshListener, QRefreshLayout.OnLoadListener, QRefreshLayout.OnLoadMoreCheckListener {

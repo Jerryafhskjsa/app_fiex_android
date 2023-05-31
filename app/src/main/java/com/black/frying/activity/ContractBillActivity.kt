@@ -1,4 +1,4 @@
-package com.black.wallet.activity
+package com.black.frying.activity
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -10,17 +10,22 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
+import com.black.frying.fragment.CostFragment
+import com.black.frying.fragment.DelegationFragment
+import com.black.frying.fragment.EntrustmentFragment
+import com.black.frying.fragment.FlowFragment
+import com.black.frying.fragment.OdersFragment
+import com.black.frying.fragment.OrderHistoryFragment
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivitySpotBillBinding
-import com.black.wallet.fragment.*
 import com.google.android.material.tabs.TabLayout
 
 @Route(value = [RouterConstData.CONTRACT_BILL_ACTIVITY])
 class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
     companion object {
-        private val TAB_TITLES = arrayOfNulls<String>(5)
+        private val TAB_TITLES = arrayOfNulls<String>(3)
         private var TAB_DELEGATION: String? = null
         private var TAB_ENTRUSTMENT: String? = null
         private var TAB_ODERS: String? = null
@@ -32,7 +37,7 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
     private var fragmentList: java.util.ArrayList<Fragment>? = null
     private var delegationFragment: DelegationFragment? = null
     private var entrustmentFragment: EntrustmentFragment? = null
-    private var odersFragment: OdersFragment? = null
+    private var orderHistoryFragment: OrderHistoryFragment? = null
     private var flowFragment: FlowFragment? = null
     private var costFragment: CostFragment? = null
 
@@ -44,7 +49,7 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             TAB_DELEGATION = it
             TAB_TITLES[0] = TAB_DELEGATION
         }
-        getString(R.string.historical_orders).also {
+        "历史成交".also {
             TAB_ENTRUSTMENT = it
             TAB_TITLES[1] = TAB_ENTRUSTMENT
         }
@@ -53,7 +58,7 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             TAB_TITLES[2] = TAB_ODERS
         }
 
-        getString(R.string.capital_cost).also {
+       /* getString(R.string.capital_cost).also {
             TAB_FLOW = it
             TAB_TITLES[3] = TAB_FLOW
         }
@@ -61,6 +66,8 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             TAB_COST = it
             TAB_TITLES[4] = TAB_COST
         }
+
+        */
 
         binding?.tabLayout?.setSelectedTabIndicatorHeight(0)
         binding?.tabLayout?.tabMode = TabLayout.MODE_SCROLLABLE
@@ -129,17 +136,17 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             delegationFragment = it
 
         })
-        fragmentList?.add(OdersFragment().also {
+        fragmentList?.add(OrderHistoryFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
-            odersFragment = it
+            orderHistoryFragment = it
         })
         fragmentList?.add(EntrustmentFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
             entrustmentFragment = it
         })
-        fragmentList?.add(FlowFragment().also {
+       /* fragmentList?.add(FlowFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
             flowFragment = it
@@ -149,6 +156,8 @@ class ContractBillActivity: BaseActionBarActivity(), View.OnClickListener {
             it.arguments = bundle
             costFragment = it
         })
+
+        */
 
     }
 }

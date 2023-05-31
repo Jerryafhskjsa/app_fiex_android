@@ -7,11 +7,13 @@ import com.black.base.adapter.BaseDataTypeBindAdapter
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.OrderBeanItem
+import com.black.frying.service.FutureService
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 
 class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?) : BaseDataTypeBindAdapter<OrderBeanItem ,ListItemContractTabPlanBinding>(context, data){
     private var bgWin: Int? = null
@@ -39,6 +41,9 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         var bondDes:String? = null
         var positionType:String? = null
         val unit = planData.symbol!!.split("_")[1].toString().uppercase()
+        val contractSize = FutureService.getContractSize(planData.symbol)?: BigDecimal(0.0001)
+        val num = BigDecimal(planData.origQty.toString()).multiply(contractSize.multiply(BigDecimal(planData.price)))
+        val num2 = BigDecimal(planData.executedQty.toString()).multiply(contractSize.multiply(BigDecimal(planData.price)))
         when(planData.positionSide){
             //做多
             "LONG" ->{
@@ -59,7 +64,7 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         viewHolder?.typeOne?.setText( getString((R.string.bao_amount)) + "(" + unit + ")")
         viewHolder?.tvDealAmount?.setText(getString(R.string.type))
         viewHolder?.tvProfitPrice?.setText(getString((R.string.junjia)) + "(" + unit + ")")
-        viewHolder?.tvEntrustAmount?.setText(getString((R.string.contract_bond)))
+        viewHolder?.tvEntrustAmount?.setText(String.format(context.getString(R.string.contract_bond), unit))
         viewHolder?.tvBondAmount?.setText(getString((R.string.contract_with_limit)) + "(" + unit + ")")
 
         //仓位描述
@@ -67,7 +72,7 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         //方向
         viewHolder?.positionSide?.text = sideDes
         //订单类型
-        viewHolder?.type?.text = planData.origQty.toString() + "/" + planData.executedQty
+        viewHolder?.type?.text = String.format("%.2f",num) + "/" + String.format("%.2f",num2)
         viewHolder?.tvDealAmountDes?.text = "限价"
         //创建时间
         viewHolder?.tvCreateTime?.text = CommonUtil.formatTimestamp("yyyy/MM/dd HH:mm", planData.createdTime!!)
@@ -78,7 +83,7 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         //止盈价格
         viewHolder?.tvProfitPriceDes?.text = planData.avgPrice
         //zhiyinzhisun
-        viewHolder?.tvBondAmountDes?.text = planData.triggerProfitPrice.toString() + "/" + planData.triggerProfitPrice
+        viewHolder?.tvBondAmountDes?.text = (if (planData.triggerProfitPrice == null) nullAmount else planData.triggerProfitPrice.toString()) + "/" + (if (planData.triggerStopPrice == null) nullAmount else planData.triggerStopPrice)
         //撤销
         viewHolder?.tvRevoke?.setOnClickListener {
             FutureApiServiceHelper.cancelOrderId(

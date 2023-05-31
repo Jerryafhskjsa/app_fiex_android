@@ -1,4 +1,4 @@
-package com.black.wallet.activity
+package com.black.frying.activity
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -13,7 +13,6 @@ import com.black.base.util.RouterConstData
 import com.black.router.annotation.Route
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivitySpotBillBinding
-import com.black.wallet.fragment.*
 import com.google.android.material.tabs.TabLayout
 
 @Route(value = [RouterConstData.FUTURE_JI_LU])
@@ -29,7 +28,7 @@ class FutureJiLu: BaseActionBarActivity(), View.OnClickListener {
 
     private var binding: ActivitySpotBillBinding? = null
     private var fragmentList: java.util.ArrayList<Fragment>? = null
-    private var odersFragment: OdersFragment? = null
+    private var odersFragment: com.black.frying.fragment.OdersFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +102,7 @@ class FutureJiLu: BaseActionBarActivity(), View.OnClickListener {
         }
         fragmentList?.clear()
 
-        fragmentList?.add(OdersFragment().also {
+        fragmentList?.add(com.black.frying.fragment.OdersFragment().also {
             val bundle = Bundle()
             it.arguments = bundle
             odersFragment = it

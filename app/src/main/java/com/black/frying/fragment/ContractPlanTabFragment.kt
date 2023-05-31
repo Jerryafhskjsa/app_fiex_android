@@ -188,6 +188,10 @@ class ContractPlanTabFragment : BaseFragment(),
 
     }
 
+    override fun onPosition(positionList: UserPositionBean?) {
+        Log.d("22213213",positionList.toString())
+    }
+
     /**
      * 获取当前委托列表数据
      */

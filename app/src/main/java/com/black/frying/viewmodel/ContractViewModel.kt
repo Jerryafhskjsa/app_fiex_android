@@ -10,27 +10,17 @@ import android.text.TextUtils
 import android.util.Log
 import android.util.Pair
 import com.black.base.api.*
-import com.black.base.manager.ApiManager
 import com.black.base.model.*
 import com.black.base.model.clutter.Kline
 import com.black.base.model.future.*
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
-import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
-import com.black.base.model.user.UserBalanceWarpper
-import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletLever
-import com.black.base.model.wallet.WalletLeverDetail
-import com.black.base.net.HttpCallbackSimple
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
-import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AnalyticChart2
-import com.black.frying.fragment.PLAN
 import com.black.frying.service.FutureService
-import com.black.frying.service.socket.FiexSocketManager
 import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -154,6 +144,7 @@ class ContractViewModel(
             indexPriceObserver = createIndexPriceObserver()
         }
         SocketDataContainer.subscribeIndexPriceObservable(indexPriceObserver)
+
 
         if (fundRateObserver == null) {
             fundRateObserver = createFundRateObserver()

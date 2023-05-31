@@ -11,10 +11,10 @@ import com.black.base.activity.BaseActionBarActivity
 import com.black.base.util.FryingUtil
 import com.black.base.util.RouterConstData
 import com.black.frying.fragment.EmptyFragment
+import com.black.frying.fragment.FlowFragment
 import com.black.router.annotation.Route
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivitySpotBillBinding
-import com.black.wallet.fragment.*
 import com.google.android.material.tabs.TabLayout
 
 @Route(value = [RouterConstData.FUTURE_MSG_ACTIVITY])

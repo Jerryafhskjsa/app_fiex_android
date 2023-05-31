@@ -316,6 +316,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 data.toString(),
                                 object : TypeToken<UserPositionBean?>() {}.type
                             )
+                            SocketDataContainer.updatePosition(mHandler,userPositionBean)
                             Log.d("ttttttt-->UserListener", userPositionBean.toString());
                         }
                        /* "user.trade" -> {

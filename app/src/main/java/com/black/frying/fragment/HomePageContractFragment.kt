@@ -1047,7 +1047,7 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    private fun getMultipleDes(bean: ContractMultiChooseBean?): String? {
+    private fun getMultipleDes(bean: ContractMultiChooseBean?): String {
         var des: String? = null
         var typeDes: String? = null
         var orientationDes: String? = null
@@ -1792,7 +1792,7 @@ class HomePageContractFragment : BaseFragment(),
         currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
         binding?.fragmentHomePageContractHeader1?.useableBuyType?.setText(currentUnitType)
         binding?.fragmentHomePageContractHeader1?.useableSaleType?.setText(currentUnitType)
-        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null || BigDecimal(price) == BigDecimal.ZERO) {
+        if (price?.isEmpty() == true || !LoginUtil.isFutureLogin(context) || price == null || price.toDouble() == 0.0) {
             return
         }
         val longLeverage = leverage?: 10

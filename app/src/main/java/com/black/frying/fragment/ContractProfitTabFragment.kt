@@ -177,6 +177,10 @@ class ContractProfitTabFragment : BaseFragment(),
 
     }
 
+    override fun onPosition(positionList: UserPositionBean?) {
+        Log.d("222",positionList.toString())
+    }
+
     /**
      * 获取当前止盈止损数据
      */

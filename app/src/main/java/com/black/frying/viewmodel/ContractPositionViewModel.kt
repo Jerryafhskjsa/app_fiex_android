@@ -10,6 +10,7 @@ import com.black.base.util.*
 import com.black.base.viewmodel.BaseViewModel
 import com.black.frying.service.FutureService
 import com.black.util.Callback
+import io.reactivex.Observer
 import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
@@ -27,6 +28,7 @@ class ContractPositionViewModel(
     private var positionList: ArrayList<PositionBean?>? = null//持仓的订单
     private var leverageBracket: LeverageBracketBean? = null//交易对杠杆分层
     private var adlList: ArrayList<ADLBean?>? = null
+    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
 
     init {
         val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(
@@ -41,10 +43,17 @@ class ContractPositionViewModel(
 
     override fun onResume() {
         super.onResume()
+        if (positionObservers == null) {
+            positionObservers = createPositionObserver()
+        }
+        SocketDataContainer.subscribePositionObservable(positionObservers)
     }
 
     override fun onStop() {
         super.onStop()
+        if (positionObservers != null) {
+            SocketDataContainer.removePositionObservable(positionObservers)
+        }
     }
 
 
@@ -103,6 +112,14 @@ class ContractPositionViewModel(
      * isSocket = true更新socket推的数据
      * isSocket = false更新http请求的数据
      */
+    private fun createPositionObserver(): Observer<UserPositionBean?> {
+        return object : SuccessObserver<UserPositionBean?>() {
+            override fun onSuccess(value:UserPositionBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                onContractPositionModelListener?.onPosition(value)
+            }
+        }
+    }
     private fun updateCurrentPosition(context: Context?,flagPrice:String?,symbol: String?,isSocket:Boolean?) {
         Log.d("ttttttt--->222", symbol.toString())
         for (positionBean in positionList!!) {
@@ -408,5 +425,7 @@ class ContractPositionViewModel(
          * 仓位数据获取
          */
         fun onGetPositionData(positionList: ArrayList<PositionBean?>?)
+
+        fun onPosition(positionList: UserPositionBean?)
     }
 }

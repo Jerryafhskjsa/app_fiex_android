@@ -1,4 +1,4 @@
-package com.black.wallet.fragment
+package com.black.frying.fragment
 
 import android.app.Activity
 import android.app.Dialog
@@ -23,7 +23,7 @@ import com.black.net.HttpRequestResult
 import com.black.util.Callback
 import com.black.wallet.BR
 import com.black.wallet.R
-import com.black.wallet.adapter.ContractOdersAdapter
+import com.black.frying.adapter.ContractOdersAdapter
 import com.black.wallet.databinding.FragmentDelegationBinding
 import java.util.*
 

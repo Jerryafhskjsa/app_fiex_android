@@ -1,20 +1,17 @@
-package com.black.wallet.adapter
+package com.black.frying.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
-import com.black.base.api.FutureApiServiceHelper
-import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.OrderBeanItem
-import com.black.base.model.future.PlansBean
 import com.black.base.util.FryingUtil
-import com.black.util.Callback
+import com.black.frying.service.FutureService
 import com.black.util.CommonUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListTabContractPlanBinding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.util.Calendar
 
 class ContraLimitTabListAdapter(context: Context, variableId: Int, data: MutableList<OrderBeanItem>?) : BaseRecycleDataBindAdapter<OrderBeanItem, ListTabContractPlanBinding>(context, variableId, data){
@@ -52,20 +49,39 @@ class ContraLimitTabListAdapter(context: Context, variableId: Int, data: Mutable
         val second = calendar.get(Calendar.SECOND)
         var sideDes: String? = null
         val unit = planData.symbol!!.split("_")[1].toString().uppercase()
-        when (planData.positionSide) {
+        val contractSize = FutureService.getContractSize(planData.symbol)?: BigDecimal(0.0001)
+        val num = BigDecimal(planData.origQty.toString()).multiply(contractSize.multiply(BigDecimal(planData.avgPrice)))
+        val num2 = BigDecimal(planData.executedQty.toString()).multiply(contractSize.multiply(BigDecimal(planData.avgPrice)))
+        when (planData.orderSide) {
             //做多
-            "LONG" -> {
-                sideDes = getString(R.string.contract_see_up)
+            "BUY" -> {
                 sideBgColor = context.getColor(R.color.T17)
                 sideBlackColor = context.getColor(R.color.T22)
+                when (planData.positionSide) {
+                    "LONG" -> {
+                        sideDes = getString(R.string.contract_buy_raise)
+                    }
+                    //做空
+                    "SHORT" -> {
+                        sideDes = getString(R.string.contract_buy_fall)
+                    }
+                }
             }
-            //做空
-            "SHORT" -> {
-                sideDes = getString(R.string.contract_see_down)
-                sideBgColor = context.getColor(R.color.T16)
-                sideBlackColor = context.getColor(R.color.T21)
+                "SELL" -> {
+                    sideBgColor = context.getColor(R.color.T16)
+                    sideBlackColor = context.getColor(R.color.T21)
+                    when(planData.positionSide) {
+                        "LONG" -> {
+                            sideDes = getString(R.string.contract_sell_raise)
+                        }
+                        //做空
+                        "SHORT" -> {
+                            sideDes = getString(R.string.contract_sell_fall)
+                        }
+                    }
             }
         }
+
         viewHolder?.tvEntrustPrice?.text = String.format("委托价格(%s)", unit)
         viewHolder?.tvEntrustAmount?.text = String.format("数量(%s)", unit)
         viewHolder?.tvDealAmount?.text = String.format("手续费(%s)", unit)
@@ -89,15 +105,15 @@ class ContraLimitTabListAdapter(context: Context, variableId: Int, data: Mutable
         //开仓均价
         viewHolder?.tvEntrustPriceDes?.text = planData.price
         //委托数量
-        viewHolder?.tvEntrustAmountDes?.text = planData.origQty.toString()
+        viewHolder?.tvEntrustAmountDes?.text = String.format("%.4f",num)
         //手续费
         viewHolder?.tvDealAmountDes?.text = "--"
         //成交均价
         viewHolder?.tvProfitPriceDes?.text = planData.avgPrice
         //成交数量
-        viewHolder?.tvLosePriceDes?.text = planData.executedQty.toString()
+        viewHolder?.tvLosePriceDes?.text = String.format("%.4f",num2)
         //平仓盈亏
-        viewHolder?.tvBondAmountDes?.text = if (planData.closeProfit == null ) nullAmount else planData.closeProfit
+        viewHolder?.tvBondAmountDes?.text = if (planData.closeProfit == null ) nullAmount else String.format("%.4f",planData.closeProfit)
         viewHolder?.id?.setOnClickListener {
             if (CommonUtil.copyText(
                     context,

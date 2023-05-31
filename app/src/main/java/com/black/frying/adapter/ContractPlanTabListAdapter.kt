@@ -1,4 +1,4 @@
-package com.black.wallet.adapter
+package com.black.frying.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,14 +8,15 @@ import com.black.base.adapter.BaseRecycleDataBindAdapter
 import com.black.base.adapter.interfaces.BaseViewHolder
 import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
-import com.black.base.model.future.OrderBeanItem
 import com.black.base.model.future.PlansBean
 import com.black.base.util.FryingUtil
+import com.black.frying.service.FutureService
 import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ListTabContractPlanBinding
 import skin.support.content.res.SkinCompatResources
+import java.math.BigDecimal
 import java.util.Calendar
 
 class ContractPlanTabListAdapter(context: Context, variableId: Int, data: MutableList<PlansBean?>?) : BaseRecycleDataBindAdapter<PlansBean?, ListTabContractPlanBinding>(context, variableId, data){
@@ -56,24 +57,44 @@ class ContractPlanTabListAdapter(context: Context, variableId: Int, data: Mutabl
         val minute = calendar.get(Calendar.MINUTE)
         val second = calendar.get(Calendar.SECOND)
         val unit = planData?.symbol!!.split("_")[1].toString().uppercase()
-        when (planData.positionSide) {
+        val contractSize = FutureService.getContractSize(planData.symbol)?: BigDecimal(0.0001)
+        val num2 = BigDecimal(planData.origQty.toString()).minus(contractSize.minus(BigDecimal(planData.price)))
+        when (planData.orderSide) {
             //做多
-            "LONG" -> {
-                sideDes = getString(R.string.contract_see_up)
-                num = "≥" + planData.stopPrice
+            "BUY" -> {
                 sideBgColor = context.getColor(R.color.T17)
                 sideBlackColor = context.getColor(R.color.T22)
+                when (planData.positionSide) {
+                    "LONG" -> {
+                        num = "≥" + planData.stopPrice
+                        sideDes = getString(R.string.contract_buy_raise)
+                    }
+                    //做空
+                    "SHORT" -> {
+                        num = "≤" + planData.stopPrice
+                        sideDes = getString(R.string.contract_buy_fall)
+                    }
+                }
             }
-            //做空
-            "SHORT" -> {
-                sideDes = getString(R.string.contract_see_down)
-                num = "≤" + planData.stopPrice
+            "SELL" -> {
                 sideBgColor = context.getColor(R.color.T16)
                 sideBlackColor = context.getColor(R.color.T21)
+                when(planData.positionSide) {
+                    "LONG" -> {
+                        num = "≥" + planData.stopPrice
+                        sideDes = getString(R.string.contract_sell_raise)
+                    }
+                    //做空
+                    "SHORT" -> {
+                        num = "≤" + planData.stopPrice
+                        sideDes = getString(R.string.contract_sell_fall)
+                    }
+                }
             }
         }
         viewHolder?.one?.visibility = View.GONE
         viewHolder?.two?.visibility = View.GONE
+        viewHolder?.youla?.visibility = View.GONE
         viewHolder?.tvEntrustPrice?.text = String.format("委托价格(%s)", unit)
         viewHolder?.tvEntrustAmount?.text = String.format("数量(%s)", unit)
         viewHolder?.tvDealAmount?.text = String.format("触发价格(%s)", unit)
@@ -99,7 +120,7 @@ class ContractPlanTabListAdapter(context: Context, variableId: Int, data: Mutabl
         //开仓均价
         viewHolder?.tvEntrustPriceDes?.text = planData.price
         //委托数量
-        viewHolder?.tvEntrustAmountDes?.text = planData.origQty.toString()
+        viewHolder?.tvEntrustAmountDes?.text = num2.toString()
         //手续费
         viewHolder?.tvDealAmountDes?.text = num
         //成交均价

@@ -1,4 +1,4 @@
-package com.black.wallet.adapter
+package com.black.frying.adapter
 
 import android.content.Context
 import android.util.Log
