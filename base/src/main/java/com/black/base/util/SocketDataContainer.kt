@@ -17,6 +17,8 @@ import com.black.base.model.c2c.C2CPrice
 import com.black.base.model.future.FundRateBean
 import com.black.base.model.future.IndexPriceBean
 import com.black.base.model.future.MarkPriceBean
+import com.black.base.model.future.UserBalanceBean
+import com.black.base.model.future.UserOrderBean
 import com.black.base.model.future.UserPositionBean
 import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderDepth
@@ -113,6 +115,9 @@ object SocketDataContainer {
     //现货用户余额变更
     private val userBalanceObservers = ArrayList<Observer<UserBalance?>>()
 
+    //合约用户余额变更
+    private val userFBalanceObservers = ArrayList<Observer<UserBalanceBean?>>()
+
     //现货用户挂单变更
     private val userOrderObservers = ArrayList<Observer<TradeOrderFiex?>>()
 
@@ -124,6 +129,9 @@ object SocketDataContainer {
 
     //u本位合约仓位
     private val positionObservers = ArrayList<Observer<UserPositionBean?>?>()
+
+    //u本位合约下单
+    private val orderObservers = ArrayList<Observer<UserOrderBean?>?>()
 
     //u本位合约费率
     private val fundRateObservers = ArrayList<Observer<FundRateBean?>?>()
@@ -174,12 +182,30 @@ object SocketDataContainer {
         }
     }
 
+    fun subscribeFUserBalanceObservable(observer: Observer<UserBalanceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(userFBalanceObservers) {
+            if (!userFBalanceObservers.contains(observer)) {
+                userFBalanceObservers.add(observer)
+            }
+        }
+    }
+
     //移除用户余额观察者
     fun removeUserBalanceObservable(observer: Observer<UserBalance?>?) {
         if (observer == null) {
             return
         }
         synchronized(userBalanceObservers) { userBalanceObservers.remove(observer) }
+    }
+
+    fun removeFUserBalanceObservable(observer: Observer<UserBalanceBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(userFBalanceObservers) { userFBalanceObservers.remove(observer) }
     }
 
     //添加用户Order观察者
@@ -1004,9 +1030,11 @@ object SocketDataContainer {
 
     fun subscribeIndexPriceObservable(observer: Observer<IndexPriceBean?>?) {
         if (observer == null) {
+            Log.d("1kjhkjhkjh","111")
             return
         }
         synchronized(indexPriceObservers) {
+            Log.d("hjhjkhkj","111")
             if (!indexPriceObservers.contains(observer)) {
                 indexPriceObservers.add(observer)
             }
@@ -1027,16 +1055,31 @@ object SocketDataContainer {
             }
         }
     }
+    /**
+     *  添加u本位合约下单观察者
+     */
 
+    fun subscribeFutureOrderObservable(observer: Observer<UserOrderBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(orderObservers) {
+            if (!orderObservers.contains(observer)) {
+                orderObservers.add(observer)
+            }
+        }
+    }
     /**
      *  添加u本位合约仓位观察者
      */
 
     fun subscribePositionObservable(observer: Observer<UserPositionBean?>?) {
         if (observer == null) {
+            Log.d("12376354716","111")
             return
         }
         synchronized(positionObservers) {
+            Log.d("sfhkjhsadjk","111")
             if (!positionObservers.contains(observer)) {
                 positionObservers.add(observer)
             }
@@ -1134,6 +1177,15 @@ object SocketDataContainer {
         synchronized(fundRateObservers) { fundRateObservers.remove(observer) }
     }
 
+    /**
+     *  移除合u本位合约下单观察者
+     */
+    fun removeFutureOrderObservable(observer: Observer<UserOrderBean?>?) {
+        if (observer == null) {
+            return
+        }
+        synchronized(orderObservers) { orderObservers.remove(observer) }
+    }
     /**
      * 更新交易对是否添加自选
      *
@@ -2258,10 +2310,10 @@ object SocketDataContainer {
             }.subscribeOn(Schedulers.trampoline())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(object : SuccessObserver<PairQuotation>() {
-                    override fun onSuccess(pairQuo: PairQuotation) {
+                    override fun onSuccess(value: PairQuotation) {
                         synchronized(futurePairQuotationObservers) {
                             for (observer in futurePairQuotationObservers) {
-                                observer?.onNext(pairQuo)
+                                observer?.onNext(value)
                             }
                         }
                     }
@@ -2285,6 +2337,7 @@ object SocketDataContainer {
                 .subscribe(object : SuccessObserver<MarkPriceBean>() {
                     override fun onSuccess(markPrice: MarkPriceBean) {
                         synchronized(markPriceObservers) {
+                            Log.d("123516235", markPriceObservers.toString())
                             for (observer in markPriceObservers) {
                                 observer?.onNext(markPrice)
                             }
@@ -2345,21 +2398,87 @@ object SocketDataContainer {
     }
 
     /**
-     * 更新合约费率
+     * 更新仓位信息
      */
     fun updatePosition(handler: Handler?, data: UserPositionBean?) {
-        Log.d("12671", data.toString())
-        synchronized(positionObservers) {
-            for (observer in positionObservers) {
+        Log.d("ahgjsdjhaghj", data.toString())
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<UserPositionBean> { emitter ->
+                Log.d("ahghdaaksjh", data.toString())
                 if (data != null) {
-                    Log.d("1267198789", data.toString())
-                    observer?.onNext(data)
+                    emitter.onNext(data)
+                    Log.d("2167862187621", data.toString())
+                } else {
+                    emitter.onComplete()
                 }
-            }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<UserPositionBean>() {
+                    override fun onSuccess(value: UserPositionBean) {
+                        synchronized(positionObservers) {
+                            Log.d("12897489721987", positionObservers.toString())
+                            for (observer in positionObservers){
+                                Log.d("2937482374", "1111")
+                                observer?.onNext(value)
+                            }
+                        }
+                    }
+                })
         }
     }
 
 
+    /**
+     * 下单后更新
+     */
+    fun updateOrder(handler: Handler?, data: UserOrderBean?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<UserOrderBean> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<UserOrderBean>() {
+                    override fun onSuccess(value: UserOrderBean) {
+                        synchronized(orderObservers) {
+                            Log.d("1236778631287", orderObservers.toString())
+                            for (observer in orderObservers) {
+                                observer?.onNext(value)
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    /**
+     * 合约用户余额
+     */
+    fun updateFUserBalance(handler: Handler?, data: UserBalanceBean?) {
+        CommonUtil.postHandleTask(handler) {
+            Observable.create<UserBalanceBean> { emitter ->
+                if (data != null) {
+                    emitter.onNext(data)
+                } else {
+                    emitter.onComplete()
+                }
+            }.subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(object : SuccessObserver<UserBalanceBean>() {
+                    override fun onSuccess(value: UserBalanceBean) {
+                        synchronized(userFBalanceObservers) {
+                            Log.d("1236778631287", userFBalanceObservers.toString())
+                            for (observer in userFBalanceObservers) {
+                                observer.onNext(value)
+                            }
+                        }
+                    }
+                })
+        }
+    }
     fun addKLineData(
         currentPair: String?,
         handler: Handler?,

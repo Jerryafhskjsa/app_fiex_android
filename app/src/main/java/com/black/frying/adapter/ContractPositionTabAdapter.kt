@@ -754,7 +754,6 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             intent.type = "image/jpeg"
             intent.putExtra(Intent.EXTRA_STREAM, uri)
             startActivity(context,Intent.createChooser(intent, "分享"),null)
-            dialog.dismiss()
         }
 
     }

@@ -200,7 +200,7 @@
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="@dimen/text_size_10"
-                    app:tabGravity="center"
+                    android:layout_gravity="bottom"
                     android:fadingEdge="none"
                     app:tabRippleColor="@color/transparent"
                     android:overScrollMode="never"

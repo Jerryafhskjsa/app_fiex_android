@@ -60,7 +60,7 @@ class ContractViewModel(
     private var socketHandler: Handler? = null
 
     //用户相关
-    private var userBalanceObserver: Observer<UserBalance?>? = createUserBalanceObserver()
+    private var userBalanceObserver: Observer<UserBalanceBean?>? = createUserBalanceObserver()
     private var userTradeOrderObserver: Observer<TradeOrderFiex?>? = createUserOrderObserver()
 
     //交易对相关
@@ -154,7 +154,7 @@ class ContractViewModel(
         if (userBalanceObserver == null) {
             userBalanceObserver = createUserBalanceObserver()
         }
-        SocketDataContainer.subscribeUserBalanceObservable(userBalanceObserver)
+        SocketDataContainer.subscribeFUserBalanceObservable(userBalanceObserver)
 
         if (userTradeOrderObserver == null) {
             userTradeOrderObserver = createUserOrderObserver()
@@ -220,10 +220,8 @@ class ContractViewModel(
         initPairStatus()
         changePairSocket()
         if (LoginUtil.isFutureLogin(context)) {
-                getPositionData()
                 initBalanceByCoin(context)
-            getProfitData(Constants.UNFINISHED)
-            getPlanData(Constants.UNFINISHED)
+            getPositionData()
         }
     }
 
@@ -252,7 +250,7 @@ class ContractViewModel(
             bundle2
         )
         if (userBalanceObserver != null) {
-            SocketDataContainer.removeUserBalanceObservable(userBalanceObserver)
+            SocketDataContainer.removeFUserBalanceObservable(userBalanceObserver)
         }
 
         if (userTradeOrderObserver != null) {
@@ -382,7 +380,7 @@ class ContractViewModel(
      * 获取当前计划委托列表
      */
     fun getPlanData(state: String?) {
-        var symbol:String? = currentPairStatus?.pair
+        var symbol:String? = currentPairStatus.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
@@ -393,8 +391,8 @@ class ContractViewModel(
 
                 override fun callback(returnData: HttpRequestResultBean<PagingData<PlansBean?>?>?) {
                     if (returnData != null) {
-                        var data = returnData.result?.items
-                        planUnionBean?.planList = data
+                        val data = returnData.result?.items
+                        planUnionBean.planList = data
                         getLimitPricePlanData()
                     }
                 }
@@ -425,9 +423,9 @@ class ContractViewModel(
             })
     }
 
-    private fun createUserBalanceObserver(): Observer<UserBalance?> {
-        return object : SuccessObserver<UserBalance?>() {
-            override fun onSuccess(value: UserBalance?) {
+    private fun createUserBalanceObserver(): Observer<UserBalanceBean?> {
+        return object : SuccessObserver<UserBalanceBean?>() {
+            override fun onSuccess(value: UserBalanceBean?) {
                 onContractModelListener?.run {
                     if (value != null) {
                         //onContractModelListener.onUserBalanceChanged(value)
@@ -565,7 +563,7 @@ class ContractViewModel(
         return object : SuccessObserver<MarkPriceBean?>() {
             override fun onSuccess(value: MarkPriceBean?) {
 //                todo 计算总权益
-//                Log.d("ttt------>markPirce", value.toString())
+                Log.d("ttt------>markPirce", value.toString())
                 var floatProfit: BigDecimal = BigDecimal.ZERO
                 if (positionList != null) {
                     for (item in positionList!!) {

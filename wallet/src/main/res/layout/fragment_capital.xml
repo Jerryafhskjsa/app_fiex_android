@@ -166,7 +166,7 @@
                                 style="@style/ButtonGray"
                                 android:layout_width="104dp"
                                 android:layout_height="30dp"
-                              android:layout_marginLeft="@dimen/text_size_10"
+                              android:layout_marginLeft="@dimen/text_size_16"
                                 android:layout_marginRight="@dimen/text_size_10"
                                 android:gravity="center"
                                 android:textSize="@dimen/text_size_14"

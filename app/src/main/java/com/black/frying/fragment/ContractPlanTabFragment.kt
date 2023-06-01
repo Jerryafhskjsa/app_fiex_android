@@ -14,6 +14,7 @@ import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.PagingData
+import com.black.base.model.SuccessObserver
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
@@ -35,7 +36,9 @@ import kotlin.collections.ArrayList
 class ContractPlanTabFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
     View.OnClickListener,
-    ContractPositionViewModel.OnContractPositionModelListener {
+    ContractPositionViewModel.OnContractPositionModelListener,
+    HomePageContractFragment.OnTabModelListener,
+    ContractPlanTabAdapter.OnTabModelListener{
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
@@ -52,6 +55,8 @@ class ContractPlanTabFragment : BaseFragment(),
     private var contractSize: String? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var planUnionBean = PlanUnionBean()
+    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
+    private var orderObservers : Observer<UserOrderBean?>? = createOrderObserver()
     private var entrustType:Int?  = 0//0限价委托，1计划委托
 
     /**
@@ -112,6 +117,15 @@ class ContractPlanTabFragment : BaseFragment(),
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
+        if (positionObservers == null) {
+            positionObservers = createPositionObserver()
+        }
+        SocketDataContainer.subscribePositionObservable(positionObservers)
+
+        if (orderObservers == null) {
+            orderObservers = createOrderObserver()
+        }
+        SocketDataContainer.subscribeFutureOrderObservable(orderObservers)
         getPlanData(Constants.UNFINISHED)
     }
 
@@ -120,6 +134,14 @@ class ContractPlanTabFragment : BaseFragment(),
         if (pairObserver != null) {
             SocketDataContainer.removePairObservable(pairObserver)
             pairObserver == null
+        }
+        if (positionObservers != null) {
+            SocketDataContainer.removePositionObservable(positionObservers)
+            positionObservers = null
+        }
+        if (orderObservers != null) {
+            SocketDataContainer.removeFutureOrderObservable(orderObservers)
+            orderObservers = null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -172,6 +194,13 @@ class ContractPlanTabFragment : BaseFragment(),
         }
     }
 
+    override fun refresh2() {
+        Log.d("jkhkjhkjhjk","sss")
+        getPlanData(Constants.UNFINISHED)
+    }
+    override fun refresh() {
+        getPlanData(Constants.UNFINISHED)
+    }
 
     override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
     }
@@ -219,19 +248,33 @@ class ContractPlanTabFragment : BaseFragment(),
                          */
                         adapter?.data = planUnionBean.planList
                         adapter?.notifyDataSetChanged()
+                        Log.d("ajksdhkjhdakj", count.toString())
                         onTabModelListener?.onCount(count)
                     }
                 }
             })
     }
 
-    interface OnTabModelListener {
-        fun onCount(count: Int?) {
-            if (count != 0)
-            {
-
+    private fun createPositionObserver(): Observer<UserPositionBean?> {
+        return object : SuccessObserver<UserPositionBean?>() {
+            override fun onSuccess(value:UserPositionBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                getPlanData(Constants.UNFINISHED)
             }
         }
+    }
+
+    private fun createOrderObserver(): Observer<UserOrderBean?> {
+        return object : SuccessObserver<UserOrderBean?>() {
+            override fun onSuccess(value:UserOrderBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                getPlanData(Constants.UNFINISHED)
+            }
+        }
+    }
+
+    interface OnTabModelListener {
+        fun onCount(count: Int?)
     }
 
     companion object {

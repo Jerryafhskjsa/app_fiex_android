@@ -9,6 +9,7 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.model.HttpRequestResultBean
 import com.black.base.model.future.PlansBean
 import com.black.base.util.TimeUtil
+import com.black.frying.fragment.HomePageContractFragment
 import com.black.frying.service.FutureService
 import com.black.util.Callback
 import com.black.util.CommonUtil
@@ -21,6 +22,7 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
+    private var onTabModelListener: OnTabModelListener? = null
     var sideBgColor: Int? = null
     var sideBlackColor: Int? = null
 
@@ -91,6 +93,7 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
                         if (returnData != null) {
+                            onTabModelListener?.refresh2()
                             Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
                         }
                     }
@@ -101,4 +104,7 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         }
     }
 
+    interface OnTabModelListener {
+        fun refresh2()
+    }
 }

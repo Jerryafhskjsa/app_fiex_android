@@ -252,7 +252,7 @@ class FuturesOrderCreateViewModel : ViewModel() {
 
     fun calculateFuturesInfo(price: String) {
         val price = NumberUtils.toBigDecimal(price)
-        if (price <= BigDecimal.ZERO) {
+        if (price <= BigDecimal.ZERO || price.toDouble() == 0.0) {
             Log.d(TAG, "calculateFuturesInfo() called with: price = zero  break")
             return
         }

@@ -47,8 +47,10 @@ class ContractPositionTabFragment : BaseFragment(),
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
+    private var all:Boolean? = null
     private var num: Int = 0
     private var futureMarkPriceObserver: Observer<MarkPriceBean?>? = null
+    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
     private var onTabModelListener: OnTabModelListener? = null
 
     /**
@@ -109,9 +111,9 @@ class ContractPositionTabFragment : BaseFragment(),
         socketHandler = Handler(handlerThread?.looper)
         viewModel?.getMarketPrice(CookieUtil.getCurrentFutureUPair(context!!))
         viewModel?.getFundRate(CookieUtil.getCurrentFutureUPair(context!!))
-        var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
+        all = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
         if (all != null) {
-            binding?.contractWithLimit?.isChecked = all
+            binding?.contractWithLimit?.isChecked = all!!
         }
         if (LoginUtil.isFutureLogin(context)) {
             viewModel?.getPositionAdlList(context)
@@ -122,6 +124,11 @@ class ContractPositionTabFragment : BaseFragment(),
             futureMarkPriceObserver = createMarkPriceObserver()
         }
         SocketDataContainer.subscribeMarkPriceObservable(futureMarkPriceObserver)
+
+        if (positionObservers == null) {
+            positionObservers = createPositionObserver()
+        }
+        SocketDataContainer.subscribePositionObservable(positionObservers)
     }
 
     override fun onStop() {
@@ -129,6 +136,10 @@ class ContractPositionTabFragment : BaseFragment(),
         if (futureMarkPriceObserver != null) {
             SocketDataContainer.removeMarkPriceObservable(futureMarkPriceObserver)
             futureMarkPriceObserver = null
+        }
+        if (positionObservers != null) {
+            SocketDataContainer.removePositionObservable(positionObservers)
+            positionObservers = null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -139,6 +150,14 @@ class ContractPositionTabFragment : BaseFragment(),
         }
     }
 
+    private fun createPositionObserver(): Observer<UserPositionBean?> {
+        return object : SuccessObserver<UserPositionBean?>() {
+            override fun onSuccess(value:UserPositionBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                viewModel?.getPositionData(all)
+            }
+        }
+    }
     private fun createMarkPriceObserver(): Observer<MarkPriceBean?> {
         return object : SuccessObserver<MarkPriceBean?>() {
             @RequiresApi(Build.VERSION_CODES.N)
@@ -193,7 +212,7 @@ class ContractPositionTabFragment : BaseFragment(),
 
     override fun onGetPositionData(positionList: ArrayList<PositionBean?>?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            onTabModelListener?.onCount(positionList?.size)
+            onTabModelListener?.onCount(positionList?.size ?: 0)
             num = positionList?.size?: 0
                 adapter?.data = null
                 adapter?.notifyDataSetChanged()

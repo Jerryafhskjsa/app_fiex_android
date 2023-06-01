@@ -129,6 +129,7 @@ class HomePageContractFragment : BaseFragment(),
     private var kLineQuotaSelector: PositionSideSelector? = null
     private var positionTypeSelector: PositionTypeSeletor? = null
     private var futureMSG: FutureMSG? = null
+    private var onTabModelListener: OnTabModelListener? = null
     private var moreTimeStepTextView: TextView? = null
     private var kLinePage = 0
     private var lastTimeStepIndex = 0
@@ -863,8 +864,6 @@ class HomePageContractFragment : BaseFragment(),
 
     //初始化记录相关的tab
     private fun initRecordTab() {
-        viewModel?.getPositionData()
-
         recordTab?.setTabTextColors(
             SkinCompatResources.getColor(activity, R.color.C5),
             SkinCompatResources.getColor(activity, R.color.C1)
@@ -877,28 +876,28 @@ class HomePageContractFragment : BaseFragment(),
         tab1.amount = 0
         tab1.name = getString(R.string.contract_record_tab1, tab1.amount.toString())
         tab1.type = ConstData.CONTRACT_REC_HOLD_AMOUNT
-        val tab3 = ContractRecordTabBean()
-        tab3.amount = 0
-        tab3.name = getString(R.string.contract_record_tab3, tab3.amount.toString())
-        tab3.type = ConstData.CONTRACT_REC_CURRENT
         val tab2 = ContractRecordTabBean()
         tab2.amount = 0
         tab2.name = getString(R.string.contract_record_tab2, tab2.amount.toString())
         tab2.type = ConstData.CONTRACT_REC_WITH_LIMIE
+        val tab3 = ContractRecordTabBean()
+        tab3.amount = 0
+        tab3.name = getString(R.string.contract_record_tab3, tab3.amount.toString())
+        tab3.type = ConstData.CONTRACT_REC_CURRENT
         tabData?.add(tab1)
-        tabData?.add(tab3)
         tabData?.add(tab2)
+        tabData?.add(tab3)
         positionTabListener = object : ContractPositionTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
                 updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, count)
             }
         }
-        profitTabListener = object : ContractCurrentFragment.OnTabModelListener {
+        planTabListener = object : ContractPlanTabFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
                 updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE, count)
             }
         }
-        planTabListener = object : ContractPlanTabFragment.OnTabModelListener {
+        profitTabListener = object : ContractCurrentFragment.OnTabModelListener {
             override fun onCount(count: Int?) {
                 updateTabTitles(ConstData.CONTRACT_REC_CURRENT, count)
             }
@@ -917,9 +916,9 @@ class HomePageContractFragment : BaseFragment(),
                         ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
                             fragment = ContractPositionTabFragment.newInstance(tabData)
                         }
-                        ConstData.CONTRACT_REC_CURRENT -> fragment =
-                            ContractPlanTabFragment.newInstance(tabData)
                         ConstData.CONTRACT_REC_WITH_LIMIE -> fragment =
+                            ContractPlanTabFragment.newInstance(tabData)
+                        ConstData.CONTRACT_REC_CURRENT -> fragment =
                             ContractCurrentFragment.newInstance(tabData)
 
                     }
@@ -927,13 +926,13 @@ class HomePageContractFragment : BaseFragment(),
                         fragment.setAutoHeightViewPager(recordViewPager)
                         fragment.setOnTabModeListener(positionTabListener as ContractPositionTabFragment.OnTabModelListener)
                     }
-                    if (fragment is ContractCurrentFragment) {
-                        fragment.setAutoHeightViewPager(recordViewPager)
-                        fragment.setOnTabModeListener(profitTabListener as ContractCurrentFragment.OnTabModelListener)
-                    }
                     if (fragment is ContractPlanTabFragment) {
                         fragment.setAutoHeightViewPager(recordViewPager)
                         fragment.setOnTabModeListener(planTabListener as ContractPlanTabFragment.OnTabModelListener)
+                    }
+                    if (fragment is ContractCurrentFragment) {
+                        fragment.setAutoHeightViewPager(recordViewPager)
+                        fragment.setOnTabModeListener(profitTabListener as ContractCurrentFragment.OnTabModelListener)
                     }
 //                    if (fragment is EmptyFragment) {
 //                        fragment?.setAutoHeightViewPager(recordViewPager)
@@ -950,10 +949,10 @@ class HomePageContractFragment : BaseFragment(),
                 override fun getItem(position: Int): Fragment {
                     if (recordFragmentList!![position] is ContractPositionTabFragment) {
                         return recordFragmentList!![position] as ContractPositionTabFragment
-                    } else if (recordFragmentList!![position] is ContractCurrentFragment) {
-                        return recordFragmentList!![position] as ContractCurrentFragment
-                    } else {
+                    } else if (recordFragmentList!![position] is ContractPlanTabFragment) {
                         return recordFragmentList!![position] as ContractPlanTabFragment
+                    } else {
+                        return recordFragmentList!![position] as ContractCurrentFragment
                     }
                 }
 
@@ -2219,10 +2218,13 @@ class HomePageContractFragment : BaseFragment(),
                         override fun callback(returnData: HttpRequestResultBean<String>?) {
                             if (returnData != null) {
                                 //Log.d("iiiiii-->createFutureOrder", returnData.result.toString())
+                                onTabModelListener?.refresh()
                                 header1View?.price?.setText(price)
                                 header1View?.transactionQuota?.setText("0.0")
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
+                                view
                                 refreshShuju()
+                                viewModel!!.getPlanData(Constants.UNFINISHED)
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2266,6 +2268,7 @@ class HomePageContractFragment : BaseFragment(),
                                 FryingUtil.showToast(context, getString(R.string.trade_success))
                                 initHeader2()
                                 refreshShuju()
+                                viewModel!!.getPlanData(Constants.UNFINISHED)
                                 /**
                                  * todo 刷新持仓列表
                                  */
@@ -2292,9 +2295,6 @@ class HomePageContractFragment : BaseFragment(),
         updateOpenAvailableData()
         viewModel!!.initBalanceByCoin(mContext)
         FutureService.initBalanceByCoin(mContext)
-        viewModel!!.getPositionData()
-        viewModel!!.getPlanData(Constants.UNFINISHED)
-        viewModel!!.getLimitPricePlanData()
     }
     fun withTimerGetCurrentTradeOrder() {
         var count = 0
@@ -2318,6 +2318,7 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     override fun onPlanData(data: PlanUnionBean?) {
+        Log.d("jk87657865","sss")
         updateTabTitles(ConstData.CONTRACT_REC_CURRENT, data?.limitPriceList?.size!!)
         updateTabTitles(ConstData.CONTRACT_REC_WITH_LIMIE,data.planList?.size!! )
     }
@@ -2328,6 +2329,7 @@ class HomePageContractFragment : BaseFragment(),
 //初始化杠杆倍数方向
     @SuppressLint("SetTextI18n")
     override fun onPositionData(data: ArrayList<PositionBean?>?) {
+    Log.d("kjlkjklj","41343")
         updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
        if ( data?.size != null && data.size > 0){
            for (item in data) {
@@ -2556,7 +2558,7 @@ class HomePageContractFragment : BaseFragment(),
                 override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
                     if (returnData != null) {
                         binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = returnData.result?.walletBalance
-                        binding?.fragmentHomePageContractHeader1?.amount?.text = returnData.result?.walletBalance
+                        binding?.fragmentHomePageContractHeader1?.amount?.text = returnData.result?.availableBalance
                     }
                 }
             })
@@ -2702,6 +2704,9 @@ class HomePageContractFragment : BaseFragment(),
          */
     }
 
+    interface OnTabModelListener {
+        fun refresh()
+    }
     private fun refreshUsable() {
         /*activity?.runOnUiThread {
             //买入

@@ -1,6 +1,9 @@
 package com.black.frying.viewmodel
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Process
 import android.util.Log
 import com.black.base.api.*
 import com.black.base.model.*
@@ -29,6 +32,8 @@ class ContractPositionViewModel(
     private var leverageBracket: LeverageBracketBean? = null//交易对杠杆分层
     private var adlList: ArrayList<ADLBean?>? = null
     private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
+    private var handlerThread: HandlerThread? = null
+    private var socketHandler: Handler? = null
 
     init {
         val pairStatus: PairStatus? = SocketDataContainer.getPairStatusSync(
@@ -43,6 +48,9 @@ class ContractPositionViewModel(
 
     override fun onResume() {
         super.onResume()
+        handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
+        handlerThread?.start()
+        socketHandler = Handler(handlerThread?.looper)
         if (positionObservers == null) {
             positionObservers = createPositionObserver()
         }
@@ -53,6 +61,14 @@ class ContractPositionViewModel(
         super.onStop()
         if (positionObservers != null) {
             SocketDataContainer.removePositionObservable(positionObservers)
+            positionObservers = null
+        }
+        if (socketHandler != null) {
+            socketHandler?.removeMessages(0)
+            socketHandler = null
+        }
+        if (handlerThread != null) {
+            handlerThread?.quit()
         }
     }
 

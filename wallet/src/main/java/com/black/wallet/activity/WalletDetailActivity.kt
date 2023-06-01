@@ -167,6 +167,9 @@ class WalletDetailActivity : BaseActivity(),
     private fun refreshWallet() {
         binding?.coinType?.setText(wallet?.coinType)
         binding?.coinTypeDes?.setText(wallet?.coinTypeDes)
+        if (wallet?.coinIconUrl == null){
+            binding?.iconCoin?.setBackgroundColor(R.drawable.icon_tips)
+        }
         val requestOptions = RequestOptions
             .bitmapTransform(RoundedCorners(DipPx.dip2px(mContext, 15f)))
         Glide.with(mContext)

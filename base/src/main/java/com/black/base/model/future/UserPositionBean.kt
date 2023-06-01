@@ -11,5 +11,7 @@ data class UserPositionBean(
     val positionSize: String,
     val positionType: String,
     val realizedProfit: String, //  已实现盈亏
-    val symbol: String
+    val symbol: String,
+    val underlyingType: String
+
 )

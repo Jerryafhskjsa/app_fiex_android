@@ -320,10 +320,10 @@ class WalletViewModel(context: Context) : BaseViewModel<Any>(context) {
             if(coinList != null){
                 for(coin in coinList!!){
                     if(coin?.coinType == "USDT" || coin?.coinType == "BTC" ||coin?.coinType == "ETH") {
-                        var wallet = TigerWallet()
-                        wallet.coinType = coin?.coinType
-                        wallet.coinIconUrl = coin?.logosUrl
-                        wallet.coinTypeDes = coin?.coinFullName
+                        val wallet = TigerWallet()
+                        wallet.coinType = coin.coinType
+                        wallet.coinIconUrl = coin.logosUrl
+                        wallet.coinTypeDes = coin.coinFullName
                         wallet.coinAmount = 0.0
                         wallet.estimatedAvailableAmount = 0.0
                         wallet.estimatedAvailableAmountCny = 0.0

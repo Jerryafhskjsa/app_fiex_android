@@ -310,14 +310,15 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<UserBalanceBean?>() {}.type
                             )
                             Log.d("ttttttt-->UserListener", userBalanceBean.toString());
+                            SocketDataContainer.updateFUserBalance(mHandler, userBalanceBean)
                         }
                         "user.position" -> {
                             val userPositionBean = gson.fromJson<UserPositionBean>(
                                 data.toString(),
                                 object : TypeToken<UserPositionBean?>() {}.type
                             )
-                            SocketDataContainer.updatePosition(mHandler,userPositionBean)
                             Log.d("ttttttt-->UserListener", userPositionBean.toString());
+                            SocketDataContainer.updatePosition(mHandler,userPositionBean)
                         }
                        /* "user.trade" -> {
                             val userTradeBean = gson.fromJson<UserTradeBean>(
@@ -335,6 +336,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<UserOrderBean?>() {}.type
                             )
                             Log.d("ttttttt-->UserListener", userOrderBean.toString());
+                            SocketDataContainer.updateOrder(mHandler,userOrderBean)
                         }
                         "user.notify" -> {
 

@@ -12,6 +12,7 @@ import com.black.base.api.FutureApiServiceHelper
 import com.black.base.fragment.BaseFragment
 import com.black.base.model.ContractRecordTabBean
 import com.black.base.model.HttpRequestResultBean
+import com.black.base.model.SuccessObserver
 import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
@@ -47,6 +48,8 @@ class ContractCurrentFragment : BaseFragment(),
     private var onTabModelListener: OnTabModelListener? = null
 
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
+    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
+    private var orderObservers : Observer<UserOrderBean?>? = createOrderObserver()
     private var planUnionBean = PlanUnionBean()
     private var entrustType:Int?  = 0//0限价委托，1计划委托
 
@@ -107,6 +110,14 @@ class ContractCurrentFragment : BaseFragment(),
         handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
         handlerThread?.start()
         socketHandler = Handler(handlerThread?.looper)
+        if (positionObservers == null) {
+            positionObservers = createPositionObserver()
+        }
+        SocketDataContainer.subscribePositionObservable(positionObservers)
+        if (orderObservers == null) {
+            orderObservers = createOrderObserver()
+        }
+        SocketDataContainer.subscribeFutureOrderObservable(orderObservers)
         getLimitPricePlanData()
     }
 
@@ -115,6 +126,14 @@ class ContractCurrentFragment : BaseFragment(),
         if (pairObserver != null) {
             SocketDataContainer.removePairObservable(pairObserver)
             pairObserver == null
+        }
+        if (positionObservers != null) {
+            SocketDataContainer.removePositionObservable(positionObservers)
+            positionObservers = null
+        }
+        if (orderObservers != null) {
+            SocketDataContainer.removeFutureOrderObservable(orderObservers)
+            orderObservers = null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -188,6 +207,23 @@ class ContractCurrentFragment : BaseFragment(),
         Log.d("222",positionList.toString())
     }
 
+    private fun createPositionObserver(): Observer<UserPositionBean?> {
+        return object : SuccessObserver<UserPositionBean?>() {
+            override fun onSuccess(value:UserPositionBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                getLimitPricePlanData()
+            }
+        }
+    }
+
+    private fun createOrderObserver(): Observer<UserOrderBean?> {
+        return object : SuccessObserver<UserOrderBean?>() {
+            override fun onSuccess(value:UserOrderBean?) {
+                Log.d("ahsdjkhak", value.toString())
+                getLimitPricePlanData()
+            }
+        }
+    }
     /**
      * 获取当前限价委托
      */
@@ -208,6 +244,7 @@ class ContractCurrentFragment : BaseFragment(),
                             adapter?.data = dataList
                             adapter?.notifyDataSetChanged()
                             val count = planUnionBean.limitPriceList?.size!!
+                            Log.d("fsdjhskjafhjk", count.toString())
                             onTabModelListener?.onCount(count)
                         }
                     }
