@@ -6,6 +6,7 @@ import android.os.HandlerThread
 import android.os.Process
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import android.widget.TextView.OnEditorActionListener
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.databinding.ListViewEmptyLongBinding
+import com.black.base.model.SuccessObserver
+import com.black.base.model.socket.PairStatus
 import com.black.base.service.DearPairService
 import com.black.base.util.*
 import com.black.frying.adapter.PairSearchAdapter
@@ -26,6 +29,8 @@ import com.black.util.Callback
 import com.black.util.CallbackObject
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityDearPairSearchBinding
+import io.reactivex.Observable
+import io.reactivex.Observer
 import skin.support.app.SkinCompatDelegate
 import java.util.*
 
@@ -36,7 +41,9 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
     //异步获取数据
     private var handlerThread: HandlerThread? = null
     private var socketHandler: Handler? = null
+    private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     private val dearPairs = ArrayList<String?>()
+    private var pairSearch: ArrayList<PairStatus?>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +81,25 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         super.onResume()
         pairSearchHistory
         searchPair("")
+        if (pairObserver == null) {
+            pairObserver = createPairObserver()
+        }
+        SocketDataContainer.subscribePairObservable(pairObserver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (pairObserver != null) {
+            SocketDataContainer.removePairObservable(pairObserver)
+        }
+        if (socketHandler != null) {
+            socketHandler?.removeMessages(0)
+            socketHandler = null
+        }
+        if (handlerThread != null) {
+            handlerThread?.quit()
+            handlerThread = null
+        }
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -136,6 +162,15 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(this)
     }
 
+    private fun createPairObserver(): Observer<ArrayList<PairStatus?>?> {
+        return object : SuccessObserver<ArrayList<PairStatus?>?>() {
+            override fun onSuccess(value: ArrayList<PairStatus?>?) {
+                if (value?.size!! > 0) {
+                    pairSearch = value
+                }
+            }
+        }
+    }
     private val pairSearchHistory: Unit
         get() {
             if (DearPairService.dearPairMap.isNotEmpty()) {
@@ -207,8 +242,11 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
                 for (i in pairStatuses.indices) {
                     val pairStatus = pairStatuses[i]
                     pairStatus?.let {
-                        val pairSearch = PairSearch()
+                        var pairSearch = PairSearch()
                         pairSearch.pair = pairStatus.pair
+                        pairSearch.currentPrice = pairStatus.currentPrice
+                        pairSearch.priceChangeSinceToday = pairStatus.priceChangeSinceToday
+                        pairSearch.currentPrice = pairStatus.currentPrice
                         pairSearch.is_dear = dearPairs.contains(pairSearch.pair)
                         pairSearches.add(pairSearch)
                     }

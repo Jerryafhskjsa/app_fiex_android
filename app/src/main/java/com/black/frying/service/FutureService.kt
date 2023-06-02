@@ -581,8 +581,8 @@ object FutureService {
         for (item in leverageBracket?.leverageBrackets!!) {
 //            Log.d("ttttttt-->该层最大名义价值", item?.maxNominalValue)
             //根据当前的杠杆备注 找到所处的位置最大价值
-            if (BigDecimal(leverage).compareTo(BigDecimal(item?.maxLeverage)) == -1) {
-                maxNominalValue = item?.maxNominalValue
+            if (BigDecimal(leverage).compareTo(BigDecimal(item.maxLeverage.toInt() + 1)) == -1) {
+                maxNominalValue = item.maxNominalValue
             }
         }
         return maxNominalValue
@@ -624,9 +624,6 @@ object FutureService {
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
                     if (returnData != null) {
                         balanceDetail = returnData.result
-                        if (balanceDetail == null){
-                            initBalanceByCoin(context)
-                        }
                     }
                 }
             })
@@ -1250,7 +1247,7 @@ object FutureService {
      */
     private fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean): BigDecimal {
 
-        var coin = balanceDetail?.coin
+        var coin = balanceDetail.coin
         var availableBalance = balanceDetail.availableBalance
 
         var floatProfit: BigDecimal? = BigDecimal(0)
@@ -1400,7 +1397,7 @@ object FutureService {
             return null
         }
         for (item in leverageBracket?.leverageBrackets!!) {
-            if (leverage < item.maxLeverage.toInt()) {
+            if (leverage <= item.maxLeverage.toInt()) {
                 leverageBracketItem = item
             }
         }

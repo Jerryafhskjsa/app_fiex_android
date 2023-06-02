@@ -24,7 +24,17 @@ import com.fbsex.exchange.databinding.FutureCountActivityBinding
 @Route(value = [RouterConstData.FUTURE_COUNT_ACTIVITY])
 
 class FutureCountActivity: BaseActivity(), View.OnClickListener {
+    companion object{
+        var TAB_ONE: String = "ONE"
+        var TAB_TWO: String = "TWO"
+        var TAB_THREE: String = "THREE"
+        var TAB_FOUR: String = "FOUR"
+        var TAB_FIVE: String = "FIVE"
+        var TAB_SIX: String = "SIX"
+    }
     private var binding: FutureCountActivityBinding? = null
+
+    private var type = TAB_ONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +70,7 @@ class FutureCountActivity: BaseActivity(), View.OnClickListener {
                 binding?.xuanzhe?.visibility = View.GONE
                 binding?.four?.hint = "平仓价格"
                 binding?.tishi?.visibility = View.GONE
+                getType()
             }
 
             com.fbsex.exchange.R.id.shouyi -> {
@@ -140,5 +151,11 @@ class FutureCountActivity: BaseActivity(), View.OnClickListener {
             }
 
 
+    }
+
+    private fun getType(){
+        if ( binding?.duo?.isChecked == true) {
+
+        }
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import com.black.util.CommonUtil
 
 object UrlConfig {
-    val HOSTS = "https://pixelex.co"
+    val HOSTS = "https://hipiex.net"
 
 
     fun getHost(context: Context): String {
@@ -26,10 +26,10 @@ object UrlConfig {
         return HOSTS + apiTypeDes
     }
 
-     var SOCKET_HOSTS_SOEASTEX = "wss://pixelex.co/ws/"//正式
+     var SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/ws/"//正式
 
 
-    var SPOT_SOCKET_HOSTS_SOEASTEX = "wss://pixelex.co/socket"//正式
+    var SPOT_SOCKET_HOSTS_SOEASTEX = "wss://hipiex.net/socket"//正式
 
 
 

@@ -32,6 +32,7 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.frying.FryingApplication
 import com.black.frying.fragment.*
 import com.black.frying.model.HomeTab
+import com.black.frying.service.FutureService
 import com.black.frying.service.SocketService
 import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.util.UdeskUtil
@@ -198,6 +199,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
         }
         if (CookieUtil.getUserInfo(mContext) != null) {
             sendLoginBroadcast(SocketUtil.COMMAND_USER_LOGIN)
+            FutureService.initFutureData(mContext)
         }
 //        getDialogAd()
     }

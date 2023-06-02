@@ -113,7 +113,7 @@ class ContraLimitTabListAdapter(context: Context, variableId: Int, data: Mutable
         //成交数量
         viewHolder?.tvLosePriceDes?.text = String.format("%.4f",num2)
         //平仓盈亏
-        viewHolder?.tvBondAmountDes?.text = if (planData.closeProfit == null ) nullAmount else String.format("%.4f",planData.closeProfit)
+        viewHolder?.tvBondAmountDes?.text = if (planData.closeProfit == null ) nullAmount else String.format("%.4f",planData.closeProfit?.toDouble())
         viewHolder?.id?.setOnClickListener {
             if (CommonUtil.copyText(
                     context,

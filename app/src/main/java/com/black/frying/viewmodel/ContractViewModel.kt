@@ -62,6 +62,7 @@ class ContractViewModel(
     //用户相关
     private var userBalanceObserver: Observer<UserBalanceBean?>? = createUserBalanceObserver()
     private var userTradeOrderObserver: Observer<TradeOrderFiex?>? = createUserOrderObserver()
+    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
 
     //交易对相关
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
@@ -196,6 +197,11 @@ class ContractViewModel(
         }
         SocketDataContainer.subscribeFKLineAddMoreObservable(fkLineAddMoreObserver)
 
+        if (positionObservers == null) {
+            positionObservers = createPositionObserver()
+        }
+        SocketDataContainer.subscribePositionObservable(positionObservers)
+
         val bundle = Bundle()
         bundle.putString(SocketUtil.WS_TYPE, SocketUtil.WS_USER)
         SocketUtil.sendSocketCommandBroadcast(
@@ -291,6 +297,10 @@ class ContractViewModel(
         if (fkLineAddMoreObserver != null) {
             SocketDataContainer.removeFKLineAddMoreObservable(fkLineAddMoreObserver)
         }
+        if (positionObservers != null) {
+            SocketDataContainer.removePositionObservable(positionObservers)
+            positionObservers = null
+        }
 
         if (socketHandler != null) {
             socketHandler!!.removeMessages(0)
@@ -301,6 +311,16 @@ class ContractViewModel(
         }
     }
 
+    private fun createPositionObserver(): Observer<UserPositionBean?> {
+        return object : SuccessObserver<UserPositionBean?>() {
+            override fun onSuccess(value:UserPositionBean?) {
+                Log.d("hkhkjhjk", value.toString())
+                getPositionData()
+                initBalanceByCoin(context)
+                FutureService.initBalanceByCoin(context)
+            }
+        }
+    }
     /**
      * 获取资产
      */
@@ -319,7 +339,7 @@ class ContractViewModel(
                     Log.d("ttttttt-->getBalanceDetail", returnData?.result.toString())
                     if (returnData != null) {
                         balanceDetailBean = returnData.result!!
-                        //onContractModelListener?.futureBalance(balanceDetailBean)
+                        onContractModelListener?.futureBalance(balanceDetailBean)
                     }
                 }
             })
@@ -329,6 +349,7 @@ class ContractViewModel(
      * 获取仓位列表
      */
     fun getPositionData() {
+        Log.d("khjkhkjh", "1111")
         FutureApiServiceHelper.getPositionList(context, null, false,
             object : Callback<HttpRequestResultBean<ArrayList<PositionBean?>?>?>() {
                 override fun error(type: Int, error: Any?) {
@@ -337,12 +358,13 @@ class ContractViewModel(
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
 
-                        var data: ArrayList<PositionBean?>? = returnData.result
-                        positionList =
-                            data?.filter { it?.positionSize!!.toInt() > 0  || it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
-                        if (positionList?.size!! > 0) {
-                            onContractModelListener?.onPositionData(positionList)
+                        val data: ArrayList<PositionBean?>? = returnData.result
+                        Log.d("khjkhkjh", data.toString())
+                        if (data?.size!! > 0) {
+                            onContractModelListener?.onPositionData(data)
                         }
+                        positionList = data.filter { it?.positionSize!!.toInt() > 0  || it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
+                        Log.d("khjkhkjh", positionList.toString())
                     }
                 }
             })
@@ -355,7 +377,7 @@ class ContractViewModel(
      * 获取当前持仓数据
      */
     fun getProfitData(state: String?) {
-        var symbol:String? = currentPairStatus?.pair
+        var symbol:String? = currentPairStatus.pair
         if(SharedPreferenceUtils.getData(Constants.PROFIT_ALL_CHECKED,false) as Boolean){
             symbol = null
         }
@@ -403,7 +425,7 @@ class ContractViewModel(
      * 获取当前限价委托
      */
     fun getLimitPricePlanData() {
-        var symbol:String? = currentPairStatus?.pair
+        var symbol:String? = currentPairStatus.pair
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
@@ -414,9 +436,9 @@ class ContractViewModel(
 
                 override fun callback(returnData: HttpRequestResultBean<OrderBean>?) {
                     if (returnData != null) {
-                        var orderData = returnData?.result
+                        var orderData = returnData.result
                         var orderList = orderData?.items
-                        planUnionBean?.limitPriceList = orderList
+                        planUnionBean.limitPriceList = orderList
                         onContractModelListener?.onPlanData(planUnionBean)
                     }
                 }
@@ -565,6 +587,9 @@ class ContractViewModel(
 //                todo 计算总权益
                 Log.d("ttt------>markPirce", value.toString())
                 var floatProfit: BigDecimal = BigDecimal.ZERO
+                if (value?.s == currentPairStatus.pair) {
+                    onContractModelListener?.onMarketPrice(value)
+                }
                 if (positionList != null) {
                     for (item in positionList!!) {
                         Log.d("tt1------>floatProfit", positionList!!.size.toString())
@@ -577,16 +602,13 @@ class ContractViewModel(
                     var totalProfit: BigDecimal = BigDecimal.ZERO
                     var available: BigDecimal = BigDecimal.ZERO
 //                    Log.d("ttt------>balanceAmount", balanceDetailBean?.walletBalance.toString())
-                    if (balanceDetailBean != null) {
+                    if (balanceDetailBean != null && floatProfit.toDouble() != 0.0) {
                         Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
                         available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
                         onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
                     }
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
-                }
-                if (value?.s == currentPairStatus.pair) {
-                    onContractModelListener?.onMarketPrice(value)
                 }
             }
         }
@@ -1397,7 +1419,7 @@ class ContractViewModel(
         /**
          * 用户余额变化
          */
-        //fun onUserBalanceChanged(userBalance: UserBalance?)
+        //fun onUserBalanceChanged(userBalance: UserBalanceBean?)
 
         /**
          * 交易对24小时行情变更

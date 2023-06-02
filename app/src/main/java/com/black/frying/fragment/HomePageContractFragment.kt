@@ -331,7 +331,8 @@ class HomePageContractFragment : BaseFragment(),
         initHeader1()
         initHeader2()
         initTimeStepTab()
-        initBalanceByCoin(mContext)
+        viewModel!!.initBalanceByCoin(context)
+        FutureService.initFutureData(mContext)
         return layout
     }
 
@@ -1029,7 +1030,6 @@ class HomePageContractFragment : BaseFragment(),
     }
 
     private fun updateTabTitles(tabType: Int?, amount: Int?) {
-        refreshCangwei()
         when (tabType) {
             ConstData.CONTRACT_REC_HOLD_AMOUNT -> {
                 recordTab?.getTabAt(0)?.text =
@@ -1674,6 +1674,9 @@ class HomePageContractFragment : BaseFragment(),
 
     //计算最大交易数量
     private fun getMaxAmount(): BigDecimal? {
+        if (viewModel?.balanceDetailBean == null){
+            return BigDecimal.ZERO
+        }
         if (transactionType == ConstData.FUTURE_OPERATE_OPEN) {
 //            val usable = currentBalanceSell?.availableBalance
             val usable = viewModel?.balanceDetailBean?.availableBalance
@@ -1933,7 +1936,6 @@ class HomePageContractFragment : BaseFragment(),
         viewModel!!.changePairSocket()
         resetPriceLength()
         resetAmountLength()
-        refreshCurrentWallet()
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
@@ -2056,7 +2058,6 @@ class HomePageContractFragment : BaseFragment(),
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null) {
             header1View?.btnHandle?.setText(R.string.login)
         }
-        refreshCurrentWallet()
     }
 
     private fun refreshDeepView() {
@@ -2286,11 +2287,13 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
-    private fun refreshCangwei(){
+   /* private fun refreshCangwei(){
         updateOpenAvailableData()
         viewModel!!.initBalanceByCoin(mContext)
         FutureService.initBalanceByCoin(mContext)
     }
+
+    */
     private fun refreshShuju(){
         updateOpenAvailableData()
         viewModel!!.initBalanceByCoin(mContext)
@@ -2329,8 +2332,7 @@ class HomePageContractFragment : BaseFragment(),
 //初始化杠杆倍数方向
     @SuppressLint("SetTextI18n")
     override fun onPositionData(data: ArrayList<PositionBean?>?) {
-    Log.d("kjlkjklj","41343")
-        updateTabTitles(ConstData.CONTRACT_REC_HOLD_AMOUNT, data?.size)
+    Log.d("kjlkjklj",data.toString())
        if ( data?.size != null && data.size > 0){
            for (item in data) {
                if (item?.symbol == viewModel?.getCurrentPair()) {
@@ -2344,6 +2346,7 @@ class HomePageContractFragment : BaseFragment(),
                    positionType = item?.positionType
                    binding!!.fragmentHomePageContractHeader1.cangBeishu.text =
                        item?.leverage.toString()
+                   Log.d("kjlkjklj",item.toString())
                    leverage = item?.leverage
                    break
                }
@@ -2416,7 +2419,6 @@ class HomePageContractFragment : BaseFragment(),
             updatePriceSince(tickerBean?.r)
             updateCurrentPairPrice(tickerBean?.c)
 //            initInputPriceValue(tickerBean?.c)
-            updateOpenAvailableData()
         }
     }
 
@@ -2467,6 +2469,7 @@ class HomePageContractFragment : BaseFragment(),
     //用户信息被修改，刷新委托信息和钱包
     override fun onUserInfoChanged() {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            Log.d("adhkjshdfja",CookieUtil.getUserInfo(mContext!!).toString())
             getTradeOrderCurrent()
             refreshCurrentWallet()
         }
@@ -2507,6 +2510,8 @@ class HomePageContractFragment : BaseFragment(),
                 Log.d("12312", marketPrice.toString()
                 )
             header1View?.tagPrice?.text = marketPrice?.p
+            val price = if (header1View?.price?.text?.isEmpty() == true) marketPrice?.p else header1View?.price?.text.toString()
+            updateCanOpenAmount(price)
         }
     }
 
@@ -2516,7 +2521,7 @@ class HomePageContractFragment : BaseFragment(),
     override fun onFundingRate(fundRate: FundingRateBean?) {
         Log.d("iiiiii", "onFundingRate")
         CommonUtil.checkActivityAndRunOnUI(mContext) {
-            val rate: String? = NumberUtil.formatNumberNoGroup(
+            val rate: String = NumberUtil.formatNumberNoGroup(
                 fundRate?.fundingRate?.toFloat()?.times(100),
                 RoundingMode.FLOOR,
                 4,
@@ -2557,17 +2562,21 @@ class HomePageContractFragment : BaseFragment(),
 
                 override fun callback(returnData: HttpRequestResultBean<BalanceDetailBean?>?) {
                     if (returnData != null) {
-                        binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = returnData.result?.walletBalance
-                        binding?.fragmentHomePageContractHeader1?.amount?.text = returnData.result?.availableBalance
+                        binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = String.format("%.4f", returnData.result?.walletBalance?.toDouble())
+                        binding?.fragmentHomePageContractHeader1?.amount?.text = String.format("%.4f", returnData.result?.availableBalance?.toDouble())
                     }
                 }
             })
     }
+    @SuppressLint("SetTextI18n")
     override fun futureBalance(balanceDetailBean: BalanceDetailBean?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            if (balanceDetailBean == null){
+                binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = "0.0000"
+                binding?.fragmentHomePageContractHeader1?.amount?.text = "0.0000"
+            }
                 binding?.fragmentHomePageContractHeader?.totalProfitValue?.text = String.format("%.4f",viewModel?.balanceDetailBean?.walletBalance?.toDouble())
                 binding?.fragmentHomePageContractHeader1?.amount?.text = String.format("%.4f",viewModel?.balanceDetailBean?.availableBalance?.toDouble())
-            //binding?.fragmentHomePageContractHeader1?.amount?.setText(balanceDetailBean1?.availableBalance.toString())
         }
     }
 
@@ -2697,6 +2706,8 @@ class HomePageContractFragment : BaseFragment(),
     }
     //刷新当前钱包
     private fun refreshCurrentWallet() {
+        viewModel!!.initBalanceByCoin(context)
+        FutureService.initFutureData(mContext)
         /*currentWallet = null
         currentEstimatedWallet = null
         viewModel!!.getCurrentWallet(tabType)

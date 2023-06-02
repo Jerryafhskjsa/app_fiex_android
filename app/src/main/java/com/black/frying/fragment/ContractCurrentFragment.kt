@@ -247,6 +247,9 @@ class ContractCurrentFragment : BaseFragment(),
                             Log.d("fsdjhskjafhjk", count.toString())
                             onTabModelListener?.onCount(count)
                         }
+                        else{
+                            onTabModelListener?.onCount(0)
+                        }
                     }
                 })
         }

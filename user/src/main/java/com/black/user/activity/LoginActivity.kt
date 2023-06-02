@@ -273,7 +273,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun doLogin(username: String, password: String, telCountryCode: String?) {
+    /*private fun doLogin(username: String, password: String, telCountryCode: String?) {
         showLoading()
         ApiManager.build(this, false, UrlConfig.ApiType.URl_UC)
             .getService<UserApiService>(UserApiService::class.java)
@@ -364,47 +364,44 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         Observable.empty()
                     }
                 }
-            })
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : NormalObserver2<HttpRequestResultData<SuffixResult?>?>(this) {
-                override fun afterRequest() {
-                    hideLoading()
-                }
-    /*private fun doLogin(username: String, password: String, telCountryCode: String?) {
+            })*/
+    //?.observeOn(AndroidSchedulers.mainThread())
+    //?.subscribe
+    private fun doLogin(username: String, password: String, telCountryCode: String?) {
         UserApiServiceHelper.login(mContext,username,password,telCountryCode, object : Callback<HttpRequestResultData<SuffixResult?>?>() {
             override fun error(type: Int, error: Any?) {
-            }*/
+            }
 
-                override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
-                    if (result != null && result.code == HttpRequestResult.SUCCESS) {
-                        val ucToken = result.data?.ucToken
-                        val ticket = result.data?.ticket
-                        Log.d(TAG, "ucToken = $ucToken")
-                        Log.d(TAG, "ticket = $ticket")
-                        if (TextUtils.isEmpty(ucToken)) {
-                            FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
-                        } else {
-                            HttpCookieUtil.saveUcToken(mContext, ucToken)
-                            CookieUtil.saveToken(mContext, ucToken)
-                            Log.d(TAG, "currentThread = " + Thread.currentThread().name)
-                            HttpCookieUtil.saveTicket(mContext, ticket)
-                            if (user != null) {
-                                user!!.token = ucToken
-                                user!!.ucToken = ucToken
-                                user!!.ticket = ticket
-                            }
-                            getProToken(mContext)
-                            getOtcToken(mContext)
-                            getFicToken(mContext)
-                        }
+            override fun callback(result: HttpRequestResultData<SuffixResult?>?) {
+                if (result != null && result.code == HttpRequestResult.SUCCESS) {
+                    val ucToken = result.data?.ucToken
+                    val ticket = result.data?.ticket
+                    Log.d(TAG, "ucToken = $ucToken")
+                    Log.d(TAG, "ticket = $ticket")
+                    if (TextUtils.isEmpty(ucToken)) {
+                        FryingUtil.showToast(mContext, getString(R.string.get_token_failed))
                     } else {
-                        FryingUtil.showToast(
-                            mContext,
-                            if (result == null) getString(R.string.login_data_error) else result.msg
-                        )
+                        HttpCookieUtil.saveUcToken(mContext, ucToken)
+                        CookieUtil.saveToken(mContext, ucToken)
+                        Log.d(TAG, "currentThread = " + Thread.currentThread().name)
+                        HttpCookieUtil.saveTicket(mContext, ticket)
+                        if (user != null) {
+                            user!!.token = ucToken
+                            user!!.ucToken = ucToken
+                            user!!.ticket = ticket
+                        }
+                        getProToken(mContext)
+                        getOtcToken(mContext)
+                        getFicToken(mContext)
                     }
+                } else {
+                    FryingUtil.showToast(
+                        mContext,
+                        if (result == null) getString(R.string.login_data_error) else result.msg
+                    )
                 }
-            })
+            }
+        })
 
     }
 
@@ -434,7 +431,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
      * 获取listen-key
      */
     private fun getListenKey(context: Context) {
-        FutureApiServiceHelper.getListenKey(context, false,
+        FutureApiServiceHelper.getListenKey(context!!, false,
             object : Callback<HttpRequestResultBean<String>?>() {
                 override fun error(type: Int, error: Any?) {
                     Log.d("ttttttt-->getListenKey", error.toString());
@@ -491,14 +488,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         val otcTokenResult: LoginVO? = result.data
                         val otcToken = otcTokenResult?.token
                         val otcTokenExpiredTime = otcTokenResult?.expireTime
-                            HttpCookieUtil.saveApiToken(context, otcToken)
-                            HttpCookieUtil.saveApiTokenExpiredTime(
-                                context,
-                                otcTokenExpiredTime.toString()
-                            )
+                        HttpCookieUtil.saveApiToken(context, otcToken)
+                        HttpCookieUtil.saveApiTokenExpiredTime(
+                            context,
+                            otcTokenExpiredTime.toString()
+                        )
 
-                        }
                     }
+                }
 
             })
     }
