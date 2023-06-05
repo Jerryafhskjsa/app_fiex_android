@@ -656,7 +656,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.volumeH24?.setText(pairStatus.tradeVolueFormat)
         binding?.coinVolumeH24?.setText(pairStatus.tradeAmountFormat)
         binding?.analyticChart?.setCurrentPrice(pairStatus.currentPrice)
-        binding?.liang?.setText(String.format("24h成交量(%s)",pairStatus.setName?.uppercase()))
+        binding?.liang?.setText(String.format("24h成交量(%s)",pairStatus.name?.uppercase()))
         binding?.jiao?.setText(String.format("24h成交额(%s)",pairStatus.setName?.uppercase()))
 //        binding?.quotationDetailDeepLayout?.depthChart?.setMiddlePrice(pairStatus.currentPrice)
     }

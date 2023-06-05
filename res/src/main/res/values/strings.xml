@@ -366,7 +366,7 @@
     <string name="more">更多</string>
     <string name="purchase_by_amount">按金额</string>
     <string name="purchase_by_account">按数量</string>
-    <string name="rechange">充值</string>
+    <string name="rechange">充值/收款</string>
     <string name="extract">提现/转账</string>
     <string name="bill">账单</string>
     <string name="transfer">划转</string>
@@ -443,8 +443,8 @@
     <string name="k_buy">买入</string>
     <string name="k_sale">卖出</string>
     <string name="volumn_24">24H量 %1$s</string>
-    <string name="entrust_type_buy">限价买入</string>
-    <string name="entrust_type_sale">限价卖出</string>
+    <string name="entrust_type_buy">限价/买入</string>
+    <string name="entrust_type_sale">限价/卖出</string>
     <string name="trade_value">交易额</string>
     <string name="point_count">%1$s</string>
     <string name="trade_sale_over_price">卖单价格低于当前成交价20%</string>

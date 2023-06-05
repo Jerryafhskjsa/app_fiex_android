@@ -29,6 +29,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
     private var colorT5A10: Int
     private var currentStyle = STYLE_NORMAL
     private val nullAmount: String
+    private var oneSelector: OneSelector? = null
+    private var twoSelector: TwoSelector? = null
     private var onTransactionDeepListener: OnTransactionDeepListener? = null
     fun init() {
         binding.handicapSaleLayout01.background = ProgressDrawable(colorT5A10, colorTransparent, ProgressDrawable.RIGHT)
@@ -51,6 +53,10 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         binding.handicapSaleLayout09.setOnClickListener(this)
         binding.handicapSaleLayout10.background = ProgressDrawable(colorT5A10, colorTransparent, ProgressDrawable.RIGHT)
         binding.handicapSaleLayout10.setOnClickListener(this)
+        binding.handicapSaleLayout11.background = ProgressDrawable(colorT5A10, colorTransparent, ProgressDrawable.RIGHT)
+        binding.handicapSaleLayout11.setOnClickListener(this)
+        binding.handicapSaleLayout12.background = ProgressDrawable(colorT5A10, colorTransparent, ProgressDrawable.RIGHT)
+        binding.handicapSaleLayout12.setOnClickListener(this)
         binding.handicapBuyLayout01.background = ProgressDrawable(colorT7A10, colorTransparent, ProgressDrawable.RIGHT)
         binding.handicapBuyLayout01.setOnClickListener(this)
         binding.handicapBuyLayout02.background = ProgressDrawable(colorT7A10, colorTransparent, ProgressDrawable.RIGHT)
@@ -71,10 +77,39 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         binding.handicapBuyLayout09.setOnClickListener(this)
         binding.handicapBuyLayout10.background = ProgressDrawable(colorT7A10, colorTransparent, ProgressDrawable.RIGHT)
         binding.handicapBuyLayout10.setOnClickListener(this)
+        binding.handicapBuyLayout11.background = ProgressDrawable(colorT7A10, colorTransparent, ProgressDrawable.RIGHT)
+        binding.handicapBuyLayout11.setOnClickListener(this)
+        binding.handicapBuyLayout12.background = ProgressDrawable(colorT7A10, colorTransparent, ProgressDrawable.RIGHT)
+        binding.handicapBuyLayout12.setOnClickListener(this)
         binding.deep.setOnClickListener(this)
         binding.displayType.setOnClickListener(this)
+        binding.deepLayout.setOnClickListener(this)
         binding.linDeepPostion.setOnClickListener(this)
         binding.linDeepDepth.setOnClickListener(this)
+        oneSelector = OneSelector(context)
+        oneSelector?.setOnKLineQuotaSelectorListener(object : OneSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: Int?) {
+                if (type != null) {
+                    currentStyle = type
+                    showCurrentStyle()
+                    showStyleLayout()
+                    viewModel.getAllOrderFiex()
+                }
+            }
+
+        })
+        twoSelector = TwoSelector(context)
+        twoSelector?.setOnKLineQuotaSelectorListener(object : TwoSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: Int?) {
+                if (type != null) {
+                    currentStyle = type
+                    showCurrentStyle()
+                    showStyleLayout()
+                    viewModel.getAllOrderFiex()
+                }
+            }
+
+        })
         showCurrentStyle()
         showStyleLayout()
     }
@@ -82,8 +117,9 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
     override fun onClick(v: View) {
         when (v.id) {
             R.id.deep,R.id.lin_deep_postion ->  //弹出深度选择器
+                //twoSelector!!.show(binding.)
                 if (viewModel.getPrecisionList() != null && viewModel.getPrecisionList()!!.isNotEmpty()) {
-                    DeepControllerWindow<Deep>(context, null, viewModel.getPrecisionDeep(viewModel.getPrecision()), viewModel.getPrecisionList() as List<Deep>,
+                    DeepControllerWindow<Deep>(context, "深度选择", viewModel.getPrecisionDeep(viewModel.getPrecision()), viewModel.getPrecisionList() as List<Deep>,
                             object : DeepControllerWindow.OnReturnListener<Deep> {
                                 override fun onReturn(window: DeepControllerWindow<Deep>, item: Deep) {
                                     item.precision?.let { viewModel.setPrecision(it) }
@@ -93,14 +129,10 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                                 }
                             }).show()
                 }
-            R.id.display_type -> {
-                currentStyle = (currentStyle + 1) % 3
-                showCurrentStyle()
-                showStyleLayout()
-//                viewModel.getAllOrder()
-                viewModel.getAllOrderFiex()
+            R.id.deep_layout -> {
+                oneSelector!!.show(binding.displayType)
             }
-            R.id.handicap_sale_layout_01, R.id.handicap_sale_layout_02, R.id.handicap_sale_layout_03, R.id.handicap_sale_layout_04, R.id.handicap_sale_layout_05, R.id.handicap_sale_layout_06, R.id.handicap_sale_layout_07, R.id.handicap_sale_layout_08, R.id.handicap_sale_layout_09, R.id.handicap_sale_layout_10, R.id.handicap_buy_layout_01, R.id.handicap_buy_layout_02, R.id.handicap_buy_layout_03, R.id.handicap_buy_layout_04, R.id.handicap_buy_layout_05, R.id.handicap_buy_layout_06, R.id.handicap_buy_layout_07, R.id.handicap_buy_layout_08, R.id.handicap_buy_layout_09, R.id.handicap_buy_layout_10 -> {
+            R.id.handicap_sale_layout_01, R.id.handicap_sale_layout_02, R.id.handicap_sale_layout_03, R.id.handicap_sale_layout_04, R.id.handicap_sale_layout_05, R.id.handicap_sale_layout_06, R.id.handicap_sale_layout_07, R.id.handicap_sale_layout_08, R.id.handicap_sale_layout_09, R.id.handicap_sale_layout_10,R.id.handicap_sale_layout_11, R.id.handicap_sale_layout_12, R.id.handicap_buy_layout_01, R.id.handicap_buy_layout_02, R.id.handicap_buy_layout_03, R.id.handicap_buy_layout_04, R.id.handicap_buy_layout_05, R.id.handicap_buy_layout_06, R.id.handicap_buy_layout_07, R.id.handicap_buy_layout_08, R.id.handicap_buy_layout_09, R.id.handicap_buy_layout_10, R.id.handicap_buy_layout_11, R.id.handicap_buy_layout_12 -> {
                 val tag = v.tag
                 if (tag is TradeOrder) {
                     if (onTransactionDeepListener != null) {
@@ -138,6 +170,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         resetProgressDrawable(binding.handicapBuyLayout09, colorT7A10, colorTransparent)
         resetProgressDrawable(binding.handicapBuyLayout09, colorT7A10, colorTransparent)
         resetProgressDrawable(binding.handicapBuyLayout10, colorT7A10, colorTransparent)
+        resetProgressDrawable(binding.handicapBuyLayout11, colorT7A10, colorTransparent)
+        resetProgressDrawable(binding.handicapBuyLayout12, colorT7A10, colorTransparent)
     }
 
     private fun resetSaleProgressDrawables() {
@@ -151,6 +185,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         resetProgressDrawable(binding.handicapSaleLayout08, colorT5A10, colorTransparent)
         resetProgressDrawable(binding.handicapSaleLayout09, colorT5A10, colorTransparent)
         resetProgressDrawable(binding.handicapSaleLayout10, colorT5A10, colorTransparent)
+        resetProgressDrawable(binding.handicapSaleLayout11, colorT5A10, colorTransparent)
+        resetProgressDrawable(binding.handicapSaleLayout12, colorT5A10, colorTransparent)
     }
 
     private fun resetProgressDrawable(view: View?, progressColor: Int, bgColor: Int) {
@@ -165,9 +201,9 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
 
     private fun showCurrentStyle() {
         when (currentStyle) {
-            STYLE_BID_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep_02))
-            STYLE_ASK_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep_03))
-            else -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep))
+            STYLE_BID_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.mairu))
+            STYLE_ASK_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.maichu))
+            else -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.maimai))
         }
     }
 
@@ -175,7 +211,7 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         val defaultPadding = context.resources.getDimensionPixelSize(R.dimen.default_padding)
         when (currentStyle) {
             STYLE_BID_ALL -> {
-                viewModel.bidMax = 10
+                viewModel.bidMax = 12
                 viewModel.askMax = 0
                 binding.currentPriceLayout.setPadding(0, 0, 0, defaultPadding)
                 binding.handicapBuyLayout01.visibility = View.VISIBLE
@@ -188,6 +224,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                 binding.handicapBuyLayout08.visibility = View.VISIBLE
                 binding.handicapBuyLayout09.visibility = View.VISIBLE
                 binding.handicapBuyLayout10.visibility = View.VISIBLE
+                binding.handicapBuyLayout11.visibility = View.VISIBLE
+                binding.handicapBuyLayout12.visibility = View.VISIBLE
                 binding.handicapSaleLayout01.visibility = View.GONE
                 binding.handicapSaleLayout02.visibility = View.GONE
                 binding.handicapSaleLayout03.visibility = View.GONE
@@ -198,10 +236,12 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                 binding.handicapSaleLayout08.visibility = View.GONE
                 binding.handicapSaleLayout09.visibility = View.GONE
                 binding.handicapSaleLayout10.visibility = View.GONE
+                binding.handicapSaleLayout11.visibility = View.GONE
+                binding.handicapSaleLayout12.visibility = View.GONE
             }
             STYLE_ASK_ALL -> {
                 viewModel.bidMax = 0
-                viewModel.askMax = 10
+                viewModel.askMax = 12
                 binding.currentPriceLayout.setPadding(0, defaultPadding, 0, 0)
                 binding.handicapBuyLayout01.visibility = View.GONE
                 binding.handicapBuyLayout02.visibility = View.GONE
@@ -213,6 +253,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                 binding.handicapBuyLayout08.visibility = View.GONE
                 binding.handicapBuyLayout09.visibility = View.GONE
                 binding.handicapBuyLayout10.visibility = View.GONE
+                binding.handicapBuyLayout11.visibility = View.GONE
+                binding.handicapBuyLayout12.visibility = View.GONE
                 binding.handicapSaleLayout01.visibility = View.VISIBLE
                 binding.handicapSaleLayout02.visibility = View.VISIBLE
                 binding.handicapSaleLayout03.visibility = View.VISIBLE
@@ -223,31 +265,37 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
                 binding.handicapSaleLayout08.visibility = View.VISIBLE
                 binding.handicapSaleLayout09.visibility = View.VISIBLE
                 binding.handicapSaleLayout10.visibility = View.VISIBLE
+                binding.handicapSaleLayout11.visibility = View.VISIBLE
+                binding.handicapSaleLayout12.visibility = View.VISIBLE
             }
             else -> {
-                viewModel.bidMax = 5
-                viewModel.askMax = 5
+                viewModel.bidMax = 6
+                viewModel.askMax = 6
                 binding.currentPriceLayout.setPadding(0, defaultPadding, 0, defaultPadding)
                 binding.handicapBuyLayout01.visibility = View.VISIBLE
                 binding.handicapBuyLayout02.visibility = View.VISIBLE
                 binding.handicapBuyLayout03.visibility = View.VISIBLE
                 binding.handicapBuyLayout04.visibility = View.VISIBLE
                 binding.handicapBuyLayout05.visibility = View.VISIBLE
-                binding.handicapBuyLayout06.visibility = View.GONE
+                binding.handicapBuyLayout06.visibility = View.VISIBLE
                 binding.handicapBuyLayout07.visibility = View.GONE
                 binding.handicapBuyLayout08.visibility = View.GONE
                 binding.handicapBuyLayout09.visibility = View.GONE
                 binding.handicapBuyLayout10.visibility = View.GONE
+                binding.handicapBuyLayout11.visibility = View.GONE
+                binding.handicapBuyLayout12.visibility = View.GONE
                 binding.handicapSaleLayout01.visibility = View.VISIBLE
                 binding.handicapSaleLayout02.visibility = View.VISIBLE
                 binding.handicapSaleLayout03.visibility = View.VISIBLE
                 binding.handicapSaleLayout04.visibility = View.VISIBLE
                 binding.handicapSaleLayout05.visibility = View.VISIBLE
-                binding.handicapSaleLayout06.visibility = View.GONE
+                binding.handicapSaleLayout06.visibility = View.VISIBLE
                 binding.handicapSaleLayout07.visibility = View.GONE
                 binding.handicapSaleLayout08.visibility = View.GONE
                 binding.handicapSaleLayout09.visibility = View.GONE
                 binding.handicapSaleLayout10.visibility = View.GONE
+                binding.handicapSaleLayout11.visibility = View.GONE
+                binding.handicapSaleLayout12.visibility = View.GONE
             }
         }
     }
@@ -283,6 +331,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         showAskOrder(CommonUtil.getItemFromList(data, 7), binding.handicapSaleLayout08, binding.priceSale08, binding.countSale08)
         showAskOrder(CommonUtil.getItemFromList(data, 8), binding.handicapSaleLayout09, binding.priceSale09, binding.countSale09)
         showAskOrder(CommonUtil.getItemFromList(data, 9), binding.handicapSaleLayout10, binding.priceSale10, binding.countSale10)
+        showAskOrder(CommonUtil.getItemFromList(data, 10), binding.handicapSaleLayout11, binding.priceSale11, binding.countSale11)
+        showAskOrder(CommonUtil.getItemFromList(data, 11), binding.handicapSaleLayout12, binding.priceSale12, binding.countSale12)
     }
 
     private fun showAskOrder(tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
@@ -305,6 +355,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         setOrderBg(binding.handicapSaleLayout08, null)
         setOrderBg(binding.handicapSaleLayout09, null)
         setOrderBg(binding.handicapSaleLayout10, null)
+        setOrderBg(binding.handicapSaleLayout11, null)
+        setOrderBg(binding.handicapSaleLayout12, null)
     }
 
     //显示买入订单
@@ -327,6 +379,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         showBidOrder(CommonUtil.getItemFromList(data, 7), binding.handicapBuyLayout08, binding.priceBuy08, binding.countBuy08)
         showBidOrder(CommonUtil.getItemFromList(data, 8), binding.handicapBuyLayout09, binding.priceBuy09, binding.countBuy09)
         showBidOrder(CommonUtil.getItemFromList(data, 9), binding.handicapBuyLayout10, binding.priceBuy10, binding.countBuy10)
+        showBidOrder(CommonUtil.getItemFromList(data, 10), binding.handicapBuyLayout11, binding.priceBuy11, binding.countBuy11)
+        showBidOrder(CommonUtil.getItemFromList(data, 11), binding.handicapBuyLayout12, binding.priceBuy12, binding.countBuy12)
     }
 
     private fun showBidOrder(tradeOrder: TradeOrder?, layout: View, priceView: TextView, countView: TextView) {
@@ -349,6 +403,8 @@ class TransactionDeepViewBinding(private val context: Activity, private val view
         setOrderBg(binding.handicapBuyLayout08, null)
         setOrderBg(binding.handicapBuyLayout09, null)
         setOrderBg(binding.handicapBuyLayout10, null)
+        setOrderBg(binding.handicapBuyLayout11, null)
+        setOrderBg(binding.handicapBuyLayout12, null)
     }
 
     interface OnTransactionDeepListener {

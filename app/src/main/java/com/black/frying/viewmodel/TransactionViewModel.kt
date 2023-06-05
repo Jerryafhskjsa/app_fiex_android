@@ -52,8 +52,8 @@ class TransactionViewModel(
     private var currentOrderType: String? = null
     private var coinType: String? = null
     private var pairSet: String? = null
-    var askMax = 5
-    var bidMax = 5
+    var askMax = 6
+    var bidMax = 6
 
     //异步获取数据
     private var handlerThread: HandlerThread? = null
@@ -210,6 +210,22 @@ class TransactionViewModel(
         }
     }
 
+    fun getAllWallet(isShowLoading: Boolean) {
+//        getWalletFromServer2(isShowLoading)
+        getUserBalance(isShowLoading)
+    }
+    private fun getUserBalance(isShowLoading: Boolean){
+        WalletApiServiceHelper.getUserBalance(context)
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, object : Callback<HttpRequestResultData<UserBalanceWarpper?>?>() {
+                override fun error(type: Int, error: Any) {
+                }
+                override fun callback(returnData: HttpRequestResultData<UserBalanceWarpper?>?) {
+                    if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    }
+                }
+            }))
+    }
     private fun createUserBalanceObserver(): Observer<UserBalance?> {
         return object : SuccessObserver<UserBalance?>() {
             override fun onSuccess(value: UserBalance?) {
@@ -580,7 +596,7 @@ class TransactionViewModel(
                         var recentDeal = CommonUtil.getItemFromList(dealList, 0)
                         onTransactionModelListener?.run {
                             if (recentDeal != null && currentPairStatus.pair != null) {
-                                onTransactionModelListener?.onPairDeal(recentDeal)
+                                onTransactionModelListener.onPairDeal(recentDeal)
                             }
                         }
                     }

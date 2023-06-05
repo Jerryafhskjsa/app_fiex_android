@@ -89,7 +89,7 @@ class MainViewModel(context: Context) : BaseViewModel<Any>(context) {
             //获取公告信息
             getNoticeInfo()
         }
-        getCoinlistConfig()
+        //getCoinlistConfig()
     }
 
     override fun onStop() {

@@ -89,10 +89,18 @@ class PositionSideSelector(activity: Activity) : PopupWindow.OnDismissListener, 
         }
     }
 
-    fun show(view: View?, type: String) {
+    fun show(view: View?, type: String ,orderType: Int) {
         this.type = null
         refreshView(type)
+        refreshViewType(orderType)
         popupWindow!!.showAsDropDown(view, margin.toInt(), margin.toInt())
+    }
+
+    private fun refreshViewType(orderType: Int) {
+        if (orderType == 0){
+            binding.plan.visibility = View.GONE
+            binding.view1.visibility = View.GONE
+        }
     }
 
     private fun refreshView(type: String) {
@@ -107,7 +115,7 @@ class PositionSideSelector(activity: Activity) : PopupWindow.OnDismissListener, 
         }
     }
 
-    fun setOnKLineQuotaSelectorListener(onKLineQuotaSelectorListener: OnKLineQuotaSelectorListener?) {
+    fun setOnKLineQuotaSelectorListener(onKLineQuotaSelectorListener: OnKLineQuotaSelectorListener) {
         this.onKLineQuotaSelectorListener = onKLineQuotaSelectorListener
     }
 

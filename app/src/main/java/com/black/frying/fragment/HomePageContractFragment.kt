@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -14,11 +13,9 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
-import android.util.Pair
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.CheckedTextView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -43,29 +40,22 @@ import com.black.base.model.socket.*
 import com.black.base.model.trade.TradeOrderResult
 import com.black.base.model.user.UserBalance
 import com.black.base.model.wallet.Wallet
-import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
-import com.black.base.view.AlertMessageDialog
 import com.black.base.view.ContractMultipleSelectWindow
 import com.black.base.view.DeepControllerWindow
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
-import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AnalyticChart2
 import com.black.base.widget.AutoHeightViewPager
 import com.black.frying.activity.HomePageActivity
-import com.black.frying.activity.QuotationDetailActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
 import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.FutureMSG
-import com.black.frying.view.KLineQuotaSelector
 import com.black.frying.view.MoreTimeStepSelector
 import com.black.frying.view.PositionSideSelector
 import com.black.frying.view.PositionTypeSeletor
-import com.black.frying.view.TransactionMorePopup
-import com.black.frying.view.TransactionMorePopup.OnTransactionMoreClickListener
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout
 import com.black.net.HttpRequestResult
@@ -80,8 +70,6 @@ import com.fbsex.exchange.databinding.FragmentHomePageContractBinding
 import com.fbsex.exchange.databinding.FragmentHomePageContractHeader1Binding
 import com.fbsex.exchange.databinding.FragmentHomePageContractHeaderBinding
 import com.google.android.material.tabs.TabLayout
-import io.reactivex.Observable
-import retrofit2.http.Field
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -1231,7 +1219,7 @@ class HomePageContractFragment : BaseFragment(),
 
             R.id.lin_order_type -> {
                 currentOrderType =  if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
-                kLineQuotaSelector!!.show(header1View?.linOrderType, currentOrderType!!)
+                kLineQuotaSelector!!.show(header1View?.linOrderType, currentOrderType!!,1)
                 /*DeepControllerWindow(mContext as Activity,
                     getString(R.string.select_order_type),
                    currentOrderType,

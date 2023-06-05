@@ -46,6 +46,8 @@ class EntrustCurrentHomeAdapter(
         val tradeOrder: TradeOrderFiex? = getItem(position)
         val viewHolder = holder.dataBing
         val type = StringBuilder()
+        val unit1 = tradeOrder?.symbol?.split("_")?.get(0)
+        val unit2 = tradeOrder?.symbol?.split("_")?.get(0)
         when {
             TextUtils.equals(tradeOrder?.orderSide, "SELL") -> {
                 viewHolder?.type?.setTextColor(t5)
@@ -67,7 +69,7 @@ class EntrustCurrentHomeAdapter(
         }
         viewHolder?.date?.setText(
             if (tradeOrder?.createdTime == null) nullAmount else CommonUtil.formatTimestamp(
-                "yyyy/MM/dd HH:mm",
+                "yyyy/MM/dd HH:mm:ss",
                 tradeOrder.createdTime!!
             )
         )
@@ -75,19 +77,33 @@ class EntrustCurrentHomeAdapter(
         viewHolder?.entrustAmount?.setText(
             if (tradeOrder?.origQty == null || tradeOrder.origQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
                 tradeOrder.origQty!!.toDoubleOrNull(), amountPrecision, amountPrecision
-            )
+            ) + unit1
         )
         viewHolder?.dealAmount?.setText(
             if (tradeOrder?.executedQty == null || tradeOrder.executedQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
                 tradeOrder.executedQty!!.toDoubleOrNull(), amountPrecision, amountPrecision
-            )
+            ) + "/"
         )
         viewHolder?.priceDes?.setText(
             if (tradeOrder?.price == null || tradeOrder.price == "0") "0" else NumberUtil.formatNumberNoGroup(
-                tradeOrder.price!!.toDoubleOrNull()
-            )
+                tradeOrder.price!!.toDoubleOrNull(), amountPrecision, amountPrecision
+            ) + unit2
         )
-
+        viewHolder?.priceDes1?.setText(
+            if (tradeOrder?.avgPrice == null || tradeOrder.avgPrice == "0" ) "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.avgPrice!!.toDoubleOrNull(), amountPrecision, amountPrecision
+            ) + unit2
+        )
+        viewHolder?.dealAmount?.setText(
+            if (tradeOrder?.avgPrice == null || tradeOrder.avgPrice == "0" || tradeOrder.executedQty == null || tradeOrder.executedQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.avgPrice!!.toDouble() * tradeOrder.executedQty !!.toDouble(), amountPrecision, amountPrecision
+            ) + "/"
+        )
+        viewHolder?.dealAmount1?.setText(
+            if (tradeOrder?.price == null || tradeOrder.price == "0" || tradeOrder.origQty == null || tradeOrder.origQty == 0.0.toString()) "0" else NumberUtil.formatNumberNoGroup(
+                tradeOrder.price!!.toDouble() * tradeOrder.origQty!!.toDouble(), amountPrecision, amountPrecision
+            ) + unit2
+        )
     }
 
     fun setAmountPrecision(amountPrecision: Int) {

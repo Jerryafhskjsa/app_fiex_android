@@ -43,11 +43,13 @@ import com.black.base.model.wallet.WalletLeverDetail
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
 import com.black.base.view.AlertMessageDialog
-import com.black.base.view.DeepControllerWindow
 import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
+import com.black.frying.view.FutureMSG
+import com.black.frying.view.PositionSideSelector
+import com.black.frying.view.ThreeSelector
 import com.black.frying.view.TransactionDeepViewBinding
 import com.black.frying.view.TransactionDeepViewBinding.OnTransactionDeepListener
 import com.black.frying.view.TransactionMorePopup
@@ -56,7 +58,6 @@ import com.black.frying.viewmodel.TransactionViewModel
 import com.black.frying.viewmodel.TransactionViewModel.OnTransactionModelListener
 import com.black.im.util.IMHelper
 import com.black.lib.refresh.QRefreshLayout
-import com.black.net.HttpCookieUtil
 import com.black.net.HttpRequestResult
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
@@ -77,7 +78,6 @@ import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.pow
 
 //首页交易
@@ -101,11 +101,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private var colorWin = 0
     private var colorLost = 0
     private var colorT3 = 0
-
+    private var wallet =  Wallet()
     private var transactionType = 1 //1 买入 2卖出
     private var tabType = ConstData.TAB_COIN
     private var type = ConstData.BalanceType.SPOT
-
+    private var kLineQuotaSelector: PositionSideSelector? = null
+    private var threeSelector: ThreeSelector? = null
     private var countProgressBuy: Drawable? = null
     private var countProgressSale: Drawable? = null
     private var currentOrderType: String? = "LIMIT"
@@ -202,9 +203,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         deepViewBinding?.setOnTransactionDeepListener(this)
 
         binding?.actionBarLayout?.btnTransactionMemu?.setOnClickListener(this)
+        binding!!.contractWithLimit.setOnClickListener(this)
         binding?.actionBarLayout?.headCharts?.setOnClickListener(this)
+        binding?.actionBarLayout?.exchange?.setOnClickListener(this)
         binding?.actionBarLayout?.headTransactionMore?.setOnClickListener(this)
         binding?.actionBarLayout?.riskInfo?.setOnClickListener(this)
+        binding?.fragmentHomePageTransactionHeader1?.huazhuan?.setOnClickListener(this)
         binding?.actionBarLayout?.leverHandle?.setOnClickListener(this)
         binding?.actionBarLayout?.leverLayout?.visibility =
             if (tabType == ConstData.TAB_LEVER) View.VISIBLE else View.GONE
@@ -232,6 +236,48 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         binding!!.fragmentHomePageTransactionHeader2.assets.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader2.openOrder.setOnClickListener(this)
         binding!!.fragmentHomePageTransactionHeader2.showAllCheckbox.setOnClickListener(this)
+        kLineQuotaSelector = PositionSideSelector(mContext!!)
+        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : PositionSideSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: String?) {
+                if (type != null) {
+                    if (type == "LIMIT"){
+                        binding?.fragmentHomePageTransactionHeader1?.orderType?.text = getString(R.string.order_type_limit)
+                    }
+                    else {
+                        binding?.fragmentHomePageTransactionHeader1?.orderType?.text =  getString(R.string.order_type_market)
+                    }
+                    refreshOrderType(type)
+                    currentOrderType = type
+                    viewModel?.setCurrentPairorderType(type)
+                }
+            }
+
+        })
+        threeSelector = ThreeSelector(mContext!!)
+        threeSelector?.setOnKLineQuotaSelectorListener(object : ThreeSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: String?) {
+                if (type != null) {
+                    if (type == "0"){
+                        BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                            .withRequestCode(ConstData.CHOOSE_COIN_RECHARGE)
+                            .go(this@HomePageTransactionFragmentFiex)
+                    }
+                    else if(type == "1") {
+                        BlackRouter.getInstance().build(RouterConstData.WALLET_CHOOSE_COIN)
+                            .withRequestCode(ConstData.CHOOSE_COIN_WITHDRAW)
+                            .go(this@HomePageTransactionFragmentFiex)
+                    }
+                    else if(type == "2") {
+                        BlackRouter.getInstance().build(RouterConstData.USER_SETTING).go(mContext)
+                    }
+                    else if(type == "3") {
+                        val bundle = Bundle()
+                        val wallet = bundle.putParcelable(ConstData.WALLET , wallet)
+                        BlackRouter.getInstance().build(RouterConstData.WALLET_DETAIL).with(bundle).go(mContext)
+                    }
+                }
+            }
+        })
         return layout
     }
 
@@ -241,6 +287,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
+        viewModel!!.getAllWallet(true)
         viewModel?.setTabType(tabType)
         viewModel?.getCurrentUserBalance(ConstData.BalanceType.SPOT)
         viewModel?.getCurrentPairDepth(50)
@@ -281,13 +328,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         if (isDear!!) {
                             binding?.actionBarLayout?.imgCollect?.setImageDrawable(
                                 mContext?.getDrawable(
-                                    R.drawable.btn_collect_dis
+                                    R.drawable.shoucang1
                                 )
                             )
                         } else {
                             binding?.actionBarLayout?.imgCollect?.setImageDrawable(
                                 mContext?.getDrawable(
-                                    R.drawable.btn_collect_default
+                                    R.drawable.shoucang
                                 )
                             )
                         }
@@ -296,9 +343,9 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         } else {
             isDear = dear
             if (isDear!!) {
-                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_dis))
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.shoucang1))
             } else {
-                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.btn_collect_default))
+                binding?.actionBarLayout?.imgCollect?.setImageDrawable(mContext?.getDrawable(R.drawable.shoucang))
             }
         }
     }
@@ -392,8 +439,60 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         refreshSubmitButton()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                ConstData.CHOOSE_COIN_RECHARGE -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.RECHARGE).with(bundle).go(this) { _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.CHOOSE_COIN_WITHDRAW -> {
+                    val chooseWallet: Wallet? = data?.getParcelableExtra(ConstData.WALLET)
+                    if (chooseWallet != null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(ConstData.WALLET, chooseWallet)
+                        BlackRouter.getInstance().build(RouterConstData.EXTRACT).with(bundle).go(this){ _, error ->
+                            if (error != null) {
+                                CommonUtil.printError(mContext, error)
+                            }
+                        }
+                    }
+                }
+                ConstData.LEVER_PAIR_CHOOSE -> {
+                    val pair = data?.getStringExtra(ConstData.PAIR)
+                    if (pair != null) {
+                        FryingUtil.checkAndAgreeLeverProtocol(mContext!!, Runnable {
+                            val bundle = Bundle()
+                            bundle.putString(ConstData.PAIR, pair)
+                            BlackRouter.getInstance().build(RouterConstData.WALLET_TRANSFER).with(bundle).go(this)
+                        })
+                    }
+                }
+            }
+        }
+    }
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.exchange -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            }
+
+            R.id.huazhuan -> {
+                BlackRouter.getInstance().build(RouterConstData.ASSET_TRANSFER).go(mContext)
+            }
+
+            R.id.contract_with_limit -> {
+                getTradeOrderCurrent()
+            }
             R.id.show_all_checkbox -> {
                 val checkBox: CheckBox = v as CheckBox
                 Log.d("sss--->", checkBox.isChecked.toString())
@@ -470,20 +569,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             }
             R.id.lin_order_type -> {
                 currentOrderType = if (binding?.fragmentHomePageTransactionHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) "LIMIT" else "MARKET"
-                DeepControllerWindow(mContext as Activity,
-                    getString(R.string.select_order_type),
-                    currentOrderType,
-                    viewModel?.getCurrentPairOrderTypeList() as List<String?>?,
-                    object : DeepControllerWindow.OnReturnListener<String?> {
-                        override fun onReturn(
-                            window: DeepControllerWindow<String?>,
-                            item: String?
-                        ) {
-                            refreshOrderType(item)
-                            currentOrderType = item
-                            viewModel?.setCurrentPairorderType(item)
-                        }
-                    }).show()
+                kLineQuotaSelector!!.show(binding?.fragmentHomePageTransactionHeader1?.linOrderType, currentOrderType!! , 0)
             }
             R.id.tab_transaction_c2c -> BlackRouter.getInstance().build(RouterConstData.C2C_NEW)
                 .go(mContext)
@@ -498,10 +584,12 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                     .go(mContext)
             }
-            R.id.head_transaction_more -> viewModel!!.checkDearPair()
+            R.id.head_transaction_more -> {threeSelector!!.show(binding!!.actionBarLayout.headTransactionMore,null)}
+                /*viewModel!!.checkDearPair()
                 ?.subscribe(HttpCallbackSimple(mContext, true, object : Callback<Boolean>() {
                     override fun error(type: Int, error: Any) {}
                     override fun callback(returnData: Boolean) {
+
 //                            WalletApiServiceHelper.getCoinInfo(mContext, viewModel!!.getCoinType(), object : Callback<CoinInfo?>() {
 //                                override fun error(type: Int, error: Any) {
 //                                    CommonUtil.checkActivityAndRunOnUI(mContext) {
@@ -519,6 +607,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 //                            })
                     }
                 }))
+
+                 */
             R.id.btn_transaction_memu -> mContext?.let {
                 PairApiServiceHelper.getTradeSetsLocal(
                     it,
@@ -700,19 +790,21 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 }
             }
             R.id.assets -> {
-                binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.GONE
-                binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.VISIBLE
+                //binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.GONE
+                //binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.VISIBLE
                 binding?.fragmentHomePageTransactionHeader2?.assets?.isChecked = true
                 binding?.fragmentHomePageTransactionHeader2?.openOrder?.isChecked = false
                 binding?.assetsList?.visibility = View.VISIBLE
+                binding?.yincang?.visibility = View.GONE
                 binding?.orderInfo?.visibility = View.GONE
             }
             R.id.open_order -> {
-                binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.GONE
-                binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.VISIBLE
+                //binding?.fragmentHomePageTransactionHeader2?.barB?.visibility = View.GONE
+                //binding?.fragmentHomePageTransactionHeader2?.barA?.visibility = View.VISIBLE
                 binding?.fragmentHomePageTransactionHeader2?.assets?.isChecked = false
                 binding?.fragmentHomePageTransactionHeader2?.openOrder?.isChecked = true
                 binding?.orderInfo?.visibility = View.VISIBLE
+                binding?.yincang?.visibility = View.VISIBLE
                 binding?.assetsList?.visibility = View.GONE
             }
         }
@@ -747,7 +839,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         val max: BigDecimal? = getMaxAmount()
         if (!inputNumber!!) {
             if (max == null || max == BigDecimal.ZERO) {
-                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("0.00")
+                binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText("0.0000")
             } else {
                 binding!!.fragmentHomePageTransactionHeader1.transactionQuota.setText(
                     NumberUtil.formatNumberNoGroup(
@@ -918,6 +1010,43 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         val count = CommonUtil.parseDouble(
             binding!!.fragmentHomePageTransactionHeader1.transactionQuota.text.toString()
                 .trim { it <= ' ' })
+        if (transactionType == 1) {
+            binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
+            binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+            if (price != null && price > 0 && currentBalanceSell != null) {
+                //总的钱数除以输入价格
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        currentBalanceSell?.availableBalance!!.toDouble()
+                            .div(price.toDouble()),
+                        RoundingMode.FLOOR,
+                        viewModel!!.getAmountLength(),
+                        viewModel!!.getAmountLength()
+                    )
+                )
+            } else {
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
+            }
+        }
+        if (transactionType == 2) {
+            Log.d("kjkk788776","1111")
+            binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+            binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
+            if (price != null && price > 0 && currentBalanceBuy != null ) {
+                Log.d("kjkkhjkjh",currentBalanceBuy?.availableBalance.toString())
+                //总的钱数乘以输入价格
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
+                    NumberUtil.formatNumberNoGroup(
+                        currentBalanceBuy?.availableBalance!!.toDouble(),
+                        RoundingMode.FLOOR,
+                        viewModel!!.getAmountLength(),
+                        viewModel!!.getAmountLength()
+                    )
+                )
+            } else {
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
+            }
+        }
         if (price == null && price2 != null)
         {
             binding?.fragmentHomePageTransactionHeader1?.price?.setText(price2.toString())
@@ -944,51 +1073,16 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                         ) + viewModel!!.getSetName()
                     )
                 }
-            } else { //只有价格
-                if (transactionType == 1) {
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
-                    if (price > 0 && currentBalanceSell != null) {
-                        //总的钱数除以输入价格
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
-                            NumberUtil.formatNumberNoGroup(
-                                currentBalanceSell?.availableBalance!!.toDouble()
-                                    .div(price.toDouble()),
-                                RoundingMode.FLOOR,
-                                viewModel!!.getAmountLength(),
-                                viewModel!!.getAmountLength()
-                            )
-                        )
-                    } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                    }
-                } else if (transactionType == 2) {
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                    binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
-                    if (price > 0 && currentBalanceBuy != null) {
-                        //总的钱数乘以输入价格
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
-                            NumberUtil.formatNumberNoGroup(
-                                currentBalanceBuy?.availableBalance!!.toDouble() * price.toDouble(),
-                                RoundingMode.FLOOR,
-                                viewModel!!.getAmountLength(),
-                                viewModel!!.getAmountLength()
-                            )
-                        )
-                    } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
-                    }
-                }
             }
         }
             else {
-            if (transactionType == 1) {
+                if (transactionType == 1) {
                 binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
                 binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
             } else if (transactionType == 2) {
-                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
-                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
+                binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
                 binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
             }
         }
@@ -1070,11 +1164,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
                 binding!!.fragmentHomePageTransactionHeader1.linPrice.visibility = View.GONE
                 binding!!.fragmentHomePageTransactionHeader1.linPrinceCny.visibility = View.GONE
+                binding!!.fragmentHomePageTransactionHeader1.linMarketPrice.visibility = View.VISIBLE
             }
             "LIMIT" -> {
                 typeDes = getString(R.string.order_type_limit)
                 binding!!.fragmentHomePageTransactionHeader1.linPrice.visibility = View.VISIBLE
                 binding!!.fragmentHomePageTransactionHeader1.linPrinceCny.visibility = View.VISIBLE
+                binding!!.fragmentHomePageTransactionHeader1.linMarketPrice.visibility = View.GONE
             }
         }
         binding!!.fragmentHomePageTransactionHeader1.orderType.text = typeDes
@@ -1125,17 +1221,17 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable =
                 countProgressSale
             binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_sale)
+                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
             binding!!.fragmentHomePageTransactionHeader1.btnHandle.background =
                 SkinCompatResources.getDrawable(activity, R.drawable.btn_t5)
         }
@@ -1154,8 +1250,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     resources.getString(R.string.buy).toString() + viewModel!!.getCoinType()
                 )
             } else if (transactionType == 2) {
-                binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getCoinType())
-                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageTransactionHeader1.useableUnit.setText(viewModel!!.getSetName())
+                binding!!.fragmentHomePageTransactionHeader1.useableBuyUnit.setText(viewModel!!.getCoinType())
                 binding!!.fragmentHomePageTransactionHeader1.useableFreezUnit.setText(viewModel!!.getCoinType())
                 binding!!.fragmentHomePageTransactionHeader1.btnHandle.setText(
                     resources.getString(R.string.sale).toString() + viewModel!!.getCoinType()
@@ -1209,11 +1305,11 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null){
             currentBalanceBuy = null
             currentBalanceSell = null
-            binding!!.unable.setText("0.0")
-            binding!!.usable2.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+            binding!!.unable.setText("0.0000")
+            binding!!.usable2.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
         }else {
             if (currentBalanceSell != null) {
                 binding!!.unable.setText(
@@ -1245,13 +1341,15 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         if (mContext == null || CookieUtil.getUserInfo(mContext!!) == null){
             currentBalanceBuy = null
             currentBalanceSell = null
-            binding!!.unable.setText("0.0")
-            binding!!.usable2.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
-            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
+            binding!!.unable.setText("0.0000")
+            binding!!.usable2.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0000")
+            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
         }else {
             activity?.runOnUiThread {
+                val price = CommonUtil.parseDouble(
+                    binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
                 //买入
                 if (transactionType == 1) {
                     if (currentBalanceSell != null) {
@@ -1263,6 +1361,17 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                                 4
                             )
                         )
+                        if (price != null && price != 0.0){
+                            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
+                                NumberUtil.formatNumberNoGroup(
+                                    currentBalanceSell?.availableBalance!!.toDouble()
+                                        .div(price.toDouble()),
+                                    RoundingMode.FLOOR,
+                                    viewModel!!.getAmountLength(),
+                                    viewModel!!.getAmountLength()
+                                )
+                            )
+                        }
                         binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
                             NumberUtil.formatNumberNoGroup(
                                 currentBalanceSell?.freeze?.toDoubleOrNull(),
@@ -1272,32 +1381,41 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                             )
                         )
                     } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0000")
                     }
                     binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.buy_usable)
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
                 } else if (transactionType == 2) {
                     if (currentBalanceBuy != null) {
-                        binding!!.fragmentHomePageTransactionHeader1.useable.setText(
-                            NumberUtil.formatNumberNoGroup(
-                                currentBalanceBuy?.availableBalance?.toDoubleOrNull(),
-                                RoundingMode.FLOOR,
-                                4,
-                                4
+                        if (price != null && price != 0.0) {
+                            binding!!.fragmentHomePageTransactionHeader1.useable.setText(
+                                NumberUtil.formatNumberNoGroup(
+                                    currentBalanceBuy?.availableBalance!!.toDouble()
+                                            * (price.toDouble()),
+                                    RoundingMode.FLOOR,
+                                    4,
+                                    4
+                                )
                             )
-                        )
-                        binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
-                            NumberUtil.formatNumberNoGroup(
-                                currentBalanceBuy?.freeze?.toDoubleOrNull(),
-                                RoundingMode.FLOOR,
-                                4,
-                                4
+                            binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText(
+                                NumberUtil.formatNumberNoGroup(
+                                    currentBalanceBuy?.availableBalance!!.toDouble(),
+                                    RoundingMode.FLOOR,
+                                    viewModel!!.getAmountLength(),
+                                    viewModel!!.getAmountLength()
+                                )
                             )
-                        )
-                    } else {
-                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0")
+                            binding!!.fragmentHomePageTransactionHeader1.freezAmount.setText(
+                                NumberUtil.formatNumberNoGroup(
+                                    currentBalanceBuy?.freeze?.toDoubleOrNull(),
+                                    RoundingMode.FLOOR,
+                                    4,
+                                    4
+                                )
+                            )
+                        }
+                    }else {
+                        binding!!.fragmentHomePageTransactionHeader1.useable.setText("0.0000")
                     }
-                    binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0")
                     binding!!.fragmentHomePageTransactionHeader1.actionType.setText(R.string.sale_usable)
                 }
             }
@@ -1312,7 +1430,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 //            val orderState = 1
             TradeApiServiceHelper.getTradeOrderRecordFiex(
                 activity,
-                viewModel!!.getCurrentPair(),
+                if (binding!!.contractWithLimit.isChecked) viewModel!!.getCurrentPair() else null,
                 null,
                 null,
                 null,
@@ -1456,7 +1574,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     fun withTimerGetCurrentTradeOrder() {
         var count = 0
         var timer = Timer()
-        timer?.schedule(object : TimerTask() {
+        timer.schedule(object : TimerTask() {
             override fun run() {
                 getTradeOrderCurrent()
                 count++
@@ -1592,8 +1710,13 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     currentBalanceSell = returnData.second
 
                 }
+                wallet.coinType = currentBalanceBuy?.coin?.uppercase()
+                wallet.coinFroze = if (currentBalanceBuy?.freeze == null) 0.0 else currentBalanceBuy?.freeze!!.toDouble()
+                wallet.coinAmount = BigDecimal(currentBalanceBuy?.availableBalance)
+                wallet.estimatedAvailableAmountCny = currentBalanceBuy?.availableBalance!!.toDouble()
                 refreshAsstes()
                 refreshUsable()
+                computeTotal()
             }
 
             override fun error(type: Int, error: Any?) {
@@ -1903,38 +2026,38 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         val styleChange = StyleChangeUtil.getStyleChangeSetting(mContext!!)?.styleCode
         if (since != null && styleChange == 1) {
             if (since > 0) {//涨
-                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
             } else if (since < 0) {
-                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             } else {
-                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
                 color = mContext?.getColor(R.color.B3)
             }
             Log.d(tag, "priceSince0 = $since")
-            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            val result = NumberUtil.formatNumber2(since.times(100)) + "%"
             Log.d(tag, "priceSince1 = $result")
             binding!!.actionBarLayout.currentPriceSince.setText(result)
-            binding!!.actionBarLayout.currentPriceSince.background = background
+            //binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
         if (since != null && styleChange == 0) {
             if (since < 0) {
-                background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_raise_bg_corner)
                 color = mContext?.getColor(R.color.T10)
             } else if (since > 0) {
-                background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_fall_bg_corner)
                 color = mContext?.getColor(R.color.T9)
             } else {
-                background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
+                //background = mContext?.getDrawable(R.drawable.trans_default_bg_corner)
                 color = mContext?.getColor(R.color.B3)
             }
             Log.d(tag, "priceSince0 = $since")
-            var result = NumberUtil.formatNumber2(since?.times(100)) + "%"
+            val result = NumberUtil.formatNumber2(since.times(100)) + "%"
             Log.d(tag, "priceSince1 = $result")
             binding!!.actionBarLayout.currentPriceSince.setText(result)
-            binding!!.actionBarLayout.currentPriceSince.background = background
+            //binding!!.actionBarLayout.currentPriceSince.background = background
             binding!!.actionBarLayout.currentPriceSince.setTextColor(color!!)
         }
     }
@@ -1983,6 +2106,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                                     .into(binding?.iconCoin2!!)
                             }
                             binding?.coinTypeDes2?.setText(name)
+                            wallet.coinTypeDes = name
+                            wallet.coinIconUrl = url
                         }
                     }
                 }

@@ -832,7 +832,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<PairDeal??>() {}.type
                             )
                             if (pairDeal != null) {
-                                SocketDataContainer.getCurrentPairDeal(mHandler, pairDeal)
+                                SocketDataContainer.getCurrentPairDeal(mHandler, pairDeal,ConstData.DEPTH_SPOT_TYPE)
                             }
                         }
                         //当前交易对24小时行情
@@ -917,7 +917,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<PairDeal?>() {}.type
                                 )
                                 if(dealBean != null){
-                                    SocketDataContainer.getCurrentPairDeal(mHandler, dealBean)
+                                   // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
                                     SocketDataContainer.updateFutureCurrentPairDeal(mHandler,dealBean)
                                 }
                             }

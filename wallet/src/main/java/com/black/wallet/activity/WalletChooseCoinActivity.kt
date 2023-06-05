@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -159,6 +160,7 @@ class WalletChooseCoinActivity : BaseActivity(), View.OnClickListener, AdapterVi
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         val wallet = adapter?.getItem(position)
+        Log.d("lkjlkjkl11" , wallet?.coinAmount.toString())
         CookieUtil.addPairSearchHistory(mContext,wallet?.coinType)
         saveSearchHistory(wallet?.coinType)
         val resultData = Intent()

@@ -70,6 +70,9 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     private var total = 0
     private var hasMore = false
 
+    override fun getTitleText(): String? {
+        return mContext.getString(R.string.spot)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrust_records_new)
@@ -92,6 +95,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         initHeaderLayout()
 
         binding?.pairChooseMenu?.setOnClickListener(this)
+        binding?.contractWithLimit?.setOnClickListener(this)
         binding?.pairChooseMenu?.setText(if (routerPair == null) getString(R.string.all_coin) else routerPair!!.replace("_", "/"))
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -167,6 +171,9 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 adapter?.clear()
                 adapter?.notifyDataSetChanged()
                 getTradeOrderCurrent(true)
+            }
+            R.id.contract_with_limit -> {
+
             }
             R.id.filter_layout -> {
                 //                openFilterWindow();
@@ -258,17 +265,27 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     private fun refreshCurrentType(type: Int) {
         if (TYPE_HIS == type) {
             binding?.entrustNew?.isChecked = false
-            binding?.entrustNew?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+            //binding?.entrustNew?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
             binding?.entrustHis?.isChecked = true
-            binding?.entrustHis?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
+            //binding?.entrustHis?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
             entrustStatus = EntrustStatus.HIS
+            binding?.barA?.visibility = View.GONE
+            binding?.barB?.visibility = View.VISIBLE
+            binding?.barTwo?.visibility = View.GONE
+            binding?.barOne?.visibility = View.VISIBLE
+            binding?.contractWithLimit?.visibility = View.VISIBLE
             headTitleView?.setText(R.string.filter_entrust_his)
         } else if (TYPE_NEW == type) {
             binding?.entrustNew?.isChecked = true
-            binding?.entrustNew?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
+            //binding?.entrustNew?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
             binding?.entrustHis?.isChecked = false
-            binding?.entrustHis?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
+            //binding?.entrustHis?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_20).toFloat())
             entrustStatus = EntrustStatus.NEW
+            binding?.barB?.visibility = View.GONE
+            binding?.barA?.visibility = View.VISIBLE
+            binding?.barOne?.visibility = View.GONE
+            binding?.barTwo?.visibility = View.VISIBLE
+            binding?.contractWithLimit?.visibility = View.GONE
             headTitleView?.setText(R.string.filter_entrust_new)
         }
     }
@@ -306,9 +323,9 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
                     if (currentPage == 1) {
-                        adapter?.data = returnData?.data?.items
+                        adapter?.data = returnData.data?.items
                     } else {
-                        adapter?.addAll(returnData?.data?.items)
+                        adapter?.addAll(returnData.data?.items)
                     }
                     adapter?.notifyDataSetChanged()
                 } else {

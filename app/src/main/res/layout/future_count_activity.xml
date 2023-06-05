@@ -97,6 +97,8 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/daohanglan"
                     android:textColor="@color/T14"
+                    android:layout_marginTop="@dimen/text_size_2"
+                    android:gravity="center_vertical"
                     android:text="BTC_USDT"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
@@ -203,6 +205,7 @@
                     android:layout_weight="6"
                     android:gravity="center_vertical|left"
                     android:padding="@dimen/text_size_10"
+                    android:inputType="number"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/black"
                     android:hint="@string/price"
@@ -257,6 +260,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="6"
                     android:gravity="center_vertical|left"
+                    android:inputType="number"
                     android:padding="@dimen/text_size_10"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/black"
@@ -314,6 +318,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="6"
                     android:gravity="center_vertical|left"
+                    android:inputType="number"
                     android:padding="@dimen/text_size_10"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/black"
@@ -327,7 +332,7 @@
                     android:layout_weight="1"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/T3"
-                    android:text="BTC"
+                    android:text="USDT"
                     />
             </LinearLayout>
 
@@ -520,7 +525,7 @@
                 android:id="@+id/btn_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="@drawable/anniu"
+                android:background="@drawable/btn_blue"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/text_size_10"
                 android:layout_marginRight="@dimen/text_size_10"

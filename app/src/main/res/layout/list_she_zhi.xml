@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewKLineQuotaSelectorModel"
+            type="Object" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            style="@style/ButtonTanChuang"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/future_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rechange"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:checked="true"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_14" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:background="@color/L1_ALPHA30" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/count_mechain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/extract"
+                android:checked="true"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_14" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:background="@color/L1_ALPHA30" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/like_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="偏好设置"
+                android:checked="true"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_13" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:background="@color/L1_ALPHA30" />
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/future_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="综合账单"
+                android:checked="true"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:paddingTop="@dimen/double_padding"
-        android:paddingRight="15dp"
+        android:paddingRight="10dp"
         android:paddingBottom="@dimen/double_padding">
         <LinearLayout
             android:layout_width="0dp"
@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_transaction_input"
                 android:orientation="horizontal">
                 <com.black.base.widget.SpanCheckedTextView
                     android:id="@+id/btn_buy"
@@ -62,14 +61,14 @@
                 android:id="@+id/lin_order_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
+                android:background="@drawable/btn_gray"
                 android:orientation="horizontal">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="25dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
                         <com.black.base.widget.SpanCheckedTextView
@@ -77,9 +76,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginTop="6dp"
                             android:layout_marginRight="8dp"
-                            android:layout_marginBottom="6dp"
                             android:layout_weight="1"
                             android:text="@string/limit_order"
                             android:padding="0dp"
@@ -91,10 +88,10 @@
                             android:id="@+id/order_type_arrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/text_size_10"
                             android:adjustViewBounds="true"
-                            android:padding="12dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_selector_down" />
+                            android:src="@drawable/xiala" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -104,7 +101,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
+                android:background="@drawable/btn_gray"
                 android:orientation="horizontal">
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -112,7 +109,7 @@
                     <LinearLayout
                         android:id="@+id/lin_price"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
                         <ImageView
@@ -122,7 +119,7 @@
                             android:adjustViewBounds="true"
                             android:padding="12dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_sub" />
+                            android:src="@drawable/jianhao" />
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/price"
                             style="@style/NormalEditTextStyle"
@@ -137,6 +134,7 @@
                             android:background="@null"
                             android:gravity="center_horizontal"
                             android:hint="@string/price"
+                            android:textColorHint="#BBBBC0"
                             android:padding="0dp"
                             android:maxLines="1"
                             android:textSize="@dimen/text_size_14"
@@ -149,9 +147,30 @@
                             android:adjustViewBounds="true"
                             android:padding="12dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_add" />
+                            android:src="@drawable/jiahao" />
                     </LinearLayout>
                 </FrameLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_10" />
+            <LinearLayout
+                android:id="@+id/lin_market_price"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/btn_shijia"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="@string/order_type_market"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:textColor="@color/T3"
+                    app:useDelete="false" />
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -162,6 +181,15 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="估值："
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/price_cny"
                     android:layout_width="wrap_content"
@@ -175,14 +203,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_transaction_input"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:background="@drawable/btn_gray"
                 android:orientation="horizontal">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="40dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
                         <ImageView
@@ -191,8 +220,9 @@
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:padding="12dp"
+                            android:visibility="gone"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_sub" />
+                            android:src="@drawable/jianhao" />
                         <com.black.base.widget.SpanMaterialEditText
                             android:id="@+id/transaction_quota"
                             style="@style/NormalEditTextStyle"
@@ -207,19 +237,29 @@
                             android:inputType="numberDecimal"
                             android:gravity="center_horizontal"
                             android:hint="@string/amount"
+                            android:textColorHint="#BBBBC0"
                             android:padding="0dp"
                             android:maxLines="1"
                             android:textSize="@dimen/text_size_14"
                             android:textStyle="bold"
                             app:useDelete="false" />
                         <ImageView
+                            android:id="@+id/qiehuan"
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
+                            android:layout_marginRight="@dimen/text_size_12"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/qiehuan" />
+                        <ImageView
                             android:id="@+id/amount_add"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:padding="12dp"
+                            android:visibility="gone"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_price_buy_add" />
+                            android:src="@drawable/jiahao" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -229,41 +269,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <com.black.base.widget.SpanTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="@string/useable"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:gravity="right"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="8dp"
-                    android:singleLine="true"
-                    android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/action_freez"
@@ -296,6 +302,152 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/count_progress"
+                    style="@style/TradeProgressBarStyle"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:layout_marginRight="@dimen/text_size_10"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_zero"
+                        style="@style/TradeSeekBarCheckbox"
+                        android:layout_marginLeft="4dp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_twenty"
+                        style="@style/TradeSeekBarCheckbox" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_fourty"
+                        style="@style/TradeSeekBarCheckbox" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_sixty"
+                        style="@style/TradeSeekBarCheckbox" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_eighty"
+                        style="@style/TradeSeekBarCheckbox" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/line"
+                        android:layout_weight="1" />
+
+                    <skin.support.widget.SkinCompatCheckBox
+                        android:id="@+id/amount_all"
+                        style="@style/TradeSeekBarCheckbox" />
+                </LinearLayout>
+
+                <skin.support.widget.SkinCompatSeekBar
+                    android:id="@+id/count_bar"
+                    style="@style/TradeSeekBar" />
+            </FrameLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="0"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="100%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_padding" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/useable"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:gravity="right"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+                <ImageView
+                    android:id="@+id/huazhuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/huazhuan7" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -307,14 +459,7 @@
                     android:includeFontPadding="false"
                     android:text="@string/buy_usable"
                     android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-                <com.black.base.widget.SpanTextView
-                    android:id="@+id/useable_buy_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
+                    android:textSize="@dimen/text_size_12" />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/useable_buy"
                     android:layout_width="0dp"
@@ -326,132 +471,20 @@
                     android:paddingLeft="8dp"
                     android:singleLine="true"
                     android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/useable_buy_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ProgressBar
-                    android:id="@+id/count_progress"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:max="100"
-                    android:maxHeight="6dp"
-                    android:minHeight="6dp"
-                    android:progressDrawable="@drawable/bg_transaction_progress_bar_buy" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_zero"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:layout_marginLeft="4dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_twenty"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_fourty"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_sixty"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_eighty"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:layout_marginRight="0dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/line"
-                        android:layout_weight="1" />
-                    <skin.support.widget.SkinCompatCheckBox
-                        android:id="@+id/amount_all"
-                        android:layout_width="8dp"
-                        android:layout_height="6dp"
-                        android:layout_marginRight="0dp"
-                        android:button="@drawable/icon_transaction_count_buy"
-                        android:enabled="false" />
-                </LinearLayout>
-                <skin.support.widget.SkinCompatSeekBar
-                    android:id="@+id/count_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:max="100"
-                    android:maxHeight="20dp"
-                    android:minHeight="20dp"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:progressDrawable="@color/transparent"
-                    android:splitTrack="false"
-                    android:thumb="@drawable/icon_thumbcount_bar"
-                    android:thumbOffset="0dp" />
-            </FrameLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.black.base.widget.SpanTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="0"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-                <com.black.base.widget.SpanTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:includeFontPadding="false"
-                    android:text="100%"
-                    android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_13" />
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/default_padding" />
-
             <RelativeLayout
                 android:id="@+id/rel_volume"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="15dp">
 
                 <com.black.base.widget.SpanTextView
@@ -491,7 +524,7 @@
             <com.black.base.widget.SpanTextView
                 android:id="@+id/btn_handle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:background="@drawable/btn_c2"
                 android:checked="true"
                 android:includeFontPadding="false"
@@ -522,10 +555,11 @@
                     android:maxLines="1"
                     android:text="@string/price"
                     android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_10"
                     />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/deep_price_p"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/deep_price"
@@ -535,7 +569,7 @@
                     android:maxLines="1"
                     android:text="(usdt)"
                     android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_10"
                     />
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/deep_amount"
@@ -546,11 +580,12 @@
                     android:maxLines="1"
                     android:text="@string/amount"
                     android:textColor="@color/T2"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_10"
                     />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/deep_amount_name"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/deep_amount"
@@ -560,7 +595,7 @@
                 android:paddingTop="4dp"
                 android:text="(Eth)"
                 android:textColor="@color/T2"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_10" />
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
@@ -570,6 +605,67 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
+                    <RelativeLayout
+                        android:id="@+id/handicap_sale_layout_12"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/price_sale_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/text_size_2"
+                            android:gravity="right"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/T5"
+                            android:textSize="@dimen/text_size_10"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/count_sale_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/text_size_5"
+                            android:layout_centerVertical="true"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_10"
+                             />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/handicap_sale_layout_11"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/price_sale_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/text_size_2"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/T5"
+                            android:textSize="@dimen/text_size_10"
+                            android:textStyle="bold" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/count_sale_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/text_size_5"
+                            android:layout_centerVertical="true"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_10"
+                             />
+                    </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_10"
                     android:layout_width="match_parent"
@@ -580,24 +676,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_09"
@@ -609,23 +707,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_09"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_08"
@@ -637,24 +736,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_08"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_07"
@@ -666,13 +767,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
 
                     <com.black.base.widget.SpanTextView
@@ -680,12 +782,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_06"
@@ -697,25 +799,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_06"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_05"
@@ -727,6 +830,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="0dp"
@@ -734,19 +838,19 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_05"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_04"
@@ -758,6 +862,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="0dp"
@@ -765,19 +870,20 @@
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_sale_04"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_sale_layout_03"
@@ -789,13 +895,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
 
                     <com.black.base.widget.SpanTextView
@@ -803,12 +910,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -821,13 +928,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
 
                     <com.black.base.widget.SpanTextView
@@ -835,12 +943,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -853,12 +961,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T5"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
 
                     <com.black.base.widget.SpanTextView
@@ -866,12 +975,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"/>
                 </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/current_price_layout"
@@ -894,7 +1003,7 @@
                             android:maxLines="1"
                             android:text="@string/number_default"
                             android:textColor="@color/black_real"
-                            android:textSize="@dimen/text_size_16"
+                            android:textSize="@dimen/text_size_20"
                             android:textStyle="bold" />
                         <com.black.base.widget.SpanTextView
                             android:id="@+id/current_price_cny"
@@ -919,24 +1028,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_01"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_02"
@@ -948,25 +1059,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_02"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_03"
@@ -978,24 +1091,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_03"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_04"
@@ -1007,54 +1121,55 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_04"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_05"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/price_buy_05"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="0dp"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_05"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_06"
@@ -1066,24 +1181,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_06"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_07"
@@ -1095,25 +1211,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_07"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_08"
@@ -1125,13 +1243,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
 
                     <com.black.base.widget.SpanTextView
@@ -1139,12 +1258,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -1157,24 +1276,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_09"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
-                        android:textStyle="bold" />
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/handicap_buy_layout_10"
@@ -1186,24 +1307,85 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:includeFontPadding="false"
                         android:maxLines="1"
                         android:textColor="@color/T7"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
                     <com.black.base.widget.SpanTextView
                         android:id="@+id/count_buy_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
                         android:layout_centerVertical="true"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:textColor="@color/T2"
-                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/handicap_buy_layout_11"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/price_buy_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/text_size_2"
+                        android:layout_centerVertical="true"
+                        android:gravity="right"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/T7"
+                        android:textSize="@dimen/text_size_10"
                         android:textStyle="bold" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/count_buy_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/text_size_5"
+                        android:layout_centerVertical="true"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/handicap_buy_layout_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/price_buy_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="right"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/T7"
+                        android:textSize="@dimen/text_size_10"
+                        android:textStyle="bold" />
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/count_buy_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/T1"
+                        android:textSize="@dimen/text_size_10"
+                        />
                 </RelativeLayout>
             </LinearLayout>
             <View
@@ -1213,33 +1395,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:visibility="visible"
-                >
+                android:visibility="visible">
 
                 <com.black.base.widget.SpanTextView
+                    style="@style/ButtonGray"
                     android:id="@+id/deep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/bg_transaction_input"
-                    android:drawableRight="@drawable/icon_deep"
-                    android:drawablePadding="8dp"
+                    android:drawableRight="@drawable/xiala"
+                    android:drawablePadding="10dp"
                     android:includeFontPadding="false"
-                    android:padding="8dp"
+                    android:padding="@dimen/text_size_5"
+                    android:gravity="center"
                     android:text="@string/number_default"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_10" />
 
+                <LinearLayout
+                    android:id="@+id/deep_layout"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/btn_gray"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/text_size_5"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/display_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginRight="1dp"
-                    android:src="@drawable/icon_trade_deep" />
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:src="@drawable/maimai" />
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:src="@drawable/xiala" />
+
+                </LinearLayout>
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"

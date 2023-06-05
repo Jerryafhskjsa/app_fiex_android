@@ -2222,21 +2222,28 @@ object SocketDataContainer {
     /**
      * 当前交易对的成交价
      */
-    fun getCurrentPairDeal(handler: Handler?, data: PairDeal?) {
+    fun getCurrentPairDeal(handler: Handler?, data: PairDeal? , depthType: Int?) {
+        if (data == null) {
+            return
+        }
+        var observer1 = ArrayList<Observer<PairDeal?>?>()
+        when (depthType) {
+            ConstData.DEPTH_SPOT_TYPE -> {
+                observer1 = currentPairDealObservers
+            }
+            ConstData.DEPTH_FUTURE_TYPE -> {
+                observer1 = currentPairDealObservers
+            }
+        }
         CommonUtil.postHandleTask(handler) {
-            Observable.create<PairDeal> { emitter ->
-                if (data != null) {
-                    emitter.onNext(data)
-                } else {
-                    emitter.onComplete()
-                }
-            }.subscribeOn(Schedulers.trampoline())
+            Observable.create<PairDeal> { emitter -> emitter.onNext(data) }
+                .subscribeOn(Schedulers.trampoline())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(object : SuccessObserver<PairDeal>() {
-                    override fun onSuccess(pairDeal: PairDeal) {
-                        synchronized(currentPairDealObservers) {
-                            for (observer in currentPairDealObservers) {
-                                observer?.onNext(pairDeal)
+                    override fun onSuccess(s: PairDeal) {
+                        synchronized(observer1) {
+                            for (observer in observer1) {
+                                observer?.onNext(s)
                             }
                         }
                     }

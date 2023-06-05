@@ -1719,22 +1719,36 @@
                     android:drawableRight="@drawable/xiala"
                     android:drawablePadding="10dp"
                     android:includeFontPadding="false"
-                    android:padding="@dimen/text_size_2"
+                    android:padding="@dimen/text_size_5"
                     android:gravity="center"
                     android:text="@string/number_default"
                     android:textColor="@color/T2"
                     android:textSize="@dimen/text_size_10" />
 
-                <ImageView
-                    android:id="@+id/display_type"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                <LinearLayout
+                    android:id="@+id/deep_layout"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/btn_gray"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:padding="@dimen/text_size_5"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginRight="1dp"
-                    android:src="@drawable/icon_trade_deep" />
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/display_type"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/maimai" />
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="@dimen/text_size_10"
+                        android:src="@drawable/xiala" />
+
+                </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout

@@ -176,25 +176,12 @@ class WalletDetailActivity : BaseActivity(),
             .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext, wallet?.coinIconUrl)))
             .apply(requestOptions)
             .into(binding?.iconCoin!!)
-         binding?.usable?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberNoGroup(wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString())), RoundingMode.FLOOR, 2, 8) + wallet?.coinType)
-         binding?.totalCny?.setText(if (wallet == null) nullAmount else "≈ $" + NumberUtil.formatNumberDynamicScaleNoGroup(
-            rate!! * (wallet?.estimatedAvailableAmountCny!!),
-            10,
-            2,
-            2
-        ) )
+         binding?.usable?.setText(if (wallet == null) nullAmount else String.format("%.4f", wallet?.coinAmount?.plus(BigDecimal(wallet?.coinFroze.toString()))) + wallet?.coinType)
+         binding?.totalCny?.setText(if (wallet == null) nullAmount else "≈ $" + String.format("%.4f", rate!! * (wallet?.estimatedAvailableAmountCny!! )))
 
-        binding?.
+        binding?.able?.setText(if (wallet == null) nullAmount else  "≈" + String.format("%.4f", wallet?.estimatedAvailableAmountCny) + wallet?.coinType)
 
-
-        able?.setText(if (wallet == null) nullAmount else  "≈" + NumberUtil.formatNumberDynamicScaleNoGroup(wallet?.estimatedAvailableAmountCny , 10, 2, 2) + "USDT")
-
-        binding?.freez?.setText(if (wallet == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(
-            wallet?.coinFroze,
-            10,
-            2,
-            2
-        ) + wallet?.coinType)
+        binding?.freez?.setText(if (wallet == null) nullAmount else String.format("%.4f", wallet?.coinFroze) + wallet?.coinType)
         /*if (wallet?.coinIconUrl != null) {
             var requestOptions = RequestOptions
                 .bitmapTransform(RoundedCorners(DipPx.dip2px(mContext, 15f)))

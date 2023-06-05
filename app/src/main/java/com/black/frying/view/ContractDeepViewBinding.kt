@@ -31,6 +31,7 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
     private var colorT7A10: Int
     private var colorT5A10: Int
     private var currentStyle = STYLE_NORMAL
+    private var oneSelector: OneSelector? = null
     private val nullAmount: String
     private var onTransactionDeepListener: OnTransactionDeepListener? = null
     fun init() {
@@ -118,6 +119,19 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
         binding.displayType.setOnClickListener(this)
         binding.linDeepPostion.setOnClickListener(this)
         binding.linDeepDepth.setOnClickListener(this)
+        binding.deepLayout.setOnClickListener(this)
+        oneSelector = OneSelector(context)
+        oneSelector?.setOnKLineQuotaSelectorListener(object : OneSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: Int?) {
+                if (type != null) {
+                    currentStyle = type
+                    showCurrentStyle()
+                    showStyleLayout()
+                    viewModel.getAllDepthOrderFiex()
+                }
+            }
+
+        })
         showCurrentStyle()
         showStyleLayout()
     }
@@ -136,11 +150,8 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
                                 }
                             }).show()
                 }
-            R.id.display_type -> {
-                currentStyle = (currentStyle + 1) % 3
-                showCurrentStyle()
-                showStyleLayout()
-                viewModel.getAllDepthOrderFiex()
+            R.id.deep_layout -> {
+                oneSelector!!.show(binding.displayType)
             }
             R.id.handicap_sale_layout_01, R.id.handicap_sale_layout_02, R.id.handicap_sale_layout_03, R.id.handicap_sale_layout_04, R.id.handicap_sale_layout_05, R.id.handicap_sale_layout_06, R.id.handicap_sale_layout_07, R.id.handicap_sale_layout_08, R.id.handicap_sale_layout_09, R.id.handicap_sale_layout_10, R.id.handicap_buy_layout_01, R.id.handicap_buy_layout_02, R.id.handicap_buy_layout_03, R.id.handicap_buy_layout_04, R.id.handicap_buy_layout_05, R.id.handicap_buy_layout_06, R.id.handicap_buy_layout_07, R.id.handicap_buy_layout_08, R.id.handicap_buy_layout_09, R.id.handicap_buy_layout_10 -> {
                 val tag = v.tag
@@ -223,9 +234,9 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
 
     private fun showCurrentStyle() {
         when (currentStyle) {
-            STYLE_BID_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep_02))
-            STYLE_ASK_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep_03))
-            else -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.icon_trade_deep))
+            STYLE_BID_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.mairu))
+            STYLE_ASK_ALL -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.maichu))
+            else -> binding.displayType.setImageDrawable(SkinCompatResources.getDrawable(context, R.drawable.maimai))
         }
     }
 

@@ -12,31 +12,45 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingTop="@dimen/double_padding"
-        android:paddingBottom="@dimen/double_padding">
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.black.base.widget.SpanTextView
                 android:id="@+id/pair_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:includeFontPadding="false"
                 android:text="ETH/USDT"
                 android:textColor="@color/black_real"
                 android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/type"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:includeFontPadding="false"
+                android:layout_weight="1"
+                android:text="@string/limit_price_buy"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textColor="@color/T9"
+                android:textSize="@dimen/text_size_10"
+                />
 
             <com.black.base.widget.SpanTextView
                 android:id="@+id/status"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:includeFontPadding="false"
                 android:gravity="right"
+                android:padding="@dimen/text_size_5"
+                android:background="@drawable/btn_gray"
                 android:text="@string/revoke"
-                android:textColor="@color/T13"
-                android:textSize="@dimen/text_size_12"
+                android:textColor="#484A57"
+                android:textSize="@dimen/text_size_10"
                 />
         </LinearLayout>
         <LinearLayout
@@ -46,26 +60,11 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <com.black.base.widget.SpanTextView
-                android:id="@+id/type"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:includeFontPadding="false"
-                android:text="@string/limit_price_buy"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/trans_revoke_type_bg_corner"
-                android:textColor="@color/T9"
-                android:textSize="@dimen/text_size_12"
-                />
-            <com.black.base.widget.SpanTextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2022-09-08 22:22:22"
                 android:textColor="@color/T11"
-                android:layout_marginLeft="10dp"
                 android:textSize="@dimen/text_size_12" />
         </LinearLayout>
         <RelativeLayout
@@ -76,20 +75,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="@string/price"
+                android:text="成交均价/委托价"
                 android:textColor="@color/T11"
                 android:textSize="@dimen/text_size_12"
                 />
 
-            <com.black.base.widget.SpanTextView
-                android:id="@+id/price_des"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:includeFontPadding="false"
-                android:text="1.33"
-                android:textColor="@color/T11"
-                android:textSize="@dimen/text_size_12" />
+                >
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_des1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="right"
+                    android:text="10"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_10" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="/"
+                    android:textColor="@color/T11"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/price_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111"
+                    android:textColor="@color/T11"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -100,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="@string/amount"
+                android:text="委托量"
                 android:textColor="@color/T11"
                 android:textSize="@dimen/text_size_12" />
             <LinearLayout
@@ -113,9 +130,9 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:gravity="right"
-                    android:text="成交数量10"
+                    android:text="10"
                     android:textColor="@color/T1"
-                    android:textSize="@dimen/text_size_13" />
+                    android:textSize="@dimen/text_size_10" />
                 <com.black.base.widget.SpanTextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -126,10 +143,55 @@
                     android:id="@+id/entrust_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="总数量111"
+                    android:text="111"
                     android:textColor="@color/T11"
-                    android:textSize="@dimen/text_size_13" />
+                    android:textSize="@dimen/text_size_10" />
             </LinearLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="委托额"
+                android:textColor="@color/T11"
+                android:textSize="@dimen/text_size_12" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                >
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/deal_amount1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="right"
+                    android:text="10"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_10" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="/"
+                    android:textColor="@color/T11"
+                    />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/entrust_amount1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="111"
+                    android:textColor="@color/T11"
+                    android:textSize="@dimen/text_size_10" />
+            </LinearLayout>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:background="@color/B1"/>
     </LinearLayout>
 </layout>
