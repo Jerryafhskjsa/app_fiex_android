@@ -260,7 +260,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
+                                    android:gravity="right|center_vertical"
                                     android:layout_marginRight="@dimen/text_size_16"
                                     android:layout_weight="1">
                                 <com.black.base.widget.SpanCheckBox
@@ -269,6 +269,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="3dp"
                                     android:background="@null"
+                                    android:padding="@dimen/text_size_2"
                                     android:button="@drawable/btn_wallet_filter"
                                     android:clickable="true"
                                     android:focusable="true"

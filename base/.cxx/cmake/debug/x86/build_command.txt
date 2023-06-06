@@ -1,21 +1,25 @@
-Executable : /Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake
+                    Executable : C:\Users\10417\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\cmake.exe
 arguments : 
--H/Users/randy/Desktop/FryingPub/base
+-HC:\Users\10417\AndroidStudioProjects\app_fiex_android\base
 -DCMAKE_CXX_FLAGS=-std=c++11
+-DCMAKE_FIND_ROOT_PATH=C:\Users\10417\AndroidStudioProjects\app_fiex_android\base\.cxx\cmake\debug\prefab\x86\prefab
 -DCMAKE_BUILD_TYPE=Debug
--DCMAKE_TOOLCHAIN_FILE=/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake
+-DCMAKE_TOOLCHAIN_FILE=C:\Users\10417\AppData\Local\Android\Sdk\ndk\21.4.7075529\build\cmake\android.toolchain.cmake
 -DANDROID_ABI=x86
--DANDROID_NDK=/Users/randy/Library/Android/sdk/ndk-bundle
--DANDROID_PLATFORM=android-21
+-DANDROID_NDK=C:\Users\10417\AppData\Local\Android\Sdk\ndk\21.4.7075529
+-DANDROID_PLATFORM=android-23
 -DCMAKE_ANDROID_ARCH_ABI=x86
--DCMAKE_ANDROID_NDK=/Users/randy/Library/Android/sdk/ndk-bundle
+-DCMAKE_ANDROID_NDK=C:\Users\10417\AppData\Local\Android\Sdk\ndk\21.4.7075529
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/randy/Desktop/FryingPub/base/build/intermediates/cmake/debug/obj/x86
--DCMAKE_MAKE_PROGRAM=/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\10417\AndroidStudioProjects\app_fiex_android\base\build\intermediates\cmake\debug\obj\x86
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\10417\AndroidStudioProjects\app_fiex_android\base\build\intermediates\cmake\debug\obj\x86
+-DCMAKE_MAKE_PROGRAM=C:\Users\10417\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe
 -DCMAKE_SYSTEM_NAME=Android
--DCMAKE_SYSTEM_VERSION=21
--B/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86
+-DCMAKE_SYSTEM_VERSION=23
+-BC:\Users\10417\AndroidStudioProjects\app_fiex_android\base\.cxx\cmake\debug\x86
 -GNinja
 jvmArgs : 
 
-Build command args:
+
+                    Build command args: []
+                    Version: 1

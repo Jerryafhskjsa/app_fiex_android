@@ -125,7 +125,7 @@ open class BaseActionBarActivity : AppCompatActivity(), PermissionHelper, GeeTes
         initToolbar()
     }
 
-    override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View? {
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return super.onCreateView(name, context, attrs)
     }
 

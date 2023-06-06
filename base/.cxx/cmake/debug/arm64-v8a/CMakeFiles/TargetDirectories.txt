@@ -1,5 +1,5 @@
-/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
-/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
-/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir
-/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/edit_cache.dir
-/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/fryingSecret.dir
+C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/edit_cache.dir
+C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a/src/main/cpp/sec/CMakeFiles/rebuild_cache.dir

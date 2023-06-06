@@ -1,13 +1,17 @@
 {
   "abi": "X86",
-  "abiPlatformVersion": 21,
-  "buildSettings": {
-    "environmentVariables": []
+  "info": {
+    "abi": "X86",
+    "bitness": 32,
+    "deprecated": false,
+    "default": true
   },
+  "originalCxxBuildFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+  "cxxBuildFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+  "abiPlatformVersion": 23,
   "cmake": {
-    "cmakeArtifactsBaseFolder": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86",
-    "cmakeServerLogFile": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86/cmake_server_log.txt",
-    "cmakeWrappingBaseFolder": "/Users/randy/Desktop/FryingPub/base/.cxx/cxx/debug/x86",
+    "cmakeWrappingBaseFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cxx\\debug\\x86",
+    "cmakeArtifactsBaseFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
     "effectiveConfiguration": {
       "name": "traditional-android-studio-cmake-environment",
       "description": "Composite reified CMakeSettings configuration",
@@ -15,13 +19,17 @@
       "inheritEnvironments": [
         "ndk"
       ],
-      "buildRoot": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86",
-      "cmakeToolchain": "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake",
-      "cmakeExecutable": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
+      "buildRoot": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+      "cmakeToolchain": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake",
+      "cmakeExecutable": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
       "variables": [
         {
           "name": "CMAKE_CXX_FLAGS",
           "value": "-std\u003dc++11"
+        },
+        {
+          "name": "CMAKE_FIND_ROOT_PATH",
+          "value": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\prefab\\x86\\prefab"
         },
         {
           "name": "CMAKE_BUILD_TYPE",
@@ -29,7 +37,7 @@
         },
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake"
+          "value": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake"
         },
         {
           "name": "ANDROID_ABI",
@@ -37,11 +45,11 @@
         },
         {
           "name": "ANDROID_NDK",
-          "value": "/Users/randy/Library/Android/sdk/ndk-bundle"
+          "value": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529"
         },
         {
           "name": "ANDROID_PLATFORM",
-          "value": "android-21"
+          "value": "android-23"
         },
         {
           "name": "CMAKE_ANDROID_ARCH_ABI",
@@ -49,7 +57,7 @@
         },
         {
           "name": "CMAKE_ANDROID_NDK",
-          "value": "/Users/randy/Library/Android/sdk/ndk-bundle"
+          "value": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529"
         },
         {
           "name": "CMAKE_EXPORT_COMPILE_COMMANDS",
@@ -57,11 +65,15 @@
         },
         {
           "name": "CMAKE_LIBRARY_OUTPUT_DIRECTORY",
-          "value": "/Users/randy/Desktop/FryingPub/base/build/intermediates/cmake/debug/obj/x86"
+          "value": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build\\intermediates\\cmake\\debug\\obj\\x86"
+        },
+        {
+          "name": "CMAKE_RUNTIME_OUTPUT_DIRECTORY",
+          "value": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build\\intermediates\\cmake\\debug\\obj\\x86"
         },
         {
           "name": "CMAKE_MAKE_PROGRAM",
-          "value": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
+          "value": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe"
         },
         {
           "name": "CMAKE_SYSTEM_NAME",
@@ -69,49 +81,77 @@
         },
         {
           "name": "CMAKE_SYSTEM_VERSION",
-          "value": "21"
+          "value": "23"
         }
       ]
-    }
+    },
+    "cmakeServerLogFile": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86\\cmake_server_log.txt"
   },
-  "cxxBuildFolder": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86",
-  "info": {
-    "abi": "X86",
-    "bitness": 32,
-    "deprecated": false,
-    "default": true
-  },
-  "originalCxxBuildFolder": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86",
   "variant": {
     "buildSystemArgumentList": [],
-    "buildTargetSet": [],
     "cFlagsList": [],
-    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "cppFlagsList": [
       "-std\u003dc++11"
     ],
+    "variantName": "debug",
+    "objFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build\\intermediates\\cmake\\debug\\obj",
+    "soFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build\\intermediates\\cmake\\debug\\lib",
     "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "module": {
-      "buildSystem": "CMAKE",
-      "cmake": {
-        "cmakeExe": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
-        "minimumCmakeVersion": "3.10.2",
-        "ninjaExe": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
-      },
-      "cmakeToolchainFile": "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake",
-      "cxxFolder": "/Users/randy/Desktop/FryingPub/base/.cxx",
+      "cxxFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx",
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build\\intermediates",
       "gradleModulePathName": ":base",
-      "intermediatesFolder": "/Users/randy/Desktop/FryingPub/base/build/intermediates",
-      "makeFile": "/Users/randy/Desktop/FryingPub/base/CMakeLists.txt",
-      "moduleBuildFile": "/Users/randy/Desktop/FryingPub/base/build.gradle",
-      "moduleRootFolder": "/Users/randy/Desktop/FryingPub/base",
+      "moduleRootFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base",
+      "moduleBuildFile": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\build.gradle",
+      "makeFile": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "ndkFolder": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529",
+      "ndkVersion": "21.4.7075529",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
       "ndkDefaultAbiList": [
         "ARMEABI_V7A",
         "ARM64_V8A",
         "X86",
         "X86_64"
       ],
-      "ndkFolder": "/Users/randy/Library/Android/sdk/ndk-bundle",
+      "ndkDefaultStl": "LIBCXX_STATIC",
+      "ndkMetaPlatforms": {
+        "min": 16,
+        "max": 30,
+        "aliases": {
+          "20": 19,
+          "25": 24,
+          "J": 16,
+          "J-MR1": 17,
+          "J-MR2": 18,
+          "K": 19,
+          "L": 21,
+          "L-MR1": 22,
+          "M": 23,
+          "N": 24,
+          "N-MR1": 24,
+          "O": 26,
+          "O-MR1": 27,
+          "P": 28,
+          "Q": 29,
+          "R": 30
+        }
+      },
       "ndkMetaAbiList": [
         {
           "abi": "ARMEABI_V7A",
@@ -138,64 +178,43 @@
           "default": true
         }
       ],
-      "ndkMetaPlatforms": {
-        "min": 16,
-        "max": 30,
-        "aliases": {
-          "20": 19,
-          "25": 24,
-          "J": 16,
-          "J-MR1": 17,
-          "J-MR2": 18,
-          "K": 19,
-          "L": 21,
-          "L-MR1": 22,
-          "M": 23,
-          "N": 24,
-          "N-MR1": 24,
-          "O": 26,
-          "O-MR1": 27,
-          "P": 28,
-          "Q": 29,
-          "R": 30
-        }
+      "originalCmakeToolchainFile": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake",
+      "cmakeToolchainFile": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake",
+      "cmake": {
+        "isValidCmakeAvailable": true,
+        "cmakeExe": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
+        "minimumCmakeVersion": "3.10.2",
+        "ninjaExe": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+        "isPreferCmakeFileApiEnabled": true
       },
-      "ndkSupportedAbiList": [
-        "ARMEABI_V7A",
-        "ARM64_V8A",
-        "X86",
-        "X86_64"
-      ],
-      "ndkVersion": "22.1.7171670",
-      "project": {
-        "compilerSettingsCacheFolder": "/Users/randy/Desktop/FryingPub/.cxx",
-        "cxxFolder": "/Users/randy/Desktop/FryingPub/.cxx",
-        "isBuildOnlyTargetAbiEnabled": true,
-        "isCmakeBuildCohabitationEnabled": false,
-        "isNativeCompilerSettingsCacheEnabled": false,
-        "rootBuildGradleFolder": "/Users/randy/Desktop/FryingPub",
-        "sdkFolder": "/Users/randy/Library/Android/sdk"
-      },
-      "splitsAbiFilterSet": [],
       "stlSharedObjectMap": {
         "LIBCXX_SHARED": {
-          "ARMEABI_V7A": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
-          "ARM64_V8A": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
-          "X86": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
-          "X86_64": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+          "ARMEABI_V7A": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\arm-linux-androideabi\\libc++_shared.so",
+          "ARM64_V8A": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+          "X86": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\libc++_shared.so",
+          "X86_64": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so"
         },
         "LIBCXX_STATIC": {},
         "NONE": {},
         "SYSTEM": {}
-      }
+      },
+      "project": {
+        "rootBuildGradleFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android",
+        "cxxFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\.cxx",
+        "compilerSettingsCacheFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\.cxx",
+        "sdkFolder": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk",
+        "isNativeCompilerSettingsCacheEnabled": false,
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isPrefabEnabled": false,
+        "isV2NativeModelEnabled": true
+      },
+      "nativeBuildOutputLevel": "QUIET"
     },
-    "objFolder": "/Users/randy/Desktop/FryingPub/base/build/intermediates/cmake/debug/obj",
-    "variantName": "debug",
-    "validAbiList": [
-      "ARMEABI_V7A",
-      "ARM64_V8A",
-      "X86",
-      "X86_64"
-    ]
-  }
+    "prefabDirectory": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\prefab"
+  },
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "prefabFolder": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\prefab\\x86"
 }

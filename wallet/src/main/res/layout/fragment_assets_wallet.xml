@@ -100,12 +100,7 @@
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
                     </LinearLayout>
-                        <ImageView
-                            android:layout_width="52dp"
-                            android:layout_height="30dp"
-                            android:layout_marginTop="@dimen/text_size_16"
-                            android:layout_marginRight="24dp"
-                            android:background="@drawable/jiantou2"/>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -175,12 +170,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/text_size_10"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="@dimen/text_size_16"
                         android:layout_height="@dimen/text_size_16"
-                        android:layout_marginTop="@dimen/text_size_2"
-                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginLeft="@dimen/text_size_20"
                         android:src="@drawable/qianbao"/>
                 <com.black.base.widget.SpanTextView
                     android:id="@+id/investment_portfolio"
@@ -203,8 +198,10 @@
                     <LinearLayout
                         android:id="@+id/spot"
                         android:layout_gravity="center"
-                        android:layout_width="380dp"
+                        android:layout_width="match_parent"
                         android:layout_height="92dp"
+                        android:layout_marginRight="@dimen/text_size_10"
+                        android:layout_marginLeft="@dimen/text_size_10"
                         android:background="@drawable/xianhuo"
                         android:orientation="horizontal">
 
@@ -286,8 +283,10 @@
                     style="@style/Yinying"
                     android:id="@+id/future"
                     android:layout_gravity="center"
-                    android:layout_width="380dp"
+                    android:layout_width="match_parent"
                     android:layout_height="92dp"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
                     android:background="@drawable/xianhuo"
                     android:orientation="horizontal">
 
@@ -358,8 +357,10 @@
                     style="@style/Yinying"
                     android:id="@+id/capital"
                     android:layout_gravity="center"
-                    android:layout_width="380dp"
+                    android:layout_width="match_parent"
                     android:layout_height="92dp"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:layout_marginLeft="@dimen/text_size_10"
                     android:background="@drawable/xianhuo"
                     android:orientation="horizontal">
 

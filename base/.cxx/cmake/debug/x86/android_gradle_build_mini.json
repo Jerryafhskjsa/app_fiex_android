@@ -1,21 +1,34 @@
 {
   "buildFiles": [
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake",
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/compiler_id.cmake",
-    "/Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/CMakeLists.txt",
-    "/Users/randy/Desktop/FryingPub/base/CMakeLists.txt",
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/platforms.cmake"
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\CMakeLists.txt",
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\src\\main\\cpp\\sec\\CMakeLists.txt"
   ],
-  "cleanCommands": [
-    "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86\" clean"
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+      "clean"
+    ]
   ],
-  "buildTargetsCommand": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86\" {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
   "libraries": {
     "fryingSecret-Debug-x86": {
       "artifactName": "fryingSecret",
-      "buildCommand": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86\" fryingSecret",
+      "buildCommandComponents": [
+        "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+        "-C",
+        "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\x86",
+        "fryingSecret"
+      ],
       "abi": "x86",
-      "output": "/Users/randy/Desktop/FryingPub/base/src/main/jniLibs/x86/libfryingSecret.so"
+      "output": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\src\\main\\jniLibs\\x86\\libfryingSecret.so",
+      "runtimeFiles": []
     }
   }
 }

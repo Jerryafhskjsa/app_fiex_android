@@ -1,8 +1,8 @@
-# Install script for directory: /Users/randy/Desktop/FryingPub/base/src/main/cpp/sec
+# Install script for directory: C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/src/main/cpp/sec
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Project")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

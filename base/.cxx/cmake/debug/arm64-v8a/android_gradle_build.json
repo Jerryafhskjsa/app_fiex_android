@@ -1,42 +1,39 @@
 {
-  "stringTable": {
-    "0": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a",
-    "1": "--target=aarch64-none-linux-android21 --gcc-toolchain=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DfryingSecret_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -std=c++11 -std=c++11 -O0 -fno-limit-debug-info -fPIC"
-  },
+  "stringTable": {},
   "buildFiles": [
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake",
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/compiler_id.cmake",
-    "/Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/CMakeLists.txt",
-    "/Users/randy/Desktop/FryingPub/base/CMakeLists.txt",
-    "/Users/randy/Library/Android/sdk/ndk-bundle/build/cmake/platforms.cmake"
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\CMakeLists.txt",
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\src\\main\\cpp\\sec\\CMakeLists.txt"
   ],
-  "cleanCommands": [
-    "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a\" clean"
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\arm64-v8a",
+      "clean"
+    ]
   ],
-  "buildTargetsCommand": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
   "libraries": {
     "fryingSecret-Debug-arm64-v8a": {
-      "buildCommand": "/Users/randy/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a\" fryingSecret",
+      "buildCommandComponents": [
+        "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe",
+        "-C",
+        "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\.cxx\\cmake\\debug\\arm64-v8a",
+        "fryingSecret"
+      ],
       "buildType": "debug",
-      "toolchain": "2808857151",
       "abi": "arm64-v8a",
       "artifactName": "fryingSecret",
-      "files": [
-        {
-          "src": "/Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/fryingSecret.cpp",
-          "flagsOrdinal": 1,
-          "workingDirectoryOrdinal": 0
-        }
-      ],
-      "headers": [],
-      "output": "/Users/randy/Desktop/FryingPub/base/src/main/jniLibs/arm64-v8a/libfryingSecret.so"
+      "output": "C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\src\\main\\jniLibs\\arm64-v8a\\libfryingSecret.so",
+      "runtimeFiles": []
     }
   },
-  "toolchains": {
-    "2808857151": {
-      "cppCompilerExecutable": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
-    }
-  },
+  "toolchains": {},
   "cFileExtensions": [],
   "cppFileExtensions": [
     "cpp"

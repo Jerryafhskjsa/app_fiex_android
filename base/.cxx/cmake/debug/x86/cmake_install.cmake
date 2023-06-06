@@ -1,8 +1,8 @@
-# Install script for directory: /Users/randy/Desktop/FryingPub/base
+# Install script for directory: C:/Users/10417/AndroidStudioProjects/app_fiex_android/base
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Project")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86/src/main/cpp/sec/cmake_install.cmake")
+  include("C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/x86/src/main/cpp/sec/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/x86/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/x86/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

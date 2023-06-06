@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -26,9 +27,11 @@ import com.black.base.model.socket.PairStatus
 import com.black.base.model.socket.TradeOrder
 import com.black.base.model.socket.TradeOrderFiex
 import com.black.base.model.trade.TradeOrderHistoryResult
+import com.black.base.model.trade.TradeOrderResult
 import com.black.base.util.*
 import com.black.base.view.PairStatusPopupWindow
 import com.black.frying.adapter.EntrustRecordNewAdapter
+import com.black.frying.fragment.HomePageTransactionFragmentFiex
 import com.black.frying.view.EntrustFilter
 import com.black.frying.viewmodel.TransactionViewModel
 import com.black.lib.refresh.QRefreshLayout
@@ -120,7 +123,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-        getTradeOrderCurrent(true)
+        getTradeOrderCurrent()
     }
 
     override fun isStatusBarDark(): Boolean {
@@ -162,7 +165,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 adapter?.setType(currentType)
                 adapter?.clear()
                 adapter?.notifyDataSetChanged()
-                getTradeOrderCurrent(true)
+                getTradeOrderCurrent()
             }
             R.id.entrust_his -> if (TYPE_HIS != currentType) {
                 currentType = TYPE_HIS
@@ -335,6 +338,29 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         })
     }
 
+    private fun getTradeOrderCurrent() {
+        var pair = routerPair
+        if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
+            TradeApiServiceHelper.getTradeOrderRecordFiex(
+                mContext,
+                pair,
+                null,
+                null,
+                null,
+                true,
+                object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>(mContext!!) {
+                    override fun error(type: Int, error: Any?) {
+                    }
+
+                    override fun callback(returnData: HttpRequestResultData<TradeOrderResult?>?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                                adapter?.data = returnData.data?.items
+                                adapter?.notifyDataSetChanged()
+                        }
+                    }
+                })
+        }
+    }
     override fun onPairClick(tradeOrder: TradeOrderFiex?) {
         val bundle = Bundle()
         bundle.putInt(ConstData.HOME_FRAGMENT_INDEX, 2)
@@ -355,27 +381,43 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     }
 
     override fun onHandleClick(tradeOrder: TradeOrderFiex?) {
-//        TradeApiServiceHelper.cancelTradeOrder(mContext, tradeOrder!!.id, tradeOrder.pair, tradeOrder.direction, object : NormalCallback<HttpRequestResultString?>() {
-//            override fun callback(returnData: HttpRequestResultString?) {
-//                if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-//                    adapter?.removeItem(tradeOrder)
-//                    adapter?.notifyDataSetChanged()
-//                } else {
-//                    FryingUtil.showToast(mContext, if (returnData == null) "null" else returnData.msg)
-//                }
-//            }
-//        })
-    }
+            TradeApiServiceHelper.cancelTradeOrderFiex(
+                mContext,
+                tradeOrder?.orderId,
+                object : NormalCallback<HttpRequestResultString?>(mContext) {
+                    override fun callback(returnData: HttpRequestResultString?) {
+                        if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                            adapter?.removeItem(tradeOrder)
+                            adapter?.notifyDataSetChanged()
+                        } else {
+                            FryingUtil.showToast(
+                                mContext,
+                                if (returnData == null) "null" else returnData.msg
+                            )
+                        }
+                    }
+                })
+        }
 
     override fun onRefresh() {
         currentPage = 1
-        getTradeOrderCurrent(false)
+        if (currentType != TYPE_NEW) {
+            getTradeOrderCurrent(false)
+        }
+        else{
+            getTradeOrderCurrent()
+        }
     }
 
     override fun onLoad() {
         if (total > adapter?.count ?: 0 || hasMore) {
             currentPage += 1
-            getTradeOrderCurrent(true)
+            if (currentType != TYPE_NEW) {
+                getTradeOrderCurrent(true)
+            }
+            else{
+                getTradeOrderCurrent()
+            }
         }
     }
 

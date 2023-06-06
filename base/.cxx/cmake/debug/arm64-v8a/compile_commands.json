@@ -1,7 +1,7 @@
 [
 {
-  "directory": "/Users/randy/Desktop/FryingPub/base/.cxx/cmake/debug/arm64-v8a",
-  "command": "/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android21 --gcc-toolchain=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/randy/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -DfryingSecret_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++11 -std=c++11 -O0 -fno-limit-debug-info  -fPIC   -o src/main/cpp/sec/CMakeFiles/fryingSecret.dir/fryingSecret.cpp.o -c /Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/fryingSecret.cpp",
-  "file": "/Users/randy/Desktop/FryingPub/base/src/main/cpp/sec/fryingSecret.cpp"
+  "directory": "C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/.cxx/cmake/debug/arm64-v8a",
+  "command": "C:\\Users\\10417\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=aarch64-none-linux-android23 --gcc-toolchain=C:/Users/10417/AppData/Local/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/10417/AppData/Local/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64/sysroot  -DfryingSecret_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++11 -std=c++11 -O0 -fno-limit-debug-info  -fPIC   -o src\\main\\cpp\\sec\\CMakeFiles\\fryingSecret.dir\\fryingSecret.cpp.o -c C:\\Users\\10417\\AndroidStudioProjects\\app_fiex_android\\base\\src\\main\\cpp\\sec\\fryingSecret.cpp",
+  "file": "C:/Users/10417/AndroidStudioProjects/app_fiex_android/base/src/main/cpp/sec/fryingSecret.cpp"
 }
 ]

@@ -2498,7 +2498,7 @@ class HomePageContractFragment : BaseFragment(),
                 Log.d("12312", marketPrice.toString()
                 )
             header1View?.tagPrice?.text = marketPrice?.p
-            val price = if (header1View?.price?.text?.isEmpty() == true) marketPrice?.p else header1View?.price?.text.toString()
+            val price = if (header1View?.price?.text?.isEmpty() == true && header1View?.price?.text?.toString() == "0.0") marketPrice?.p else header1View?.price?.text.toString()
             updateCanOpenAmount(price)
         }
     }
