@@ -321,7 +321,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_zero"
-                        style="@style/TradeSeekBarCheckbox"
+                        style="@style/TradeSeekBarCheckbox2"
                         android:layout_marginLeft="4dp" />
 
                     <View
@@ -331,7 +331,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_twenty"
-                        style="@style/TradeSeekBarCheckbox" />
+                        style="@style/TradeSeekBarCheckbox2" />
 
                     <View
                         android:layout_width="0dp"
@@ -340,7 +340,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_fourty"
-                        style="@style/TradeSeekBarCheckbox" />
+                        style="@style/TradeSeekBarCheckbox2" />
 
                     <View
                         android:layout_width="0dp"
@@ -349,7 +349,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_sixty"
-                        style="@style/TradeSeekBarCheckbox" />
+                        style="@style/TradeSeekBarCheckbox2" />
 
                     <View
                         android:layout_width="0dp"
@@ -358,7 +358,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_eighty"
-                        style="@style/TradeSeekBarCheckbox" />
+                        style="@style/TradeSeekBarCheckbox2" />
 
                     <View
                         android:layout_width="0dp"
@@ -367,7 +367,7 @@
 
                     <skin.support.widget.SkinCompatCheckBox
                         android:id="@+id/amount_all"
-                        style="@style/TradeSeekBarCheckbox" />
+                        style="@style/TradeSeekBarCheckbox2" />
                 </LinearLayout>
 
                 <skin.support.widget.SkinCompatSeekBar

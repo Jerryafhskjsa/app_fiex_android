@@ -52,6 +52,18 @@
                 android:textColor="#484A57"
                 android:textSize="@dimen/text_size_10"
                 />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/cancel"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:gravity="right"
+                android:padding="@dimen/text_size_5"
+                android:background="@drawable/btn_gray"
+                android:text="@string/revoke"
+                android:textColor="#484A57"
+                android:textSize="@dimen/text_size_10" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -183,7 +195,7 @@
                     android:id="@+id/entrust_amount1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="111"
+                    android:text="0.000"
                     android:textColor="@color/T11"
                     android:textSize="@dimen/text_size_10" />
             </LinearLayout>

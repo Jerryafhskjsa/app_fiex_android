@@ -293,7 +293,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         viewModel?.getCurrentPairDepth(50)
         viewModel?.getCurrentPairDeal(50)
         viewModel?.onResume()
-        getTradeOrderCurrent()
+        withTimerGetCurrentTradeOrder()
         updateDear(isDear)
         getUserBalanceCallback()
         initTicker()
@@ -433,6 +433,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     }
 
     private fun initView() {
+        withTimerGetCurrentTradeOrder()
         clearInput()
         refreshUsable()
         refreshTransactionHardViews()
@@ -1140,6 +1141,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
         }
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
+        getTradeOrderCurrent()
         adapter?.setAmountPrecision(viewModel!!.getAmountLength())
         resetPriceLength()
         resetAmountLength()
@@ -1202,17 +1204,17 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable =
                 countProgressBuy
             binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.btnHandle.background =
                 SkinCompatResources.getDrawable(activity, R.drawable.btn_t7)
         } else if (transactionType == 2) {
@@ -1221,17 +1223,17 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             binding!!.fragmentHomePageTransactionHeader1.countProgress.progressDrawable =
                 countProgressSale
             binding!!.fragmentHomePageTransactionHeader1.amountZero.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountTwenty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountFourty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountSixty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountEighty.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.amountAll.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             binding!!.fragmentHomePageTransactionHeader1.btnHandle.background =
                 SkinCompatResources.getDrawable(activity, R.drawable.btn_t5)
         }
@@ -1348,6 +1350,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
             binding!!.fragmentHomePageTransactionHeader1.useableBuy.setText("0.0000")
         }else {
             activity?.runOnUiThread {
+                val currentPrice = binding!!.fragmentHomePageTransactionHeader1.currentPrice.text.toString()
+                binding!!.fragmentHomePageTransactionHeader1.price.setText(currentPrice)
                 val price = CommonUtil.parseDouble(
                     binding!!.fragmentHomePageTransactionHeader1.price.text.toString().trim { it <= ' ' })
                 //买入
@@ -1426,27 +1430,25 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     private fun getTradeOrderCurrent() {
 
         if (mContext != null && CookieUtil.getUserInfo(mContext!!) != null) {
+            Log.d("khjfajkshfjahs", "111")
 //            mContext?.runOnUiThread { }
 //            val orderState = 1
             TradeApiServiceHelper.getTradeOrderRecordFiex(
                 activity,
-                if (binding!!.contractWithLimit.isChecked) viewModel!!.getCurrentPair() else null,
+                viewModel!!.getCurrentPair(),
                 null,
                 null,
                 null,
-                false,
+                true,
                 object : NormalCallback<HttpRequestResultData<TradeOrderResult?>?>(mContext!!) {
                     override fun error(type: Int, error: Any?) {
-                        Log.d(TAG, "getTradeOrderCurrent error")
+                        Log.d("getTradeOrderCurrent error", TAG)
                         showCurrentOrderList(null)
                     }
 
                     override fun callback(returnData: HttpRequestResultData<TradeOrderResult?>?) {
                         if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                            Log.d(
-                                TAG,
-                                "getTradeOrderCurrent data.size = " + returnData.data?.items?.size
-                            )
+                            Log.d("jlkklkkjjaiiii", returnData.data?.items?.size.toString())
                             showCurrentOrderList(returnData.data?.items)
                         }
                     }
@@ -1658,11 +1660,14 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
     //用户信息被修改，刷新委托信息和钱包
     override fun onUserInfoChanged() {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            showCurrentOrderList(null)
             getTradeOrderCurrent()
             refreshUserBalance()
             refreshUsable()
             refreshAsstes()
             refreshCurrentWallet()
+            adapter?.data = null
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -1712,8 +1717,8 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                 }
                 wallet.coinType = currentBalanceBuy?.coin?.uppercase()
                 wallet.coinFroze = if (currentBalanceBuy?.freeze == null) 0.0 else currentBalanceBuy?.freeze!!.toDouble()
-                wallet.coinAmount = BigDecimal(currentBalanceBuy?.availableBalance)
-                wallet.estimatedAvailableAmountCny = currentBalanceBuy?.availableBalance!!.toDouble()
+                wallet.coinAmount = if (currentBalanceBuy?.freeze == null) BigDecimal.ZERO else BigDecimal(currentBalanceBuy?.availableBalance)
+                wallet.estimatedAvailableAmountCny = currentBalanceBuy?.availableBalance?.toDouble()?:0.0
                 refreshAsstes()
                 refreshUsable()
                 computeTotal()

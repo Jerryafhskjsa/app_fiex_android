@@ -829,7 +829,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
 //                            d(TAG, "qDeal->data = $resultData")
                             val pairDeal: PairDeal? = gson.fromJson<PairDeal?>(
                                 jsonObject.toString(),
-                                object : TypeToken<PairDeal??>() {}.type
+                                object : TypeToken<PairDeal?>() {}.type
                             )
                             if (pairDeal != null) {
                                 SocketDataContainer.getCurrentPairDeal(mHandler, pairDeal,ConstData.DEPTH_SPOT_TYPE)

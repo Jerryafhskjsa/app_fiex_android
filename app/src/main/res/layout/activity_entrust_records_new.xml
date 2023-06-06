@@ -37,16 +37,15 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="109dp"
+                        android:layout_height="90dp"
                         android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="109dp"
+                        android:layout_height="90dp"
                         android:gravity="bottom"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
-                        android:paddingBottom="@dimen/double_padding"
                         app:layout_collapseMode="pin">
 
                         <LinearLayout
@@ -173,8 +172,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:maxLines="1"
+                                android:text="@string/spot"
                                 android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_20" />
+                                android:textSize="@dimen/text_size_16"
+                                android:textStyle="bold"/>
 
                             <RelativeLayout
                                 android:id="@+id/filter_layout"

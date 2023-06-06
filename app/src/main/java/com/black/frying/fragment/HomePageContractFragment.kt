@@ -1988,17 +1988,17 @@ class HomePageContractFragment : BaseFragment(),
             header1View?.countProgress?.progressDrawable =
                 countProgressBuy
             header1View?.amountZero?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountTwenty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountFourty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountSixty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountEighty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountAll?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
         } else if (transactionType == ConstData.FUTURE_OPERATE_CLOSE) {
             header1View?.contractWithLimit?.visibility = View.GONE
             header1View?.linStopValue?.visibility = View.GONE
@@ -2011,17 +2011,17 @@ class HomePageContractFragment : BaseFragment(),
             header1View?.countProgress?.progressDrawable =
                 countProgressSale
             header1View?.amountZero?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountTwenty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountFourty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountSixty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountEighty?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
             header1View?.amountAll?.buttonDrawable =
-                SkinCompatResources.getDrawable(mContext, R.drawable.icon_transaction_count_buy)
+                SkinCompatResources.getDrawable(mContext, R.drawable.black_icon_count)
         }
         if (!TextUtils.isEmpty(viewModel!!.getCurrentPair())) {
             binding!!.actionBarLayout.actionBarTitle.setText(
