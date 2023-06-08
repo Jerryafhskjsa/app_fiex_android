@@ -191,7 +191,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
         }
     }
 
-    private fun initPairStatus() {
+     fun initPairStatus() {
         if (TextUtils.isEmpty(currentPairStatus.pair)) {
             currentPairStatus.pair = CookieUtil.getCurrentPair(context)
         }

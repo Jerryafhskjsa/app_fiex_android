@@ -55,6 +55,7 @@
                         layout="@layout/fragment_home_page_transaction_header1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/text_size_16"

@@ -791,6 +791,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<TradeOrderDepth?>() {}.type
                             )
                             if (allDepth != null) {
+                                Log.d("oiuoiuiou", allDepth.toString())
                                 SocketDataContainer.updateQuotationOrderNewDataFiex(
                                     mCcontext,
                                     ConstData.DEPTH_SPOT_TYPE,
@@ -805,23 +806,28 @@ class FiexSocketManager(context: Context, handler: Handler) {
                             val oneDepth: TradeOrderOneDepth? =
                                 gson.fromJson<TradeOrderOneDepth?>(
                                     jsonObject.toString(),
-                                    object : TypeToken<TradeOrderOneDepth??>() {}.type
+                                    object : TypeToken<TradeOrderOneDepth?>() {}.type
                                 )
                             if (oneDepth != null) {
-                                var allDepthData = TradeOrderDepth()
-                                var direction = oneDepth?.m
-                                var desArray: Array<String?>? =
-                                    arrayOf(oneDepth?.p, oneDepth?.q)
+                                val allDepthData = TradeOrderDepth()
+                                val direction = oneDepth.m
+                                val desArray: Array<String?>? =
+                                    arrayOf(oneDepth.p, oneDepth.q)
                                 if (direction.equals("1")) {//BID
-                                    var bidArray = arrayOf(desArray)
-                                    allDepthData?.b = bidArray
+                                    val bidArray = arrayOf(desArray)
+                                    allDepthData.b = bidArray
                                 }
                                 if (direction.equals("2")) {//ASK
-                                    var askArray = arrayOf(desArray)
-                                    allDepthData?.a = askArray
+                                    val askArray = arrayOf(desArray)
+                                    allDepthData.a = askArray
                                 }
-                                allDepthData.s = oneDepth?.s
-//                            SocketDataContainer.updateQuotationOrderNewDataFiex(mCcontext,mHandler,currentPair,allDepthData,false)
+                                allDepthData.s = oneDepth.s
+                            SocketDataContainer.updateQuotationOrderNewDataFiex( mCcontext,
+                                ConstData.DEPTH_SPOT_TYPE,
+                                mHandler,
+                                currentPair,
+                                allDepthData,
+                                false)
                             }
                         }
                         //当前交易对成交数据
@@ -922,10 +928,34 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 }
                             }
                             "push.deep" -> { //深度
-                                val deepBean = gson.fromJson<DeepBean>(
+                                val oneDepth = gson.fromJson<DeepBean>(
                                     data.toString(),
                                     object : TypeToken<DeepBean?>() {}.type
                                 )
+                                if (oneDepth != null) {
+                                    val allDepthData = TradeOrderDepth()
+                                    val direction = oneDepth.ba
+                                    val desArray: Array<String?>? =
+                                        arrayOf(oneDepth.p, oneDepth.q)
+                                    if (direction.equals(1)) {//BID
+                                        val bidArray = arrayOf(desArray)
+                                        allDepthData.b = bidArray
+                                    }
+                                    if (direction.equals(2)) {//ASK
+                                        val askArray = arrayOf(desArray)
+                                        allDepthData.a = askArray
+                                    }
+                                    allDepthData.s = oneDepth.s
+                                    SocketDataContainer.
+                                    updateQuotationOrderNewDataFiex(
+                                        mCcontext,
+                                        ConstData.DEPTH_FUTURE_TYPE,
+                                        mHandler,
+                                        currentUFuturePair,
+                                        allDepthData,
+                                        false
+                                    )
+                                }
                             }
                             "push.deep.full" -> { //全部深度
                                 val allDepth: TradeOrderDepth? = gson.fromJson<TradeOrderDepth?>(
@@ -934,7 +964,8 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 )
                                 Log.d(TAG, "SymbolListener futureCurrentPair = $currentUFuturePair")
                                 if (allDepth != null) {
-                                    SocketDataContainer.updateQuotationOrderNewDataFiex(
+                                    SocketDataContainer.
+                                    updateQuotationOrderNewDataFiex(
                                         mCcontext,
                                         ConstData.DEPTH_FUTURE_TYPE,
                                         mHandler,

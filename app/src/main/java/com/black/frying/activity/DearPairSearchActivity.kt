@@ -1,5 +1,6 @@
 package com.black.frying.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -7,12 +8,14 @@ import android.os.Process
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.databinding.ListViewEmptyLongBinding
@@ -40,10 +43,17 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
     private var binding: ActivityDearPairSearchBinding? = null
     //异步获取数据
     private var handlerThread: HandlerThread? = null
+    private var type: Int = 0
     private var socketHandler: Handler? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = createPairObserver()
     private val dearPairs = ArrayList<String?>()
     private var pairSearch: ArrayList<PairStatus?>? = null
+    private var futureTickerObserver: Observer<ArrayList<PairStatus?>?>? = null
+    private var pairSearch1 = PairSearch()
+    private var pairSearch2 = PairSearch()
+    private var pairSearch3 = PairSearch()
+    private var pairSearch4 = PairSearch()
+    private var pairSearch5 = PairSearch()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +69,24 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         binding?.coinEdit?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                searchPair(binding?.coinEdit?.text.toString())
+                if(!s.isEmpty()){
+                    binding?.history?.visibility = View.GONE
+                    binding?.tab?.visibility = View.VISIBLE
+                }
+                searchPair(s.toString())
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
         binding?.btnCancel?.setOnClickListener(this)
+        binding?.one?.setOnClickListener(this)
+        binding?.two?.setOnClickListener(this)
+        binding?.three?.setOnClickListener(this)
+        binding?.four?.setOnClickListener(this)
+        binding?.five?.setOnClickListener(this)
+        binding?.spot?.setOnClickListener(this)
+        binding?.futures?.setOnClickListener(this)
+        binding?.btnAction?.setOnClickListener(this)
         adapter = PairSearchAdapter(this, null)
         adapter?.setOnSearchHandleListener(this)
         binding?.listView?.adapter = adapter
@@ -85,12 +107,23 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
             pairObserver = createPairObserver()
         }
         SocketDataContainer.subscribePairObservable(pairObserver)
+        if (futureTickerObserver == null) {
+            futureTickerObserver = createFutureTickerObserver()
+        }
+        SocketDataContainer.subscribeFuturePairObservable(futureTickerObserver)
+        handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
+        handlerThread?.start()
+        socketHandler = Handler(handlerThread?.looper)
     }
 
     override fun onStop() {
         super.onStop()
         if (pairObserver != null) {
             SocketDataContainer.removePairObservable(pairObserver)
+        }
+        if (futureTickerObserver != null) {
+            SocketDataContainer.removeFuturePairObservable(futureTickerObserver)
+            futureTickerObserver == null
         }
         if (socketHandler != null) {
             socketHandler?.removeMessages(0)
@@ -115,6 +148,62 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_cancel -> finish()
+
+            R.id.one ->{
+                binding?.coinEdit?.setText(pairSearch1.pair!!.split("_")[0].toString())
+                searchPair(pairSearch1.pair!!.split("_")[0].toString())
+            }
+
+            R.id.two ->{  binding?.coinEdit?.setText(pairSearch2.pair!!.split("_")[0].toString())
+                searchPair(pairSearch1.pair!!.split("_")[0].toString())}
+
+            R.id.three ->{  binding?.coinEdit?.setText(pairSearch3.pair!!.split("_")[0].toString())
+                searchPair(pairSearch1.pair!!.split("_")[0].toString())}
+
+            R.id.four ->{  binding?.coinEdit?.setText(pairSearch4.pair!!.split("_")[0].toString())
+                searchPair(pairSearch1.pair!!.split("_")[0].toString())}
+
+            R.id.five ->{  binding?.coinEdit?.setText(pairSearch5.pair!!.split("_")[0].toString())
+                searchPair(pairSearch1.pair!!.split("_")[0].toString())}
+
+            R.id.btn_action -> {
+            CookieUtil.clearPairSearchHistory(this)
+                binding?.history?.visibility = View.GONE
+                binding?.bar?.visibility = View.VISIBLE
+                binding?.listView?.visibility = View.VISIBLE
+                binding?.tab?.visibility = View.VISIBLE
+                val key = binding?.coinEdit?.text.toString()
+                searchPair(key)
+            }
+
+            R.id.spot-> {
+                type = 0
+                binding?.spot?.isChecked = true
+                binding?.futures?.isChecked = false
+                binding?.spot?.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(
+                        R.dimen.text_size_18).toFloat())
+                binding?.futures?.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(
+                        R.dimen.text_size_12).toFloat())
+                val key = binding?.coinEdit?.text.toString()
+                searchPair(key)
+
+            }
+
+            R.id.futures-> {
+                type = 1
+                binding?.spot?.isChecked = false
+                binding?.futures?.isChecked = true
+                binding?.spot?.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(
+                        R.dimen.text_size_12).toFloat())
+                binding?.futures?.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(
+                        R.dimen.text_size_18).toFloat())
+                val key = binding?.coinEdit?.text.toString()
+                searchPair(key)
+            }
         }
     }
 
@@ -158,7 +247,7 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         sendSocketCommandChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
         val bundle = Bundle()
         bundle.putString(ConstData.PAIR, pairSearch.pair)
-        bundle.putInt(ConstData.NAME,0)
+        if (type == 0) bundle.putInt(ConstData.NAME,0) else bundle.putInt(ConstData.NAME,1)
         BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle).go(this)
     }
 
@@ -168,6 +257,14 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
                 if (value?.size!! > 0) {
                     pairSearch = value
                 }
+            }
+        }
+    }
+    private fun createFutureTickerObserver(): Observer<ArrayList<PairStatus?>?> {
+        return object : SuccessObserver<ArrayList<PairStatus?>?>() {
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun onSuccess(value: ArrayList<PairStatus?>?) {
+
             }
         }
     }
@@ -203,14 +300,47 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
     private fun refreshDearPairs() {
         var searchHistory = CookieUtil.getPairSearchHistory(mContext)
         searchHistory = searchHistory ?: ArrayList()
+        if (searchHistory.size == 0){
+            binding?.history?.visibility = View.GONE
+            binding?.tab?.visibility = View.VISIBLE
+        }
+        else{
+            binding?.history?.visibility = View.VISIBLE
+            binding?.tab?.visibility = View.GONE
+        }
         val pairSearches = ArrayList<PairSearch?>()
         for (i in searchHistory.indices) {
             val pairSearch = PairSearch()
             pairSearch.pair = searchHistory[i]
             pairSearch.is_dear = dearPairs.contains(pairSearch.pair)
             pairSearches.add(pairSearch)
+            if (i == searchHistory.size - 1){
+                pairSearch1 = pairSearch
+                binding?.one?.setText(pairSearch.pair)
+                binding?.one?.visibility = View.VISIBLE
+            }
+            if (i == searchHistory.size - 2){
+                pairSearch2 = pairSearch
+                binding?.two?.setText(pairSearch.pair)
+                binding?.two?.visibility = View.VISIBLE
+            }
+            if (i == searchHistory.size - 3){
+                pairSearch3 = pairSearch
+                binding?.three?.setText(pairSearch.pair)
+                binding?.three?.visibility = View.VISIBLE
+            }
+            if (i == searchHistory.size - 4){
+                pairSearch4 = pairSearch
+                binding?.four?.setText(pairSearch.pair)
+                binding?.four?.visibility = View.VISIBLE
+            }
+            if (i == searchHistory.size - 5){
+                pairSearch5 = pairSearch
+                binding?.five?.setText(pairSearch.pair)
+                binding?.five?.visibility = View.VISIBLE
+            }
         }
-        refreshSearchPairHistory(pairSearches)
+        //refreshSearchPairHistory(pairSearches)
     }
 
     private fun refreshSearchPairHistory(pairSearches: ArrayList<PairSearch?>) {
@@ -233,29 +363,56 @@ class DearPairSearchActivity : BaseActionBarActivity(), View.OnClickListener, On
         }
     }
 
-    fun searchPair(key: String?) {
+    private fun searchPair(key: String?) {
         socketHandler?.post {
-            val pairStatuses = SocketDataContainer.getPairStatusListByKey(mContext, key)
-            //                ArrayList<PairStatus> pairStatuses = SocketUtil.getPairStatusListByKey(mContext, key);
-            if (pairStatuses != null && pairStatuses.isNotEmpty()) {
-                val pairSearches = ArrayList<PairSearch?>()
-                for (i in pairStatuses.indices) {
-                    val pairStatus = pairStatuses[i]
-                    pairStatus?.let {
-                        var pairSearch = PairSearch()
-                        pairSearch.pair = pairStatus.pair
-                        pairSearch.currentPrice = pairStatus.currentPrice
-                        pairSearch.priceChangeSinceToday = pairStatus.priceChangeSinceToday
-                        pairSearch.currentPrice = pairStatus.currentPrice
-                        pairSearch.is_dear = dearPairs.contains(pairSearch.pair)
-                        pairSearches.add(pairSearch)
+            when (type) {
+                0 -> {
+                    val pairStatuses = SocketDataContainer.getPairStatusListByKey(mContext, key)
+                    //                ArrayList<PairStatus> pairStatuses = SocketUtil.getPairStatusListByKey(mContext, key);
+                    if (pairStatuses != null && pairStatuses.isNotEmpty()) {
+                        val pairSearches = ArrayList<PairSearch?>()
+                        for (i in pairStatuses.indices) {
+                            val pairStatus = pairStatuses[i]
+                            pairStatus?.let {
+                                var pairSearch = PairSearch()
+                                pairSearch.pair = pairStatus.pair
+                                pairSearch.currentPrice = pairStatus.currentPrice
+                                pairSearch.priceChangeSinceToday = pairStatus.priceChangeSinceToday
+                                pairSearch.currentPrice = pairStatus.currentPrice
+                                pairSearch.is_dear = dearPairs.contains(pairSearch.pair)
+                                pairSearches.add(pairSearch)
+                            }
+                        }
+                        refreshSearchPairs(pairSearches)
+                    } else {
+                        refreshSearchPairs(null)
                     }
                 }
-                refreshSearchPairs(pairSearches)
-            } else {
-                refreshSearchPairs(null)
-            }
+                1 -> {
+                    val pairStatuses = SocketDataContainer.getFPairStatusListByKey(mContext, key)
+                    Log.d("oppiopoop", pairStatuses?.size.toString())
+                    //                ArrayList<PairStatus> pairStatuses = SocketUtil.getPairStatusListByKey(mContext, key);
+                    if (pairStatuses != null && pairStatuses.isNotEmpty()) {
+                        val pairSearches = ArrayList<PairSearch?>()
+                        for (i in pairStatuses.indices) {
+                            val pairStatus = pairStatuses[i]
+                            pairStatus?.let {
+                                var pairSearch = PairSearch()
+                                pairSearch.pair = pairStatus.pair
+                                pairSearch.currentPrice = pairStatus.currentPrice
+                                pairSearch.priceChangeSinceToday = pairStatus.priceChangeSinceToday
+                                pairSearch.currentPrice = pairStatus.currentPrice
+                                pairSearch.is_dear = dearPairs.contains(pairSearch.pair)
+                                pairSearches.add(pairSearch)
+                            }
+                        }
+                        refreshSearchPairs(pairSearches)
+                    } else {
+                        refreshSearchPairs(null)
+                    }
+                }
         }
+    }
     }
 
 }

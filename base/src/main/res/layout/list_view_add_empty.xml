@@ -5,6 +5,7 @@
     >
     <RelativeLayout
         android:id="@+id/top_info"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/default_padding"
@@ -32,7 +33,7 @@
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="@dimen/line"
+        android:divider="@color/B2"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:scrollbars="none">

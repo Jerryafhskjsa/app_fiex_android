@@ -30,14 +30,14 @@ class KLineQuotaSelector(activity: Activity) : PopupWindow.OnDismissListener, Vi
         popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow.setOnDismissListener(this)
-        binding.ma?.setOnClickListener(this)
-        binding.boll?.setOnClickListener(this)
-        binding.mainHidden?.setOnClickListener(this)
-        binding.macd?.setOnClickListener(this)
-        binding.kdj?.setOnClickListener(this)
-        binding.rsi?.setOnClickListener(this)
-        binding.wr?.setOnClickListener(this)
-        binding.subHidden?.setOnClickListener(this)
+        binding.ma.setOnClickListener(this)
+        binding.boll.setOnClickListener(this)
+        binding.mainHidden.setOnClickListener(this)
+        binding.macd.setOnClickListener(this)
+        binding.kdj.setOnClickListener(this)
+        binding.rsi.setOnClickListener(this)
+        binding.wr.setOnClickListener(this)
+        binding.subHidden.setOnClickListener(this)
     }
 
     override fun onDismiss() {

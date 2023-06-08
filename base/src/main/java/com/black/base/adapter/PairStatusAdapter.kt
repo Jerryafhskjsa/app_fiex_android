@@ -12,6 +12,7 @@ import com.black.base.model.PairStatusShowPopup
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.CookieUtil
 import com.black.base.util.StyleChangeUtil
+import com.black.base.view.PairStatusPopupWindow
 import com.black.util.NumberUtil
 import skin.support.content.res.SkinCompatResources
 
@@ -40,6 +41,7 @@ class PairStatusAdapter(
         if (view == null) {
             view = inflater.inflate(R.layout.list_item_pair_status, null)
             val viewHolder = ViewHolder()
+            viewHolder.bar = view.findViewById(R.id.bar_a)
             viewHolder.pairNameView = view.findViewById(R.id.pair_name)
             viewHolder.setNameView = view.findViewById(R.id.set_name)
             viewHolder.maxLeverView = view.findViewById(R.id.max_lever)
@@ -66,6 +68,11 @@ class PairStatusAdapter(
         } else {
             viewHolder.maxLeverView?.visibility = View.GONE
         }
+        Log.d("2764821781",dataType.toString())
+        if (dataType == PairStatusPopupWindow.TYPE_FUTURE_ALL){
+            viewHolder.bar?.visibility = View.GONE
+            viewHolder.maxLeverView?.visibility = View.VISIBLE
+        }
         if (viewHolder.pairNameView != null) {
             viewHolder.pairNameView?.text = pairStatus?.name.toString().uppercase()
         }
@@ -73,9 +80,9 @@ class PairStatusAdapter(
             viewHolder.setNameView?.text = pairStatus?.setName.toString().uppercase()
         }
         if (viewHolder.priceView != null) {
-            val color = colorDefault
+            //val color = colorDefault
             viewHolder.priceView?.text = pairStatus?.currentPriceFormat
-            viewHolder.priceView?.setTextColor(color)
+            //viewHolder.priceView?.setTextColor(color)
         }
         if (viewHolder.sinceView != null) {
             var styleChange = StyleChangeUtil.getStyleChangeSetting(context)?.styleCode
@@ -84,12 +91,14 @@ class PairStatusAdapter(
                     if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! < 0) colorWin else colorLost
                 viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
                 viewHolder.sinceView?.setTextColor(color)
+                viewHolder.priceView?.setTextColor(color)
             }
             if (styleChange == 0) {
                 val color =
                     if (pairStatus?.priceChangeSinceToday == null || pairStatus.priceChangeSinceToday == 0.0) colorDefault else if (pairStatus.priceChangeSinceToday!! > 0) colorWin else colorLost
                 viewHolder.sinceView?.text = pairStatus?.priceChangeSinceTodayFormat
                 viewHolder.sinceView?.setTextColor(color)
+                viewHolder.priceView?.setTextColor(color)
             }
         }
         if (viewHolder.hotView != null) {
@@ -99,7 +108,7 @@ class PairStatusAdapter(
                 View.GONE
             }
             if (visiable != null) {
-                viewHolder.hotView?.visibility = visiable
+                viewHolder.hotView?.visibility = View.GONE
             }
         }
         if (TextUtils.equals(currentPair, pairStatus?.pair)) {
@@ -110,6 +119,7 @@ class PairStatusAdapter(
     }
 
     inner class ViewHolder {
+        var bar: TextView? = null
         var coinIconView: ImageView? = null
         var pairNameView: TextView? = null
         var setNameView: TextView? = null

@@ -242,7 +242,7 @@ class HomePageContractFragment : BaseFragment(),
         )
         layout = binding?.root
         viewModel = ContractViewModel(mContext!!, this)
-        binding!!.actionBarLayout.actionBarTitle
+        binding!!.actionBarLayout
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -1317,7 +1317,7 @@ class HomePageContractFragment : BaseFragment(),
                 val optionalCoinBaseSet = QuotationSet()
                 optionalCoinBaseSet.coinType = getString(R.string.usd)
                 optionalCoinBaseSet.name = getString(R.string.coin_base)
-                setData.add(optionalCoinBaseSet)
+                //setData.add(optionalCoinBaseSet)
                 PairStatusPopupWindow.getInstance(
                     it,
                     PairStatusPopupWindow.TYPE_FUTURE_ALL,
@@ -2028,7 +2028,7 @@ class HomePageContractFragment : BaseFragment(),
                 viewModel!!.getCoinType().toString().uppercase()
             )
             binding!!.actionBarLayout.pairSetName.setText(
-                "/" + viewModel!!.getSetName().toString().uppercase()
+                viewModel!!.getSetName().toString().uppercase()
             )
             header1View?.deepPriceP?.text =
                 getString(R.string.brackets, viewModel!!.getSetName().toString().uppercase())

@@ -121,7 +121,9 @@ final class PairStatusPopupWindow(
             contentView.findViewById<View>(R.id.header_layout)
                 .setPadding(0, getStatusBarHeight(mActivity), 0, 0)
         }
-        popupWindow = PopupWindow(contentView, width, WindowManager.LayoutParams.MATCH_PARENT)
+        val height: Int = mActivity.resources.displayMetrics.heightPixels
+        popupWindow = PopupWindow(contentView, width, height + getStatusBarHeight(mActivity) + getStatusBarHeight(mActivity) + getStatusBarHeight(mActivity))
+        popupWindow.isClippingEnabled = false
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(PaintDrawable())
         popupWindow.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
@@ -143,14 +145,14 @@ final class PairStatusPopupWindow(
             }
             TYPE_FUTURE_U, TYPE_FUTURE_COIN, TYPE_FUTURE_ALL -> {
                 titleView.setText(R.string.futures)
-                btnTotal.visibility = View.VISIBLE
+                btnTotal.visibility = View.GONE
                 btnTotal.setOnClickListener(this)
             }
             else -> {
                 if (dataType == PairStatus.LEVER_DATA) {
                     titleView.text = "杠杆"
                 } else {
-                    titleView.setText(R.string.home_tab_transaction)
+                    titleView.setText(R.string.spot)
                 }
                 btnTotal.visibility = View.GONE
             }
@@ -160,7 +162,7 @@ final class PairStatusPopupWindow(
             SkinCompatResources.getColor(mActivity, R.color.C5),
             SkinCompatResources.getColor(mActivity, R.color.C1)
         )
-        setTab.setSelectedTabIndicatorHeight(0)
+        //setTab.setSelectedTabIndicatorHeight(3)
         setTab.tabMode = TabLayout.MODE_SCROLLABLE
         inputEdit = contentView.findViewById(R.id.input)
         inputEdit.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
@@ -211,7 +213,7 @@ final class PairStatusPopupWindow(
                 drawable.color = SkinCompatResources.getColor(mActivity, R.color.L1)
                 drawable.alpha = (0.3 * 255).toInt()
                 listView.divider = drawable
-                listView.dividerHeight = 1
+                listView.dividerHeight = 0
                 listView.onItemClickListener = this
                 var setName: String? = null
                 setName = if (type == TYPE_TRANSACTION) {
@@ -249,9 +251,9 @@ final class PairStatusPopupWindow(
         }
         setTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             var textSize15 =
-                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_15).toFloat()
+                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
             var textSize14 =
-                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+                mActivity.resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val view = tab.customView
@@ -373,6 +375,7 @@ final class PairStatusPopupWindow(
         if (dearPairs.isNotEmpty()) {
             val myPairs = listViewDataMap[myPairSet]
             for (pair in dearPairs) {
+                Log.d("uirywuieyui", pair.toString())
                 pair?.let {
                     val pairStatusShowPopup = allPairStatusShowMap[pair]
                     if (pairStatusShowPopup != null) {
@@ -382,9 +385,11 @@ final class PairStatusPopupWindow(
                     }
                 }
             }
+            Log.d("uirywuieyui", "12 " + myPairs?.size.toString())
             val adapter = adapterMap[myPairSet]
             if (adapter != null) {
                 adapter.data = listViewDataMap[myPairSet]
+                Log.d("uirywuieyui", "11 " + listViewDataMap[myPairSet]?.size.toString())
                 adapter.sortData(PairStatusShowPopup.COMPARATOR)
                 adapter.notifyDataSetChanged()
             }
@@ -466,7 +471,7 @@ final class PairStatusPopupWindow(
                                 for (setName in listViewDataMap.keys) {
                                     if (setName.equals(myPairSet, ignoreCase = true)) {
                                         if (dearPairs.isNotEmpty()) {
-                                            initDearPairsShow()
+                                            //initDearPairsShow()
                                         }
                                     } else {
                                         val adapter = adapterMap[setName]

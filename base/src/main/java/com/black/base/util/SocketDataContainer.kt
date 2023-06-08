@@ -1674,9 +1674,6 @@ object SocketDataContainer {
             return
         }
         //自选数据等后边补充逻辑
-        if (ConstData.PairStatusType.FUTURE_DEAR == pairType) {
-
-        }
         Log.d("666666","getFuturesPairsWithSet,pairType = "+pairType)
         FutureApiServiceHelperWrapper.getFutureTickersLocal(context, pairType)
             ?.compose(RxJavaHelper.observeOnMainThread())
@@ -1696,7 +1693,16 @@ object SocketDataContainer {
                                 val result = ArrayList<PairStatus?>()
                                 for (i in returnData.indices) {
                                     val pairStatus = returnData[i]
-                                    result.add(pairStatus)
+                                    Log.d("ioiouiuoi" , pairStatus?.pair + pairStatus?.is_dear + pairType)
+                                    if (pairType == ConstData.PairStatusType.FUTURE_DEAR) {
+                                        var dearPair = dearFuturePairMap[pairStatus?.pair]
+                                        if (dearPair != null) {
+                                            pairStatus?.is_dear = true
+                                            result.add(pairStatus)
+                                        }
+                                    }else{
+                                        result.add(pairStatus)
+                                    }
                                 }
                                 callback.callback(
                                     gson.fromJson(
@@ -1743,6 +1749,33 @@ object SocketDataContainer {
         }
     }
 
+
+    fun getFPairStatusListByKey(context: Context?, key: String?): ArrayList<PairStatus?>? {
+        if (context == null) {
+            return null
+        }
+        synchronized(allFuturePairStatusList) {
+            return if (key == null || key.trim { it <= ' ' }.isEmpty()) {
+                gson.fromJson<ArrayList<PairStatus?>>(
+                    gson.toJson(allFuturePairStatusList),
+                    object : TypeToken<ArrayList<PairStatus?>?>() {}.type
+                )
+            } else {
+                val realKey = key.uppercase(Locale.getDefault())
+                val result = ArrayList<PairStatus?>()
+                for (pairStatus in allFuturePairStatusList) {
+                    val pair = pairStatus?.pair?.uppercase(Locale.getDefault())
+                    if (pair != null && pair.contains(realKey)) {
+                        result.add(pairStatus)
+                    }
+                }
+                gson.fromJson<ArrayList<PairStatus?>>(
+                    gson.toJson(result),
+                    object : TypeToken<ArrayList<PairStatus?>?>() {}.type
+                )
+            }
+        }
+    }
     /**
      * 更新现货买卖单深度数据
      */
@@ -1773,7 +1806,7 @@ object SocketDataContainer {
                     }
                     var tradeOrderPairList =
                         parseOrderDepthData(context, depthType, tradeOrderDepth)
-                    var orderDepthData = tradeOrderPairList?.let { parseOrderDepthToList(it) }
+                    var orderDepthData = tradeOrderPairList.let { parseOrderDepthToList(it) }
                     synchronized(dataList!!) {
                         if (isRemoveAll) {
                             dataList!!.clear()
@@ -1863,14 +1896,14 @@ object SocketDataContainer {
         context: Context?,
         type: Int?,
         depth: TradeOrderDepth
-    ): TradeOrderPairList? {
+    ): TradeOrderPairList {
         var pairListData = TradeOrderPairList()
         var askOrderList = ArrayList<TradeOrder?>()
         var bidOrderList = ArrayList<TradeOrder?>()
         var result = depth
-        var pair = result?.s
-        var bidArray = result?.b
-        var askArray = result?.a
+        var pair = result.s
+        var bidArray = result.b
+        var askArray = result.a
         var contractSize: String? = null
         var currentPairObj = CookieUtil.getCurrentFutureUPairObjrInfo(context!!)
         if (currentPairObj != null) {
@@ -1898,7 +1931,7 @@ object SocketDataContainer {
                 tradeOrder.pair = pair
                 bidOrderList.add(tradeOrder)
             }
-            pairListData!!.bidOrderList = bidOrderList
+            pairListData.bidOrderList = bidOrderList
         }
         if (askArray != null) {
             for (askItem in askArray) {
@@ -1922,7 +1955,7 @@ object SocketDataContainer {
                 tradeOrder.pair = pair
                 askOrderList.add(tradeOrder)
             }
-            pairListData!!.askOrderList = askOrderList
+            pairListData.askOrderList = askOrderList
         }
         return pairListData
     }

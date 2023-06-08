@@ -73,9 +73,6 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
     private var total = 0
     private var hasMore = false
 
-    override fun getTitleText(): String? {
-        return mContext.getString(R.string.spot)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrust_records_new)
@@ -99,6 +96,8 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
 
         binding?.pairChooseMenu?.setOnClickListener(this)
         binding?.contractWithLimit?.setOnClickListener(this)
+        binding?.actionBarTitle?.setText(getString(R.string.spot))
+        binding?.actionBarTitle?.visibility = View.VISIBLE
         binding?.pairChooseMenu?.setText(if (routerPair == null) getString(R.string.all_coin) else routerPair!!.replace("_", "/"))
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -130,6 +129,9 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         return !super.isStatusBarDark()
     }
 
+    override fun getTitleText(): String? {
+        return mContext.getString(R.string.spot)
+    }
     override fun initToolbarViews(toolbar: Toolbar) {
         toolbar.setOnClickListener {
             val entrustFilter = getEntrustFilter(binding?.filterLayout)
@@ -187,7 +189,47 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                     entrustFilter.show()
                 }
             }
-            R.id.pair_choose_menu -> PairApiServiceHelper.getTradeSetsLocal(mContext, true, object : NormalCallback<ArrayList<QuotationSet?>?>(mContext!!) {
+            R.id.pair_choose_menu ->
+                mContext.let {
+                    PairApiServiceHelper.getTradeSetsLocal(
+                        it,
+                        true,
+                        object : Callback<ArrayList<QuotationSet?>?>() {
+                            override fun callback(returnData: ArrayList<QuotationSet?>?) {
+                                if (returnData != null) {
+                                    Log.d("ioopipoiop", returnData[0]!!.coinType + returnData[0]!!.name)
+                                    val num = QuotationSet()
+                                    num.coinType = getString(R.string.pair_collect)
+                                    num.name = getString(R.string.pair_collect)
+                                    PairStatusPopupWindow.getInstance(
+                                        it as Activity,
+                                        PairStatusPopupWindow.TYPE_TRANSACTION,
+                                        returnData
+                                    )
+                                        .show(object :
+                                            PairStatusPopupWindow.OnPairStatusSelectListener {
+                                            override fun onPairStatusSelected(pairStatus: PairStatus?) {
+                                                if (pairStatus == null) {
+                                                    return
+                                                }
+                                                //交易对切换
+                                                if (!TextUtils.equals(
+                                                        routerPair,
+                                                        pairStatus.pair
+                                                    )
+                                                ) {
+                                                    setCurrentPairStatus(pairStatus)
+                                                }
+                                            }
+                                        })
+                                }
+                            }
+
+                            override fun error(type: Int, error: Any?) {
+                            }
+                        })
+                }
+        /*PairApiServiceHelper.getTradeSetsLocal(mContext, true, object : NormalCallback<ArrayList<QuotationSet?>?>(mContext!!) {
                 override fun callback(returnData: ArrayList<QuotationSet?>?) {
                     val type = PairStatusPopupWindow.TYPE_ENTRUST or (if (TransactionViewModel.LEVER_TYPE_LEVER == levelType) PairStatus.LEVER_DATA else PairStatus.NORMAL_DATA)
                     PairStatusPopupWindow.getInstance(mContext as Activity, type, returnData)
@@ -200,7 +242,10 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                             })
                 }
             })
+
+         */
         }
+
     }
 
     override fun onBackPressed() {
@@ -277,7 +322,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
             binding?.barTwo?.visibility = View.GONE
             binding?.barOne?.visibility = View.VISIBLE
             binding?.contractWithLimit?.visibility = View.VISIBLE
-            headTitleView?.setText(R.string.filter_entrust_his)
+            //headTitleView?.setText(R.string.filter_entrust_his)
         } else if (TYPE_NEW == type) {
             binding?.entrustNew?.isChecked = true
             //binding?.entrustNew?.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.text_size_28).toFloat())
@@ -289,7 +334,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
             binding?.barOne?.visibility = View.GONE
             binding?.barTwo?.visibility = View.VISIBLE
             binding?.contractWithLimit?.visibility = View.GONE
-            headTitleView?.setText(R.string.filter_entrust_new)
+            //headTitleView?.setText(R.string.filter_entrust_new)
         }
     }
 
@@ -297,7 +342,12 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
         routerPair = pairStatus?.pair
         binding?.pairChooseMenu?.text = if (routerPair == null) getString(R.string.all_coin) else routerPair!!.replace("_", "/")
         currentPage = 1
-        getTradeOrderCurrent(true)
+        if (currentType == TYPE_NEW){
+            getTradeOrderCurrent()
+        }
+        else {
+            getTradeOrderCurrent(true)
+        }
     }
 
     override fun onItemClick(recyclerView: RecyclerView?, view: View, position: Int, item: Any?) {
@@ -307,12 +357,10 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
 //        BlackRouter.getInstance().build(RouterConstData.ENTRUST_DETAIL).with(bundle).go(this);
     }
 
-    //当前委托
+    //历史委托
     private fun getTradeOrderCurrent(isShowLoading: Boolean) {
         var pair = routerPair
-        if(currentType == TYPE_HIS){
-            pair = null
-        }
+        Log.d("oiuiouiouio", pair)
         TradeApiServiceHelper.getTradeOrderHistoryRecord(mContext, pair,  isShowLoading, object : NormalCallback<HttpRequestResultData<TradeOrderHistoryResult?>?>(mContext!!) {
             override fun error(type: Int, error: Any?) {
                 super.error(type, error)
@@ -324,6 +372,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 binding?.refreshLayout?.setRefreshing(false)
                 binding?.refreshLayout?.setLoading(false)
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    Log.d("oiuiouiouio", returnData.data.toString())
                     hasMore = returnData.data?.hasNext != null && returnData.data?.hasNext!!
                     if (currentPage == 1) {
                         adapter?.data = returnData.data?.items
@@ -405,7 +454,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
             getTradeOrderCurrent(false)
         }
         else{
-            getTradeOrderCurrent()
+
         }
     }
 
@@ -416,7 +465,7 @@ class EntrustRecordsNewActivity : BaseActivity(), View.OnClickListener, EntrustR
                 getTradeOrderCurrent(true)
             }
             else{
-                getTradeOrderCurrent()
+
             }
         }
     }

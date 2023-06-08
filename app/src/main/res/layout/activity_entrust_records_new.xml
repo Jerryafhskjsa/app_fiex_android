@@ -9,7 +9,7 @@
             type="java.util.ArrayList" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
@@ -35,14 +35,82 @@
                     app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
                     app:titleEnabled="true">
 
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/B2"
+                        android:theme="@style/AppTheme"
+                        app:contentInsetLeft="0dp"
+                        app:contentInsetStart="0dp"
+                        app:layout_collapseMode="pin"
+                        app:theme="@style/AppTheme"
+                        app:titleMargin="0dp"
+                        app:titleTextAppearance="@style/ToolBarTitleStyle">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageButton
+                                android:id="@+id/action_bar_back"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_vertical"
+                                android:background="@null"
+                                android:contentDescription="@null"
+                                android:onClick="onBackClick"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/fanhui" />
+
+                            <com.black.base.widget.SpanTextView
+                                android:id="@id/action_bar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:maxLines="1"
+                                android:text="@string/spot"
+                                android:textColor="@color/T1"
+                                android:textSize="@dimen/text_size_16"
+                                android:textStyle="bold"/>
+
+                            <RelativeLayout
+                                android:id="@+id/filter_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_vertical|right"
+                                android:visibility="gone"
+                                android:padding="@dimen/middle_padding">
+
+                                <com.black.base.widget.SpanTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:lineSpacingExtra="0dp"
+                                    android:padding="0dp"
+                                    android:text="@string/filter_title"
+                                    android:textColor="@color/T1"
+                                    android:textSize="@dimen/text_size_16" />
+
+                            </RelativeLayout>
+                        </FrameLayout>
+
+                    </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="90dp"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
+                        android:layout_height="wrap_content"
                         android:gravity="bottom"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/double_padding"
@@ -136,72 +204,6 @@
                             android:background="@color/B1" />
                     </LinearLayout>
                     </LinearLayout>
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="@color/B2"
-                        android:theme="@style/AppTheme"
-                        app:contentInsetLeft="0dp"
-                        app:contentInsetStart="0dp"
-                        app:layout_collapseMode="pin"
-                        app:theme="@style/AppTheme"
-                        app:titleMargin="0dp"
-                        app:titleTextAppearance="@style/ToolBarTitleStyle">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageButton
-                                android:id="@+id/action_bar_back"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="center_vertical"
-                                android:background="@null"
-                                android:contentDescription="@null"
-                                android:onClick="onBackClick"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/fanhui" />
-
-                            <com.black.base.widget.SpanTextView
-                                android:id="@id/action_bar_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:maxLines="1"
-                                android:text="@string/spot"
-                                android:textColor="@color/T1"
-                                android:textSize="@dimen/text_size_16"
-                                android:textStyle="bold"/>
-
-                            <RelativeLayout
-                                android:id="@+id/filter_layout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="center_vertical|right"
-                                android:visibility="gone"
-                                android:padding="@dimen/middle_padding">
-
-                                <com.black.base.widget.SpanTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:lineSpacingExtra="0dp"
-                                    android:padding="0dp"
-                                    android:text="@string/filter_title"
-                                    android:textColor="@color/T1"
-                                    android:textSize="@dimen/text_size_16" />
-
-                            </RelativeLayout>
-                        </FrameLayout>
-
-                    </androidx.appcompat.widget.Toolbar>
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -298,5 +300,5 @@
                 </com.black.base.widget.ObserveScrollView>
             </com.black.lib.refresh.QRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </FrameLayout>
+    </RelativeLayout>
 </layout>

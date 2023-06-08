@@ -617,6 +617,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
                     object : Callback<ArrayList<QuotationSet?>?>() {
                         override fun callback(returnData: ArrayList<QuotationSet?>?) {
                             if (returnData != null) {
+                                Log.d("ioopipoiop", returnData[0]!!.coinType + returnData[0]!!.name)
                                 PairStatusPopupWindow.getInstance(
                                     it,
                                     PairStatusPopupWindow.TYPE_TRANSACTION,

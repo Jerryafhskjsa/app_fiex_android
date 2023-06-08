@@ -125,7 +125,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                 if (binding?.checkOne?.isChecked == true)
                     been1 = true
             }
-
              */
             val emptyView = inflater.inflate(R.layout.list_view_empty_pair, null)
             emptyView.findViewById<View>(R.id.btn_action).setOnClickListener(this)
@@ -460,6 +459,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                             }
                                         }
                                         mContext?.runOnUiThread {
+                                            Log.d("786876786", dataList.toString())
                                             adapter?.data = dataList
                                             adapter?.sortData(comparator)
                                             adapter?.notifyDataSetChanged()
@@ -513,7 +513,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                         getString(R.string.futures) -> {
                             pairStatusType =
                                 ConstData.PairStatusType.FUTURE_DEAR
-
                             SocketDataContainer.getFuturesPairsWithSet(
                                 activity,
                                 pairStatusType,
@@ -586,7 +585,13 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                         bundle.putInt(ConstData.NAME,0)
                             BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
                         .go(it)}
-                    getString(R.string.futures) ->{}
+                    getString(R.string.futures) ->{CookieUtil.setCurrentPair(it, pairStatus?.pair)
+                        sendPairChangedBroadcast(SocketUtil.COMMAND_PAIR_CHANGED)
+                        val bundle = Bundle()
+                        bundle.putString(ConstData.PAIR, pairStatus?.pair)
+                        bundle.putInt(ConstData.NAME,1)
+                        BlackRouter.getInstance().build(RouterConstData.QUOTATION_DETAIL).with(bundle)
+                            .go(it)}
                 }
 
             }
@@ -608,6 +613,10 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
         when (v.id) {
             R.id.tian_jia -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
                 .go(mContext) { _, _ -> }
+
+            R.id.btn_action -> BlackRouter.getInstance().build(RouterConstData.DEAR_PAIR_SEARCH)
+                .go(mContext) { _, _ -> }
+
             R.id.zi_zhu -> {
                 if (been1) {
                     val pair = "BTC_USDT"
@@ -627,7 +636,9 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                         updatedPairs,
                                         false
                                     )
-
+                                    binding?.yijian?.visibility = View.GONE
+                                    thisSetPairStatusData
+                                    binding?.marketRefreshLayout?.setRefreshing(true)
                                 }
                                 else {
                                     FryingUtil.showToast(
@@ -637,43 +648,6 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                 }
                             }
                         })
-                    binding?.yijian?.visibility = View.GONE
-                    SocketDataContainer.getPairsWithSet(
-                        activity,
-                        context?.getString(com.black.base.R.string.pair_collect),
-                        object : Callback<ArrayList<PairStatus?>?>() {
-                            override fun error(type: Int, error: Any) {
-                                gettingPairsData = false
-                            }
-
-                            override fun callback(returnData: ArrayList<PairStatus?>?) {
-                                if (returnData == null) {
-                                    gettingPairsData = false
-                                    return
-                                }
-                                synchronized(dataMap) {
-                                    synchronized(dataList) {
-                                        dataMap.clear()
-                                        dataList.clear()
-                                        dataList.addAll(returnData)
-                                        for (pairStatus in returnData) {
-                                            pairStatus?.pair?.let {
-                                                dataMap[it] = pairStatus
-                                            }
-                                        }
-                                        mContext?.runOnUiThread {
-                                            adapter?.data = dataList
-                                            adapter?.sortData(comparator)
-                                            adapter?.notifyDataSetChanged()
-                                            gettingPairsData = false
-                                        }
-                                    }
-                                }
-                                gettingPairsData = false
-                            }
-                        })
-                    //DearPairService.insertDearPair(mContext!!, socketHandler, "BTC/USDT")
-                    //DearPairService.insertDearPair(mContext!!, socketHandler, "ETH/USDT")
                 }
             }
         }

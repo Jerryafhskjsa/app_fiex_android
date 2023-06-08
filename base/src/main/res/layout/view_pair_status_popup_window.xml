@@ -11,11 +11,12 @@
         android:id="@+id/header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:orientation="horizontal" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material">
+        android:layout_height="36dp">
 
         <com.black.base.widget.SpanTextView
             android:id="@+id/title"
@@ -25,7 +26,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_20"
+            android:textSize="@dimen/text_size_18"
             android:textStyle="bold" />
 
         <com.black.base.widget.SpanTextView
@@ -35,6 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
+            android:visibility="gone"
             android:padding="15dp"
             android:text="@string/total"
             android:textColor="@color/T1"
@@ -45,44 +47,57 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/set_tab"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
-        app:tabRippleColor="@color/transparent"
+        app:tabBackground="@color/transparent"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabIndicator="@drawable/gold_indicator"
+        app:tabIndicatorColor="#E4AA24"
         app:tabMaxWidth="200dp"
         app:tabMinWidth="20dp"
         app:tabPaddingBottom="0dp"
-        app:tabPaddingEnd="@dimen/double_padding"
-        app:tabPaddingStart="0dp"
-        app:tabPaddingTop="0dp"
+        app:tabPaddingTop="@dimen/text_size_10"
+        app:tabPaddingEnd="@dimen/default_padding"
+        app:tabPaddingStart="@dimen/default_padding"
+        app:tabIndicatorFullWidth="false"
         app:tabTextAppearance="@style/DefaultTabStyle" />
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/bg_transfer_corner"
-        android:padding="8dp">
+        android:padding="10dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/icon_coin_search" />
-
-        <com.black.base.widget.SpanMaterialEditText
-            android:id="@+id/input"
+        <com.black.lib.view.InputLinearLayout
+            style="@style/ButtonGrayLight"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:background="@null"
-            android:hint="@string/search_coin"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLines="1"
-            android:padding="0dp" />
+            android:layout_height="match_parent"
+            android:padding="@dimen/text_size_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="@dimen/text_size_5"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/sousuo" />
+
+            <com.black.base.widget.SpanMaterialEditText
+                android:id="@+id/input"
+                style="@style/NormalEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="搜索"
+                android:textColor="#5F616D"
+                android:textSize="@dimen/text_size_12" />
+        </com.black.lib.view.InputLinearLayout>
     </LinearLayout>
 
     <com.black.base.widget.NoScrollViewPager

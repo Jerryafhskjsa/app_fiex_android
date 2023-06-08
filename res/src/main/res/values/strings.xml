@@ -442,7 +442,7 @@
     <string name="k_sale_amount">数量(%1$s) 卖盘</string>
     <string name="k_buy">买入</string>
     <string name="k_sale">卖出</string>
-    <string name="volumn_24">24H量 %1$s</string>
+    <string name="volumn_24">成交额 %1$s</string>
     <string name="entrust_type_buy">限价/买入</string>
     <string name="entrust_type_sale">限价/卖出</string>
     <string name="trade_value">交易额</string>

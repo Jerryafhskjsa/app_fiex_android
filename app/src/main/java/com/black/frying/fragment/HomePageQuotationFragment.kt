@@ -54,7 +54,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     //异步获取数据
     private val handlerThread: HandlerThread? = null
     private val socketHandler: Handler? = null
-    private var currentTabPosition:Int = 1
+    private var currentTabPosition:Int = 0
 
     var comparator = PairQuotationComparator(PairQuotationComparator.NORMAL,PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL, PairQuotationComparator.NORMAL)
 
@@ -71,8 +71,9 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page_quotation, container, false)
         binding?.setTab?.setTabTextColors(SkinCompatResources.getColor(activity, R.color.C5), SkinCompatResources.getColor(activity, R.color.C1))
         binding?.setTab?.tabMode = TabLayout.MODE_SCROLLABLE
-
-
+        if (tabTag != getString(R.string.pair_collect)){
+            binding!!.one.visibility = View.GONE
+        }
         binding?.sortCoin?.setOnClickListener(this)
         binding?.sortVolume?.setOnClickListener(this)
         binding?.sortPrice?.setOnClickListener(this)
@@ -187,7 +188,7 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
                             var optionalSet = QuotationSet()
                             optionalSet.coinType = getString(R.string.pair_collect)
                             optionalSet.name = getString(R.string.pair_collect)
-                            setData?.add(0,  optionalSet)
+                            //setData?.add(0,  optionalSet)
                             if (setData != null && setData?.isNotEmpty()) {
                                 sets = setData
                                 initQuotationGroup()
@@ -216,15 +217,15 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
 
     //初始化合约行情分组
     private fun initFutureQuotationGroup(){
-        var setData = ArrayList<QuotationSet?>(2)
+        var setData = ArrayList<QuotationSet?>()
         var optionalUbaseSet = QuotationSet()
         optionalUbaseSet.coinType = getString(R.string.usdt_base)
         optionalUbaseSet.name = getString(R.string.usdt_base)
-        setData?.add(0,  optionalUbaseSet)
+        setData?.add(optionalUbaseSet)
         var optionalCoinBaseSet = QuotationSet()
         optionalCoinBaseSet.coinType = getString(R.string.coin_base)
         optionalCoinBaseSet.name = getString(R.string.coin_base)
-        setData?.add(1,  optionalCoinBaseSet)
+        //setData?.add(1,  optionalCoinBaseSet)
         sets = setData
         initQuotationGroup()
     }
@@ -233,77 +234,101 @@ class HomePageQuotationFragment : BaseFragment(), View.OnClickListener {
     private fun initQuotationGroup() {
         if (sets != null && sets!!.isNotEmpty()) {
             val setSize = sets!!.size
-            if(fragmentList != null){
+            if (fragmentList != null) {
                 return
             }
             fragmentList = ArrayList(setSize)
-            for (i in 0 until setSize) {
-                val set = sets!![i]
+            if (setSize == 1) {
                 try {
-                    fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set,tabTag))
+                    fragmentList?.add(
+                        HomePageQuotationDetailFragment.newInstance(
+                            sets!![0],
+                            tabTag
+                        )
+                    )
                 } catch (throwable: Throwable) {
                     FryingUtil.printError(throwable)
                 }
             }
-            binding?.quotationViewPager?.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
-                override fun getItem(position: Int): Fragment{
-                    return fragmentList!![position] as Fragment
-                }
-
-                override fun getCount(): Int {
-                    return fragmentList!!.size
-                }
-
-                override fun getPageTitle(position: Int): CharSequence? {
-                    return sets!![position]?.name
+            else {
+                for (i in 0 until setSize) {
+                    val set = sets!![i]
+                    try {
+                        fragmentList?.add(HomePageQuotationDetailFragment.newInstance(set, tabTag))
+                    } catch (throwable: Throwable) {
+                        FryingUtil.printError(throwable)
+                    }
                 }
             }
-            binding?.setTab?.setupWithViewPager(binding?.quotationViewPager, true)
-            for (i in 0 until (binding?.setTab?.tabCount ?: 0)) {
-                val set = sets!![i]
-                try {
-                    val tab = binding?.setTab?.getTabAt(i)
-                    if (tab != null) {
-                        tab.setCustomView(R.layout.view_home_quotation_tab)
-                        if (tab.customView != null) {
-                            val textView = tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
-                            textView.text = set?.name
+                binding?.quotationViewPager?.adapter =
+                    object : FragmentStatePagerAdapter(childFragmentManager) {
+                        override fun getItem(position: Int): Fragment {
+                            return fragmentList!![position] as Fragment
+                        }
+
+                        override fun getCount(): Int {
+                            return fragmentList!!.size
+                        }
+
+                        override fun getPageTitle(position: Int): CharSequence? {
+                            return sets!![position]?.name
                         }
                     }
-                } catch (throwable: Throwable) {
-                    FryingUtil.printError(throwable)
-                }
-            }
-            binding?.quotationViewPager?.currentItem = currentTabPosition
-            binding?.setTab?.getTabAt(currentTabPosition)?.select()//默认选中自选
-            val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
-            if (currentFragment != null && currentFragment.isVisible) {
-//                currentFragment.onResume()
-            }
-            binding?.setTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
-                var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    val view = tab.customView
-                    val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
-                    binding?.quotationViewPager?.currentItem = tab.position
-                    val currentFragment = CommonUtil.getItemFromList(fragmentList, currentTabPosition ) as HomePageQuotationDetailFragment
-                    if (currentFragment != null && currentFragment.isVisible) {
-//                        currentFragment.onResume()
+                binding?.setTab?.setupWithViewPager(binding?.quotationViewPager, true)
+                for (i in 0 until (binding?.setTab?.tabCount ?: 0)) {
+                    val set = sets!![i]
+                    try {
+                        val tab = binding?.setTab?.getTabAt(i)
+                        if (tab != null) {
+                            tab.setCustomView(R.layout.view_home_quotation_tab)
+                            if (tab.customView != null) {
+                                val textView =
+                                    tab.customView!!.findViewById<View>(android.R.id.text1) as TextView
+                                textView.text = set?.name
+                            }
+                        }
+                    } catch (throwable: Throwable) {
+                        FryingUtil.printError(throwable)
                     }
                 }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                    val view = tab.customView
-                    val textView = if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
-                    textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
+                binding?.quotationViewPager?.currentItem = currentTabPosition
+                binding?.setTab?.getTabAt(currentTabPosition)?.select()//默认选中自选
+                val currentFragment = CommonUtil.getItemFromList(
+                    fragmentList,
+                    currentTabPosition
+                ) as HomePageQuotationDetailFragment
+                if (currentFragment != null && currentFragment.isVisible) {
+//                currentFragment.onResume()
                 }
+                binding?.setTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                    var textSize14 = resources.getDimensionPixelSize(R.dimen.text_size_14).toFloat()
+                    var textSize12 = resources.getDimensionPixelSize(R.dimen.text_size_12).toFloat()
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        val view = tab.customView
+                        val textView =
+                            if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                        textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize14)
+                        binding?.quotationViewPager?.currentItem = tab.position
+                        val currentFragment = CommonUtil.getItemFromList(
+                            fragmentList,
+                            currentTabPosition
+                        ) as HomePageQuotationDetailFragment
+                        if (currentFragment != null && currentFragment.isVisible) {
+//                        currentFragment.onResume()
+                        }
+                    }
 
-                override fun onTabReselected(tab: TabLayout.Tab) {}
-            })
+                    override fun onTabUnselected(tab: TabLayout.Tab) {
+                        val view = tab.customView
+                        val textView =
+                            if (view == null) null else view.findViewById<View>(android.R.id.text1) as TextView
+                        textView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize12)
+                    }
 
-        }
+                    override fun onTabReselected(tab: TabLayout.Tab) {}
+                })
+
+            }
     }
     companion object {
         fun newSelfInstance(tab: String?): HomePageQuotationFragment {

@@ -17,14 +17,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/T1"
-            android:textSize="@dimen/text_size_15"
+            android:textSize="@dimen/text_size_16"
             android:text="pair_name"
             android:textStyle="bold" />
 
         <com.black.base.widget.SpanTextView
+            android:id="@id/bar_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="/"
+            android:text=" /"
             android:textColor="@color/T2"
             android:textSize="@dimen/text_size_12"
             android:textStyle="bold" />
@@ -42,19 +43,15 @@
             android:id="@+id/max_lever"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="@drawable/bg_c110_border_c1_corner_1"
-            android:paddingLeft="4dp"
-            android:paddingTop="2dp"
-            android:paddingRight="4dp"
-            android:paddingBottom="2dp"
-            android:text="max_lever"
-            android:textColor="@color/C1"
-            android:textSize="@dimen/text_size_14" />
+            android:textColor="@color/T2"
+            android:textSize="@dimen/text_size_10"
+            android:text="永续"
+            android:textStyle="bold"  />
         <ImageView
             android:id="@+id/icon_hot"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:visibility="gone"
             android:layout_marginLeft="6dp"
             android:src="@drawable/icon_hot">
 
@@ -76,6 +73,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="12.11%"
-        android:textSize="@dimen/text_size_13"
+        android:textSize="@dimen/text_size_12"
         android:gravity="right"/>
 </LinearLayout>

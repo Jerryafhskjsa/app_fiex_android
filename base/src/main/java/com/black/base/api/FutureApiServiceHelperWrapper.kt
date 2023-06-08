@@ -32,6 +32,7 @@ object FutureApiServiceHelperWrapper {
     //合约币本位交易对列表
     var futureCoinBaseSymbolPairList: ArrayList<PairStatus>? = null
 
+
     //u本位交易对行情数据
     private var futureUbaseTickersPairStatus: ArrayList<PairStatus?>? = ArrayList()
 
@@ -40,6 +41,7 @@ object FutureApiServiceHelperWrapper {
 
     //所有合约交易对行情数据
     private var futureAllPairTickersStatus: ArrayList<PairStatus?>? = ArrayList()
+
 
     //上次拉取数据时间，根据类型分类
     private val lastGetTimeMap = SparseArray<Long>()
@@ -167,7 +169,6 @@ object FutureApiServiceHelperWrapper {
                         pairStatus?.quantityPrecision = symbol?.quantityPrecision
                         pairStatus?.quoteCoinPrecision = symbol?.quoteCoinPrecision
                         pairStatus?.quoteCoinDisplayPrecision = symbol?.quoteCoinDisplayPrecision
-
                         pairStatus?.order_no = i
                         var maxPrecision = symbol?.pricePrecision
                         maxPrecision =
@@ -231,6 +232,9 @@ object FutureApiServiceHelperWrapper {
                 futureList = futureCoinTickersPairStatus
             }
             ConstData.PairStatusType.FUTURE_ALL -> {
+                futureList = futureAllPairTickersStatus
+            }
+            ConstData.PairStatusType.FUTURE_DEAR -> {
                 futureList = futureAllPairTickersStatus
             }
         }

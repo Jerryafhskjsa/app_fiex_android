@@ -18,6 +18,7 @@
             android:id="@+id/btn_search_menu"
             android:layout_width="match_parent"
             android:layout_height="36dp"
+            android:layout_marginTop="@dimen/text_size_10"
             android:layout_marginLeft="@dimen/text_size_14"
             android:gravity="center_vertical">
 
@@ -31,7 +32,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:src="@drawable/sousuo" />
@@ -57,13 +58,143 @@
                 android:textColor="@color/T1"
                 android:textSize="@dimen/text_size_12" />
         </RelativeLayout>
-
-
-
-        <View
+        <LinearLayout
+            android:id="@+id/history"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/line"
-            android:background="@color/L1_ALPHA60" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:layout_marginTop="@dimen/text_size_28"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="历史记录"
+                android:layout_weight="1"
+                android:textColor="@color/black_real"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_16" />
+            <ImageView
+                android:id="@+id/btn_action"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="@dimen/text_size_10"
+                android:layout_gravity="right"
+                android:src="@drawable/yichu3">
+
+            </ImageView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_size_14"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:gravity="center_vertical"
+            android:padding="@dimen/text_size_5"
+            android:orientation="horizontal">
+
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/one"
+                style="@style/ButtonReturn2"
+                android:layout_width="64dp"
+                android:layout_height="22dp"
+                android:text="BTC/USDT"
+                android:visibility="gone"
+                android:textColor="@color/black_real"
+                android:padding="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_10" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/two"
+                style="@style/ButtonReturn2"
+                android:layout_width="64dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:visibility="gone"
+                android:text="BTC/USDT"
+                android:textColor="@color/black_real"
+                android:padding="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_10" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/three"
+                style="@style/ButtonReturn2"
+                android:layout_width="64dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:visibility="gone"
+                android:text="BTC/USDT"
+                android:textColor="@color/black_real"
+                android:padding="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_10"  />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/four"
+                style="@style/ButtonReturn2"
+                android:layout_width="64dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:visibility="gone"
+                android:text="BTC/USDT"
+                android:textColor="@color/black_real"
+                android:padding="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_10"  />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/five"
+                style="@style/ButtonReturn2"
+                android:layout_width="64dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:visibility="gone"
+                android:text="BTC/USDT"
+                android:textColor="@color/black_real"
+                android:padding="@dimen/text_size_5"
+                android:textSize="@dimen/text_size_10"  />
+        </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:layout_marginBottom="@dimen/text_size_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/spot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/spot"
+                android:checked="true"
+                android:textStyle="bold"
+                android:textColor="@color/home_page_main_rise_fall"
+                android:textSize="@dimen/text_size_18" />
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/futures"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:text="@string/futures"
+                android:checked="false"
+                android:textColor="@color/home_page_main_rise_fall"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+   <View
+       android:id="@+id/bar"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/line"/>
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -80,5 +211,6 @@
                 android:padding="@dimen/default_padding"
                 android:scrollbars="none" />
         </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>

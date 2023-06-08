@@ -25,12 +25,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.black.base.activity.BaseActionBarActivity
+import com.black.base.api.PairApiServiceHelper
 import com.black.base.model.HttpRequestResultData
 import com.black.base.model.HttpRequestResultString
 import com.black.base.model.NormalCallback
+import com.black.base.model.QuotationSet
 import com.black.base.model.socket.*
 import com.black.base.net.HttpCallbackSimple
 import com.black.base.util.*
+import com.black.base.view.PairStatusPopupWindow
 import com.black.base.viewmodel.BaseViewModel
 import com.black.base.widget.AnalyticChart
 import com.black.base.widget.AnalyticChart.AnalyticChartHelper
@@ -226,6 +229,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         coinTypeView = view.findViewById(R.id.action_bar_title)
         view.findViewById<View>(R.id.btn_chat_room).also { btnChatRoom = it }.setOnClickListener(this)
         view.findViewById<View>(R.id.fenxiang).setOnClickListener(this)
+        view.findViewById<View>(R.id.action_bar_title).setOnClickListener(this)
     }
 
     private fun selectTab(position: Int?) {
@@ -266,12 +270,54 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
 
     }
 
+    private fun init(){
+        viewModel!!.onResume()
+    }
     override fun getViewModel(): BaseViewModel<*>? {
         return viewModel
     }
 
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.action_bar_title -> {mContext.let {
+                PairApiServiceHelper.getTradeSetsLocal(
+                    it,
+                    true,
+                    object : Callback<java.util.ArrayList<QuotationSet?>?>() {
+                        override fun callback(returnData: java.util.ArrayList<QuotationSet?>?) {
+                            if (returnData != null) {
+                                Log.d("ioopipoiop", returnData[0]!!.coinType + returnData[0]!!.name)
+                                val num = QuotationSet()
+                                num.coinType = getString(R.string.pair_collect)
+                                num.name = getString(R.string.pair_collect)
+                                PairStatusPopupWindow.getInstance(
+                                    it as Activity,
+                                    if (intent.getIntExtra(ConstData.NAME,0) == 0) PairStatusPopupWindow.TYPE_TRANSACTION else PairStatusPopupWindow.TYPE_FUTURE_U,
+                                    returnData
+                                )
+                                    .show(object :
+                                        PairStatusPopupWindow.OnPairStatusSelectListener {
+                                        override fun onPairStatusSelected(pairStatus: PairStatus?) {
+                                            if (pairStatus == null) {
+                                                return
+                                            }
+                                            //交易对切换
+                                            if (!TextUtils.equals(
+                                                    intent.getStringExtra(ConstData.PAIR),
+                                                    pairStatus.pair
+                                                )
+                                            ) {
+                                               init()
+                                            }
+                                        }
+                                    })
+                            }
+                        }
+
+                        override fun error(type: Int, error: Any?) {
+                        }
+                    })
+            }}
             R.id.btn_chat_room -> fryingHelper.checkUserAndDoing(Runnable { viewModel!!.checkIntoChatRoom() }, 0)
             R.id.fenxiang -> {
                 dialog()
