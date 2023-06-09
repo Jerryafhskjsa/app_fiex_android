@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="listItemWalletTransferRecordModel"
+            type="Object" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            style="@style/ButtonTanChuang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+            <LinearLayout
+                android:id="@+id/one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:checked="true"
+                android:textStyle="bold"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_14" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/L1_ALPHA30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/market"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:checked="true"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_14" />
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/L1_ALPHA30" />
+            </LinearLayout>
+
+            <com.black.base.widget.SpanCheckedTextView
+                android:id="@+id/plan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:checked="true"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:textColor="@color/c2c_tab_buy"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

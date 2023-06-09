@@ -284,6 +284,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                         }
                     }
                     for (pairStatus in value) {
+                        Log.d("yutwrety",pairStatus?.pair?.toString())
                         pairStatus?.pair?.let {
                             var showPair = dataMap[it]
                             var isDear = dearPairs.contains(it)
@@ -298,7 +299,7 @@ class HomePageQuotationDetailFragment : BaseFragment(), AdapterView.OnItemClickL
                                                 hasPairListChanged = true
                                             }
                                         } else {
-                                            if (pairStatus?.pair.equals(showPair.pair)) {
+                                            if (pairStatus.pair.equals(showPair.pair)) {
                                                 showPair.currentPrice = (pairStatus.currentPrice)
                                                 showPair.setCurrentPriceCNY(
                                                     pairStatus.currentPriceCNY,
