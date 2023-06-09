@@ -36,6 +36,7 @@ import com.black.util.Callback
 import com.black.util.NumberUtil
 import com.black.wallet.R
 import com.black.wallet.databinding.ActivityAssetTransferBinding
+import com.black.wallet.view.ZhangHuSelector
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import java.io.Serializable
@@ -70,6 +71,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private var userBalanceList:ArrayList<UserBalance?>? = null
     private var tigerBalanceList:ArrayList<UserBalance?>? = null
     private var userBalance:UserBalance? = null
+    private var kLineQuotaSelector: ZhangHuSelector? = null
 
     private var chooseCoinDialog:ChooseCoinControllerWindow<CanTransferCoin?>? = null
 
@@ -116,6 +118,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 getUserBalance(false)
             }
             R.id.rel_to ->{
+                Log.d("yiuyiuyui",toAccount?.name)
                 showWalletChooseDialog(toAccountType)
                 getUserBalance(false)
             }
@@ -170,6 +173,18 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         supportTransferCoin
         allCoinList
         getUserBalance(false)
+        kLineQuotaSelector = ZhangHuSelector(this)
+        kLineQuotaSelector?.setOnKLineQuotaSelectorListener(object : ZhangHuSelector.OnKLineQuotaSelectorListener {
+            override fun onSelect(type: SupportAccount?) {
+                binding?.shangla?.visibility = View.GONE
+                binding?.imgTo?.visibility = View.VISIBLE
+                toAccount = type
+                toAccount?.selected = true
+                binding?.tvToAccount?.text = toAccount?.name
+            }
+
+
+        })
     }
 
     private val supportAccount: Unit
@@ -383,7 +398,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 accountData = supportToAccountData
             }
         }
-        ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet),clickAccout,
+        binding?.shangla?.visibility = View.VISIBLE
+        binding?.imgTo?.visibility = View.GONE
+        kLineQuotaSelector!!.show(binding?.tvToAccount,clickAccout, accountData!!)
+        /*ChooseWalletControllerWindow(mContext as Activity, getString(R.string.select_wallet),clickAccout,
             accountData,
             object : ChooseWalletControllerWindow.OnReturnListener<SupportAccount?> {
                 override fun onReturn(window: ChooseWalletControllerWindow<SupportAccount?>, item: SupportAccount?) {
@@ -400,7 +418,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                         }
                     }
                 }
-            }).show()
+            }).show(
+        */
     }
 
     private fun getSelectedCoinInfo(selectedCoin:CanTransferCoin?):UserBalance?{
@@ -467,6 +486,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 data,
                 object : ChooseCoinControllerWindow.OnReturnListener<CanTransferCoin?> {
                     override fun onReturn(window: ChooseCoinControllerWindow<CanTransferCoin?>, item: CanTransferCoin?) {
+                        CookieUtil.addCoinSearchHistory(mContext, item?.coin)
                         selectedCoin = item
                         userBalance = getSelectedCoinInfo(selectedCoin)
                         updateSelectCoinInfo(selectedCoin,userBalance)

@@ -8,16 +8,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="60dp"
-        android:layout_marginLeft="60dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"/>
         <LinearLayout
             style="@style/ButtonTanChuang"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            >
 
 
             <LinearLayout
@@ -25,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center_vertical">
 
             <com.black.base.widget.SpanCheckedTextView
                 android:id="@+id/limit"
@@ -33,11 +36,12 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_10"
                 android:checked="true"
                 android:textStyle="bold"
                 android:textColor="@color/c2c_tab_buy"
-                android:textSize="@dimen/text_size_14" />
+                android:textSize="@dimen/text_size_12" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -49,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center_vertical">
             <com.black.base.widget.SpanCheckedTextView
                 android:id="@+id/market"
                 android:layout_width="wrap_content"
@@ -57,10 +61,11 @@
                 android:text=""
                 android:checked="true"
                 android:textStyle="bold"
+                android:layout_marginLeft="@dimen/text_size_20"
                 android:layout_marginTop="@dimen/text_size_10"
                 android:layout_marginBottom="@dimen/text_size_10"
                 android:textColor="@color/c2c_tab_buy"
-                android:textSize="@dimen/text_size_14" />
+                android:textSize="@dimen/text_size_12" />
             <View
                 android:id="@+id/view1"
                 android:layout_width="match_parent"
@@ -75,11 +80,16 @@
                 android:text=""
                 android:textStyle="bold"
                 android:checked="true"
+                android:gravity="center_vertical|left"
                 android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginLeft="@dimen/text_size_20"
                 android:layout_marginBottom="@dimen/text_size_10"
                 android:textColor="@color/c2c_tab_buy"
-                android:textSize="@dimen/text_size_13" />
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"/>
     </LinearLayout>
 </layout>

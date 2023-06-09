@@ -8,6 +8,7 @@ class SupportAccount:Parcelable{
     var type:String? = "FINANCIAL"
     var name:String? = ""
     var selected:Boolean? = false
+
     constructor(type:String?,name: String?,selected:Boolean?){
         this.type = type
         this.name = name

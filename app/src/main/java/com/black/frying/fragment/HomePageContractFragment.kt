@@ -54,7 +54,7 @@ import com.black.frying.service.FutureService
 import com.black.frying.view.ContractDeepViewBinding
 import com.black.frying.view.FutureMSG
 import com.black.frying.view.MoreTimeStepSelector
-import com.black.wallet.view.PositionSideSelector
+import com.black.frying.view.PositionSideSelector
 import com.black.frying.view.PositionTypeSeletor
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.lib.refresh.QRefreshLayout

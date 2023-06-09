@@ -94,7 +94,7 @@
                                 android:layout_height="11dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
-                                android:src="@drawable/bg_c2c_tab_header"/>
+                                android:src="@drawable/green_rangle"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -180,6 +180,14 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_centerVertical="true"
                                     android:src="@drawable/xiala"/>
+                                <ImageView
+                                    android:id="@+id/shangla"
+                                    android:visibility="gone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/shangla"/>
                             </RelativeLayout>
                         </LinearLayout>
 

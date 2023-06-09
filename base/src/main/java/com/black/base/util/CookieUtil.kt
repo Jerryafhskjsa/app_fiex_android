@@ -409,8 +409,8 @@ object CookieUtil {
         history = history ?: ArrayList()
         if (!history.contains(pair)) {
             history.add(pair)
-            if (history.size > 3) {
-                history = history.subList(history.size - 3, history.size)
+            if (history.size > 5) {
+                history = history.subList(history.size - 5, history.size)
             }
             getSharedPreferences(context).edit().putStringSet(ConstData.COIN_SEARCH_HISTORY, HashSet(history)).apply()
         }
@@ -422,7 +422,6 @@ object CookieUtil {
 
     fun getCoinSearchHistory(context: Context): ArrayList<String?> {
         val result = getRealCoinSearchHistory(context)
-        result.add("USDT")
         return result
     }
 

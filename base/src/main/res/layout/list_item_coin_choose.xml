@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="70dp"
+    android:layout_marginTop="@dimen/text_size_10"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     >
 
     <ImageView
         android:id="@+id/img_coin"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@mipmap/ic_launcher_fiex"></ImageView>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ic_launcher_fiex">
+
+    </ImageView>
 
     <com.black.base.widget.SpanTextView
         android:id="@+id/coin_name"
@@ -19,7 +24,8 @@
         android:maxLines="1"
         android:text="1INCH"
         android:textColor="@color/T14"
-        android:textSize="@dimen/text_size_14" />
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_12" />
 
     <com.black.base.widget.SpanTextView
         android:id="@+id/coin_name_des"
@@ -27,21 +33,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/coin_name"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
         android:layout_toRightOf="@+id/img_coin"
         android:maxLines="1"
         android:text="1INCH"
         android:textColor="@color/T11_ALPHA60"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_10" />
 
     <com.black.base.widget.SpanTextView
         android:id="@+id/coin_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="15dp"
         android:maxLines="1"
         android:text="0.00"
         android:textColor="@color/T14"
-        android:textSize="@dimen/text_size_14" />
-</RelativeLayout>
+        android:textSize="@dimen/text_size_10" />
+</LinearLayout>
