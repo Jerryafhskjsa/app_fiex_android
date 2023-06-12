@@ -1,11 +1,14 @@
 package com.black.frying.fragment
 
+import android.app.Dialog
 import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import com.black.base.api.FutureApiServiceHelper
@@ -17,6 +20,7 @@ import com.black.base.model.future.*
 import com.black.base.model.socket.PairStatus
 import com.black.base.util.*
 import com.black.base.widget.AutoHeightViewPager
+import com.black.base.widget.SpanTextView
 import com.black.frying.adapter.ContactCurrentAdapter
 import com.black.frying.viewmodel.ContractPositionViewModel
 import com.black.util.Callback
@@ -162,27 +166,78 @@ class ContractCurrentFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (dataList?.size == 0) {
+                if (entrustType == 0) {
                     FryingUtil.showToast(activity, getString(R.string.null_bills))
                     return
                 }
-                FutureApiServiceHelper.closeAll(
-                    activity,
-                    symbol = null,
-                    true,
-                    object : Callback<HttpRequestResultBean<String>?>() {
-                        override fun callback(returnData: HttpRequestResultBean<String>?) {
-                            if (returnData != null) {
-                                FryingUtil.showToast(activity, "Success")
-                                getLimitPricePlanData()
-                                onTabModelListener?.onCount(0)
+                val futureSecond = FutureSecond.getFutureSecondSetting(mContext!!)?.futureCode
+                if (futureSecond == 0 || futureSecond == null) {
+                    FutureApiServiceHelper.closeAll(
+                        activity,
+                        symbol = null,
+                        true,
+                        object : Callback<HttpRequestResultBean<String>?>() {
+                            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                if (returnData != null) {
+                                    FryingUtil.showToast(activity, "Success")
+                                    getLimitPricePlanData()
+                                    onTabModelListener?.onCount(0)
+                                }
                             }
-                        }
 
-                        override fun error(type: Int, error: Any?) {
-                            FryingUtil.showToast(activity, error.toString())
-                        }
-                    })
+                            override fun error(type: Int, error: Any?) {
+                                FryingUtil.showToast(activity, error.toString())
+                            }
+                        })
+                } else {
+                    val contentView =
+                        LayoutInflater.from(mContext).inflate(R.layout.future_second_dialog, null)
+                    val dialog = Dialog(mContext!!, R.style.AlertDialog)
+                    val window = dialog.window
+                    if (window != null) {
+                        val params = window.attributes
+                        //设置背景昏暗度
+                        params.dimAmount = 0.2f
+                        params.gravity = Gravity.CENTER
+                        params.width = WindowManager.LayoutParams.MATCH_PARENT
+                        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                        window.attributes = params
+                    }
+                    //设置dialog的宽高为屏幕的宽高
+                    val display = resources.displayMetrics
+                    val layoutParams =
+                        ViewGroup.LayoutParams(
+                            display.widthPixels,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                    dialog.setContentView(contentView, layoutParams)
+                    dialog.show()
+                    dialog.findViewById<SpanTextView>(R.id.title).text = "撤销当前委托"
+                    dialog.findViewById<SpanTextView>(R.id.neirong).text = "是否确认将永续合约所有当前委托全部撤销？"
+                    dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+                        dialog.dismiss()
+                    }
+                    dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                        FutureApiServiceHelper.closeAll(
+                            activity,
+                            symbol = null,
+                            true,
+                            object : Callback<HttpRequestResultBean<String>?>() {
+                                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                    if (returnData != null) {
+                                        FryingUtil.showToast(activity, "Success")
+                                        getLimitPricePlanData()
+                                        onTabModelListener?.onCount(0)
+                                    }
+                                }
+
+                                override fun error(type: Int, error: Any?) {
+                                    FryingUtil.showToast(activity, error.toString())
+                                }
+                            })
+                        dialog.dismiss()
+                    }
+                }
             }
         }
     }

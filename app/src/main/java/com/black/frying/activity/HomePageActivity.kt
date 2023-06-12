@@ -201,7 +201,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
             sendLoginBroadcast(SocketUtil.COMMAND_USER_LOGIN)
             FutureService.initFutureData(mContext)
         }
-//        getDialogAd()
+       // getDialogAd()
     }
 
     override fun onStop() {
@@ -216,7 +216,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     private fun startSocketService() {
         val socketServiceIntent = Intent(this, SocketService::class.java)
         socketServiceIntent.setPackage(packageName)
-        //            startService(socketServiceIntent);
+         //           startService(socketServiceIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(socketServiceIntent)
         } else {

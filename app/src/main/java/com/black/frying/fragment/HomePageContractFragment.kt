@@ -1930,10 +1930,13 @@ class HomePageContractFragment : BaseFragment(),
     //交易对切换，刷新控件，刷新交易对信息，刷新深度，刷新数据,通知交易对改变
     fun onPairStatusChanged(pairStatus: PairStatus) {
         clearInput()
+        CookieUtil.setCurrentFutureUPair(mContext!!, pairStatus.pair)
         deepViewBinding!!.clearASKTradeOrders()
         deepViewBinding!!.clearBIDTradeOrders()
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
         viewModel!!.changePairSocket()
+        viewModel!!.getAggTicker()
+        viewModel!!.getMarketPrice(pairStatus.pair)
         resetPriceLength()
         resetAmountLength()
         refreshTransactionHardViews()
@@ -2388,6 +2391,7 @@ class HomePageContractFragment : BaseFragment(),
 
     override fun onPairDeal(value: PairDeal) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            Log.d("423223234", value.p)
             updateCurrentPairPrice(value.p)
         }
     }
@@ -2488,6 +2492,7 @@ class HomePageContractFragment : BaseFragment(),
     //更新涨跌幅和当前价格
     override fun onPairQuotation(tickerBean: PairQuotation?) {
         CommonUtil.checkActivityAndRunOnUI(mContext) {
+            Log.d("pipoiopiop", tickerBean?.c)
             updatePriceSince(tickerBean?.r)
             updateCurrentPairPrice(tickerBean?.c)
 //            initInputPriceValue(tickerBean?.c)

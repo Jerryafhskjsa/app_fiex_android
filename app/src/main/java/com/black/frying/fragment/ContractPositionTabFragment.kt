@@ -216,7 +216,7 @@ class ContractPositionTabFragment : BaseFragment(),
                         })
                 }
                 else{
-                    val contentView = LayoutInflater.from(mContext).inflate(R.layout.zong_quan_yi_dialog, null)
+                    val contentView = LayoutInflater.from(mContext).inflate(R.layout.future_second_dialog, null)
                     val dialog = Dialog(mContext!!, R.style.AlertDialog)
                     val window = dialog.window
                     if (window != null) {
@@ -235,7 +235,28 @@ class ContractPositionTabFragment : BaseFragment(),
                     dialog.setContentView(contentView, layoutParams)
                     dialog.show()
                     dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+                        dialog.dismiss()
+                    }
+                    dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                        FutureApiServiceHelper.closeAll(
+                            activity,
+                            true,
+                            object : Callback<HttpRequestResultBean<String>?>() {
+                                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                    if (returnData != null) {
+                                        var all: Boolean? = SharedPreferenceUtils.getData(
+                                            Constants.POSITION_ALLL_CHECKED,
+                                            true
+                                        ) as Boolean
+                                        FryingUtil.showToast(mContext, "Success")
+                                        viewModel?.getPositionData(binding?.contractWithLimit?.isChecked)
+                                    }
+                                }
 
+                                override fun error(type: Int, error: Any?) {
+                                    FryingUtil.showToast(activity, error.toString())
+                                }
+                            })
                         dialog.dismiss()
                     }
                 }

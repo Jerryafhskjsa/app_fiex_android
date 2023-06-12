@@ -588,6 +588,7 @@ class ContractViewModel(
                 Log.d("ttt------>markPirce", value.toString())
                 var floatProfit: BigDecimal = BigDecimal.ZERO
                 if (value?.s == currentPairStatus.pair) {
+                    Log.d("ooiuoiuio", value?.p)
                     onContractModelListener?.onMarketPrice(value)
                 }
                 if (positionList != null) {

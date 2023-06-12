@@ -118,9 +118,27 @@ class FryingApplication : BaseApplication() {
             initLanguageItems(applicationContext)
         }
         //LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
-        //StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
-        //ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
-        //FutureSecond.setFutureSecondSetting(this, FutureSecondChange(0,false))
+        val style = StyleChangeUtil.getStyleChangeSetting(this)?.styleCode
+        if (style == null){
+            StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
+        }
+        else{
+            initStyleItems(applicationContext)
+        }
+        val rate = ExchangeRatesUtil.getExchangeRatesSetting(this)?.rateCode
+        if (rate == null){
+            ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
+        }
+        else{
+            initExchangeItems(applicationContext)
+        }
+        val futureSecond = FutureSecond.getFutureSecondSetting(this)?.futureCode
+        if (futureSecond == null){
+            FutureSecond.setFutureSecondSetting(this, FutureSecondChange(0,false))
+        }
+        else{
+            initFutureSecondItems(applicationContext)
+        }
         initFilters()
         BlackRouter.getInstance().init(this)
         BlackRouter.getInstance().setWebViewPath(RouterConstData.WEB_VIEW)
