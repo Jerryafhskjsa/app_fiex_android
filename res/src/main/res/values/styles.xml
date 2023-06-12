@@ -21,7 +21,7 @@
 
     <style name="AppTheme.Splash" parent="android:Theme.Black.NoTitleBar.Fullscreen">
         <!-- 设置应用启动时默认显示的图片 , 这样比白屏/黑屏体验好一些 -->
-        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowBackground">@drawable/icon_fiex</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

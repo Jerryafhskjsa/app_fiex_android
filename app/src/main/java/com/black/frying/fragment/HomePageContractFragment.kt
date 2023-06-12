@@ -1111,6 +1111,7 @@ class HomePageContractFragment : BaseFragment(),
 
                  */
             }
+
             R.id.shangla -> {
                 headerView?.shangla?.visibility = View.GONE
                 headerView?.xiala?.visibility = View.VISIBLE
