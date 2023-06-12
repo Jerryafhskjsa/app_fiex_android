@@ -11,8 +11,10 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.BaseApplication
 import com.black.base.activity.BaseActivity
 import com.black.base.model.FryingStyleChange
+import com.black.base.model.FutureSecondChange
 import com.black.base.util.ExchangeRatesUtil
 import com.black.base.util.FryingUtil
+import com.black.base.util.FutureSecond
 import com.black.base.util.LanguageUtil
 import com.black.base.util.RouterConstData
 import com.black.base.util.StyleChangeUtil
@@ -22,12 +24,15 @@ import com.black.router.annotation.Route
 import com.black.user.R
 import com.black.user.databinding.ActivityUserSettingBinding
 import com.black.util.CommonUtil
+import kotlinx.android.synthetic.main.activity_user_setting.btn_future
+import kotlinx.android.synthetic.main.activity_user_setting.view.btn_future
 import org.intellij.lang.annotations.Language
 
 @Route(value = [RouterConstData.USER_SETTING], beforePath = RouterConstData.LOGIN)
 class UserSettingActivity : BaseActivity(), View.OnClickListener {
     private var application: BaseApplication? = null
     private var style: Int? = 0
+    private var future: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityUserSettingBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_setting)
@@ -36,13 +41,16 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
         binding.aboutUs.setOnClickListener(this)
         binding.moreLanguage.setOnClickListener(this)
         binding.jijiaSetting.setOnClickListener(this)
+        binding.btnFuture.setOnClickListener(this)
         binding.styleSetting.setOnClickListener(this)
         binding.version.setText(String.format("V%s" , CommonUtil.getVersionName(mContext,"1.0.0")))
         application = getApplication() as BaseApplication
 
         style = StyleChangeUtil.getStyleChangeSetting(mContext)?.styleCode
+        future = FutureSecond.getFutureSecondSetting(mContext)?.futureCode
         val language = LanguageUtil.getLanguageSetting(mContext)?.languageCode
         val rate = ExchangeRatesUtil.getExchangeRatesSetting(mContext)?.rateCode
+        binding.btnFuture.isChecked = !(future == null || future == 0)
         if (style == null || style == 0) {
             binding.redDown.setText(R.string.red_down)
         } else {
@@ -82,6 +90,16 @@ class UserSettingActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.style_setting ->{
                 showChangeDialog()
+            }
+            R.id.btn_future -> {
+                if (view.btn_future.isChecked) {
+                    view.btn_future.tag = application!!.getFutureSecond(FutureSecondChange.two)
+                    futureChange(view.btn_future.tag as FutureSecondChange)
+                }
+                else{
+                    view.btn_future.tag = application!!.getFutureSecond(FutureSecondChange.one)
+                    futureChange(view.btn_future.tag as FutureSecondChange)
+                }
             }
             R.id.more_language ->{
                 BlackRouter.getInstance().build(RouterConstData.LANGUAGE_SETTING).go(this)
@@ -153,4 +171,14 @@ private fun change(styleChange: FryingStyleChange){
     }
 }
 
+    private fun futureChange(styleChange: FutureSecondChange){
+        if(styleChange != FutureSecond.getFutureSecondSetting(this)){
+            FutureSecond.setFutureSecondSetting(this,styleChange)
+            FryingUtil.showToast(mContext, getString(com.black.base.R.string.change_successful))
+            BlackRouter.getInstance().build(RouterConstData.START_PAGE)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .go(this)
+        }
+    }
 }

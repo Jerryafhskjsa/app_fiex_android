@@ -20,6 +20,7 @@ import com.black.base.BaseApplication
 import com.black.base.model.FryingExchangeRates
 import com.black.base.model.FryingLanguage
 import com.black.base.model.FryingStyleChange
+import com.black.base.model.FutureSecondChange
 import com.black.base.util.*
 import com.black.im.config.CustomFaceConfig
 import com.black.im.config.GeneralConfig
@@ -117,8 +118,9 @@ class FryingApplication : BaseApplication() {
             initLanguageItems(applicationContext)
         }
         //LanguageUtil.changeAppLanguage(this, FryingLanguage(Locale.ENGLISH,0,getString(R.string.language_english)),true)
-        StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
-        ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
+        //StyleChangeUtil.setStyleChangeSetting(this, FryingStyleChange(0,"绿涨红跌"))
+        //ExchangeRatesUtil.setExChangeRatesSetting(this, FryingExchangeRates(0, "CNY"))
+        //FutureSecond.setFutureSecondSetting(this, FutureSecondChange(0,false))
         initFilters()
         BlackRouter.getInstance().init(this)
         BlackRouter.getInstance().setWebViewPath(RouterConstData.WEB_VIEW)

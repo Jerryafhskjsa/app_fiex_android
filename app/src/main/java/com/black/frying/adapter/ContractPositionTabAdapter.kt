@@ -696,8 +696,8 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.findViewById<SpanTextView>(R.id.fourth).setTextColor(bgWin!!)
         }
         else{
-            dialog.findViewById<SpanTextView>(R.id.third).text =  "-" + positionData?.profitRate
-            dialog.findViewById<SpanTextView>(R.id.fourth).text = "(" + "-" + positionData?.unRealizedProfit + positionData?.symbol!!.split("_")[1].toString().uppercase() + ")"
+            dialog.findViewById<SpanTextView>(R.id.third).text =  positionData?.profitRate
+            dialog.findViewById<SpanTextView>(R.id.fourth).text = "(" + positionData?.unRealizedProfit + positionData?.symbol!!.split("_")[1].toString().uppercase() + ")"
             dialog.findViewById<SpanTextView>(R.id.third).setTextColor(bgLose!!)
             dialog.findViewById<SpanTextView>(R.id.fourth).setTextColor(bgLose!!)
         }

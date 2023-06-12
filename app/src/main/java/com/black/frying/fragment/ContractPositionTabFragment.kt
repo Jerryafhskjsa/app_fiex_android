@@ -1,11 +1,14 @@
 package com.black.frying.fragment
 
+import android.app.Dialog
 import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -187,25 +190,55 @@ class ContractPositionTabFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (num == 0){
+                val futureSecond = FutureSecond.getFutureSecondSetting(mContext!!)?.futureCode
+                if (num == 0) {
                     return
                 }
-                FutureApiServiceHelper.closeAll(
-                    activity,
-                    true,
-                    object : Callback<HttpRequestResultBean<String>?>() {
-                        override fun callback(returnData: HttpRequestResultBean<String>?) {
-                            if (returnData != null) {
-                                var all:Boolean? = SharedPreferenceUtils.getData(Constants.POSITION_ALLL_CHECKED,true) as Boolean
-                                FryingUtil.showToast(mContext, "Success")
-                                viewModel?.getPositionData(binding?.contractWithLimit?.isChecked)
+                if (futureSecond == 0 || futureSecond == null) {
+                    FutureApiServiceHelper.closeAll(
+                        activity,
+                        true,
+                        object : Callback<HttpRequestResultBean<String>?>() {
+                            override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                if (returnData != null) {
+                                    var all: Boolean? = SharedPreferenceUtils.getData(
+                                        Constants.POSITION_ALLL_CHECKED,
+                                        true
+                                    ) as Boolean
+                                    FryingUtil.showToast(mContext, "Success")
+                                    viewModel?.getPositionData(binding?.contractWithLimit?.isChecked)
+                                }
                             }
-                        }
 
-                        override fun error(type: Int, error: Any?) {
-                            FryingUtil.showToast(activity, error.toString())
-                        }
-                    })
+                            override fun error(type: Int, error: Any?) {
+                                FryingUtil.showToast(activity, error.toString())
+                            }
+                        })
+                }
+                else{
+                    val contentView = LayoutInflater.from(mContext).inflate(R.layout.zong_quan_yi_dialog, null)
+                    val dialog = Dialog(mContext!!, R.style.AlertDialog)
+                    val window = dialog.window
+                    if (window != null) {
+                        val params = window.attributes
+                        //设置背景昏暗度
+                        params.dimAmount = 0.2f
+                        params.gravity = Gravity.CENTER
+                        params.width = WindowManager.LayoutParams.MATCH_PARENT
+                        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                        window.attributes = params
+                    }
+                    //设置dialog的宽高为屏幕的宽高
+                    val display = resources.displayMetrics
+                    val layoutParams =
+                        ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    dialog.setContentView(contentView, layoutParams)
+                    dialog.show()
+                    dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+
+                        dialog.dismiss()
+                    }
+                }
             }
         }
     }

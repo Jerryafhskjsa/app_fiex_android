@@ -124,6 +124,7 @@
                             android:textSize="@dimen/text_size_14" />
 
                         <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/btn_future"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

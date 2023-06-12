@@ -10,8 +10,10 @@ import androidx.multidex.MultiDex
 import com.black.base.model.FryingExchangeRates
 import com.black.base.model.FryingLanguage
 import com.black.base.model.FryingStyleChange
+import com.black.base.model.FutureSecondChange
 import com.black.base.model.filter.*
 import com.black.base.model.wallet.WalletBillType
+import com.black.base.util.FutureSecond
 import java.util.*
 
 open class BaseApplication : Application() {
@@ -21,6 +23,7 @@ open class BaseApplication : Application() {
         private var languages: ArrayList<FryingLanguage?>? = null
         private var exchangeRates: ArrayList<FryingExchangeRates?>? = null
         private var styleChanges: ArrayList<FryingStyleChange?>? = null
+        private var futureSecond: ArrayList<FutureSecondChange?>? = null
         var checkTokenError = true
         var isXGRegister = false
         var hasInitJGPush = false
@@ -79,6 +82,12 @@ open class BaseApplication : Application() {
         styleChanges!!.add(FryingStyleChange(1, context.getString(R.string.red_up)))
     }
 
+    fun initFutureSecondItems(context: Context){
+        futureSecond = ArrayList()
+        futureSecond!!.add(FutureSecondChange(0, false))
+        futureSecond!!.add(FutureSecondChange(1, true))
+    }
+
     open fun getLanguage(type:Int): FryingLanguage? {
         if (languages == null || languages!!.isEmpty()) {
             initLanguageItems(this)
@@ -99,6 +108,13 @@ open class BaseApplication : Application() {
             initStyleItems(this)
         }
         return styleChanges?.get(type)
+    }
+
+    open fun getFutureSecond(type:Int): FutureSecondChange? {
+        if (futureSecond == null || futureSecond!!.isEmpty()) {
+            initFutureSecondItems(this)
+        }
+        return futureSecond?.get(type)
     }
 
     fun initFilters() {

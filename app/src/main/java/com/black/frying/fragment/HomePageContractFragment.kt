@@ -48,6 +48,7 @@ import com.black.base.view.PairStatusPopupWindow
 import com.black.base.view.PairStatusPopupWindow.OnPairStatusSelectListener
 import com.black.base.widget.AnalyticChart2
 import com.black.base.widget.AutoHeightViewPager
+import com.black.base.widget.SpanTextView
 import com.black.frying.activity.HomePageActivity
 import com.black.frying.adapter.EntrustCurrentHomeAdapter
 import com.black.frying.service.FutureService
@@ -107,10 +108,12 @@ class HomePageContractFragment : BaseFragment(),
         var TAB_CROSSED = "CROSSED" // 全仓
         var TAB_ISOLATED = "ISOLATED" //逐仓
     }
-
-
+    private var color = 0
+    private var color2 = 0
     private var colorWin = 0
     private var colorLost = 0
+    private var colorWin2 = 0
+    private var colorLost2 = 0
     private var colorT3 = 0
 
     private var moreTimeStepSelector: MoreTimeStepSelector? = null
@@ -195,7 +198,7 @@ class HomePageContractFragment : BaseFragment(),
     private var planTabListener: ContractPlanTabFragment.OnTabModelListener? = null
 
     private var currentTabPosition: Int = 0
-
+    private var future: Int? = null
     private var fundRateTime: Long? = null
     private val mFundRateTimerHandler = Handler()
     private val fundRateTimer = object : Runnable {
@@ -233,6 +236,8 @@ class HomePageContractFragment : BaseFragment(),
         }
         colorWin = SkinCompatResources.getColor(mContext, R.color.T7)
         colorLost = SkinCompatResources.getColor(mContext, R.color.T5)
+        colorWin2 = SkinCompatResources.getColor(mContext, R.color.T22)
+        colorLost2 = SkinCompatResources.getColor(mContext, R.color.T21)
         colorT3 = SkinCompatResources.getColor(mContext, R.color.T3)
         binding = DataBindingUtil.inflate(
             inflater,
@@ -321,6 +326,8 @@ class HomePageContractFragment : BaseFragment(),
         initTimeStepTab()
         viewModel!!.initBalanceByCoin(context)
         FutureService.initFutureData(mContext)
+        future = FutureSecond.getFutureSecondSetting(mContext!!)?.futureCode
+        Log.d("khfjshdkjhui" , future.toString())
         return layout
     }
 
@@ -1442,6 +1449,8 @@ class HomePageContractFragment : BaseFragment(),
 
                     */
                 }
+                color = colorLost
+                color2 = colorLost2
                 createOrderFuture(positionSide, orderSide)
             }
             //买入/开多
@@ -1466,6 +1475,8 @@ class HomePageContractFragment : BaseFragment(),
                          */
 
                     }
+                    color = colorWin
+                    color2 = colorWin2
                     createOrderFuture(positionSide, orderSide)
                 }
             }
@@ -2112,27 +2123,35 @@ class HomePageContractFragment : BaseFragment(),
      * positionSide：LONG;SHORT
      * 数量 = 输入数量/(输入价格*合约面值)
      */
+    @SuppressLint("SetTextI18n")
     private fun createOrderFuture(positionSide: String, orderSide: String) {
-        var orderType: String? =if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_market)) MARKET else PLAN
+        var orderType: String? =
+            if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(R.string.order_type_limit)) LIMIT else if (binding?.fragmentHomePageContractHeader1?.orderType?.text.toString() == getString(
+                    R.string.order_type_market
+                )
+            ) MARKET else PLAN
         val price: String = header1View?.price?.text.toString().trim()
-        var priceNum = NumberUtil.toBigDecimal(price)?: BigDecimal.ZERO
+        var priceNum = NumberUtil.toBigDecimal(price) ?: BigDecimal.ZERO
         if (priceNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_price))
             return
         }
-        val timeInForce: String = currentTimeInForceType?:"GTC"
-        val num = NumberUtil.toBigDecimal(viewModel?.getContractSize()?:"0.0001")?: BigDecimal.ZERO
+        val timeInForce: String = currentTimeInForceType ?: "GTC"
+        val num =
+            NumberUtil.toBigDecimal(viewModel?.getContractSize() ?: "0.0001") ?: BigDecimal.ZERO
         if (num == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, "合约面值未获取，无法下单")
             return
         }
         val origQty = header1View?.transactionQuota?.text.toString().trim()
+        val leverage = header1View?.cangBeishu?.text.toString().trim()
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
         var totalAmountInt: BigDecimal = BigDecimal.ZERO
         if (origQtyNum == BigDecimal.ZERO) {
             FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
             return
         }
+        val magin = String.format("%.4f", origQtyNum.divide(BigDecimal(leverage)))
         currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
         if (currentUnitType == "USDT") {
             if (origQtyNum <= num * (priceNum)) {
@@ -2148,8 +2167,7 @@ class HomePageContractFragment : BaseFragment(),
                 return
             }
             totalAmountInt = (origQtyNum) / (num * (priceNum))
-        }
-        else{
+        } else {
             if (origQtyNum <= num) {
                 FryingUtil.showToast(
                     mContext,
@@ -2159,7 +2177,10 @@ class HomePageContractFragment : BaseFragment(),
                 return
             }
             if (origQtyNum * priceNum > NumberUtils.toBigDecimal("100000")) {
-                FryingUtil.showToast(mContext,NumberUtils.toBigDecimal("100000").div(priceNum).toString())
+                FryingUtil.showToast(
+                    mContext,
+                    NumberUtils.toBigDecimal("100000").div(priceNum).toString()
+                )
                 return
             }
             totalAmountInt = (origQtyNum) / (num)
@@ -2171,15 +2192,75 @@ class HomePageContractFragment : BaseFragment(),
         var tigerStop: Boolean? = header1View?.contractWithLimit?.isChecked
         val tigerProfit: String = header1View?.stopSurplus?.text.toString().trim()
         var tigerProfitValue = NumberUtil.toBigDecimal(tigerProfit)
+        val tigerLose: String = header1View?.stopLose?.text.toString().trim()
+        val tigerLoseValue = NumberUtil.toBigDecimal(tigerLose)
 //        if (tigerProfitValue == BigDecimal.ZERO) {
 //            tigerProfitValue = tigerProfit.toFloat()
 //        }
-
-        val tigerLose: String = header1View?.stopLose?.text.toString().trim()
-        val tigerLoseValue =  NumberUtil.toBigDecimal(tigerLose)
+        if (future == 0){
+            create(orderSide,orderType,positionSide,priceNum,timeInForce,totalAmountInt)
+        }
+        else {
+            val contentView =
+                LayoutInflater.from(mContext).inflate(R.layout.future_one_dialog, null)
+            val dialog = Dialog(mContext!!, com.black.c2c.R.style.AlertDialog)
+            val window = dialog.window
+            if (window != null) {
+                val params = window.attributes
+                //设置背景昏暗度
+                params.dimAmount = 0.2f
+                params.gravity = Gravity.BOTTOM
+                params.width = WindowManager.LayoutParams.MATCH_PARENT
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                window.attributes = params
+            }
+            //设置dialog的宽高为屏幕的宽高
+            val display = resources.displayMetrics
+            val layoutParams =
+                ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.setContentView(contentView, layoutParams)
+            dialog.show()
+            dialog.findViewById<SpanTextView>(R.id.positionDes).text =
+                viewModel?.getCurrentPair()?.replace("_", "")?.uppercase()
+            dialog.findViewById<SpanTextView>(R.id.positionSide).text =
+                if (orderSide == "BUY") "多" else "空"
+            dialog.findViewById<SpanTextView>(R.id.queren).text =
+                if (orderSide == "BUY") "开多" else "开空"
+            dialog.findViewById<SpanTextView>(R.id.title).text =
+                if (orderSide == "BUY") "开多" else "开空"
+            dialog.findViewById<SpanTextView>(R.id.cangwei).text =
+                header1View!!.cang.text.toString()
+            dialog.findViewById<SpanTextView>(R.id.beishu).text =
+                header1View!!.cangBeishu.text.toString() + "X"
+            dialog.findViewById<SpanTextView>(R.id.positionSide).setTextColor(color)
+            dialog.findViewById<SpanTextView>(R.id.positionSide).setBackgroundColor(color2)
+            dialog.findViewById<View>(R.id.btn_confirm).setBackgroundColor(color)
+            dialog.findViewById<SpanTextView>(R.id.price).text =
+                header1View!!.orderType.text.toString()
+            dialog.findViewById<SpanTextView>(R.id.amount).text =
+                origQty + " " + viewModel!!.getCurrentPair()?.split("_")!![1].uppercase()
+            dialog.findViewById<SpanTextView>(R.id.magin).text = magin + " " + viewModel!!.getCurrentPair()?.split("_")!![1].uppercase()
+            dialog.findViewById<SpanTextView>(R.id.new_price).text =
+                header1View!!.currentPrice.text.toString() + " " + viewModel!!.getCurrentPair()?.split("_")!![1].uppercase()
+            dialog.findViewById<View>(com.black.c2c.R.id.btn_confirm).setOnClickListener { v ->
+                create(orderSide, orderType, positionSide, priceNum, timeInForce, totalAmountInt)
+                dialog.dismiss()
+            }
+            dialog.findViewById<View>(com.black.c2c.R.id.btn_cancel).setOnClickListener { v ->
+                dialog.dismiss()
+            }
+        }
+    }
+    private fun create(orderSide: String ,orderType: String? ,positionSide: String ,priceNum: BigDecimal, timeInForce: String, totalAmountInt: BigDecimal){
+        var tigerStop: Boolean? = header1View?.contractWithLimit?.isChecked
         var stopPrice:BigDecimal? = null
         var triggerPriceType: String? = null
         var entrustType: String? = null
+        val tigerProfit: String = header1View?.stopSurplus?.text.toString().trim()
+        var tigerProfitValue = NumberUtil.toBigDecimal(tigerProfit)
+        val tigerLose: String = header1View?.stopLose?.text.toString().trim()
+        val tigerLoseValue = NumberUtil.toBigDecimal(tigerLose)
+        val price: String = header1View?.price?.text.toString().trim()
         if (currentOrderType == "PLAN")
         {
             if (header1View?.price?.text == null){
@@ -2276,6 +2357,8 @@ class HomePageContractFragment : BaseFragment(),
         }
     }
 
+    private fun kaiDialog(orderSide: String){
+    }
    /* private fun refreshCangwei(){
         updateOpenAvailableData()
         viewModel!!.initBalanceByCoin(mContext)

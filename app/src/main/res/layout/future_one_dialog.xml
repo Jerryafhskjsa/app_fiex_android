@@ -1,6 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        style="@style/wanshang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/title"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="@dimen/text_size_16"
+                    android:layout_weight="1"
+                    android:text="开多"
+                    android:textColor="@color/T1"
+                    android:textStyle="bold"/>
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="@dimen/middle_padding"
+                    android:text="@string/cancel"
+                    android:textColor="@color/T1"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/default_padding"
+                android:orientation="horizontal">
+
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionDes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="@string/sustainable"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionSide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/T16"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T8"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/cangwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/beishu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:background="@color/B1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="价格"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="预估数量"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="预估保证金"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/magin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="111"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="最新价格"
+                android:textColor="@color/T2"
+                android:textSize="@dimen/text_size_12" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/new_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:layout_marginTop="@dimen/text_size_14"
+                android:text="111"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_light_t13"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:orientation="horizontal">
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanCheckBox
+                android:id="@+id/btn_wallet_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="@dimen/text_size_2"
+                android:button="@drawable/btn_wallet_filter"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="10dp"
+                android:text="不再提醒，可在偏好设置中进行修改。"
+                android:textColor="@color/T3"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/anniu"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/queren"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="反向开仓"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_size_16"/>
+
+    </LinearLayout>
+
+
+</layout>
