@@ -2148,13 +2148,14 @@ class HomePageContractFragment : BaseFragment(),
         }
         val origQty = header1View?.transactionQuota?.text.toString().trim()
         val leverage = header1View?.cangBeishu?.text.toString().trim()
+        Log.d("oiuoiuoiu", origQty + leverage)
         val origQtyNum = NumberUtil.toBigDecimal(origQty)
         var totalAmountInt: BigDecimal = BigDecimal.ZERO
         if (origQtyNum == BigDecimal.ZERO) {
-            FryingUtil.showToast(mContext, getString(R.string.alert_input_count))
+            FryingUtil.showToast(mContext, mContext?.getString(R.string.alert_input_count))
             return
         }
-        val magin = String.format("%.4f", origQtyNum.divide(BigDecimal(leverage)))
+        val magin = String.format("%.4f", origQtyNum.div(BigDecimal(leverage)))
         currentUnitType = binding?.fragmentHomePageContractHeader1?.unitType?.text.toString()
         if (currentUnitType == "USDT") {
             if (origQtyNum <= num * (priceNum)) {

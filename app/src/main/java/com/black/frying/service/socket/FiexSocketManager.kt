@@ -910,7 +910,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<MarkPriceBean?>() {}.type
                                 )
                                 if (markPriceBean != null) {
-                                    Log.d("1111",currentPair)
+                                    Log.d("116671623711",markPriceBean.p)
                                     SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
                                 }
                             }
@@ -923,8 +923,13 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<PairDeal?>() {}.type
                                 )
                                 if(dealBean != null){
-                                   // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
-                                    SocketDataContainer.updateFutureCurrentPairDeal(mHandler,dealBean)
+                                    if (currentUFuturePair == dealBean.s) {
+                                        // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
+                                        SocketDataContainer.updateFutureCurrentPairDeal(
+                                            mHandler,
+                                            dealBean
+                                        )
+                                    }
                                 }
                             }
                             "push.deep" -> { //深度
@@ -1132,6 +1137,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<MarkPriceBean?>() {}.type
                                 )
                                 if (markPriceBean != null) {
+                                    Log.d("oipouuoiu",markPriceBean.p)
                                     SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
                                 }
                             }
