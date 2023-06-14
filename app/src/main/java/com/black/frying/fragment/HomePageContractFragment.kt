@@ -1929,11 +1929,13 @@ class HomePageContractFragment : BaseFragment(),
 
     //交易对切换，刷新控件，刷新交易对信息，刷新深度，刷新数据,通知交易对改变
     fun onPairStatusChanged(pairStatus: PairStatus) {
+        viewModel!!.getSymbolTicker(pairStatus.pair)
         clearInput()
         CookieUtil.setCurrentFutureUPair(mContext!!, pairStatus.pair)
         deepViewBinding!!.clearASKTradeOrders()
         deepViewBinding!!.clearBIDTradeOrders()
         viewModel!!.getCurrentPairStatus(pairStatus.pair)
+        viewModel!!.getCurrentDeal()
         viewModel!!.changePairSocket()
         viewModel!!.getAggTicker()
         viewModel!!.getMarketPrice(pairStatus.pair)
@@ -1942,6 +1944,7 @@ class HomePageContractFragment : BaseFragment(),
         refreshTransactionHardViews()
         refreshUsable()
         refreshData()
+        updateDear(isDear)
         currentUnitType = "USDT"
         currentTimeInForceType = "GTC"
         viewModel?.setCurrentPairOrderType(currentOrderType)

@@ -476,7 +476,8 @@ class ContractViewModel(
         return object : SuccessObserver<PairDeal?>() {
             override fun onSuccess(value: PairDeal?) {
                 onContractModelListener?.run {
-                    if (value != null && currentPairStatus.pair != null) {
+                    if (value != null && currentPairStatus.pair == value.s) {
+                        Log.d("lkjkljkljkjhj", currentPairStatus.pair + value.s + value.p.toString())
                         onContractModelListener.onPairDeal(value)
                     }
                 }
@@ -710,6 +711,7 @@ class ContractViewModel(
                         var recentDeal = CommonUtil.getItemFromList(dealList, 0)
                         onContractModelListener?.run {
                             if (recentDeal != null && currentPairStatus.pair != null) {
+                                Log.d("891273481789", recentDeal.p.toString())
                                 onContractModelListener.onPairDeal(recentDeal)
                             }
                         }

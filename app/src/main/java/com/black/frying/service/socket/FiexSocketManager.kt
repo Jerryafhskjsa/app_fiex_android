@@ -923,13 +923,11 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<PairDeal?>() {}.type
                                 )
                                 if(dealBean != null){
-                                    if (currentUFuturePair == dealBean.s) {
                                         // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
                                         SocketDataContainer.updateFutureCurrentPairDeal(
                                             mHandler,
                                             dealBean
                                         )
-                                    }
                                 }
                             }
                             "push.deep" -> { //深度
