@@ -607,7 +607,7 @@ class ContractViewModel(
                     if (balanceDetailBean != null && floatProfit.toDouble() != 0.0) {
                         Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
-                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
+                        available = BigDecimal(balanceDetailBean?.availableBalance)
                         onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
                     }
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
