@@ -101,23 +101,14 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:orientation="vertical">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_marginRight="15sp"
-                            android:layout_marginLeft="17sp"
+                            <FrameLayout
+                                android:id="@+id/banner_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="@dimen/default_padding"
+                                android:layout_marginRight="15dp" />
 
-                            android:layout_height="200dp"
-                            >
-
-                                    <ImageView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:background="@drawable/shouye1">
-                                    </ImageView>
-
-
-                    </RelativeLayout>
 
                         <LinearLayout
                             android:id="@+id/notice_layout"

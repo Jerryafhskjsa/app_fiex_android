@@ -122,15 +122,14 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
         viewModel = MainViewModel(mContext!!, this)
         layout = binding?.root as FrameLayout
         StatusBarUtil.addStatusBarPadding(layout)
-       /* imageBanner = if (activity == null) null else FryingUrlImageNormalBanner(activity!!)
-        imageBanner?.setScale(0.3333f, binding?.bannerLayout)
+       imageBanner = if (activity == null) null else FryingUrlImageNormalBanner(activity!!)
+        imageBanner?.setScale(0.4f, binding?.bannerLayout)
         binding?.bannerLayout?.addView(imageBanner?.bannerView)
-        banner?.imageUrl = "https://img.zcool.cn/community/013de756fb63036ac7257948747896.jpg"
-        banner?.type = 1
-        imageBanner?.setData(listOf(banner))
+        banner = Banner()
+        banner?.imageUrl = "https://img1.imgtp.com/2023/06/28/83R6LVkO.png"
+        banner?.type = 0
+        imageBanner?.setData(listOf(banner,banner,banner))
         imageBanner?.startScroll()
-
-        */
         binding!!.refreshLayout.setRefreshHolder(RefreshHolderFrying(activity!!))
         binding!!.refreshLayout.setOnRefreshListener(object : QRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -566,10 +565,9 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
-            val num = mContext!!.window
-            //获取view缓存
-            num.decorView.isDrawingCacheEnabled = true
-            val bmp: Bitmap = num.decorView.drawingCache
+            dialog.window!!.decorView.isDrawingCacheEnabled = true
+            dialog.window!!.decorView.buildDrawingCache()
+            val bmp: Bitmap =  dialog.window?.decorView!!.drawingCache
             val contentResolver: ContentResolver = mContext!!.contentResolver
             //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
             val uri = Uri.parse(
@@ -590,40 +588,42 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
     }
     private fun showTickersPairs(pairs: ArrayList<PairStatus?>?) {
         //先临时取btc跟eth
-        var ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT" || it?.pair == "BNB_USDT"}
+        val ticketData = pairs?.filter { it?.pair == "BTC_USDT" || it?.pair == "ETH_USDT"}
         val viewList: MutableList<View> = ArrayList()
         if (ticketData != null) {
             val pairCount = ticketData.size
             if (pairCount > 0) {
                 var pageCount = pairCount / STATUS_PAGE_COUNT
 //                pageCount = if (pairCount % STATUS_PAGE_COUNT > 0) pageCount + 1 else pageCount
-                pageCount = 2//暂时取1，如果有更多的交易对需要展示，在修改该值
+                pageCount = 1//暂时取1，如果有更多的交易对需要展示，在修改该值
                 for (i in 0 until pageCount) {
                     val gridPairs: MutableList<PairStatus?> = ArrayList(STATUS_PAGE_COUNT)
                     val offset = i * STATUS_PAGE_COUNT
                     val rest =
                         if (offset + STATUS_PAGE_COUNT <= pairCount) STATUS_PAGE_COUNT else pairCount - offset
-                    val gridView = GridView(activity)
+                    Log.d("uioyiuhyiuh", rest.toString())
+                    Log.d("uioyiuhyiuh213", pairCount.toString())
+                    val gridView = GridView(mContext)
                     for (j in 0 until rest) {
                         val pairStatus = ticketData[offset + j]
-                        var pairName = pairStatus?.pair
-                        var temp = hardGridViewMap[pairStatus?.pair]
+                        val pairName = pairStatus?.pair
+                        val temp = hardGridViewMap[pairStatus?.pair]
                         if (temp != null) {
                             if (pairStatus?.currentPrice!! > 0) {
-                                var gridViewAdapter = temp?.adapter as GridViewAdapter
-                                gridViewAdapter.updateItem(pairStatus?.pair, pairStatus)
+                                val gridViewAdapter = temp.adapter as GridViewAdapter
+                                gridViewAdapter.updateItem(pairStatus.pair, pairStatus)
                                 gridViewAdapter.notifyDataSetChanged()
                                 hotPairMap[pairName] = pairStatus
                             }
                         } else {
                             gridPairs.add(pairStatus)
                             hotPairMap[pairName] = pairStatus
-                            val adapter = GridViewAdapter(activity!!, gridPairs)
-                            gridView?.numColumns = STATUS_PAGE_COUNT
-                            gridView?.adapter = adapter
-                            gridView?.scrollBarSize = 0
-                            gridView?.horizontalSpacing = 15
-                            gridView?.onItemClickListener =
+                            val adapter = GridViewAdapter(mContext!!, gridPairs)
+                            gridView.numColumns = STATUS_PAGE_COUNT
+                            gridView.adapter = adapter
+                            gridView.scrollBarSize = 0
+                            gridView.horizontalSpacing = 15
+                            gridView.onItemClickListener =
                                 AdapterView.OnItemClickListener { _, _, position, _ ->
                                     onQuotationPairStatusClick(adapter.getItem(position)!!)
                                 }
@@ -631,15 +631,15 @@ class HomePageMainFragmentFiex : BaseFragment(), View.OnClickListener,
                             viewList.add(gridView)
                         }
                     }
-                }
-                Log.d(TAG, "viewList.size = " + viewList.size)
-                if (viewList.size > 0) {
-                    if (statusAdapter == null) {
-                        statusAdapter = BaseViewPagerAdapter(viewList)
-                    } else {
-                        statusAdapter?.setViewList(viewList)
+                    Log.d(TAG, "viewList.size = " + viewList.size)
+                    if (viewList.size > 0) {
+                        if (statusAdapter == null) {
+                            statusAdapter = BaseViewPagerAdapter(viewList)
+                        } else {
+                            statusAdapter?.setViewList(viewList)
+                        }
+                        binding!!.statusViewPager.adapter = statusAdapter
                     }
-                    binding!!.statusViewPager.adapter = statusAdapter
                 }
             }
         }

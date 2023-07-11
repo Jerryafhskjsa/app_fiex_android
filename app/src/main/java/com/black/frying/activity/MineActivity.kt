@@ -2,13 +2,18 @@ package com.black.frying.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActionBarActivity
 import com.black.base.api.CommonApiServiceHelper
@@ -34,10 +39,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ActivityMineBinding
+import com.google.zxing.WriterException
 import kotlinx.android.synthetic.main.activity_mine.fenxiang
 import skin.support.SkinCompatManager
 import skin.support.SkinCompatManager.SkinLoaderListener
 import skin.support.content.res.SkinCompatResources
+import java.util.Calendar
 
 //我的界面
 @Route(value = [RouterConstData.MINE])
@@ -47,6 +54,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
     }
 
     private var userInfo: UserInfo? = null
+    private var url : String? = null
     private val fryingLinesConfig: MutableList<FryingLinesConfig?> = ArrayList()
     private val localLinesConfig: MutableList<FryingLinesConfig?> = ArrayList()
     private var currentServerConfig: FryingLinesConfig? = null
@@ -691,13 +699,42 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.setContentView(contentView, layoutParams)
         dialog.show()
+        url = UrlConfig.getHost(mContext) + "/auth/register/" + CookieUtil.getUserInfo(mContext)?.inviteCode
+        val uri = Uri.parse(url)
+        //val secret = uri.getQueryParameter("secret") //解析参数
+        if (!TextUtils.isEmpty(url)) { //显示密钥，并进行下一步
+            var qrcodeBitmap: Bitmap? = null
+            try {
+                qrcodeBitmap = CommonUtil.createQRCode(url, 72, 0)
+            } catch (e: WriterException) {
+                CommonUtil.printError(mContext, e)
+            }
+            dialog.findViewById<ImageView>(R.id.image).setImageBitmap(qrcodeBitmap)
+        }
         dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
+            //获取view缓存
+            dialog.window!!.decorView.isDrawingCacheEnabled = true
+            dialog.window!!.decorView.buildDrawingCache()
+            val bmp: Bitmap =  dialog.window?.decorView!!.drawingCache
+            val contentResolver: ContentResolver = mContext.contentResolver
+            //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
+            val uri = Uri.parse(
+                MediaStore.Images.Media.insertImage(
+                    contentResolver,
+                    bmp,
+                    "IMG" + Calendar.getInstance().time,
+                    null
+                )
+            )
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(intent, "分享"))
             dialog.dismiss()
         }
-
     }
 
 

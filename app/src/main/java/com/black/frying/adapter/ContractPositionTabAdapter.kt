@@ -736,10 +736,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
-            val num = (context as BaseActionBarActivity).window
-            //获取view缓存
-            num.decorView.isDrawingCacheEnabled = true
-            val bmp: Bitmap = num.decorView.drawingCache
+            dialog.window!!.decorView.isDrawingCacheEnabled = true
+            dialog.window!!.decorView.buildDrawingCache()
+            val bmp: Bitmap =  dialog.window?.decorView!!.drawingCache
             val contentResolver: ContentResolver = context.contentResolver
             //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
             val uri = Uri.parse(

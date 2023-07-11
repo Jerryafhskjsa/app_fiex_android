@@ -18,6 +18,6 @@ class UserBalance : Parcelable {
     var crossedMargin:String? = null//全仓起始保证金
     var isolatedMargin:String? = null//逐仓保证金冻结
     var openOrderMarginFrozen:String? = null//订单冻结
-    var profit:String? = null//未实现盈亏
+    var profit:String? = "0.0"//未实现盈亏
     var walletBalance:String? = null//钱包余额
 }

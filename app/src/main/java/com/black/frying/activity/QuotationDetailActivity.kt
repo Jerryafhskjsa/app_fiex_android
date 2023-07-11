@@ -449,11 +449,11 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
             dialog.dismiss()
         }
         dialog.findViewById<View>(R.id.btn_resume).setOnClickListener { v ->
-            val num = (mContext as BaseActionBarActivity).window
             //获取view缓存
-            num.decorView.isDrawingCacheEnabled = true
-            val bmp: Bitmap = num.decorView.drawingCache
-            val contentResolver: ContentResolver = mContext!!.contentResolver
+            dialog.window!!.decorView.isDrawingCacheEnabled = true
+            dialog.window!!.decorView.buildDrawingCache()
+            val bmp: Bitmap =  dialog.window?.decorView!!.drawingCache
+            val contentResolver: ContentResolver = mContext.contentResolver
             //这里"IMG"+ Calendar.getInstance().time如果没有可能会出现报错
             val ur = Uri.parse(
                 MediaStore.Images.Media.insertImage(

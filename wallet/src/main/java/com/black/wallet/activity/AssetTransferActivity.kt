@@ -1,5 +1,6 @@
 package com.black.wallet.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.net.Uri
@@ -69,6 +70,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
     private var coinCount:BigDecimal? = null
     private var userBalanceList:ArrayList<UserBalance?>? = null
+    private var balance: String? = null
     private var tigerBalanceList:ArrayList<UserBalance?>? = null
     private var userBalance:UserBalance? = null
     private var kLineQuotaSelector: ZhangHuSelector? = null
@@ -111,6 +113,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
         return getString(R.string.exchange)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.rel_from -> {
@@ -132,7 +135,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 getUserBalance(false)
             }
             R.id.tv_all ->{
-                binding?.editAmount?.setText(userBalance?.availableBalance)
+                binding?.editAmount?.setText((BigDecimal(userBalance?.availableBalance?:"0") + BigDecimal(userBalance?.profit?:"0")).toString())
             }
             R.id.btn_confirm_transfer -> doTransfer
             R.id.img_action_bar_right ->{
@@ -229,10 +232,10 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             val from = fromAccount?.type?.lowercase()
             val to = toAccount?.type?.lowercase()
             if (to != null && from != null) {
-                    WalletApiServiceHelper.getSupportTransferCoin(this,  from, to,true, object : NormalCallback<HttpRequestResultDataList<CanTransferCoin?>?>(mContext!!) {
+                    WalletApiServiceHelper.getSupportTransferCoin(this,  from, to,true, object : NormalCallback<HttpRequestResultDataList<CanTransferCoin?>?>(mContext) {
                         override fun callback(returnData: HttpRequestResultDataList<CanTransferCoin?>?) {
                             if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
-                                var result = returnData.data
+                                val result = returnData.data
                                 supportCoinData = result
                                 if(supportCoinData != null && supportCoinData?.size!! > 0){
                                     if(showSupportCoin == true){
@@ -256,11 +259,11 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
      * 遍历所有币种跟钱包余额
      */
     private fun getNeedCoinInfo():ArrayList<CanTransferCoin?>?{
-        var canTransferCoin:ArrayList<CanTransferCoin?>? = ArrayList()
+        val canTransferCoin:ArrayList<CanTransferCoin?>? = ArrayList()
         for(i in configCoinInfoList?.indices!!){
-            var coinInfo = configCoinInfoList!![i]
+            val coinInfo = configCoinInfoList!![i]
             for (j in supportCoinData?.indices!!){
-                var supportCoinInfo = supportCoinData!![j]
+                val supportCoinInfo = supportCoinData!![j]
                 if(coinInfo?.coinType.equals(supportCoinInfo?.coin)){
                     supportCoinInfo?.coinDes = coinInfo?.config?.get(0)?.coinConfigVO?.coinFullName
                     supportCoinInfo?.coinIconUrl = coinInfo?.config?.get(0)?.coinConfigVO?.logosUrl
@@ -272,13 +275,13 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
 
         }
 
-        var result:ArrayList<CanTransferCoin?>? = ArrayList()
+        val result:ArrayList<CanTransferCoin?>? = ArrayList()
         for (k in canTransferCoin?.indices!!){
-             var canTransferCoin = canTransferCoin[k]
+             val canTransferCoin = canTransferCoin[k]
             for (h in userBalanceList?.indices!!){
-                var balance = userBalanceList!![h]
+                val balance = userBalanceList!![h]
                 if(canTransferCoin?.coin.equals(balance?.coin)){
-                    canTransferCoin?.amount = balance?.availableBalance
+                    canTransferCoin?.amount = (BigDecimal(balance?.availableBalance?:"0") + BigDecimal(balance?.profit?:"0")).toString()
                     result?.add(canTransferCoin)
                     break
                 }
@@ -462,19 +465,19 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
     private fun updateSelectCoinInfo(selectedCoin: CanTransferCoin?,userBalance: UserBalance?){
         binding?.tvChooseName?.text = if(selectedCoin == null){
             getString(R.string.coin_choose)
-        }else selectedCoin?.coin
+        }else selectedCoin.coin
 
         binding?.tvName?.text = if(selectedCoin == null){
             "-"
-        }else selectedCoin?.coin
-        var logoView = binding?.imgIcon
+        }else selectedCoin.coin
+        val logoView = binding?.imgIcon
         if (logoView != null) {
             Glide.with(mContext)
                 .load(Uri.parse(UrlConfig.getCoinIconUrl(mContext,selectedCoin?.coinIconUrl)))
                 .apply(RequestOptions().error(com.black.base.R.drawable.icon_coin_default))
                 .into(logoView)
         }
-        var maxtCoin = if(userBalance != null)userBalance?.availableBalance + " "+userBalance?.coin else{
+        val maxtCoin = if(userBalance != null)(BigDecimal(userBalance.availableBalance?:"0") + BigDecimal(userBalance.profit?:"0")).toString() + " "+userBalance.coin else{
             "0.00"
         }
         binding?.maxTransfer?.text = maxtCoin
