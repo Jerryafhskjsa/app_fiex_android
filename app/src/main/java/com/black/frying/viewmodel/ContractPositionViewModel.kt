@@ -77,6 +77,7 @@ class ContractPositionViewModel(
      * 获取当前持仓数据
      */
     fun getPositionData(all:Boolean?) {
+        positionList = null
         var pair: String? = null
         if (all == true){
             pair = CookieUtil.getCurrentFutureUPair(context)

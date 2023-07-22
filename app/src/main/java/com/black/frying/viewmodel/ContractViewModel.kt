@@ -315,7 +315,7 @@ class ContractViewModel(
         return object : SuccessObserver<UserPositionBean?>() {
             override fun onSuccess(value:UserPositionBean?) {
                 Log.d("hkhkjhjk", value.toString())
-                getPositionData()
+                //getPositionData()
                 initBalanceByCoin(context)
                 FutureService.initBalanceByCoin(context)
             }
