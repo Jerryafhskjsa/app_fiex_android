@@ -177,7 +177,7 @@ class ContractViewModel(
         }
         SocketDataContainer.subscribeUserInfoObservable(userInfoObserver)
 
-        if (pairQuotationObserver != null) {
+        if (pairQuotationObserver == null) {
             pairQuotationObserver = createPairQuotationObserver()
         }
         SocketDataContainer.subscribeFuturePairQuotationObservable(pairQuotationObserver)
@@ -316,6 +316,7 @@ class ContractViewModel(
             override fun onSuccess(value:UserPositionBean?) {
                 Log.d("hkhkjhjk", value.toString())
                 //getPositionData()
+                getCurrentPairDepth(50)
                 initBalanceByCoin(context)
                 FutureService.initBalanceByCoin(context)
             }
@@ -608,7 +609,13 @@ class ContractViewModel(
                     if (balanceDetailBean != null && floatProfit.toDouble() != 0.0) {
                         Log.d("ttt------>floatProfit", floatProfit.toString())
                         totalProfit = BigDecimal(balanceDetailBean?.walletBalance).add(floatProfit)
-                        available = BigDecimal(balanceDetailBean?.availableBalance)
+                        available = BigDecimal(balanceDetailBean?.availableBalance).add(floatProfit)
+                        if (available.toDouble() < 0.0){
+                            available = BigDecimal.ZERO
+                        }
+                        if (totalProfit.toDouble() < 0.0){
+                            totalProfit = BigDecimal.ZERO
+                        }
                         onContractModelListener?.updateTotalProfit(String.format("%.4f", totalProfit),String.format("%.4f", available))
                     }
 //                    Log.d("ttt------>totalProfit", totalProfit.toString())
@@ -658,6 +665,7 @@ class ContractViewModel(
                 object : Callback<TradeOrderPairList?>() {
                     override fun error(type: Int, error: Any) {}
                     override fun callback(returnData: TradeOrderPairList?) {
+                        Log.d("kjhkjhkjhk",currentPairStatus.pair.toString())
                         sortTradeOrder(currentPairStatus.pair, returnData)
                     }
                 })
@@ -767,6 +775,7 @@ class ContractViewModel(
                 @Throws(Exception::class)
                 override fun apply(orders: TradeOrderPairList): ObservableSource<Void> {
                     var tradeOrders = orders
+                    Log.d("hgjhghjghjguy",tradeOrders.bidOrderList.toString())
 //                        tradeOrders = tradeOrders ?: TradeOrderPairList()
                     tradeOrders.bidOrderList =
                         if (tradeOrders.bidOrderList == null) ArrayList() else tradeOrders.bidOrderList

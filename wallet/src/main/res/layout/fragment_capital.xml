@@ -226,7 +226,6 @@
                                     style="@style/ButtonGrayLight"
                                     android:layout_width="158dp"
                                     android:layout_height="36dp"
-                                    android:layout_marginLeft="@dimen/text_size_14"
                                     android:gravity="center_vertical">
 
                                     <com.black.lib.view.InputLinearLayout
@@ -238,7 +237,7 @@
                                         <ImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
-                                            android:layout_marginRight="10dp"
+                                            android:layout_marginLeft="10dp"
                                             android:adjustViewBounds="true"
                                             android:scaleType="centerInside"
                                             android:src="@drawable/sousuo" />
@@ -258,7 +257,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="right|center_vertical"
-                                    android:layout_marginRight="@dimen/text_size_16"
                                     android:layout_weight="1">
                                     <com.black.base.widget.SpanCheckBox
                                         android:id="@+id/btn_wallet_filter"

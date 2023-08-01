@@ -1278,6 +1278,7 @@ class HomePageTransactionFragmentFiex : BaseFragment(),
 
     private fun onDeepChoose() {
         //深度选择之后重新拉取数据
+        viewModel?.getCurrentPairDepth(50)
         refreshDeepView()
         viewModel!!.getAllOrder()
     }

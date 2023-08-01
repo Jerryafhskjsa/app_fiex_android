@@ -351,9 +351,10 @@ class TransactionViewModel(
 
     fun getAllOrder() {
         CommonUtil.postHandleTask(socketHandler) {
-            SocketDataContainer.getOrderList(context, ConstData.DEPTH_FUTURE_TYPE,object : Callback<TradeOrderPairList?>() {
+            SocketDataContainer.getOrderList(context, ConstData.DEPTH_SPOT_TYPE,object : Callback<TradeOrderPairList?>() {
                 override fun error(type: Int, error: Any) {}
                 override fun callback(returnData: TradeOrderPairList?) {
+                    Log.d("kljlkjkljlkio",returnData.toString())
                     sortTradeOrder(currentPairStatus.pair, returnData)
                 }
             })
@@ -452,6 +453,7 @@ class TransactionViewModel(
                         bidTradeOrderList,
                         askTradeOrderList
                     )
+                    Log.d("hjgjjhgjhgh",bidTradeOrderList.toString())
                     return Observable.empty()
                 }
 

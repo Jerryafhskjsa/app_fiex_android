@@ -372,7 +372,7 @@ class HomePageContractFragment : BaseFragment(),
                 }
             }
         })
-        val tab = timeStepTab.getTabAt(1)
+        val tab = timeStepTab.getTabAt(3)
         tab?.select()
     }
     private fun selectKTab(timeStep: AnalyticChart2.TimeStep2?) {
@@ -1286,6 +1286,7 @@ class HomePageContractFragment : BaseFragment(),
                                 return
                             }
                             else {
+                                onDeepChoose()
                                 refreshUnitType(item)
                                 currentUnitType = item
                                 viewModel?.setCurrentUnitType(item)
@@ -2096,6 +2097,7 @@ class HomePageContractFragment : BaseFragment(),
 
     private fun onDeepChoose() {
         //深度选择之后重新拉取数据
+        viewModel?.getCurrentPairDepth(50)
         refreshDeepView()
         viewModel!!.getAllOrder()
     }

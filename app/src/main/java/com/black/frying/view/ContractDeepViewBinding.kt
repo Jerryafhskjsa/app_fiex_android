@@ -6,8 +6,10 @@ import android.view.View
 import android.widget.TextView
 import com.black.base.model.socket.Deep
 import com.black.base.model.socket.TradeOrder
+import com.black.base.util.CookieUtil
 import com.black.base.util.FryingUtil
 import com.black.base.view.DeepControllerWindow
+import com.black.frying.service.socket.FiexSocketManager
 import com.black.frying.viewmodel.ContractViewModel
 import com.black.frying.viewmodel.TransactionViewModel
 import com.black.lib.view.ProgressDrawable
@@ -30,6 +32,7 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
     private var colorTransparent: Int
     private var colorT7A10: Int
     private var colorT5A10: Int
+    private var fiexSocketManager: FiexSocketManager? = null
     private var currentStyle = STYLE_NORMAL
     private var oneSelector: OneSelector? = null
     private val nullAmount: String
@@ -428,17 +431,17 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
         setOrderBg(layout, tradeOrder)
         layout.tag = tradeOrder
         var amount: Double = 0.0
-        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
-            return
-        }
+//        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
+//            return
+//        }
         if (binding.deepAmountName.text.toString() == "(USDT)"){
-            amount = tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble()
+            countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble(), 10, viewModel.getAmountLength(), viewModel.getAmountLength())
         }
         else{
-            amount = tradeOrder.exchangeAmount
+            countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
         }
-        priceView.text =  tradeOrder.formattedPrice
-        countView.text =  NumberUtil.formatNumberDynamicScaleNoGroup(amount , 10, viewModel.getAmountLength(), viewModel.getAmountLength())
+        priceView.text = if (tradeOrder == null) nullAmount else tradeOrder.formattedPrice
+
     }
 
     //清空显示卖出订单
@@ -502,17 +505,16 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
         setOrderBg(layout, tradeOrder)
         layout.tag = tradeOrder
         var amount: Double = 0.0
-        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
-            return
-        }
+//        if (tradeOrder?.exchangeAmount == null || tradeOrder.formattedPrice == null){
+//            return
+//        }
         if (binding.deepAmountName.text.toString() == "(USDT)"){
-            amount = tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble()
+            countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount * tradeOrder.formattedPrice!!.toDouble(), 10, viewModel.getAmountLength(), viewModel.getAmountLength())
         }
         else{
-            amount = tradeOrder.exchangeAmount
+            countView.text = if (tradeOrder == null) nullAmount else NumberUtil.formatNumberDynamicScaleNoGroup(tradeOrder.exchangeAmount, 10, viewModel.getAmountLength(), viewModel.getAmountLength())
         }
-        priceView.text =  tradeOrder.formattedPrice
-        countView.text =  NumberUtil.formatNumberDynamicScaleNoGroup(amount , 10, viewModel.getAmountLength(), viewModel.getAmountLength())
+        priceView.text = if (tradeOrder == null) nullAmount else tradeOrder.formattedPrice
     }
 
     //清空显示买入订单
