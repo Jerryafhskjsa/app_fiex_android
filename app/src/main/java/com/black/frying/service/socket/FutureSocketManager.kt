@@ -413,7 +413,7 @@ class FutureSocketManager(context: Context, handler: Handler) {
                                 object : TypeToken<MarkPriceBean?>() {}.type
                             )
 //
-                            FutureSocketData.onMarkPriceChange(markPriceBean)
+                            //FutureSocketData.onMarkPriceChange(markPriceBean)
                         }
                         "push.agg.ticker" -> { //聚合行情
 

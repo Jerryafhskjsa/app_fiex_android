@@ -2,6 +2,7 @@ package com.black.frying.fragment
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +72,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
         binding?.refreshLayout?.setOnRefreshListener(this)
         binding?.refreshLayout?.setOnLoadListener(this)
         binding?.refreshLayout?.setOnLoadMoreCheckListener(this)
-
+        binding?.refreshLayout?.setRefreshing(false)
         binding?.contractChoose?.setOnClickListener(this)
         binding?.btnAll?.setOnClickListener(this)
         binding?.timeChoose?.visibility = View.GONE
@@ -181,6 +182,7 @@ class DelegationFragment : BaseFragment(), View.OnClickListener,OnItemClickListe
     private fun getLimitPricePlanData() {
         //U本位
         if(otherType == TYPE_U_CONTRACT) {
+            Log.d("hjkjhjg11","hjgjg")
             FutureApiServiceHelper.getOrderList(currentPage, 10, if(type == TYPE_ALL) null else if (type == TYPE_BTC) "btc_usdt" else "eth_usdt" , null, context, true,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {

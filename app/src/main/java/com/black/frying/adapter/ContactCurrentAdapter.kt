@@ -86,9 +86,10 @@ class ContactCurrentAdapter(context: Context, data: MutableList<OrderBeanItem>?)
         viewHolder?.tvBondAmountDes?.text = (if (planData.triggerProfitPrice == null) nullAmount else planData.triggerProfitPrice.toString()) + "/" + (if (planData.triggerStopPrice == null) nullAmount else planData.triggerStopPrice)
         //撤销
         viewHolder?.tvRevoke?.setOnClickListener {
+            Log.d("bhubunkknj",planData.orderId.toString())
             FutureApiServiceHelper.cancelOrderId(
                 context,
-                planData.sourceId.toString(),
+                planData.orderId,
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {

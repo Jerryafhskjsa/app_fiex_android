@@ -25,7 +25,8 @@ open class PositionBean : BaseAdapterItem() {
     var bondAmount: String? = null//保证金
     var flagPrice: String? = null//标记价格
     var adl: Int? = 0
-    var price: String? = null // 持仓可平
+    var price: String? = null // 持仓
+    var positionValue: String? = null// 可平
 
     override fun toString(): String {
         return "PositionBean(autoMargin=$autoMargin, availableCloseSize=$availableCloseSize, closeOrderSize=$closeOrderSize, entryPrice=$entryPrice, isolatedMargin=$isolatedMargin, leverage=$leverage, openOrderMarginFrozen=$openOrderMarginFrozen, positionSide=$positionSide, positionSize=$positionSize, positionType=$positionType, realizedProfit=$realizedProfit, symbol=$symbol, unRealizedProfit=$unRealizedProfit, profitRate=$profitRate, forceStopPrice=$forceStopPrice, bondAmount=$bondAmount, flagPrice=$flagPrice, adl=$adl)"

@@ -510,8 +510,9 @@
                         android:layout_width="5dp"
                         android:layout_height="match_parent" />
 
-                    <TextView
+                    <com.black.base.widget.SpanCheckedTextView
                         android:id="@+id/btn_close_position"
+                        style="@style/ButtonBlue"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -519,8 +520,7 @@
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="平仓"
-                        android:background="@drawable/anniu"
-                        android:textColor="@color/white"
+                        android:textColor="@color/btn_buy_check"
                         android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
                 </LinearLayout>

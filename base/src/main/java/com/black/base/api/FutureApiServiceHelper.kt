@@ -801,7 +801,7 @@ object FutureApiServiceHelper {
         positionSide: String?,
         timeInForce: String?,
         origQty: Int,
-        souceType: String?,
+        price: String?,
         isShowLoading: Boolean,
         callback: Callback<HttpRequestResultBean<String>?>?
     ) {
@@ -817,7 +817,37 @@ object FutureApiServiceHelper {
                 orderType,
                 positionSide,
                 origQty,
-                souceType,
+                price,
+            )
+            ?.compose(RxJavaHelper.observeOnMainThread())
+            ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
+    }
+//反向开仓
+    fun createOrder3(
+        context: Context?,
+        orderSide: String,
+        orderType: String,
+        symbol: String?,
+        positionSide: String?,
+        timeInForce: String?,
+        origQty: Int,
+        sourceType: Int?,
+        isShowLoading: Boolean,
+        callback: Callback<HttpRequestResultBean<String>?>?
+    ) {
+        if (context == null || callback == null) {
+            return
+        }
+        ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
+            .getService(FutureApiService::class.java)
+            ?.orderCreate3(
+                orderSide,
+                symbol,
+                timeInForce,
+                orderType,
+                positionSide,
+                origQty,
+                sourceType,
             )
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))

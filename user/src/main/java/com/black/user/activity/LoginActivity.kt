@@ -29,6 +29,7 @@ import com.black.base.view.CountryChooseWindow
 import com.black.base.view.CountryChooseWindow.OnCountryChooseListener
 import com.black.base.widget.SpanTextView
 import com.black.net.*
+import com.black.net.websocket.WebSocketHandler
 import com.black.router.BlackRouter
 import com.black.router.annotation.Route
 import com.black.user.R
@@ -41,6 +42,7 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import org.json.JSONObject
 import java.util.*
 
 @Route(value = [RouterConstData.LOGIN])
@@ -442,6 +444,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         Log.d("ttttttt-->getListenKey", returnData.toString());
                         var listenKey = returnData.result
                         HttpCookieUtil.saveListenKey(context, listenKey)
+                        try {
+                            val jsonObject = JSONObject()
+                            var listenKey = HttpCookieUtil.getListenKey(mContext)
+                            if (listenKey == null) {
+                                getListenKey(mContext!!)
+                                return
+                            }
+                            jsonObject.put("req", "sub_user")
+                            jsonObject.put("listenKey", listenKey) //“listenKey”:”上一步获取的listenKey”
+                            WebSocketHandler.getWebSocket(SocketUtil.WS_FUTURE_SUB_USER)
+                                ?.send(jsonObject.toString())
+                        } catch (e: Exception) {
+                            FryingUtil.printError(e)
+                        }
                     }
                 }
 

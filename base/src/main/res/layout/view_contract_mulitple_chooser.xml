@@ -162,7 +162,9 @@
 
             <ProgressBar
                 android:id="@+id/count_progress"
-                style="@style/TradeProgressBarStyle" />
+                style="@style/TradeProgressBarStyle"
+                android:layout_marginLeft="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/text_size_10"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

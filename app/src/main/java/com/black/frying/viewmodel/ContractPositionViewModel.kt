@@ -1,10 +1,12 @@
 package com.black.frying.viewmodel
 
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
 import android.util.Log
+import androidx.databinding.DataBindingUtil.setContentView
 import com.black.base.api.*
 import com.black.base.model.*
 import com.black.base.model.future.*
@@ -14,6 +16,7 @@ import com.black.base.viewmodel.BaseViewModel
 import com.black.frying.service.FutureService
 import com.black.util.Callback
 import io.reactivex.Observer
+import org.greenrobot.eventbus.EventBus
 import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
@@ -57,6 +60,9 @@ class ContractPositionViewModel(
         SocketDataContainer.subscribePositionObservable(positionObservers)
     }
 
+
+
+
     override fun onStop() {
         super.onStop()
         if (positionObservers != null) {
@@ -92,8 +98,9 @@ class ContractPositionViewModel(
                 override fun callback(returnData: HttpRequestResultBean<ArrayList<PositionBean?>?>?) {
                     if (returnData != null) {
                         var data: ArrayList<PositionBean?>? = returnData.result
-                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 && it.availableCloseSize!!.toInt() > 0} as ArrayList<PositionBean?>?
+                        positionList = data?.filter { it?.positionSize!!.toInt() > 0 && (it.closeOrderSize!!.toInt() > 0||it.availableCloseSize!!.toInt() > 0)} as ArrayList<PositionBean?>?
                         Log.d("1221123", positionList.toString())
+
                     }
                     else{
                         positionList = null
@@ -282,6 +289,7 @@ class ContractPositionViewModel(
                 positionBean.unRealizedProfit = String.format("%.4f", floatProfit)
                 positionBean.profitRate = String.format("%.2f", floatProfitRate) + "%"
                 positionBean.price = String.format("%.4f", positionValue.add(floatProfit))
+                positionBean.positionValue = String.format("%.4f", positionValue)
                 Log.d("ttttttt---2222", positionBean.toString())
                 //计算你的仓位价值，根据leverage bracket里的maxNominalValue找到在哪一档
 //            Log.d("ttttttt-->positionValue", positionValue.toString())

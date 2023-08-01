@@ -30,6 +30,9 @@ import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import com.tencent.imsdk.friendship.TIMPendencyType
 import io.reactivex.Observer
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 import kotlin.collections.ArrayList
@@ -41,8 +44,7 @@ class ContractPlanTabFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
     View.OnClickListener,
     ContractPositionViewModel.OnContractPositionModelListener,
-    HomePageContractFragment.OnTabModelListener,
-    ContractPlanTabAdapter.OnTabModelListener{
+    HomePageContractFragment.OnTabModelListener{
     private var type: ContractRecordTabBean? = null
 
     private var binding: FragmentHomePageContractDetailBinding? = null
@@ -59,8 +61,8 @@ class ContractPlanTabFragment : BaseFragment(),
     private var contractSize: String? = null
     private var pairObserver: Observer<ArrayList<PairStatus?>?>? = null
     private var planUnionBean = PlanUnionBean()
-    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
-    private var orderObservers : Observer<UserOrderBean?>? = createOrderObserver()
+//    private var positionObservers : Observer<UserPositionBean?>? = createPositionObserver()
+//    private var orderObservers : Observer<UserOrderBean?>? = createOrderObserver()
     private var entrustType:Int?  = 0//0限价委托，1计划委托
 
     /**
@@ -107,55 +109,65 @@ class ContractPlanTabFragment : BaseFragment(),
         binding?.listView?.emptyView = emptyView
         adapter = ContractPlanTabAdapter(mContext!!, dataList)
         binding?.listView?.adapter = adapter
-        binding?.listView?.onItemClickListener = this
+        EventBus.getDefault().register(this)
+       // binding?.listView?.onItemClickListener = this
         if (arguments != null) {
             val position = arguments!!.getInt(AutoHeightViewPager.POSITION)
             binding?.root?.let { mViewPager?.setViewPosition(it, position) }
         }
+        getPlanData(Constants.UNFINISHED)
         return binding?.root
     }
 
 
     override fun onResume() {
         super.onResume()
-        handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
-        handlerThread?.start()
-        socketHandler = Handler(handlerThread?.looper)
-        if (positionObservers == null) {
-            positionObservers = createPositionObserver()
-        }
-        SocketDataContainer.subscribePositionObservable(positionObservers)
 
-        if (orderObservers == null) {
-            orderObservers = createOrderObserver()
-        }
-        SocketDataContainer.subscribeFutureOrderObservable(orderObservers)
-        getPlanData(Constants.UNFINISHED)
+//        handlerThread = HandlerThread(ConstData.SOCKET_HANDLER, Process.THREAD_PRIORITY_BACKGROUND)
+//        handlerThread?.start()
+//        socketHandler = Handler(handlerThread?.looper)
+//        if (positionObservers == null) {
+//            positionObservers = createPositionObserver()
+//        }
+//        SocketDataContainer.subscribePositionObservable(positionObservers)
+//
+//        if (orderObservers == null) {
+//            orderObservers = createOrderObserver()
+//        }
+//        SocketDataContainer.subscribeFutureOrderObservable(orderObservers)
+
     }
 
     override fun onStop() {
         super.onStop()
-        if (pairObserver != null) {
-            SocketDataContainer.removePairObservable(pairObserver)
-            pairObserver == null
-        }
-        if (positionObservers != null) {
-            SocketDataContainer.removePositionObservable(positionObservers)
-            positionObservers = null
-        }
-        if (orderObservers != null) {
-            SocketDataContainer.removeFutureOrderObservable(orderObservers)
-            orderObservers = null
-        }
-        if (socketHandler != null) {
-            socketHandler?.removeMessages(0)
-            socketHandler = null
-        }
-        if (handlerThread != null) {
-            handlerThread?.quit()
-        }
+//        if (pairObserver != null) {
+//            SocketDataContainer.removePairObservable(pairObserver)
+//            pairObserver == null
+//        }
+////        if (positionObservers != null) {
+////            SocketDataContainer.removePositionObservable(positionObservers)
+////            positionObservers = null
+////        }
+////        if (orderObservers != null) {
+////            SocketDataContainer.removeFutureOrderObservable(orderObservers)
+////            orderObservers = null
+////        }
+//        if (socketHandler != null) {
+//            socketHandler?.removeMessages(0)
+//            socketHandler = null
+//        }
+//        if (handlerThread != null) {
+//            handlerThread?.quit()
+//        }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun zhu(event: String) {
+        if(event == "111") {
+            getPlanData(Constants.UNFINISHED)
+            Log.d("hjgjhgj", event)
+        }
+    }
     override fun doResetSkinResources() {
         val drawable = ColorDrawable()
         drawable.color = SkinCompatResources.getColor(activity, R.color.L1_ALPHA30)
@@ -248,10 +260,6 @@ class ContractPlanTabFragment : BaseFragment(),
         }
     }
 
-    override fun refresh2() {
-        Log.d("jkhkjhkjhjk","sss")
-        getPlanData(Constants.UNFINISHED)
-    }
     override fun refresh() {
         getPlanData(Constants.UNFINISHED)
     }
@@ -312,23 +320,23 @@ class ContractPlanTabFragment : BaseFragment(),
             })
     }
 
-    private fun createPositionObserver(): Observer<UserPositionBean?> {
-        return object : SuccessObserver<UserPositionBean?>() {
-            override fun onSuccess(value:UserPositionBean?) {
-                Log.d("ahsdjkhak", value.toString())
-                getPlanData(Constants.UNFINISHED)
-            }
-        }
-    }
-
-    private fun createOrderObserver(): Observer<UserOrderBean?> {
-        return object : SuccessObserver<UserOrderBean?>() {
-            override fun onSuccess(value:UserOrderBean?) {
-                Log.d("ahsdjkhak", value.toString())
-                getPlanData(Constants.UNFINISHED)
-            }
-        }
-    }
+//    private fun createPositionObserver(): Observer<UserPositionBean?> {
+//        return object : SuccessObserver<UserPositionBean?>() {
+//            override fun onSuccess(value:UserPositionBean?) {
+//                Log.d("ahsdjkhak", value.toString())
+//                getPlanData(Constants.UNFINISHED)
+//            }
+//        }
+//    }
+//
+//    private fun createOrderObserver(): Observer<UserOrderBean?> {
+//        return object : SuccessObserver<UserOrderBean?>() {
+//            override fun onSuccess(value:UserOrderBean?) {
+//                Log.d("ahsdjkhak", value.toString())
+//                getPlanData(Constants.UNFINISHED)
+//            }
+//        }
+//    }
 
     interface OnTabModelListener {
         fun onCount(count: Int?)

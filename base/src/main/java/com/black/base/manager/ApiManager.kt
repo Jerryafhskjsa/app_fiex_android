@@ -35,7 +35,7 @@ class ApiManager {
             context1 = context1.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
-            val lang = if (language != null && language.languageCode == 0) "en" else "vi"
+            val lang = if (language != null && language.languageCode == 0) "en" else "zh"
             val deviceId = CommonUtil.getDeviceId(context1)
             apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH,
                 "$url/pro/", deviceId, lang,null, ApiCookieHelperIml(context1), HttpInterceptHelperIml())
@@ -47,7 +47,7 @@ class ApiManager {
             context1 = context1.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
-            val lang = if (language != null && language.languageCode == 0) "en" else "vi"
+            val lang = if (language != null && language.languageCode == 0) "en" else "zh"
             val deviceId = CommonUtil.getDeviceId(context1)
             apiManager.apiManagerIml = ApiManagerImpl.getInstance(context1, ConstData.CACHE_PATH, UrlConfig.getHost(context1), deviceId, lang, if (noToken) null else HttpCookieUtil.getUcToken(context1), ApiCookieHelperIml(context1), HttpInterceptHelperIml())
             return apiManager
@@ -64,7 +64,7 @@ class ApiManager {
             val context1 = context.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
-            val lang = if (language != null && language.languageCode == 0) "en" else "vi"
+            val lang = if (language != null && language.languageCode == 0) "en" else "zh"
             val deviceId = CommonUtil.getDeviceId(context1)
             val realUrl = UrlConfig.getFiexHost(context,apiType)
             val token = if (noToken) null else HttpCookieUtil.getUcToken(context1)
@@ -77,7 +77,7 @@ class ApiManager {
             val context1 = context.applicationContext
             val apiManager = instance
             val language = LanguageUtil.getLanguageSetting(context1)
-            val lang = if (language != null && language.languageCode == 0) "en" else "vi"
+            val lang = if (language != null && language.languageCode == 0) "en" else "zh"
             val deviceId = CommonUtil.getDeviceId(context1)
             val realUrl = UrlConfig.getFiexHost(context,apiType)
             val token = if (noToken) null else HttpCookieUtil.getApiToken(context1)
@@ -90,7 +90,7 @@ class ApiManager {
         val context1 = context.applicationContext
         val apiManager = instance
         val language = LanguageUtil.getLanguageSetting(context1)
-        val lang = if (language != null && language.languageCode == 0) "en" else "vi"
+        val lang = if (language != null && language.languageCode == 0) "en" else "zh"
         val deviceId = CommonUtil.getDeviceId(context1)
         val realUrl = UrlConfig.getFinancalUrl(context1)
         val token = if (noToken) null else HttpCookieUtil.getUcToken(context1)

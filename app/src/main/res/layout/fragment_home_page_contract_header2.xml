@@ -39,7 +39,7 @@
         android:layout_height="@dimen/text_size_20"
         android:layout_marginRight="@dimen/text_size_5"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/liushui"/>
+        android:background="@drawable/liushui2"/>
     </LinearLayout>
         <com.black.base.widget.AutoHeightViewPager
             android:id="@+id/contract_record_view_pager"

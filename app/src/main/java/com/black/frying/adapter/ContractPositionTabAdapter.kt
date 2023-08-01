@@ -108,6 +108,9 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         buyMultiChooseBean?.defaultMultiple = positionData?.leverage
         buyMultiChooseBean?.symbol = positionData?.symbol
         amonut = positionData?.price?.toDouble()?:0.0
+        viewHolder?.btnClosePosition?.isChecked = positionData?.availableCloseSize == "0"
+       // viewHolder?.btnClosePosition?.isClickable = !(positionData?.availableCloseSize == "0" || positionData?.closeOrderSize == "0")
+        Log.d("jhkjhkjh",positionData?.positionSize)
         when (positionData?.positionSide) {
             //做多
             "LONG" -> {
@@ -185,7 +188,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         viewHolder?.entryPrice?.text = positionData?.entryPrice
         //强平价格>0
         //持仓数量
-        viewHolder?.positionAmount?.text = positionData?.price
+        viewHolder?.positionAmount?.text = positionData?.positionValue
         //可平数量
         viewHolder?.availableCloseAmount?.text = positionData?.price
         //仓位保证金
@@ -639,14 +642,55 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                 dialog.dismiss()
             }
             dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
-                pingcang()
-                kaicang()
-                dialog.dismiss()
+                if (viewHolder.btnClosePosition.isChecked) {
+                    FryingUtil.showToast(context, "仓位处于平仓状态，不能反向开仓")
+                    dialog.dismiss()
+                } else {
+                    val createRunnable = Runnable {
+                        Log.d(
+                            "knsdjofdiosj",
+                            positionData?.positionSide + positionData?.positionSize
+                        )
+                        FutureApiServiceHelper.createOrder3(context,
+                            if (positionData?.positionSide == "LONG") "SELL" else "BUY",
+                            "MARKET",
+                            positionData?.symbol,
+                            positionData?.positionSide,
+                            "IOC",
+                            positionData?.positionSize!!.toInt(),
+                            4,
+                            false,
+                            object : Callback<HttpRequestResultBean<String>?>() {
+                                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                    if (returnData != null) {
+                                        viewHolder.btnClosePosition.isChecked = true
+                                        FryingUtil.showToast(context, "反向开仓成功")
+                                        /**
+                                         * todo 刷新持仓列表
+                                         */
+                                    }
+                                }
+
+                                override fun error(type: Int, error: Any?) {
+                                    Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                                    FryingUtil.showToast(context, error.toString())
+                                }
+
+                            })
+                    }
+                    createRunnable.run()
+                    dialog.dismiss()
+                }
             }
 
         }
         viewHolder?.btnClosePosition?.setOnClickListener {
-            pingcang()
+            if (viewHolder.btnClosePosition.isChecked){
+                FryingUtil.showToast(mContext,"当前不能平仓")
+            }
+            else {
+                pingcang()
+            }
         }
 
     }
@@ -757,24 +801,25 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
     }
     private fun pingcang(){
-        val createRunnable = Runnable {
             FutureApiServiceHelper.createOrder2(context,
-                "SELL",
-                "MARKET",
+                if (positionData?.positionSide == "LONG") "SELL" else "BUY",
+                "LIMIT",//限价“LIMIT”市价“MARKET”
                 positionData?.symbol,
                 positionData?.positionSide,
-                "IOC",
+                "GTC",//限价“GTC”市价“IOC”
                 positionData?.positionSize!!.toInt(),
-                "1001",
+                positionData?.entryPrice,//限价positionData?.flagPrice市价null
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
                         if (returnData != null) {
                             FryingUtil.showToast(context, "平仓成功")
-
                             /**
                              * todo 刷新持仓列表
                              */
+                        }
+                        else{
+                            FryingUtil.showToast(context, returnData?.msgInfo)
                         }
                     }
 
@@ -784,46 +829,10 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                     }
 
                 })
-        }
-        createRunnable.run()
+
 
     }
-    private fun kaicang(){
-        val createRunnable = Runnable {
-            FutureApiServiceHelper.createOrder(context,
-                if (positionData?.positionSide == "LONG") "SELL" else "BUY",
-                "MARKET",
-                positionData?.symbol,
-                if (positionData?.positionSide == "LONG") "SHORT" else "LONG",
-                null,
-                "IOC",
-                positionData?.positionSize!!.toInt(),
-                null,
-                null,
-                false,
-                true,
-                /*stopPrice?.toDouble(),
-            triggerPriceType,
-            entrustType,*/
-                object : Callback<HttpRequestResultBean<String>?>() {
-                    override fun callback(returnData: HttpRequestResultBean<String>?) {
-                        if (returnData != null) {
-                            FryingUtil.showToast(context, "反向开仓成功")
-                            /**
-                             * todo 刷新持仓列表
-                             */
-                        }
-                    }
 
-                    override fun error(type: Int, error: Any?) {
-                        Log.d("iiiiii-->createFutureOrder--error", error.toString())
-                        FryingUtil.showToast(context, error.toString())
-                    }
-
-                })
-        }
-        createRunnable.run()
-    }
 
     /*fun set(price:String?)
     {

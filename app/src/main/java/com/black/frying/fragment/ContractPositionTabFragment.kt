@@ -29,7 +29,11 @@ import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import skin.support.content.res.SkinCompatResources
+import udesk.org.jivesoftware.smackx.xevent.packet.MessageEvent
 import kotlin.collections.ArrayList
 
 /**
@@ -66,6 +70,9 @@ class ContractPositionTabFragment : BaseFragment(),
     fun setOnTabModeListener(tabListener: OnTabModelListener) {
         onTabModelListener = tabListener
     }
+
+    //准备接受事件的订阅者
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,6 +159,7 @@ class ContractPositionTabFragment : BaseFragment(),
             handlerThread?.quit()
         }
     }
+
 
     private fun createPositionObserver(): Observer<UserPositionBean?> {
         return object : SuccessObserver<UserPositionBean?>() {

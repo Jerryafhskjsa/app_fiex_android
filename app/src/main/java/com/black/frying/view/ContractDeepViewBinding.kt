@@ -171,7 +171,7 @@ class ContractDeepViewBinding(private val context: Activity, private val viewMod
     fun doResetSkinResources() {
         colorT7A10 = SkinCompatResources.getColor(context, R.color.T7_ALPHA10)
         colorT5A10 = SkinCompatResources.getColor(context, R.color.T5_ALPHA10)
-        colorTransparent = SkinCompatResources.getColor(context, R.color.transparent)
+        colorTransparent = SkinCompatResources.getColor(context, R.color.T1)
         resetBuyProgressDrawables()
         resetSaleProgressDrawables()
     }

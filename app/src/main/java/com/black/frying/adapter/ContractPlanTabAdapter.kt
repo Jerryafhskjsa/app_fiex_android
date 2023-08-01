@@ -15,6 +15,7 @@ import com.black.util.Callback
 import com.black.util.CommonUtil
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.ListItemContractTabPlanBinding
+import org.greenrobot.eventbus.EventBus
 import skin.support.content.res.SkinCompatResources
 import java.math.BigDecimal
 
@@ -22,7 +23,6 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
     private var bgWin: Int? = null
     private var bgLose: Int? = null
     private var bgDefault: Int? = null
-    private var onTabModelListener: OnTabModelListener? = null
     var sideBgColor: Int? = null
     var sideBlackColor: Int? = null
 
@@ -93,7 +93,7 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
                         if (returnData != null) {
-                            onTabModelListener?.refresh2()
+                            EventBus.getDefault().post("111")
                             Log.d("iiiiii-->cancel profit stop by id", returnData.result.toString())
                         }
                     }
@@ -104,7 +104,5 @@ class ContractPlanTabAdapter(context: Context, data: MutableList<PlansBean?>?) :
         }
     }
 
-    interface OnTabModelListener {
-        fun refresh2()
-    }
+
 }

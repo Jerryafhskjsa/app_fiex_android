@@ -13,10 +13,10 @@
 
     <color name="top_message_normal">#CC0b2545</color>
     <color name="top_message_error">#CCd72d4d</color>
-    <color name="C1">#83CD13</color>
-    <color name="C1_ALPHA10">#1983CD13</color>
-    <color name="C1_ALPHA50">#8083CD13</color>
-    <color name="C1_ALPHA80">#cc83CD13</color>
+    <color name="C1">#ff2ebd85</color>
+    <color name="C1_ALPHA10">#4d28bd5b</color>
+    <color name="C1_ALPHA50">#4d28bd5b</color>
+    <color name="C1_ALPHA80">#ff2ebd85</color>
     <color name="C2">#c5ced4</color>
     <color name="C2_ALPHA30">#4cc5ced4</color>
     <color name="C2_ALPHA50">#80c5ced4</color>
@@ -42,9 +42,9 @@
     <color name="T5_ALPHA50">#80F12C18</color>
     <color name="T5_ALPHA80">#ccF12C18</color>
     <color name="T7">#2EBD85</color>
-    <color name="T7_ALPHA10">#1983CD13</color>
-    <color name="T7_ALPHA50">#8083CD13</color>
-    <color name="T7_ALPHA80">#cc83CD13</color>
+    <color name="T7_ALPHA10">#4d28bd5b</color>
+    <color name="T7_ALPHA50">#4d28bd5b</color>
+    <color name="T7_ALPHA80">#ff2ebd85</color>
     <color name="T8">#ffffff</color>
     <color name="T8_ALPHA30">#4cffffff</color>
 
@@ -60,12 +60,12 @@
     <color name="B2_LIAN">#FF5600</color>
 
     <color name="T9">#2EBD85</color>
-    <color name="T9_ALPHA10">#1983CD13</color>
-    <color name="T9_ALPHA50">#8083CD13</color>
-    <color name="T9_ALPHA80">#cc83CD13</color>
+    <color name="T9_ALPHA10">#4d28bd5b</color>
+    <color name="T9_ALPHA50">#4d28bd5b</color>
+    <color name="T9_ALPHA80">#ff2ebd85</color>
     <color name="T10">#F5465D</color>
     <color name="T10_ALPHA20">#33F12C18</color>
-    <color name="T10_ALPHA10">#19F12C18</color>
+    <color name="T10_ALPHA10">#4dff4d4d</color>
     <color name="T10_ALPHA50">#80F12C18</color>
     <color name="T10_ALPHA80">#ccF12C18</color>
     <color name="T14">#3C3E4D</color>
@@ -84,15 +84,15 @@
     <color name="T13_ALPHA2">#0571FF</color>
     <color name="T13_ALPHA10">#191571FF</color>
     <color name="T13_ALPHA50">#801571FF</color>
-    <color name="T13_ALPHA80">#cc1571FF</color>
+    <color name="T13_ALPHA80">#fff6f7f7</color>
     <color name="T15">#FF8B00</color>
     <color name="T15_ALPHA20">#33FF8B00</color>
     <color name="T15_ALPHA10">#1AFF8B00</color>
     <color name="T16">#EF444A</color>
     <color name="T17">#2EBD85</color>
-    <color name="T18">#FEBE40</color>
-    <color name="T19">#AA00E6</color>
-    <color name="T20">#40DCFE</color>
+    <color name="T18">#ffecb900</color>
+    <color name="T19">#ff5770d7</color>
+    <color name="T20">#ff905cd4</color>
     <color name="T21">#4DFF4D4D</color>
     <color name="T22">#4D28BD5B</color>
 

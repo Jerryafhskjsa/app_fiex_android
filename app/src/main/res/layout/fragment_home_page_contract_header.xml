@@ -109,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="--"
+                    android:textStyle="bold"
                     android:textColor="@color/T14"
                     android:textSize="@dimen/text_size_10">
 
@@ -124,14 +125,23 @@
                 android:gravity="right"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <com.black.base.widget.SpanTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fond_time"
                     android:textColor="@color/T11_ALPHA60"
                     android:textSize="@dimen/text_size_10">
-
                 </com.black.base.widget.SpanTextView>
+
+                <com.black.base.widget.DashLineView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -240,20 +250,19 @@
                     android:id="@+id/k_time_step_tab"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:fadingEdge="none"
                     android:textSize="@dimen/text_size_12"
-                    app:tabTextColor="@color/T2"
+                    app:tabTextColor="@color/home_tab_text_color"
                     app:tabBackground="@color/transparent"
                     app:tabRippleColor="@android:color/transparent"
                     app:tabIndicator="@drawable/tabs_rounded_line_indicator"
-                    app:tabIndicatorColor="@color/T13"
+                    app:tabIndicatorColor="@null"
                     app:tabMaxWidth="200dp"
                     app:tabMinWidth="20dp"
                     app:tabPaddingBottom="0dp"
-                    app:tabPaddingEnd="@dimen/default_padding"
-                    app:tabPaddingStart="@dimen/default_padding"
+                    app:tabPaddingEnd="14dp"
+                    app:tabPaddingStart="14dp"
                     app:tabPaddingTop="0dp"
                     app:tabIndicatorFullWidth="false"
                     android:overScrollMode="never"
@@ -287,7 +296,7 @@
                 <com.black.base.widget.AnalyticChart2
                     android:id="@+id/analytic_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="100dp" />
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

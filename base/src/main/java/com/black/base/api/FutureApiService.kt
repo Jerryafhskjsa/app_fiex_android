@@ -294,7 +294,20 @@ interface FutureApiService {
         @Field("orderType") orderType: String?,
         @Field("positionSide") positionSide: String?,
         @Field("origQty") origQty: Int?,
-        @Field("sourceType") sourceType: String?,
+        @Field("price") price: String?,
+    ): Observable<HttpRequestResultBean<String>?>?
+
+
+    @FormUrlEncoded
+    @POST(UrlConfig.Future.ULR_ORDER_CREATE)
+    fun orderCreate3(
+        @Field("orderSide") orderSide: String?,
+        @Field("symbol") symbol: String?,
+        @Field("timeInForce") timeInForce: String?,
+        @Field("orderType") orderType: String?,
+        @Field("positionSide") positionSide: String?,
+        @Field("origQty") origQty: Int?,
+        @Field("sourceType") sourceType: Int?,
     ): Observable<HttpRequestResultBean<String>?>?
 
     /**

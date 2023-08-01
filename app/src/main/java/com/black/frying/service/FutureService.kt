@@ -242,6 +242,7 @@ object FutureService {
             ConstData.PairStatusType.FUTURE_U,
             CookieUtil.getCurrentFutureUPair(context!!)
         )
+        Log.d("jkhkjhkjh","3333")
         var symbol: String? = pairStatus?.pair
         if (SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED, true) as Boolean) {
             symbol = null
@@ -683,7 +684,7 @@ object FutureService {
      */
     fun getFloatProfit(positionBean: PositionBean , price: String): BigDecimal {
         var flagPrice: String = "1"
-        if (price == "0") {
+        if (price == "0" || positionBean.symbol != symbol) {
             var markPriceBean = FutureSocketData.markPrice
             if (markPriceBean == null) {
                 flagPrice = getMarkPrice(symbol)!!.p
@@ -693,7 +694,7 @@ object FutureService {
                 contractSize = getContractSize(markPriceBean.s)
             }
         }
-        else{
+        else {
             flagPrice = price
             contractSize = getContractSize(positionBean.symbol)
         }
@@ -961,10 +962,10 @@ object FutureService {
 
         var longMaxOpenSheet =
             getUserLongMaxOpen(buyPrice, longLeverage).setScale(0, BigDecimal.ROUND_DOWN)
-
+        Log.d("ttttttt-->longMaxOpen---", longMaxOpenSheet.toString())
         var longMaxOpen =
             sheet2CurrentUnit(longMaxOpenSheet.toString(), buyPrice.toString())
-        Log.d("ttttttt-->longMaxOpen---", longMaxOpen.toString())
+       // Log.d("ttttttt-->longMaxOpen---", longMaxOpen.toString())
         var longInputSheetAmount = currentUnit2Sheet(amount, buyPrice)
 //        Log.d("ttttttt-->longInputSheetAmount---", longInputSheetAmount.toString())
         var longSheetAmount: BigDecimal = BigDecimal.ZERO
@@ -1108,8 +1109,8 @@ object FutureService {
 //        Log.d("ttttttt-->leverage", leverage.toString())
         var a = getBracketLongMaxAmount(buyPrice, leverage)
         var b = getBalanceLongMaxOpen(buyPrice, leverage)
-//        Log.d("ttttttt-->longMaxOpen--a", a.toString())
-//        Log.d("ttttttt-->longMaxOpen--b", b.toString())
+        Log.d("ttttttt-->longMaxOpen--a", a.toString())
+        Log.d("ttttttt-->longMaxOpen--b", b.toString())
         return a.min(b)
     }
 
@@ -1148,7 +1149,7 @@ object FutureService {
         if (balanceDetail == null) {
             return BigDecimal(0)
         }
-        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
+        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!, price)
         var b = price.multiply(contractSize?:BigDecimal(0.0001))
             .multiply(
                 BigDecimal("1").divide(BigDecimal(leverage), 8, RoundingMode.DOWN)
@@ -1228,7 +1229,8 @@ object FutureService {
         if (balanceDetail == null) {
             return BigDecimal.ZERO
         }
-        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!)
+        var availableBalanceDisplay = getAvailableBalanceDisplay(balanceDetail!!, inputPrice)
+        Log.d("pioipoiopi",availableBalanceDisplay.toString())
         //余额多仓最大可开
         if (contractSize == null ){
             return BigDecimal.ZERO
@@ -1245,7 +1247,7 @@ object FutureService {
     /**
      * 该结算货币下的全仓未实现盈亏
      */
-    private fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean): BigDecimal {
+    private fun getAvailableBalanceDisplay(balanceDetail: BalanceDetailBean,price: BigDecimal): BigDecimal {
 
         var coin = balanceDetail.coin
         var availableBalance = balanceDetail.availableBalance
@@ -1259,8 +1261,9 @@ object FutureService {
             else {
                 for (p in positionList!!) {
                     if (p?.symbol!!.split("_")[1].equals("usdt")) {
-                        var fp = getFloatProfit(p!!,"0")
+                        var fp = getFloatProfit(p,price.toString())
                         floatProfit = floatProfit!!.plus(fp)
+                        Log.d("qwteuytqwuyiu2",fp.toString())
                         if (p.positionType.equals(Constants.CROSSED) && fp.toDouble() != 0.0) {
                             crossedFloatProfit = crossedFloatProfit!!.plus(fp)
                         }
@@ -1278,8 +1281,8 @@ object FutureService {
                 }
             }
         }
-//        Log.d("ttt--->availableBalanceDisplay", availableBalance)
-//        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
+        Log.d("ttt--->availableBalanceDisplay", availableBalance)
+        Log.d("ttt--->crossedFloatProfit", crossedFloatProfit.toString())
         val a = NumberUtils.toBigDecimal(availableBalance).plus(crossedFloatProfit!!)
         // 可用余额 = max(0，真实可用 + ∑该结算货币下的全仓未实现盈亏)
         return BigDecimal(0).max(a)

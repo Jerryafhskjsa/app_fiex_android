@@ -281,7 +281,7 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
             for (h in userBalanceList?.indices!!){
                 val balance = userBalanceList!![h]
                 if(canTransferCoin?.coin.equals(balance?.coin)){
-                    canTransferCoin?.amount = (BigDecimal(balance?.availableBalance?:"0") + BigDecimal(balance?.profit?:"0")).toString()
+                    canTransferCoin?.amount = (BigDecimal(balance?.availableBalance?:"0") ).toString()
                     result?.add(canTransferCoin)
                     break
                 }
@@ -477,7 +477,8 @@ class AssetTransferActivity : BaseActionBarActivity(), View.OnClickListener{
                 .apply(RequestOptions().error(com.black.base.R.drawable.icon_coin_default))
                 .into(logoView)
         }
-        val maxtCoin = if(userBalance != null)(BigDecimal(userBalance.availableBalance?:"0") + BigDecimal(userBalance.profit?:"0")).toString() + " "+userBalance.coin else{
+        //BigDecimal(userBalance.profit?:"0")
+        val maxtCoin = if(userBalance != null)(BigDecimal(userBalance.availableBalance?:"0") ).toString() + " "+userBalance.coin else{
             "0.00"
         }
         binding?.maxTransfer?.text = maxtCoin

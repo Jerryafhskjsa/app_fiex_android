@@ -308,14 +308,14 @@ class AnalyticChart2 : SkinCompatView {
         SELECT_BG_COLOR = SkinCompatResources.getColor(context, R.color.C2_ALPHA30)
         BASE_LINE_COLOR = SkinCompatResources.getColor(context, R.color.L1_ALPHA60)
         COORDINATE_TEXT_COLOR = SkinCompatResources.getColor(context, R.color.T2)
-        CURRENT_PRICE_LINE_COLOR = SkinCompatResources.getColor(context, R.color.C1)
-        CURRENT_PRICE_BG_COLOR = SkinCompatResources.getColor(context, R.color.C1)
+        CURRENT_PRICE_LINE_COLOR = SkinCompatResources.getColor(context, R.color.T15)
+        CURRENT_PRICE_BG_COLOR = SkinCompatResources.getColor(context, R.color.T15)
         CURRENT_PRICE_TEXT_COLOR = -0x70607
         POPPER_BORDER_COLOR = SkinCompatResources.getColor(context, R.color.C3)
         POPPER_BG_COLOR = SkinCompatResources.getColor(context, R.color.C3)
         POPPER_TITLE_COLOR = SkinCompatResources.getColor(context, R.color.T4)
         POPPER_TEXT_COLOR = SkinCompatResources.getColor(context, R.color.T4)
-        POPPER_PRICE_COLOR = SkinCompatResources.getColor(context, R.color.T4)
+        POPPER_PRICE_COLOR = SkinCompatResources.getColor(context, R.color.T15)
         POPPER_LINE_COLOR = SkinCompatResources.getColor(context, R.color.C3)
         POPPER_POINTER_INNER_COLOR = SkinCompatResources.getColor(context, R.color.T1)
         //        POPPER_POINTER_OUTER_COLOR = 0x66364365;

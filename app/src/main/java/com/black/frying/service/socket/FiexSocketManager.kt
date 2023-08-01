@@ -1136,6 +1136,7 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                 )
                                 if (markPriceBean != null) {
                                     Log.d("oipouuoiu",markPriceBean.p)
+                                    FutureSocketData.onMarkPriceChange(markPriceBean)
                                     SocketDataContainer.updateMarkPrice(mHandler, markPriceBean)
                                 }
                             }

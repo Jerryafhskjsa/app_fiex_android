@@ -27,11 +27,14 @@ import com.black.util.Callback
 import com.fbsex.exchange.R
 import com.fbsex.exchange.databinding.FragmentHomePageContractDetailBinding
 import io.reactivex.Observer
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import skin.support.content.res.SkinCompatResources
 import kotlin.collections.ArrayList
 
 /**
- * @author 合约计划委托列表页
+ * @author 合约当前委托列表页
  */
 class ContractCurrentFragment : BaseFragment(),
     AdapterView.OnItemClickListener,
@@ -68,6 +71,13 @@ class ContractCurrentFragment : BaseFragment(),
         onTabModelListener = tabListener
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun zhu(event: String) {
+        if (event == "222") {
+            getLimitPricePlanData()
+            Log.d("hjgjhgj", "oiiuoiuiuyuiuy")
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -97,6 +107,7 @@ class ContractCurrentFragment : BaseFragment(),
         val emptyView = inflater.inflate(R.layout.list_view_empty, null)
         val group = binding?.listView?.parent as ViewGroup
         group.addView(emptyView)
+        EventBus.getDefault().register(this)
         binding?.listView?.emptyView = emptyView
         adapter = ContactCurrentAdapter(mContext!!,dataList)
         binding?.listView?.adapter = adapter
@@ -105,6 +116,7 @@ class ContractCurrentFragment : BaseFragment(),
             val position = arguments!!.getInt(AutoHeightViewPager.POSITION)
             binding?.root?.let { mViewPager?.setViewPosition(it, position) }
         }
+        getLimitPricePlanData()
         return binding?.root
     }
 
@@ -122,7 +134,6 @@ class ContractCurrentFragment : BaseFragment(),
             orderObservers = createOrderObserver()
         }
         SocketDataContainer.subscribeFutureOrderObservable(orderObservers)
-        getLimitPricePlanData()
     }
 
     override fun onStop() {
@@ -166,10 +177,6 @@ class ContractCurrentFragment : BaseFragment(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.all_done -> {
-                if (entrustType == 0) {
-                    FryingUtil.showToast(activity, getString(R.string.null_bills))
-                    return
-                }
                 val futureSecond = FutureSecond.getFutureSecondSetting(mContext!!)?.futureCode
                 if (futureSecond == 0 || futureSecond == null) {
                     FutureApiServiceHelper.closeAll(
@@ -181,7 +188,6 @@ class ContractCurrentFragment : BaseFragment(),
                                 if (returnData != null) {
                                     FryingUtil.showToast(activity, "Success")
                                     getLimitPricePlanData()
-                                    onTabModelListener?.onCount(0)
                                 }
                             }
 
@@ -287,6 +293,7 @@ class ContractCurrentFragment : BaseFragment(),
         if(SharedPreferenceUtils.getData(Constants.PLAN_ALL_CHECKED,true) as Boolean){
             symbol = null
         }
+        Log.d("jkhkjhkjh3123",symbol?:"jhgjhgj")
             FutureApiServiceHelper.getOrderList(1, 10, symbol, Constants.UNFINISHED, context, false,
                 object : Callback<HttpRequestResultBean<OrderBean>>() {
                     override fun error(type: Int, error: Any?) {
@@ -298,7 +305,7 @@ class ContractCurrentFragment : BaseFragment(),
                             dataList = returnData.result?.items
                             adapter?.data = dataList
                             adapter?.notifyDataSetChanged()
-                            val count = planUnionBean.limitPriceList?.size!!
+                            val count = dataList?.size!!
                             Log.d("fsdjhskjafhjk", count.toString())
                             onTabModelListener?.onCount(count)
                         }

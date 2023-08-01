@@ -244,6 +244,7 @@ class HomePageActivity : BaseActionBarActivity(), View.OnClickListener, Fragment
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         //判断socket的service 是否存活
+        Log.d("lijkhkjhkh",(!CommonUtil.isServiceWorked(this, SocketService::class.java)).toString())
         if (!CommonUtil.isServiceWorked(this, SocketService::class.java)) {
             val socketServiceIntent = Intent(this, SocketService::class.java)
             socketServiceIntent.setPackage(packageName)
