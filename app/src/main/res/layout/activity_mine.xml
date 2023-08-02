@@ -159,7 +159,6 @@
                                         android:id="@+id/uid"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
-                                        android:visibility="gone"
                                         android:layout_marginLeft="10dp"
                                         android:src="@drawable/fuzhi4">
                                     </ImageView>
@@ -589,45 +588,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/system_version"
-                    style="@style/MenuListItem"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/SettingIconStyle"
-                        android:src="@drawable/icon_system_version" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/double_padding"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <com.black.base.widget.SpanTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="@string/system_version"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_16" />
-                        <com.black.base.widget.SpanTextView
-                            android:id="@+id/version"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:text="-"
-                            android:layout_marginRight="4dp"
-                            android:textColor="@color/T1"
-                            android:textSize="@dimen/text_size_16" />
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/icon_share" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
                     android:id="@+id/help_center"
                     style="@style/MenuListItem"
                     android:visibility="gone"
@@ -847,6 +807,46 @@
                             android:layout_height="16dp"
                             android:src="@drawable/qianwnag" />
                     </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/system_version"
+                    style="@style/MenuListItem"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/SettingIconStyle"
+                        android:src="@drawable/banben" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/double_padding"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="当前版本"
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_14" />
+                        <com.black.base.widget.SpanTextView
+                            android:id="@+id/version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:text=""
+                            android:textColor="@color/T1"
+                            android:textSize="@dimen/text_size_14" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/qianwnag" />
+                    </LinearLayout>
+
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"

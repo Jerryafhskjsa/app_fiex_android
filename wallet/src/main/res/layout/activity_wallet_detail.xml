@@ -312,8 +312,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:background="@drawable/chongzhi2"/>
             <com.black.base.widget.SpanTextView
                 android:layout_width="wrap_content"
@@ -337,8 +337,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:background="@drawable/tixian2"/>
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
@@ -362,8 +362,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:background="@drawable/huazhuan"/>
                         <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"

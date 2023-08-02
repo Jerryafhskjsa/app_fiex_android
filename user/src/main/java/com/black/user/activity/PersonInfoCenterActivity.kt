@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
@@ -47,7 +49,14 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
     private var binding: ActivityPersonInfoCenterBinding? = null
     private var imageSelectorHelper: ImageSelectorHelper? = null
     private var imageLoader: ImageLoader? = null
+    private val watcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            checkClickable()
+        }
 
+        override fun afterTextChanged(s: Editable) {}
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         C1 = SkinCompatResources.getColor(mContext, R.color.C1)
@@ -59,8 +68,9 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
         T5 = SkinCompatResources.getColor(mContext, R.color.T5)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_person_info_center)
         binding?.iconAvatar?.setOnClickListener(this)
-        binding?.nickNameLayout?.setOnClickListener(this)
+        //binding?.nickNameLayout?.setOnClickListener(this)
         binding?.state?.setOnClickListener(this)
+        binding?.btnLogin?.setOnClickListener(this)
         imageSelectorHelper = ImageSelectorHelper(this)
         imageSelectorHelper!!.addOnImageGetListener(this)
         imageLoader = ImageLoader(this)
@@ -76,6 +86,49 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
 
     override fun onClick(v: View) {
         val i = v.id
+        if (v.id == R.id.btn_login) {
+            val nickName = binding?.nickName?.text.toString()
+            if (TextUtils.isEmpty(nickName)) {
+                FryingUtil.showToast(this, getString(R.string.put_nick_name))
+            } else {
+                val userIdHeader = IMHelper.getUserIdHeader(mContext)
+                IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
+                    override fun callback(returnData: Boolean?) {
+                        if (returnData != null) {
+                            UserApiServiceHelper.modifyUserInfo(mContext, null, nickName, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
+                                override fun callback(modifyResult: HttpRequestResultString?) {
+                                    if (modifyResult != null && modifyResult.code == HttpRequestResult.SUCCESS) {
+                                        getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
+                                            override fun error(type: Int, error: Any?) {}
+                                            override fun callback(returnData: UserInfo?) {
+                                                FryingUtil.showToast(mContext, getString(R.string.name_success))
+                                                finish()
+                                            }
+                                        })
+                                    } else {
+                                        FryingUtil.showToast(mContext, modifyResult?.msg)
+                                    }
+                                }
+                            })
+//                            IMHelper.updateNickName(nickName, object : Callback<Boolean?>() {
+//                                override fun error(type: Int, error: Any) {
+//                                    FryingUtil.showToast(mContext, "昵称同步失败")
+//                                }
+//
+//                                override fun callback(returnData: Boolean?) {
+//                                    FryingUtil.showToast(mContext, "昵称同步成功")
+//                                }
+//                            })
+
+                        } else{
+                            FryingUtil.showToast(mContext, "初始化失败，稍后重试！")
+                        }
+                    }
+
+                    override fun error(type: Int, error: Any) {}
+                })
+            }
+        }
         if (i == R.id.icon_avatar) {
             val userIdHeader = IMHelper.getUserIdHeader(mContext)
             IMHelper.imLogin(mContext, userIdHeader + userInfo!!.id, object : Callback<Boolean?>() {
@@ -114,13 +167,16 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
         }
     }
 
+    private fun checkClickable() {
+        binding?.btnLogin?.isEnabled = !TextUtils.isEmpty(binding?.nickName?.text.toString().trim { it <= ' ' })
+    }
     override fun onResume() {
         super.onResume()
         userInfo = CookieUtil.getUserInfo(this)
         if(userInfo != null){
             refreshView()
         }else{
-            getUserInfo(object : NormalCallback<UserInfo?>(mContext!!) {
+            getUserInfo(object : NormalCallback<UserInfo?>(mContext) {
                 override fun error(type: Int, error: Any?) {
                     super.error(type, error)
                     finish()
@@ -188,7 +244,7 @@ class PersonInfoCenterActivity : BaseActivity(), View.OnClickListener, OnImageGe
         if (userInfo == null) {
             return
         }
-        binding?.nickName?.text = if (userInfo == null || userInfo!!.nickname == null) "" else userInfo!!.nickname
+        binding?.nickName?.setText(if (userInfo == null || userInfo!!.nickname == null) " " else userInfo!!.nickname)
         if(userInfo?.headPortrait != null){
             binding?.iconAvatar?.let {
                 Glide.with(mContext)

@@ -923,7 +923,9 @@ class FiexSocketManager(context: Context, handler: Handler) {
                                     object : TypeToken<PairDeal?>() {}.type
                                 )
                                 if(dealBean != null){
-                                        // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
+                                        // SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE
+                                     Log.d("iuouoiuoi",dealBean.p)
+                                    SocketDataContainer.getCurrentPairDeal(mHandler, dealBean,ConstData.DEPTH_FUTURE_TYPE)
                                         SocketDataContainer.updateFutureCurrentPairDeal(
                                             mHandler,
                                             dealBean

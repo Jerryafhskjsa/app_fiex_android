@@ -301,7 +301,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
-                        android:checked="true"
                         android:textColor="@color/btn_buy_check"
                         android:padding="@dimen/middle_padding"
                         android:text="@string/register_title" />

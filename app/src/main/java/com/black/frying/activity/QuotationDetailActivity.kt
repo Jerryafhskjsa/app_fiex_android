@@ -161,7 +161,7 @@ open class QuotationDetailActivity : BaseActionBarActivity(), View.OnClickListen
         binding?.tab?.tabMode = MODE_FIXED
         for (i in TAB_TITLES.indices) {
             val tab = binding?.tab?.newTab()?.setText(TAB_TITLES[i])
-            tab?.setCustomView(R.layout.view_k_line_tab)
+            tab?.setCustomView(R.layout.view_tab_normal)
             val textView: TextView? = tab?.customView?.findViewById(android.R.id.text1)
             textView?.text = TAB_TITLES[i]
             binding?.tab?.addTab(tab!!)

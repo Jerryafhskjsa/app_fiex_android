@@ -27,6 +27,8 @@ object FutureApiServiceHelper {
         symbol: String,
         interval: String,
         limit: Int,
+        startTime: Long,
+        endTime: Long,
         isShowLoading: Boolean,
        // endTime: Long,
         callback: Callback<HttpRequestResultDataList<Kline?>?>?
@@ -36,7 +38,7 @@ object FutureApiServiceHelper {
         }
         ApiManager.build(context, true, UrlConfig.ApiType.URL_FUT_F)
             .getService(FutureApiService::class.java)
-            ?.getHistoryKline(symbol, interval, limit)
+            ?.getHistoryKline(symbol, interval, limit,startTime,endTime)
             ?.compose(RxJavaHelper.observeOnMainThread())
             ?.subscribe(HttpCallbackSimple(context, isShowLoading, callback))
     }

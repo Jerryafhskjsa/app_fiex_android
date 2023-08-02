@@ -453,9 +453,16 @@
                         app:tabMaxWidth="200dp"
                         app:tabMinWidth="20dp"
                         app:tabPaddingBottom="0dp"
+                        android:fadingEdge="none"
                         app:tabPaddingTop="0dp"
                         app:tabRippleColor="@color/transparent"
-                        app:tabTextColor="@color/c2c_tab_sale" />
+                        app:tabIndicator="@drawable/tabs_rounded_line_indicator"
+                        app:tabIndicatorColor="@null"
+                        app:tabPaddingEnd="14dp"
+                        app:tabPaddingStart="14dp"
+                        app:tabIndicatorFullWidth="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"/>
 
                     <View
                         android:layout_width="match_parent"

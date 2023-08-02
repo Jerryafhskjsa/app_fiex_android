@@ -46,6 +46,8 @@
             <enum name="RIGHT" value="5" />
         </attr>
     </declare-styleable>
+
+
     <declare-styleable name="BaseIndicaorBanner">
 
         <!-- indicator style,STYLE_DRAWABLE_RESOURCE or STYLE_CORNER_RECTANGLE -->

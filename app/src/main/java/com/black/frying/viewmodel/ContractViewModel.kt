@@ -1023,6 +1023,8 @@ class ContractViewModel(
                     it,
                     timeStep,
                     500,
+                    startTime,
+                    endTime,
                     true,
                     object : Callback<HttpRequestResultDataList<Kline?>?>() {
                         override fun error(type: Int, error: Any) {

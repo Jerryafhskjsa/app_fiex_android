@@ -39,7 +39,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //K线竖屏数据模型
-class QuotationDetailViewModel(context: Context, private val pair: String?,private val type: Int?, private val onKLineModelListener: OnKLineModelListener?) : BaseViewModel<Any?>(context) {
+class QuotationDetailViewModel(context: Context, private var pair: String?,private val type: Int?, private val onKLineModelListener: OnKLineModelListener?) : BaseViewModel<Any?>(context) {
     private var currentPairStatus: PairStatus = PairStatus()
     private var coinType: String? = null
     private var pairSet: String? = null
@@ -210,7 +210,6 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
 
     //根据当前交易对状态，刷新所有数据
     private fun getPairStatus() {
-        var pair: String? = null
         if (type == 0){
             pairStatusType = ConstData.PairStatusType.SPOT
             pair = currentPairStatus.pair?.uppercase()
@@ -309,6 +308,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                         quotationDealNew.t = value.t!!
                         var list = ArrayList<QuotationDealNew?>()
                         list.add(quotationDealNew)
+                        Log.d("oiuoiuppoo",list.toString())
                         SocketDataContainer.updateQuotationDealNewData(socketHandler,currentPairStatus.pair,list,false)
                     }
                 }
@@ -335,6 +335,7 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
             override fun onSuccess(value: Pair<String?, TradeOrderPairList?>) {
                 onKLineModelListener?.run {
                     if (TextUtils.equals(currentPairStatus.pair, value.first) && value.second != null) {
+                        Log.d("utuyiopopp",value.toString())
                         sortTradeOrder(value.second)
                     }
                 }
@@ -668,6 +669,8 @@ class QuotationDetailViewModel(context: Context, private val pair: String?,priva
                         it,
                         timeStep,
                         500,
+                        startTime,
+                        endTime,
                         true,
                         object : Callback<HttpRequestResultDataList<Kline?>?>() {
                             override fun error(type: Int, error: Any) {

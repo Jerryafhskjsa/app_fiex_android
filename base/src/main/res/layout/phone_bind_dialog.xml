@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="290dp"
     android:layout_height="230dp"
-    android:background="@drawable/xianhuo"
+    android:background="@drawable/renzheng_dialog"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"

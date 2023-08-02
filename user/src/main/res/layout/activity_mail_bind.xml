@@ -180,6 +180,7 @@
                 style="@style/ButtonBlue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:padding="@dimen/middle_padding"
                 android:text="@string/submit" />
         </LinearLayout>

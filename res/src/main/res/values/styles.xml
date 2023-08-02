@@ -516,6 +516,7 @@
         <item name="android:background">@drawable/yin_ying</item>
     </style>
 
+
     <style name="wanshang">
         <item name="android:background">@drawable/white_white</item>
         <item name="android:gravity">center</item>

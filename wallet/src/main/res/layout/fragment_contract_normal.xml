@@ -31,10 +31,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/text_size_5"
-                    android:layout_marginLeft="@dimen/text_size_5"
-                    android:layout_marginTop="@dimen/text_size_5"
-                    android:background="@drawable/xianhuo"
+                    android:translationX="2dp"
+                    android:translationY="2dp"
+                    android:layout_margin="@dimen/text_size_16"
+                    android:background="@drawable/yinying_kuang"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -387,7 +387,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/text_size_20" />
+                            android:layout_height="@dimen/text_size_5" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

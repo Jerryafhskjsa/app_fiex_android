@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        style="@style/wanshang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="@dimen/text_size_16"
+                    android:layout_weight="1"
+                    android:text="平仓"
+                    android:textColor="@color/T1"
+                    android:textStyle="bold"/>
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="@dimen/middle_padding"
+                    android:text="@string/cancel"
+                    android:textColor="#ff484a57"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginRight="@dimen/default_padding"
+                android:orientation="horizontal">
+
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionDes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="@string/sustainable"
+                    android:textAlignment="center"
+                    android:textColor="@color/T14"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/positionSide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/T16"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T8"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/cangwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/beishu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F3F4"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/T2"
+                    android:textSize="10sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:layout_marginBottom="@dimen/text_size_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="最新价格"
+                    android:textSize="@dimen/text_size_12"
+                    />
+
+
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/zuixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textColor="@color/T1"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/zhiyin_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_16"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:orientation="horizontal">
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:text="价格"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:text="类型"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="@dimen/text_size_16"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/text_size_10"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/xiajia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_gray"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:gravity="center"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+                    <com.black.base.widget.SpanMaterialEditText
+                        style="@style/NormalEditTextStyle"
+                        android:id="@+id/one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/black"
+                        android:text="0.0"
+                        />
+                    <com.black.base.widget.SpanTextView
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/btn_gray"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="#ffbbbbc0"
+                        android:textStyle="bold"
+                        android:text="USDT"
+                        />
+                </LinearLayout>
+
+                <com.black.base.widget.SpanTextView
+                    android:id="@+id/shijia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:background="#ffe6e6e6"
+                    android:text="市价"
+                    android:padding="@dimen/text_size_10"
+                    android:textStyle="bold"
+                    android:layout_marginRight="@dimen/text_size_16"
+                    android:gravity="center_vertical"
+                    android:layout_weight="2.5"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_gray"
+                    android:layout_marginLeft="@dimen/text_size_10"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <com.black.base.widget.SpanTextView
+                        android:id="@+id/xuanzhe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_gray"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="3dp"
+                        android:layout_weight="5"
+                        android:text="限价交易"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="3dp"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_16"
+                        android:drawableRight="@drawable/xiala"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="5"
+                android:orientation="vertical">
+                <com.black.base.widget.SpanCheckedTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center"
+                    android:textSize="@dimen/text_size_12"
+                    android:layout_weight="2"
+                    android:textColor="@color/T2"
+                    android:text="@string/amount" />
+                <com.black.base.widget.SpanMaterialEditText
+                    android:id="@+id/price"
+                    style="@style/NormalEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#F1F3F4"
+                    android:gravity="center"
+                    android:hint="@string/amount"
+                    android:textColorHint="#ffbbbbc0"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold"
+                    android:textColor="@color/T1"
+                    app:useDelete="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/xuanzhe2"
+                style="@style/Yinying"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/xiajia2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:textColor="@color/black_app"
+                    android:text="限价交易"
+                    android:textSize="@dimen/text_size_10"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="@dimen/text_size_5"
+                    android:layout_marginLeft="@dimen/text_size_5"
+                    android:background="@color/B1"/>
+                <com.black.base.widget.SpanCheckedTextView
+                    android:id="@+id/shijia2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="市价交易"
+                    android:textColor="@color/black_app"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_10"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/moren"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+
+                <com.black.base.widget.SpanTextView
+                    android:gravity="center|right"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    />
+
+                    <com.black.base.widget.SpanTextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#F1F3F4"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="#ffbbbbc0"
+                        android:textStyle="bold"
+                        android:text="USDT"
+                        />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_size_5"
+                android:text="可平数量"
+                android:textColor="#ffbbbbc0"
+                android:textSize="@dimen/text_size_12" />
+            <com.black.base.widget.SpanTextView
+                android:id="@+id/keping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00USDT"
+                android:textColor="#ffbbbbc0"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/text_size_9"
+                    android:background="@color/T13"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:text="10%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/text_size_5"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/text_size_9"
+                    android:background="@color/T13"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:text="25%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/text_size_5"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/text_size_9"
+                    android:background="@color/T13"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:text="50%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/text_size_5"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/fourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/text_size_9"
+                    android:background="@color/T13"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:text="75%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/text_size_5"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/fifth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/text_size_9"
+                    android:background="@color/T13"/>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_5"
+                    android:text="100%"
+                    android:textColor="@color/T2"
+                    android:textSize="@dimen/text_size_12" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/btn_blue"
+            android:layout_marginLeft="@dimen/text_size_10"
+            android:layout_marginRight="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.black.base.widget.SpanTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="平仓"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_size_16"/>
+
+    </LinearLayout>
+
+
+</layout>

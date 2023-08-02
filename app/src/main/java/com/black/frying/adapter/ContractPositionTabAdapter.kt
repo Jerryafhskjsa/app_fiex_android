@@ -53,6 +53,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     BaseDataTypeBindAdapter<PositionBean?, ListItemContractTabPositionBinding>(context, data) {
     private var bgWin: Int? = null
     private var bgLose: Int? = null
+    private var orderPosition: String = "LIMIT"
     private var bgDefault: Int? = null
     private var color: Int? = null
     private var positionData: PositionBean? = null
@@ -93,7 +94,7 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "CutPasteId")
     override fun bindView(position: Int, holder: ViewHolder<ListItemContractTabPositionBinding>?) {
         positionData = getItem(position)
 
@@ -314,6 +315,83 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                         viewHolder.beishu.setText(buyMultiChooseBean?.defaultMultiple.toString())
                     }
                 }).show()
+
+        }
+        viewHolder?.btnClosePositionFan?.setOnClickListener {
+                v ->
+            val contentView = LayoutInflater.from(context).inflate(R.layout.fan_xiang_dialog, null)
+            val dialog = Dialog(context, R.style.AlertDialog)
+            val window = dialog.window
+            if (window != null) {
+                val params = window.attributes
+                //设置背景昏暗度
+                params.dimAmount = 0.2f
+                params.gravity = Gravity.BOTTOM
+                params.width = WindowManager.LayoutParams.MATCH_PARENT
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT
+                window.attributes = params
+            }
+            //设置dialog的宽高为屏幕的宽高
+            val layoutParams =
+                ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.setContentView(contentView, layoutParams)
+            dialog.show()
+            dialog.findViewById<TextView>(R.id.positionDes).text = positionData?.symbol.toString().uppercase()
+            dialog.findViewById<TextView>(R.id.cangwei).text = positionType
+            dialog.findViewById<TextView>(R.id.beishu).text = positionData?.leverage.toString() + "X"
+            dialog.findViewById<TextView>(R.id.positionSide).text = sideDes
+            dialog.findViewById<TextView>(R.id.keping).text = positionData?.price + unit
+            dialog.findViewById<TextView>(R.id.two).text = positionData?.price + unit
+            dialog.findViewById<TextView>(R.id.one).text = sideDes2
+            dialog.findViewById<TextView>(R.id.price).text = positionData?.flagPrice
+            dialog.findViewById<TextView>(R.id.positionSide).setTextColor(sideBgColor!!)
+            dialog.findViewById<TextView>(R.id.positionSide).setBackgroundColor(sideBlackColor!!)
+            dialog.findViewById<TextView>(R.id.one).setTextColor(sideBgColor2!!)
+            dialog.findViewById<TextView>(R.id.two).setTextColor(sideBgColor2!!)
+            dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
+                if (viewHolder.btnClosePosition.isChecked) {
+                    FryingUtil.showToast(context, "仓位处于平仓状态，不能反向开仓")
+                    dialog.dismiss()
+                } else {
+                    val createRunnable = Runnable {
+                        Log.d(
+                            "knsdjofdiosj",
+                            positionData?.positionSide + positionData?.positionSize
+                        )
+                        FutureApiServiceHelper.createOrder3(context,
+                            if (positionData?.positionSide == "LONG") "SELL" else "BUY",
+                            "MARKET",
+                            positionData?.symbol,
+                            positionData?.positionSide,
+                            "IOC",
+                            positionData?.positionSize!!.toInt(),
+                            4,
+                            false,
+                            object : Callback<HttpRequestResultBean<String>?>() {
+                                override fun callback(returnData: HttpRequestResultBean<String>?) {
+                                    if (returnData != null) {
+                                        viewHolder.btnClosePosition.isChecked = true
+                                        FryingUtil.showToast(context, "反向开仓成功")
+                                        /**
+                                         * todo 刷新持仓列表
+                                         */
+                                    }
+                                }
+
+                                override fun error(type: Int, error: Any?) {
+                                    Log.d("iiiiii-->createFutureOrder--error", error.toString())
+                                    FryingUtil.showToast(context, error.toString())
+                                }
+
+                            })
+                    }
+                    createRunnable.run()
+                    dialog.dismiss()
+                }
+            }
 
         }
         viewHolder?.btnWithLimit?.setOnClickListener {
@@ -607,9 +685,10 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
 
 
         }
-        viewHolder?.btnClosePositionFan?.setOnClickListener {
+
+        viewHolder?.btnClosePosition?.setOnClickListener {
                 v ->
-            val contentView = LayoutInflater.from(context).inflate(R.layout.fan_xiang_dialog, null)
+            val contentView = LayoutInflater.from(context).inflate(R.layout.contract_ping_cang_dialog, null)
             val dialog = Dialog(context, R.style.AlertDialog)
             val window = dialog.window
             if (window != null) {
@@ -631,65 +710,95 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
             dialog.findViewById<TextView>(R.id.beishu).text = positionData?.leverage.toString() + "X"
             dialog.findViewById<TextView>(R.id.positionSide).text = sideDes
             dialog.findViewById<TextView>(R.id.keping).text = positionData?.price + unit
-            dialog.findViewById<TextView>(R.id.two).text = positionData?.price + unit
-            dialog.findViewById<TextView>(R.id.one).text = sideDes2
-            dialog.findViewById<TextView>(R.id.price).text = positionData?.flagPrice
             dialog.findViewById<TextView>(R.id.positionSide).setTextColor(sideBgColor!!)
             dialog.findViewById<TextView>(R.id.positionSide).setBackgroundColor(sideBlackColor!!)
-            dialog.findViewById<TextView>(R.id.one).setTextColor(sideBgColor2!!)
-            dialog.findViewById<TextView>(R.id.two).setTextColor(sideBgColor2!!)
-            dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener {
-                if (viewHolder.btnClosePosition.isChecked) {
-                    FryingUtil.showToast(context, "仓位处于平仓状态，不能反向开仓")
-                    dialog.dismiss()
-                } else {
-                    val createRunnable = Runnable {
-                        Log.d(
-                            "knsdjofdiosj",
-                            positionData?.positionSide + positionData?.positionSize
-                        )
-                        FutureApiServiceHelper.createOrder3(context,
-                            if (positionData?.positionSide == "LONG") "SELL" else "BUY",
-                            "MARKET",
-                            positionData?.symbol,
-                            positionData?.positionSide,
-                            "IOC",
-                            positionData?.positionSize!!.toInt(),
-                            4,
-                            false,
-                            object : Callback<HttpRequestResultBean<String>?>() {
-                                override fun callback(returnData: HttpRequestResultBean<String>?) {
-                                    if (returnData != null) {
-                                        viewHolder.btnClosePosition.isChecked = true
-                                        FryingUtil.showToast(context, "反向开仓成功")
-                                        /**
-                                         * todo 刷新持仓列表
-                                         */
-                                    }
-                                }
-
-                                override fun error(type: Int, error: Any?) {
-                                    Log.d("iiiiii-->createFutureOrder--error", error.toString())
-                                    FryingUtil.showToast(context, error.toString())
-                                }
-
-                            })
-                    }
-                    createRunnable.run()
-                    dialog.dismiss()
+            dialog.findViewById<TextView>(R.id.zuixin).text = positionData?.flagPrice
+            dialog.findViewById<TextView>(R.id.one).text = positionData?.flagPrice
+            dialog.findViewById<TextView>(R.id.price).text = positionData?.price
+            dialog.findViewById<View>(R.id.xuanzhe).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.VISIBLE
+                dialog.findViewById<View>(R.id.moren).visibility = View.GONE
+                if (dialog.findViewById<TextView>(R.id.xuanzhe).text == "限价交易")
+                {
+                    dialog.findViewById<TextView>(R.id.xiajia2).setTextColor(color!!)
+                    dialog.findViewById<TextView>(R.id.shijia2).setTextColor(gray!!)
+                    orderPosition = "LIMIT"
+                }
+                else{
+                    dialog.findViewById<TextView>(R.id.xiajia2).setTextColor(gray!!)
+                    dialog.findViewById<TextView>(R.id.shijia2).setTextColor(color!!)
+                    orderPosition = "MARKET"
                 }
             }
-
-        }
-        viewHolder?.btnClosePosition?.setOnClickListener {
-            if (viewHolder.btnClosePosition.isChecked){
-                FryingUtil.showToast(mContext,"当前不能平仓")
+            dialog.findViewById<View>(R.id.xiajia2).setOnClickListener { v ->
+                dialog.findViewById<TextView>(R.id.xiajia2).setTextColor(color!!)
+                dialog.findViewById<TextView>(R.id.shijia2).setTextColor(gray!!)
+                dialog.findViewById<TextView>(R.id.xuanzhe).text = "限价交易"
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.GONE
+                dialog.findViewById<View>(R.id.moren).visibility = View.VISIBLE
             }
-            else {
-                pingcang()
+            dialog.findViewById<View>(R.id.shijia2).setOnClickListener { v ->
+                dialog.findViewById<TextView>(R.id.xiajia2).setTextColor(gray!!)
+                dialog.findViewById<TextView>(R.id.shijia2).setTextColor(color!!)
+                dialog.findViewById<TextView>(R.id.xuanzhe).text = "市价交易"
+                dialog.findViewById<View>(R.id.xuanzhe2).visibility = View.GONE
+                dialog.findViewById<View>(R.id.moren).visibility = View.VISIBLE
+            }
+            dialog.findViewById<View>(R.id.first).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.1 *  amonut)
+                dialog.findViewById<TextView>(R.id.keping).text = String.format("%.2f",0.1 *  amonut) + unit
+
+            }
+            dialog.findViewById<View>(R.id.second).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.25 * amonut)
+                dialog.findViewById<TextView>(R.id.keping).text = String.format("%.2f",0.1 *  amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.third).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.5 * amonut)
+                dialog.findViewById<TextView>(R.id.keping).text = String.format("%.2f",0.1 *  amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.fourth).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(colorGray!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",0.75 * amonut)
+                dialog.findViewById<TextView>(R.id.keping).text = String.format("%.2f",0.1 *  amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.fifth).setOnClickListener { v ->
+                dialog.findViewById<View>(R.id.first).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.second).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.third).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fourth).setBackgroundColor(color!!)
+                dialog.findViewById<View>(R.id.fifth).setBackgroundColor(color!!)
+                dialog.findViewById<TextView>(R.id.price).text = String.format("%.2f",amonut)
+                dialog.findViewById<TextView>(R.id.keping).text = String.format("%.2f",0.1 *  amonut) + unit
+            }
+            dialog.findViewById<View>(R.id.btn_confirm).setOnClickListener { v ->
+                var price = dialog.findViewById<TextView>(R.id.one).text.toString()
+                var orgty = dialog.findViewById<TextView>(R.id.price).text.toString()
+                var contractSize = FutureService.getContractSize(positionData?.symbol)?:BigDecimal(0.0001)
+                pingcang(BigDecimal(orgty)* contractSize,price, orderPosition)
+                dialog.dismiss()
+            }
+            dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { v ->
+                dialog.dismiss()
             }
         }
 
@@ -800,15 +909,22 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
         }
 
     }
-    private fun pingcang(){
+    private fun pingcang(orgty:BigDecimal,price:String? , orderPosition:String){
+        var timeInForce:String = "GTC"
+        var price2 = price
+        if (orderPosition == "MARKET"){
+            price2 = null
+            timeInForce = "IOC"
+        }
+        Log.d("poipoiouo",timeInForce + price2 + orderPosition)
             FutureApiServiceHelper.createOrder2(context,
                 if (positionData?.positionSide == "LONG") "SELL" else "BUY",
-                "LIMIT",//限价“LIMIT”市价“MARKET”
+                orderPosition,//限价“LIMIT”市价“MARKET”
                 positionData?.symbol,
                 positionData?.positionSide,
-                "GTC",//限价“GTC”市价“IOC”
+                timeInForce,//限价“GTC”市价“IOC”
                 positionData?.positionSize!!.toInt(),
-                positionData?.entryPrice,//限价positionData?.flagPrice市价null
+                price2,//限价positionData?.flagPrice市价null
                 true,
                 object : Callback<HttpRequestResultBean<String>?>() {
                     override fun callback(returnData: HttpRequestResultBean<String>?) {
@@ -818,14 +934,11 @@ class ContractPositionTabAdapter(context: Context, data: MutableList<PositionBea
                              * todo 刷新持仓列表
                              */
                         }
-                        else{
-                            FryingUtil.showToast(context, returnData?.msgInfo)
-                        }
                     }
 
-                    override fun error(type: Int, error: Any?) {
-                        Log.d("iiiiii-->createFutureOrder--error", error.toString())
-                        FryingUtil.showToast(context, error.toString())
+                    override fun error(type: Int, msg: Any?) {
+                        Log.d("iiiiii-->createFutureOrder--error", msg.toString())
+                        FryingUtil.showToast(context, "无效的数据")
                     }
 
                 })

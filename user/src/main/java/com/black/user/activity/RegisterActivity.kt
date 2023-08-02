@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import com.black.base.activity.BaseActivity
 import com.black.base.api.CommonApiServiceHelper
 import com.black.base.api.UserApiServiceHelper
+import com.black.base.lib.FryingSingleToast
 import com.black.base.model.*
 import com.black.base.util.ConstData
 import com.black.base.util.FryingUtil
@@ -322,6 +323,8 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         }*/
         if (TextUtils.isEmpty(binding?.phoneInviteCode?.text.toString().trim { it <= ' ' })) {
             getDialog()
+            return
+
         }
         //        if (TextUtils.isDigitsOnly(password)) {
 //            FryingUtil.showToast(mContext, getString(R.string.alert_password_all_number))
@@ -337,10 +340,10 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
                     msType = 0
-                   dialog(msType)
+                    FryingUtil.showToast(context,getString(R.string.zuche_success))
                 } else {
                     msType = 1
-                    dialog(msType)
+                    FryingUtil.showToast(context,returnData?.msg)
                 }
             }
         })
@@ -370,6 +373,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         }
         if (TextUtils.isEmpty(binding?.phoneInviteCode?.text.toString().trim { it <= ' ' })) {
             getDialog()
+            return
         }
         /*if (password.length < 8) {
             FryingUtil.showToast(mContext, getString(R.string.alert_password_too_short))
@@ -388,11 +392,14 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         UserApiServiceHelper.register(this, userName, password, null, verifyCode, null, inviteCode, object : NormalCallback<HttpRequestResultString?>(mContext!!) {
             override fun callback(returnData: HttpRequestResultString?) {
                 if (returnData != null && returnData.code == HttpRequestResult.SUCCESS) {
+                    FryingUtil.showToast(context,getString(R.string.zuche_success),
+                        FryingSingleToast.ERROR)
                     msType = 0
-                    dialog(msType)
+                    //dialog(msType)
                 } else {
                     msType = 1
-                    dialog(msType)
+                    FryingUtil.showToast(context,returnData?.msg, FryingSingleToast.ERROR)
+                    //dialog(msType)
                 }
             }
         })
@@ -427,31 +434,32 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun dialog(msType: Int?) {
-        val contentView = LayoutInflater.from(mContext).inflate(R.layout.zhuce_dialog, null)
-        val dialog = Dialog(mContext, R.style.AlertDialog)
-        val window = dialog.window
-        if (window != null) {
-            val params = window.attributes
-            //设置背景昏暗度
-            params.gravity = Gravity.TOP
-            params.width = WindowManager.LayoutParams.WRAP_CONTENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            window.attributes = params
-        }
-        //设置dialog的宽高为屏幕的宽高
-        val display = resources.displayMetrics
-        val layoutParams =
-            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.setContentView(contentView, layoutParams)
-        dialog.show()
-        if (msType == 0) {
-            dialog.findViewById<TextView>(R.id.title).text = getString(R.string.zuche_success)
-        }
-        val userName = binding?.phoneAccount?.text.toString().trim { it <= ' ' }
-        onRegisterSuccess(userName)
-
-    }
+//    private fun dialog(msType: Int?) {
+//        val contentView = LayoutInflater.from(mContext).inflate(R.layout.zhuce_dialog, null)
+//        val dialog = Dialog(mContext, R.style.AlertDialog)
+//        val window = dialog.window
+//        if (window != null) {
+//            val params = window.attributes
+//            //设置背景昏暗度
+//            params.gravity = Gravity.TOP
+//            params.width = WindowManager.LayoutParams.WRAP_CONTENT
+//            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+//            window.attributes = params
+//        }
+//        //设置dialog的宽高为屏幕的宽高
+//        val display = resources.displayMetrics
+//        val layoutParams =
+//            ViewGroup.LayoutParams(display.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        dialog.setContentView(contentView, layoutParams)
+//        dialog.show()
+//        if (msType == 0) {
+//            dialog.findViewById<TextView>(R.id.title).text = getString(R.string.zuche_success)
+//        }
+//
+//        val userName = binding?.phoneAccount?.text.toString().trim { it <= ' ' }
+//        //onRegisterSuccess(userName)
+//
+//    }
 
     private fun getUrl(){
         UserApiServiceHelper.getSupportUrl(mContext, object : NormalCallback<HttpRequestResultData<String?>?>(mContext) {

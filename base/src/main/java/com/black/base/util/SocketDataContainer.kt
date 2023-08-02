@@ -2170,6 +2170,7 @@ object SocketDataContainer {
                 if (dataSource == null) {
                     emitter.onComplete()
                 } else {
+                    Log.d("tuqruqroiuwio","iouoiuio786876")
                     val result = ArrayList<TradeOrder>()
                     synchronized(dealList) {
                         if (removeAll) {

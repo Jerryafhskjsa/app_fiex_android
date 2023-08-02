@@ -2,12 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/xianhuo"
-    android:layout_marginLeft="@dimen/text_size_20"
-    android:layout_marginRight="@dimen/text_size_20"
+    android:background="@color/transparent"
     android:orientation="vertical"
-    android:padding="@dimen/double_padding">
+    >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/renzheng_dialog"
+        android:padding="@dimen/double_padding"
+        android:layout_marginLeft="@dimen/text_size_20"
+        android:layout_marginRight="@dimen/text_size_20"
+        android:gravity="center"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,7 +89,8 @@
 
         <com.black.base.widget.SpanTextView
             android:id="@+id/btn_cancel"
-            style="@style/ButtonReturn"
+            android:background="@drawable/neibu_zhuan"
+            android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -104,5 +112,6 @@
             android:text="@string/confirm"
             android:textSize="@dimen/text_size_15" />
 
+    </LinearLayout>
     </LinearLayout>
 </LinearLayout>

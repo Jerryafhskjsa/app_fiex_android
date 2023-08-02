@@ -32,10 +32,20 @@
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/xianhuo"
+                    android:orientation="vertical"
+                    >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/yinying_kuang"
+                    android:layout_marginTop="@dimen/text_size_10"
+                    android:elevation="4dp"
+                    android:translationZ="0.1dp"
+                    android:translationX="0.1dp"
                     android:layout_marginRight="@dimen/text_size_10"
                     android:layout_marginLeft="@dimen/text_size_16"
                     android:orientation="vertical"
@@ -186,15 +196,17 @@
                         android:layout_marginBottom="30dp"
                         android:layout_marginLeft="@dimen/text_size_16"
                         android:layout_marginRight="@dimen/text_size_16"/>
-                    <com.black.base.widget.SpanTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="@dimen/text_size_10"
-                        android:text="注：请将此备份密钥保存在安全位置。如果您丢失手机，此密钥将允许您恢复您的身份验证器。"
-                        android:textColor="@color/T13"
-                        android:textSize="@dimen/text_size_12" />
 
+                </LinearLayout>
+                <com.black.base.widget.SpanTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_size_20"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="@dimen/text_size_10"
+                    android:text="注：请将此备份密钥保存在安全位置。如果您丢失手机，此密钥将允许您恢复您的身份验证器。"
+                    android:textColor="@color/T15"
+                    android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -211,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/middle_padding"
-                android:text="@string/next" />
+                android:text="绑定" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

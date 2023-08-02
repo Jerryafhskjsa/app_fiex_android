@@ -109,6 +109,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
         binding?.notifications?.setOnClickListener(this)
         binding?.safeCenter?.setOnClickListener(this)
         binding?.helpCenter?.setOnClickListener(this)
+        binding?.systemVersion?.setOnClickListener(this)
         binding?.moreLanguage?.setOnClickListener(this)
         binding?.exchangeRates?.setOnClickListener(this)
         binding?.version?.setText(String.format("V%s",CommonUtil.getVersionName(mContext,"1.2.0")))
@@ -307,6 +308,8 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             R.id.consult ->  //客服咨询
                 UdeskUtil.start(applicationContext)
             R.id.safe_center -> BlackRouter.getInstance().build(RouterConstData.SAFE_CENTER)
+                .go(mContext)
+            R.id.system_version -> BlackRouter.getInstance().build(RouterConstData.ABOUT)
                 .go(mContext)
             R.id.bangzu -> {
                 //帮助中心
@@ -566,7 +569,7 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
                         .into(it)
                 }
             }
-            val userName = if (userInfo!!.username == null) "" else userInfo!!.username
+            val userName = if (userInfo!!.nickname == null) userInfo!!.username else userInfo!!.nickname
             binding?.name?.text = String.format("%s", userName)
             var relVerifyBg: Drawable? = null
             var tvVerifyColor: Int? = null
@@ -643,9 +646,11 @@ class MineActivity : BaseActionBarActivity(), View.OnClickListener {
             binding?.btnLoginOut?.visibility = View.VISIBLE
             binding?.loginStatus?.visibility = View.VISIBLE
             binding?.btnLogin?.visibility = View.GONE
+            binding?.uid?.visibility = View.VISIBLE
         } else {
             binding?.name?.setText(R.string.please_login)
             binding?.uuid?.setText(R.string.denglutishi)
+            binding?.uid?.visibility = View.GONE
            // binding?.safeLevel?.text = ""
             binding?.btnLoginOut?.visibility = View.GONE
             binding?.btnLogin?.visibility = View.GONE

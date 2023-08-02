@@ -9,7 +9,7 @@
             type="Object" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/B2">
@@ -17,6 +17,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/btn_login"
             android:background="@color/B2">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -30,17 +31,14 @@
 
                 <include layout="@layout/tool_bar_left_back" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_padding"
-                    android:background="@color/B1" />
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.black.base.widget.ObserveScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/B1"
+                android:background="@color/B2"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -57,7 +55,7 @@
                         android:background="@color/B2"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingLeft="@dimen/double_padding"
+                        android:paddingLeft="@dimen/text_size_16"
                         android:paddingRight="@dimen/double_padding">
 
                         <com.black.base.widget.SpanTextView
@@ -66,30 +64,22 @@
                             android:text="@string/image"
                             android:textColor="@color/T2"
                             android:textSize="@dimen/text_size_16" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right|center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/icon_avatar"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:adjustViewBounds="true"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/icon_avatar" />
-                        </LinearLayout>
-
-                        <ImageView
+                        <com.black.base.widget.SpanTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
-                            android:src="@drawable/icon_left" />
-                    </LinearLayout>
+                            android:text="*"
+                            android:textColor="@color/T13"
+                            android:textSize="@dimen/text_size_16" />
 
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/icon_avatar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:adjustViewBounds="true"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_avatar" />
                     <LinearLayout
                         android:id="@+id/nick_name_layout"
                         android:layout_width="match_parent"
@@ -106,6 +96,12 @@
                             android:text="@string/nick_name"
                             android:textColor="@color/T2"
                             android:textSize="@dimen/text_size_16" />
+                        <com.black.base.widget.SpanTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="*"
+                            android:textColor="@color/T13"
+                            android:textSize="@dimen/text_size_16" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -113,29 +109,43 @@
                             android:gravity="right|center_vertical"
                             android:orientation="horizontal">
 
-                            <com.black.base.widget.SpanTextView
-                                android:id="@+id/nick_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableRight="@drawable/icon_left"
-                                android:drawablePadding="6dp"
-                                android:gravity="right"
-                                android:hint="@string/not_filled_in"
-                                android:textColor="@color/T1"
-                                android:textColorHint="@color/T2"
-                                android:textSize="@dimen/text_size_16" />
                         </LinearLayout>
                     </LinearLayout>
-
-                    <View
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding"
-                        android:background="@color/B1" />
+                        android:layout_height="64dp"
+                        android:background="@drawable/btn_gray_default"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginRight="@dimen/text_size_16">
 
+                        <com.black.base.widget.SpanMaterialEditText
+                            android:id="@+id/nick_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/double_padding"
+                            android:layout_marginRight="@dimen/double_padding"
+                            android:textSize="@dimen/text_size_14"
+                            android:hint="@string/put_nick_name"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:imeOptions="actionSearch" />
+
+                    </LinearLayout>
+                    <com.black.base.widget.SpanTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/T2"
+                        android:text="1至12个字符，仅支持中文、英文、数字."
+                        android:layout_marginLeft="@dimen/text_size_16"
+                        android:layout_marginTop="@dimen/text_size_10"
+                        android:textSize="@dimen/text_size_12" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/B2"
+                        android:visibility="gone"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -292,5 +302,18 @@
                 </LinearLayout>
             </com.black.base.widget.ObserveScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </FrameLayout>
+        <com.black.base.widget.SpanCheckedTextView
+            android:id="@+id/btn_login"
+            style="@style/ButtonBlue"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/text_size_16"
+            android:layout_marginRight="@dimen/text_size_16"
+            android:layout_marginBottom="@dimen/text_size_16"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/btn_buy_check"
+            android:padding="@dimen/middle_padding"
+            android:text="提交修改" />
+    </RelativeLayout>
 </layout>
